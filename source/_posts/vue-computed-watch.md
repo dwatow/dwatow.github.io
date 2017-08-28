@@ -1,9 +1,11 @@
 ---
-title: vue-computed-watch
+title: vue的computed和watch比較
 date: 2017-08-28 11:16:41
 tags: ['vue','computed','watch']
 categories: '技術心得'
 ---
+
+# vue的computed和watch比較
 
 最近在學[vue](https://github.com/dwatow/vueExercise)，學到了`watch`和`computed`時，發現它們兩個極像又很難區分。
 
