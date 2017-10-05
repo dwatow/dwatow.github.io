@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="" />
+  <meta name="title" content="《深黑色》技術筆記">
+  <meta name="author" content="github.com/dwatow">
+  <meta name="copyright" content="《深黑色》2017">
+  <meta name="description" content="從C++到Javascript，邁向網頁前端之路。">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:title" content="《深黑色》技術筆記">
+  <meta property="og:url" content="dwatow.github.io">
+  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:description" content="從C++到Javascript，邁向網頁前端之路">
+
+  <title>
+    
+      初探Facebook Messager 聊天機器人 |
+        
+          《深黑色》
+  </title>
+  
+    
+      <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>《深黑色》</div>
+        
+            <div>有點懶×做筆記</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+  <header class='PageTitle'>
+    <h1>初探Facebook Messager 聊天機器人</h1>
+  </header>
+
+  <section>
+    
+  <div id="toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">初探Facebook Messager 聊天機器人</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">事前準備</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">執行ngrok</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Facebook開發者帳號 (極重要!!!)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">看看facebook傳什麼過來</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">建立機器人運作的 Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Hello World!!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">設定回覆給 facebook的訊息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Facebook開發者帳號。續</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">確認伺服器有收到訊息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">寫程式，機器人回覆訊息!!</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">在此先安裝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">寫程式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">JSON</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">改寫 request</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">最後的最後</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">完成</span></a></li></ol></li></ol>
+  </div>
+  
+
+      <h1>初探Facebook Messager 聊天機器人</h1>
+<p>基本架構圖</p>
+<p><img src="https://i.imgur.com/g20l9NE.jpg" alt=""></p>
+<h2>事前準備</h2>
+<ul>
+<li>
+<a href="/2017/06-16-ngrok/" title="安裝 **ngrok**">安裝 **ngrok**</a>
+</li>
+<li>建立facebook粉絲頁</li>
+<li>建立<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="external">facebook開發者帳號</a></li>
+<li>安裝 <strong>node.js</strong> <strong>+</strong> <a href="http://expressjs.com/zh-tw/starter/installing.html" target="_blank" rel="external">安裝Express</a></li>
+</ul>
+<h2>執行ngrok</h2>
+<p>在任意的位置執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> ngrok http 3000</div></pre></td></tr></table></figure>
+<p>就好了!!</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ngrok by @inconshreveable                                 (Ctrl+C to quit)</div><div class="line"></div><div class="line">Session Status                online</div><div class="line">Version                       2.2.4               </div><div class="line">Region                        United States (us)</div><div class="line">Web Interface                 http://127.0.0.1:4040</div><div class="line">Forwarding                    http://db9ba35e.ngrok.io -&gt; localhost:3000        </div><div class="line">Forwarding                    https://db9ba35e.ngrok.io -&gt; localhost:3000       </div><div class="line"></div><div class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</div><div class="line">                              0       0       0.00    0.00    0.00    0.00</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Web Interface[color=blue]                 <a href="http://127.0.0.1:4040" target="_blank" rel="external">http://127.0.0.1:4040</a></p>
+</blockquote>
+<p>可以看見<code>request</code>的明細。等一下可以用它看粉絲團小編是不是有收到訊息。</p>
+<blockquote>
+<p>Forwarding                    <a href="http://db9ba35e.ngrok.io" target="_blank" rel="external">http://db9ba35e.ngrok.io</a> -&gt; localhost:3000<br>
+Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" target="_blank" rel="external">https://db9ba35e.ngrok.io</a> -&gt; localhost:3000</p>
+</blockquote>
+<p>這兩個就是可以連線的對外網址，等一下要用它。</p>
+<div class="danger">
+<p>這個東西，從頭到尾都不能關掉。<br>
+因為一旦重開對外的網址就改變！！<br>
+相關的設定都會改變唷。</p>
+</div>
+<h2>Facebook開發者帳號 <em>(極重要!!!)</em></h2>
+<p>進入<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="external">官網</a>之後，按右上角的「建立應用程式」</p>
+<blockquote>
+<p><img src="https://i.imgur.com/HPoGprM.png" alt=""><br>
+要建立一個應用程式，給Facebook一些必要的資料。</p>
+</blockquote>
+<p><strong>選Messager</strong><br>
+<img src="https://i.imgur.com/KIGVk6X.png" alt=""><br>
+點擊開始使用</p>
+<p>進入畫面之後，找到 <strong>Webhook</strong><br>
+<img src="https://i.imgur.com/l85c5zR.png" alt=""></p>
+<p>在此要填入兩個東西，下面的就勾<code>messages</code>就好，其它隨你</p>
+<ul>
+<li>回呼網址</li>
+<li>驗證權杖</li>
+</ul>
+<p>回呼網址就是開好的伺服器的對外網址。<br>
+在此就是上一節的Forwarding網址<br>
+(在此篇文章<code>http://db9ba35e.ngrok.io</code>)。</p>
+<p>為了讓facebook伺服器知道要把收到的訊息，丟到哪給機器人。</p>
+<p>驗證權杖: 隨便打(真的!!!)</p>
+<blockquote>
+<p>在此，一定會出現下面的錯誤訊息<br>
+<img src="https://i.imgur.com/xkKAlYf.png" alt=""></p>
+</blockquote>
+<p>原因在於，facebook伺服器傳給我們一個訊息，<br>
+但是要回覆一個相同的值(在此要回<code>1770261222</code>)給他，不然就報錯。</p>
+<h3>看看facebook傳什麼過來</h3>
+<p>從<a href="http://127.0.0.1:4040" target="_blank" rel="external">Web Interface</a>可以看到</p>
+<p><img src="https://i.imgur.com/ZZFJwRM.png" alt=""></p>
+<p>其中 <code>1770261222</code>值藏在<code>hub.challenge</code>裡面。</p>
+<p>所以，接下來要建立伺服器，並且回傳正確的訊息給facebook伺服器。</p>
+<h2>建立機器人運作的 Server</h2>
+<h3>Hello World!!</h3>
+<p>在此使用<code>node.js</code>。</p>
+<ol>
+<li>建立一個資料夾</li>
+<li>進入資料夾</li>
+<li>新增一個 <mark>***.js</mark> 檔案(在此使用 <mark>app.js</mark>的檔名)</li>
+</ol>
+<p>找<a href="http://expressjs.com/zh-tw/starter/hello-world.html" target="_blank" rel="external">nodejs hello world</a> 從這裡面貼上接下來要使用的程式碼</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'Hello World!'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.listen(<span class="number">3000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<ol start="4">
+<li>執行伺服器</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div></pre></td></tr></table></figure>
+<p>接下來<a href="http://localhost:3000" target="_blank" rel="external">開瀏覽器</a>，看見 <ins>hello world</ins>，就算成功讓伺服器運作起來。</p>
+<h3>設定回覆給 facebook的訊息</h3>
+<p>回到<code>app.js</code>改寫<code>get</code>的<code>request</code>的處理函數，改掉原本的 “<ins>Hello World!</ins>”</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'Hello World!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>改寫成下面這樣，就可以回覆facebook要的訊息囉</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(req.query[<span class="string">'hub.challenge'</span>]);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>再回到 facebook的開發者頁面</p>
+<h2>Facebook開發者帳號。續</h2>
+<p>按下驗證之前，要先把伺服器跑起來!!!</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div></pre></td></tr></table></figure>
+<p>這樣就可以按下「驗證」並且回到 <code>Messager</code>的設定畫面。</p>
+<p>先取得權杖 <ins>(真是中二的翻譯)</ins>，它指的就是<mark>token</mark><br>
+<img src="https://i.imgur.com/CZ9DRL0.png" alt=""></p>
+<p>在同頁面滑下來一點。<br>
+<img src="https://i.imgur.com/b7hFrNK.png" alt=""></p>
+<p>按下「選擇粉絲專頁」&gt;「訂閱」</p>
+<h2>確認伺服器有收到訊息</h2>
+<p>打開<a href="http://127.0.0.1:4040/" target="_blank" rel="external">Web Interface</a>可以看見目前收到的 <strong>request</strong> 明細。</p>
+<p>用 facebook帳號跟你申請的粉絲頁傳訊息(就是聊天)，<br>
+送出訊息後，看看是不是可以在Web Interface看見你送出的訊息？</p>
+<blockquote>
+<p><em>例圖 ↓</em><br>
+<img src="https://i.imgur.com/31WMgqv.png" alt=""></p>
+</blockquote>
+<p>想要看得懂這個結構，可以參考<a href="https://developers.facebook.com/docs/messenger-platform/webhook-reference/message" target="_blank" rel="external">官方網站的文件</a></p>
+<p>可以看見送出的訊息「<strong>!!!</strong>」放在資料結構的哪個位置。</p>
+<blockquote>
+<p>在此要注意: <a href="http://recipient.id" target="_blank" rel="external">recipient.id</a> 等一下會用上</p>
+</blockquote>
+<h2>寫程式，機器人回覆訊息!!</h2>
+<h3>在此先安裝</h3>
+<p>在此，需要讓 <strong>web service</strong> 發送 <strong>request</strong>，必須安裝一個外掛<a href="https://github.com/request/request" target="_blank" rel="external">request</a>(在你的專案資料夾)，<br>
+讓你的<code>node.js</code>可以送request。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install request --save</div></pre></td></tr></table></figure>
+<blockquote>
+<p>「發送request」這件事一般來說都是瀏覽器在做的，伺服器是負責接收的，<br>
+若伺服器要和伺服器溝通，就要讓伺服器「發送request」。</p>
+</blockquote>
+<h3>寫程式</h3>
+<p>讓<code>node.js</code>可以送出POST的request。</p>
+<p><a href="https://stackoverflow.com/questions/27190447/pass-json-to-http-post-request" target="_blank" rel="external">上網找一下怎麼送出POST的request的寫法</a>，找到一個簡單的寫</p>
+<p>回到<code>app.js</code>，上面加上 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div></pre></td></tr></table></figure>
+<p>下面加上接收post的函數 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  <span class="comment">//...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在函數裡面加上「發送request」的功能</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">request(&#123;</div><div class="line">    url: url,</div><div class="line">    method: <span class="string">"POST"</span>,</div><div class="line">    json: requestData</div><div class="line">&#125;, ...</div></pre></td></tr></table></figure>
+<p>讓機器人收到 facebook傳過來的訊息之後，再發送訊息回去給 facebook伺服器</p>
+<p>其中有兩個資料要填入：</p>
+<ul>
+<li>url</li>
+<li>json</li>
+</ul>
+<h4><strong>URL</strong></h4>
+<p>這個網址就是facebook messager伺服器的位址<br>
+到 <a href="https://developers.facebook.com/docs/messenger-platform/send-api-reference" target="_blank" rel="external">Messager的開發文件&gt;傳送 API 參考資料&gt;要求</a></p>
+<p>這一段</p>
+<blockquote>
+<p>若要傳送訊息，請使用您的粉絲專頁存取權杖，向 <a href="https://graph.facebook.com/v2.6/me/messages?access_token=" target="_blank" rel="external">https://graph.facebook.com/v2.6/me/messages?access_token=</a>&lt;PAGE_ACCESS_TOKEN&gt; 發出 POST 要求。承載必須以 JSON 格式提供，如下所述</p>
+</blockquote>
+<p>網址就是</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">https://graph.facebook.com/v2.6/me/messages?access_token=</div></pre></td></tr></table></figure>
+<p>後面的<code>token</code>在下圖的位置取得<br>
+<img src="https://i.imgur.com/JJPRQDb.png" alt=""></p>
+<h4><strong>JSON</strong></h4>
+<p>找到要回覆的格式…的 JSON<br>
+到<a href="https://developers.facebook.com/docs/messenger-platform/send-api-reference" target="_blank" rel="external">Messager的開發文件&gt;傳送 API 參考資料&gt;要求</a><br>
+(和剛剛同一份文件的同一段中的範例…)</p>
+<blockquote>
+<p><img src="https://i.imgur.com/g15sRhp.png" alt=""><br>
+(facebook提供的範例是使用<code>curl</code>這隻程式來送出請求，可以把curl想成postman的指令版)</p>
+</blockquote>
+<p>取出來之後</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"recipient"</span>: &#123;</div><div class="line">    <span class="string">"id"</span>:</div><div class="line">  &#125;,</div><div class="line">  <span class="string">"message"</span>: &#123;</div><div class="line">    <span class="string">"text"</span>: <span class="string">""</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>填入回覆者的 id 和要給他的訊息就可以囉~<br>
+到<a href="#%E7%A2%BA%E8%AA%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9C%89%E6%94%B6%E5%88%B0%E8%A8%8A%E6%81%AF">這裡</a>找<code>sender</code></p>
+<h3>改寫 request</h3>
+<p>剩下在<code>text</code>寫上你要回傳的訊息。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">request(&#123;</div><div class="line">    url: https:<span class="comment">//graph.facebook.com/v2.6/me/messages?access_token=&lt;token&gt;,</span></div><div class="line">    method: <span class="string">"POST"</span>,</div><div class="line">    json: &#123;</div><div class="line">      <span class="string">"recipient"</span>: &#123;</div><div class="line">        <span class="string">"id"</span>:</div><div class="line">      &#125;,</div><div class="line">      <span class="string">"message"</span>: &#123;</div><div class="line">        <span class="string">"text"</span>: <span class="string">""</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3>最後的最後</h3>
+<p>為了防止鬼擋牆，查了一下<a href="https://developers.facebook.com/docs/messenger-platform/faq#faq_144542125979728" target="_blank" rel="external">官方文件</a></p>
+<blockquote>
+<p>為什麼我持續收到 Webhook 一直未接受更新的開發人員重要通知，或持續不斷收到相同的 Webhook 呼叫？[color=red]</p>
+<blockquote>
+<p>請確定 Webhook 以狀態代碼 200 回應。這樣會告知我們已成功收到 Webhook。如果您未傳回狀態代碼 200，我們會重新嘗試呼叫，直到成功完成為止。此外，如果 Webhook 很長一段時間都未傳回狀態代碼 200，我們就會傳送開發人員重要通知。[color=lightblue]<br>
+另請注意，成功狀態代碼必須即時傳回。Webhook 呼叫會在 20 秒後逾時。請務必在設計程式碼架構時，以非同步的方式處理 Webhook，以便可立即傳回成功狀態代碼，然後分別處理 Wehbook。</p>
+</blockquote>
+</blockquote>
+<p>在你的post函數最後，加入下面程式碼的第3行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line"></div><div class="line">  res.sendStatus(<span class="number">200</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2>完成</h2>
+<p><em>改好之後，重開伺服器，再發訊息給小編就可以囉!!!</em></p>
+
+
+        
+
+  </section>
+  
+    <section class='ArticleMeta'>
+      <div>
+        发布于&nbsp;
+        <time datetime="2017-06-16T10:03:20.000Z" itemprop="datePublished">
+              2017-06-16
+            </time>
+      </div>
+      
+        <div>
+          tags:
+          
+  <li class="meta-text">
+  { <a href="/tags/facebook/">facebook</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/message-bot/">message bot</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/API/">API</a> }
+  </li>
+
+
+        </div>
+        
+    </section>
+    
+      
+        <section>
+          <div id="disqus_thread"></div>
+          <script>
+          window.disqus_config = function () {
+            this.page.url = window.location.toString()
+            this.page.identifier = window.location.pathname
+          }
+          if (typeof DISQUS === 'undefined') {
+            (function() { // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
+              s.src = 'https://dwatow-github.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          } else {
+            DISQUS.reset({
+                reload: true,
+                config: window.disqus_config
+            })
+          }
+        </script>
+        </section>
+        
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>
