@@ -2,7 +2,7 @@
 title: 測試hackmd支援的markdown寫法
 date: 2017-06-18 16:30:34
 tags: ['hexo', 'markdown測試']
-categories: 'Blog語法測試'
+categories: 'hexo改裝'
 ---
 
 # 測試hackmd語法

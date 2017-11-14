@@ -1,7 +1,7 @@
 ---
 title: vue的computed和watch比較
 date: 2017-08-28 11:16:41
-tags: ['vuejs','computed','watch']
+tags: ['vuejs']
 categories: '技術心得'
 ---
 

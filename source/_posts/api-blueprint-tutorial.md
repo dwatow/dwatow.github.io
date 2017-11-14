@@ -1,8 +1,8 @@
 ---
 title: API Blueprint Tutorial 學習筆記
 date: 2017-11-14 10:13:40
-tags: 'API Doc'
-categories: 技術學習
+tags: ['API', 'API Doc', 'Aglio']
+categories: 工具使用
 ---
 
 # API Blueprint Tutorial 學習筆記

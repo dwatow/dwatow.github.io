@@ -23,6 +23,7 @@ categories: '技術心得'
 
 ```shell=
 ~/code $ python -m SimpleHTTPServer
+# or ~/code $ php -S localhost:8000
 ```
 
 先新增一個`repo`並且初始化成一個`git bare`。
