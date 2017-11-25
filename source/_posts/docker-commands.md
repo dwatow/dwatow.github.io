@@ -1,13 +1,14 @@
 ---
 title: Docker 指令們
 date: 2017-10-26 12:11:42
-tags: docker
-categories: '技術心得'
+tags: Docker
+categories: ['工具使用', '技術練習']
 ---
 
 # Docker 指令們
 
 ## docker 指令
+
 - `version`
   Show the Docker version information
   顯示Docker版本信息
@@ -23,6 +24,7 @@ categories: '技術心得'
 - `inspect`
   Return low-level information on Docker objects
   印出Docker物件的底層資訊
+
 ## docker to image
 
 ## Image 指令
