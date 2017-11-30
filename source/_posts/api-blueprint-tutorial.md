@@ -394,6 +394,109 @@ containing a question and a collection of answers in the form of choices.
 + Relation: self
 ```
 
+# MSON 學習筆記
+
+`MSON` 是一種寫 `Markdown Syntax` 表示 `Object Notation`，一種可讀性更高的資料結構表示方式，這個教學學會 `MSON` 的描述和資料結構表示法
+
+官網提供的 MSON Resource
+
+- [MSON Specification](https://github.com/apiaryio/mson/blob/master/MSON%20Specification.md)
+- [Examples](https://github.com/apiaryio/mson#notational-conventions)
+
+
+# Data structures in MSON
+
+下面我們描述了一個 `Object` 稱為 `Person` ，它有一個 `properties` 叫 `name`。
+
+```markdown
+# Person
+
++ name
+```
+
+使用`()`宣告 `properties` 的型別。預設型別是字串。
+使用`-`接上一段文字，當作 `properties` 的描述。
+使用`: `接上一個值，當作 `properties` 的值(舉例的值)。
+
+```markdown
++ name: Chris (string) - The Person's name
+```
+
+> 若 `properties` 的值，包含下面符號，就要用 `back-ticks` 包成 `code-block`。
+
+
+**在aglio上實測結果**
+
+```markdown
+# Person [GET /person/]
+
++ Response 200
+    + Attribute
+        + name: Chris (string) - The Person's name
+```
+
+變這樣
+![](https://i.imgur.com/rihL31u.png)
+
+`list`結構，變成 `object`
+```markdown
+# Company [GET /company/]
+
++ Response 200
+    + Attribute
+        + name: Apiary
+        + founded: 2011 (number) - The year in which the company was founded
+        + address
+            + street: 235 Ninth Street
+            + city: San Francisco
+            + state: California
+```
+變這樣
+![](https://i.imgur.com/9bNUHEu.png)
+
+
+## 型別
+
+MSON 有6種型別可以使用
+
+- 簡單型別: `boolean`, `string`, `number`
+- 複雜型別: `array`, `enum`, `object`
+
+## Inheritance
+
+:::warning
+aglio 試不出來
+:::
+
+Administrator 繼承 Person
+
+```markdown
+# Administrator (Person)
+
++ role (string) - The administrators role
+```
+
+(aglio 試不出來)
+
+## Nesting
+
+:::warning
+aglio 試不出來
+:::
+
+Company裡的founder是一個Person
+
+```markdown
+# Company
+
++ name: Apiary
++ founder (Person)
+```
+
+# 學習更多
+
+
+
 
 # 後記
 
@@ -402,5 +505,7 @@ containing a question and a collection of answers in the form of choices.
 
 練習頁面成果
 - [Tutorial](https://dwatow.github.io/apiblueprint-demo/tutorial.html)
-- [Advance Tutorial]
-- [Example: poll]
+- [Advance Tutorial](https://dwatow.github.io/apiblueprint-demo/advance_tutorial.html)
+- [Example: poll](https://dwatow.github.io/apiblueprint-demo/poll.html)
+
+api blueprint 官網的 [MSON Specification](https://apiblueprint.org/documentation/mson/specification.html)
