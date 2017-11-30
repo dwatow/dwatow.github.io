@@ -16,16 +16,28 @@ Api Buleprint 是一種markdown，主要的用途是撰寫 Api 文件
 
 所以，特別寫一篇常用文法的整理。
 
-## 後設資料
+
+# 後設資料
 
 並不會被render到頁面上。
-可以用來代表文件版本。
+
+## 文件版本
 
 ```markdown
 FORMAT: 1A
 ```
 
-## API 名稱&描述
+## 文件的 `HOST`
+
+有設定 `HOST` 的話，下面的 `Resource` 將會添加上網址的 domain
+
+```markdown
+HOST: https://dwatow.github.io
+```
+
+
+# API 名稱&描述
+
 API Name & Description
 
 整份文件第一個`h1`，寫成`# API名稱`，用來當作 **API 文件的名稱**
@@ -44,7 +56,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
 ![](https://i.imgur.com/IUZ5m7i.png)
 
-## API 群組
+# Resource 群組
 Resource Groups
 
 一種有接著`Group`關鍵字的`h1`，寫成`# Group API 群組名稱`，用來當 **API 群組**名稱
@@ -63,10 +75,10 @@ Resources related to questions in the API.
 
 ![](https://i.imgur.com/1829jBY.png)
 
-## API (本身)
+# Resource (API 本身)
 Resource
 
-官網是用`Resource`這個字，也許是因為[`URI`](https://zh.wikipedia.org/wiki/%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E6%A0%87%E5%BF%97%E7%AC%A6)的關係，所以稱為`Resource`，畢竟網址本身可以是各種形式的資源
+官網是用`Resource`這個字，也許是因為[`URI`](https://zh.wikipedia.org/wiki/%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E6%A0%87%E5%BF%97%E7%AC%A6)，所以稱為`Resource`，畢竟網址本身可以是各種形式的資源
 
 只要用`##`就代表要API 本身。它會定義一組路徑。
 再依不同的`Actions`各別定義要帶資料形式。
@@ -81,9 +93,11 @@ Resource
 
 ![](https://i.imgur.com/b1TDUJm.png)
 
-### API 動作
+## API 動作
 
 Actions
+
+使用`### 名字 [動作]`可以表示 API 的動作段落
 
 **markdown**
 
@@ -98,10 +112,10 @@ Actions
 ![](https://i.imgur.com/YOw3rmG.png)
 
 
-### 很多個 API 動作
+## 很多個 API 動作
 
-每一個API都會有不同的動作。
-直接用`###`就可以再加一個了。
+每一個`Resource`都會有不同的動作。
+直接用`### 名字 [動作]`就可以再加一個了。
 
 而且，下面可以直接使用`markdown`的`list`語法。
 會render出條列式的內容
@@ -122,9 +136,9 @@ containing a question and a collection of answers in the form of choices.
 
 ![](https://i.imgur.com/uJNG4sQ.png)
 
-### Response(JSON)
+### Response (JSON)
 
-記錄 Response 形式很多種，用`list`形式記錄
+記錄 `Response` 形式很多種，用`list`形式記錄
 
 傳回200，資料以JSON形式呈現。
 
@@ -173,9 +187,11 @@ containing a question and a collection of answers in the form of choices.
 展開是這樣
 ![](https://i.imgur.com/LA3NwH2.png)
 
-##### 自訂 Headers, Body
+### 自訂 Response 的 Headers, Body
 
-也可以使用`list`來自訂 Headers、Body的JSON
+也可以使用`list`來自訂 Headers、Body 的 JSON
+
+> 要注意，`Body`後面的 JSON 要再多縮一次縮排。
 
 **markdown**
 
@@ -199,9 +215,11 @@ containing a question and a collection of answers in the form of choices.
 
 ![](https://i.imgur.com/t9KuU9V.png)
 
-## URI Template
+# URI Template
 
 要將 API 網址一部份當變數使用，在此可以使用`{變數}`的形式，放在 `Resource`的位址列定義中，稱之為`URI Template`。
+
+定義 `URI Template` 時，若有變數，要設定 `URI Parameters` 區段對變數進行定義。
 
 **markdown**
 
@@ -213,7 +231,7 @@ containing a question and a collection of answers in the form of choices.
 
 ![](https://i.imgur.com/Su74IhH.png)
 
-### URI Parameters
+## URI Parameters
 
 用在URI的參數描述，使用`+ Parameters`做`list`的第一層
 通常是用來描述URL上的變數。[看完整定義](https://github.com/apiaryio/api-blueprint/blob/master/API%20Blueprint%20Specification.md#def-uriparameters-section)
@@ -229,50 +247,160 @@ containing a question and a collection of answers in the form of choices.
 
 ![](https://i.imgur.com/jrDcyEZ.png)
 
-### Actions
 
-(和上面的描述一樣，沒有什麼差別)
+# 同場加映: Advance Tutorial
+
+這一段進階的教學，大概的內容是在講
+如果你在 `request` 和 `response` 要放 `JSON`。
+而且希望附上 `JSON Schema` ，可以考慮使用 `MSON` (在 `+ Attributes` 下接 `list`)。
+
+使用 `MSON` ，就可以使用 `Data Structures`
+另外，還可以使用 `Relaiton Types`
+
+# JSON Schema
+
+`Action` 的 `Request` 和 `Response` ，可以描述它們的 `Body` 結構有相關的 `Schema` 。
+通常使用 `JSON Schema` 描述 `JSON bodies`
+
+
+**markdown**
+在 `Response` 的 `Body` 後面加上 `+ Schema` 段落即可。
+
+
+```markdown
+### Create a New Question [POST]
+You may create your own question using this action. It takes a JSON object
+containing a question and a collection of answers in the form of choices.
+
++ Request (application/json)
+
+    + Body
+
+            {
+              "question": "Favourite language?"
+              "choices": [
+                "Swift",
+                "Objective-C"
+              ]
+            }
+
+    + Schema
+
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "choices": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 2
+                }
+              }
+            }
+```
+
+**result**
+
+![](https://i.imgur.com/EK62JtG.png)
+
+# Attributes
+
+表示 `Request` 和 `Response` 的結構還有另一個方法，就是使用 `MSON` 撰寫。
+
+`MSON` 像是 `API Blueprint` 一樣，可讀性很高，不像 `JSON` 或 `YAML` 是給機器讀的
+
+`MSON` 也允許你描述 API 的資料結構。可以加在 `Resource`, `Action` 和  individual requests or responses ， 只要加上 `+ Attributes`
+
+> 注意，自動生成的 `JSON Schema` 和手寫的並不會完全相同。(可比較上一段手寫的)在這個例子中，`minItems` 將不會渲染生成。
+> 如果你無法接受，你可以覆寫 `schema` 。
+
+**markdown**
+
+當 `Attribute` 下面那一段成功渲染時，會同時擁有 `JSON body` 和 `JSON Schema` 。
+
+
+```markdown
+### Create a New Question [POST]
+You may create your own question using this action. It takes a JSON object
+containing a question and a collection of answers in the form of choices.
+
++ Request (application/json)
+
+    + Attributes
+
+        + question: Favourite Language? (required)
+        + choices: Swift, `Objective-C` (array, required)
+```
+
+**result**
+
+![](https://i.imgur.com/gBJhD2t.png)
+
+# Data Struct
+
+只要你開始使用 `MSON` 你可以重複使用某些常用或巢狀的資料結構組合。
+
+可以使用 `## Data Structures` 段落。 `Attribute` 可以引用自己或其它的 Resource 所定義的 `data structures` 段落名稱
 
 **markdown**
 
 ```markdown
-### View a Questions Detail [GET]
-
+### List All Questions [GET]
 + Response 200 (application/json)
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2014-11-11T08:40:51.620Z",
-                "url": "/questions/1",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "url": "/questions/1/choices/1",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "url": "/questions/1/choices/2",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "url": "/questions/1/choices/3",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "url": "/questions/1/choices/4",
-                        "votes": 256
-                    }
-                ]
-            }
+    + Attributes (array[Question])
+
+## Data Structures
+
+### Question
++ question: Favourite programming language? (required)
++ published_at: `2014-11-11T08:40:51.620Z` (required)
++ url: /questions/1 (required)
++ choices (array[Choice], required)
+
+### Choice
++ choice: Javascript (required)
++ url: /questions/1/choices/1 (required)
++ votes: 2048 (number, required)
 ```
 
-**render result**
+**result**
 
-![](https://i.imgur.com/mURlxBK.png)
+![](https://i.imgur.com/on9L1uQ.png)
+
+# Relaiton Types
+
+看不懂作用是什麼。
+在此就不誤人子弟了
+附上看過的參考資料
+- [官網 Advance Tutorial](https://apiblueprint.org/documentation/advanced-tutorial.html)
+- [官網 Specification](https://apiblueprint.org/documentation/specification.html)
+
+```markdown
+## Question [/question/{id}]
+### View a Question Detail [GET]
++ Relation: self
+
+### Delete a Question [DELETE]
++ Relation: delete
+
+## Questions Collection [/questions]
+### List All Questions [GET]
++ Relation: self
+```
 
 
 # 後記
 
 這就是[API Blueprint Tutorial](https://apiblueprint.org/documentation/tutorial.html)的過程。
 
-[練習頁面成果](https://dwatow.github.io/apidoc-demo/apiBlueprintTutorial.html)
+
+練習頁面成果
+- [Tutorial](https://dwatow.github.io/apiblueprint-demo/tutorial.html)
+- [Advance Tutorial]
+- [Example: poll]
