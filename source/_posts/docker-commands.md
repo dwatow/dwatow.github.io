@@ -2,7 +2,7 @@
 title: Docker 指令們
 date: 2017-10-26 12:11:42
 tags: Docker
-categories: ['工具使用', '技術練習']
+categories: ["工具使用"]
 ---
 
 # Docker 指令們

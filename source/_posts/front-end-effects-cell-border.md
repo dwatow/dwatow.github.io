@@ -1,8 +1,8 @@
 ---
 title: 思緒亂亂的特效
 date: 2017-08-05 10:04:34
-tags: 動畫特效
-categories: 技術練習
+tags: "動畫特效"
+categories: "技術練習"
 ---
 # 思緒亂亂的特效
 
