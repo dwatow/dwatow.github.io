@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="" />
+  <meta name="title" content="《Chris 技術筆記》">
+  <meta name="author" content="Chris">
+  <meta name="copyright" content="《Chris 技術筆記》2018">
+  <meta name="description" content="從C++到Javascript，邁向網頁前端之路。">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:title" content="《Chris 技術筆記》">
+  <meta property="og:url" content="dwatow.github.io">
+  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:description" content="從C++到Javascript，邁向網頁前端之路">
+
+  <title>
+    
+          《Chris 技術筆記》
+  </title>
+  
+    
+      <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>Chris × 前端技術</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <header class='PageTitle'>
+        <h1>{ 前端新手村 }</h1>
+    </header>
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-30-iron-man-2008/iron-man-2008-day20/">前端新手村 flex grow &amp; shrink 演算法</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-29T23:13:55.000Z" itemprop="datePublished">
+    2017-12-30
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Flex/">Flex</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/flex-grow/">flex-grow</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/flex-shrink/">flex-shrink</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>flex grow &amp; shrink 演算法</h1>
+<blockquote>
+<p>此演算法，是和邦友 <a href="https://ithelp.ithome.com.tw/users/20107334/profile" target="_blank" rel="external">OTree</a> 一起研究，我只是寫 JavaScript 驗證。</p>
+</blockquote>
+<p>新手若覺得這種學術路線不適合你，那這一篇就跳過吧！我還是想寫一下。</p>
+<p>來說說伸縮與壓縮的尺寸計算方式<br>
+直接用例子來試算一下。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outter"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.outter</span> &#123;</div><div class="line">  <span class="attribute">outline </span>: solid <span class="number">1px</span> black;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line"></div><div class="line">  .div1 &#123;</div><div class="line">    <span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;</div><div class="line">    <span class="selector-tag">background</span> : <span class="selector-tag">red</span>;</div><div class="line">    <span class="selector-tag">flex-grow</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-shrink</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-basis</span><span class="selector-pseudo">:400px</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-class">.div2</span> &#123;</div><div class="line">    <span class="attribute">height</span>:<span class="number">100px</span>;</div><div class="line">    <span class="attribute">background </span>: blue;</div><div class="line">    <span class="attribute">flex-grow</span>:<span class="number">1</span>;</div><div class="line">    <span class="attribute">flex-shrink</span>:<span class="number">1</span>;</div><div class="line">    flex-basis:200px; //預借空間</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>渲染結果</strong></p>
+<p><img src="https://i.imgur.com/FpQeB3q.png" alt=""></p>
+<p><strong>描述問題</strong></p>
+<p>元素 $i$ (每個元素) 在 flex container 中，因為伸展和壓縮，需要重新計算寬度。</p>
+<p>運算式的名詞定義</p>
+<p><img src="https://i.imgur.com/nK4Baef.png" alt=""></p>
+<h2><code>flex-grow</code></h2>
+<p>運算式如下</p>
+<p><img src="https://i.imgur.com/P6dZATs.png" alt=""></p>
+<p>由公式可以看出(真的可以看出嗎？)</p>
+<p>最後的寬度，是由預借空間加上「伸展量」<br>
+伸展量是該元素佔有剩餘空間的比例。<br>
+(描述這個，跟本就是數學運算式要轉成國小應用問題的能力)</p>
+<h2><code>flex-shrink</code> &amp; <code>flex-basis</code></h2>
+<p>運算式如下</p>
+<p><img src="https://i.imgur.com/wnMAhMG.png" alt=""></p>
+<p>由公式可以看出(真的可以看出嗎？)</p>
+<p>最後的寬度，是由預借空間加上「壓縮量」(負數)<br>
+壓縮量是該元素的預借空間佔有剩餘空間的比例。</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://codepen.io/dwatow/pen/Nwmojy" target="_blank" rel="external">flex-basis excerise</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-29-iron-man-2008/iron-man-2008-day19/">前端新手村 flex (下)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-28T23:38:50.000Z" itemprop="datePublished">
+    2017-12-29
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Flex/">Flex</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>flex (下)</h1>
+<p>今天來說說，<code>flex</code> 比較讓人不好懂的部份。</p>
+<h2>Flexibility<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p><code>flex</code> 的定義裡盡可能的讓 flex item 的高寬填滿容器</p>
+<p><code>flex</code> 的 CSS 屬性，用來定義 flex item 如何填滿容器。如何伸長分配剩餘空間，如何擠壓自己防止 flex item 超出容器</p>
+<h2><code>flex</code> 縮寫語法</h2>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">flex: 延伸 壓縮 預借空間</div></pre></td></tr></table></figure>
+<p><code>flex</code> 裡的三個值，依序如下</p>
+<ol>
+<li>延伸 <code>flex-grow</code></li>
+<li>壓縮 <code>flex-shrink</code></li>
+<li>預借空間 <code>flex-basis</code></li>
+</ol>
+<p>預設值 <code>flex: 0 1 auto;</code></p>
+<blockquote>
+<p>為了符合過去常常見的大部份的情況，所以將縮寫預設值不同於單一屬性預設值。</p>
+</blockquote>
+<ul>
+<li><code>flex: initial</code> = <code>flex: 0 1 auto</code></li>
+<li><code>flex: auto</code> = <code>flex: 1 1 auto</code></li>
+<li><code>flex: none</code> = <code>flex: 0 0 auto;</code></li>
+<li><code>flex: n</code> = <code>flex n 1 0</code> 純以比例決定 flex item 大小</li>
+</ul>
+<p>flex 可以搭配 <code>min-width</code> 和 <code>min-height</code> 改變壓縮時的幅度。</p>
+<blockquote>
+<p>建議優先使用 <code>flex</code> 而不建議只用各別的 <code>flex-grow</code>、<code>flex-shrink</code>、<code>flex-basis</code>，因為縮寫預設值較符合一般使用情境</p>
+</blockquote>
+<h2><code>flex-grow</code></h2>
+<p>定義 flex grow factor 伸延因數</p>
+<ul>
+<li>預設值: 1</li>
+<li>值: 負數無效</li>
+</ul>
+<p>當容器的「分配空間」是<strong>正數</strong>時，就使用 <code>flex-grow</code></p>
+<h2><code>flex-shrink</code></h2>
+<p>定義 flex grow factor 壓縮因數</p>
+<ul>
+<li>預設值: 1</li>
+<li>負數無效</li>
+</ul>
+<p>當容器的「分配空間」是<strong>負數</strong>時，就使用 <code>flex-grow</code></p>
+<blockquote>
+<p>縮小時，<code>flex-shrink</code> × <code>flex-basis</code><br>
+依物品能夠縮小的比例。<br>
+目的在於「較大物品明顯減少之前，小物品不會縮到0」</p>
+</blockquote>
+<h2><code>flex-basis</code></h2>
+<ul>
+<li>預設值: auto</li>
+</ul>
+<p>決定容器的「分配空間」之前，每一個 flex-item 要先佔有的尺寸，換句話說，是 flex-item 對「分配空間」的「預借空間」</p>
+<ul>
+<li>設定 <code>auto</code> 時，會去找該元素的主要尺寸設定值(<code>height</code>/<code>width</code>)做為基礎，若它們也都是 <code>auto</code> 就用內容尺寸。</li>
+<li>設定 <code>0</code> 直接看圖比較實在<br>
+<img src="https://i.imgur.com/LlQkutI.png" alt="">
+<ul>
+<li>上面是設定 <code>0</code>，設定 0，包含內容都當作是剩餘空間。</li>
+<li>下面是設定 <code>auto</code>，flex-item 尺寸內容尺寸為準，留白才算剩餘空間。</li>
+</ul>
+</li>
+</ul>
+<h2>flex 使用 margin <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<ul>
+<li>要避免在 flex item 的 <code>margin</code> 和 <code>padding</code> 使用百分比，會跨瀏覽器的問題</li>
+</ul>
+<p>一般在 <code>flex item</code> 的 <code>margin</code> 的排法，寫在<a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#layout-algorithm" target="_blank" rel="external">排版演算法</a>，但是當 <code>margin: auto</code> ，flex 希望比較像是 <code>block</code> 的排版，所以有下列幾點要注意:</p>
+<ul>
+<li>計算 <code>flex-basis</code> 時，<code>margin</code> 會直接當作 0</li>
+<li>在 <code>justify-content</code> 和 <code>align-self</code> 計算之前，會先分配正數的剩餘空間給該方向的 <code>margin: auto</code></li>
+<li>若擠滿容器，主軸方向的 <code>margin: auto</code> 會忽略，不會超過 flex container。</li>
+</ul>
+<p>不管你是不是看得懂這一段在寫什麼。<br>
+總之，用 flex item 要注意你是不是用了 <code>margin: auto</code>。<br>
+flex item 都使用 <code>flex</code> 處理剩餘空間了，就不應該又使用 <code>margin: auto</code> 來分配剩餘空間</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#flex-property" target="_blank" rel="external"> 7.1. The flex Shorthand - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins" target="_blank" rel="external"> 8.1. Aligning with auto margins - w3.org</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-28-iron-man-2008/iron-man-2008-day18/">前端新手村 flex (上)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-27T23:25:29.000Z" itemprop="datePublished">
+    2017-12-28
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Flex/">Flex</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>flex (上)</h1>
+<h2>歷史</h2>
+<p>跟著我的步調，先來看看 flex 對於內容排版，有什麼基本的功能吧！</p>
+<p>以《眾妙之門》這本簡中翻譯書的內容對照出版日，來看看 flex 為什麼是現在這個名字[^1]。</p>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>display</th>
+<th>屬性名稱</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2009年以前</td>
+<td><code>display:box;</code></td>
+<td><code>box-{*}</code></td>
+</tr>
+<tr>
+<td>2011年的左右</td>
+<td><code>display:flexbox;</code></td>
+<td><code>flex()</code></td>
+</tr>
+<tr>
+<td>2012-2013年</td>
+<td><code>display:flex</code></td>
+<td><code>flex-{*}</code></td>
+</tr>
+</tbody>
+</table>
+<p>在繁中的一些早期就有出的書(ex: 《HTML5 完美風暴》)，也可以看得出這些語法的版本改變，講的都是同一件事，就是 flex box<br>
+在現在(2017年底)講的版本，相對穩定許多。(硬要酸一下)</p>
+<p>在 CSS2.1 中，定義了四種排版方式。</p>
+<ol>
+<li>block 排版，為文章排版而設計。</li>
+<li>inline 排版，為文字排版而設計。</li>
+<li>table 排版，為了將資料攤成表格。</li>
+<li>position 排版，為了依位置而不是依內容關係排版而設計</li>
+</ol>
+<p>在此介紹第五種排版方式</p>
+<ol start="5">
+<li>flex 排版，為了複雜排版畫面而設計。</li>
+</ol>
+<h2>flex 術語</h2>
+<ul>
+<li><strong>flex container</strong> 使用 <code>flex</code> 或 <code>inline-flex</code> 的容器，內容以 flex formatting context 方式排列。</li>
+<li><strong>flex items</strong> 在 flex container 裡的元素們(整行的元素)</li>
+<li><strong>flex directions</strong> 在 flex container 裡的排列方向</li>
+</ul>
+<h2>flex container</h2>
+<p>在容器使用</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">display</span>: <span class="selector-tag">flex</span>;</div><div class="line"><span class="selector-tag">display</span>: <span class="selector-tag">inline-flex</span>;</div></pre></td></tr></table></figure>
+<p>容器裡的元素排列會以 <code>flex</code> 的排列方式進行。</p>
+<ul>
+<li>排列方式會像 <code>inline</code> 可以橫向並且一行一行的排列，也像 <code>block</code> 這樣控制每個元素</li>
+<li><code>::first-letter</code> 、 <code>::first-line</code>、<code>float</code> 以及 <code>clear</code> 和 <code>vertical-align</code> 沒有作用。</li>
+<li><code>margin</code> 不會 margins collapsing</li>
+<li><code>margin</code> 和 <code>padding</code> 不要用在元素上，目前未定案</li>
+<li><code>margin: auto</code> 特別規定在 <a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins" target="_blank" rel="external">8.1. Aligning with auto margins - w3.org</a></li>
+</ul>
+<h2>在 flex 容器排元素</h2>
+<p>理解方式，就像是理解 <code>inline</code> 排版的方式。<br>
+一邊看語法，一邊用 <code>inline</code> 的圖複習一下</p>
+<ul>
+<li><strong>justify</strong> 指的是每一行的頭尾對齊<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> (主軸方向)
+<ul>
+<li><code>justify-content</code> 文章的行頭尾對齊</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://i.imgur.com/oyl3mjs.png" alt=""></p>
+<ul>
+<li><strong>align</strong> 指的是「以行為單位」的對齊(副軸方向)
+<ul>
+<li><code>align-content</code> 行與行副軸空間分配(副軸頭尾對齊)</li>
+<li><code>align-items</code> 整排元素(整行)的對齊(上下調整)</li>
+<li><code>align-self</code> 個別元素的對齊(上下調整)</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://i.imgur.com/boIyUpF.png" alt=""></p>
+<h2><code>flex-flow</code></h2>
+<p>縮寫語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">flex-flow: &lt;flex-direction&gt;  &lt;flex-wrap&gt;</div><div class="line">flex-flow: &lt;flex-wrap&gt;</div><div class="line">flex-flow: &lt;flex-direction&gt;</div></pre></td></tr></table></figure>
+<h3><code>flex-direction</code></h3>
+<p>設定在容器</p>
+<p>調整文字排列方向，預設 <code>row</code></p>
+<ul>
+<li><code>col</code> 上→下排
+<ul>
+<li><code>col-reverse</code> 下→上</li>
+</ul>
+</li>
+<li><code>row</code> 左→右排
+<ul>
+<li><code>row-reverse</code> 右→左</li>
+</ul>
+</li>
+</ul>
+<h3><code>flex-wrap</code></h3>
+<p>設定在容器</p>
+<p>自動換行，預設 <code>nowrap</code></p>
+<ul>
+<li><code>nowrap</code> 可以選擇不換行</li>
+<li><code>wrap</code> 滿了換到下一行</li>
+<li><code>wrap-reverse</code> 滿了換到上一行</li>
+</ul>
+<h2><code>order</code></h2>
+<p>設定在元素</p>
+<p>改變元素順序，預設 0</p>
+<ul>
+<li>正數靠右排</li>
+<li>負數靠左排</li>
+</ul>
+<h2>學習管道</h2>
+<ul>
+<li><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" rel="external">CSS-Tricks flex box</a></li>
+<li><a href="http://flexboxfroggy.com/" target="_blank" rel="external">小青蛙練習</a></li>
+</ul>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://helpx.adobe.com/indesign/using/aligning-text.html" target="_blank" rel="external"> Align or justify text - InDesign User Guide</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-27-iron-man-2008/iron-man-2008-day17/">前端新手村 Position 定位</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-27T00:00:06.000Z" itemprop="datePublished">
+    2017-12-27
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Position/">Position</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1><code>Position</code> 定位</h1>
+<p>呼！花了五天介紹 CSS 的 Selector!!介紹完 Selector 之後，來介紹常用的 <code>position</code> 吧！</p>
+<p>在 CSS 中，有三種可控制的方式，放置 box <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<ol>
+<li>Normal flow 自然排列<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
+<li><code>float</code> 排列<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></li>
+<li><code>position</code> 定位</li>
+</ol>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">position: 定位方法</div><div class="line">top: 數字</div><div class="line">bottom: 數字</div><div class="line">left: 數字</div><div class="line">right: 數字</div></pre></td></tr></table></figure>
+<ul>
+<li>上下左右的設定用得上再使用</li>
+<li>定位並不會造成單位變化，所以可以這樣換算 <code>left</code> = -<code>right</code>, <code>top</code> = -<code>bottom</code></li>
+</ul>
+<h2>Static 無定位</h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<ul>
+<li><code>position: staic</code> 是每個 HTML element 的預設值。</li>
+<li><code>position</code> 設定成這個值時, <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code> 將不會有任何作用。</li>
+</ul>
+<h2>Relative 相對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<p>假設有個叫 box 的HTML element 設定 <code>position: relative</code>  會有什麼影響</p>
+<ul>
+<li>在 normal flow 佔有的空間，依然佔有。</li>
+<li>不會影響其它 normal flow 的 HTML Element</li>
+<li>偏移量是相對於在 normal flow 的位置</li>
+<li>會導致元素重疊</li>
+<li>在 table 有些跨欄偏移的應用 (有明確的定義，不過在此不細講)</li>
+</ul>
+<h2>Absolute 絕對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:1">[4]</a></sup></h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<p>假設有個叫 box 的HTML element 設定 <code>position: absolute</code> 會有什麼影響</p>
+<ul>
+<li>跳脫 normal flow 排列規則，不佔有任何空間。</li>
+<li>不會影響其它 normal flow 的 HTML Element</li>
+<li>偏移量是相對於有「非 <code>position: static</code> 」的位置</li>
+<li>box 以內有 normal flow 和 <code>position: absolute</code> 的都與 box 相關</li>
+<li>會導致元素重疊</li>
+</ul>
+<h2>Fixed 可視區的絕對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:2">[4]</a></sup></h2>
+<p>可視區的絕對定位，唸起來很呦口。我也不知道怎麼翻才好。</p>
+<p>這是一種類似絕對定位的定位方式。唯一的區別在於偏移量參考點</p>
+<ul>
+<li>absolute 參考容器(的容器)中，使用「非 static 定位」的容器</li>
+<li>偏移量是相對於可視區 (viewport)</li>
+<li>每個可視區都會重複 fixed 定位的內容</li>
+</ul>
+<p>在內容捲動時，被 <code>fixed</code> 的元素會固定不移動。類似固定背景的效果</p>
+<blockquote>
+<p>有 Media Query 時，有用到 paged 類型，要注意重複的情況。<br>
+每個頁面固定放置簽名，是個很有效的做法。</p>
+</blockquote>
+<h2>Sticky 滾動黏滯定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:3">[4]</a></sup></h2>
+<p>在介紹 sticky 之前，先說說一個實例</p>
+<p>在此這個頁面，在內容向上捲動時，希望 menu 離開頁面時，會固定在最上面，一直到 menu 上面的部份再出現時，menu 再跟著頁面往下捲動。(如下圖)</p>
+<p><img src="https://i.imgur.com/r99VCN2.gif" alt=""></p>
+<p>但是<br>
+理想與現實之間<br>
+是有的差距的(如下圖)!!!</p>
+<p>常見的實作bug，有「內容跳動」的情況。<br>
+當 menu 要變成 <code>fixed</code> 時，由於從佔 normal flow 空間改成不佔空間的定位方式。跳動的現象，就是後面的元素因為 normal flow 的排列往前排造成的。</p>
+<p><img src="https://i.imgur.com/LM7iO1b.gif" alt=""></p>
+<p><strong>過去的做法</strong></p>
+<p>用 JavaScript 加上/移除 CSS 的方式。<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-pseudo">:root</span> &#123;</div><div class="line"> <span class="attribute">--menu-height</span>: <span class="number">100px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.fixMenu</span> &#123;</div><div class="line">    <span class="attribute">position</span>: fixed;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.fixMenu</span> + * &#123;</div><div class="line">    <span class="attribute">padding-top</span>: <span class="built_in">var</span>(--menu-height)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>用純 CSS 的做法</strong></p>
+<p>只需要將 menu 加上這個 css，它就會在可視區 <code>top: 0</code> 和 <code>left: 0</code> 的範圍內，隨內容滾動，在範圍以外，固定在邊界。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.stickyMenu</span> &#123;</div><div class="line">    <span class="attribute">position</span>: sticky;</div><div class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看似很符合需求，<code>sticky</code> 卻不只是可以這樣。</p>
+<blockquote>
+<p>名詞解釋: sticky-constraint rectangle<br>
+容器或 viewport，裡面的<code>div</code>之類的區塊中，其中一個包含著設定 <code>position: sticky</code> 的元素。</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-constraintrectangle"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-element"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>sticky</code> 是一種類似 <code>relative</code> 的定位方式，偏移量是參考有 scroll 的容器或者是 可視區 (viewport)。</p>
+<ul>
+<li>保留原有 normal flow 所佔用的空間</li>
+<li><code>sticky</code> 元素的活動範圍界於 sticky-constraint rectangle 四邊裡面與容器四邊裡面，若之間的空間小於<code>sticky</code> 元素，則<code>sticky</code> 元素被捲出容器四邊</li>
+<li>偏移量，捲動到離各邊多少，單位使用百分比，其 100% 是該方向容器的尺寸</li>
+<li>element 滾到上下邊界時， margin 會 margins collapse</li>
+</ul>
+<p><strong>千言萬語，先看例子就知道</strong></p>
+<ol>
+<li><code>sticky</code> 定位效果與捲動容器邊界之間的關係。</li>
+<li><code>sticky</code> 定位效果與自身容器(sticky-constraint rectangle)之間的關係。</li>
+<li>上述兩點裡的容器，影響優先權如何</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line"> Lorem Ipsum</div><div class="line">"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-constraintrectangle"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-element"</span>&gt;</span>"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, vehicula nulla non, luctus mauris. Etiam venenatis massa vitae eros vestibulum, elementum feugiat lectus rhoncus. Integer tincidunt justo id laoreet facilisis. Praesent tristique malesuada ipsum, id tincidunt felis mattis eu. Aliquam interdum id tortor nec varius. Etiam hendrerit, dolor nec luctus rhoncus, magna magna sagittis sem, a faucibus ex erat sed metus. Praesent pretium lacinia nisl nec elementum. Morbi varius finibus turpis ac facilisis.</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.sticky-element</span> &#123;</div><div class="line"> <span class="attribute">position</span>: sticky;</div><div class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">color</span>: red;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.sticky-constraintrectangle</span> &#123;</div><div class="line"> <span class="attribute">height</span>: <span class="number">50px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">overflow</span>: auto;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2>常見用法</h2>
+<p>例子1: 容器設 <code>relative</code> 給後代元素做 <code>absolute</code> 的偏移參考</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="comment">&lt;!--   很多的 box    --&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.container</span> <span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>例子2: box 置中<br>
+新手常遇到的問題，是置中很難處理。<br>
+其實絕對定位可以完美的將 box 置中</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"centerbox"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">* &#123;</div><div class="line"> <span class="attribute">margin</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">padding</span>: <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line"> <span class="attribute">width</span>: <span class="number">100vw</span>;</div><div class="line"> <span class="attribute">height</span>: <span class="number">100vh</span>;</div><div class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid;</div><div class="line"></div><div class="line"> <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.centerbox</span> &#123;</div><div class="line"> <span class="attribute">position</span>: absolute;</div><div class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">right</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">margin</span>: auto;</div><div class="line"></div><div class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">background-color</span>: <span class="number">#f00</span>;</div><div class="line"> <span class="attribute">border</span>: <span class="number">1px</span> solid red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因為 <code>fixed</code> 和 <code>absolute</code> 要符上這個公式<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&apos;left&apos; + &apos;margin-left&apos; + &apos;border-left-width&apos; + &apos;padding-left&apos; + &apos;width&apos; + &apos;padding-right&apos; + &apos;border-right-width&apos; + &apos;margin-right&apos; + &apos;right&apos; = width of containing block</div></pre></td></tr></table></figure>
+<h2>圖層</h2>
+<p>由於 <code>position</code> 會造成 HTML element 互疊，甚至是內容遮蔽，所以在此必須使用 <code>z-index</code> 調整前景與背景的關係。</p>
+<p>在未使用 <code>z-index</code> 時，HTML element 的層級順序，同層是由 html 檔排列順序(由上而下)，下面的 html 會渲染在前景。</p>
+<p><strong>看個例子</strong></p>
+<p><img src="https://i.imgur.com/ehFFhTz.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"blue"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"gray"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"green"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"red"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"orange"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">border</span>: solid;</div><div class="line"> <span class="attribute">position</span>: absolute;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.blue</span>   &#123; <span class="attribute">top</span>: <span class="number">10px</span>;             <span class="attribute">background-color</span>: blue;   &#125;</div><div class="line"><span class="selector-class">.gray</span>   &#123; <span class="attribute">top</span>: <span class="number">20px</span>;             <span class="attribute">background-color</span>: gray;   &#125;</div><div class="line"><span class="selector-class">.green</span>  &#123; <span class="attribute">top</span>: <span class="number">30px</span>;             <span class="attribute">background-color</span>: green;  &#125;</div><div class="line"><span class="selector-class">.red</span>    &#123; <span class="attribute">top</span>: <span class="number">40px</span>; <span class="attribute">left</span>: <span class="number">50px</span>; <span class="attribute">background-color</span>: red;    &#125;</div><div class="line"><span class="selector-class">.orange</span> &#123; <span class="attribute">top</span>: <span class="number">50px</span>; <span class="attribute">left</span>: <span class="number">50px</span>; <span class="attribute">background-color</span>: orange; &#125;</div></pre></td></tr></table></figure>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-css-position-3-20160517/#rel-pos" target="_blank" rel="external">6. Positioning schemes - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://ithelp.ithome.com.tw/articles/10191740" target="_blank" rel="external">前端新手村 Block 和 Inline 排版</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://ithelp.ithome.com.tw/articles/10192087" target="_blank" rel="external">前端新手村 橫向排列 &amp; 實現純手工 RWD</a> <a href="#fnref3" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-css-position-3-20160517/#position-property" target="_blank" rel="external">6.5. Choosing a positioning scheme: position property - w3.org</a> <a href="#fnref4" class="footnote-backref">↩</a> <a href="#fnref4:1" class="footnote-backref">↩</a> <a href="#fnref4:2" class="footnote-backref">↩</a> <a href="#fnref4:3" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://www.facebook.com/LiveCoding.tw/videos/1669445373356989/" target="_blank" rel="external">來聊聊一些個人切版的經驗與個人切版技巧吧！ - LiveCoding.tw</a> <a href="#fnref5" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-css-position-3-20160517/#size-and-position-details" target="_blank" rel="external">8. Sizing and positioning details - w3.org<br>
+</a> <a href="#fnref6" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-26-iron-man-2008/iron-man-2008-day16/">前端新手村 CSS Cascade 串接</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-25T23:43:34.000Z" itemprop="datePublished">
+    2017-12-26
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Specificity/">Specificity</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Rulest-Order/">Rulest Order</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>CSS Cascade<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
+<p>Cascade 中文翻譯成「串接」。</p>
+<p>Cascade 動作是由 Specificity 和 Ruleset order 作用，決定要套用的 CSS。</p>
+<h2>Specificity<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<p>Specificity 在中文翻譯成「特定度」。</p>
+<p>千言萬語，透過<a href="http://cssspecificity.com/" target="_blank" rel="external">一個頁面</a>可以說盡。<br>
+看不懂沒關係，只要繼續看下去。</p>
+<h3>定義 Specificity</h3>
+<p>首先，我們想知道 specificity 是多少，要計算 <code>a</code>, <code>b</code>, <code>c</code>, <code>d</code> 四個數字<br>
+所以，目的在搞懂這四個數字怎麼計算，就可以掌握 specificity</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">(a, b, c, d)</div></pre></td></tr></table></figure>
+<ul>
+<li>a
+<ul>
+<li><code>style</code>，直接寫在 HTML element 的 <code>style</code> attribute，a = 1</li>
+</ul>
+</li>
+<li>b
+<ul>
+<li>b = 出現 <code>id</code> 選取器的次數</li>
+</ul>
+</li>
+<li>c
+<ul>
+<li>c = 出現 <code>class</code> 類別選取器的次數</li>
+<li>c = 出現 <code>[attribute=value]</code> 屬性選取器的次數</li>
+<li>c = 出現 <code>:pseudoclasses</code> 偽類選取器的次數</li>
+</ul>
+</li>
+<li>d
+<ul>
+<li>c = 出現 <code>:sudoelements</code> 偽元素選取器的次數</li>
+<li>c = 出現 <code>tagname</code> 類型(HTML標籤)選取器的次數</li>
+</ul>
+</li>
+</ul>
+<h3>計算 Specificity</h3>
+<ol>
+<li>a, b, c, d 彼此不換算。(很重要)</li>
+<li>a, b, c, d 各別只會相加</li>
+<li>結果是四個數字</li>
+<li>特例
+<ol>
+<li>value後面加 <code>!important</code> 直接在 a 前的第五位 +1</li>
+<li><code>*</code> 選取器，不佔任何分數 +0</li>
+</ol>
+</li>
+</ol>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> <span class="comment">/* 0, 1, 1, 3 */</span></div></pre></td></tr></table></figure>
+<ul>
+<li>a = 0: 沒有寫在 HTML 的 <code>style</code></li>
+<li>b = 1: <code>#nav-blobal</code></li>
+<li>c = 1: <code>.nav-link</code></li>
+<li>d = 3: <code>ul</code>, <code>li</code>, <code>a</code></li>
+</ul>
+<h2>Rulest order</h2>
+<p>Rulest order 翻譯成 規則集順序。</p>
+<p>千言萬語，只要開「開發者模式」就可以看結果。</p>
+<p><img src="https://i.imgur.com/EcCbRuB.png" alt=""></p>
+<p>以結果來說圖中的 <code>margin-top</code>被覆寫。</p>
+<h3>定義 Rulest order</h3>
+<p>若出現兩個 Specificity 強度相同的 Ruleset ，晚宣告有較高的優先權。</p>
+<blockquote>
+<p>是要改套件樣式，要掌握這個訣竅</p>
+</blockquote>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: blue;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最後的字型顏色，是紅色的。</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>《重構 CSS》 <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/#specificity" target="_blank" rel="external">9. Calculating a selector’s specificity - w3.org<br>
+</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-25-iron-man-2008/iron-man-2008-day15/">前端新手村 偽元素</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-25T05:26:48.000Z" itemprop="datePublished">
+    2017-12-25
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Pseudo-elements/">Pseudo-elements</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>偽元素</h1>
+<p>偽類 不是 偽元素。<br>
+偽元素，是元素!!!會出現在 DOM 樹上，偽類不會出現在 DOM 樹上。</p>
+<ul>
+<li>作用在 HTML element 裡的「內容」選擇器</li>
+<li>使用 <code>::first-line</code>或<code>::first-letter</code>可以描述(選到的)內容的特定位置</li>
+<li>使用 <code>::after</code> 或 <code>::before</code> 是「建立頭/尾內容」的偽元素</li>
+</ul>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Selector::偽元素</div></pre></td></tr></table></figure>
+<ul>
+<li>使用2個<code>:</code>是CSS3的規定，1個<code>:</code>也可以用的原因是對CSS1&amp;2的相向下容性</li>
+<li>一個 Selector 只能有一個偽元素</li>
+</ul>
+<blockquote>
+<p>未來的版本會出現多重偽元素!!</p>
+</blockquote>
+<h2>第一行 <code>::first-line</code></h2>
+<ul>
+<li>作用在第一行內容</li>
+<li>第一行的 <code>inline-table</code>, <code>inline-block</code> CSS會失效</li>
+<li>作用在 <code>block</code> 或 <code>table</code> 元素裡的 <code>inline</code> 內容(才有分行)。</li>
+<li>會依寬度而影響被選到的對象(斷行就沒選到了)</li>
+<li>第一行出現 <code>&lt;br&gt;</code> 那就是 <code>&lt;br&gt;</code> 之前的才算被選到</li>
+<li>選出來的第一行特性接近 <code>inline</code> 元素</li>
+</ul>
+<p>看個例子</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">DIV</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span>First paragraph<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span>Second paragraph<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">DIV</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>其實瀏覽器會這麼讀它</p>
+<blockquote>
+<p>注意<br>
+此例有把偽元素的作用範圍、順序精確的(以虛擬標籤的方式)標示在原始碼上。</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">DIV</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span><span class="tag">&lt;<span class="name">DIV::first-line</span>&gt;</span><span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span>First paragraph<span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">DIV::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span><span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span>Second paragraph<span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">DIV</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2>第一個字 <code>::first-letter</code></h2>
+<ul>
+<li>作用在一個字(母)</li>
+<li>第一個字的 <code>inline-table</code>, <code>inline-block</code> CSS會失效</li>
+<li>作用在 <code>block</code> 或 <code>table</code> 元素裡的 <code>inline</code> 內容(才有分行)。</li>
+<li>第一個字的位置是圖，則沒有任何字被選上</li>
+<li>標點符號起始的文章，標點符號會與字母一起被選取
+<ul>
+<li>ex1: <img src="https://i.imgur.com/t9nk5TS.png" alt=""></li>
+<li>ex2: <img src="https://i.imgur.com/9Fswp9g.png" alt=""></li>
+</ul>
+</li>
+<li>第一個字出現 <code>&lt;br&gt;</code> 那就是沒有任何字母被選上</li>
+<li>選出來的第一個字特性接近 <code>inline</code> 元素</li>
+</ul>
+<p><strong>看個例子</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: red; <span class="attribute">font-size</span>: <span class="number">12pt</span> &#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-letter</span> &#123; <span class="attribute">color</span>: green; <span class="attribute">font-size</span>: <span class="number">200%</span> &#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-line</span> &#123; <span class="attribute">color</span>: blue &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">P</span>&gt;</span>Some text that ends up on two lines<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>其實瀏覽器會這麼讀它</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">P</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">P::first-letter</span>&gt;</span></div><div class="line">            S</div><div class="line">        <span class="tag">&lt;/<span class="name">P::first-letter</span>&gt;</span></div><div class="line">        ome text that</div><div class="line">    <span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span></div><div class="line">    ends up on two lines</div><div class="line"><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>結果是這樣</p>
+<p><img src="https://i.imgur.com/xCKbqdr.png" alt=""></p>
+<blockquote>
+<p>注意<br>
+若同時設定 <code>::first-letter</code> 和 <code>::first-line</code><br>
+<code>::first-letter</code> 會繼承<code>::first-line</code> 的 CSS，若有衝突，會使用 <code>::first-letter</code> 的設定(會覆蓋)</p>
+</blockquote>
+<h3>常見的用途</h3>
+<p>“initial caps” and “drop caps”</p>
+<p><img src="https://i.imgur.com/8qTDKd3.png" alt=""></p>
+<h2>內容前&amp;後 <code>::before</code> &amp; <code>::after</code></h2>
+<p>適用在可以裝子元素的 HTML element</p>
+<ul>
+<li><code>::before</code> 建立第一個子元素內容</li>
+<li><code>::after</code> 建立最後一個子元素內容</li>
+</ul>
+<p><strong>使用注意</strong></p>
+<p>要有 <code>content: ''</code> 這兩個偽元素才會 work ，是用來放偽元素的內容。</p>
+<ul>
+<li>優點
+<ul>
+<li>使用 CSS 控制是不是要加內容</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>SEO 不好(內容寫在 CSS)</li>
+</ul>
+</li>
+</ul>
+<p><strong>看個例子</strong></p>
+<p><img src="https://i.imgur.com/GLqxrjl.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/JUB7s4C.png" alt=""></p>
+<p>透過相鄰選取器就可以選取到，就算成功了。<br>
+剩下的就是在左邊加上 <code>|</code> 就成功了</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> + <span class="selector-tag">span</span><span class="selector-pseudo">::after</span> &#123;</div><div class="line"> <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line"> <span class="attribute">display</span>: block;</div><div class="line"> <span class="attribute">position</span>: absolute;</div><div class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">margin</span>: auto;</div><div class="line"> <span class="attribute">width</span>: <span class="number">1px</span>;</div><div class="line"> <span class="attribute">height</span>: <span class="number">15px</span>;</div><div class="line"> <span class="attribute">background-color</span>: <span class="number">#000</span>;</div><div class="line"> <span class="attribute">left</span>: -<span class="number">2px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下次再來分享怎麼加上 <code>|</code><br>
+(不是用 <code>border</code> 當然也不是 <code>outline</code>)</p>
+<h2>Selector 遺珠</h2>
+<h3>DTD</h3>
+<p>DTD: Document Type Definition<br>
+XML 的事，和網頁前端新手可以先跳過<br>
+在此不介紹</p>
+<h3>namespace</h3>
+<p><code>w3.org</code> 的文件的介紹，有講到 namespace<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">namespace | Selector &#123;&#125;</div></pre></td></tr></table></figure>
+<p>CSS 的 Selector 會有 <code>|</code> 出現。<br>
+不過，在此不討論 namespace。</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://developer.mozilla.org/zh-TW/docs/Web/CSS/@namespace" target="_blank" rel="external"> @namespace - MDN</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-24-iron-man-2008/iron-man-2008-day14/">前端新手村 CSS Selector 的 Combinators</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-24T00:33:20.000Z" itemprop="datePublished">
+    2017-12-24
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>CSS 的 Selector Combinators<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
+<p>在介紹完 Simple selectors 之後，其實就可以做各式各樣的選擇，並且可以將它組成 Group。</p>
+<p>這還沒結束， Selector 還可以用 Combinators 來將它以某種關係組合起來。</p>
+<p>常見的應用，描述 Selector 透過 HTML 結構的耦合關係，套用特定 HTML element 的 CSS。</p>
+<p>英文稱為 Combinators，不過我後來想一想，這個的概念像是英文的連結詞: and, but 之類的。</p>
+<ul>
+<li>
+<p>Descendant combinator 後裔組合</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">a b</div></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Child combinators  孩子組合</p>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">a&gt;b</div></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Sibling combinators  同層組合<br>
+在考慮相鄰關係時，略過非元素節點</p>
+<ul>
+<li>Adjacent sibling combinator  相鄰同層組合</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">A+B</div></pre></td></tr></table></figure>
+<ul>
+<li>General sibling combinator 向後同層組合</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">A~B</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2>常見又不建議的關係整理</h2>
+<table>
+<thead>
+<tr>
+<th>邏輯</th>
+<th>Selector</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td>.A.B</td>
+<td>同時擁有.A和.B</td>
+</tr>
+<tr>
+<td>OR</td>
+<td>.A, .B</td>
+<td>只要有.A或.B</td>
+</tr>
+<tr>
+<td>INCLUDE</td>
+<td>.A .B</td>
+<td>.B包含在.A裡</td>
+</tr>
+<tr>
+<td>IN</td>
+<td>.A &gt; .B</td>
+<td>.B下一層有.A</td>
+</tr>
+</tbody>
+</table>
+<p>其實，不推薦這樣理解它們。<br>
+原因在於，初學會有許許多多的疑問</p>
+<ul>
+<li>不知道最後選到了誰</li>
+<li>它們是不是運算式，有沒有先乘除後加減的規則？</li>
+</ul>
+<p>還是用正確的分類一個一個來認識它們。</p>
+<h2>常見的應用</h2>
+<p>在 menu 或 footer 的設計上，常出現元素中間需要間隔線。</p>
+<p>看個例子</p>
+<p><img src="https://i.imgur.com/GLqxrjl.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/JUB7s4C.png" alt=""></p>
+<p>透過相鄰選取器就可以選取到，就算成功了。<br>
+剩下的就是在左邊加上 <code>|</code> 就成功了</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> + <span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下次再來分享怎麼加上 <code>|</code><br>
+(不是用 <code>border</code> 當然也不是 <code>outline</code>)</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/#pseudo-classes" target="_blank" rel="external">Selectors Level 3, 6.6. Pseudo-classes - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-23-iron-man-2008/iron-man-2008-day13/">前端新手村 CSS 的 簡單 Selector (下篇)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-22T23:17:11.000Z" itemprop="datePublished">
+    2017-12-23
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>css 的 簡單 Selector (下篇)</h1>
+<h2>The UI element states pseudo-classes</h2>
+<p>可以 enable / disable 切換的UI元素。<br>
+切換時可用這兩種元素選取</p>
+<ul>
+<li><code>:enabled</code></li>
+<li><code>:disabled</code></li>
+</ul>
+<p><code>&lt;input type=&quot;radio&quot;|&quot;checkbox&quot;&gt;</code> 的 element 可以套用上，點擊可以切換成能套用 <code>:checked</code> 和不能套用 <code>:checked</code> 的。</p>
+<ul>
+<li><code>:checked</code></li>
+</ul>
+<h2>Structural pseudo-classes</h2>
+<p>結構化虛擬類，允許用 DOM 樹結構關係進行選取。<br>
+以1起始計數</p>
+<ul>
+<li><code>:root</code> document 的根節點</li>
+</ul>
+<h3>n 的小小補習班</h3>
+<p>n 可以是 <code>odd</code> 或 <code>even</code> 單數、偶數。<br>
+如果覺得很難記，教你一個好記的方式</p>
+<p><code>odd</code> 幾個字母？3是奇數還是偶數？<br>
+<code>even</code> 幾個字母？4是奇數還是偶數？</p>
+<p>所以 <code>odd</code> 是奇數，<code>even</code> 是偶數</p>
+<p>n也可以是 <code>±Zn±Z</code> 或 <code>±Zn</code> (Z是整數) <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p>無差別計數。<br>
+像是家裡的第幾個小孩</p>
+<ul>
+<li><code>:nth-child(n)</code> 正數第 <code>n</code> 個同層</li>
+<li><code>:nth-last-child(n)</code> 倒數最後一個同層</li>
+<li><code>:first-child</code> 老大</li>
+<li><code>:last-child</code> 老么</li>
+<li><code>:only-child</code> 獨子</li>
+</ul>
+<p>同類計數<br>
+像是家裡的第幾個男孩或女孩</p>
+<ul>
+<li><code>:nth-of-type(n)</code> 正數第 <code>n</code> 個同層同類</li>
+<li><code>:nth-last-of-type(n)</code> 倒數第 <code>n</code> 個同層同類</li>
+<li><code>:first-of-type</code> 長男或長女</li>
+<li><code>:last-of-type</code> 么男或么女</li>
+<li><code>:only-of-type</code> 生一個男的或一個女的</li>
+</ul>
+<p>最後一個</p>
+<ul>
+<li><code>:empty</code> 沒有孩子，沒有資料</li>
+</ul>
+<p>有些特別的</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span> 有</div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span> 無</div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">value</span>=<span class="string">"chris"</span>&gt;</span> 有</div></pre></td></tr></table></figure>
+<h2>The negation pseudo-class</h2>
+<ul>
+<li><code>:not(selector)</code> 改選擇沒被 selector 到的那些</li>
+</ul>
+<h2>常見好案例</h2>
+<p>案例 1: CSS 取代 onclick</p>
+<p>被選到的就變紅字</p>
+<p><img src="https://i.imgur.com/lDb98ya.png" alt=""></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">input</span><span class="selector-pseudo">:checked</span> + <span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"X"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>1X<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"X"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>2X<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"X"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>3X<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"X"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>4X<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"X"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>5X<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>案例 2: 磚型排版</p>
+<p>要做這個排版</p>
+<p><img src="https://i.imgur.com/wobW8d9.png" alt=""></p>
+<p>可以先觀察，重複性: 每九個就重複一次，排列方式。<br>
+只要先做一般的排版，並且選取到紅色的部份，就等於做完了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">n = 9n+6</div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/Svg5oGt.png" alt=""></p>
+<p>原始碼長這樣<br>
+將 <code>margin-left: 50px;</code> 解除註解就可以看到成功的案例囉</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line"> <span class="attribute">padding-bottom</span>: <span class="number">50px</span>;</div><div class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid black;</div><div class="line"> <span class="attribute">display</span>: inline-block;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:nth-child(9n+6)</span> &#123;</div><div class="line"><span class="comment">/*  margin-left: 50px; */</span></div><div class="line"> <span class="attribute">background-color</span>: <span class="number">#f00</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line"> <span class="attribute">width</span>: <span class="number">500px</span>;</div><div class="line"> <span class="attribute">font-size</span>: <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="comment">&lt;!--  省略掉很多 box  --&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://zh.wikipedia.org/wiki/%E6%95%B4%E6%95%B0" target="_blank" rel="external">整數 - wiki</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-22-iron-man-2008/iron-man-2008-day12/">前端新手村 CSS 的 簡單 Selector (中篇)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-21T23:10:54.000Z" itemprop="datePublished">
+    2017-12-22
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>CSS 的 簡單 Selector (中篇)</h1>
+<h2>pseudo-classes<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>「偽類」不同於「偽元素」這兩個內容不同。</p>
+<p>定義: 是一種描述「 HTML element 狀態」的選擇器描述方式，選擇器名稱不屬於「 HTML element 節點」上節點。</p>
+<p>一旦狀態改變，偽類就可以實作 純CSS 的動態變化。<br>
+常見於一些標榜著「使用 CSS 省下 JS 的炫麗技術」就是這一單元的應用。<br>
+換句話說，要學神技，就看懂這些!!!</p>
+<p>用法</p>
+<ul>
+<li>可以用 <code>:</code> 加在任何一個簡單選擇器之後。</li>
+<li>有互斥的偽類，也有可以疊加的偽類</li>
+</ul>
+<h3>Dynamic pseudo-classes</h3>
+<p>用在連結 <code>&lt;a href=&quot;##&quot;&gt;&lt;/a&gt;</code> 看過或未看過的狀態。<br>
+使用者與畫面元素之間的互動，也會改變狀態。</p>
+<ul>
+<li>The link pseudo-classes 表示 link 的狀態
+<ul>
+<li><code>:link</code> 未看過連結</li>
+<li><code>:visited</code> 看過連結</li>
+</ul>
+</li>
+<li>The user action pseudo-classes 表示 user action 的狀態(不限定是 link!! )
+<ul>
+<li><code>:hover</code> 懸停<br>
+若使用者用行動裝置，<code>hover</code>就不一定會有反應<br>
+有些互動媒體並不支援<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
+<li><code>:active</code> 互動當下一瞬間<br>
+適用於互動裝置的主觸發鍵(通常是滑鼠左鍵)</li>
+<li><code>:focus</code><br>
+接受鍵盤或滑鼠形式的操作，或其它能具有「游標」的形式。<br>
+ex: <code>&lt;a href=&quot;##&quot;&gt;&lt;/a&gt;</code>, <code>&lt;input type=&quot;text&quot;&gt;</code><br>
+簡單測試: <strong>用 tab 移動游可到達的，就可以擁有 focus</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>實際測試套用情況</strong></p>
+<p>在 Chrome 的開發者模式，找到</p>
+<p><img src="https://i.imgur.com/JZNOEK2.png" alt=""></p>
+<h3>The target pseudo-class</h3>
+<p>網址後面有時會接著一個 <code>#</code> 後面再接一段字，那段字若等同於某個 id ，則擁有 id 的 HTML element 稱為 target element ，就會用到 <code>:target</code> 的 css</p>
+<p>使用情境</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#chris"</span>&gt;</span>chris<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#mary"</span>&gt;</span>mary<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line"><span class="comment">&lt;!--中間省略--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"chris"</span>&gt;</span>chris<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"mary"</span>&gt;</span>mary<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-pseudo">:target</span> &#123;</div><div class="line"> <span class="attribute">display</span>: block;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line"> <span class="attribute">display</span>: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>:target</code> = <code>*:target</code> 任何 html element 的 id 在網址上，就會被套用 <code>:target</code> css。</li>
+<li><code>div:target</code> 就是只有 div 的 id 在網址上，才會套用 <code>:target</code> css。</li>
+</ul>
+<blockquote>
+<p>注意，捲軸會重新捲到顯示 <code>id</code> 的地方。<br>
+若使用 <code>:target</code> 出現無法解釋的捲軸移動現象，就只是為了顯示擁有該 <code>id</code> 的元素。</p>
+</blockquote>
+<h3>The language pseudo-class</h3>
+<ul>
+<li><code>:lang</code></li>
+</ul>
+<p>指定語言時，決定排版方向，在製作多國語系時可以考慮這個用法。<br>
+在此不深入研究。</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/#pseudo-classes" target="_blank" rel="external">Selectors Level 3, 6.6. Pseudo-classes</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/REC-CSS2/media.html#interactive-media-group" target="_blank" rel="external">7.3.1 Media groups</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-21-iron-man-2008/iron-man-2008-day11/">前端新手村 CSS 簡單 Selector (上篇) &amp; Groups</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-20T23:30:03.000Z" itemprop="datePublished">
+    2017-12-21
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>CSS 簡單 Selector (上篇)</h1>
+<h2>CSS Selector</h2>
+<blockquote>
+<p>Selectors are patterns that match against elements<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+</blockquote>
+<p>選擇器是一種樹狀元素匹配的 Pattern，可以高效率的選取 HTML 和 XML 節點。</p>
+<p><strong>運作原理<sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1]</a></sup></strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">expression ∗ element → boolean</div></pre></td></tr></table></figure>
+<p>expression: 指的是你的選擇器<br>
+element: 指的是選中的 HTML / XML 節點<br>
+兩者相乘，指的是「邏輯 AND 」兩者都要 <code>true</code>，最後才是 <code>true</code></p>
+<p>透過一種 STSS<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 的機制，決定 Selector 的運作。</p>
+<p><strong>大小寫？</strong><br>
+CSS 的 Selector 語法不區分大小寫</p>
+<p><strong>新手要注意</strong></p>
+<p>許許多多的選擇器，可以幫助我們降低工作量，將所有的選擇器都看過一輪並且有印象(不用硬背起來)，是初學首要任務之一，原因在於當你需要時是否可以知道「Selector 是否辦得到」，至於實作細節或關鍵字，再查就好了無需死背。(除非要靠這個考高中 or 大學)</p>
+<h2>簡單 Selector</h2>
+<p>我們從最簡單的 Selector 開始介紹。<br>
+各式各樣的 Selector ，順便再介紹有趣的應用。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"chrisClass1 chrisClass2"</span> <span class="attr">id</span>=<span class="string">"chrisId"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>如果要選到上面的 HTML element，我們可以怎麼選。</p>
+<ol>
+<li>universal selector
+<ul>
+<li><code>*</code> 選到任何的 HTML elements</li>
+</ul>
+</li>
+<li>type selector
+<ul>
+<li><code>div</code> 選到相同 html tag name 的 HTML elements</li>
+</ul>
+</li>
+<li>class selector
+<ul>
+<li><code>.chrisClass1</code> 選到擁有相同 class 的 HTML elements</li>
+<li><code>.chrisClass2</code></li>
+</ul>
+</li>
+<li>ID selector
+<ul>
+<li><code>#chrisId</code> 選到相同 id 的 HTML element</li>
+</ul>
+</li>
+</ol>
+<p>初學，最主要先學 1~4<br>
+屬性選擇器就有空再學就好了。</p>
+<p>換個例子</p>
+<p><img src="https://i.imgur.com/Bfa0BEO.png" alt=""></p>
+<ol start="5">
+<li>attribute selector
+<ul>
+<li>Attribute presence and value selectors
+<ul>
+<li><code>[type]</code> 只要有這個屬性</li>
+<li><code>[type=text]</code> 要有屬性，值等於 <code>val</code></li>
+<li><code>[class~=border]</code> 要有這個屬性，值以空白隔開，其中一個值是 <code>border</code></li>
+<li><code>[class|=color]</code> 要有這個屬性，值以空白隔開，其中一個值開頭 <code>color-</code></li>
+</ul>
+</li>
+<li>Substring matching attribute selectors 關鍵字吻合
+<ul>
+<li><code>[class^='color']</code> 要有這個屬性，第一個值以 <code>color-blue</code> 前綴開頭</li>
+<li><code>[class$='margin-top-10']</code> 要有這個屬性，最後一個值以 <code>margin-top-10</code> 後綴結尾</li>
+<li><code>[class*='border']</code> 要有這個屬性，值包含 <code>border</code> 關鍵字</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2>ID Selector 在 JavaScript 無需再宣告</h2>
+<p>有個特別的現象，會發生在 id 選擇器。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"abcde"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>直接在 console 執行 JavaScript</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(abcde)  <span class="comment">//&lt;div id="abcde"&gt;&lt;/div&gt;</span></div></pre></td></tr></table></figure>
+<p>無需再宣告！這是一個有趣的現象。<br>
+而且每個 id 名稱在每一頁，不能重複。<br>
+就像是變數命名一樣，所以通常 id 是留給 js 用的。<br>
+(不過 js 還是有在用 class ，css 還是有在用 id 的)</p>
+<p>css 還是會建議以 class 優先使用。<br>
+原因是「大多數的 css 修改不具備畫面唯一性」。</p>
+<h2>Groups of Selectors</h2>
+<p>可以使用<code>,</code>符號，將 Selector 串起來，這是將 Selector 組成群組 (Group)。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">*, <span class="selector-class">.className</span> &#123;&#125;</div><div class="line"><span class="selector-id">#id</span>, <span class="selector-class">.className</span> &#123;&#125;</div></pre></td></tr></table></figure>
+<p>它並沒有任何在 DOM 樹上的關係連結符號，只是單純的將各式各樣的 Selector 連起來，共用 Ruleset</p>
+<p>還有其它的 Selectors ，接下來再慢慢介紹</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/" target="_blank" rel="external">Selectors Level 3 - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a> <a href="#fnref1:1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/NOTE-STTS3" target="_blank" rel="external">Simple Tree Transformation Sheets 3 - w3.org</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+  <section id="nav-wrapper">
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/categories/前端新手村/">« prev</a><a class="page-number" href="/categories/前端新手村/">1</a><span class="page-number current">2</span><a class="page-number" href="/categories/前端新手村/page/3/">3</a><a class="extend next" rel="next" href="/categories/前端新手村/page/3/">next »</a>
+    </nav>
+  </section>
+
+
+
+            <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

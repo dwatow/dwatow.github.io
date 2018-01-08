@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="" />
+  <meta name="title" content="《Chris 技術筆記》">
+  <meta name="author" content="Chris">
+  <meta name="copyright" content="《Chris 技術筆記》2018">
+  <meta name="description" content="從C++到Javascript，邁向網頁前端之路。">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:title" content="《Chris 技術筆記》">
+  <meta property="og:url" content="dwatow.github.io">
+  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:description" content="從C++到Javascript，邁向網頁前端之路">
+
+  <title>
+    
+          《Chris 技術筆記》
+  </title>
+  
+    
+      <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>Chris × 前端技術</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <header class='PageTitle'>
+        <h1>{ flex-grow }</h1>
+    </header>
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12-30-iron-man-2008/iron-man-2008-day20/">前端新手村 flex grow &amp; shrink 演算法</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-29T23:13:55.000Z" itemprop="datePublished">
+    2017-12-30
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Flex/">Flex</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/flex-grow/">flex-grow</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/flex-shrink/">flex-shrink</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>flex grow &amp; shrink 演算法</h1>
+<blockquote>
+<p>此演算法，是和邦友 <a href="https://ithelp.ithome.com.tw/users/20107334/profile" target="_blank" rel="external">OTree</a> 一起研究，我只是寫 JavaScript 驗證。</p>
+</blockquote>
+<p>新手若覺得這種學術路線不適合你，那這一篇就跳過吧！我還是想寫一下。</p>
+<p>來說說伸縮與壓縮的尺寸計算方式<br>
+直接用例子來試算一下。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outter"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.outter</span> &#123;</div><div class="line">  <span class="attribute">outline </span>: solid <span class="number">1px</span> black;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line"></div><div class="line">  .div1 &#123;</div><div class="line">    <span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;</div><div class="line">    <span class="selector-tag">background</span> : <span class="selector-tag">red</span>;</div><div class="line">    <span class="selector-tag">flex-grow</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-shrink</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-basis</span><span class="selector-pseudo">:400px</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-class">.div2</span> &#123;</div><div class="line">    <span class="attribute">height</span>:<span class="number">100px</span>;</div><div class="line">    <span class="attribute">background </span>: blue;</div><div class="line">    <span class="attribute">flex-grow</span>:<span class="number">1</span>;</div><div class="line">    <span class="attribute">flex-shrink</span>:<span class="number">1</span>;</div><div class="line">    flex-basis:200px; //預借空間</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>渲染結果</strong></p>
+<p><img src="https://i.imgur.com/FpQeB3q.png" alt=""></p>
+<p><strong>描述問題</strong></p>
+<p>元素 $i$ (每個元素) 在 flex container 中，因為伸展和壓縮，需要重新計算寬度。</p>
+<p>運算式的名詞定義</p>
+<p><img src="https://i.imgur.com/nK4Baef.png" alt=""></p>
+<h2><code>flex-grow</code></h2>
+<p>運算式如下</p>
+<p><img src="https://i.imgur.com/P6dZATs.png" alt=""></p>
+<p>由公式可以看出(真的可以看出嗎？)</p>
+<p>最後的寬度，是由預借空間加上「伸展量」<br>
+伸展量是該元素佔有剩餘空間的比例。<br>
+(描述這個，跟本就是數學運算式要轉成國小應用問題的能力)</p>
+<h2><code>flex-shrink</code> &amp; <code>flex-basis</code></h2>
+<p>運算式如下</p>
+<p><img src="https://i.imgur.com/wnMAhMG.png" alt=""></p>
+<p>由公式可以看出(真的可以看出嗎？)</p>
+<p>最後的寬度，是由預借空間加上「壓縮量」(負數)<br>
+壓縮量是該元素的預借空間佔有剩餘空間的比例。</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://codepen.io/dwatow/pen/Nwmojy" target="_blank" rel="external">flex-basis excerise</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+
+            <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>

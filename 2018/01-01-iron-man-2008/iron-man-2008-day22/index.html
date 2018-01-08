@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="" />
+  <meta name="title" content="《Chris 技術筆記》">
+  <meta name="author" content="Chris">
+  <meta name="copyright" content="《Chris 技術筆記》2018">
+  <meta name="description" content="從C++到Javascript，邁向網頁前端之路。">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:title" content="《Chris 技術筆記》">
+  <meta property="og:url" content="dwatow.github.io">
+  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta property="og:description" content="從C++到Javascript，邁向網頁前端之路">
+
+  <title>
+    
+      前端新手村 Transition |
+        
+          《Chris 技術筆記》
+  </title>
+  
+    
+      <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>Chris × 前端技術</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+  <header class='PageTitle'>
+    <h1>前端新手村 Transition</h1>
+  </header>
+
+  <section>
+    
+  <div id="toc">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">Transition</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">transition-property 屬性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">transition-duration 持續時間</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">transition-timing-function 變化函數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">transition-delay delay時間</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">常見的雷</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">參考資料</span></a>
+  </div>
+  
+
+      <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1>Transition</h1>
+<p>由互動行為而改變 CSS (不管是用 js 抽換 class ，還是使用 <code>:checked</code> 或 <code>:target</code>)，畫面會瞬間變成修改後的樣子。<br>
+如果想要中間變化的過程，隨時間顯示在畫面上，transition 是一個簡單又直覺的選擇。</p>
+<p>transition 可以計算數值，從舊的到新的變化過程。只有可動畫化的屬性<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，才可以用在 transition。<br>
+transition 還有一個「隨時可以中斷」的特性。若在 running transition 時，css 改變了，就會馬上改變，而不會等完成 transition 之後才套用。</p>
+<p><strong>語法</strong></p>
+<p>(縮寫)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">transition: 屬性 持續時間 delay時間 變化函數</div></pre></td></tr></table></figure>
+<p>因為 transition 要有轉變對象，開始時間、持續時間、結束時間，所以至少要寫下面這樣</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">transition: 屬性 持續時間</div></pre></td></tr></table></figure>
+<p>delay時間 變化函數 都是使用預設值。</p>
+<h2><code>transition-property</code> 屬性</h2>
+<p>值: 指定轉換的 CSS 屬性名稱 或 <code>none</code><br>
+預設值: <code>all</code></p>
+<p>設定 <code>none</code> 就什麼都不轉換。</p>
+<h2><code>transition-duration</code> 持續時間</h2>
+<p>值: 時間 (正實數)<br>
+預設值: <code>0s</code></p>
+<p>若設定 <code>0s</code> 則表示過場變化瞬間完成，若設定負數表示不渲染。</p>
+<h2><code>transition-timing-function</code> 變化函數</h2>
+<p>值: timing function 名稱<br>
+預設值: <code>ease</code></p>
+<p>要過場的屬性值在時間變化中，有不同的變化速度。<br>
+將時間轉成百分比，再將位置經過不同的插值規則運算<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>出來。</p>
+<h2><code>transition-delay</code> delay時間</h2>
+<p>值: 時間(實數)<br>
+預設值: <code>0s</code></p>
+<p>這個屬性控制兩件事</p>
+<ol>
+<li>transition 執行時間</li>
+<li>transition 顯示時間</li>
+</ol>
+<p>設定值為正數( n)時，執行時間和顯示時間都會延遲<br>
+設定值為負數(-n)時，只有顯示時間延遲，執行時間延遲。所以會有「起始動畫到 n 秒」的效果</p>
+<p><strong>來看個例子</strong><br>
+體驗一下 transition</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid black;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#f00</span>;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">transition</span>: all <span class="number">1s</span> -.<span class="number">3s</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#00f</span>;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">50px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/oGolSuh.gif" alt="Imgur"></p>
+<h2>常見的雷</h2>
+<p><strong>例子1: 元素要以淡出的方式消失在畫面上!!!</strong></p>
+<p>一般來說，讓元素不出現在畫面上，都是給 <code>display:none</code> 但是，這就是 transition 的雷點。</p>
+<p>複習一下文章開頭的一句</p>
+<blockquote>
+<p>transition 可以計算數值，從舊的到新的變化過程。</p>
+</blockquote>
+<p><code>diaplay: none</code> 到 <code>display: block</code> 要怎麼運算？<br>
+所以，在此要使用 <code>opacity: 0</code> 看到數值了吧？！ <code>opacity: 0</code> 到 <code>opacity: 1</code> 是可以運算的。</p>
+<p>不過，在此做三種消失看看<br>
+<code>display: none;</code><br>
+馬上消失，快速切換 <code>:hover</code> 和 無 hover 的 CSS 造成的閃爍<br>
+<img src="https://i.imgur.com/kW1SdXi.gif" alt=""><br>
+<code>visibility: hidden;</code><br>
+在 transition 到達最後狀態時，才有 <code>visibility: hidden</code> 的效果<br>
+而恢復時，離開了最後狀態，就失去 <code>visibility: hidden</code> 的效果<br>
+<img src="https://i.imgur.com/Z0tjU1x.gif" alt=""><br>
+<code>opacity: 0;</code><br>
+將 <code>opacity: 1</code> 的數值計算到 <code>opacity: 0</code> ，達到淡出的效果<br>
+<img src="https://i.imgur.com/D895Iqo.gif" alt=""></p>
+<p><strong>例子2: hover 和恢復原狀，兩個 transition</strong></p>
+<p>有時希望做倒帶的 transition，就要寫兩個 <code>transition</code><br>
+但是往往會搞不清楚要寫在哪才是正確的。<br>
+在此寫了一個 hover 花1秒，恢復花5秒的 transition</p>
+<p>先來看看原始碼</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid black;</div><div class="line"></div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#f00</span>;</div><div class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#eef</span>;</div><div class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(30000000000deg);</div><div class="line"></div><div class="line">  <span class="attribute">transition</span>: all <span class="number">5s</span> <span class="number">0s</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.box</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">border-radius</span>: <span class="number">0%</span>;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">50px</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#fee</span>;</div><div class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(0deg);</div><div class="line"></div><div class="line">  <span class="attribute">transition</span>: all <span class="number">1s</span> <span class="number">0s</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"margin-top"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/FLmsenZ.gif" alt=""><br>
+上圖標示 hover 的作用區間，恢復的作用區間。(用顏色標示)</p>
+<p>也就是說，元素只有在一開始是沒有 hover ，一旦要成為 hover 就是游標懸停時開始，所以 1秒變成方形的 <code>transition</code> 要寫在 <code>:hover</code> 上面；相反的，當游標離開元素，就要套用5秒變成圓形的 CSS。</p>
+<p><strong>例子2: display: none -&gt; display: block</strong></p>
+<p>先說結果: 沒有 transition</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"c1"</span> <span class="attr">type</span>=<span class="string">"checkbox"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#c1</span><span class="selector-pseudo">:checked</span> ~ <span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">0px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#0a0</span>;</div><div class="line">  <span class="attribute">margin-left</span>: <span class="number">50px</span>;</div><div class="line">  <span class="attribute">transition</span>: <span class="number">1s</span> -.<span class="number">3s</span> linear;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>結果是這樣<br>
+<img src="https://i.imgur.com/oF8c0zU.gif" alt=""></p>
+<p>若我們要在一開始消失，後來出現。<br>
+在 CSS 加上 <code>display: none</code> -&gt; <code>display: block</code> 的切換</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#c1</span><span class="selector-pseudo">:checked</span> ~ <span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="comment">/* 和上面的一樣 */</span></div><div class="line">  <span class="attribute">display</span>: block;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="comment">/* 和上面的一樣 */</span></div><div class="line">  <span class="attribute">display</span>: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>結果是這樣<br>
+<img src="https://i.imgur.com/Ap2lDMk.gif" alt=""></p>
+<p>那怎麼辦呢？<br>
+<code>display: none</code> 改成 <code>visibility: hidden;</code><br>
+<code>display: block</code> 改成 <code>visibility: visible;</code><br>
+就可以保留中間的動畫，又可以讓 box 在一開始消失囉~<br>
+若你想要的是淡出，又不知道怎麼做，再留言告訴我吧~^^</p>
+<h1>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/WD-css-transitions-1-20171130/#animatable-css" target="_blank" rel="external">9.1. Properties from CSS - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://drafts.csswg.org/css-timing/" target="_blank" rel="external">CSS Timing Functions Level 1</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+
+        
+
+  </section>
+  
+    <section class='ArticleMeta'>
+      <div>
+        发布于&nbsp;
+        <time datetime="2018-01-01T01:42:05.000Z" itemprop="datePublished">
+              2018-01-01
+            </time>
+      </div>
+      
+        <div>
+          tags:
+          
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Transition/">Transition</a> }
+  </li>
+
+
+        </div>
+        
+    </section>
+    
+      
+        <section>
+          <div id="disqus_thread"></div>
+          <script>
+          window.disqus_config = function () {
+            this.page.url = window.location.toString()
+            this.page.identifier = window.location.pathname
+          }
+          if (typeof DISQUS === 'undefined') {
+            (function() { // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
+              s.src = 'https://dwatow-github.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          } else {
+            DISQUS.reset({
+                reload: true,
+                config: window.disqus_config
+            })
+          }
+        </script>
+        </section>
+        
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+</body>
+</html>
