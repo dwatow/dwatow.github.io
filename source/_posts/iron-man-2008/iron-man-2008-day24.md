@@ -31,7 +31,7 @@ categories: "前端新手村"
 
 ## diaplsy [^2]
 
-`display` 會影響自身元素與包在元素內的子元素們，是否被生成在畫面上。
+`display` 會影響自身元素與包在元素內的子元素們，是否被生成在畫面上。[^3]
 
 預設值: `inline`
 
@@ -48,7 +48,7 @@ categories: "前端新手村"
 容器設定 `display: none` , 元素設定 `display: block` 元素還是不會顯示。
 - 其它 `table`, `inline-table`, `table-row-group`, `table-column`, `table-column-group`, `table-header-group`, `table-footer-group`, `table-row`, `table-cell`, `and table-caption` 讓元素有 table 的表現形式。欲知詳情可以查看 [17 Tables](https://www.w3.org/TR/CSS22/tables.html) [^4]
 
-## opacity [^6]
+## opacity [^5]
 
 `opacity` 不透明度，可以被認為是最後處理的步驟，在元素被渲染在畫面上後，再將畫面區域的不透明度加上去。
 
@@ -65,15 +65,15 @@ categories: "前端新手村"
 |`opacity: 0`| yes | no |
 
 
-## 從瀏覽器渲染引擎來看[^5]
+## 從瀏覽器渲染引擎來看 [^6]
 
-先看一下 webkit 的流程圖
+先看一下 Webkit(chrome, safari) 的流程圖[^7]
 ![webkit 的流程圖](https://i.imgur.com/Ex41AeZ.png)
 
-再看一下 fiefox 的流程圖
-![fiefox 的流程圖](https://i.imgur.com/LrgHZst.png)
+再看一下 Gecko(firefox) 的流程圖[^7]
+![gecko 的流程圖](https://i.imgur.com/LrgHZst.png)
 
-在 firefox 裡的術語在 render tree 的 element 叫 frame。在 webkit 稱 render 或 render object。而每一個 element 都知道它自己的 child element
+在 Gecko 裡的術語在 render tree 的 element 叫 frame。在 webkit 稱 render 或 render object。而每一個 element 都知道它自己的 child element
 
 webkit 瀏覽器會建立一棵叫 Rendering Tree (渲染樹)的資料結構。讓內容可以依照正確的順序繪製。每一個 element 都代表一個矩形區域，通常是符合 CSS2 的 box 規範。
 在 render tree 階段，每一個 box 的形態，會受到 display 設定的影響。
@@ -124,5 +124,6 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
 [^2]: [17.5.5 Dynamic row and column effects - w3.org](https://www.w3.org/TR/CSS22/tables.html#dynamic-effects)
 [^3]: [9.2.4 The 'display' property - w3.org](https://www.w3.org/TR/CSS22/visuren.html#display-prop)
 [^4]: [17 Tables - w3.org](https://www.w3.org/TR/CSS22/tables.html)
-[^5]: [Render tree construction](http://taligarsiel.com/Projects/howbrowserswork1.htm#Render_tree_construction)
-[^6]: [3.2. Transparency: the ‘opacity’ property - w3.org](https://www.w3.org/TR/css-color-3/#opacity)
+[^5]: [3.2. Transparency: the ‘opacity’ property - w3.org](https://www.w3.org/TR/css-color-3/#opacity)
+[^6]: [Render tree construction](http://taligarsiel.com/Projects/howbrowserswork1.htm#Render_tree_construction)
+[^7]: [深入探討瀏覽器引擎如何進行解析](https://ithelp.ithome.com.tw/articles/10191579)
