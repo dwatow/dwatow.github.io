@@ -5,18 +5,23 @@ tags: ['Facebook', 'chat bot', 'API']
 categories: "技術練習"
 ---
 # 初探Facebook Messager 聊天機器人
-
 基本架構圖
-
 ![](https://i.imgur.com/g20l9NE.jpg)
 
+client -> FB server
+FB server hook -> bot
+bot -> FB server
+
+---
 
 ## 事前準備
 
-- {% post_link ngrok 安裝 **ngrok** %}
+- [安裝 **ngrok**](https://hackmd.io/EwM2DYA4BMEMEYC0BOcwAMiAsWDMwV8BWRAY13CICM4Jpkqg)
 - 建立facebook粉絲頁
 - 建立[facebook開發者帳號](https://developers.facebook.com/?locale=zh_TW)
 - 安裝 **node.js** **+** [安裝Express](http://expressjs.com/zh-tw/starter/installing.html)
+
+---
 
 ## 執行ngrok
 
@@ -56,38 +61,35 @@ Forwarding[color=red]                    https://db9ba35e.ngrok.io -> localhost:
 相關的設定都會改變唷。
 :::
 
+---
+
+## 建立 webhook
+
+[官網文件](https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup)寫得相當得好。很推薦看一下
 
 
-## Facebook開發者帳號 *(極重要!!!)*
+1. 進入[開發者帳號](https://developers.facebook.com/?locale=zh_TW)之後，按右上角的「新增應用程式」
+![](https://i.imgur.com/ip2RRfK.png)
 
-進入[官網](https://developers.facebook.com/?locale=zh_TW)之後，按右上角的「建立應用程式」
-> ![](https://i.imgur.com/HPoGprM.png)
-要建立一個應用程式，給Facebook一些必要的資料。
-
-**選Messager**
-![](https://i.imgur.com/KIGVk6X.png)
+2. 選 webhooks
+![](https://i.imgur.com/w5XOZmC.png)
 點擊開始使用
 
-進入畫面之後，找到 **Webhook**
-![](https://i.imgur.com/l85c5zR.png)
+3. 進入畫面之後，找到 Edit Subscription
+![](https://i.imgur.com/7nTNfQl.png)
+下面的就勾`messages`就好，其它隨你
 
-在此要填入兩個東西，下面的就勾`messages`就好，其它隨你
-- 回呼網址
-- 驗證權杖
+4. 在此要填入兩個東西
+![](https://i.imgur.com/r4lIszF.png)
 
-回呼網址就是開好的伺服器的對外網址。
-在此就是上一節的Forwarding網址
-(在此篇文章`http://db9ba35e.ngrok.io`)。
-
-為了讓facebook伺服器知道要把收到的訊息，丟到哪給機器人。
-
-驗證權杖: 隨便打(真的!!!)
+- 回呼網址: bot 的 api 網址 (在此篇文章`http://db9ba35e.ngrok.io`)
+  為了讓facebook伺服器知道要把收到的訊息，丟到哪給機器人。
+- 驗證權杖: 一個自訂的字串 (亂打就好....真的!!!)
 
 >在此，一定會出現下面的錯誤訊息
 ![](https://i.imgur.com/xkKAlYf.png)
 
-原因在於，facebook伺服器傳給我們一個訊息，
-但是要回覆一個相同的值(在此要回`1770261222`)給他，不然就報錯。
+原因在於，facebook 伺服器傳過來一個 `GET` 的 request，要求回覆一個 echo 值(在此要回`1770261222`)給他，不然就報錯。
 
 ### 看看facebook傳什麼過來
 
@@ -97,15 +99,13 @@ Forwarding[color=red]                    https://db9ba35e.ngrok.io -> localhost:
 
 其中 `1770261222`值藏在`hub.challenge`裡面。
 
+所以，接下來要寫程式，處理 `GET` 請求，並回傳正確的訊息給 facebook 伺服器。
 
+---
 
-所以，接下來要建立伺服器，並且回傳正確的訊息給facebook伺服器。
+## 建立機器人運作的 Service
 
-
-
-## 建立機器人運作的 Server
-
-### Hello World!!
+### `node.js` 的 Hello World!!
 
 在此使用`node.js`。
 
@@ -155,9 +155,9 @@ app.get('/', function (req, res) {
 
 再回到 facebook的開發者頁面
 
+---
 
-
-## Facebook開發者帳號。續
+### 完成 webhook
 
 按下驗證之前，要先把伺服器跑起來!!!
 
@@ -165,7 +165,17 @@ app.get('/', function (req, res) {
 $ node app.js
 ```
 
-這樣就可以按下「驗證」並且回到 `Messager`的設定畫面。
+這樣就可以按下「驗證並儲存」，即可完成 webhook 的設定
+![](https://i.imgur.com/r4lIszF.png)
+
+檢查一下是否有訂閱 `messages` 的 webhook。
+![](https://i.imgur.com/fRDqAnu.png)
+
+## 設定 Messager
+
+新增 `Messager`
+![](https://i.imgur.com/cKAg7dD.png)
+
 
 先取得權杖 ++(真是中二的翻譯)++，它指的就是==token==
 ![](https://i.imgur.com/CZ9DRL0.png)
@@ -176,28 +186,48 @@ $ node app.js
 按下「選擇粉絲專頁」>「訂閱」
 
 
-
-## 確認伺服器有收到訊息
+### 確認伺服器有收到訊息
 
 打開[Web Interface](http://127.0.0.1:4040/)可以看見目前收到的 **request** 明細。
 
-用 facebook帳號跟你申請的粉絲頁傳訊息(就是聊天)，
-送出訊息後，看看是不是可以在Web Interface看見你送出的訊息？
+用 facebook 帳號跟你申請的粉絲頁傳訊息(對話)，
+送出訊息後，看看是不是可以在 Web Interface 看見你送出的訊息？
 
 > *例圖 ↓*
 > ![](https://i.imgur.com/31WMgqv.png)
 
 想要看得懂這個結構，可以參考[官方網站的文件](https://developers.facebook.com/docs/messenger-platform/webhook-reference/message)
 
-可以看見送出的訊息「**!!!**」放在資料結構的哪個位置。
+可以看見送出的「測試訊息」 `!!!` 放在資料結構的哪個位置。
 
-> 在此要注意: recipient.id 等一下會用上
+> 在此要注意: `sender.id` 等一下會用上
 
+---
 
-
-## 寫程式，機器人回覆訊息!!
+## 寫程式，抓到文字訊息!!
 
 ### 在此先安裝
+
+在此，需要讓 node.js 收到 `POST` 的 JSON。並且從 `request.body` 找得到，並且可以處理，必須安裝一個套件 `body-parser` 。
+
+```shell=
+$ npm install body-parser --save
+```
+
+```javascript=
+app.post('/', (req, res) => {
+    let body = req.body;
+    //body["object"] is "page"
+    //...
+});
+```
+
+這樣就可以處理收到的 `POST` 的 JSON 囉。
+
+## 寫程式，回覆訊息!!
+
+可參考[官網教學](https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start)
+
 在此，需要讓 **web service** 發送 **request**，必須安裝一個外掛[request](https://github.com/request/request)(在你的專案資料夾)，
 讓你的`node.js`可以送request。
 
@@ -208,7 +238,6 @@ $ npm install request --save
 > 「發送request」這件事一般來說都是瀏覽器在做的，伺服器是負責接收的，
 >  若伺服器要和伺服器溝通，就要讓伺服器「發送request」。
 
-### 寫程式
 
 讓`node.js`可以送出POST的request。
 
@@ -224,36 +253,27 @@ app.post('/', function (req, res) {
   //...
 }
 ```
+
 在函數裡面加上「發送request」的功能
 ```javascript=2
 request({
-    url: url,
-    method: "POST",
-    json: requestData
+    "uri": url,
+    "qs": {
+        "access_token": token
+    },
+    "method": "POST",
+    "json": requestData
 }, ...
 ```
 讓機器人收到 facebook傳過來的訊息之後，再發送訊息回去給 facebook伺服器
 
 其中有兩個資料要填入：
 - url
+    這個網址就是 facebook messager 伺服器的位址
+    是固定的 `https://graph.facebook.com/v2.6/me/messages`
+- token 在下圖的位置取得
+  ![](https://i.imgur.com/JJPRQDb.png)
 - json
-
-#### **URL**
-
-這個網址就是facebook messager伺服器的位址
-到 [Messager的開發文件>傳送 API 參考資料>要求](https://developers.facebook.com/docs/messenger-platform/send-api-reference)
-
-這一段
-
->若要傳送訊息，請使用您的粉絲專頁存取權杖，向 https://graph.facebook.com/v2.6/me/messages?access_token=<PAGE_ACCESS_TOKEN> 發出 POST 要求。承載必須以 JSON 格式提供，如下所述
-
-網址就是
-```
-https://graph.facebook.com/v2.6/me/messages?access_token=
-```
-
-後面的`token`在下圖的位置取得
-![](https://i.imgur.com/JJPRQDb.png)
 
 #### **JSON**
 
@@ -270,15 +290,15 @@ https://graph.facebook.com/v2.6/me/messages?access_token=
 ```javascript=
 {
   "recipient": {
-    "id":
+    "id": <傳給誰>
   },
   "message": {
-    "text": ""
+    "text": <傳什麼文字>
 }
 ```
 
 填入回覆者的 id 和要給他的訊息就可以囉~
-到[這裡](#確認伺服器有收到訊息)找`sender`
+到[這裡](#確認伺服器有收到訊息)找 `sender.id`
 
 ### 改寫 request
 
@@ -286,14 +306,17 @@ https://graph.facebook.com/v2.6/me/messages?access_token=
 
 ```javascript=2
 request({
-    url: https://graph.facebook.com/v2.6/me/messages?access_token=<token>,
-    method: "POST",
-    json: {
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": {
+        "access_token": "EEAbyth...****"
+    },
+    "method": "POST",
+    "json": {
       "recipient": {
-        "id":
+        "id": "1555445211145246"
       },
       "message": {
-        "text": ""
+        "text": "!!!"
     }
 });
 ```
@@ -311,12 +334,13 @@ request({
 在你的post函數最後，加入下面程式碼的第3行。
 ```javascript=
 app.post('/', function (req, res) {
-
-  res.sendStatus(200);
+    //...
+    res.status(200);
+    //後面不要放程式
 });
 ```
 
-
+---
 
 ## 完成
 
