@@ -5,7 +5,7 @@ type: "tags"
 ---
 
 <style media="screen">
-    li {
+    .tag-list {
         display: inline-block;
     }
 </style>
