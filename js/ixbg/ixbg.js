@@ -1,5 +1,4 @@
 (function() {
-    const totalDusts = screen.width/10;
     var resizeWidth;
     var resizeHeight;
     function resize() {
@@ -42,6 +41,7 @@
     var random = Math.random;
 
     //initial position in canvas
+    const totalDusts = screen.width/5; // for RWD
     var dusts = []
     for (var indexDusts = 0; indexDusts < totalDusts; indexDusts++) {
         dusts.push({
