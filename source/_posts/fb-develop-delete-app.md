@@ -1,7 +1,7 @@
 ---
 title: 刪除 facebook developers 的 app
 date: 2017-11-12 18:27:03
-tags: ['Facebook', 'chat bot']
+tags: ['Facebook', 'Chatbot']
 categories: "技術練習"
 ---
 
