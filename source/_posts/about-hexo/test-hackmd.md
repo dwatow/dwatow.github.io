@@ -231,6 +231,7 @@ alert(s);
 **注意：請使用 https 的網址，否則可能會被您的瀏覽器阻擋載入**
 {%pdf https://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf %}
 ```
+:::
 
 ## MathJax
 
@@ -247,7 +248,6 @@ $$
 $$
 
 > 更多關於 **LaTeX** 數學表達式 [請至這裡](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)
-:::
 
 ## UML 圖表
 

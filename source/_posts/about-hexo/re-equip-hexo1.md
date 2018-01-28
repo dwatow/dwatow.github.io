@@ -69,7 +69,6 @@ $ npm install markdown-it-footnote --save
 $ npm install markdown-it-imsize --save
 $ npm install markdown-it-ins --save
 $ npm install markdown-it-mark --save
-$ npm install markdown-it-mathjax --save
 $ npm install markdown-it-regexp --save
 $ npm install markdown-it-sub --save
 $ npm install markdown-it-sup --save
@@ -117,7 +116,6 @@ markdown:
     - markdown-it-imsize
     - markdown-it-ins
     - markdown-it-mark
-    - markdown-it-mathjax
     - markdown-it-regexp
     - markdown-it-sub
     - markdown-it-sup

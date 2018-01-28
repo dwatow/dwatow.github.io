@@ -10,5 +10,5 @@ categories: 'hexo改裝'
 突然看見這個功能的[github](https://github.com/bubkoo/hexo-filter-sequence), 測試之後和hackmd的寫法一樣唷!!!
 
 ```shell
-$ npm install --save hexo-filter-sequence
+$ npm install hexo-filter-sequence --save
 ```

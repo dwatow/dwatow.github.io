@@ -65,11 +65,11 @@ categories: '工具使用'
 控制對話中的輸入指示器和讀取回條指示器。
 讓訊息收件人知道您已讀取其訊息，且訊息正在處理中。
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/13480169_570751053131489_689799179_n.png?oh=6f1b3e7ae5314a9f59ed99a584ea8909&oe=5AE5341C)](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/13480169_570751053131489_689799179_n.png?oh=6f1b3e7ae5314a9f59ed99a584ea8909&oe=5AE5341C =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/sender-actions)
 
 ## 一般型範本
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/22880422_1740199342956641_1916832982102966272_n.png?oh=740b1a44f5b82b31c81477b3a23403e5&oe=5AEFD83C)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/22880422_1740199342956641_1916832982102966272_n.png?oh=740b1a44f5b82b31c81477b3a23403e5&oe=5AEFD83C =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic)
 
 簡單的結構化訊息，可包含標題、副標題、圖像及最多三個按鈕。
 可以設定點擊範本範圍時，用 WebView 開啟網址。
@@ -95,9 +95,7 @@ categories: '工具使用'
 
 ## 清單範本
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/21201919_1215144078631552_6152307842817720320_n.png?oh=1b258e3f01677766a7de466f55cd07c7&oe=5B20176A)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/list)
-
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/21274842_1998857677000635_328116182651502592_n.png?oh=899049757e3dd684706ed41bb42a22bf&oe=5ADC7E05)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/list)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/21201919_1215144078631552_6152307842817720320_n.png?oh=1b258e3f01677766a7de466f55cd07c7&oe=5B20176A =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/list)   [![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/21274842_1998857677000635_328116182651502592_n.png?oh=899049757e3dd684706ed41bb42a22bf&oe=5ADC7E05 =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/list)
 
  2 至 4 個結構化項目的清單，並可選擇在底部顯示全域按鈕。每個項目可包含縮圖圖像、標題、副標題和一個按鈕。
 可以設定點擊範本範圍時，用 WebView 開啟網址。
@@ -112,7 +110,7 @@ categories: '工具使用'
 
 (目前只能用來傳歌曲)
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23423203_163011880970306_7772330384011821056_n.png?oh=7bb80c50deb34b9edb08456cbdc090dc&oe=5B1DDCFE)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/open-graph)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23423203_163011880970306_7772330384011821056_n.png?oh=7bb80c50deb34b9edb08456cbdc090dc&oe=5B1DDCFE =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/open-graph)
 
 開放社交關係圖範本可讓您傳送含開放社交關係圖網址的結構化訊息，並可選擇是否附加按鈕。目前僅支援分享歌曲。歌曲會顯示在泡泡中，供訊息收件人查看專輯封面及試聽歌曲。
 
@@ -120,16 +118,14 @@ categories: '工具使用'
 
 (可傳送 Facebook 粉絲頁的內容)
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23666967_188506161716866_2869776016224550912_n.png?oh=401b91170534a4df63a61c2348de18e9&oe=5AE29CE5)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media)
-
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23065701_1942345712696886_5686788878908784640_n.png?oh=8ad8c68098a1ba2c82e8b028ae352695&oe=5AD8A2A1)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23666967_188506161716866_2869776016224550912_n.png?oh=401b91170534a4df63a61c2348de18e9&oe=5AE29CE5 =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media) [![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23065701_1942345712696886_5686788878908784640_n.png?oh=8ad8c68098a1ba2c82e8b028ae352695&oe=5AD8A2A1 =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/media)
 
 可傳送圖像、GIF 和影片在對話中播放。
 可選擇是否附加按鈕。
 
 ## 收據範本
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23208289_889588377870772_7170760265053503488_n.png?oh=07099c061e10012ecabf400db7bd7e74&oe=5AF1638C)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/receipt)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23208289_889588377870772_7170760265053503488_n.png?oh=07099c061e10012ecabf400db7bd7e74&oe=5AF1638C =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/receipt)
 
 收據範本可讓您以結構化訊息的方式傳送訂單確認。這類範本可包含訂單摘要、付款詳細資料及送貨資訊。
 
@@ -147,7 +143,7 @@ categories: '工具使用'
 
 ## 按鈕範本
 
-[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23204276_131607050888932_1057585862134464512_n.png?oh=137225225113c68256fa83e651dd7bfa&oe=5AF2670A)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/button)
+[![](https://scontent.ftpe4-2.fna.fbcdn.net/v/t39.2365-6/23204276_131607050888932_1057585862134464512_n.png?oh=137225225113c68256fa83e651dd7bfa&oe=5AF2670A =225x)](https://developers.facebook.com/docs/messenger-platform/send-messages/template/button)
 
 傳送最多三個文字訊息的按鈕。
 
