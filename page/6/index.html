@@ -135,40 +135,40 @@
 <p>大約七天前，開始重新研究<code>hexo</code>。<br>
 之前安裝好就沒有研究它，因為目前還在學習前端的技術，所以暫時沒有花太多心力進行研究。</p>
 <p>之後還有一些進步的空間，希望可以出續集</p>
-<h2>有動力的契機</h2>
+<h2 id="有動力的契機"><a class="header-anchor" href="#有動力的契機"></a>有動力的契機</h2>
 <p>工作室，聊起了「行銷自己」這件事。也開始對於「品牌管理」、「作品集」…等設計相關的個人行銷手法有一些著墨。</p>
 <p>而寫部落格是其中一種。</p>
 <p>身為一個前端工程師(雖然現在還只是前端小學徒)，使用github來架設自己的部落格，也是正常的吧？</p>
 <p>就想說，再來進一步的研究hexo吧。</p>
-<h2>研究方向</h2>
+<h2 id="研究方向"><a class="header-anchor" href="#研究方向"></a>研究方向</h2>
 <p>話說，先前的文章有提到，我是hackmd的愛用者，hexo是沒有「所見即所得」的編輯介面，而hackmd如果能成為我的編輯介面那就再好不過了。</p>
 <p>所以，就將hexo呈現的內容結果(不管我套哪個主題)，先看起來和hackmd有幾分像吧！</p>
-<h2>渲染器</h2>
+<h2 id="渲染器"><a class="header-anchor" href="#渲染器"></a>渲染器</h2>
 <p>先對渲染器著手吧！</p>
 <p>一開始以為只要搞定渲染器，<code>html</code>就可以和<code>hackmd</code>一模一樣了。沒想到這是一個天大的誤會。</p>
 <p><code>markdown</code>渲染器搞定，頂多是「確定<code>input</code>端沒問題」。可以吃的語法都可以吃，但是不保證結果一樣。</p>
 <p>在此，換成和<code>hackmd</code>一樣的渲染器: <code>markdown-it</code>，除了核心渲染器之外，還有它的外掛也要一起安裝。</p>
-<h3>更換渲染器</h3>
+<h3 id="更換渲染器"><a class="header-anchor" href="#更換渲染器"></a>更換渲染器</h3>
 <p>刪除原本的渲染器</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm un hexo-renderer-marked --save</div></pre></td></tr></table></figure>
 <p>在hexo的專案中，安裝套件<code>hexo-renderer-markdown-it</code></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm i hexo-renderer-markdown-it --save</div></pre></td></tr></table></figure>
-<p><code>hexo-renderer-markdown-it</code>是用來初始化<code>markdown-it</code>並且給外掛參數的地方。有興趣可以看看它的<a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="external">程式碼</a>。</p>
-<h3>安裝渲染器外掛</h3>
-<p>參考<code>hackmd</code>的<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/extra.js" target="_blank" rel="external"><code>markdown-it</code>初始化程式碼</a>可以看得出它安裝了什麼外掛。</p>
+<p><code>hexo-renderer-markdown-it</code>是用來初始化<code>markdown-it</code>並且給外掛參數的地方。有興趣可以看看它的<a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="noopener">程式碼</a>。</p>
+<h3 id="安裝渲染器外掛"><a class="header-anchor" href="#安裝渲染器外掛"></a>安裝渲染器外掛</h3>
+<p>參考<code>hackmd</code>的<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/extra.js" target="_blank" rel="noopener"><code>markdown-it</code>初始化程式碼</a>可以看得出它安裝了什麼外掛。</p>
 <p>在此直接給安裝指令</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install markdown-it-abbr --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-container --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-deflist --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-emoji --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-footnote --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-imsize --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-ins --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-mark --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-regexp --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-sub --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-sup --save</div></pre></td></tr></table></figure>
 <p>但是要注意，初始化外掛程式碼，加入<code>markdown-it</code>時，有些有第三個參數，而這些參數都用在修改html的語法，在此並不適用。</p>
 <p>另外，還有幾個在hackmd上沒裝，但是hexo要裝的，也要裝上</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install markdown-it-checkbox --save</div></pre></td></tr></table></figure>
-<h3>修改hexo設定檔</h3>
+<h3 id="修改hexo設定檔"><a class="header-anchor" href="#修改hexo設定檔"></a>修改hexo設定檔</h3>
 <p>在hexo的_config.yml檔最下面加上這一段</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Markdown-it config</span></div><div class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></div><div class="line"><span class="attr">markdown:</span></div><div class="line"><span class="attr">  render:</span></div><div class="line"><span class="attr">    html:</span> <span class="literal">true</span> <span class="comment"># Doesn't escape HTML content so the tags will appear as html.</span></div><div class="line">    <span class="comment"># xhtmlOut: false # Parser will not produce XHTML compliant code.</span></div><div class="line"><span class="attr">    breaks:</span> <span class="literal">true</span> <span class="comment"># Parser produces `&lt;br&gt;` tags every time there is a line break in the source document.</span></div><div class="line"><span class="attr">    langPrefix:</span> <span class="string">''</span></div><div class="line"><span class="attr">    linkify:</span> <span class="literal">true</span> <span class="comment"># Returns text links as text.</span></div><div class="line"><span class="attr">    typographer:</span> <span class="literal">true</span> <span class="comment"># Substitution of common typographical elements will take place.</span></div><div class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span> <span class="comment"># "double" will be turned into “single”</span></div><div class="line">                   <span class="comment"># 'single' will be turned into ‘single’</span></div><div class="line"><span class="attr">  plugins:</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-abbr</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">success</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">info</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">warning</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">danger</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-deflist</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-emoji</span></div><div class="line"><span class="attr">      options:</span></div><div class="line"><span class="attr">        shortcuts:</span> <span class="string">&#123;&#125;</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-footnote</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-imsize</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-ins</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-mark</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-regexp</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-sub</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-sup</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-checkbox</span></div><div class="line"><span class="attr">  anchors:</span></div><div class="line"><span class="attr">    level:</span> <span class="number">6</span> <span class="comment"># Minimum level for ID creation. (Ex. h2 to h6)</span></div><div class="line"><span class="attr">    collisionSuffix:</span> <span class="string">'v'</span> <span class="comment"># A suffix that is prepended to the number given if the ID is repeated.</span></div><div class="line"><span class="attr">    permalink:</span> <span class="literal">true</span> <span class="comment"># If true, creates an anchor tag with a permalink besides the heading.</span></div><div class="line"><span class="attr">    permalinkClass:</span> <span class="string">header-anchor</span> <span class="comment"># Class used for the permalink anchor tag.</span></div><div class="line"><span class="attr">    permalinkSymbol:</span> <span class="string">¶</span> <span class="comment"># The symbol used to make the permalink.</span></div></pre></td></tr></table></figure>
-<h3>確認 hexo-renderer-markdown-it</h3>
-<p>在此要確定 <a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="external"><code>hexo-renderer-markdown-it/blob/master/lib/renderer.js</code></a>的內容是否允許外掛程式進行第二個參數的設定</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Markdown-it config</span></div><div class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></div><div class="line"><span class="attr">markdown:</span></div><div class="line"><span class="attr">  render:</span></div><div class="line"><span class="attr">    html:</span> <span class="literal">true</span> <span class="comment"># Doesn't escape HTML content so the tags will appear as html.</span></div><div class="line">    <span class="comment"># xhtmlOut: false # Parser will not produce XHTML compliant code.</span></div><div class="line"><span class="attr">    breaks:</span> <span class="literal">true</span> <span class="comment"># Parser produces `&lt;br&gt;` tags every time there is a line break in the source document.</span></div><div class="line"><span class="attr">    langPrefix:</span> <span class="string">''</span></div><div class="line"><span class="attr">    linkify:</span> <span class="literal">true</span> <span class="comment"># Returns text links as text.</span></div><div class="line"><span class="attr">    typographer:</span> <span class="literal">true</span> <span class="comment"># Substitution of common typographical elements will take place.</span></div><div class="line"><span class="attr">    quotes:</span> <span class="string">'“”‘’'</span> <span class="comment"># "double" will be turned into “single”</span></div><div class="line">                   <span class="comment"># 'single' will be turned into ‘single’</span></div><div class="line"><span class="attr">  plugins:</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-abbr</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">success</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">info</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">warning</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-container</span></div><div class="line"><span class="attr">      options:</span> <span class="string">danger</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-deflist</span></div><div class="line"><span class="attr">    - name:</span> <span class="string">markdown-it-emoji</span></div><div class="line"><span class="attr">      options:</span></div><div class="line"><span class="attr">        shortcuts:</span> <span class="string">&#123;&#125;</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-footnote</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-imsize</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-ins</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-mark</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-regexp</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-sub</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-sup</span></div><div class="line"><span class="bullet">    -</span> <span class="string">markdown-it-checkbox</span></div><div class="line"><span class="attr">    anchors:</span></div><div class="line"><span class="attr">      level:</span> <span class="number">1</span><span class="string">,</span> <span class="number">2</span> <span class="comment"># Minimum level for ID creation. (Ex. h2 to h6)</span></div><div class="line"><span class="attr">      collisionSuffix:</span> <span class="string">'v'</span> <span class="comment"># A suffix that is prepended to the number given if the ID is repeated.</span></div><div class="line"><span class="attr">      permalink:</span> <span class="literal">true</span> <span class="comment"># If true, creates an anchor tag with a permalink besides the heading.</span></div><div class="line"><span class="attr">      permalinkClass:</span> <span class="string">header-anchor</span> <span class="comment"># Class used for the permalink anchor tag.</span></div><div class="line"><span class="attr">      permalinkSymbol:</span> <span class="string">''</span> <span class="comment"># The symbol used to make the permalink.</span></div></pre></td></tr></table></figure>
+<h3 id="確認-hexo-renderer-markdown-it"><a class="header-anchor" href="#確認-hexo-renderer-markdown-it"></a>確認 hexo-renderer-markdown-it</h3>
+<p>在此要確定 <a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="noopener"><code>hexo-renderer-markdown-it/blob/master/lib/renderer.js</code></a>的內容是否允許外掛程式進行第二個參數的設定</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (opt.plugins) &#123;</div><div class="line">  parser = opt.plugins.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">parser, pugs</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (pugs <span class="keyword">instanceof</span> <span class="built_in">Object</span> &amp;&amp; pugs.name) &#123;</div><div class="line">      <span class="keyword">return</span> parser.use(<span class="built_in">require</span>(pugs.name), pugs.options);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> parser.use(<span class="built_in">require</span>(pugs));</div><div class="line">    &#125;</div><div class="line">  &#125;, parser);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>因為在研究時，npm下載下來的版本並不是這麼寫，但是github已經更新成這樣了。</p>
-<h2>程式碼區塊的行號</h2>
+<h2 id="程式碼區塊的行號"><a class="header-anchor" href="#程式碼區塊的行號"></a>程式碼區塊的行號</h2>
 <p>在hackmd中，程式碼區塊的行號指定方式和hexo並不同。<br>
 hexo是透過config檔案去設定整個部落格是否都一致要有行號，而且每一個程式碼區塊的第一個行號都是1開始計數。</p>
 <p>但是hackmd，在程式碼區塊的三個點點後，是這麼設定的</p>
@@ -178,10 +178,10 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li><code>js=3</code> -&gt; js code block with line number, start in 3</li>
 </ul>
 <p>相當漂亮。</p>
-<p>所以，在此修改<code>lib/plugins/filter/before_post_render/backtick_code_block.js</code>，並提交了<a href="https://github.com/hexojs/hexo/pull/2612/files" target="_blank" rel="external">一份pull request</a></p>
+<p>所以，在此修改<code>lib/plugins/filter/before_post_render/backtick_code_block.js</code>，並提交了<a href="https://github.com/hexojs/hexo/pull/2612/files" target="_blank" rel="noopener">一份pull request</a></p>
 <p>不過，因為原作者希望使用config做設定，所以這一份應該暫時還過不了。<br>
 (還是設定一個hackmd mode也許可以XD)</p>
-<h2>hacmkd 在渲染器上的處理</h2>
+<h2 id="hacmkd-在渲染器上的處理"><a class="header-anchor" href="#hacmkd-在渲染器上的處理"></a>hacmkd 在渲染器上的處理</h2>
 <ul>
 <li>第一層: 直接自訂 markdown-it<br>
 最開始先是 markdown 轉 html<br>
@@ -191,23 +191,23 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li>第三層: 是動態轉換，把需要互動的元素綁定事件<br>
 有用jquery</li>
 </ul>
-<p>在hackmd的原始碼中，有看見<code>ui.area.markdown</code>，其中<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/lib/editor/ui-elements.js" target="_blank" rel="external">ui物件是這樣</a>建出來的，也許就是給第二層或第三層用，使用jQuery的地方。</p>
-<h3>也許是進入點的地方</h3>
+<p>在hackmd的原始碼中，有看見<code>ui.area.markdown</code>，其中<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/lib/editor/ui-elements.js" target="_blank" rel="noopener">ui物件是這樣</a>建出來的，也許就是給第二層或第三層用，使用jQuery的地方。</p>
+<h3 id="也許是進入點的地方"><a class="header-anchor" href="#也許是進入點的地方"></a>也許是進入點的地方</h3>
 <p>原本想找在hackmd中，有沒有markdown-it的渲染呼叫點呢？</p>
-<p>就開始找了，終於讓我找到幾個可能的地方，<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/index.js" target="_blank" rel="external">其中一個地方</a>如下</p>
+<p>就開始找了，終於讓我找到幾個可能的地方，<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/index.js" target="_blank" rel="noopener">其中一個地方</a>如下</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">2800</div><div class="line">2801</div><div class="line">2802</div><div class="line">2803</div><div class="line">2804</div><div class="line">2805</div><div class="line">2806</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateViewInner</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (appState.currentMode === modeType.edit || !isDirty) <span class="keyword">return</span></div><div class="line">  <span class="keyword">var</span> value = editor.getValue()</div><div class="line">  <span class="keyword">var</span> lastMeta = md.meta</div><div class="line">  md.meta = &#123;&#125;</div><div class="line">  <span class="keyword">delete</span> md.metaError</div><div class="line">  <span class="keyword">var</span> rendered = md.render(value)</div></pre></td></tr></table></figure>
 <p>這一行</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> rendered = md.render(value)</div></pre></td></tr></table></figure>
-<p>和<a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="external">hexo-renderer-markdown-it裡</a>的這一行好像呀</p>
+<p>和<a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="noopener">hexo-renderer-markdown-it裡</a>的這一行好像呀</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">return</span> parser.render(data.text);</div></pre></td></tr></table></figure>
 <p>所以 hackmd的這一行指的是，使用者keyin原本的markdown source code</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> value = editor.getValue()</div></pre></td></tr></table></figure>
-<h2>過濾器</h2>
+<h2 id="過濾器"><a class="header-anchor" href="#過濾器"></a>過濾器</h2>
 <p>過濾器，也就是語法的後處理器。</p>
-<p>前面研究的<a href="https://github.com/hexojs/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js" target="_blank" rel="external">「程式碼區塊加行號的參數」</a>，就是後處理器在進行的。</p>
+<p>前面研究的<a href="https://github.com/hexojs/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js" target="_blank" rel="noopener">「程式碼區塊加行號的參數」</a>，就是後處理器在進行的。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'hexo-util'</span>);</div><div class="line"><span class="keyword">var</span> highlight = util.highlight;</div></pre></td></tr></table></figure>
 <p>由上面的程式碼得知，參數與程式碼則是丟進了外掛程式<code>hexo-util</code>的<code>highlight</code>函數中。進行後處理，hexo在處理程式碼加行號時，會使用<code>table</code>語法確定排列不與<code>css</code>相依，也可以排列出想要的位置。</p>
-<h3>過濾器與渲染器兩者之間差在哪呢？</h3>
+<h3 id="過濾器與渲染器兩者之間差在哪呢？"><a class="header-anchor" href="#過濾器與渲染器兩者之間差在哪呢？"></a>過濾器與渲染器兩者之間差在哪呢？</h3>
 <p>渲染器: markdown -&gt; html<br>
 後處理器: 模版語言 or html -&gt; html</p>
 <ul>
@@ -216,7 +216,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 由於模版語言，並不是markdown，所以渲染器並不會處理。</li>
 </ul>
 <p>最後的html並不會和hackmd一模一樣。(但是沒關係)</p>
-<h3>安裝過濾器</h3>
+<h3 id="安裝過濾器"><a class="header-anchor" href="#安裝過濾器"></a>安裝過濾器</h3>
 <p>有一些外掛程式支援與hackmd一樣的寫法，並且出現相同的效果</p>
 <ul>
 <li>表情符號(彩色的)<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li>
@@ -224,10 +224,10 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li>UML循序圖<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> npm install hexo-filter-github-emojis --save</div><div class="line"><span class="meta">$</span> npm install hexo-filter-flowchart --save</div><div class="line"><span class="meta">$</span> npm install hexo-filter-sequence --save</div></pre></td></tr></table></figure>
-<h3>設定過濾器</h3>
+<h3 id="設定過濾器"><a class="header-anchor" href="#設定過濾器"></a>設定過濾器</h3>
 <p>一樣在hexo的_config.yml檔下面貼上</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Github Emojis config</span></div><div class="line"><span class="attr">githubEmojis:</span></div><div class="line"><span class="attr">  enable:</span> <span class="literal">true</span></div><div class="line"><span class="attr">  className:</span> <span class="string">github-emoji</span></div><div class="line"><span class="attr">  unicode:</span> <span class="literal">false</span></div><div class="line"><span class="attr">  localEmojis:</span></div><div class="line"><span class="attr">flowchart:</span></div><div class="line">  <span class="comment"># raphael:   # optional, the source url of raphael.js</span></div><div class="line">  <span class="comment"># flowchart: # optional, the source url of flowchart.js</span></div><div class="line"><span class="attr">  options:</span> <span class="comment"># options used for `drawSVG`</span></div><div class="line"><span class="attr">sequence:</span></div><div class="line">  <span class="comment"># webfont:     # optional, the source url of webfontloader.js</span></div><div class="line">  <span class="comment"># snap:        # optional, the source url of snap.svg.js</span></div><div class="line">  <span class="comment"># underscore:  # optional, the source url of underscore.js</span></div><div class="line">  <span class="comment"># sequence:    # optional, the source url of sequence-diagram.js</span></div><div class="line">  <span class="comment"># css: # optional, the url for css, such as hand drawn theme</span></div><div class="line"><span class="attr">  options:</span></div><div class="line"><span class="attr">    theme:</span></div><div class="line"><span class="attr">    css_class:</span></div></pre></td></tr></table></figure>
-<h2>改上文章目錄<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
+<h2 id="改上文章目錄"><a class="header-anchor" href="#改上文章目錄"></a>改上文章目錄<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
 <p>我裝的主題，沒有文章目錄，所以要自己安裝上去。</p>
 <p>在主題的<code>layout</code>資料夾中，找到插入內容的這一行<code>&lt;%- post.content %&gt;</code>，上面加上<code>&lt;%- partial('toc') %&gt;</code></p>
 <p>改好如下</p>
@@ -235,13 +235,13 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://github.com/crimx/hexo-filter-github-emojis" target="_blank" rel="external">[github]hexo-filter-github-emojis</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://github.com/crimx/hexo-filter-github-emojis" target="_blank" rel="noopener">[github]hexo-filter-github-emojis</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://github.com/bubkoo/hexo-filter-flowchart" target="_blank" rel="external">[github]hexo-filter-flowchart</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/bubkoo/hexo-filter-flowchart" target="_blank" rel="noopener">[github]hexo-filter-flowchart</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a href="https://github.com/bubkoo/hexo-filter-sequence" target="_blank" rel="external">[github]hexo-filter-sequence</a> <a href="#fnref3" class="footnote-backref">↩</a></p>
+<li id="fn3" class="footnote-item"><p><a href="https://github.com/bubkoo/hexo-filter-sequence" target="_blank" rel="noopener">[github]hexo-filter-sequence</a> <a href="#fnref3" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn4" class="footnote-item"><p><a href="https://pengloo53.gitbooks.io/hexo/content/chapter2/7%20%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95.html" target="_blank" rel="external">Hexo小书 &gt; 添加文章目录</a> <a href="#fnref4" class="footnote-backref">↩</a></p>
+<li id="fn4" class="footnote-item"><p><a href="https://pengloo53.gitbooks.io/hexo/content/chapter2/7%20%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95.html" target="_blank" rel="noopener">Hexo小书 &gt; 添加文章目录</a> <a href="#fnref4" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>
@@ -292,7 +292,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
     <div>
       
         <h1>hexo加上github表情符號</h1>
-<p>突然看見這個功能的<a href="https://github.com/crimx/hexo-filter-github-emojis" target="_blank" rel="external">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
+<p>突然看見這個功能的<a href="https://github.com/crimx/hexo-filter-github-emojis" target="_blank" rel="noopener">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install hexo-filter-github-emojis --save</div></pre></td></tr></table></figure>
 
       
@@ -341,7 +341,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
     <div>
       
         <h1>hexo加上UML循序圖</h1>
-<p>突然看見這個功能的<a href="https://github.com/bubkoo/hexo-filter-sequence" target="_blank" rel="external">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
+<p>突然看見這個功能的<a href="https://github.com/bubkoo/hexo-filter-sequence" target="_blank" rel="noopener">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install hexo-filter-sequence --save</div></pre></td></tr></table></figure>
 
       
@@ -390,7 +390,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
     <div>
       
         <h1>hexo加上流程圖</h1>
-<p>突然看見這個功能的<a href="https://github.com/bubkoo/hexo-filter-flowchart" target="_blank" rel="external">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
+<p>突然看見這個功能的<a href="https://github.com/bubkoo/hexo-filter-flowchart" target="_blank" rel="noopener">github</a>, 測試之後和hackmd的寫法一樣唷!!!</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install --save hexo-filter-flowchart</div></pre></td></tr></table></figure>
 
       
@@ -446,7 +446,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <p>此頁是用來測試到底支援了多少hackmd原本的寫法<br>
 不過，確實有許多功能不需要照本宣科的移植過來，畢竟身為hackmd的愛用者，只要夠用，而不是取代呀<br>
 所以，下面列出目前支援的語法與功能到什麼程度，標示danger區塊的則是<em>不支援</em>或<em>沒有這功能</em>的意思。</p>
-<h2>測試開始</h2>
+<h2 id="測試開始"><a class="header-anchor" href="#測試開始"></a>測試開始</h2>
 <h1>功能介紹</h1>
 <p><strong><a href="/features">English version</a></strong><br>
 <strong><a href="/CwYwhgzAbApgHFAtHAnAIzY4awBNkwCsA7ImFCBCHAIxwBMhhIQAAA==">中文版</a></strong><br>
@@ -462,11 +462,11 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 所以您可以在<strong>電腦、平板甚至是手機</strong>與其他人做筆記！<br>
 同時也可以在 <strong><a href="/">首頁</a></strong> 透過 <strong>Facebook、Twitter、GitHub、Dropbox</strong> 登入</p>
 <p>目前這個服務還在初步階段，所以可能會有點問題或是壞掉<br>
-如有任何狀況，請至 <a href="https://github.com/hackmdio/hackmd" target="_blank" rel="external">GitHub</a> 回報問題<br>
-如果需要即時支援，請使用 <a href="https://www.facebook.com/messages/866415986748945" target="_blank" rel="external">Facebook Message</a><br>
+如有任何狀況，請至 <a href="https://github.com/hackmdio/hackmd" target="_blank" rel="noopener">GitHub</a> 回報問題<br>
+如果需要即時支援，請使用 <a href="https://www.facebook.com/messages/866415986748945" target="_blank" rel="noopener">Facebook Message</a><br>
 <strong>謝謝您！</strong></p>
 <h1>工作區</h1>
-<h2>模式</h2>
+<h2 id="模式"><a class="header-anchor" href="#模式"></a>模式</h2>
 <p><strong>電腦 &amp; 平板</strong></p>
 <p><i class="fa fa-edit fa-fw"></i> 編輯：只看到編輯器<br>
 <i class="fa fa-eye fa-fw"></i> 檢視：只看到結果<br>
@@ -474,46 +474,46 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <p><strong>手機</strong></p>
 <p><i class="fa fa-toggle-on fa-fw"></i> 檢視：只看到結果<br>
 <i class="fa fa-toggle-off fa-fw"></i> 編輯：只看到編輯器</p>
-<h2>上傳圖片</h2>
+<h2 id="上傳圖片"><a class="header-anchor" href="#上傳圖片"></a>上傳圖片</h2>
 <p>只要按下這個按鈕 <i class="fa fa-camera"></i><br>
 或是 <strong>拖放</strong> 圖片到編輯器，甚至 <strong>貼上</strong> 圖片也可以喔！<br>
-這會自動上傳圖片至 <strong><a href="http://imgur.com" target="_blank" rel="external">imgur</a></strong>，啥都不必煩惱了 <img class="github-emoji" title="tada" alt="tada" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png?v7" height="20" width="20"><br>
+這會自動上傳圖片至 <strong><a href="http://imgur.com" target="_blank" rel="noopener">imgur</a></strong>，啥都不必煩惱了 <img class="github-emoji" title="tada" alt="tada" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png?v7" height="20" width="20"><br>
 <img src="https://i.imgur.com/9cgQVqD.png" alt=""></p>
-<h2>分享筆記</h2>
+<h2 id="分享筆記"><a class="header-anchor" href="#分享筆記"></a>分享筆記</h2>
 <p>如果您想分享 <strong>可編輯的</strong> 筆記，複製這份文件的網址就好<br>
 如果您想分享 <strong>只可讀的</strong> 筆記，按下這個按鈕 <i class="fa fa-share-alt"></i> 然後複製網址</p>
-<h2>儲存</h2>
+<h2 id="儲存"><a class="header-anchor" href="#儲存"></a>儲存</h2>
 <p>目前可以儲存至 <strong>Dropbox</strong> <i class="fa fa-dropbox"></i> 或是存放 <strong>.md</strong> <i class="fa fa-file-text"></i> 到您的本機</p>
-<h2>匯入</h2>
+<h2 id="匯入"><a class="header-anchor" href="#匯入"></a>匯入</h2>
 <p>就像上面的儲存功能，您可以從 <strong>Dropbox</strong> <i class="fa fa-dropbox"></i> 匯入 <strong>.md</strong> <i class="fa fa-file-text"></i><br>
 或是從 <strong>剪貼簿</strong> <i class="fa fa-clipboard"></i> 匯入，而且這可以轉換 <strong>html</strong> 喔 <img class="github-emoji" title="smiley" alt="smiley" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f603.png?v7" height="20" width="20"></p>
-<h2>權限</h2>
+<h2 id="權限"><a class="header-anchor" href="#權限"></a>權限</h2>
 <p>檢視右上方有個小按鈕，您可以透過以下選項來更改權限：</p>
 <p><i class="fa fa-leaf fa-fw"></i> 隨意：任何人都可以更改這份筆記<br>
 <i class="fa fa-pencil fa-fw"></i> 可編輯：已登入使用者可以更改這份筆記<br>
 <i class="fa fa-lock fa-fw"></i> 鎖定：只有擁有者可以更改這份筆記<br>
 <i class="fa fa-hand-stop-o fa-fw"></i> 私有：只有擁有者可以更改與檢視這份筆記</p>
 <p><strong>只有筆記的擁有者可以更改權限</strong></p>
-<h2>嵌入</h2>
+<h2 id="嵌入"><a class="header-anchor" href="#嵌入"></a>嵌入</h2>
 <figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">width</span>=<span class="string">"100%"</span> <span class="attr">height</span>=<span class="string">"500"</span> <span class="attr">src</span>=<span class="string">"https://hackmd.io/features"</span> <span class="attr">frameborder</span>=<span class="string">"0"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2><a href="./slide-example">簡報模式</a></h2>
+<h2 id="簡報模式"><a class="header-anchor" href="#簡報模式"></a><a href="./slide-example">簡報模式</a></h2>
 <p>您可以使用一些語法將您的筆記分成投影片<br>
 然後用 <strong>簡報模式</strong> <i class="fa fa-tv"></i> 來展示，詳細請至上連結</p>
 <h1>檢視</h1>
-<h2>目錄</h2>
+<h2 id="目錄"><a class="header-anchor" href="#目錄"></a>目錄</h2>
 <p>在右下角有個目錄的小按鈕 <i class="fa fa-bars"></i><br>
 按下它會顯示目前的目錄，而且會標明你所在的區塊<br>
 支援到<strong>第三階段的標頭</strong></p>
-<h2>永久連結</h2>
+<h2 id="永久連結"><a class="header-anchor" href="#永久連結"></a>永久連結</h2>
 <p>每個標頭都會在右側自動加上永久連結<br>
 您可以在滑到上面並且按 <i class="fa fa-chain"></i> 去移到那個錨點</p>
 <h1>編輯</h1>
-<h2>快速鍵</h2>
+<h2 id="快速鍵"><a class="header-anchor" href="#快速鍵"></a>快速鍵</h2>
 <p>跟又快又方便的Sublime text很像</p>
 <blockquote>
-<p>更多訊息請至 <a href="https://codemirror.net/demo/sublime.html" target="_blank" rel="external">這裡</a></p>
+<p>更多訊息請至 <a href="https://codemirror.net/demo/sublime.html" target="_blank" rel="noopener">這裡</a></p>
 </blockquote>
-<h2>自動完成</h2>
+<h2 id="自動完成"><a class="header-anchor" href="#自動完成"></a>自動完成</h2>
 <p>提供完整的 Markdown 自動完成與提示</p>
 <ul>
 <li>表情符號：輸入 <code>:</code> 顯示提示</li>
@@ -529,15 +529,15 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li>外部：輸入 <code>{}</code> 顯示提示</li>
 <li>圖片：輸入 <code>!</code> 顯示提示</li>
 </ul>
-<h2>標題</h2>
+<h2 id="標題"><a class="header-anchor" href="#標題"></a>標題</h2>
 <p>會使用 <strong>第一個第一級標頭</strong> 作為筆記標題</p>
-<h2>標籤</h2>
+<h2 id="標籤"><a class="header-anchor" href="#標籤"></a>標籤</h2>
 <div class="danger">
 <p>(這個語法的功能不同)<br>
 如同以下方式來使用標籤，它們會顯示在您的 <strong>歷史紀錄</strong></p>
-<h6 id="tags-功能-酷-更新"><a class="header-anchor" href="#tags-功能-酷-更新">¶</a>tags: <code>功能</code> <code>酷</code> <code>更新</code></h6>
+<h6 id="tags-功能-酷-更新"><a class="header-anchor" href="#tags-功能-酷-更新"></a>tags: <code>功能</code> <code>酷</code> <code>更新</code></h6>
 </div>
-<h2><a href="./yaml-metadata">YAML metadata</a></h2>
+<h2 id="yaml-metadata"><a class="header-anchor" href="#yaml-metadata"></a><a href="./yaml-metadata">YAML metadata</a></h2>
 <p>提供描述筆記的資訊，以進階設定瀏覽行為，詳細請至上連結</p>
 <ul>
 <li>robots: 設定網路機器人 meta</li>
@@ -546,12 +546,12 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li>breaks: 設定是否使用分行</li>
 <li>mathjax: 設定是否使用 mathjax</li>
 </ul>
-<h2>表情符號</h2>
+<h2 id="表情符號"><a class="header-anchor" href="#表情符號"></a>表情符號</h2>
 <p>您可以像是這樣使用表情符號 <img class="github-emoji" title="smile" alt="smile" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f604.png?v7" height="20" width="20"> <img class="github-emoji" title="smiley" alt="smiley" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f603.png?v7" height="20" width="20"> <img class="github-emoji" title="cry" alt="cry" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f622.png?v7" height="20" width="20"> <img class="github-emoji" title="wink" alt="wink" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f609.png?v7" height="20" width="20"></p>
 <blockquote>
-<p>完整的表情符號列表 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="external">在這裡</a></p>
+<p>完整的表情符號列表 <a href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="noopener">在這裡</a></p>
 </blockquote>
-<h2>待辦清單</h2>
+<h2 id="待辦清單"><a class="header-anchor" href="#待辦清單"></a>待辦清單</h2>
 <ul>
 <li><input type="checkbox" id="checkbox0"><label for="checkbox0">待辦</label>
 <ul>
@@ -561,7 +561,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 </ul>
 </li>
 </ul>
-<h2>程式碼區塊</h2>
+<h2 id="程式碼區塊"><a class="header-anchor" href="#程式碼區塊"></a>程式碼區塊</h2>
 <p>我們支援非常多程式語言，使用自動完成來看看有些什麼</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> s = <span class="string">"JavaScript syntax highlighting"</span>;</div><div class="line">alert(s);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">$initHighlight</span>(<span class="params">block, cls</span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">if</span> (cls.search(<span class="regexp">/\bno\-highlight\b/</span>) != <span class="number">-1</span>)</div><div class="line">      <span class="keyword">return</span> process(block, <span class="literal">true</span>, <span class="number">0x0F</span>) +</div><div class="line">             <span class="string">' class=""'</span>;</div><div class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="comment">/* handle exception */</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span> / <span class="number">2</span>; i &lt; classes.length; i++) &#123;</div><div class="line">    <span class="keyword">if</span> (checkCondition(classes[i]) === <span class="literal">undefined</span>)</div><div class="line">      <span class="keyword">return</span> <span class="regexp">/\d+[\s/]/g</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <blockquote>
@@ -578,7 +578,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 </div>
 <div class="danger">
 <p>(這一段語法不吃)</p>
-<h2>引用區塊標籤</h2>
+<h2 id="引用區塊標籤"><a class="header-anchor" href="#引用區塊標籤"></a>引用區塊標籤</h2>
 <blockquote>
 <p>您可以使用以下語法，表明自己的 <strong>姓名、時間與顏色</strong> 並與其他的引用區塊做區別<br>
 [name=ChengHan Wu] [time=Sun, Jun 28, 2015 9:59 PM] [color=#907bf7]</p>
@@ -588,48 +588,48 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 </blockquote>
 </blockquote>
 </div>
-<h2>外部</h2>
-<h3>Youtube</h3>
+<h2 id="外部"><a class="header-anchor" href="#外部"></a>外部</h2>
+<h3 id="youtube"><a class="header-anchor" href="#youtube"></a>Youtube</h3>
 <div class="video-container"><iframe src="//www.youtube.com/embed/1G4isv_Fylg" frameborder="0" allowfullscreen></iframe></div>
-<h3>Vimeo</h3>
+<h3 id="vimeo"><a class="header-anchor" href="#vimeo"></a>Vimeo</h3>
 <div class="video-container"><iframe src="//player.vimeo.com/video/124148255" frameborder="0" allowfullscreen></iframe></div>
-<h3>Gist</h3>
+<h3 id="gist"><a class="header-anchor" href="#gist"></a>Gist</h3>
 <script src="//gist.github.com/schacon/4277.js"></script>
 <div class="danger">
 <p>(這一段語法不吃)</p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><div class="line"><span class="section">### SlideShare</span></div><div class="line">&#123;%slideshare briansolis/26-disruptive-technology-trends-2016-2018-56796196 %&#125;</div><div class="line"></div><div class="line"><span class="section">### Speakerdeck</span></div><div class="line">&#123;%speakerdeck sugarenia/xxlcss-how-to-scale-css-and-keep-your-sanity %&#125;</div><div class="line"></div><div class="line"><span class="section">### PDF</span></div><div class="line"><span class="strong">**注意：請使用 https 的網址，否則可能會被您的瀏覽器阻擋載入**</span></div><div class="line">&#123;%pdf https://papers.nips.cc/paper/5346-sequence-to-sequence-learning-with-neural-networks.pdf %&#125;</div></pre></td></tr></table></figure>
 </div>
-<h2>MathJax</h2>
-<p>您可以使用 <strong>MathJax</strong> 語法 來產生 <em>LaTeX</em> 數學表達式，如同 <a href="http://math.stackexchange.com/" target="_blank" rel="external">math.stackexchange.com</a>：</p>
+<h2 id="mathjax"><a class="header-anchor" href="#mathjax"></a>MathJax</h2>
+<p>您可以使用 <strong>MathJax</strong> 語法 來產生 <em>LaTeX</em> 數學表達式，如同 <a href="http://math.stackexchange.com/" target="_blank" rel="noopener">math.stackexchange.com</a>：</p>
 <p>The <em>Gamma function</em> satisfying <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Γ</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>!</mo><mspace width="1em"></mspace><mi mathvariant="normal">∀</mi><mi>n</mi><mo>∈</mo><mi mathvariant="double-struck">N</mi></mrow><annotation encoding="application/x-tex">\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">Γ</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mbin">−</span><span class="mord mathrm">1</span><span class="mclose">)</span><span class="mclose">!</span><span class="mord mspace quad"></span><span class="mord mathrm">∀</span><span class="mord mathit">n</span><span class="mrel">∈</span><span class="mord mathbb">N</span></span></span></span> is via the Euler integral</p>
 <p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mfrac><mrow><mo>−</mo><mi>b</mi><mo>±</mo><msqrt><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">x = {-b \pm \sqrt{b^2-4ac} \over 2a}.
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.590389em;"></span><span class="strut bottom" style="height:2.276389em;vertical-align:-0.686em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord displaystyle textstyle uncramped"><span class="mord reset-textstyle displaystyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.686em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle cramped"><span class="mord textstyle cramped"><span class="mord mathrm">2</span><span class="mord mathit">a</span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.677em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord">−</span><span class="mord mathit">b</span><span class="mbin">±</span><span class="sqrt mord"><span class="sqrt-sign" style="top:-0.07338899999999993em;"><span class="style-wrap reset-textstyle textstyle uncramped">√</span></span><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="mord textstyle cramped"><span class="mord"><span class="mord mathit">b</span><span class="vlist"><span style="top:-0.289em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">−</span><span class="mord mathrm">4</span><span class="mord mathit">a</span><span class="mord mathit">c</span></span></span><span style="top:-0.8333889999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span><span class="reset-textstyle textstyle uncramped sqrt-line"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:1em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span><span class="mord mathrm">.</span></span></span></span></span></p>
 <p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Γ</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi mathvariant="normal">∞</mi></msubsup><msup><mi>t</mi><mrow><mi>z</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mo>−</mo><mi>t</mi></mrow></msup><mi>d</mi><mi>t</mi><mspace width="0.16667em"></mspace><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.36em;"></span><span class="strut bottom" style="height:2.27225em;vertical-align:-0.91225em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathrm">Γ</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mrel">=</span><span class="mop"><span class="op-symbol large-op mop" style="margin-right:0.44445em;top:-0.0011249999999999316em;">∫</span><span class="vlist"><span style="top:0.91225em;margin-left:-0.44445em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">0</span></span></span><span style="top:-0.9739999999999999em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord mathrm">∞</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">t</span><span class="vlist"><span style="top:-0.41300000000000003em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mbin">−</span><span class="mord mathrm">1</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:-0.41300000000000003em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord">−</span><span class="mord mathit">t</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">d</span><span class="mord mathit">t</span><span class="mord mspace thinspace"></span><span class="mord mathrm">.</span></span></span></span></span></p>
 <blockquote>
-<p>更多關於 <strong>LaTeX</strong> 數學表達式 <a href="http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference" target="_blank" rel="external">請至這裡</a></p>
+<p>更多關於 <strong>LaTeX</strong> 數學表達式 <a href="http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference" target="_blank" rel="noopener">請至這裡</a></p>
 </blockquote>
-<h2>UML 圖表</h2>
-<h3>循序圖</h3>
+<h2 id="uml-圖表"><a class="header-anchor" href="#uml-圖表"></a>UML 圖表</h2>
+<h3 id="循序圖"><a class="header-anchor" href="#循序圖"></a>循序圖</h3>
 <p>您可以像是以下使用循序圖：</p>
 <div id="sequence-0"></div>
-<h3>流程圖</h3>
+<h3 id="流程圖"><a class="header-anchor" href="#流程圖"></a>流程圖</h3>
 <p>您可以像是以下使用流程圖：</p>
 <div id="flowchart-0" class="flow-chart"></div>
 <div class="danger">
 <p>(這一段語法不吃)</p>
-<h3>Graphviz</h3>
+<h3 id="graphviz"><a class="header-anchor" href="#graphviz"></a>Graphviz</h3>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">digraph hierarchy &#123;</div><div class="line"></div><div class="line">                nodesep=1.0 // increases the separation between nodes</div><div class="line"></div><div class="line">                node [color=Red,fontname=Courier,shape=box] //All nodes will this shape and colour</div><div class="line">                edge [color=Blue, style=dashed] //All the lines look like this</div><div class="line"></div><div class="line">                Headteacher-&gt;&#123;Deputy1 Deputy2 BusinessManager&#125;</div><div class="line">                Deputy1-&gt;&#123;Teacher1 Teacher2&#125;</div><div class="line">                BusinessManager-&gt;ITManager</div><div class="line">                &#123;rank=same;ITManager Teacher1 Teacher2&#125;  // Put them on the same level</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3>Mermaid</h3>
+<h3 id="mermaid"><a class="header-anchor" href="#mermaid"></a>Mermaid</h3>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">gantt</div><div class="line">    title A Gantt Diagram</div><div class="line"></div><div class="line">    section Section</div><div class="line">    A task           :a1, 2014-01-01, 30d</div><div class="line">    Another task     :after a1  , 20d</div><div class="line">    section Another</div><div class="line">    Task in sec      :2014-01-12  , 12d</div><div class="line">    anther task      : 24d</div></pre></td></tr></table></figure>
 <blockquote>
-<p>更多關於 <strong>循序圖</strong> 語法 <a href="http://bramp.github.io/js-sequence-diagrams/" target="_blank" rel="external">在這裡</a>.<br>
-更多關於 <strong>流程圖</strong> 語法 <a href="http://adrai.github.io/flowchart.js/" target="_blank" rel="external">在這裡</a>.<br>
-更多關於 <strong>Graphviz</strong> 語法 <a href="http://www.tonyballantyne.com/graphs.html" target="_blank" rel="external">在這裡</a><br>
-更多關於 <strong>Mermaid</strong> 語法 <a href="http://knsv.github.io/mermaid" target="_blank" rel="external">在這裡</a></p>
+<p>更多關於 <strong>循序圖</strong> 語法 <a href="http://bramp.github.io/js-sequence-diagrams/" target="_blank" rel="noopener">在這裡</a>.<br>
+更多關於 <strong>流程圖</strong> 語法 <a href="http://adrai.github.io/flowchart.js/" target="_blank" rel="noopener">在這裡</a>.<br>
+更多關於 <strong>Graphviz</strong> 語法 <a href="http://www.tonyballantyne.com/graphs.html" target="_blank" rel="noopener">在這裡</a><br>
+更多關於 <strong>Mermaid</strong> 語法 <a href="http://knsv.github.io/mermaid" target="_blank" rel="noopener">在這裡</a></p>
 </blockquote>
 </div>
-<h2>警告區塊</h2>
+<h2 id="警告區塊"><a class="header-anchor" href="#警告區塊"></a>警告區塊</h2>
 <div class="success">
 <p>耶 <img class="github-emoji" title="tada" alt="tada" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f389.png?v7" height="20" width="20"></p>
 </div>
@@ -642,21 +642,21 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <div class="danger">
 <p>喔不 <img class="github-emoji" title="fire" alt="fire" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f525.png?v7" height="20" width="20"></p>
 </div>
-<h2>排版</h2>
-<h3>標頭</h3>
+<h2 id="排版"><a class="header-anchor" href="#排版"></a>排版</h2>
+<h3 id="標頭"><a class="header-anchor" href="#標頭"></a>標頭</h3>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># h1 標頭</div><div class="line">## h2 標頭</div><div class="line">### h3 標頭</div><div class="line">#### h4 標頭</div><div class="line">##### h5 標頭</div><div class="line">###### h6 標頭</div></pre></td></tr></table></figure>
-<h3>水平分隔線</h3>
+<h3 id="水平分隔線"><a class="header-anchor" href="#水平分隔線"></a>水平分隔線</h3>
 <hr>
 <hr>
 <hr>
-<h3>字形替換</h3>
+<h3 id="字形替換"><a class="header-anchor" href="#字形替換"></a>字形替換</h3>
 <p>© © ® ® ™ ™ § § ±</p>
 <p>測試… 測試… 測試… 測試?.. 測試!..</p>
 <p>!!! ??? ,</p>
 <p>Remarkable – awesome</p>
 <p>“Smartypants, 雙引號”</p>
 <p>‘Smartypants, 單引號’</p>
-<h3>強調</h3>
+<h3 id="強調"><a class="header-anchor" href="#強調"></a>強調</h3>
 <p><strong>這是粗體文字</strong></p>
 <p><strong>這是粗體文字</strong></p>
 <p><em>這是斜體文字</em></p>
@@ -666,7 +666,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <p>下標： H<sub>2</sub>O</p>
 <p><ins>這是底線文字</ins></p>
 <p><mark>這是標記文字</mark></p>
-<h3>引用區塊</h3>
+<h3 id="引用區塊"><a class="header-anchor" href="#引用區塊"></a>引用區塊</h3>
 <blockquote>
 <p>引用區塊也可以是巢狀的喔…</p>
 <blockquote>
@@ -676,8 +676,8 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 </blockquote>
 </blockquote>
 </blockquote>
-<h3>清單</h3>
-<h4>項目</h4>
+<h3 id="清單"><a class="header-anchor" href="#清單"></a>清單</h3>
+<h4 id="項目"><a class="header-anchor" href="#項目"></a>項目</h4>
 <ul>
 <li>在行開頭使用 <code>+</code> <code>-</code> 或是 <code>*</code> 來建立清單</li>
 <li>空兩個空白就可以產生子清單
@@ -697,7 +697,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 </li>
 <li>非常簡單！</li>
 </ul>
-<h4>編號</h4>
+<h4 id="編號"><a class="header-anchor" href="#編號"></a>編號</h4>
 <ol>
 <li>Lorem ipsum dolor sit amet</li>
 <li>Consectetur adipiscing elit</li>
@@ -717,7 +717,7 @@ hexo是透過config檔案去設定整個部落格是否都一致要有行號，�
 <li>foo</li>
 <li>bar</li>
 </ol>
-<h3>程式碼</h3>
+<h3 id="程式碼"><a class="header-anchor" href="#程式碼"></a>程式碼</h3>
 <p>行內 <code>程式碼</code></p>
 <p>縮排程式碼</p>
 <pre><code>// Some comments
@@ -729,7 +729,7 @@ line 3 of code
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Sample text here...</div></pre></td></tr></table></figure>
 <p>語法標色</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params">bar</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> bar++;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(foo(<span class="number">5</span>));</div></pre></td></tr></table></figure>
-<h3>表格</h3>
+<h3 id="表格"><a class="header-anchor" href="#表格"></a>表格</h3>
 <table>
 <thead>
 <tr>
@@ -821,11 +821,11 @@ line 3 of code
 </tr>
 </tbody>
 </table>
-<h3>連結</h3>
-<p><a href="http://dev.nodeca.com" target="_blank" rel="external">連結文字</a><br>
-<a href="http://nodeca.github.io/pica/demo/" title="標題文字！" target="_blank" rel="external">加上標題的連結文字</a><br>
-自動轉換連結 <a href="https://github.com/nodeca/pica" target="_blank" rel="external">https://github.com/nodeca/pica</a></p>
-<h3>圖片</h3>
+<h3 id="連結"><a class="header-anchor" href="#連結"></a>連結</h3>
+<p><a href="http://dev.nodeca.com" target="_blank" rel="noopener">連結文字</a><br>
+<a href="http://nodeca.github.io/pica/demo/" title="標題文字！" target="_blank" rel="noopener">加上標題的連結文字</a><br>
+自動轉換連結 <a href="https://github.com/nodeca/pica" target="_blank" rel="noopener">https://github.com/nodeca/pica</a></p>
+<h3 id="圖片"><a class="header-anchor" href="#圖片"></a>圖片</h3>
 <p><img src="https://octodex.github.com/images/minion.png" alt="Minion"><br>
 <img src="https://octodex.github.com/images/stormtroopocat.jpg" alt="Stormtroopocat" title="The Stormtroopocat"><br>
 如同連結一般，圖片也可以用註腳語法<br>
@@ -833,12 +833,12 @@ line 3 of code
 使用參考，可以在稍後的文件中再定義圖片網址</p>
 <p><img src="https://octodex.github.com/images/minion.png" alt="Minion" width="200" height="200"><br>
 使用指定的大小顯示圖片</p>
-<h3>註腳</h3>
+<h3 id="註腳"><a class="header-anchor" href="#註腳"></a>註腳</h3>
 <p>註腳 1 連結<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.<br>
 註腳 2 連結<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>.<br>
 行內註腳<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 定義<br>
 重複的註腳參考<sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2]</a></sup>.</p>
-<h3>定義清單</h3>
+<h3 id="定義清單"><a class="header-anchor" href="#定義清單"></a>定義清單</h3>
 <dl>
 <dt>名詞 1</dt>
 <dd>
@@ -860,7 +860,7 @@ line 3 of code
 <dd>定義 2a</dd>
 <dd>定義 2b</dd>
 </dl>
-<h3>縮寫</h3>
+<h3 id="縮寫"><a class="header-anchor" href="#縮寫"></a>縮寫</h3>
 <p>這是 <abbr title="Hyper Text Markup Language">HTML</abbr> 的縮寫範例<br>
 它會轉換 “<abbr title="Hyper Text Markup Language">HTML</abbr>”，但是縮寫旁邊其他的部分，例如：“xxxHTMLyyy”，不受影響</p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 開始
@@ -939,41 +939,41 @@ Note left of 艾莉絲: 艾莉絲回應
       
         <h1>測試 markdown-it 渲染器</h1>
 <p>在此提供目前渲染能力的語法，驗證對於<code>markdown-it</code>以及其外掛的設定與安裝，支援程度的內容<br>
-語法測試參考自<code>markdown-it</code>的<a href="https://markdown-it.github.io/" target="_blank" rel="external">官網測試內容</a></p>
+語法測試參考自<code>markdown-it</code>的<a href="https://markdown-it.github.io/" target="_blank" rel="noopener">官網測試內容</a></p>
 <p>以下測試開始</p>
 <hr>
 <p><strong>Advertisement :)</strong></p>
 <ul>
-<li><strong><a href="https://nodeca.github.io/pica/demo/" target="_blank" rel="external">pica</a></strong> - high quality and fast image<br>
+<li><strong><a href="https://nodeca.github.io/pica/demo/" target="_blank" rel="noopener">pica</a></strong> - high quality and fast image<br>
 resize in browser.</li>
-<li><strong><a href="https://github.com/nodeca/babelfish/" target="_blank" rel="external">babelfish</a></strong> - developer friendly<br>
+<li><strong><a href="https://github.com/nodeca/babelfish/" target="_blank" rel="noopener">babelfish</a></strong> - developer friendly<br>
 i18n with plurals support and easy syntax.</li>
 </ul>
 <p>You will like those projects!</p>
 <hr>
 <h1>h1 Heading 8-)</h1>
-<h2>h2 Heading</h2>
-<h3>h3 Heading</h3>
-<h4>h4 Heading</h4>
-<h5>h5 Heading</h5>
-<h6 id="h6-heading"><a class="header-anchor" href="#h6-heading">¶</a>h6 Heading</h6>
-<h2>Horizontal Rules</h2>
+<h2 id="h2-heading"><a class="header-anchor" href="#h2-heading"></a>h2 Heading</h2>
+<h3 id="h3-heading"><a class="header-anchor" href="#h3-heading"></a>h3 Heading</h3>
+<h4 id="h4-heading"><a class="header-anchor" href="#h4-heading"></a>h4 Heading</h4>
+<h5 id="h5-heading"><a class="header-anchor" href="#h5-heading"></a>h5 Heading</h5>
+<h6 id="h6-heading"><a class="header-anchor" href="#h6-heading"></a>h6 Heading</h6>
+<h2 id="horizontal-rules"><a class="header-anchor" href="#horizontal-rules"></a>Horizontal Rules</h2>
 <hr>
 <hr>
 <hr>
-<h2>Typographic replacements</h2>
+<h2 id="typographic-replacements"><a class="header-anchor" href="#typographic-replacements"></a>Typographic replacements</h2>
 <p>Enable typographer option to see result.</p>
 <p>© © ® ® ™ ™ § § ±</p>
 <p>test… test… test… test?.. test!..</p>
 <p>!!! ??? ,  – —</p>
 <p>“Smartypants, double quotes” and ‘single quotes’</p>
-<h2>Emphasis</h2>
+<h2 id="emphasis"><a class="header-anchor" href="#emphasis"></a>Emphasis</h2>
 <p><strong>This is bold text</strong></p>
 <p><strong>This is bold text</strong></p>
 <p><em>This is italic text</em></p>
 <p><em>This is italic text</em></p>
 <p><s>Strikethrough</s></p>
-<h2>Blockquotes</h2>
+<h2 id="blockquotes"><a class="header-anchor" href="#blockquotes"></a>Blockquotes</h2>
 <blockquote>
 <p>Blockquotes can also be nested…</p>
 <blockquote>
@@ -983,7 +983,7 @@ i18n with plurals support and easy syntax.</li>
 </blockquote>
 </blockquote>
 </blockquote>
-<h2>Lists</h2>
+<h2 id="lists"><a class="header-anchor" href="#lists"></a>Lists</h2>
 <p>Unordered</p>
 <ul>
 <li>Create a list by starting a line with <code>+</code>, <code>-</code>, or <code>*</code></li>
@@ -1019,7 +1019,7 @@ i18n with plurals support and easy syntax.</li>
 <li>foo</li>
 <li>bar</li>
 </ol>
-<h2>Code</h2>
+<h2 id="code"><a class="header-anchor" href="#code"></a>Code</h2>
 <p>Inline <code>code</code></p>
 <p>Indented code</p>
 <pre><code>// Some comments
@@ -1031,7 +1031,7 @@ line 3 of code
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Sample text here...</div></pre></td></tr></table></figure>
 <p>Syntax highlighting</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params">bar</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> bar++;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(foo(<span class="number">5</span>));</div></pre></td></tr></table></figure>
-<h2>Tables</h2>
+<h2 id="tables"><a class="header-anchor" href="#tables"></a>Tables</h2>
 <table>
 <thead>
 <tr>
@@ -1077,40 +1077,40 @@ line 3 of code
 </tr>
 </tbody>
 </table>
-<h2>Links</h2>
-<p><a href="http://dev.nodeca.com" target="_blank" rel="external">link text</a></p>
-<p><a href="http://nodeca.github.io/pica/demo/" title="title text!" target="_blank" rel="external">link with title</a></p>
-<p>Autoconverted link <a href="https://github.com/nodeca/pica" target="_blank" rel="external">https://github.com/nodeca/pica</a> (enable linkify to see)</p>
-<h2>Images</h2>
+<h2 id="links"><a class="header-anchor" href="#links"></a>Links</h2>
+<p><a href="http://dev.nodeca.com" target="_blank" rel="noopener">link text</a></p>
+<p><a href="http://nodeca.github.io/pica/demo/" title="title text!" target="_blank" rel="noopener">link with title</a></p>
+<p>Autoconverted link <a href="https://github.com/nodeca/pica" target="_blank" rel="noopener">https://github.com/nodeca/pica</a> (enable linkify to see)</p>
+<h2 id="images"><a class="header-anchor" href="#images"></a>Images</h2>
 <p><img src="https://octodex.github.com/images/minion.png" alt="Minion"><br>
 <img src="https://octodex.github.com/images/stormtroopocat.jpg" alt="Stormtroopocat" title="The Stormtroopocat"></p>
 <p>Like links, Images also have a footnote style syntax</p>
 <p><img src="https://octodex.github.com/images/dojocat.jpg" alt="Alt text" title="The Dojocat"></p>
 <p>With a reference later in the document defining the URL location:</p>
-<h2>Plugins</h2>
+<h2 id="plugins"><a class="header-anchor" href="#plugins"></a>Plugins</h2>
 <p>The killer feature of <code>markdown-it</code> is very effective support of<br>
-<a href="https://www.npmjs.org/browse/keyword/markdown-it-plugin" target="_blank" rel="external">syntax plugins</a>.</p>
-<h3><a href="https://github.com/markdown-it/markdown-it-emoji" target="_blank" rel="external">Emojies</a></h3>
+<a href="https://www.npmjs.org/browse/keyword/markdown-it-plugin" target="_blank" rel="noopener">syntax plugins</a>.</p>
+<h3 id="emojies"><a class="header-anchor" href="#emojies"></a><a href="https://github.com/markdown-it/markdown-it-emoji" target="_blank" rel="noopener">Emojies</a></h3>
 <blockquote>
 <p>Classic markup: <img class="github-emoji" title="wink" alt="wink" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f609.png?v7" height="20" width="20"> :crush: <img class="github-emoji" title="cry" alt="cry" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f622.png?v7" height="20" width="20"> :tear: <img class="github-emoji" title="laughing" alt="laughing" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f606.png?v7" height="20" width="20"> <img class="github-emoji" title="yum" alt="yum" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f60b.png?v7" height="20" width="20"></p>
 <p>Shortcuts (emoticons): :-) :-( 8-) ;)</p>
 </blockquote>
-<p>see <a href="https://github.com/markdown-it/markdown-it-emoji#change-output" target="_blank" rel="external">how to change output</a> with twemoji.</p>
-<h3><a href="https://github.com/markdown-it/markdown-it-sub" target="_blank" rel="external">Subscript</a> / <a href="https://github.com/markdown-it/markdown-it-sup" target="_blank" rel="external">Superscript</a></h3>
+<p>see <a href="https://github.com/markdown-it/markdown-it-emoji#change-output" target="_blank" rel="noopener">how to change output</a> with twemoji.</p>
+<h3 id="subscript-superscript"><a class="header-anchor" href="#subscript-superscript"></a><a href="https://github.com/markdown-it/markdown-it-sub" target="_blank" rel="noopener">Subscript</a> / <a href="https://github.com/markdown-it/markdown-it-sup" target="_blank" rel="noopener">Superscript</a></h3>
 <ul>
 <li>19<sup>th</sup></li>
 <li>H<sub>2</sub>O</li>
 </ul>
-<h3><a href="https://github.com/markdown-it/markdown-it-ins" target="_blank" rel="external">&lt;ins&gt;</a></h3>
+<h3 id="ins"><a class="header-anchor" href="#ins"></a><a href="https://github.com/markdown-it/markdown-it-ins" target="_blank" rel="noopener">&lt;ins&gt;</a></h3>
 <p><ins>Inserted text</ins></p>
-<h3><a href="https://github.com/markdown-it/markdown-it-mark" target="_blank" rel="external">&lt;mark&gt;</a></h3>
+<h3 id="mark"><a class="header-anchor" href="#mark"></a><a href="https://github.com/markdown-it/markdown-it-mark" target="_blank" rel="noopener">&lt;mark&gt;</a></h3>
 <p><mark>Marked text</mark></p>
-<h3><a href="https://github.com/markdown-it/markdown-it-footnote" target="_blank" rel="external">Footnotes</a></h3>
+<h3 id="footnotes"><a class="header-anchor" href="#footnotes"></a><a href="https://github.com/markdown-it/markdown-it-footnote" target="_blank" rel="noopener">Footnotes</a></h3>
 <p>Footnote 1 link<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p>
 <p>Footnote 2 link<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>.</p>
 <p>Inline footnote<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> definition.</p>
 <p>Duplicated footnote reference<sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2]</a></sup>.</p>
-<h3><a href="https://github.com/markdown-it/markdown-it-deflist" target="_blank" rel="external">Definition lists</a></h3>
+<h3 id="definition-lists"><a class="header-anchor" href="#definition-lists"></a><a href="https://github.com/markdown-it/markdown-it-deflist" target="_blank" rel="noopener">Definition lists</a></h3>
 <dl>
 <dt>Term 1</dt>
 <dd>
@@ -1133,10 +1133,10 @@ with lazy continuation.</p>
 <dd>Definition 2a</dd>
 <dd>Definition 2b</dd>
 </dl>
-<h3><a href="https://github.com/markdown-it/markdown-it-abbr" target="_blank" rel="external">Abbreviations</a></h3>
+<h3 id="abbreviations"><a class="header-anchor" href="#abbreviations"></a><a href="https://github.com/markdown-it/markdown-it-abbr" target="_blank" rel="noopener">Abbreviations</a></h3>
 <p>This is <abbr title="Hyper Text Markup Language">HTML</abbr> abbreviation example.</p>
 <p>It converts “<abbr title="Hyper Text Markup Language">HTML</abbr>”, but keep intact partial entries like “xxxHTMLyyy” and so on.</p>
-<h3><a href="https://github.com/markdown-it/markdown-it-container" target="_blank" rel="external">Custom containers</a></h3>
+<h3 id="custom-containers"><a class="header-anchor" href="#custom-containers"></a><a href="https://github.com/markdown-it/markdown-it-container" target="_blank" rel="noopener">Custom containers</a></h3>
 <div class="warning">
 <p><em>here be dragons</em></p>
 </div>
@@ -1204,16 +1204,16 @@ with lazy continuation.</p>
       
         <h1>初探ngrok神器</h1>
 <p><img src="https://ngrok.com/static/img/demo.png" alt=""></p>
-<h2>安裝</h2>
-<p>到<a href="https://ngrok.com/" target="_blank" rel="external">官網</a>看見左邊是下載，右邊是登入</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝"></a>安裝</h2>
+<p>到<a href="https://ngrok.com/" target="_blank" rel="noopener">官網</a>看見左邊是下載，右邊是登入</p>
 <p>先登入(用facebook就可以了)</p>
-<h3>下載</h3>
+<h3 id="下載"><a class="header-anchor" href="#下載"></a>下載</h3>
 <p>下載之後，解壓縮，得到一個執行檔。</p>
-<h3>取得環境變數</h3>
+<h3 id="取得環境變數"><a class="header-anchor" href="#取得環境變數"></a>取得環境變數</h3>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> echo $PATH</div></pre></td></tr></table></figure>
-<h2>完成</h2>
+<h2 id="完成"><a class="header-anchor" href="#完成"></a>完成</h2>
 <p>放到環境變數路徑之下，就算是安裝完成了</p>
-<h2>使用</h2>
+<h2 id="使用"><a class="header-anchor" href="#使用"></a>使用</h2>
 <p>執行ngrok，用http接到port 3000。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> ngrok http 3000</div></pre></td></tr></table></figure>
 
@@ -1277,26 +1277,26 @@ with lazy continuation.</p>
 FB server hook -&gt; bot<br>
 bot -&gt; FB server</p>
 <hr>
-<h2>事前準備</h2>
+<h2 id="事前準備"><a class="header-anchor" href="#事前準備"></a>事前準備</h2>
 <ul>
-<li><a href="https://hackmd.io/EwM2DYA4BMEMEYC0BOcwAMiAsWDMwV8BWRAY13CICM4Jpkqg" target="_blank" rel="external">安裝 <strong>ngrok</strong></a></li>
+<li><a href="https://hackmd.io/EwM2DYA4BMEMEYC0BOcwAMiAsWDMwV8BWRAY13CICM4Jpkqg" target="_blank" rel="noopener">安裝 <strong>ngrok</strong></a></li>
 <li>建立facebook粉絲頁</li>
-<li>建立<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="external">facebook開發者帳號</a></li>
-<li>安裝 <strong>node.js</strong> <strong>+</strong> <a href="http://expressjs.com/zh-tw/starter/installing.html" target="_blank" rel="external">安裝Express</a></li>
+<li>建立<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">facebook開發者帳號</a></li>
+<li>安裝 <strong>node.js</strong> <strong>+</strong> <a href="http://expressjs.com/zh-tw/starter/installing.html" target="_blank" rel="noopener">安裝Express</a></li>
 </ul>
 <hr>
-<h2>執行ngrok</h2>
+<h2 id="執行ngrok"><a class="header-anchor" href="#執行ngrok"></a>執行ngrok</h2>
 <p>在任意的位置執行</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> ngrok http 3000</div></pre></td></tr></table></figure>
 <p>就好了!!</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">ngrok by @inconshreveable                                 (Ctrl+C to quit)</div><div class="line"></div><div class="line">Session Status                online</div><div class="line">Version                       2.2.4               </div><div class="line">Region                        United States (us)</div><div class="line">Web Interface                 http://127.0.0.1:4040</div><div class="line">Forwarding                    http://db9ba35e.ngrok.io -&gt; localhost:3000        </div><div class="line">Forwarding                    https://db9ba35e.ngrok.io -&gt; localhost:3000       </div><div class="line"></div><div class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</div><div class="line">                              0       0       0.00    0.00    0.00    0.00</div></pre></td></tr></table></figure>
 <blockquote>
-<p>Web Interface[color=blue]                 <a href="http://127.0.0.1:4040" target="_blank" rel="external">http://127.0.0.1:4040</a></p>
+<p>Web Interface[color=blue]                 <a href="http://127.0.0.1:4040" target="_blank" rel="noopener">http://127.0.0.1:4040</a></p>
 </blockquote>
 <p>可以看見<code>request</code>的明細。等一下可以用它看粉絲團小編是不是有收到訊息。</p>
 <blockquote>
-<p>Forwarding                    <a href="http://db9ba35e.ngrok.io" target="_blank" rel="external">http://db9ba35e.ngrok.io</a> -&gt; localhost:3000<br>
-Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" target="_blank" rel="external">https://db9ba35e.ngrok.io</a> -&gt; localhost:3000</p>
+<p>Forwarding                    <a href="http://db9ba35e.ngrok.io" target="_blank" rel="noopener">http://db9ba35e.ngrok.io</a> -&gt; localhost:3000<br>
+Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" target="_blank" rel="noopener">https://db9ba35e.ngrok.io</a> -&gt; localhost:3000</p>
 </blockquote>
 <p>這兩個就是可以連線的對外網址，等一下要用它。</p>
 <div class="danger">
@@ -1305,11 +1305,11 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 相關的設定都會改變唷。</p>
 </div>
 <hr>
-<h2>建立 webhook</h2>
-<p><a href="https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup" target="_blank" rel="external">官網文件</a>寫得相當得好。很推薦看一下</p>
+<h2 id="建立-webhook"><a class="header-anchor" href="#建立-webhook"></a>建立 webhook</h2>
+<p><a href="https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup" target="_blank" rel="noopener">官網文件</a>寫得相當得好。很推薦看一下</p>
 <ol>
 <li>
-<p>進入<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="external">開發者帳號</a>之後，按右上角的「新增應用程式」<br>
+<p>進入<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">開發者帳號</a>之後，按右上角的「新增應用程式」<br>
 <img src="https://i.imgur.com/ip2RRfK.png" alt=""></p>
 </li>
 <li>
@@ -1337,42 +1337,42 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <img src="https://i.imgur.com/xkKAlYf.png" alt=""></p>
 </blockquote>
 <p>原因在於，facebook 伺服器傳過來一個 <code>GET</code> 的 request，要求回覆一個 echo 值(在此要回<code>1770261222</code>)給他，不然就報錯。</p>
-<h3>看看facebook傳什麼過來</h3>
-<p>從<a href="http://127.0.0.1:4040" target="_blank" rel="external">Web Interface</a>可以看到</p>
+<h3 id="看看facebook傳什麼過來"><a class="header-anchor" href="#看看facebook傳什麼過來"></a>看看facebook傳什麼過來</h3>
+<p>從<a href="http://127.0.0.1:4040" target="_blank" rel="noopener">Web Interface</a>可以看到</p>
 <p><img src="https://i.imgur.com/ZZFJwRM.png" alt=""></p>
 <p>其中 <code>1770261222</code>值藏在<code>hub.challenge</code>裡面。</p>
 <p>所以，接下來要寫程式，處理 <code>GET</code> 請求，並回傳正確的訊息給 facebook 伺服器。</p>
 <hr>
-<h2>建立機器人運作的 Service</h2>
-<h3><code>node.js</code> 的 Hello World!!</h3>
+<h2 id="建立機器人運作的-service"><a class="header-anchor" href="#建立機器人運作的-service"></a>建立機器人運作的 Service</h2>
+<h3 id="node-js-的-hello-world"><a class="header-anchor" href="#node-js-的-hello-world"></a><code>node.js</code> 的 Hello World!!</h3>
 <p>在此使用<code>node.js</code>。</p>
 <ol>
 <li>建立一個資料夾</li>
 <li>進入資料夾</li>
 <li>新增一個 <mark>***.js</mark> 檔案(在此使用 <mark>app.js</mark>的檔名)</li>
 </ol>
-<p>找<a href="http://expressjs.com/zh-tw/starter/hello-world.html" target="_blank" rel="external">nodejs hello world</a> 從這裡面貼上接下來要使用的程式碼</p>
+<p>找<a href="http://expressjs.com/zh-tw/starter/hello-world.html" target="_blank" rel="noopener">nodejs hello world</a> 從這裡面貼上接下來要使用的程式碼</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'Hello World!'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">app.listen(<span class="number">3000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <ol start="4">
 <li>執行伺服器</li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div></pre></td></tr></table></figure>
-<p>接下來<a href="http://localhost:3000" target="_blank" rel="external">開瀏覽器</a>，看見 <ins>hello world</ins>，就算成功讓伺服器運作起來。</p>
-<h3>設定回覆給 facebook的訊息</h3>
+<p>接下來<a href="http://localhost:3000" target="_blank" rel="noopener">開瀏覽器</a>，看見 <ins>hello world</ins>，就算成功讓伺服器運作起來。</p>
+<h3 id="設定回覆給-facebook的訊息"><a class="header-anchor" href="#設定回覆給-facebook的訊息"></a>設定回覆給 facebook的訊息</h3>
 <p>回到<code>app.js</code>改寫<code>get</code>的<code>request</code>的處理函數，改掉原本的 “<ins>Hello World!</ins>”</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'Hello World!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>改寫成下面這樣，就可以回覆facebook要的訊息囉</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">  res.send(req.query[<span class="string">'hub.challenge'</span>]);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>再回到 facebook的開發者頁面</p>
 <hr>
-<h3>完成 webhook</h3>
+<h3 id="完成-webhook"><a class="header-anchor" href="#完成-webhook"></a>完成 webhook</h3>
 <p>按下驗證之前，要先把伺服器跑起來!!!</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div></pre></td></tr></table></figure>
 <p>這樣就可以按下「驗證並儲存」，即可完成 webhook 的設定<br>
 <img src="https://i.imgur.com/r4lIszF.png" alt=""></p>
 <p>檢查一下是否有訂閱 <code>messages</code> 的 webhook。<br>
 <img src="https://i.imgur.com/fRDqAnu.png" alt=""></p>
-<h2>設定 Messager</h2>
+<h2 id="設定-messager"><a class="header-anchor" href="#設定-messager"></a>設定 Messager</h2>
 <p>新增 <code>Messager</code><br>
 <img src="https://i.imgur.com/cKAg7dD.png" alt=""></p>
 <p>先取得權杖 <ins>(真是中二的翻譯)</ins>，它指的就是<mark>token</mark><br>
@@ -1380,29 +1380,29 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <p>在同頁面滑下來一點。<br>
 <img src="https://i.imgur.com/b7hFrNK.png" alt=""></p>
 <p>按下「選擇粉絲專頁」&gt;「訂閱」</p>
-<h3>確認伺服器有收到訊息</h3>
-<p>打開<a href="http://127.0.0.1:4040/" target="_blank" rel="external">Web Interface</a>可以看見目前收到的 <strong>request</strong> 明細。</p>
+<h3 id="確認伺服器有收到訊息"><a class="header-anchor" href="#確認伺服器有收到訊息"></a>確認伺服器有收到訊息</h3>
+<p>打開<a href="http://127.0.0.1:4040/" target="_blank" rel="noopener">Web Interface</a>可以看見目前收到的 <strong>request</strong> 明細。</p>
 <p>用 facebook 帳號跟你申請的粉絲頁傳訊息(對話)，<br>
 送出訊息後，看看是不是可以在 Web Interface 看見你送出的訊息？</p>
 <blockquote>
 <p><em>例圖 ↓</em><br>
 <img src="https://i.imgur.com/31WMgqv.png" alt=""></p>
 </blockquote>
-<p>想要看得懂這個結構，可以參考<a href="https://developers.facebook.com/docs/messenger-platform/webhook-reference/message" target="_blank" rel="external">官方網站的文件</a></p>
+<p>想要看得懂這個結構，可以參考<a href="https://developers.facebook.com/docs/messenger-platform/webhook-reference/message" target="_blank" rel="noopener">官方網站的文件</a></p>
 <p>可以看見送出的「測試訊息」 <code>!!!</code> 放在資料結構的哪個位置。</p>
 <blockquote>
 <p>在此要注意: <code>sender.id</code> 等一下會用上</p>
 </blockquote>
 <hr>
-<h2>寫程式，抓到文字訊息!!</h2>
-<h3>在此先安裝</h3>
+<h2 id="寫程式-抓到文字訊息"><a class="header-anchor" href="#寫程式-抓到文字訊息"></a>寫程式，抓到文字訊息!!</h2>
+<h3 id="在此先安裝"><a class="header-anchor" href="#在此先安裝"></a>在此先安裝</h3>
 <p>在此，需要讓 node.js 收到 <code>POST</code> 的 JSON。並且從 <code>request.body</code> 找得到，並且可以處理，必須安裝一個套件 <code>body-parser</code> 。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> npm install body-parser --save</div></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> body = req.body;</div><div class="line">    <span class="comment">//body["object"] is "page"</span></div><div class="line">    <span class="comment">//...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>這樣就可以處理收到的 <code>POST</code> 的 JSON 囉。</p>
-<h2>寫程式，回覆訊息!!</h2>
-<p>可參考<a href="https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start" target="_blank" rel="external">官網教學</a></p>
-<p>在此，需要讓 <strong>web service</strong> 發送 <strong>request</strong>，必須安裝一個外掛<a href="https://github.com/request/request" target="_blank" rel="external">request</a>(在你的專案資料夾)，<br>
+<h2 id="寫程式-回覆訊息"><a class="header-anchor" href="#寫程式-回覆訊息"></a>寫程式，回覆訊息!!</h2>
+<p>可參考<a href="https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start" target="_blank" rel="noopener">官網教學</a></p>
+<p>在此，需要讓 <strong>web service</strong> 發送 <strong>request</strong>，必須安裝一個外掛<a href="https://github.com/request/request" target="_blank" rel="noopener">request</a>(在你的專案資料夾)，<br>
 讓你的<code>node.js</code>可以送request。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install request --save</div></pre></td></tr></table></figure>
 <blockquote>
@@ -1410,7 +1410,7 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 若伺服器要和伺服器溝通，就要讓伺服器「發送request」。</p>
 </blockquote>
 <p>讓<code>node.js</code>可以送出POST的request。</p>
-<p><a href="https://stackoverflow.com/questions/27190447/pass-json-to-http-post-request" target="_blank" rel="external">上網找一下怎麼送出POST的request的寫法</a>，找到一個簡單的寫</p>
+<p><a href="https://stackoverflow.com/questions/27190447/pass-json-to-http-post-request" target="_blank" rel="noopener">上網找一下怎麼送出POST的request的寫法</a>，找到一個簡單的寫</p>
 <p>回到<code>app.js</code>，上面加上 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</div></pre></td></tr></table></figure>
 <p>下面加上接收post的函數 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
@@ -1427,9 +1427,9 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <img src="https://i.imgur.com/JJPRQDb.png" alt=""></li>
 <li>json</li>
 </ul>
-<h4><strong>JSON</strong></h4>
+<h4 id="json"><a class="header-anchor" href="#json"></a><strong>JSON</strong></h4>
 <p>找到要回覆的格式…的 JSON<br>
-到<a href="https://developers.facebook.com/docs/messenger-platform/send-api-reference" target="_blank" rel="external">Messager的開發文件&gt;傳送 API 參考資料&gt;要求</a><br>
+到<a href="https://developers.facebook.com/docs/messenger-platform/send-api-reference" target="_blank" rel="noopener">Messager的開發文件&gt;傳送 API 參考資料&gt;要求</a><br>
 (和剛剛同一份文件的同一段中的範例…)</p>
 <blockquote>
 <p><img src="https://i.imgur.com/g15sRhp.png" alt=""><br>
@@ -1439,11 +1439,11 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"recipient"</span>: &#123;</div><div class="line">    <span class="string">"id"</span>: &lt;傳給誰&gt;</div><div class="line">  &#125;,</div><div class="line">  "message": &#123;</div><div class="line">    "text": &lt;傳什麼文字&gt;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>填入回覆者的 id 和要給他的訊息就可以囉~<br>
 到<a href="#%E7%A2%BA%E8%AA%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9C%89%E6%94%B6%E5%88%B0%E8%A8%8A%E6%81%AF">這裡</a>找 <code>sender.id</code></p>
-<h3>改寫 request</h3>
+<h3 id="改寫-request"><a class="header-anchor" href="#改寫-request"></a>改寫 request</h3>
 <p>剩下在<code>text</code>寫上你要回傳的訊息。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">request(&#123;</div><div class="line">    <span class="string">"uri"</span>: <span class="string">"https://graph.facebook.com/v2.6/me/messages"</span>,</div><div class="line">    <span class="string">"qs"</span>: &#123;</div><div class="line">        <span class="string">"access_token"</span>: <span class="string">"EEAbyth...****"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="string">"method"</span>: <span class="string">"POST"</span>,</div><div class="line">    <span class="string">"json"</span>: &#123;</div><div class="line">      <span class="string">"recipient"</span>: &#123;</div><div class="line">        <span class="string">"id"</span>: <span class="string">"1555445211145246"</span></div><div class="line">      &#125;,</div><div class="line">      <span class="string">"message"</span>: &#123;</div><div class="line">        <span class="string">"text"</span>: <span class="string">"!!!"</span></div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h3>最後的最後</h3>
-<p>為了防止鬼擋牆，查了一下<a href="https://developers.facebook.com/docs/messenger-platform/faq#faq_144542125979728" target="_blank" rel="external">官方文件</a></p>
+<h3 id="最後的最後"><a class="header-anchor" href="#最後的最後"></a>最後的最後</h3>
+<p>為了防止鬼擋牆，查了一下<a href="https://developers.facebook.com/docs/messenger-platform/faq#faq_144542125979728" target="_blank" rel="noopener">官方文件</a></p>
 <blockquote>
 <p>為什麼我持續收到 Webhook 一直未接受更新的開發人員重要通知，或持續不斷收到相同的 Webhook 呼叫？[color=red]</p>
 <blockquote>
@@ -1454,7 +1454,7 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <p>在你的post函數最後，加入下面程式碼的第3行。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</div><div class="line">    <span class="comment">//...</span></div><div class="line">    res.status(<span class="number">200</span>);</div><div class="line">    <span class="comment">//後面不要放程式</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <hr>
-<h2>完成</h2>
+<h2 id="完成"><a class="header-anchor" href="#完成"></a>完成</h2>
 <p><em>改好之後，重開伺服器，再發訊息給小編就可以囉!!!</em></p>
 
       
@@ -1503,36 +1503,36 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
     <div>
       
         <h1>修改 Hexo程式碼區段 後處理</h1>
-<h2>問題描述</h2>
+<h2 id="問題描述"><a class="header-anchor" href="#問題描述"></a>問題描述</h2>
 <p>hexo在程式碼區段決定要不要「行號」是透過<code>_condifg.yml</code>設定決定。<br>
 但是，我自己愛用的hackmd卻是用<code>markdown</code>中，直接指定。</p>
 <p>可以在文章中，動態的決定這一段是不是要加行號，並且指定第一行的行號是幾號。</p>
-<h3>markdown</h3>
+<h3 id="markdown"><a class="header-anchor" href="#markdown"></a>markdown</h3>
 <p>請無視下面的<code>&lt;code&gt;</code>標籤</p>
 <figure class="highlight markdown"><table><tr><td class="code"><pre><div class="line"><span class="section">## Code</span></div><div class="line"></div><div class="line">Inline <span class="code">`code`</span></div><div class="line"></div><div class="line">Indented code</div><div class="line"></div><div class="line">  // Some comments</div><div class="line">  line 1 of code</div><div class="line">  line 2 of code</div><div class="line">  line 3 of code</div><div class="line"></div><div class="line">Block code "fences"</div><div class="line"></div><div class="line">&lt;code&gt;<span class="code">```&lt;/code&gt;</span></div><div class="line"><span class="code">Sample text here...</span></div><div class="line"><span class="code">&lt;code&gt;```&lt;/code&gt;</span></div><div class="line"><span class="code"></span></div><div class="line"><span class="code">Syntax highlighting</span></div><div class="line"><span class="code"></span></div><div class="line"><span class="code">&lt;code&gt;```js&lt;/code&gt;</span></div><div class="line"><span class="code">var foo = function (bar) &#123;</span></div><div class="line"><span class="code">  return bar++;</span></div><div class="line"><span class="code">&#125;;</span></div><div class="line"><span class="code"></span></div><div class="line"><span class="code">console.log(foo(5));</span></div><div class="line"><span class="code">&lt;code&gt;```&lt;/code&gt;</span></div></pre></td></tr></table></figure>
-<h3>HEXO的結果是這樣</h3>
+<h3 id="hexo的結果是這樣"><a class="header-anchor" href="#hexo的結果是這樣"></a>HEXO的結果是這樣</h3>
 <p>用語法區隔出來的程式碼區塊，Hexo出現的結果會自動加上行號。html會用table呈現</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Code<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Inline <span class="tag">&lt;<span class="name">code</span>&gt;</span>code<span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Indented code<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">code</span>&gt;</span>// Some comments</div><div class="line">line 1 of code</div><div class="line">line 2 of code</div><div class="line">line 3 of code</div><div class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Block code &amp;quot;fences&amp;quot;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">figure</span> <span class="attr">class</span>=<span class="string">"highlight plain"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"gutter"</span>&gt;</span><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"code"</span>&gt;</span><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>Sample text here...<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">figure</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Syntax highlighting<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">figure</span> <span class="attr">class</span>=<span class="string">"highlight js"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"gutter"</span>&gt;</span><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>1<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>2<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>3<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>4<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">class</span>=<span class="string">"code"</span>&gt;</span><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"keyword"</span>&gt;</span>var<span class="tag">&lt;/<span class="name">span</span>&gt;</span> foo = <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"function"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"keyword"</span>&gt;</span>function<span class="tag">&lt;/<span class="name">span</span>&gt;</span> (<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"params"</span>&gt;</span>bar<span class="tag">&lt;/<span class="name">span</span>&gt;</span>) <span class="tag">&lt;/<span class="name">span</span>&gt;</span>&amp;#123;<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"keyword"</span>&gt;</span>return<span class="tag">&lt;/<span class="name">span</span>&gt;</span> bar++;<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span>&amp;#125;;<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"line"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"built_in"</span>&gt;</span>console<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.log(foo(<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"number"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">span</span>&gt;</span>));<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">figure</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure>
-<h3><a href="https://markdown-it.github.io/" target="_blank" rel="external">markdown-it demo web</a> 結果如下</h3>
+<h3 id="markdown-it-demo-web-結果如下"><a class="header-anchor" href="#markdown-it-demo-web-結果如下"></a><a href="https://markdown-it.github.io/" target="_blank" rel="noopener">markdown-it demo web</a> 結果如下</h3>
 <p>第二段和第三段程式碼沒有自動加上去的行號，自然也不會出現table的html</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Code<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Inline <span class="tag">&lt;<span class="name">code</span>&gt;</span>code<span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Indented code<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">code</span>&gt;</span>// Some comments</div><div class="line">line 1 of code</div><div class="line">line 2 of code</div><div class="line">line 3 of code</div><div class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Block code “fences”<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">pre</span> <span class="attr">class</span>=<span class="string">"hljs"</span>&gt;</span><span class="tag">&lt;<span class="name">code</span>&gt;</span>Sample text here...</div><div class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Syntax highlighting<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">pre</span> <span class="attr">class</span>=<span class="string">"hljs language-js"</span>&gt;</span><span class="tag">&lt;<span class="name">code</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-keyword"</span>&gt;</span>var<span class="tag">&lt;/<span class="name">span</span>&gt;</span> foo = <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-function"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-keyword"</span>&gt;</span>function<span class="tag">&lt;/<span class="name">span</span>&gt;</span> (<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-params"</span>&gt;</span>bar<span class="tag">&lt;/<span class="name">span</span>&gt;</span>) <span class="tag">&lt;/<span class="name">span</span>&gt;</span>&#123;</div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-keyword"</span>&gt;</span>return<span class="tag">&lt;/<span class="name">span</span>&gt;</span> bar++;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-built_in"</span>&gt;</span>console<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.log(foo(<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hljs-number"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">span</span>&gt;</span>));</div><div class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2>找程式碼</h2>
-<h3>hexo-util</h3>
-<p>經過一夜的找尋，原以為這是markdown渲染器造成的問題，結果不是，是hexo有自帶一個外掛程式叫<a href="https://github.com/hexojs/hexo-util" target="_blank" rel="external">hexo-util</a>主要是對文件內的特定區塊做「再處理」，比較偏向前端才能處理的情況</p>
+<h2 id="找程式碼"><a class="header-anchor" href="#找程式碼"></a>找程式碼</h2>
+<h3 id="hexo-util"><a class="header-anchor" href="#hexo-util"></a>hexo-util</h3>
+<p>經過一夜的找尋，原以為這是markdown渲染器造成的問題，結果不是，是hexo有自帶一個外掛程式叫<a href="https://github.com/hexojs/hexo-util" target="_blank" rel="noopener">hexo-util</a>主要是對文件內的特定區塊做「再處理」，比較偏向前端才能處理的情況</p>
 <p>在檔案<code>$hexo/node_modules/hexo-util/lib/highlight.js</code>中，找到<code>function highlightUtil()</code>裡面有針對程式碼區段的處理，可以看見它插入<code>&lt;table&gt;</code>的地方</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">highlightUtil</span>(<span class="params">str, options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> str !== <span class="string">'string'</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'str must be a string!'</span>);</div><div class="line">  options = options || &#123;&#125;;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> gutter = options.hasOwnProperty(<span class="string">'gutter'</span>) ? options.gutter : <span class="literal">true</span>;</div><div class="line">  <span class="keyword">var</span> wrap = options.hasOwnProperty(<span class="string">'wrap'</span>) ? options.wrap : <span class="literal">true</span>;</div><div class="line">  <span class="keyword">var</span> firstLine = options.hasOwnProperty(<span class="string">'firstLine'</span>) ? +options.firstLine : <span class="number">1</span>;</div><div class="line">  <span class="keyword">var</span> caption = options.caption;</div><div class="line">  <span class="keyword">var</span> mark = options.hasOwnProperty(<span class="string">'mark'</span>) ? options.mark : [];</div><div class="line">  <span class="keyword">var</span> tab = options.tab;</div><div class="line">  <span class="keyword">var</span> data = highlight(str, options);</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (!wrap) <span class="keyword">return</span> data.value;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> lines = data.value.split(<span class="string">'\n'</span>);</div><div class="line">  <span class="keyword">var</span> numbers = <span class="string">''</span>;</div><div class="line">  <span class="keyword">var</span> content = <span class="string">''</span>;</div><div class="line">  <span class="keyword">var</span> result = <span class="string">''</span>;</div><div class="line">  <span class="keyword">var</span> line;</div><div class="line"></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = lines.length; i &lt; len; i++) &#123;</div><div class="line">    line = lines[i];</div><div class="line">    <span class="keyword">if</span> (tab) line = replaceTabs(line, tab);</div><div class="line">    numbers += <span class="string">'&lt;div class="line"&gt;'</span> + (firstLine + i) + <span class="string">'&lt;/div&gt;'</span>;</div><div class="line">    content += <span class="string">'&lt;div class="line'</span>;</div><div class="line">    content += (mark.indexOf(firstLine + i) !== <span class="number">-1</span>) ? <span class="string">' marked'</span> : <span class="string">''</span>;</div><div class="line">    content += <span class="string">'"&gt;'</span> + line + <span class="string">'&lt;/div&gt;'</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  result += <span class="string">'&lt;figure class="highlight'</span> + (data.language ? <span class="string">' '</span> + data.language : <span class="string">''</span>) + <span class="string">'"&gt;'</span>;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (caption) &#123;</div><div class="line">    result += <span class="string">'&lt;figcaption&gt;'</span> + caption + <span class="string">'&lt;/figcaption&gt;'</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  result += <span class="string">'&lt;table&gt;&lt;tr&gt;'</span>;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (gutter) &#123;</div><div class="line">    result += <span class="string">'&lt;td class="gutter"&gt;&lt;pre&gt;'</span> + numbers + <span class="string">'&lt;/pre&gt;&lt;/td&gt;'</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  result += <span class="string">'&lt;td class="code"&gt;&lt;pre&gt;'</span> + content + <span class="string">'&lt;/pre&gt;&lt;/td&gt;'</span>;</div><div class="line">  result += <span class="string">'&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;'</span>;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>在此希望呼叫此段程式碼時，丟進來的參數<code>options</code>的<code>firstLine</code>和<code>gutter</code>可以依markdown的code進行改變。</p>
-<h3>hexo</h3>
-<p>在<a href="https://github.com/dwatow/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js" target="_blank" rel="external"><code>$hexo/node_modules/hexo/lib/plugins/filter/before_post_render/backtick_code_block.js</code></a>中</p>
+<h3 id="hexo"><a class="header-anchor" href="#hexo"></a>hexo</h3>
+<p>在<a href="https://github.com/dwatow/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js" target="_blank" rel="noopener"><code>$hexo/node_modules/hexo/lib/plugins/filter/before_post_render/backtick_code_block.js</code></a>中</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">backtickCodeBlock</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> config = <span class="keyword">this</span>.config.highlight || &#123;&#125;;</div><div class="line">  <span class="keyword">if</span> (!config.enable) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">  data.content = data.content.replace(rBacktick, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> start = <span class="built_in">arguments</span>[<span class="number">1</span>];</div><div class="line">    <span class="keyword">var</span> end = <span class="built_in">arguments</span>[<span class="number">5</span>];</div><div class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>[<span class="number">3</span>];</div><div class="line">    <span class="keyword">var</span> content = <span class="built_in">arguments</span>[<span class="number">4</span>];</div><div class="line"></div><div class="line">    <span class="keyword">var</span> options = &#123;</div><div class="line">      autoDetect: config.auto_detect,</div><div class="line">      gutter: config.line_number,</div><div class="line">      tab: config.tab_replace</div><div class="line">    &#125;;</div></pre></td></tr></table></figure>
-<h2>修改程式</h2>
-<p>直接看<a href="https://github.com/hexojs/hexo/pull/2612/files?diff=split" target="_blank" rel="external">github的pull request</a><br>
+<h2 id="修改程式"><a class="header-anchor" href="#修改程式"></a>修改程式</h2>
+<p>直接看<a href="https://github.com/hexojs/hexo/pull/2612/files?diff=split" target="_blank" rel="noopener">github的pull request</a><br>
 修改時，請注意，若留下註解行，就會改變行號唷!!</p>
-<h3>保持程式碼指定參數</h3>
+<h3 id="保持程式碼指定參數"><a class="header-anchor" href="#保持程式碼指定參數"></a>保持程式碼指定參數</h3>
 <p>將<code>=</code>左邊的部份取出來，就是原本指定程式語言的參數了</p>
 <p>將第18行改成這樣</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// var args = arguments[3];</span></div><div class="line"><span class="keyword">var</span> args = <span class="built_in">arguments</span>[<span class="number">3</span>].split(<span class="string">'='</span>).shift();</div></pre></td></tr></table></figure>
-<h3>markdown動態指定行號使用的情況</h3>
+<h3 id="markdown動態指定行號使用的情況"><a class="header-anchor" href="#markdown動態指定行號使用的情況"></a>markdown動態指定行號使用的情況</h3>
 <p>先判斷是否要使用行號，判斷是否有給<code>=</code><br>
 若有要用行號，則取<code>=</code>右邊是否有數字，若無給預設值<code>1</code><br>
 若沒有要使用行號就給<code>0</code>(原程式給<code>undefine</code>)</p>
@@ -1595,16 +1595,16 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
     <div>
       
         <h1>換Hexo的markdown渲染器</h1>
-<h2>「懶」的原因</h2>
+<h2 id="懶-的原因"><a class="header-anchor" href="#懶-的原因"></a>「懶」的原因</h2>
 <p>由於，個人超愛用<a href="hackmd.io">hackmd</a>，希望之後寫部落格都使用hackmd寫一寫，再直接下載.md檔，就可以上部落格了。(當然這一篇文章就是這樣來的)</p>
 <p>就不用寫兩次相同內容的文章或者在那轉碼(markdown to html)貼文。</p>
-<h2>先備知識</h2>
+<h2 id="先備知識"><a class="header-anchor" href="#先備知識"></a>先備知識</h2>
 <p>在此並不是要先認識渲染器(這是先備知識的先備知識)。</p>
 <p>先知道的是hackmd是使用什麼渲染器。它是使用一個叫<code>markdown-it</code>的渲染器<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，到hackmd的github</p>
-<p>參考<a href="https://github.com/hackmdio/hackmd/blob/master/package.json" target="_blank" rel="external">hackmd的package.json</a>內的<code>package.json</code></p>
+<p>參考<a href="https://github.com/hackmdio/hackmd/blob/master/package.json" target="_blank" rel="noopener">hackmd的package.json</a>內的<code>package.json</code></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="string">"markdown-it"</span>: <span class="string">"^8.2.2"</span>,</div><div class="line"><span class="string">"markdown-it-abbr"</span>: <span class="string">"^1.0.4"</span>,</div><div class="line"><span class="string">"markdown-it-container"</span>: <span class="string">"^2.0.0"</span>,</div><div class="line"><span class="string">"markdown-it-deflist"</span>: <span class="string">"^2.0.1"</span>,</div><div class="line"><span class="string">"markdown-it-emoji"</span>: <span class="string">"^1.3.0"</span>,</div><div class="line"><span class="string">"markdown-it-footnote"</span>: <span class="string">"^3.0.1"</span>,</div><div class="line"><span class="string">"markdown-it-imsize"</span>: <span class="string">"^2.0.1"</span>,</div><div class="line"><span class="string">"markdown-it-ins"</span>: <span class="string">"^2.0.0"</span>,</div><div class="line"><span class="string">"markdown-it-mark"</span>: <span class="string">"^2.0.0"</span>,</div><div class="line"><span class="string">"markdown-it-regexp"</span>: <span class="string">"^0.4.0"</span>,</div><div class="line"><span class="string">"markdown-it-sub"</span>: <span class="string">"^1.0.0"</span>,</div><div class="line"><span class="string">"markdown-it-sup"</span>: <span class="string">"^1.0.0"</span>,</div></pre></td></tr></table></figure>
-<h2>修改步驟</h2>
-<h3>更換渲染器</h3>
+<h2 id="修改步驟"><a class="header-anchor" href="#修改步驟"></a>修改步驟</h2>
+<h3 id="更換渲染器"><a class="header-anchor" href="#更換渲染器"></a>更換渲染器</h3>
 <ol>
 <li>刪除原本的渲染器<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
 </ol>
@@ -1613,35 +1613,35 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <li>在<code>hexo</code>的專案中，安裝套件<code>hexo-renderer-markdown-it</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm i hexo-renderer-markdown-it --save</div></pre></td></tr></table></figure>
-<h3>修改渲染器參數設定程式碼</h3>
+<h3 id="修改渲染器參數設定程式碼"><a class="header-anchor" href="#修改渲染器參數設定程式碼"></a>修改渲染器參數設定程式碼</h3>
 <p>在此只要確定在<code>$hexo/node_modules/hexo-renderer-markdown-it/lib/renderer.js</code>的程式碼長這樣就好</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(opt.plugins) &#123;</div><div class="line">  parser = opt.plugins.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">parser, pugs</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span>(pugs <span class="keyword">instanceof</span> <span class="built_in">Object</span> &amp;&amp; pugs.name) &#123;</div><div class="line">      <span class="keyword">return</span> parser.use(<span class="built_in">require</span>(pugs.name), pugs.options);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> parser.use(<span class="built_in">require</span>(pugs));</div><div class="line">    &#125;</div><div class="line">  &#125;, parser);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <blockquote>
-<p><a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="external">Github</a>上的版本是上面這樣。</p>
+<p><a href="https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js" target="_blank" rel="noopener">Github</a>上的版本是上面這樣。</p>
 </blockquote>
-<h3>安裝渲染器外掛套件</h3>
+<h3 id="安裝渲染器外掛套件"><a class="header-anchor" href="#安裝渲染器外掛套件"></a>安裝渲染器外掛套件</h3>
 <p>在<code>$hexo</code>目錄下，下指令安裝套件</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm install markdown-it-abbr --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-container --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-deflist --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-emoji --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-footnote --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-imsize --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-ins --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-mark --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-regexp --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-sub --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-sup --save</div><div class="line"><span class="meta">$</span> npm install markdown-it-checkbox --save</div></pre></td></tr></table></figure>
-<h3>設定<code>_config.yml</code></h3>
+<h3 id="設定-config-yml"><a class="header-anchor" href="#設定-config-yml"></a>設定<code>_config.yml</code></h3>
 <p>先看全部，把下面那一段，直接貼到<code>_config.yml</code>的最下面。<br>
 後面會一一的解釋這些區段如何使用。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Markdown-it config</span></div><div class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></div><div class="line">markdown:</div><div class="line">  render:</div><div class="line">    html: true <span class="comment"># Doesn't escape HTML content so the tags will appear as html.</span></div><div class="line">    xhtmlOut: false <span class="comment"># Parser will not produce XHTML compliant code.</span></div><div class="line">    breaks: true <span class="comment"># Parser produces `&lt;br&gt;` tags every time there is a line break in the source document.</span></div><div class="line">    linkify: false <span class="comment"># Returns text links as text.</span></div><div class="line">    typographer: true <span class="comment"># Substitution of common typographical elements will take place.</span></div><div class="line">    quotes: <span class="string">'“”‘’'</span> <span class="comment"># "double" will be turned into “single”</span></div><div class="line">                   <span class="comment"># 'single' will be turned into ‘single’</span></div><div class="line">   plugins:</div><div class="line">     - markdown-it-abbr</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: success</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: info</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: warning</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: danger</div><div class="line">     - markdown-it-deflist</div><div class="line">     - name: markdown-it-emoji</div><div class="line">       options:</div><div class="line">         shortcuts: &#123;&#125;</div><div class="line">     - markdown-it-footnote</div><div class="line">     - markdown-it-imsize</div><div class="line">     - markdown-it-ins</div><div class="line">     - markdown-it-mark</div><div class="line">     - markdown-it-regexp</div><div class="line">     - markdown-it-sub</div><div class="line">     - markdown-it-sup</div><div class="line">     - markdown-it-checkbox</div><div class="line">  anchors:</div><div class="line">    level: <span class="number">6</span> <span class="comment"># Minimum level for ID creation. (Ex. h2 to h6)</span></div><div class="line">    collisionSuffix: <span class="string">'v'</span> <span class="comment"># A suffix that is prepended to the number given if the ID is repeated.</span></div><div class="line">    permalink: true <span class="comment"># If true, creates an anchor tag with a permalink besides the heading.</span></div><div class="line">    permalinkClass: header-anchor <span class="comment"># Class used for the permalink anchor tag.</span></div><div class="line">    permalinkSymbol: ¶ <span class="comment"># The symbol used to make the permalink.</span></div></pre></td></tr></table></figure>
-<h4>render的參數</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># Markdown-it config</span></div><div class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></div><div class="line">markdown:</div><div class="line">  render:</div><div class="line">    html: true <span class="comment"># Doesn't escape HTML content so the tags will appear as html.</span></div><div class="line">    xhtmlOut: false <span class="comment"># Parser will not produce XHTML compliant code.</span></div><div class="line">    breaks: true <span class="comment"># Parser produces `&lt;br&gt;` tags every time there is a line break in the source document.</span></div><div class="line">    linkify: false <span class="comment"># Returns text links as text.</span></div><div class="line">    typographer: true <span class="comment"># Substitution of common typographical elements will take place.</span></div><div class="line">    quotes: <span class="string">'“”‘’'</span> <span class="comment"># "double" will be turned into “single”</span></div><div class="line">                   <span class="comment"># 'single' will be turned into ‘single’</span></div><div class="line">   plugins:</div><div class="line">     - markdown-it-abbr</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: success</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: info</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: warning</div><div class="line">     - name: markdown-it-container</div><div class="line">       options: danger</div><div class="line">     - markdown-it-deflist</div><div class="line">     - name: markdown-it-emoji</div><div class="line">       options:</div><div class="line">         shortcuts: &#123;&#125;</div><div class="line">     - markdown-it-footnote</div><div class="line">     - markdown-it-imsize</div><div class="line">     - markdown-it-ins</div><div class="line">     - markdown-it-mark</div><div class="line">     - markdown-it-regexp</div><div class="line">     - markdown-it-sub</div><div class="line">     - markdown-it-sup</div><div class="line">     - markdown-it-checkbox</div><div class="line">     anchors:</div><div class="line">       level: <span class="number">1</span>, <span class="number">2</span> <span class="comment"># Minimum level for ID creation. (Ex. h2 to h6)</span></div><div class="line">       collisionSuffix: <span class="string">'v'</span> <span class="comment"># A suffix that is prepended to the number given if the ID is repeated.</span></div><div class="line">       permalink: true <span class="comment"># If true, creates an anchor tag with a permalink besides the heading.</span></div><div class="line">       permalinkClass: header-anchor <span class="comment"># Class used for the permalink anchor tag.</span></div><div class="line">       permalinkSymbol: <span class="string">''</span> <span class="comment"># The symbol used to make the permalink.</span></div></pre></td></tr></table></figure>
+<h4 id="render的參數"><a class="header-anchor" href="#render的參數"></a>render的參數</h4>
 <p>可以參考hackmd的<br>
-<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/extra.js" target="_blank" rel="external"><code>hackmd/blob/master/public/js/extra.js</code></a> 這裡有hackmd初始化<code>markdown-it</code>的程式碼</p>
+<a href="https://github.com/hackmdio/hackmd/blob/master/public/js/extra.js" target="_blank" rel="noopener"><code>hackmd/blob/master/public/js/extra.js</code></a> 這裡有hackmd初始化<code>markdown-it</code>的程式碼</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">944</div><div class="line">945</div><div class="line">946</div><div class="line">947</div><div class="line">948</div><div class="line">949</div><div class="line">950</div><div class="line">951</div><div class="line">952</div><div class="line">953</div><div class="line">954</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> markdownit <span class="keyword">from</span> <span class="string">'markdown-it'</span></div><div class="line"><span class="keyword">import</span> markdownitContainer <span class="keyword">from</span> <span class="string">'markdown-it-container'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">let</span> md = markdownit(<span class="string">'default'</span>, &#123;</div><div class="line">  html: <span class="literal">true</span>,</div><div class="line">  breaks: <span class="literal">true</span>,</div><div class="line">  langPrefix: <span class="string">''</span>,</div><div class="line">  linkify: <span class="literal">true</span>,</div><div class="line">  typographer: <span class="literal">true</span>,</div><div class="line">  highlight: highlightRender</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4>plugins</h4>
+<h4 id="plugins"><a class="header-anchor" href="#plugins"></a>plugins</h4>
 <p>把剛剛安裝的<code>markdown-it</code>外掛套件一個一個加上來。</p>
-<h4>anchors</h4>
+<h4 id="anchors"><a class="header-anchor" href="#anchors"></a>anchors</h4>
 <p>我還沒研究</p>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>透過<a href="https://hackmd.io/p/Bk9X2eJT" target="_blank" rel="external">HackMD - Markdown 協作筆記@ 2016 MOPCON - HackMD</a>這一場分享的資訊知道， <a href="#fnref1" class="footnote-backref">↩</a></p>
+<li id="fn1" class="footnote-item"><p>透過<a href="https://hackmd.io/p/Bk9X2eJT" target="_blank" rel="noopener">HackMD - Markdown 協作筆記@ 2016 MOPCON - HackMD</a>這一場分享的資訊知道， <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://github.com/hexojs/hexo-renderer-markdown-it/wiki/Getting-Started" target="_blank" rel="external">Getting Started - hexo-renderer-markdown-it</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/hexojs/hexo-renderer-markdown-it/wiki/Getting-Started" target="_blank" rel="noopener">Getting Started - hexo-renderer-markdown-it</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a href="https://github.com/hexojs/hexo-renderer-markdown-it" target="_blank" rel="external">[Github] hexo-renderer-markdown-it</a> <a href="#fnref3" class="footnote-backref">↩</a></p>
+<li id="fn3" class="footnote-item"><p><a href="https://github.com/hexojs/hexo-renderer-markdown-it" target="_blank" rel="noopener">[Github] hexo-renderer-markdown-it</a> <a href="#fnref3" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>

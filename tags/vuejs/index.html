@@ -136,7 +136,7 @@
     <div>
       
         <h1>用vue修改dom</h1>
-<p>目前看<a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="external">vue2官網教學</a>也看了有十天了，這一篇就來總結一下這十天來的學習心得吧！<br>
+<p>目前看<a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener">vue2官網教學</a>也看了有十天了，這一篇就來總結一下這十天來的學習心得吧！<br>
 有一些加不進去的就列到遺珠之憾了。哈哈</p>
 <p>vue，是一種類MVVM的設計方式。<br>
 也就是說，最主要的目的在於「修改view(HTML)」</p>
@@ -144,24 +144,24 @@
 <p>首先，我們有一個html tag</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;tagName attrProperty=&quot;attrValue&quot;&gt;content&lt;/tagName&gt;</div></pre></td></tr></table></figure>
 <p>下面就以「修改各部份」為文章結構，一一介紹vue的功能吧!!</p>
-<h2>修改tagName</h2>
+<h2 id="修改tagname"><a class="header-anchor" href="#修改tagname"></a>修改tagName</h2>
 <p>用<code>component</code>，比較複雜<br>
 另外寫一篇再講。XDDD</p>
-<h2>修改attr</h2>
-<h3>簡寫</h3>
+<h2 id="修改attr"><a class="header-anchor" href="#修改attr"></a>修改attr</h2>
+<h3 id="簡寫"><a class="header-anchor" href="#簡寫"></a>簡寫</h3>
 <p>用<code>v-bind:attrProperty</code>,簡寫成<code>:attrProperty</code></p>
-<h3>加一個</h3>
+<h3 id="加一個"><a class="header-anchor" href="#加一個"></a>加一個</h3>
 <p>在<code>attrValue</code>直接加一個<code>vue.data</code>的屬性</p>
 <p>將一些cssClass一起加入</p>
 <p>條件判斷方式<br>
 className是否出現，取決於vue.data是否擁有該屬性。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">v-bind:attr=&quot;data1&quot;</div></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">data: &#123;</div><div class="line">    data1: <span class="string">'cssClass1 cssClass2'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3>加很多</h3>
+<h3 id="加很多"><a class="header-anchor" href="#加很多"></a>加很多</h3>
 <p>在<code>attrValue</code>加「classNames陣列」，加多個vue.data屬性</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">v-bind:attr=&quot;[arrayElem, ...]&quot;</div></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">data: &#123;</div><div class="line">    arrayElem: <span class="string">'cssClass1 cssClass2'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3>條件控制加不加</h3>
+<h3 id="條件控制加不加"><a class="header-anchor" href="#條件控制加不加"></a>條件控制加不加</h3>
 <p>在<code>attrValue</code>加「classNames物件」<br>
 判斷物件內容<code>true</code> or <code>false</code></p>
 <ol>
@@ -174,37 +174,37 @@ className是否出現，取決於vue.data是否擁有該屬性。</p>
 </ol>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">v-bind:attr=&quot;objectName&quot;</div></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">data: &#123;</div><div class="line">    objectName: &#123;</div><div class="line">        cssClass: <span class="literal">true</span> | <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3>用在<code>component</code></h3>
+<h3 id="用在component"><a class="header-anchor" href="#用在component"></a>用在<code>component</code></h3>
 <pre><code>- 另外加和`component`上的attr內容，取聯集。
 </code></pre>
-<h2>修改content</h2>
+<h2 id="修改content"><a class="header-anchor" href="#修改content"></a>修改content</h2>
 <p>先把example的js寫好，所有的內容都以它為主</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> Vue(&#123;</div><div class="line">  el: <span class="string">'#app'</span> ,</div><div class="line">  data: &#123;</div><div class="line">    msg: <span class="string">'&lt;b&gt;這是被&#123;&#123;msg&#125;&#125;取代的結果&lt;/b&gt;'</span>,</div><div class="line">    seen: <span class="literal">true</span>,</div><div class="line">    url: <span class="string">'https://dwatow.github.io/'</span>,</div><div class="line">    items: [</div><div class="line">      &#123;<span class="attr">text</span>: a, <span class="attr">number</span>: <span class="string">'1'</span>&#125;,</div><div class="line">      &#123;<span class="attr">text</span>: b, <span class="attr">number</span>: <span class="string">'2'</span>&#125;,</div><div class="line">      &#123;<span class="attr">text</span>: c, <span class="attr">number</span>: <span class="string">'3'</span>&#125;,</div><div class="line">      &#123;<span class="attr">text</span>: d, <span class="attr">number</span>: <span class="string">'4'</span>&#125;,</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  filter: &#123;</div><div class="line">    upperCase: <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (!value) <span class="keyword">return</span>  <span class="string">''</span></div><div class="line">      value = value.toString()</div><div class="line">      <span class="keyword">return</span> value.toUpperCase()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3>只是加內文</h3>
+<h3 id="只是加內文"><a class="header-anchor" href="#只是加內文"></a>只是加內文</h3>
 <p>msg是js變數，內容當作字串，不會渲染</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;&#123;msg&#125;&#125;</div></pre></td></tr></table></figure>
 <p><code>&lt;b&gt;這是被取代的結果&lt;/b&gt;</code></p>
-<h3>內文後製</h3>
+<h3 id="內文後製"><a class="header-anchor" href="#內文後製"></a>內文後製</h3>
 <p>承上，<code>upperCase</code>是<code>filter</code>裡的function</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;&#123;msg | upperCase&#125;&#125;</div></pre></td></tr></table></figure>
 <p><code>&lt;B&gt;這是被取代的結果&lt;/B&gt;</code></p>
-<h3>加一個 HTML+內文</h3>
+<h3 id="加一個-html-內文"><a class="header-anchor" href="#加一個-html-內文"></a>加一個 HTML+內文</h3>
 <p>msg是js變數，內容當作含有HTML的字串，會渲染</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;p v-html=&quot;msg&quot;&gt;&lt;/p&gt;</div></pre></td></tr></table></figure>
 <p><code>&lt;b&gt;這是被取代的結果&lt;/b&gt;</code></p>
-<h3>重複很多相同的HTML+內文</h3>
+<h3 id="重複很多相同的html-內文"><a class="header-anchor" href="#重複很多相同的html-內文"></a>重複很多相同的HTML+內文</h3>
 <ul>
 <li><code>v-for</code> 所在的HTML tag會複製</li>
 <li>items內容item由<code>v-for</code>命名指定</li>
 <li>一個一個加到指定位置，(可以也用v-bind加到屬性)</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;p v-for=&quot;item in items&quot;&gt;&#123;&#123;item.text&#125;&#125;&lt;/p&gt;</div></pre></td></tr></table></figure>
-<h3>重複很多不同(群組)的HTML+內文</h3>
+<h3 id="重複很多不同-群組-的html-內文"><a class="header-anchor" href="#重複很多不同-群組-的html-內文"></a>重複很多不同(群組)的HTML+內文</h3>
 <ul>
 <li>承上，<code>v-for</code>寫在template將要複製的HTML tag括起來</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&lt;template v-for=&quot;item in items&quot;&gt;</div><div class="line">    &lt;p&gt;&#123;&#123;item.text&#125;&#125;&lt;/p&gt;</div><div class="line">    &lt;p&gt;&#123;&#123;item.number&#125;&#125;&lt;/p&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure>
-<h2>遺珠之憾(十日整理之外)</h2>
+<h2 id="遺珠之憾-十日整理之外"><a class="header-anchor" href="#遺珠之憾-十日整理之外"></a>遺珠之憾(十日整理之外)</h2>
 <ul>
 <li><code>v-bind</code> array要加判斷式(用object)的混合技法</li>
 <li><code>v-bind:style</code> 的使用，很像css的使用方式</li>
@@ -263,9 +263,9 @@ className是否出現，取決於vue.data是否擁有該屬性。</p>
     <div>
       
         <h1>vue的computed和watch比較</h1>
-<p>最近在學<a href="https://github.com/dwatow/vueExercise" target="_blank" rel="external">vue</a>，學到了<code>watch</code>和<code>computed</code>時，發現它們兩個極像又很難區分。</p>
+<p>最近在學<a href="https://github.com/dwatow/vueExercise" target="_blank" rel="noopener">vue</a>，學到了<code>watch</code>和<code>computed</code>時，發現它們兩個極像又很難區分。</p>
 <p>今天早上騎車時，想到了它們之間的差別了！就趕快來記錄下來。</p>
-<h2>語法差異</h2>
+<h2 id="語法差異"><a class="header-anchor" href="#語法差異"></a>語法差異</h2>
 <p>在此也順便的比較了<code>data</code>和<code>methods</code>。<br>
 而<code>watch</code>在語法上的特性是可以和<code>data</code>同名，我自己理解成是掛在<code>data</code>的<code>onchange</code>事件上的<code>function</code>。</p>
 <table>
@@ -304,7 +304,7 @@ className是否出現，取決於vue.data是否擁有該屬性。</p>
 </tr>
 </tbody>
 </table>
-<h2>語意上的差異</h2>
+<h2 id="語意上的差異"><a class="header-anchor" href="#語意上的差異"></a>語意上的差異</h2>
 <p>在使用上，<code>vue</code>是一種接api資料之後，再將接到的資料，填入<code>html</code>的內容。<br>
 所以!!!先被決定的是接到的「資料欄位」，也就是<code>data</code>。</p>
 <ul>
