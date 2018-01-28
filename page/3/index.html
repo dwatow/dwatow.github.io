@@ -97,6 +97,150 @@
     <header class="title">
       
         <h1>
+          <a href="/2017/12-26-iron-man-2008/iron-man-2008-day16/">前端新手村 CSS Cascade 串接</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-25T23:43:34.000Z" itemprop="datePublished">
+    2017-12-26
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Specificity/">Specificity</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Rulest-Order/">Rulest Order</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1 id="css-cascade"><a class="header-anchor" href="#css-cascade">¶</a>CSS Cascade<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
+<p>Cascade 中文翻譯成「串接」。</p>
+<p>Cascade 動作是由 Specificity 和 Ruleset order 作用，決定要套用的 CSS。</p>
+<h2 id="specificity"><a class="header-anchor" href="#specificity">¶</a>Specificity<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<p>Specificity 在中文翻譯成「特定度」。</p>
+<p>千言萬語，透過<a href="http://cssspecificity.com/" target="_blank" rel="noopener">一個頁面</a>可以說盡。<br>
+看不懂沒關係，只要繼續看下去。</p>
+<h3 id="定義-specificity"><a class="header-anchor" href="#定義-specificity">¶</a>定義 Specificity</h3>
+<p>首先，我們想知道 specificity 是多少，要計算 <code>a</code>, <code>b</code>, <code>c</code>, <code>d</code> 四個數字<br>
+所以，目的在搞懂這四個數字怎麼計算，就可以掌握 specificity</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">(a, b, c, d)</div></pre></td></tr></table></figure>
+<ul>
+<li>a
+<ul>
+<li><code>style</code>，直接寫在 HTML element 的 <code>style</code> attribute，a = 1</li>
+</ul>
+</li>
+<li>b
+<ul>
+<li>b = 出現 <code>id</code> 選取器的次數</li>
+</ul>
+</li>
+<li>c
+<ul>
+<li>c = 出現 <code>class</code> 類別選取器的次數</li>
+<li>c = 出現 <code>[attribute=value]</code> 屬性選取器的次數</li>
+<li>c = 出現 <code>:pseudoclasses</code> 偽類選取器的次數</li>
+</ul>
+</li>
+<li>d
+<ul>
+<li>d = 出現 <code>:sudoelements</code> 偽元素選取器的次數</li>
+<li>d = 出現 <code>tagname</code> 類型(HTML標籤)選取器的次數</li>
+</ul>
+</li>
+</ul>
+<h3 id="計算-specificity"><a class="header-anchor" href="#計算-specificity">¶</a>計算 Specificity</h3>
+<ol>
+<li>a, b, c, d 彼此不換算。(很重要)</li>
+<li>a, b, c, d 各別只會相加</li>
+<li>結果是四個數字</li>
+<li>特例
+<ol>
+<li>value後面加 <code>!important</code> 直接在 a 前的第五位 +1</li>
+<li><code>*</code> 選取器，不佔任何分數 +0</li>
+</ol>
+</li>
+</ol>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> <span class="comment">/* 0, 1, 1, 3 */</span></div></pre></td></tr></table></figure>
+<ul>
+<li>a = 0: 沒有寫在 HTML 的 <code>style</code></li>
+<li>b = 1: <code>#nav-blobal</code></li>
+<li>c = 1: <code>.nav-link</code></li>
+<li>d = 3: <code>ul</code>, <code>li</code>, <code>a</code></li>
+</ul>
+<h2 id="rulest-order"><a class="header-anchor" href="#rulest-order">¶</a>Rulest order</h2>
+<p>Rulest order 翻譯成 規則集順序。</p>
+<p>千言萬語，只要開「開發者模式」就可以看結果。</p>
+<p><img src="https://i.imgur.com/EcCbRuB.png" alt=""></p>
+<p>以結果來說圖中的 <code>margin-top</code>被覆寫。</p>
+<h3 id="定義-rulest-order"><a class="header-anchor" href="#定義-rulest-order">¶</a>定義 Rulest order</h3>
+<p>若出現兩個 Specificity 強度相同的 Ruleset ，晚宣告有較高的優先權。</p>
+<blockquote>
+<p>是要改套件樣式，要掌握這個訣竅</p>
+</blockquote>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: blue;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最後的字型顏色，是紅色的。</p>
+<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>《重構 CSS》 <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/#specificity" target="_blank" rel="noopener">9. Calculating a selector’s specificity - w3.org<br>
+</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2017/12-25-iron-man-2008/iron-man-2008-day15/">前端新手村 偽元素</a>
         </h1>
       
@@ -1448,169 +1592,6 @@ block 元素本身預設 <code>overflow: visible;</code> 而它沒有觸發 bloc
 <li id="fn6" class="footnote-item"><p><a href="https://www.w3.org/TR/css-backgrounds-3/#borders" target="_blank" rel="noopener">4. Borders - w3.org</a> <a href="#fnref6" class="footnote-backref">↩</a></p>
 </li>
 <li id="fn7" class="footnote-item"><p><a href="https://www.w3schools.com/css/css_border.asp" target="_blank" rel="noopener">CSS Border Properties</a> <a href="#fnref7" class="footnote-backref">↩</a></p>
-</li>
-</ol>
-</section>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2017/12-16-iron-man-2008/iron-man-2008-day6/">前端新手村 Block 和 Inline 排版</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-12-15T23:17:35.000Z" itemprop="datePublished">
-    2017-12-16
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Block/">Block</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Inline/">Inline</a> }
-  </li>
-
-
-  </ul>
-  
-  
-  / 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/categories/前端新手村/">前端新手村</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <blockquote>
-<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
-</blockquote>
-<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
-<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
-<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="block-和-inline-排版"><a class="header-anchor" href="#block-和-inline-排版">¶</a>Block 和 Inline 排版</h1>
-<p>初學 HTML 開始切版時，先學 <code>div</code> 和 <code>span</code> 這兩個標籤，就可以練習排所有的東西了!!!</p>
-<p>在網頁排版裡，可以粗略的分成兩大系統。</p>
-<ul>
-<li>區塊(Block)元素</li>
-<li>行列(Inline)元素</li>
-</ul>
-<p>這兩種元素，就只是設定「內容的排列環境(formatting context)」。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
-在網頁的排列上</p>
-<p>在 w3c 的文件中，有明確的定義這兩種排列方式，在此節錄一部份相關的內文來看</p>
-<blockquote>
-<p><strong>9.4.1 Block formatting contexts</strong></p>
-<p>In a block formatting context, boxes are laid out one after the other, vertically, beginning at the top of a containing block.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-</blockquote>
-<blockquote>
-<p><strong>9.4.2 Inline formatting contexts</strong></p>
-<p>In an inline formatting context, boxes are laid out horizontally, one after the other, beginning at the top of a containing block.</p>
-</blockquote>
-<p>這兩段內文，我們會在下面的原始碼中，有更多的體會。</p>
-<h2 id="html-表現形式"><a class="header-anchor" href="#html-表現形式">¶</a>HTML 表現形式</h2>
-<p><code>div</code> 和 <code>span</code> 這兩個元素，就是支援這兩種元素觀念的 HTML 表現形式。</p>
-<p>看個例子</p>
-<blockquote>
-<p>建議<br>
-申請一個 <a href="https://codepen.io/" target="_blank" rel="noopener">code pen</a> 讓你可以隨時做實驗。</p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>上面兩種原始碼，可以看出</p>
-<ol>
-<li>無論你的原始碼是橫排還是直排，是不會影響最後呈現的結果。</li>
-<li>div 的內容 由上到下的垂直排列</li>
-<li>span 的內容 由左至右的水平排列</li>
-</ol>
-<h3 id="div-的預設行為"><a class="header-anchor" href="#div-的預設行為">¶</a><code>&lt;div&gt;</code> 的預設行為</h3>
-<ul>
-<li><code>block</code> 類型元素的代表</li>
-<li>自然排列是直排
-<ul>
-<li><code>div</code> 元素寬與它的容器大小一樣(<code>width: 100%;</code>)。</li>
-<li><code>div</code> 元素高由它的內容撐開。</li>
-</ul>
-</li>
-<li><code>div</code> 本身的作用
-<ul>
-<li>界定區塊尺寸與留白範圍</li>
-<li>賦予執行 <code>block</code> 元素的CSS特性</li>
-</ul>
-</li>
-</ul>
-<p>使用上大多都用在區塊之間的切割，在初次看見設計稿時，腦海的分割畫面行為，大多都可以算是用 <code>div</code> 切割的行為。</p>
-<p>網頁排版大多也是使用 <code>block</code> 區塊，來描述元素之間的關係。</p>
-<h3 id="span"><a class="header-anchor" href="#span">¶</a><code>&lt;span</code>&gt;</h3>
-<ul>
-<li><code>inline</code> 類型元素的代表</li>
-<li>自然排列是橫排
-<ul>
-<li><code>span</code> 元素寬與它的內容撐開，所以可以「水平的一個接著一個」。</li>
-<li><code>span</code> 元素高由它的內容撐開。</li>
-</ul>
-</li>
-<li><code>span</code> 本身的作用
-<ul>
-<li>界定內容選取範圍</li>
-<li>賦予執行 <code>inline</code> 元素的CSS特性</li>
-</ul>
-</li>
-</ul>
-<p>使用上，最常搞混的是<code>&lt;img&gt;</code>，其實是一種 <code>inline</code> 元素。</p>
-<h2 id="css-表現形式"><a class="header-anchor" href="#css-表現形式">¶</a>CSS 表現形式</h2>
-<p><code>display</code>屬性中，有兩個值 <code>inline</code> 和 <code>block</code> 。<br>
-發現了嗎？就算你只會 <code>div</code> 也可以透過設定 <code>display: inline</code> 將 <code>div</code> 變成 <code>inline</code> 元素。(但請不要…不要這麼做。)</p>
-<p>看個例子<br>
-承上面的 code，加上 CSS</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">display</span>: inline;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line">    <span class="attribute">display</span>: block;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="排版特性交換-要小心"><a class="header-anchor" href="#排版特性交換-要小心">¶</a>排版特性交換 (要小心!!!)</h3>
-<p>若你是寫成 HTML 檔，會變這樣</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">media</span>=<span class="string">"screen"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="undefined">        div &#123;</span></div><div class="line"><span class="undefined">            display: inline;</span></div><div class="line"><span class="undefined">        &#125;</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined">        span &#123;</span></div><div class="line"><span class="undefined">            display: block;</span></div><div class="line"><span class="undefined">        &#125;</span></div><div class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>上面兩種原始碼，可以看出</p>
-<ul>
-<li>加上 CSS 之後，兩種元素的排列方式改變(交換)了。</li>
-</ul>
-<p>為什麼不要讓他們屬性交換，原因有兩個</p>
-<ol>
-<li>每個 HTML 標籤都有預設 CSS 行為，改了一個，還有千千萬萬個。<br>
-不要有「display在手，要怎麼排都有」的 <s>邪</s> 觀念呀!!! &gt;&lt;<br>
-不如在認識每個標籤時，都正確的記得它的用途與英文原文</li>
-<li><code>div</code> 要橫排，要設 <code>inline-block</code> ，內容超過行高就出問題了!!(之後會細談橫排與直排)</li>
-</ol>
-<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="http://w3help.org/zh-cn/kb/010/" target="_blank" rel="noopener">KB010: 常規流( Normal flow ) - w3help</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/visuren.html#normal-flow" target="_blank" rel="noopener">9 Visual formatting model - w3c</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>
