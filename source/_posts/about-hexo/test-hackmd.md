@@ -1,14 +1,14 @@
 ---
-title: 測試hackmd支援的markdown寫法
+title: 測試 hackmd 支援的markdown寫法
 date: 2017-06-18 16:30:34
 tags: ['hexo', 'markdown測試']
 categories: 'hexo改裝'
 ---
 
-# 測試hackmd語法
+# 測試 hackmd 語法
 
-此頁是用來測試到底支援了多少hackmd原本的寫法
-不過，確實有許多功能不需要照本宣科的移植過來，畢竟身為hackmd的愛用者，只要夠用，而不是取代呀
+此頁是用來測試到底支援了多少 hackmd 原本的寫法
+不過，確實有許多功能不需要照本宣科的移植過來，畢竟身為 hackmd 的愛用者，只要夠用，而不是取代呀
 所以，下面列出目前支援的語法與功能到什麼程度，標示danger區塊的則是*不支援*或*沒有這功能*的意思。
 
 ## 測試開始
@@ -30,12 +30,12 @@ categories: 'hexo改裝'
 
 簡介
 ===
-<i class="fa fa-file-text"></i> **HackMD** 是個跨平台的 Markdown 即時協作筆記
+<i class="fa fa-file-text"></i> ** hackmd ** 是個跨平台的 Markdown 即時協作筆記
 所以您可以在**電腦、平板甚至是手機**與其他人做筆記！
 同時也可以在 **[首頁](/)** 透過 **Facebook、Twitter、GitHub、Dropbox** 登入
 
 目前這個服務還在初步階段，所以可能會有點問題或是壞掉
-如有任何狀況，請至 [GitHub](https://github.com/hackmdio/hackmd) 回報問題
+如有任何狀況，請至 [GitHub](https://github.com/ hackmd io/ hackmd ) 回報問題
 如果需要即時支援，請使用 [Facebook Message](https://www.facebook.com/messages/866415986748945)
 **謝謝您！**
 
@@ -82,7 +82,7 @@ categories: 'hexo改裝'
 
 ## 嵌入
 ```xml
-<iframe width="100%" height="500" src="https://hackmd.io/features" frameborder="0"></iframe>
+<iframe width="100%" height="500" src="https:// hackmd .io/features" frameborder="0"></iframe>
 ```
 
 ## [簡報模式](./slide-example)

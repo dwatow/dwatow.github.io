@@ -126,13 +126,12 @@ markdown:
      - markdown-it-sub
      - markdown-it-sup
      - markdown-it-checkbox
-  anchors:
-    level: 6 # Minimum level for ID creation. (Ex. h2 to h6)
-    collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
-    permalink: true # If true, creates an anchor tag with a permalink besides the heading.
-    permalinkClass: header-anchor # Class used for the permalink anchor tag.
-    permalinkSymbol: ¶ # The symbol used to make the permalink.
-
+     anchors:
+       level: 1, 2 # Minimum level for ID creation. (Ex. h2 to h6)
+       collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
+       permalink: true # If true, creates an anchor tag with a permalink besides the heading.
+       permalinkClass: header-anchor # Class used for the permalink anchor tag.
+       permalinkSymbol: '' # The symbol used to make the permalink.
 ```
 
 #### render的參數

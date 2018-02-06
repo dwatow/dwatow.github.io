@@ -57,7 +57,8 @@
     function draw() {
         ctx.clearRect(0, 0, resizeWidth, resizeHeight);
         var allPoint = [mousePosition].concat(dusts);
-        var v;
+        // var allPoint = [...dusts];
+        // var v;
         dusts.forEach(function(dust) {
             dust.x += dust.xa,
             dust.y += dust.ya,
@@ -78,7 +79,7 @@
                      {
                         point === mousePosition && // 滑鼠位置
                         hypotenuse >= point.max / 2 &&
-                       (dust.x -= 0.03 * diffX, dust.y -= 0.03 * diffY),
+                       (dust.x += 0.03 * diffX, dust.y += 0.03 * diffY), //擠開
                         A = (point.max - hypotenuse) / point.max,
 
                         ctx.beginPath(),

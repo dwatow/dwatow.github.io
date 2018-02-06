@@ -5,7 +5,7 @@ tags: 'hexo'
 categories: 'hexo改裝'
 ---
 
-# hexo加上數學式 MathJax
+# hexo 加上數學式 MathJax
 
 [套件連結](https://www.npmjs.com/package/markdown-it-katex)
 

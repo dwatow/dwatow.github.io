@@ -7,8 +7,8 @@ categories: 'hexo改裝'
 
 # 測試 markdown-it 渲染器
 
-在此提供目前渲染能力的語法，驗證對於`markdown-it`以及其外掛的設定與安裝，支援程度的內容
-語法測試參考自`markdown-it`的[官網測試內容](https://markdown-it.github.io/)
+在此提供目前渲染能力的語法，驗證對於 `markdown-it` 以及其外掛的設定與安裝，支援程度的內容
+語法測試參考自 `markdown-it` 的[官網測試內容](https://markdown-it.github.io/)
 
 以下測試開始
 
