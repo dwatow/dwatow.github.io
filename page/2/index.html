@@ -5,21 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="keywords" content="" />
-  <meta name="title" content="《Chris 技術筆記》">
   <meta name="author" content="Chris">
-  <meta name="copyright" content="《Chris 技術筆記》2018">
-  <meta name="description" content="從C++到Javascript，邁向網頁前端之路。">
+  <meta name="copyright" content="《Chris 技術筆記》 2018">
+  <meta name="title" content="《Chris 技術筆記》">
+  <meta name="description" content="">
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
-  <meta property="og:title" content="《Chris 技術筆記》">
-  <meta property="og:url" content="dwatow.github.io">
-  <meta property="og:image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
-  <meta property="og:description" content="從C++到Javascript，邁向網頁前端之路">
+  <meta name="description" content="前端工程師技術分享部落格">
+<meta property="og:type" content="website">
+<meta property="og:title" content="《Chris 技術筆記》">
+<meta property="og:url" content="dwatow.github.io/page/2/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="前端工程師技術分享部落格">
+<meta property="og:locale" content="zh-tw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Chris 技術筆記》">
+<meta name="twitter:description" content="前端工程師技術分享部落格">
+  <title>《Chris 技術筆記》</title>
 
-  <title>
-    
-    《Chris 技術筆記》
-  </title>
     
     
       <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
@@ -91,6 +94,163 @@
             <div data-pager-shell>
                 <ul class="Index">
   
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2018/01-07-iron-man-2008/iron-man-2008-day28/">前端新手村 Animations (上)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-01-07T01:18:19.000Z" itemprop="datePublished">
+    2018-01-07
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/animation/">animation</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/keyframes/">keyframes</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1 id="animations-上"><a class="header-anchor" href="#animations-上">¶</a>Animations (上)</h1>
+<p>CSS 的 Transition 讓我們可以簡單的做出「過場動畫」，不過動畫本身的參數(開始與結束的值)，是由現有的屬性決定，無法對動畫做出更多的控制。</p>
+<p>所以，有了 Animations</p>
+<ul>
+<li>權重: 原本的 CSS 屬性 &lt; <code>@keyframe</code> &lt; <code>!important</code>
+<ul>
+<li>firefox 符合標準，套用 <code>!important</code> 無視是否有 <code>transition</code></li>
+<li>Chrome 無視 <code>!important</code></li>
+</ul>
+</li>
+<li>將 CSS 屬性設定在一組 <code>@keyframe</code> 。</li>
+<li>類似 <code>transition</code> 的方式，在一段時間之內改變 CSS 屬性值。差別是自動觸發 <code>animations</code> 的每一段動畫。</li>
+<li>可控制播放次數、暫停、執行、定格。</li>
+<li>動態修改 animation 屬性，並不會造成 animation 重新開始</li>
+</ul>
+<p>若元素設定 <code>display: none</code> 時設定動畫，若又將元素設定 <code>none</code> 以外的 <code>display</code> 設定值，就重新套用動畫。(transition 的痛點)</p>
+<h2 id="keyframes"><a class="header-anchor" href="#keyframes">¶</a><code>@keyframes</code><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>frames 有翻成 影格、幀 ，amination 最大的色就是將所有和動畫有關的屬性都寫在這。</p>
+<p>語法</p>
+<p><img src="https://i.imgur.com/U4TjG72.jpg" alt=""></p>
+<ul>
+<li>CSS 權重次於 <code>!important</code> (測試結果 firefox 符合, Chrome 不符合)</li>
+<li>keyframe selector 可以是 <code>from</code> <code>to</code> ，也可以是 <code>0%</code> <code>100%</code>，也可以混搭
+<ul>
+<li><code>from</code> = <code>0%</code> ， <code>to</code> = <code>100%</code></li>
+<li>不在 <code>0%~100%</code> 的百分比數字無效。</li>
+<li><code>0%</code> 不可以寫 <code>0</code></li>
+<li>若沒 <code>0%</code> 或 <code>100%</code> ，自動抓元素本身的 CSS 設定值來當「沒有設定的動畫頭尾」</li>
+</ul>
+</li>
+<li>keyframe name 使用 <code>jump</code> 還是 <code>&quot;jump&quot;</code> 都是等價的，大小寫視為不同。
+<ul>
+<li>關鍵字(這時大小寫視為相同): <code>none</code>, <code>initial</code>, <code>None</code> (不可以取這些名字)</li>
+</ul>
+</li>
+<li>declaration-list 可以使用任何的 CSS 屬性，不過它不參與 CSS cascade，所以會忽略 <code>!important</code> (不管它設在 keyframe 裡還是外)</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="comment">/* 這兩個等價 */</span></div><div class="line">@<span class="keyword">keyframes</span> foo &#123; ... &#125;</div><div class="line">@<span class="keyword">keyframes</span> <span class="string">"foo"</span> &#123; ... &#125;</div><div class="line"></div><div class="line"><span class="comment">/* 這個與上面兩個不等價 */</span></div><div class="line">@<span class="keyword">keyframes</span> FOO &#123; ... &#125;</div><div class="line"></div><div class="line"><span class="comment">/* 下面的都是無效 */</span></div><div class="line">@<span class="keyword">keyframes</span> <span class="string">"initial"</span> &#123; ... &#125;</div><div class="line">@<span class="keyword">keyframes</span> <span class="string">"None"</span> &#123; ... &#125;</div><div class="line">@<span class="keyword">keyframes</span> initial &#123; ... &#125;</div><div class="line">@<span class="keyword">keyframes</span> None &#123; ... &#125;</div></pre></td></tr></table></figure>
+<h2 id="animation-name"><a class="header-anchor" href="#animation-name">¶</a><code>animation-name</code><sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1]</a></sup></h2>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">    <span class="attribute">animation-name</span>: 動畫名稱;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">keyframe</span> 動畫名稱</div></pre></td></tr></table></figure>
+<p>預設值: <code>none</code> (無動畫)<br>
+可用在偽元素身上</p>
+<h2 id="animation-duration"><a class="header-anchor" href="#animation-duration">¶</a><code>animation-duration</code><sup class="footnote-ref"><a href="#fn1" id="fnref1:2">[1]</a></sup></h2>
+<p>定義: 單位動畫週期，所需要的時間<br>
+值: 時間(R+ 正實數)<br>
+預設值: <code>0s</code></p>
+<p>設定 <code>0s</code> 看起來和原本樣，但是 animation 的功能還是會跑一次。</p>
+<h2 id="animation-timing-function"><a class="header-anchor" href="#animation-timing-function">¶</a><code>animation-timing-function</code><sup class="footnote-ref"><a href="#fn1" id="fnref1:3">[1]</a></sup></h2>
+<p>值: timing function 名稱<br>
+預設值: ease</p>
+<p>animation 的 <code>@keyframe</code> 變化函數。</p>
+<h2 id="animation-delay"><a class="header-anchor" href="#animation-delay">¶</a><code>animation-delay</code><sup class="footnote-ref"><a href="#fn1" id="fnref1:4">[1]</a></sup></h2>
+<p>值: 時間(R 實數)<br>
+預設值: <code>0s</code></p>
+<p>這個屬性控制兩件事</p>
+<ol>
+<li>animation 執行時間</li>
+<li>animation 顯示時間</li>
+</ol>
+<p>設定值有兩種變化</p>
+<ul>
+<li>設定值為正數( n)時
+<ul>
+<li>執行時間和顯示時間都會延遲</li>
+<li>觸發動畫開始的 event (js)</li>
+</ul>
+</li>
+<li>設定值為負數(-n)時
+<ul>
+<li>只有顯示時間延遲，執行時間延遲</li>
+<li>會有「起始動畫到 n 秒」的效果</li>
+<li>觸發動畫結束的 event (js)</li>
+</ul>
+</li>
+</ul>
+<p>只有第一個週期的 animation 才會受此值影響</p>
+<h2 id="常見的雷"><a class="header-anchor" href="#常見的雷">¶</a>常見的雷</h2>
+<p><strong>觸發動畫的關鍵</strong></p>
+<p>觸發動畫的關鍵，是名稱。<br>
+在 <code>:hover</code>  時加了名稱(其它都設定好了)，保證動畫從 <code>0%</code> 開始播放。<br>
+但是，若是在 <code>:hover</code> 時加了時間(其它都設定好了)，不保證動畫從 <code>0%</code> 開始播放。</p>
+<p>給一段正常的原始碼</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid black;</div><div class="line"></div><div class="line">  <span class="attribute">animation-duration</span>: <span class="number">5s</span>;</div><div class="line">  <span class="attribute">animation-timing-function</span>: linear;</div><div class="line">  <span class="attribute">animation-iteration-count</span>: infinite;</div><div class="line">  <span class="attribute">animation-fill-mode</span>: none;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-pseudo">:root</span><span class="selector-pseudo">:hover</span> <span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="attribute">animation-name</span>: colorful;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">keyframes</span> colorful &#123;</div><div class="line">  <span class="selector-tag">from</span> &#123;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#fee</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  50% &#123;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#efe</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-tag">to</span> &#123;</div><div class="line">     <span class="attribute">background-color</span>: <span class="number">#eef</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>將它改成不正常的情況</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line"><span class="comment">/* ... */</span></div><div class="line"></div><div class="line">  <span class="comment">/* animation-duration: 5s; */</span></div><div class="line">  <span class="attribute">animation-name</span>: colorful;</div><div class="line"><span class="comment">/* ... */</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-pseudo">:root</span><span class="selector-pseudo">:hover</span> <span class="selector-class">.box</span> &#123;</div><div class="line">  <span class="comment">/* animation-name: colorful; */</span></div><div class="line">  <span class="attribute">animation-duration</span>: <span class="number">5s</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/css-animations-1/" target="_blank" rel="noopener">CSS Animations Level 1 - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a> <a href="#fnref1:1" class="footnote-backref">↩</a> <a href="#fnref1:2" class="footnote-backref">↩</a> <a href="#fnref1:3" class="footnote-backref">↩</a> <a href="#fnref1:4" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div>
+</article>
+
+    </li>
   
     <li>
       <article class='ListView'>
@@ -1438,193 +1598,6 @@ flex item 都使用 <code>flex</code> 處理剩餘空間了，就不應該又使
 <li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#flex-property" target="_blank" rel="noopener"> 7.1. The flex Shorthand - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins" target="_blank" rel="noopener"> 8.1. Aligning with auto margins - w3.org</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
-</li>
-</ol>
-</section>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2017/12-28-iron-man-2008/iron-man-2008-day18/">前端新手村 flex (上)</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-12-27T23:25:29.000Z" itemprop="datePublished">
-    2017-12-28
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/2008鐵人賽/">2008鐵人賽</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Flex/">Flex</a> }
-  </li>
-
-
-  </ul>
-  
-  
-  / 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/categories/前端新手村/">前端新手村</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <blockquote>
-<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
-</blockquote>
-<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
-<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
-<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="flex-上"><a class="header-anchor" href="#flex-上">¶</a>flex (上)</h1>
-<h2 id="歷史"><a class="header-anchor" href="#歷史">¶</a>歷史</h2>
-<p>跟著我的步調，先來看看 flex 對於內容排版，有什麼基本的功能吧！</p>
-<p>以《眾妙之門》這本簡中翻譯書的內容對照出版日，來看看 flex 為什麼是現在這個名字[^1]。</p>
-<table>
-<thead>
-<tr>
-<th>年份</th>
-<th>display</th>
-<th>屬性名稱</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2009年以前</td>
-<td><code>display:box;</code></td>
-<td><code>box-{*}</code></td>
-</tr>
-<tr>
-<td>2011年的左右</td>
-<td><code>display:flexbox;</code></td>
-<td><code>flex()</code></td>
-</tr>
-<tr>
-<td>2012-2013年</td>
-<td><code>display:flex</code></td>
-<td><code>flex-{*}</code></td>
-</tr>
-</tbody>
-</table>
-<p>在繁中的一些早期就有出的書(ex: 《HTML5 完美風暴》)，也可以看得出這些語法的版本改變，講的都是同一件事，就是 flex box<br>
-在現在(2017年底)講的版本，相對穩定許多。(硬要酸一下)</p>
-<p>在 CSS2.1 中，定義了四種排版方式。</p>
-<ol>
-<li>block 排版，為文章排版而設計。</li>
-<li>inline 排版，為文字排版而設計。</li>
-<li>table 排版，為了將資料攤成表格。</li>
-<li>position 排版，為了依位置而不是依內容關係排版而設計</li>
-</ol>
-<p>在此介紹第五種排版方式</p>
-<ol start="5">
-<li>flex 排版，為了複雜排版畫面而設計。</li>
-</ol>
-<h2 id="flex-術語"><a class="header-anchor" href="#flex-術語">¶</a>flex 術語</h2>
-<ul>
-<li><strong>flex container</strong> 使用 <code>flex</code> 或 <code>inline-flex</code> 的容器，內容以 flex formatting context 方式排列。</li>
-<li><strong>flex items</strong> 在 flex container 裡的元素們(整行的元素)</li>
-<li><strong>flex directions</strong> 在 flex container 裡的排列方向</li>
-</ul>
-<h2 id="flex-container"><a class="header-anchor" href="#flex-container">¶</a>flex container</h2>
-<p>在容器使用</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">display</span>: <span class="selector-tag">flex</span>;</div><div class="line"><span class="selector-tag">display</span>: <span class="selector-tag">inline-flex</span>;</div></pre></td></tr></table></figure>
-<p>容器裡的元素排列會以 <code>flex</code> 的排列方式進行。</p>
-<ul>
-<li>排列方式會像 <code>inline</code> 可以橫向並且一行一行的排列，也像 <code>block</code> 這樣控制每個元素</li>
-<li><code>::first-letter</code> 、 <code>::first-line</code>、<code>float</code> 以及 <code>clear</code> 和 <code>vertical-align</code> 沒有作用。</li>
-<li><code>margin</code> 不會 margins collapsing</li>
-<li><code>margin</code> 和 <code>padding</code> 不要用在元素上，目前未定案</li>
-<li><code>margin: auto</code> 特別規定在 <a href="https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins" target="_blank" rel="noopener">8.1. Aligning with auto margins - w3.org</a></li>
-</ul>
-<h2 id="在-flex-容器排元素"><a class="header-anchor" href="#在-flex-容器排元素">¶</a>在 flex 容器排元素</h2>
-<p>理解方式，就像是理解 <code>inline</code> 排版的方式。<br>
-一邊看語法，一邊用 <code>inline</code> 的圖複習一下</p>
-<ul>
-<li><strong>justify</strong> 指的是每一行的頭尾對齊<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> (主軸方向)
-<ul>
-<li><code>justify-content</code> 文章的行頭尾對齊</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://i.imgur.com/oyl3mjs.png" alt=""></p>
-<ul>
-<li><strong>align</strong> 指的是「以行為單位」的對齊(副軸方向)
-<ul>
-<li><code>align-content</code> 行與行副軸空間分配(副軸頭尾對齊)</li>
-<li><code>align-items</code> 整排元素(整行)的對齊(上下調整)</li>
-<li><code>align-self</code> 個別元素的對齊(上下調整)</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://i.imgur.com/boIyUpF.png" alt=""></p>
-<h2 id="flex-flow"><a class="header-anchor" href="#flex-flow">¶</a><code>flex-flow</code></h2>
-<p>縮寫語法</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">flex-flow: &lt;flex-direction&gt;  &lt;flex-wrap&gt;</div><div class="line">flex-flow: &lt;flex-wrap&gt;</div><div class="line">flex-flow: &lt;flex-direction&gt;</div></pre></td></tr></table></figure>
-<h3 id="flex-direction"><a class="header-anchor" href="#flex-direction">¶</a><code>flex-direction</code></h3>
-<p>設定在容器</p>
-<p>調整文字排列方向，預設 <code>row</code></p>
-<ul>
-<li><code>col</code> 上→下排
-<ul>
-<li><code>col-reverse</code> 下→上</li>
-</ul>
-</li>
-<li><code>row</code> 左→右排
-<ul>
-<li><code>row-reverse</code> 右→左</li>
-</ul>
-</li>
-</ul>
-<h3 id="flex-wrap"><a class="header-anchor" href="#flex-wrap">¶</a><code>flex-wrap</code></h3>
-<p>設定在容器</p>
-<p>自動換行，預設 <code>nowrap</code></p>
-<ul>
-<li><code>nowrap</code> 可以選擇不換行</li>
-<li><code>wrap</code> 滿了換到下一行</li>
-<li><code>wrap-reverse</code> 滿了換到上一行</li>
-</ul>
-<h2 id="order"><a class="header-anchor" href="#order">¶</a><code>order</code></h2>
-<p>設定在元素</p>
-<p>改變元素順序，預設 0</p>
-<ul>
-<li>正數靠右排</li>
-<li>負數靠左排</li>
-</ul>
-<h2 id="學習管道"><a class="header-anchor" href="#學習管道">¶</a>學習管道</h2>
-<ul>
-<li><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" rel="noopener">CSS-Tricks flex box</a></li>
-<li><a href="http://flexboxfroggy.com/" target="_blank" rel="noopener">小青蛙練習</a></li>
-</ul>
-<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://helpx.adobe.com/indesign/using/aligning-text.html" target="_blank" rel="noopener"> Align or justify text - InDesign User Guide</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>
