@@ -34,12 +34,12 @@
 </head>
 
 <body>
+    <script src="/js/facebookapi.js"></script>
     <div class="Shell">
         <aside class='SideBar'>
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: url(null)">
-        <div class='av-pic' style="background-image: url(/assets/head.svg)">
-        </div>
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
     </section>
     <section class='menu'>
         <div>《Chris 技術筆記》</div>
@@ -97,21 +97,17 @@
     <header class="title">
       
         <h1>
-          <a href="/2018/02-07-fb-web-login/">Facebook 網頁登入</a>
+          <a href="/2018/02-09-fb-web-login/">Facebook 網頁登入</a>
         </h1>
       
       <div class='ListMeta'>
-  <time datetime="2018-02-07T02:13:45.000Z" itemprop="datePublished">
-    2018-02-07
+  <time datetime="2018-02-09T14:37:58.000Z" itemprop="datePublished">
+    2018-02-09
   </time>
   
   | 
   <ul>
     
-  <li class="meta-text">
-  { <a href="/tags/API/">API</a> }
-  </li>
-
   <li class="meta-text">
   { <a href="/tags/Facebook/">Facebook</a> }
   </li>
@@ -128,7 +124,7 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/categories/工具使用/">工具使用</a> }
+  { <a href="/categories/技術練習/">技術練習</a> }
   </li>
 
 
@@ -139,11 +135,93 @@
     </header>
     <div>
       
-        <div class="fb-login-button" data-size="small" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-<div id="fb-root"></div>
-<script type="text/javascript">
-(function(doc, script, facebook_jssdk) {if (doc.getElementById(facebook_jssdk)) return;var js = doc.createElement(script);js.id = facebook_jssdk;js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.12&appId=213697875859331&autoLogAppEvents=1';var fbscript = doc.getElementsByTagName(script)[0];fbscript.parentNode.insertBefore(js, fbscript);}(document, 'script', 'facebook-jssdk'));
-</script>
+        <h1 id="facebook-網頁登入"><a class="header-anchor" href="#facebook-網頁登入">¶</a>Facebook 網頁登入</h1>
+<p>facebook 登入，真的還滿簡單的。<br>
+一切就從<a href="https://developers.facebook.com/docs/facebook-login/web" target="_blank" rel="noopener">這一篇官網文件</a>說起吧。</p>
+<p>有人會想，明明官網都寫了這麼清楚的文件了，為什麼 Chris 還要寫一篇來湊熱鬧？<br>
+當然，是我自己看了很久，弄半天才弄出來，所以才寫一篇來翻譯翻譯 facebook 官網文件在寫什麼呀。</p>
+<p>就當作是這是一篇導讀文吧！</p>
+<h2 id="先知道我們面對的是什麼"><a class="header-anchor" href="#先知道我們面對的是什麼">¶</a>先知道我們面對的是什麼</h2>
+<ol>
+<li>在前端</li>
+<li>用 JavaScript</li>
+</ol>
+<p>所以，facebook 標題寫「搭配 JavaScript SDK 的網頁版『Facebook 登入』」看到兩個重點</p>
+<ol>
+<li>JavaScript SDK</li>
+<li>Facebook 登入</li>
+</ol>
+<h2 id="javascript-sdk"><a class="header-anchor" href="#javascript-sdk">¶</a>JavaScript SDK</h2>
+<p>直接看另一篇<a href="https://developers.facebook.com/docs/javascript/quickstart" target="_blank" rel="noopener">官網文件</a> [^FB SDK]</p>
+<p>可以在網站上使用「讚」、「登入」、「分享」…之類的 facebook 功能。</p>
+<h3 id="基本設定"><a class="header-anchor" href="#基本設定">¶</a>基本設定</h3>
+<p>放在  <code>&lt;body&gt;</code> 開頭的後方<br>
+<code>Facebook 應用程式的編號</code> 來取代 <code>your-app-id</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="javascript">  <span class="built_in">window</span>.fbAsyncInit = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></div><div class="line"><span class="undefined">    FB.init(&#123;</span></div><div class="line"><span class="javascript">      appId            : <span class="string">'your-app-id'</span>,</span></div><div class="line"><span class="javascript">      autoLogAppEvents : <span class="literal">true</span>,</span></div><div class="line"><span class="javascript">      xfbml            : <span class="literal">true</span>,</span></div><div class="line"><span class="javascript">      version          : <span class="string">'v2.12'</span></span></div><div class="line"><span class="undefined">    &#125;);</span></div><div class="line"><span class="undefined">  &#125;;</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="javascript">  (<span class="function"><span class="keyword">function</span>(<span class="params">d, s, id</span>)</span>&#123;</span></div><div class="line"><span class="javascript">     <span class="keyword">var</span> js, fjs = d.getElementsByTagName(s)[<span class="number">0</span>];</span></div><div class="line"><span class="javascript">     <span class="keyword">if</span> (d.getElementById(id)) &#123;<span class="keyword">return</span>;&#125;</span></div><div class="line"><span class="undefined">     js = d.createElement(s); js.id = id;</span></div><div class="line"><span class="javascript">     js.src = <span class="string">"https://connect.facebook.net/en_US/sdk.js"</span>;</span></div><div class="line"><span class="undefined">     fjs.parentNode.insertBefore(js, fjs);</span></div><div class="line"><span class="javascript">   &#125;(<span class="built_in">document</span>, <span class="string">'script'</span>, <span class="string">'facebook-jssdk'</span>));</span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>以上就是快速入門的 facebook SDK 的初始化過程</p>
+<p>再來進入主題了</p>
+<h2 id="facebook-登入"><a class="header-anchor" href="#facebook-登入">¶</a>Facebook 登入</h2>
+<p>準備材料</p>
+<ol>
+<li>一個 facebook 應用程式</li>
+<li>重新導向網址要登記上去。(讓 api 可以在這個 domain 之下 work)</li>
+</ol>
+<h3 id="檢查登入狀態"><a class="header-anchor" href="#檢查登入狀態">¶</a>檢查登入狀態</h3>
+<p>流程大概是這樣</p>
+<ol>
+<li>頁面載入</li>
+<li>初始化 facebook SDK</li>
+<li>檢查登入狀態</li>
+</ol>
+<p>官網提供的程式碼<br>
+在此時官網並沒有提供它的實作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FB.getLoginStatus(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">    <span class="comment">//statusChangeCallback(response);</span></div><div class="line">    <span class="built_in">console</span>.log(response)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>建議先註解 <code>statusChangeCallback</code> 並且印出 <code>response</code> 看看內容是不是像官網說的這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">    status: <span class="string">'connected'</span>,</div><div class="line">    authResponse: &#123;</div><div class="line">        accessToken: <span class="string">'...'</span>,</div><div class="line">        expiresIn:<span class="string">'...'</span>,</div><div class="line">        signedRequest:<span class="string">'...'</span>,</div><div class="line">        userID:<span class="string">'...'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="使用者登入"><a class="header-anchor" href="#使用者登入">¶</a>使用者登入</h3>
+<p>在此，有兩個方式</p>
+<ol>
+<li>facebook 幫你生成一切的「登入按鈕」</li>
+<li>facebook 的 api</li>
+</ol>
+<h4 id="登入按鈕"><a class="header-anchor" href="#登入按鈕">¶</a>登入按鈕</h4>
+<p>這裡有個雷點。</p>
+<p>雖然 facebook 貼心的準備了一個程式碼產生器<br>
+<img src="https://i.imgur.com/Nr2KYwb.png" alt=""></p>
+<p>按下「取得程式碼」，進入三步驟</p>
+<ol>
+<li>
+<p>選你的 facebook 應用程式</p>
+</li>
+<li>
+<p>複製你要初始 facebook SDK 的程式碼</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div id=<span class="string">"fb-root"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">&lt;script&gt;</div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">d, s, id</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fjs = d.getElementsByTagName(s)[<span class="number">0</span>];</div><div class="line">    <span class="keyword">if</span> (d.getElementById(id)) <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">var</span> js = d.createElement(s);</div><div class="line">    js.id = id;</div><div class="line">    js.src = <span class="xml"><span class="tag">&lt;<span class="name">一段</span> <span class="attr">url</span>&gt;</span>;       </span></div><div class="line"><span class="xml">    fjs.parentNode.insertBefore(js, fjs);</span></div><div class="line"><span class="xml">&#125;(document, 'script', 'facebook-jssdk'));</span></div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
+</li>
+<li>
+<p>貼上 button 的 html</p>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"fb-login-button"</span> <span class="attr">data-max-rows</span>=<span class="string">"1"</span> <span class="attr">data-size</span>=<span class="string">"large"</span> <span class="attr">data-button-type</span>=<span class="string">"continue_with"</span> <span class="attr">data-show-faces</span>=<span class="string">"false"</span> <span class="attr">data-auto-logout-link</span>=<span class="string">"false"</span> <span class="attr">data-use-continue-as</span>=<span class="string">"false"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>如果，你貼過上面第一段的 facebook SDK ，可以對照一下。它雖然有給你 facebook SDK ，但是卻沒有初始化。<br>
+建議不要使用這一段 SDK 要使用<a href="#%E5%9F%BA%E6%9C%AC%E8%A8%AD%E5%AE%9A">第一段</a>的。</p>
+</blockquote>
+<p>又或者，不要管程式碼產生器，直接用第一段的初始化，和這一段 code 來產生按鈕</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">fb:login-button</span> <span class="attr">scope</span>=<span class="string">"public_profile,email"</span> <span class="attr">onlogin</span>=<span class="string">"checkLginState();"</span>&gt;</span> <span class="tag">&lt;/<span class="name">fb:login-button</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>然後 按下它執行這一段</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkLoginState</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    FB.getLoginStatus(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">        statusChangeCallback(response);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="登入按鈕-v2"><a class="header-anchor" href="#登入按鈕-v2">¶</a>登入按鈕</h4>
+<p>只需呼叫 <a href="https://developers.facebook.com/docs/reference/javascript/FB.login" target="_blank" rel="noopener"><code>FB.login()</code></a></p>
+<p>直接在 <code>console</code> 貼上這一段 code 等同於按下登入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">FB.login(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</div><div class="line">    <span class="comment">// Handle the response object,</span></div><div class="line">    <span class="comment">// like in statusChangeCallback() in our demo</span></div><div class="line">    <span class="comment">// code.   </span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="登出"><a class="header-anchor" href="#登出">¶</a>登出</h3>
+<p>同理可證</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FB.logout(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">    <span class="comment">// Person is now logged out</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>以上，再配合官網的文件就可以完成了!!</p>
+<p>facebook 應用程式開發版只能提供自己登入。<br>
+如果你按我的範例沒有成功，並不是我沒寫好，一定是還沒有申請通過!!</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[^FB SDK]: <a href="https://developers.facebook.com/docs/javascript/quickstart" target="_blank" rel="noopener">快速入門：Facebook JavaScript SDK</a></p>
 
       
     </div>
@@ -703,7 +781,7 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 (facebook提供的範例是使用<code>curl</code>這隻程式來送出請求，可以把curl想成postman的指令版)</p>
 </blockquote>
 <p>取出來之後</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"recipient"</span>: &#123;</div><div class="line">    <span class="string">"id"</span>: &lt;傳給誰&gt;</div><div class="line">  &#125;,</div><div class="line">  "message": &#123;</div><div class="line">    "text": &lt;傳什麼文字&gt;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"recipient"</span>: &#123;</div><div class="line">    <span class="string">"id"</span>: <span class="xml"><span class="tag">&lt;<span class="name">傳給誰</span>&gt;</span></span></div><div class="line"><span class="xml">  &#125;,</span></div><div class="line"><span class="xml">  "message": &#123;</span></div><div class="line"><span class="xml">    "text": <span class="tag">&lt;<span class="name">傳什麼文字</span>&gt;</span></span></div><div class="line"><span class="xml">&#125;</span></div></pre></td></tr></table></figure>
 <p>填入回覆者的 id 和要給他的訊息就可以囉~<br>
 到<a href="#%E7%A2%BA%E8%AA%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9C%89%E6%94%B6%E5%88%B0%E8%A8%8A%E6%81%AF">這裡</a>找 <code>sender.id</code></p>
 <h3 id="改寫-request"><a class="header-anchor" href="#改寫-request">¶</a>改寫 request</h3>
@@ -745,6 +823,5 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
         </div>
     </div>
     <script src="/js/ixbg/ixbg.js"></script>
-    <script src="/js/facebookapi.js"></script>
 </body>
 </html>
