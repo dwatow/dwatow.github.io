@@ -19,7 +19,7 @@ bot -> FB server
 - [安裝 **ngrok**](https://hackmd.io/EwM2DYA4BMEMEYC0BOcwAMiAsWDMwV8BWRAY13CICM4Jpkqg)
 - 建立facebook粉絲頁
 - 建立[facebook開發者帳號](https://developers.facebook.com/?locale=zh_TW)
-- 安裝 **node.js** **+** [安裝Express](http://expressjs.com/zh-tw/starter/installing.html)
+- 安裝 **node.js** **+** [安裝Express](https://expressjs.com/zh-tw/starter/installing.html)
 
 ---
 
