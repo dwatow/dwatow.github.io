@@ -159,7 +159,7 @@ function checkLoginState() {
 FB.login(function(response){
     // Handle the response object,
     // like in statusChangeCallback() in our demo
-    // code.   
+    // code.
 });
 ```
 
@@ -176,7 +176,6 @@ FB.logout(function(response) {
 
 facebook 應用程式開發版只能提供自己登入。
 如果你按我的範例沒有成功，並不是我沒寫好，一定是還沒有申請通過!!
-
 
 ## 參考資料
 
