@@ -26,7 +26,7 @@ facebook 登入，真的還滿簡單的。
 
 ## JavaScript SDK
 
-直接看另一篇[官網文件](https://developers.facebook.com/docs/javascript/quickstart) [^FB SDK]
+直接看另一篇[官網文件](https://developers.facebook.com/docs/javascript/quickstart) [^fbSdk]
 
 可以在網站上使用「讚」、「登入」、「分享」...之類的 facebook 功能。
 
@@ -179,4 +179,4 @@ facebook 應用程式開發版只能提供自己登入。
 
 ## 參考資料
 
-[^FB SDK]: [快速入門：Facebook JavaScript SDK](https://developers.facebook.com/docs/javascript/quickstart)
+[^fbSdk]: [快速入門：Facebook JavaScript SDK](https://developers.facebook.com/docs/javascript/quickstart)

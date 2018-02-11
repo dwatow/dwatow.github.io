@@ -16,7 +16,7 @@ categories: 'hexo改裝'
 
 先前研究的文章中，有提到關於 `markdown-it` 在 `_config.yml` 的設定。[^config]
 
-## 設定
+## 設定 `_config.yml`
 
 ```yaml=
 markdown:
@@ -40,7 +40,22 @@ markdown:
 
 也不是「官方 markdown-it 好像拒绝实现这个功能，就是不渲染 heading 的 id 导致锚点失效」[^#974]
 
+## 修改 toc 文字
 
+因為修改了 `_config.yml` 讓標題加上 `¶` 的偽元素。
+所以 toc 的文字多了前綴，如圖
+![](https://i.imgur.com/DOXMvAl.png =200x)
+
+所以，要修改 `module_package\hexo` 套件。
+找出 `hexo\bin\plugins\helper\toc.js` 檔案。
+
+第 29 行改成這樣
+
+```javascript=29
+var text = _.escape($(this).attr('id') || $(this).text());
+```
+
+即可相容舊的，也可以完美的去掉 `¶` 。
 
 # 參考資料
 
