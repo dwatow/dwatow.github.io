@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶CSS Cascade[1] Cascade 中文翻譯成「串接」。 Casc">
+<meta name="keywords" content="CSS,Specificity,Rulest Order,2018鐵人賽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端新手村 CSS Cascade 串接">
+<meta property="og:url" content="dwatow.github.io/2017/12-26-iron-man-2018/iron-man-2018-day16/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶CSS Cascade[1] Cascade 中文翻譯成「串接」。 Casc">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/EcCbRuB.png">
+<meta property="og:updated_time" content="2018-02-12T06:33:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端新手村 CSS Cascade 串接">
+<meta name="twitter:description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶CSS Cascade[1] Cascade 中文翻譯成「串接」。 Casc">
+<meta name="twitter:image" content="https://i.imgur.com/EcCbRuB.png">
+  <title>前端新手村 CSS Cascade 串接 - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>前端新手村</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+  <header class='PageTitle'>
+    <h1>前端新手村 CSS Cascade 串接</h1>
+  </header>
+
+  <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-cascade"><span class="toc-text">css-cascade</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#specificity"><span class="toc-text">specificity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定義-specificity"><span class="toc-text">定義-specificity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#計算-specificity"><span class="toc-text">計算-specificity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rulest-order"><span class="toc-text">rulest-order</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定義-rulest-order"><span class="toc-text">定義-rulest-order</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+  </div>
+
+
+    <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1 id="css-cascade"><a class="header-anchor" href="#css-cascade">¶</a>CSS Cascade<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
+<p>Cascade 中文翻譯成「串接」。</p>
+<p>Cascade 動作是由 Specificity 和 Ruleset order 作用，決定要套用的 CSS。</p>
+<h2 id="specificity"><a class="header-anchor" href="#specificity">¶</a>Specificity<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<p>Specificity 在中文翻譯成「特定度」。</p>
+<p>千言萬語，透過<a href="http://cssspecificity.com/" target="_blank" rel="noopener">一個頁面</a>可以說盡。<br>
+看不懂沒關係，只要繼續看下去。</p>
+<h3 id="定義-specificity"><a class="header-anchor" href="#定義-specificity">¶</a>定義 Specificity</h3>
+<p>首先，我們想知道 specificity 是多少，要計算 <code>a</code>, <code>b</code>, <code>c</code>, <code>d</code> 四個數字<br>
+所以，目的在搞懂這四個數字怎麼計算，就可以掌握 specificity</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">(a, b, c, d)</div></pre></td></tr></table></figure>
+<ul>
+<li>a
+<ul>
+<li><code>style</code>，直接寫在 HTML element 的 <code>style</code> attribute，a = 1</li>
+</ul>
+</li>
+<li>b
+<ul>
+<li>b = 出現 <code>id</code> 選取器的次數</li>
+</ul>
+</li>
+<li>c
+<ul>
+<li>c = 出現 <code>class</code> 類別選取器的次數</li>
+<li>c = 出現 <code>[attribute=value]</code> 屬性選取器的次數</li>
+<li>c = 出現 <code>:pseudoclasses</code> 偽類選取器的次數</li>
+</ul>
+</li>
+<li>d
+<ul>
+<li>d = 出現 <code>:sudoelements</code> 偽元素選取器的次數</li>
+<li>d = 出現 <code>tagname</code> 類型(HTML標籤)選取器的次數</li>
+</ul>
+</li>
+</ul>
+<h3 id="計算-specificity"><a class="header-anchor" href="#計算-specificity">¶</a>計算 Specificity</h3>
+<ol>
+<li>a, b, c, d 彼此不換算。(很重要)</li>
+<li>a, b, c, d 各別只會相加</li>
+<li>結果是四個數字</li>
+<li>特例
+<ol>
+<li>value後面加 <code>!important</code> 直接在 a 前的第五位 +1</li>
+<li><code>*</code> 選取器，不佔任何分數 +0</li>
+</ol>
+</li>
+</ol>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> <span class="comment">/* 0, 1, 1, 3 */</span></div></pre></td></tr></table></figure>
+<ul>
+<li>a = 0: 沒有寫在 HTML 的 <code>style</code></li>
+<li>b = 1: <code>#nav-blobal</code></li>
+<li>c = 1: <code>.nav-link</code></li>
+<li>d = 3: <code>ul</code>, <code>li</code>, <code>a</code></li>
+</ul>
+<h2 id="rulest-order"><a class="header-anchor" href="#rulest-order">¶</a>Rulest order</h2>
+<p>Rulest order 翻譯成 規則集順序。</p>
+<p>千言萬語，只要開「開發者模式」就可以看結果。</p>
+<p><img src="https://i.imgur.com/EcCbRuB.png" alt=""></p>
+<p>以結果來說圖中的 <code>margin-top</code>被覆寫。</p>
+<h3 id="定義-rulest-order"><a class="header-anchor" href="#定義-rulest-order">¶</a>定義 Rulest order</h3>
+<p>若出現兩個 Specificity 強度相同的 Ruleset ，晚宣告有較高的優先權。</p>
+<blockquote>
+<p>是要改套件樣式，要掌握這個訣竅</p>
+</blockquote>
+<p>看個例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: blue;</div><div class="line">&#125;</div><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最後的字型顏色，是紅色的。</p>
+<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>《重構 CSS》 <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/css3-selectors/#specificity" target="_blank" rel="noopener">9. Calculating a selector’s specificity - w3.org<br>
+</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+
+    
+    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+    </div>
+  </section>
+  
+    <section class='ArticleMeta'>
+      <div>
+        發表於&nbsp;
+        <time datetime="2017-12-25T23:43:34.000Z" itemprop="datePublished">
+              2017-12-26
+            </time>
+      </div>
+      
+        <div>
+          tags:
+          
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Specificity/">Specificity</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Rulest-Order/">Rulest Order</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
+  </li>
+
+
+        </div>
+        
+    </section>
+    
+      
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2017/12-24-iron-man-2018/iron-man-2018-day14/">前端新手村 CSS Selector 的 Combinators</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/12-14-iron-man-2018/iron-man-2018-day4/">前端新手村CSS 的單位</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-07-iron-man-2018/iron-man-2018-day28/">前端新手村 Animations (上)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-06-iron-man-2018/iron-man-2018-day27/">前端新手村 Animations (前傳)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-05-iron-man-2018/iron-man-2018-day26/">前端新手村 @import 開心的結構化 CSS</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-02-iron-man-2018/iron-man-2018-day23/">前端新手村 細說 Timing function</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li></ul>
+        </section>
+        <section>
+          <div id="disqus_thread"></div>
+        </section>
+        
+
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

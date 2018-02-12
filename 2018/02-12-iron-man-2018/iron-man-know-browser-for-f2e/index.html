@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶給前端的「來做個網路瀏覽器吧！」導讀 感謝微中子的瀏覽器系列文章，當初將自己的鐵人 30 系列貼出來，微中子就推薦他自己的這個系列給我。 果然受益良多，在看完這一系列之後，特別選了幾篇我自己覺得，對前端工程師有幫助的內容。並且寫上一些引文 希望給「同樣想要對切版深入了解的前端工程師」有更多的幫助。 如果還不滿足，推薦閱讀整系列，對瀏覽器的組成與運作步驟都有更多的了解。 (以下的排列，先給文章連結">
+<meta name="keywords" content="HTML,CSS,display,Render tree, 2018鐵人賽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="給前端的「來做個網路瀏覽器吧！」導讀">
+<meta property="og:url" content="dwatow.github.io/2018/02-12-iron-man-2018/iron-man-know-browser-for-f2e/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶給前端的「來做個網路瀏覽器吧！」導讀 感謝微中子的瀏覽器系列文章，當初將自己的鐵人 30 系列貼出來，微中子就推薦他自己的這個系列給我。 果然受益良多，在看完這一系列之後，特別選了幾篇我自己覺得，對前端工程師有幫助的內容。並且寫上一些引文 希望給「同樣想要對切版深入了解的前端工程師」有更多的幫助。 如果還不滿足，推薦閱讀整系列，對瀏覽器的組成與運作步驟都有更多的了解。 (以下的排列，先給文章連結">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-02-12T06:33:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="給前端的「來做個網路瀏覽器吧！」導讀">
+<meta name="twitter:description" content="¶給前端的「來做個網路瀏覽器吧！」導讀 感謝微中子的瀏覽器系列文章，當初將自己的鐵人 30 系列貼出來，微中子就推薦他自己的這個系列給我。 果然受益良多，在看完這一系列之後，特別選了幾篇我自己覺得，對前端工程師有幫助的內容。並且寫上一些引文 希望給「同樣想要對切版深入了解的前端工程師」有更多的幫助。 如果還不滿足，推薦閱讀整系列，對瀏覽器的組成與運作步驟都有更多的了解。 (以下的排列，先給文章連結">
+  <title>給前端的「來做個網路瀏覽器吧！」導讀 - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>前端新手村</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+  <header class='PageTitle'>
+    <h1>給前端的「來做個網路瀏覽器吧！」導讀</h1>
+  </header>
+
+  <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#給前端的-來做個網路瀏覽器吧-導讀"><span class="toc-text">給前端的-來做個網路瀏覽器吧-導讀</span></a></li></ol>
+  </div>
+
+
+    <h1 id="給前端的-來做個網路瀏覽器吧-導讀"><a class="header-anchor" href="#給前端的-來做個網路瀏覽器吧-導讀">¶</a>給前端的「來做個網路瀏覽器吧！」導讀</h1>
+<p>感謝微中子的瀏覽器系列文章，當初將自己的鐵人 30 系列貼出來，微中子就推薦他自己的這個系列給我。<br>
+果然受益良多，在看完這一系列之後，特別選了幾篇我自己覺得，對前端工程師有幫助的內容。並且寫上一些引文<br>
+希望給「同樣想要對切版深入了解的前端工程師」有更多的幫助。</p>
+<p>如果還不滿足，推薦閱讀整系列，對瀏覽器的組成與運作步驟都有更多的了解。</p>
+<p>(以下的排列，先給文章連結，引文放在連結下面。)</p>
+<ul>
+<li><a href="https://ithelp.ithome.com.tw/articles/10191579" target="_blank" rel="noopener">深入探討瀏覽器引擎如何進行解析</a><br>
+概念性的了解一下瀏覽器核心運作原理</li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10191842" target="_blank" rel="noopener">瀏覽器引擎處理 CSS 的簡易版（一）</a><br>
+解釋瀏覽器如何解析 css 語法</li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10191967" target="_blank" rel="noopener">瀏覽器引擎處理 CSS 的簡易版（二）</a><br>
+解釋術語: Specified, computed, and actual values</li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10192871" target="_blank" rel="noopener">瀏覽器引擎處理版面佈局的簡易版（一）</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10193108" target="_blank" rel="noopener">瀏覽器引擎處理版面佈局的簡易版（二）</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10193340" target="_blank" rel="noopener">瀏覽器引擎處理版面佈局的簡易版（三）</a><br>
+對於瀏覽器的 normal flow / box model / layout 有一個更明確的了解。<br>
+其中<a href="https://ithelp.ithome.com.tw/articles/10193108" target="_blank" rel="noopener">瀏覽器引擎處理版面佈局的簡易版（二）</a>有解釋渲染過程 <code>display: none</code> 為什麼會影響排版空間</li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10194518" target="_blank" rel="noopener">瀏覽器開發進階實戰（三）捲動</a><br>
+解釋 <code>overflow</code> 在瀏覽器中的運作原理</li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10195316" target="_blank" rel="noopener">瀏覽器開發進階實戰（四）font-family</a><br>
+解釋 <code>font-family</code> 預設字型的實作原理</li>
+</ul>
+
+
+    
+    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+    </div>
+  </section>
+  
+    <section class='ArticleMeta'>
+      <div>
+        發表於&nbsp;
+        <time datetime="2018-02-12T01:19:02.000Z" itemprop="datePublished">
+              2018-02-12
+            </time>
+      </div>
+      
+        <div>
+          tags:
+          
+  <li class="meta-text">
+  { <a href="/tags/HTML/">HTML</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/display/">display</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Render-tree/">Render tree</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/2018鐵人賽/"> 2018鐵人賽</a> }
+  </li>
+
+
+        </div>
+        
+    </section>
+    
+      
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-03-iron-man-2018/iron-man-2018-day24/">前端新手村 都市傳說之隱藏元素的手法</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/12-24-iron-man-2018/iron-man-2018-day14/">前端新手村 CSS Selector 的 Combinators</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-06-iron-man-2018/iron-man-2018-day27/">前端新手村 Animations (前傳)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-05-iron-man-2018/iron-man-2018-day26/">前端新手村 @import 開心的結構化 CSS</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-08-iron-man-2018/iron-man-2018-day29/">前端新手村 Animations (下)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-02-iron-man-2018/iron-man-2018-day23/">前端新手村 細說 Timing function</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li></ul>
+        </section>
+        <section>
+          <div id="disqus_thread"></div>
+        </section>
+        
+
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

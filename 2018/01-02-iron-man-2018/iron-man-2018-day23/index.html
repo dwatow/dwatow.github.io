@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶細說 Timing function 動畫並不是只是讓元素在畫面動起來，若可">
+<meta name="keywords" content="CSS,Transition,2018鐵人賽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端新手村 細說 Timing function">
+<meta property="og:url" content="dwatow.github.io/2018/01-02-iron-man-2018/iron-man-2018-day23/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶細說 Timing function 動畫並不是只是讓元素在畫面動起來，若可">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/L1piHHs.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/d/db/B%C3%A9zier_3_big.gif">
+<meta property="og:image" content="https://i.imgur.com/OfGJFrS.png">
+<meta property="og:image" content="https://i.imgur.com/C0rm439.png">
+<meta property="og:image" content="https://i.imgur.com/DeeTDXc.png">
+<meta property="og:image" content="https://i.imgur.com/13XVSja.png">
+<meta property="og:updated_time" content="2018-02-12T06:33:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端新手村 細說 Timing function">
+<meta name="twitter:description" content="「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻  ¶前言 網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。 ¶細說 Timing function 動畫並不是只是讓元素在畫面動起來，若可">
+<meta name="twitter:image" content="https://i.imgur.com/L1piHHs.png">
+  <title>前端新手村 細說 Timing function - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: url(null)">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </section>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>前端新手村</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Time Axis</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+  <header class='PageTitle'>
+    <h1>前端新手村 細說 Timing function</h1>
+  </header>
+
+  <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#細說-timing-function"><span class="toc-text">細說-timing-function</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#讀函數圖"><span class="toc-text">讀函數圖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linear-線性函數"><span class="toc-text">linear-線性函數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cubic-bézier-二次貝茲曲線"><span class="toc-text">cubic-bézier-二次貝茲曲線</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step-線性定格"><span class="toc-text">step-線性定格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frames-timing-functions"><span class="toc-text">frames-timing-functions</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+  </div>
+
+
+    <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1 id="細說-timing-function"><a class="header-anchor" href="#細說-timing-function">¶</a>細說 Timing function</h1>
+<p>動畫並不是只是讓元素在畫面動起來，若可以符合觀賞者的直覺與物理特性相同的動畫行為，可以達到更好的效果。</p>
+<p>Timing function 提供元素在畫面上變化的控制方式，可以在畫面變化的同時，實現符合動畫的基本法則<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</p>
+<h2 id="讀函數圖"><a class="header-anchor" href="#讀函數圖">¶</a>讀函數圖</h2>
+<p><img src="https://i.imgur.com/L1piHHs.png" alt=""></p>
+<p>水平軸: 資料t, 輸入的時間百分比<br>
+垂直軸: 資料x, 輸出的位置</p>
+<p>步驟:</p>
+<ol>
+<li>在 t(水平軸)，先等距的畫出一些點(t0~t10)，代表「渡過固定的時間變化量」。(幾個隨意，重點是等距)</li>
+<li>從 x(垂直軸)上的點到函數曲線 (curve) 之間，畫出垂直線，在函數曲線上的點稱為「c0~c10」 。</li>
+<li>將每個 c 點到 x (垂直軸)，畫出水平線，可以得到許多在垂直軸上的點(x0~x10)，代表「出現在畫面上的距離變化量」</li>
+</ol>
+<p>從垂直軸上的點，可以看得出</p>
+<ul>
+<li>點很疏，就是速度快(過了相同的時間，距離變化大)。</li>
+<li>點很密，就是速度慢(過了相同的時間，距離不太變化)。</li>
+</ul>
+<p>而 timing function 在定義上，必須是數學的 Pure function <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</p>
+<p>定義域是[0, 1]的實數，值域是[-∞, +∞]的實數。</p>
+<p>函數本身，即是輸入與輸出的對應關係</p>
+<blockquote>
+<p>Pure function 意指相同的輸入，永遠會得到相同的輸出，而且沒有任何顯著的副作用。</p>
+</blockquote>
+<h2 id="linear-線性函數"><a class="header-anchor" href="#linear-線性函數">¶</a>linear 線性函數</h2>
+<p>使用時，設定值為 <code>linear</code><br>
+輸入等於輸出的一種對應關係。</p>
+<p>在數學上，可用零階貝茲曲線表示。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<h2 id="cubic-bézier-二次貝茲曲線"><a class="header-anchor" href="#cubic-bézier-二次貝茲曲線">¶</a>Cubic Bézier 二次貝茲曲線</h2>
+<p>二階貝茲曲線<sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3]</a></sup>，利用兩個控制點，決定一個曲線。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/d/db/B%C3%A9zier_3_big.gif" alt=""></p>
+<p>有興趣的人可以到 <a href="http://cubic-bezier.com/" target="_blank" rel="noopener">cubic-bezier.com</a> 來拉一下，玩玩看。<br>
+但是這個工具有它的極限，但是用 Chrome 的開發者工具 keyin，沒有極限。</p>
+<p><img src="https://i.imgur.com/OfGJFrS.png" alt=""><br>
+<img src="https://i.imgur.com/C0rm439.png" alt=""></p>
+<p>使用時，設定值為 <code>cubic-bezier(P1x, P1y, P2x, P2y)</code> <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<p>特例 (在 CSS 中有列舉出來，可以接直使用)</p>
+<ul>
+<li><code>ease</code> = <code>cubic-bezier(0.25, 0.1, 0.25, 1)</code>.</li>
+<li><code>ease-in</code> = <code>cubic-bezier(0.42, 0, 1, 1)</code>.</li>
+<li><code>ease-out</code> = <code>cubic-bezier(0, 0, 0.58, 1)</code>.</li>
+<li><code>ease-in-out</code> = <code>cubic-bezier(0.42, 0, 0.58, 1)</code>.</li>
+</ul>
+<p><img src="https://i.imgur.com/DeeTDXc.png" alt=""></p>
+<h2 id="step-線性定格"><a class="header-anchor" href="#step-線性定格">¶</a>Step 線性定格</h2>
+<p>線性定格(亂翻譯的，若有知道正確中譯者，麻煩在留言告訴我，感謝)</p>
+<p>值入值: steps 數字 和 step position</p>
+<ul>
+<li>steps: 非零正整數</li>
+<li>position: <code>start</code> 或 <code>end</code></li>
+</ul>
+<p>step position 的意思</p>
+<ol>
+<li>「第一步切換下一步的時機」，換句話說，第一步是 <code>start</code> 就下一步，還是 <code>end</code> 才下一步。</li>
+<li><code>start</code> 定義域的整數無條件進位成值域， <code>end</code> 定義域的整數無條件捨去成值域。</li>
+</ol>
+<p>將輸入值的時間，切割成幾個間隔，平均分佈顯示的每個間隔的位置</p>
+<p><img src="https://i.imgur.com/13XVSja.png" alt=""></p>
+<p>舉例</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">steps</span>(1, <span class="selector-tag">start</span>);</div><div class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">steps</span>(1, <span class="selector-tag">end</span>);</div><div class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">steps</span>(3, <span class="selector-tag">start</span>);</div><div class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">steps</span>(3, <span class="selector-tag">end</span>);</div></pre></td></tr></table></figure>
+<p>特例 (在 CSS 中有列舉出來，可以接直使用)</p>
+<ul>
+<li><code>step-start</code> = <code>steps(1, start)</code></li>
+<li><code>step-middle</code> Chrome 給的特例值 (試都沒有什麼作用)</li>
+<li><code>step-end</code> = <code>steps(1, end)</code></li>
+</ul>
+<h2 id="frames-timing-functions"><a class="header-anchor" href="#frames-timing-functions">¶</a>Frames timing functions</h2>
+<p>Chrome &amp; Firefox 怎麼試都不行，還是附上語法，也許有一天會動。</p>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">frames(大於1的正整數)</div></pre></td></tr></table></figure>
+<p>例子</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">transition-timing-function</span>: <span class="selector-tag">frames</span>(3);</div></pre></td></tr></table></figure>
+<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://zh.wikipedia.org/wiki/%E5%8B%95%E7%95%AB%E7%9A%8412%E9%A0%85%E5%9F%BA%E6%9C%AC%E6%B3%95%E5%89%87" target="_blank" rel="noopener"> 動畫的12項基本法則 - wiki</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch3.html" target="_blank" rel="noopener"> 第 3 章：Pure Function－單純的幸福</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve" target="_blank" rel="noopener">Bézier curve - wiki</a> <a href="#fnref3" class="footnote-backref">↩</a> <a href="#fnref3:1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://drafts.csswg.org/css-timing/" target="_blank" rel="noopener"> CSS Timing Functions Level 1</a> <a href="#fnref4" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+
+    
+    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+    </div>
+  </section>
+  
+    <section class='ArticleMeta'>
+      <div>
+        發表於&nbsp;
+        <time datetime="2018-01-01T23:53:59.000Z" itemprop="datePublished">
+              2018-01-02
+            </time>
+      </div>
+      
+        <div>
+          tags:
+          
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Transition/">Transition</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
+  </li>
+
+
+        </div>
+        
+    </section>
+    
+      
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-01-iron-man-2018/iron-man-2018-day22/">前端新手村 Transition</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/12-24-iron-man-2018/iron-man-2018-day14/">前端新手村 CSS Selector 的 Combinators</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-07-iron-man-2018/iron-man-2018-day28/">前端新手村 Animations (上)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-06-iron-man-2018/iron-man-2018-day27/">前端新手村 Animations (前傳)</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-05-iron-man-2018/iron-man-2018-day26/">前端新手村 @import 開心的結構化 CSS</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/12-14-iron-man-2018/iron-man-2018-day4/">前端新手村CSS 的單位</a><div class="related-posts-item-abstract">
+「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
+
+¶前言
+網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端</div></li></ul>
+        </section>
+        <section>
+          <div id="disqus_thread"></div>
+        </section>
+        
+
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>
