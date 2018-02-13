@@ -97,6 +97,165 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/01-13-heroku-node-mvp/">node.js 的 Hello world 在 heroku</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-01-13T04:26:22.000Z" itemprop="datePublished">
+    2018-01-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/heroku/">heroku</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/npm/">npm</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/工具使用/">工具使用</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <h1 id="node-js-的-hello-world-在-heroku"><a class="header-anchor" href="#node-js-的-hello-world-在-heroku">¶</a>node.js 的 Hello world 在 heroku</h1>
+<h1 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h1>
+<p>因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。<br>
+所以，特別寫了一篇 <s>比 heroku 清楚</s> 的從零開始教學。</p>
+<h2 id="寫給誰"><a class="header-anchor" href="#寫給誰">¶</a>寫給誰</h2>
+<p>已安裝 node.js 並且想把它佈署到網路空間</p>
+<ul>
+<li>後端程式
+<ul>
+<li>使用 <a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a></li>
+<li>不使用 <a href="http://expressjs.com/zh-tw/" target="_blank" rel="noopener">express</a> 框架</li>
+</ul>
+</li>
+<li>用 <a href="www.heroku.com">heroku</a> 空間</li>
+</ul>
+<h1 id="開始囉"><a class="header-anchor" href="#開始囉">¶</a>開始囉</h1>
+<p>依文章的標題「node.js 的 Hello world 在 heroku」<br>
+可以拆成兩大部份</p>
+<ol>
+<li>node.js 的 Hello world</li>
+<li>在 heroku</li>
+</ol>
+<h2 id="先做-node-js-的-hello-world"><a class="header-anchor" href="#先做-node-js-的-hello-world">¶</a>先做 node.js 的 Hello world</h2>
+<p>到 node 官網，找 doc ，選任一版本，點擊文件裡的 <a href="https://nodejs.org/docs/latest-v7.x/api/synopsis.html" target="_blank" rel="noopener">Usage &amp; Example</a></p>
+<p>此例是使用 Node.js v7.10.1 Documentation 的程式碼</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> hostname = <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> port = <span class="number">3000</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.statusCode = <span class="number">200</span>;</div><div class="line">  res.setHeader(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>);</div><div class="line">  res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.listen(port, hostname, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server running at http://<span class="subst">$&#123;hostname&#125;</span>:<span class="subst">$&#123;port&#125;</span>/`</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>新增一個檔案 (ex: index.js) ，再將程式碼 貼上 → 存檔。</p>
+<p>到該目錄下執行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ls</div><div class="line">index.js</div><div class="line"><span class="meta">$</span> node index.js</div><div class="line">Server running at http://127.0.0.1:3000/</div></pre></td></tr></table></figure>
+<p>打開瀏覽器，網址輸入 <code>http://127.0.0.1:3000/</code><br>
+看見 <code>Hello World</code> 的字眼就算這一步成功了</p>
+<h2 id="在-heroku"><a class="header-anchor" href="#在-heroku">¶</a>在 heroku</h2>
+<p>到這，可是「正片開始」<br>
+首先，我們要了解，光是上傳一個 <code>index.js</code> 的話，heroku 是不知道要怎麼執行它。</p>
+<h3 id="修改程式碼"><a class="header-anchor" href="#修改程式碼">¶</a>修改程式碼</h3>
+<p>對於 port 的設定，必須要這樣執行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PORT = process.env.PORT || <span class="number">5000</span>;</div><div class="line"><span class="comment">//...</span></div><div class="line">server.listen(PORT);</div></pre></td></tr></table></figure>
+<p>不像是版本的問題。<br>
+測試下來，線上版本是 8.9.4 但是若使用預設的程式碼依然無法利執行。</p>
+<h3 id="決定上傳-heroku-的途徑"><a class="header-anchor" href="#決定上傳-heroku-的途徑">¶</a>決定上傳 heroku 的途徑</h3>
+<p>這裡就比較多 heroku 的注意事項了。</p>
+<h4 id="1-本機-repository-上傳-heroku"><a class="header-anchor" href="#1-本機-repository-上傳-heroku">¶</a>1. 本機 repository 上傳 heroku</h4>
+<p>如果你是私有專案，要安裝 heroku-cli</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> brew install heroku/brew/heroku</div></pre></td></tr></table></figure>
+<p>學一下它怎麼<a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app" target="_blank" rel="noopener">初始化並上傳程式碼到 heroku</a></p>
+<h4 id="2-github-repository-上傳-heroku"><a class="header-anchor" href="#2-github-repository-上傳-heroku">¶</a>2. Github repository 上傳 heroku</h4>
+<p>如果要透過 Github 傳到 heroku。<br>
+就在 heroku 的服務中，新增 app<br>
+在 app 裡面找 Deploy</p>
+<p>這裡選 Github</p>
+<p><img src="https://i.imgur.com/TRfSpJ2.png" alt=""></p>
+<p>並且指定你要傳過來的 repository 和 branch</p>
+<p>heroku 提供的佈署方式很靈活，算是滿方便的。</p>
+<ol>
+<li>自動佈署的開關
+<ul>
+<li>是否要等 CI 正確再自動部署到 heroku</li>
+</ul>
+</li>
+<li>手動佈署的觸發按鈕</li>
+</ol>
+<h3 id="設定-heroku-啟動-node-js"><a class="header-anchor" href="#設定-heroku-啟動-node-js">¶</a>設定 heroku 啟動 node.js</h3>
+<h4 id="heroku-預設的啟動指令"><a class="header-anchor" href="#heroku-預設的啟動指令">¶</a>heroku 預設的啟動指令</h4>
+<p>在 Web 介面 Overview 上，可看到這個東西</p>
+<p><img src="https://i.imgur.com/rkbEtG0.png" alt=""></p>
+<p>它就是預設的啟動指令。</p>
+<p>heroku 預設 node.js 會使用 <code>npm start</code> ，所以預設使用這樣的指令啟動你的專案。</p>
+<h3 id="初始化-npm"><a class="header-anchor" href="#初始化-npm">¶</a>初始化 npm</h3>
+<p>在專案目錄下執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm init</div></pre></td></tr></table></figure>
+<p>會出現 <code>package.json</code></p>
+<blockquote>
+<p>如果要指定 <code>node.js</code> 或 <code>npm</code> 的版本，要在這時候加上去。</p>
+</blockquote>
+<p>打開 <code>package.json</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">  "start": "node index.js", //加入這一行</div><div class="line">  "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>測試一下啟動指令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm start</div></pre></td></tr></table></figure>
+<p>一樣打開瀏覽器，網址輸入 <a href="http://127.0.0.1:3000/" target="_blank" rel="noopener">http://127.0.0.1:3000/</a><br>
+看見 Hello World 的字眼就算 <code>npm</code> 的初始就算成功了</p>
+<p>不過，也可以手動設定</p>
+<p>也就是說，也可以不安裝 <code>npm</code> 改預設啟動指令，也可以用 <code>node index.js</code> 來啟動程式</p>
+<h3 id="手動設定-heroku-的啟動指令"><a class="header-anchor" href="#手動設定-heroku-的啟動指令">¶</a>手動設定 heroku 的啟動指令</h3>
+<p>在 <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile" target="_blank" rel="noopener">node.js 快速啟動教學</a> 中，有介紹 Procfile 檔案。</p>
+<p>它就是 heroku 預設會讀的檔案，若你不設定，空間會提供一個預設檔，內容就是預設指令。</p>
+<div class="danger">
+<p>若你要設定，這是付費功能。</p>
+</div>
+<p>不過，線上就可以修改了</p>
+<h3 id="最後加上-env-檔"><a class="header-anchor" href="#最後加上-env-檔">¶</a>最後加上 .env 檔</h3>
+<p>參考自 <a href="https://github.com/heroku/node-js-getting-started" target="_blank" rel="noopener">node-js-getting-started</a> 這個可執行的專案。</p>
+<p>它有一個 .env 檔。<br>
+而且在佈署時，缺此檔，會有 WARNING</p>
+<p>而檔案內容就一行，(依 key=value 的格式)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line">TIMES=2</div></pre></td></tr></table></figure>
+<h2 id="這樣-應該就成功了"><a class="header-anchor" href="#這樣-應該就成功了">¶</a>這樣，應該就成功了</h2>
+<p>上傳之後，在瀏覽器看到</p>
+<p><img src="https://i.imgur.com/S4xxZj2.png" alt=""></p>
+<p>就很開心了。</p>
+<p>不用為了上傳 heroku 而必須學 express 這樣奇怪的決策順序。</p>
+<p>有幾個地方要知道，會幫助在這過程找到錯誤的線索。</p>
+<h3 id="看佈署-log"><a class="header-anchor" href="#看佈署-log">¶</a>看佈署 log</h3>
+<p><img src="https://i.imgur.com/nmgO4yo.png" alt=""></p>
+<h3 id="看執行-log"><a class="header-anchor" href="#看執行-log">¶</a>看執行 log</h3>
+<p><img src="https://i.imgur.com/IPajyxD.png" alt=""></p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2018/01-09-iron-man-2018/iron-man-2018-day30/">前端新手村 系列目錄</a>
         </h1>
       
@@ -1311,280 +1470,6 @@ transition 還有一個「隨時可以中斷」的特性。若在 running transi
 <li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2017/WD-css-transitions-1-20171130/#animatable-css" target="_blank" rel="noopener">9.1. Properties from CSS - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
 <li id="fn2" class="footnote-item"><p><a href="https://drafts.csswg.org/css-timing/" target="_blank" rel="noopener">CSS Timing Functions Level 1</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
-</li>
-</ol>
-</section>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2017/12-31-iron-man-2018/iron-man-2018-day21/">前端新手村 Media Query</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-12-30T23:18:37.000Z" itemprop="datePublished">
-    2017-12-31
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Media-Query/">Media Query</a> }
-  </li>
-
-
-  </ul>
-  
-  
-  / 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/categories/前端新手村/">前端新手村</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <blockquote>
-<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
-</blockquote>
-<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
-<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
-<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="media-query"><a class="header-anchor" href="#media-query">¶</a>Media Query<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
-<p>它是由一個 <a href="https://www.w3.org/TR/CSS22/media.html#media-groups" target="_blank" rel="noopener">media type</a> <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>  和 media feature 的條件式組成。條件式的結果，不是 true 就是 false</p>
-<h2 id="有幾個地方可以使用"><a class="header-anchor" href="#有幾個地方可以使用">¶</a>有幾個地方可以使用</h2>
-<p>在 html 插入 css 時加條件。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></div></pre></td></tr></table></figure>
-<p>在 css 插入 css 時加條件。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">import</span> url(color.css) screen and (color);</div></pre></td></tr></table></figure>
-<p>在使用 css 時加條件</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> all and (min-width:<span class="number">500px</span>) &#123; ... &#125;</div><div class="line">@<span class="keyword">media</span> (min-width:<span class="number">500px</span>) &#123; ... &#125;</div></pre></td></tr></table></figure>
-<p>media type 是 <code>all</code> 時，可以省略。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> (orientation: portrait) &#123; ... &#125;</div><div class="line">@<span class="keyword">media</span> all and (orientation: portrait) &#123; ... &#125;</div></pre></td></tr></table></figure>
-<p><code>@media</code> 的條件可以用 <code>,</code> 和 <code>and</code> 組成。</p>
-<ul>
-<li><code>,</code> 和 CSS 的 Combinators 一樣</li>
-<li><code>and</code> 就是「邏輯 AND」</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> screen and (color), projection and (color) &#123; ... &#125;</div></pre></td></tr></table></figure>
-<p>如果沒有給 media type 和 條件式，結果 always true</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> all &#123; ... &#125;</div><div class="line">@<span class="keyword">media</span> &#123; ... &#125;</div></pre></td></tr></table></figure>
-<p>在寫 media query 一開始，可以用 <code>not</code> 做「邏輯 NOT」</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"not screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> not screen and (color) &#123; ... &#125;</div></pre></td></tr></table></figure>
-<p>對於比較舊的 CSS 可以用 <code>only</code> <s>給 IE</s></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"only screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></div></pre></td></tr></table></figure>
-<p>可以在 <code>@import</code> 時加上 media query 的條件</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">import</span> url(example.css) screen and (color), projection and (color);</div></pre></td></tr></table></figure>
-<p>使用時要注意 media type 和 media feature 的單位是否匹配，若不適用會使結果變成 false</p>
-<h2 id="media-features"><a class="header-anchor" href="#media-features">¶</a>Media features</h2>
-<p>雖然 media query 在撰寫時，有一種在寫 css 的感覺。但是們還是有一些要注意的地方</p>
-<ul>
-<li>的內容是「輸出設備的要求」。</li>
-<li>不可以使用 <code>&gt;</code> 和 <code>&lt;</code> 取代常出現的 <code>max-</code> 和 <code>min-</code> 前綴字。</li>
-<li>常使用 <code>max-</code> 和 <code>min-</code> 前綴字的屬性也可以單獨使用</li>
-<li>可以只有屬性，也可以指定值(0可以不給單位)</li>
-<li>使用 <code>max-</code> 和 <code>min-</code> 的前綴字時，一定要給值才有作用</li>
-<li>不可以使用 <code>calc()</code>，只能在一個屬性後面給一個簡單的值。</li>
-</ul>
-<h3 id="有這些-media-features-可以使用"><a class="header-anchor" href="#有這些-media-features-可以使用">¶</a>有這些 Media features 可以使用</h3>
-<table>
-<thead>
-<tr>
-<th>media feature</th>
-<th>value</th>
-<th>Applies to which media type</th>
-<th>prefixes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>width</td>
-<td>length</td>
-<td>visual, tactile</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>height</td>
-<td>length</td>
-<td>visual, tactile</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>device-width</td>
-<td>length</td>
-<td>visual, tactile</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>device-height</td>
-<td>length</td>
-<td>visual, tactile</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>orientation</td>
-<td>“portrait”, “landscape”</td>
-<td>bitmap</td>
-<td>no</td>
-</tr>
-<tr>
-<td>aspect-ratio</td>
-<td>“ratio”</td>
-<td>bitmap</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>device-aspect-ratio</td>
-<td>“ratio”</td>
-<td>bitmap</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>color</td>
-<td>integer</td>
-<td>visual</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>color-index</td>
-<td>integer</td>
-<td>visual</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>monochrome</td>
-<td>integer</td>
-<td>visual</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>resolution</td>
-<td>resolution</td>
-<td>bitmap</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>scan</td>
-<td>“progressive”, “interlace”</td>
-<td>tv</td>
-<td>no</td>
-</tr>
-<tr>
-<td>grid</td>
-<td>integer(1 or 0)</td>
-<td>visual, tactile</td>
-<td>no</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>width/height: 可視區大小</li>
-<li>device-width/device-height: 單一螢幕大小</li>
-<li>orientation: 橫向/縱向顯示
-<ul>
-<li><code>@media all and (orientation:portrait) { … }</code></li>
-<li><code>@media all and (orientation:landscape) { … }</code></li>
-</ul>
-</li>
-<li>aspect-ratio: width/height 視窗寬高比</li>
-<li>device-aspect-ratio: device-width/device-height 設備寬高比
-<ul>
-<li><code>@media screen and (device-aspect-ratio: 16/9) { … }</code></li>
-<li><code>@media screen and (device-aspect-ratio: 32/18) { … }</code></li>
-<li><code>@media screen and (device-aspect-ratio: 1280/720) { … }</code></li>
-<li><code>@media screen and (device-aspect-ratio: 2560/1440) { … }</code></li>
-</ul>
-</li>
-<li>color: 在彩色顯示器中，值代表每個顏色至少幾bit
-<ul>
-<li><code>@media all and (color) { … }</code><br>
-<code>@media all and (min-color: 1) { … }</code></li>
-</ul>
-</li>
-<li>color-index: 自訂調色盤(顏色查表法)大小
-<ul>
-<li><code>@media all and (color-index) { … }</code></li>
-<li><code>@media all and (min-color-index: 1) { … }</code></li>
-<li><code>&lt;?xml-stylesheet media=&quot;all and (min-color-index: 256)&quot; href=&quot;http://www.example.com/…&quot; ?&gt;</code></li>
-</ul>
-</li>
-<li>monochrome: 在單色顯示器中，值代表每個像素幾bit
-<ul>
-<li><code>@media all and (monochrome) { … }</code> 黑白畫面</li>
-<li><code>@media all and (min-monochrome: 2) { … }</code></li>
-<li><code>&lt;link rel=&quot;stylesheet&quot; media=&quot;print and (color)&quot; href=&quot;http://…&quot; /&gt;</code><br>
-<code>&lt;link rel=&quot;stylesheet&quot; media=&quot;print and (monochrome)&quot; href=&quot;http://…&quot; /&gt;</code></li>
-</ul>
-</li>
-<li>resolution: pixel 密度(dpi 或 dpcm)
-<ul>
-<li><code>@media print and (min-resolution: 300dpi) { … }</code></li>
-<li><code>@media print and (min-resolution: 118dpcm) { … }</code></li>
-</ul>
-</li>
-<li>scan: 顯示器掃描線的方式，其值等同於 1080i 和 1080p 的字尾英文意思
-<ul>
-<li><code>@media tv and (scan: progressive) { … }</code></li>
-</ul>
-</li>
-<li>grid: 像是 terminal 或者是固定寬度字體的顯示方式
-<ul>
-<li><code>@media handheld and (grid) and (max-width: 15em) { … }</code></li>
-<li><code>@media handheld and (grid) and (device-max-height: 7em) { … }</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="常見的應用"><a class="header-anchor" href="#常見的應用">¶</a>常見的應用</h2>
-<p><strong>例子1: RWD (以 bootstrap 為例)</strong></p>
-<p>桌機版<br>
-<img src="https://i.imgur.com/YvyIxrR.png" alt=""></p>
-<p>手機版<br>
-<img src="https://i.imgur.com/mbadJh9.png" alt=""></p>
-<p>來看看這個 `.col-sm-8</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.col</span>,  <span class="comment">/*...*/</span><span class="selector-class">.col-sm-8</span> <span class="comment">/*...*/</span> &#123;</div><div class="line">    <span class="attribute">position</span>: relative;</div><div class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    <span class="attribute">min-height</span>: <span class="number">1px</span>;</div><div class="line">    <span class="attribute">padding-right</span>: <span class="number">15px</span>;</div><div class="line">    <span class="attribute">padding-left</span>: <span class="number">15px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> (min-width: <span class="number">576px</span>) &#123;</div><div class="line"><span class="comment">/* ... */</span></div><div class="line">    <span class="selector-class">.col-sm-8</span> &#123;</div><div class="line">        <span class="attribute">-webkit-box-flex</span>: <span class="number">0</span>;</div><div class="line">        <span class="attribute">-ms-flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">66.666667%</span>;</div><div class="line">        <span class="attribute">flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">66.666667%</span>;</div><div class="line">        <span class="attribute">max-width</span>: <span class="number">66.666667%</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">/* ... */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><code>.col-sm-8</code> 預設是寬度 100%，<br>
-是在任何的 media 中可視區 576px 以上，最大寬度改成 66.666667%;</p>
-<p><strong>例子2: 瀏覽與預覽列印</strong></p>
-<p>找一個頁面來看看</p>
-<p><img src="https://i.imgur.com/6eR8ghR.png" alt=""></p>
-<p>進入列印的預覽</p>
-<p><img src="https://i.imgur.com/ckySHZ8.png" alt=""></p>
-<p>發現不同了嗎？</p>
-<p>來看看 CSS 發現側邊欄 <code>#mw-navigation</code> 和其它的 selector 在列印中有設定隱藏。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line">@<span class="keyword">media</span> print &#123;</div><div class="line">    <span class="selector-class">.noprint</span>,</div><div class="line">    <span class="selector-class">.catlinks</span>,</div><div class="line">    <span class="selector-class">.magnify</span>,</div><div class="line">    <span class="selector-class">.mw-cite-backlink</span>,</div><div class="line">    <span class="selector-class">.mw-jump</span>,</div><div class="line">    <span class="selector-class">.mw-editsection</span>,</div><div class="line">    <span class="selector-class">.mw-editsection-like</span>,</div><div class="line">    <span class="selector-class">.mw-hidden-catlinks</span>,</div><div class="line">    <span class="selector-class">.mw-indicators</span>,</div><div class="line">    <span class="selector-class">.mw-redirectedfrom</span>,</div><div class="line">    <span class="selector-class">.patrollink</span>,</div><div class="line">    <span class="selector-class">.usermessage</span>,</div><div class="line">    <span class="selector-id">#column-one</span>,</div><div class="line">    <span class="selector-id">#footer-places</span>,</div><div class="line">    <span class="selector-id">#jump-to-nav</span>,</div><div class="line">    <span class="selector-id">#mw-navigation</span>,</div><div class="line">    <span class="selector-id">#siteNotice</span>,</div><div class="line">    <span class="selector-id">#f-poweredbyico</span>,</div><div class="line">    <span class="selector-id">#f-copyrightico</span>,</div><div class="line">    <span class="selector-tag">li</span><span class="selector-id">#about</span>,</div><div class="line">    <span class="selector-tag">li</span><span class="selector-id">#disclaimer</span>,</div><div class="line">    <span class="selector-tag">li</span><span class="selector-id">#mobileview</span>,</div><div class="line">    <span class="selector-tag">li</span><span class="selector-id">#privacy</span> &#123;</div><div class="line">        <span class="attribute">display</span>: none</div><div class="line">    &#125;</div><div class="line">    <span class="comment">/* ... */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/" target="_blank" rel="noopener">Media Queries - w3.org</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/media.html#media-groups" target="_blank" rel="noopener">7 Media types - w3.org</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>

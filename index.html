@@ -97,6 +97,103 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/02-13-js-module-require-exports/">Node 的 module.exports 和 require</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-02-13T05:54:16.000Z" itemprop="datePublished">
+    2018-02-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/js/">js</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/技術心得/">技術心得</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <h1 id="node-的-module-exports-和-require"><a class="header-anchor" href="#node-的-module-exports-和-require">¶</a>Node 的 module.exports 和 require</h1>
+<p>今天，想要用 JavaScript 試做一個 module 被主程式呼叫</p>
+<ul>
+<li><code>module.js</code></li>
+<li><code>main.js</code></li>
+</ul>
+<h2 id="最基本的使用方式"><a class="header-anchor" href="#最基本的使用方式">¶</a>最基本的使用方式</h2>
+<p>最基本，要先知道，怎麼樣呼叫過來，會是一個 scop，是一個 object 嗎？</p>
+<h3 id="module-js"><a class="header-anchor" href="#module-js">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"hello"</span>;</div><div class="line"><span class="built_in">module</span>.exports = text;</div></pre></td></tr></table></figure>
+<h3 id="main-js"><a class="header-anchor" href="#main-js">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(example)</div></pre></td></tr></table></figure>
+<h3 id="顯示結果"><a class="header-anchor" href="#顯示結果">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div><div class="line">hello</div></pre></td></tr></table></figure>
+<p>在此，可以得到一些初步的收獲</p>
+<ol>
+<li><code>module.exports</code> 像是 <code>return</code></li>
+<li><code>require</code> 像是 call function ，等號左值會得到 return 值，無論它是什麼。</li>
+</ol>
+<p>在此，在主程式得到的結果是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = text; <span class="comment">// var text = "hello";</span></div></pre></td></tr></table></figure>
+<p><code>require('./example.js')</code> 是載入一個檔案。回傳一個…它要回傳的東西。<br>
+也就是說，一個檔案，可以視為一個模組，讓這個模組回傳「該回傳的東西」</p>
+<p>如果 <code>module.exports = object</code> 就是回傳 object<br>
+如果 <code>module.exports = function</code> 就是回傳 function<br>
+如果 <code>module.exports = string</code> 就是回傳 string<br>
+…(沒完沒了)</p>
+<h2 id="做一些像物件的東西"><a class="header-anchor" href="#做一些像物件的東西">¶</a>做一些像物件的東西</h2>
+<h3 id="module-js-v2"><a class="header-anchor" href="#module-js-v2">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"hello"</span>;</div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    getText: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> text;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="main-js-v2"><a class="header-anchor" href="#main-js-v2">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(example.getText());</div><div class="line"><span class="built_in">console</span>.log(example.text);</div></pre></td></tr></table></figure>
+<h3 id="顯示結果-v2"><a class="header-anchor" href="#顯示結果-v2">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node index.js</div><div class="line">hello</div><div class="line">undefined</div></pre></td></tr></table></figure>
+<p>上述推論的沒有錯。<br>
+可以將 module 當作閉包。</p>
+<h2 id="小心遇到的雷點"><a class="header-anchor" href="#小心遇到的雷點">¶</a>小心遇到的雷點</h2>
+<p>在物件導向語言寫 getter 時要小心回傳值是一個參考(或指標)。<br>
+因為參考(或指標)被修改，會造成物件內容被修改(這不直覺呀!!)，所以危險，要避免。</p>
+<p>在初學 js 寫 object 的時候，也會遇到這一類的問題，在此用一個簡化的方式來說明。</p>
+<h3 id="module-js-v3"><a class="header-anchor" href="#module-js-v3">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = &#123;</div><div class="line">    message: <span class="string">"hello"</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    getText: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> text;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="main-js-v3"><a class="header-anchor" href="#main-js-v3">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="keyword">var</span> text = example.getText();</div><div class="line">text.message = <span class="number">34789</span>;</div><div class="line"><span class="built_in">console</span>.log(example.getText());</div></pre></td></tr></table></figure>
+<h3 id="顯示結果-v3"><a class="header-anchor" href="#顯示結果-v3">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node index.js</div><div class="line">&#123; message: 34789 &#125;</div></pre></td></tr></table></figure>
+<p>因為 js 的 call by sharing，會讓 module 回傳物件的內容被改掉了。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2018/02-12-iron-man-2018/iron-man-know-browser-for-f2e/">給前端的「來做個網路瀏覽器吧！」導讀</a>
         </h1>
       
@@ -405,11 +502,11 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/canvas/">canvas</a> }
+  { <a href="/tags/js/">js</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/js/">js</a> }
+  { <a href="/tags/canvas/">canvas</a> }
   </li>
 
 
@@ -1092,165 +1189,6 @@
 <div class="demo-fonts cwTeXFangSong">仿宋體</div>
 <div class="demo-fonts Noto">黑體</div>
 <div class="demo-fonts cwTeXMing">明體</div>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2018/01-13-heroku-node-mvp/">node.js 的 Hello world 在 heroku</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2018-01-13T04:26:22.000Z" itemprop="datePublished">
-    2018-01-13
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/nodejs/">nodejs</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/heroku/">heroku</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/npm/">npm</a> }
-  </li>
-
-
-  </ul>
-  
-  
-  / 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/categories/工具使用/">工具使用</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <h1 id="node-js-的-hello-world-在-heroku"><a class="header-anchor" href="#node-js-的-hello-world-在-heroku">¶</a>node.js 的 Hello world 在 heroku</h1>
-<h1 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h1>
-<p>因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。<br>
-所以，特別寫了一篇 <s>比 heroku 清楚</s> 的從零開始教學。</p>
-<h2 id="寫給誰"><a class="header-anchor" href="#寫給誰">¶</a>寫給誰</h2>
-<p>已安裝 node.js 並且想把它佈署到網路空間</p>
-<ul>
-<li>後端程式
-<ul>
-<li>使用 <a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a></li>
-<li>不使用 <a href="http://expressjs.com/zh-tw/" target="_blank" rel="noopener">express</a> 框架</li>
-</ul>
-</li>
-<li>用 <a href="www.heroku.com">heroku</a> 空間</li>
-</ul>
-<h1 id="開始囉"><a class="header-anchor" href="#開始囉">¶</a>開始囉</h1>
-<p>依文章的標題「node.js 的 Hello world 在 heroku」<br>
-可以拆成兩大部份</p>
-<ol>
-<li>node.js 的 Hello world</li>
-<li>在 heroku</li>
-</ol>
-<h2 id="先做-node-js-的-hello-world"><a class="header-anchor" href="#先做-node-js-的-hello-world">¶</a>先做 node.js 的 Hello world</h2>
-<p>到 node 官網，找 doc ，選任一版本，點擊文件裡的 <a href="https://nodejs.org/docs/latest-v7.x/api/synopsis.html" target="_blank" rel="noopener">Usage &amp; Example</a></p>
-<p>此例是使用 Node.js v7.10.1 Documentation 的程式碼</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> hostname = <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> port = <span class="number">3000</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.statusCode = <span class="number">200</span>;</div><div class="line">  res.setHeader(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>);</div><div class="line">  res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.listen(port, hostname, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server running at http://<span class="subst">$&#123;hostname&#125;</span>:<span class="subst">$&#123;port&#125;</span>/`</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>新增一個檔案 (ex: index.js) ，再將程式碼 貼上 → 存檔。</p>
-<p>到該目錄下執行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ls</div><div class="line">index.js</div><div class="line"><span class="meta">$</span> node index.js</div><div class="line">Server running at http://127.0.0.1:3000/</div></pre></td></tr></table></figure>
-<p>打開瀏覽器，網址輸入 <code>http://127.0.0.1:3000/</code><br>
-看見 <code>Hello World</code> 的字眼就算這一步成功了</p>
-<h2 id="在-heroku"><a class="header-anchor" href="#在-heroku">¶</a>在 heroku</h2>
-<p>到這，可是「正片開始」<br>
-首先，我們要了解，光是上傳一個 <code>index.js</code> 的話，heroku 是不知道要怎麼執行它。</p>
-<h3 id="修改程式碼"><a class="header-anchor" href="#修改程式碼">¶</a>修改程式碼</h3>
-<p>對於 port 的設定，必須要這樣執行</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PORT = process.env.PORT || <span class="number">5000</span>;</div><div class="line"><span class="comment">//...</span></div><div class="line">server.listen(PORT);</div></pre></td></tr></table></figure>
-<p>不像是版本的問題。<br>
-測試下來，線上版本是 8.9.4 但是若使用預設的程式碼依然無法利執行。</p>
-<h3 id="決定上傳-heroku-的途徑"><a class="header-anchor" href="#決定上傳-heroku-的途徑">¶</a>決定上傳 heroku 的途徑</h3>
-<p>這裡就比較多 heroku 的注意事項了。</p>
-<h4 id="1-本機-repository-上傳-heroku"><a class="header-anchor" href="#1-本機-repository-上傳-heroku">¶</a>1. 本機 repository 上傳 heroku</h4>
-<p>如果你是私有專案，要安裝 heroku-cli</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> brew install heroku/brew/heroku</div></pre></td></tr></table></figure>
-<p>學一下它怎麼<a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app" target="_blank" rel="noopener">初始化並上傳程式碼到 heroku</a></p>
-<h4 id="2-github-repository-上傳-heroku"><a class="header-anchor" href="#2-github-repository-上傳-heroku">¶</a>2. Github repository 上傳 heroku</h4>
-<p>如果要透過 Github 傳到 heroku。<br>
-就在 heroku 的服務中，新增 app<br>
-在 app 裡面找 Deploy</p>
-<p>這裡選 Github</p>
-<p><img src="https://i.imgur.com/TRfSpJ2.png" alt=""></p>
-<p>並且指定你要傳過來的 repository 和 branch</p>
-<p>heroku 提供的佈署方式很靈活，算是滿方便的。</p>
-<ol>
-<li>自動佈署的開關
-<ul>
-<li>是否要等 CI 正確再自動部署到 heroku</li>
-</ul>
-</li>
-<li>手動佈署的觸發按鈕</li>
-</ol>
-<h3 id="設定-heroku-啟動-node-js"><a class="header-anchor" href="#設定-heroku-啟動-node-js">¶</a>設定 heroku 啟動 node.js</h3>
-<h4 id="heroku-預設的啟動指令"><a class="header-anchor" href="#heroku-預設的啟動指令">¶</a>heroku 預設的啟動指令</h4>
-<p>在 Web 介面 Overview 上，可看到這個東西</p>
-<p><img src="https://i.imgur.com/rkbEtG0.png" alt=""></p>
-<p>它就是預設的啟動指令。</p>
-<p>heroku 預設 node.js 會使用 <code>npm start</code> ，所以預設使用這樣的指令啟動你的專案。</p>
-<h3 id="初始化-npm"><a class="header-anchor" href="#初始化-npm">¶</a>初始化 npm</h3>
-<p>在專案目錄下執行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm init</div></pre></td></tr></table></figure>
-<p>會出現 <code>package.json</code></p>
-<blockquote>
-<p>如果要指定 <code>node.js</code> 或 <code>npm</code> 的版本，要在這時候加上去。</p>
-</blockquote>
-<p>打開 <code>package.json</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">  "start": "node index.js", //加入這一行</div><div class="line">  "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
-<p>測試一下啟動指令</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm start</div></pre></td></tr></table></figure>
-<p>一樣打開瀏覽器，網址輸入 <a href="http://127.0.0.1:3000/" target="_blank" rel="noopener">http://127.0.0.1:3000/</a><br>
-看見 Hello World 的字眼就算 <code>npm</code> 的初始就算成功了</p>
-<p>不過，也可以手動設定</p>
-<p>也就是說，也可以不安裝 <code>npm</code> 改預設啟動指令，也可以用 <code>node index.js</code> 來啟動程式</p>
-<h3 id="手動設定-heroku-的啟動指令"><a class="header-anchor" href="#手動設定-heroku-的啟動指令">¶</a>手動設定 heroku 的啟動指令</h3>
-<p>在 <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile" target="_blank" rel="noopener">node.js 快速啟動教學</a> 中，有介紹 Procfile 檔案。</p>
-<p>它就是 heroku 預設會讀的檔案，若你不設定，空間會提供一個預設檔，內容就是預設指令。</p>
-<div class="danger">
-<p>若你要設定，這是付費功能。</p>
-</div>
-<p>不過，線上就可以修改了</p>
-<h3 id="最後加上-env-檔"><a class="header-anchor" href="#最後加上-env-檔">¶</a>最後加上 .env 檔</h3>
-<p>參考自 <a href="https://github.com/heroku/node-js-getting-started" target="_blank" rel="noopener">node-js-getting-started</a> 這個可執行的專案。</p>
-<p>它有一個 .env 檔。<br>
-而且在佈署時，缺此檔，會有 WARNING</p>
-<p>而檔案內容就一行，(依 key=value 的格式)</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line">TIMES=2</div></pre></td></tr></table></figure>
-<h2 id="這樣-應該就成功了"><a class="header-anchor" href="#這樣-應該就成功了">¶</a>這樣，應該就成功了</h2>
-<p>上傳之後，在瀏覽器看到</p>
-<p><img src="https://i.imgur.com/S4xxZj2.png" alt=""></p>
-<p>就很開心了。</p>
-<p>不用為了上傳 heroku 而必須學 express 這樣奇怪的決策順序。</p>
-<p>有幾個地方要知道，會幫助在這過程找到錯誤的線索。</p>
-<h3 id="看佈署-log"><a class="header-anchor" href="#看佈署-log">¶</a>看佈署 log</h3>
-<p><img src="https://i.imgur.com/nmgO4yo.png" alt=""></p>
-<h3 id="看執行-log"><a class="header-anchor" href="#看執行-log">¶</a>看執行 log</h3>
-<p><img src="https://i.imgur.com/IPajyxD.png" alt=""></p>
 
       
     </div>

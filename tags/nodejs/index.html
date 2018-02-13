@@ -101,6 +101,103 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/02-13-js-module-require-exports/">Node 的 module.exports 和 require</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-02-13T05:54:16.000Z" itemprop="datePublished">
+    2018-02-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/js/">js</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/技術心得/">技術心得</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <h1 id="node-的-module-exports-和-require"><a class="header-anchor" href="#node-的-module-exports-和-require">¶</a>Node 的 module.exports 和 require</h1>
+<p>今天，想要用 JavaScript 試做一個 module 被主程式呼叫</p>
+<ul>
+<li><code>module.js</code></li>
+<li><code>main.js</code></li>
+</ul>
+<h2 id="最基本的使用方式"><a class="header-anchor" href="#最基本的使用方式">¶</a>最基本的使用方式</h2>
+<p>最基本，要先知道，怎麼樣呼叫過來，會是一個 scop，是一個 object 嗎？</p>
+<h3 id="module-js"><a class="header-anchor" href="#module-js">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"hello"</span>;</div><div class="line"><span class="built_in">module</span>.exports = text;</div></pre></td></tr></table></figure>
+<h3 id="main-js"><a class="header-anchor" href="#main-js">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(example)</div></pre></td></tr></table></figure>
+<h3 id="顯示結果"><a class="header-anchor" href="#顯示結果">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node app.js</div><div class="line">hello</div></pre></td></tr></table></figure>
+<p>在此，可以得到一些初步的收獲</p>
+<ol>
+<li><code>module.exports</code> 像是 <code>return</code></li>
+<li><code>require</code> 像是 call function ，等號左值會得到 return 值，無論它是什麼。</li>
+</ol>
+<p>在此，在主程式得到的結果是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = text; <span class="comment">// var text = "hello";</span></div></pre></td></tr></table></figure>
+<p><code>require('./example.js')</code> 是載入一個檔案。回傳一個…它要回傳的東西。<br>
+也就是說，一個檔案，可以視為一個模組，讓這個模組回傳「該回傳的東西」</p>
+<p>如果 <code>module.exports = object</code> 就是回傳 object<br>
+如果 <code>module.exports = function</code> 就是回傳 function<br>
+如果 <code>module.exports = string</code> 就是回傳 string<br>
+…(沒完沒了)</p>
+<h2 id="做一些像物件的東西"><a class="header-anchor" href="#做一些像物件的東西">¶</a>做一些像物件的東西</h2>
+<h3 id="module-js-v2"><a class="header-anchor" href="#module-js-v2">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"hello"</span>;</div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    getText: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> text;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="main-js-v2"><a class="header-anchor" href="#main-js-v2">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(example.getText());</div><div class="line"><span class="built_in">console</span>.log(example.text);</div></pre></td></tr></table></figure>
+<h3 id="顯示結果-v2"><a class="header-anchor" href="#顯示結果-v2">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node index.js</div><div class="line">hello</div><div class="line">undefined</div></pre></td></tr></table></figure>
+<p>上述推論的沒有錯。<br>
+可以將 module 當作閉包。</p>
+<h2 id="小心遇到的雷點"><a class="header-anchor" href="#小心遇到的雷點">¶</a>小心遇到的雷點</h2>
+<p>在物件導向語言寫 getter 時要小心回傳值是一個參考(或指標)。<br>
+因為參考(或指標)被修改，會造成物件內容被修改(這不直覺呀!!)，所以危險，要避免。</p>
+<p>在初學 js 寫 object 的時候，也會遇到這一類的問題，在此用一個簡化的方式來說明。</p>
+<h3 id="module-js-v3"><a class="header-anchor" href="#module-js-v3">¶</a>module.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = &#123;</div><div class="line">    message: <span class="string">"hello"</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    getText: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> text;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="main-js-v3"><a class="header-anchor" href="#main-js-v3">¶</a>main.js</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> example = <span class="built_in">require</span>(<span class="string">'./example.js'</span>);</div><div class="line"><span class="keyword">var</span> text = example.getText();</div><div class="line">text.message = <span class="number">34789</span>;</div><div class="line"><span class="built_in">console</span>.log(example.getText());</div></pre></td></tr></table></figure>
+<h3 id="顯示結果-v3"><a class="header-anchor" href="#顯示結果-v3">¶</a>顯示結果</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> node index.js</div><div class="line">&#123; message: 34789 &#125;</div></pre></td></tr></table></figure>
+<p>因為 js 的 call by sharing，會讓 module 回傳物件的內容被改掉了。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2018/01-13-heroku-node-mvp/">node.js 的 Hello world 在 heroku</a>
         </h1>
       
