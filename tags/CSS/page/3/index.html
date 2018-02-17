@@ -107,6 +107,244 @@
     <header class="title">
       
         <h1>
+          <a href="/2017/12-17-iron-man-2018/iron-man-2018-day7/">前端新手村 垂直排列 與 Box Model</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-16T23:38:51.000Z" itemprop="datePublished">
+    2017-12-17
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Box-Model/">Box Model</a> }
+  </li>
+
+
+  </ul>
+  
+  
+  / 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/categories/前端新手村/">前端新手村</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <!-- <div>
+      
+        <blockquote>
+<p>「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻</p>
+</blockquote>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
+<p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
+<h1 id="垂直排列-與-box-model"><a class="header-anchor" href="#垂直排列-與-box-model">¶</a>垂直排列 與 Box Model</h1>
+<p>在網頁中，每個元素都可以用 Box Model 理解，不過<code>inline</code>元素，有些屬性不見得有反應，<code>block</code> 元素都可以正常演示。<br>
+Box Model 在垂直排列時，會遇到一些特殊的問題，這裡也會說明它的觀念。</p>
+<p>從 Chrome 的開發者模式，就可以馬上看見每一個參數目前的設定。</p>
+<p><img src="https://i.imgur.com/GwrhbfO.png" alt=""></p>
+<p>圖中，橘色、黃色、綠色、藍色分別如下</p>
+<ul>
+<li>白色: position (與 Box Model 無關)</li>
+<li>橘色: margin</li>
+<li>黃色: border</li>
+<li>綠色: padding</li>
+<li>藍色: content(資料本身)</li>
+</ul>
+<p>在此，的定義描述，我喜歡使用 w3school 的英文描述，下面會引用其原文，並且再用中文解釋一次。</p>
+<h2 id="共同的特性"><a class="header-anchor" href="#共同的特性">¶</a>共同的特性</h2>
+<p><strong>語法</strong></p>
+<p>上下左右，可以一行設定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">屬性: 上下左右</div><div class="line">屬性: 上下 左右</div><div class="line">屬性: 上 左右 下</div><div class="line">屬性: 上 右 下 左</div></pre></td></tr></table></figure>
+<p>上下左右，也可以指定設定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">屬性-top: 上</div><div class="line">屬性-right: 右</div><div class="line">屬性-bottom: 下</div><div class="line">屬性-left: 左</div></pre></td></tr></table></figure>
+<p><strong>值</strong></p>
+<p>Box Model 的三種屬性可以使用的值，各有不同。<br>
+要注意的有幾個重點</p>
+<ol>
+<li>設定固定值(數字): 可使用的「定義域」<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li>
+<li>設定百分比: 100%是誰。</li>
+<li>設定預設選項(就是英文的選項): 有哪些選擇。</li>
+</ol>
+<p>要注意: 並不是每個選項都有預設選項。</p>
+<h1 id="margin"><a class="header-anchor" href="#margin">¶</a><code>margin</code></h1>
+<p>一般稱為外距。</p>
+<blockquote>
+<p><strong>CSS Margins</strong><br>
+The CSS margin properties are used to create pace around elements, outside of any defined borders.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+</blockquote>
+<p>位置: elemnts 週邊的留白空間，圍繞在 borders。</p>
+<p><strong>語法</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">margin: 值;</div></pre></td></tr></table></figure>
+<h3 id="值"><a class="header-anchor" href="#值">¶</a>值</h3>
+<ul>
+<li>固定值: R(實數)<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> + 任意的 CSS 單位</li>
+<li>百分比: 相對於容器的寬!!!</li>
+<li>預設選項:
+<ul>
+<li>auto: 剩下的空間，由「設定auto的地方」平均分配。<br>
+(若同時有 <code>left</code> 和 <code>right</code> 則一人一半，若只有 <code>left</code> 或只有 <code>right</code> 則剩下的都給他)</li>
+</ul>
+</li>
+</ul>
+<h3 id="常踩的雷-margin-collapse"><a class="header-anchor" href="#常踩的雷-margin-collapse">¶</a>常踩的雷: margin collapse</h3>
+<p><strong>問題描述</strong></p>
+<p>讓我們準備一段可以重現問題的 code</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">body</span> &#123;</div><div class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid red;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.blue</span> &#123;</div><div class="line"> <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(0, 0, 255, .6);</div><div class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid blue;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.green</span> &#123;</div><div class="line"> <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(0, 255, 0, .6);</div><div class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid green;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"green"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is 1<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>This is 2<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"blue"</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is 3<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>This is 4<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>這渲染結果，為什麼讓 This is 2 和 This is 3 中間出現空白？</p>
+<p><strong>渲染結果</strong></p>
+<p><img src="https://i.imgur.com/jSIgBSO.png" alt=""></p>
+<p><strong>問題定義</strong></p>
+<p>這個問題稱為「margin collapse」<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<p>如果用開發者模式，並且選看看 This is 3 。</p>
+<p><img src="https://i.imgur.com/1kOHEBf.png" alt=""></p>
+<p>可以發現， This is 3 的 <code>margin</code> 與  This is 4 的重疊。<br>
+如果自己有練習的朋友，可以再看一下  This is 1 和  This is 4 的 <code>margin</code> 超過 <code>div</code> 容器了。</p>
+<p><strong>Margin Collapse</strong></p>
+<p>這問題，只會發生在垂直方向</p>
+<ul>
+<li>元素與元素: 兩元素間的垂直排列，若有 <code>margin-top</code> 與 <code>margin-bottom</code> 相遇，兩元素間的距離，是兩個 <code>margin</code> 取大值。</li>
+<li>容器與元素:
+<ol>
+<li>容器的第一個元素的 <code>margin-top</code> 和最後一個元素的 <code>margin-bottom</code> 會成為容器對外的 <code>margin-top</code> 或 <code>margin-bottom</code>。</li>
+<li>容器本身有 <code>marign</code> 又遇上元素的 <code>margin</code> 跑出來的時候，兩者之間取大值，當作容器的 <code>margin</code> 。</li>
+</ol>
+</li>
+</ul>
+<p>簡單的處理方式，在容器的 CSS 加上<code>overflow: auto;</code>。</p>
+<p>真正的原因，是要觸發 block formatting context 讓容器與週邊的元素以 block 排版的方式呈現。</p>
+<blockquote>
+<p>以下是我猜的<br>
+block 元素本身預設 <code>overflow: visible;</code> 而它沒有觸發 block formatting context <sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup><br>
+如此猜測的原因，只是結果回推，將 <code>overflow: visible;</code> 設定上去，並無任何改變。但是並無任何更有力的根據。</p>
+</blockquote>
+<h2 id="border"><a class="header-anchor" href="#border">¶</a><code>border</code><sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></h2>
+<p>一般稱為邊框。</p>
+<p><code>border</code> 最常寫的，是縮寫語法，但是縮寫縮了哪些東西呢？<code>border</code>有三樣。</p>
+<ol>
+<li><code>border-style</code>: 預設選項</li>
+<li><code>border-width</code>: R+</li>
+<li><code>border-color</code>: 色碼 | 顏色名稱 | 色域表示法</li>
+</ol>
+<p><strong>縮寫語法</strong></p>
+<p>順序可以換，可缺 <code>color</code> 、 <code>width</code>，瀏覽器會補上預設值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">border: width style color;</div></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#000</span>;</div></pre></td></tr></table></figure>
+<h3 id="常踩的雷"><a class="header-anchor" href="#常踩的雷">¶</a>常踩的雷</h3>
+<p><strong>顯示border(很隱性!!)</strong></p>
+<p><code>border</code> 若不設定 style ，就等於沒有設定 border!!<br>
+也就是說，若不顯示 <code>border</code> 並不是 <code>border-width: 0;</code> 這只是恰巧沒有顯示，並不是 <code>border</code> 不存在</p>
+<p><code>border: 0px solid #000;</code> 有邊框，大小等於0，瀏覽器要渲染。<br>
+<code>border: 1px none #000;</code> 無邊框，不用渲染。</p>
+<p><strong>切版時習慣將元素加上框線</strong></p>
+<p>切版時，初學都會想知道元素目前的大小與位置。直覺上會加入 <code>border</code> ，但有時拿掉 <code>border</code> 時畫面卻跑版了。不知道為什麼。<br>
+這有兩個常見的原因:</p>
+<ol>
+<li><code>border</code> 佔空間，會擠到其它元素</li>
+<li><code>border</code> 會阻止 Margin Collapse 的發生</li>
+</ol>
+<p>好的 debug 框線的做法有兩種:</p>
+<ol>
+<li>用 <code>outline</code> (用法和 <code>border</code> 一模一樣)</li>
+<li>用 <code>box-shadow</code></li>
+</ol>
+<h3 id="border-style"><a class="header-anchor" href="#border-style">¶</a><code>border-style</code></h3>
+<p>先來 <a href="https://www.w3schools.com/css/css_border.asp" target="_blank" rel="noopener">w3school 的演示</a>，看看 <code>border-style</code> 的值 有幾種預設選項<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup></p>
+<p><img src="https://i.imgur.com/JUnkIqU.png" alt=""></p>
+<h3 id="border-width"><a class="header-anchor" href="#border-width">¶</a><code>border-width</code></h3>
+<p>若 <code>border-width: 0;</code> 瀏覽器還是會渲染。</p>
+<p>值有兩種設定方式</p>
+<ul>
+<li>數字: R+(正實數)<sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3]</a></sup> + CSS 單位 (ex: <code>3px</code>)</li>
+<li>使用預設選項
+<ul>
+<li>thick 厚的</li>
+<li>medium 中的</li>
+<li>thin 細的</li>
+</ul>
+</li>
+</ul>
+<h3 id="border-color"><a class="header-anchor" href="#border-color">¶</a><code>border-color</code></h3>
+<p>顏色值有三種表示方式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">色碼 | 顏色名稱 | 色域表示法</div></pre></td></tr></table></figure>
+<p>介紹下去有點離題，所以先看<a href="https://www.w3schools.com/css/css_colors.asp" target="_blank" rel="noopener">這篇</a>頂著先。不同的表示法並不會產生新的顏色，只是表示法不同，控制的維度不同。每個表示法的每個顏色，都是可以互相轉換的(應該啦)。</p>
+<h2 id="padding"><a class="header-anchor" href="#padding">¶</a><code>padding</code></h2>
+<p>一般稱為內距。</p>
+<blockquote>
+<p><strong>CSS Padding</strong></p>
+<p>The CSS padding properties are used to generate space around an element’s content, inside of any defined borders.</p>
+</blockquote>
+<p>位置: 圍繞在 element 內容週圍的留白區域。</p>
+<p><strong>語法</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">padding: 值;</div></pre></td></tr></table></figure>
+<h3 id="值-v2"><a class="header-anchor" href="#值-v2">¶</a>值</h3>
+<ul>
+<li>固定值: R+(正實數)<sup class="footnote-ref"><a href="#fn3" id="fnref3:2">[3]</a></sup> + 任意的 CSS 單位</li>
+<li>百分比: 相對於容器的寬!!!</li>
+<li>預設選項: (無)</li>
+</ul>
+<h3 id="不常想到的妙招"><a class="header-anchor" href="#不常想到的妙招">¶</a>不常想到的妙招</h3>
+<p>用 <code>padding-top</code> 或 <code>padding-bottom</code> 創造正方形。</p>
+<p>寬度等同於容器寬，又不確定其高，可以直接給 <code>padding-top: 100%;</code> 就會是正方形了。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.box</span> &#123;</div><div class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line"> <span class="attribute">outline</span>: solid;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.box</span> &gt; <span class="selector-tag">div</span> &#123;</div><div class="line"> <span class="attribute">padding-top</span>: <span class="number">100%</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;box&quot;&gt;</div><div class="line"> &lt;div&gt;&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h2 id="content"><a class="header-anchor" href="#content">¶</a><code>content</code></h2>
+<p>由內容撐開的高寬。<br>
+一開始以為 <code>inline</code> 元素就是 <code>content</code> 結果我錯了。並不是這樣的。<br>
+明天會來細說水平排列</p>
+<h2 id="總結"><a class="header-anchor" href="#總結">¶</a>總結</h2>
+<p><code>content</code> 和 <code>border</code> 有顯示形式， <code>margin</code> 和 <code>padding</code> 是一種圍繞在它們週圍的留白空間。</p>
+<h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://zh.wikipedia.org/wiki/%E5%AE%9A%E4%B9%89%E5%9F%9F" target="_blank" rel="noopener">定義域 - wiki</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3schools.com/css/css_margin.asp" target="_blank" rel="noopener">CSS Margins</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://zh.wikipedia.org/wiki/%E5%AE%9E%E6%95%B0" target="_blank" rel="noopener">實數 - wiki</a> <a href="#fnref3" class="footnote-backref">↩</a> <a href="#fnref3:1" class="footnote-backref">↩</a> <a href="#fnref3:2" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/box.html" target="_blank" rel="noopener">8 Box model - w3.org</a> <a href="#fnref4" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/visuren.html#block-formatting" target="_blank" rel="noopener">9 Visual formatting model - w3.org</a> <a href="#fnref5" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a href="https://www.w3.org/TR/css-backgrounds-3/#borders" target="_blank" rel="noopener">4. Borders - w3.org</a> <a href="#fnref6" class="footnote-backref">↩</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><a href="https://www.w3schools.com/css/css_border.asp" target="_blank" rel="noopener">CSS Border Properties</a> <a href="#fnref7" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
+
+      
+    </div> -->
+</article>
+
+            </li>
+        
+            <li>
+                <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2017/12-16-iron-man-2018/iron-man-2018-day6/">前端新手村 Block 和 Inline 排版</a>
         </h1>
       
