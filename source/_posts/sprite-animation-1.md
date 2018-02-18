@@ -86,6 +86,8 @@ categories: 技術心得
     })
 
     document.addEventListener('keydown', (e) => {
-        e.preventDefault();
+        if (e.keyCode > 36 && e.keyCode < 41) {
+            e.preventDefault();
+        }
     })
 </script>

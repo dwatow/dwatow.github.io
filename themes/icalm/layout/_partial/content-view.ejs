@@ -1,48 +1,44 @@
 <article class='ContentView'>
-  <header class='PageTitle'>
-    <h1><%= post.title %></h1>
-  </header>
-
-  <section>
+    <header class='PageTitle'>
+        <h1><%= post.title %></h1>
+    </header>
+    <section>
     <%- partial('toc') %>
     <%- post.content %>
-
     <% if (post.type === 'tags') { %>
         <ul class="Tags">
-        <%- partial('_partial/tag-list', { className: 'tag-list', tags: site.tags }) %>
+            <%- partial('_partial/tag-list', { className: 'tag-list', tags: site.tags }) %>
         </ul>
     <% } else if (post.type === 'categories') { %>
         <ul class="Tags">
-          <%- partial('_partial/tag-list', { className: 'tag-list', tags: site.categories }) %>
+            <%- partial('_partial/tag-list', { className: 'tag-list', tags: site.categories }) %>
         </ul>
     <% } %>
-    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
-    </div>
-  </section>
-  <% if (!isPage) { %>
-    <section class='ArticleMeta'>
-      <div>
-        發表於&nbsp;
-        <time datetime="<%= date_xml(post.date) %>" itemprop="datePublished">
+    </section>
+    <% if (!isPage) { %>
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="<%= date_xml(post.date) %>" itemprop="datePublished">
               <%= date(post.date, config.date_format) %>
             </time>
-      </div>
-      <% if (post.tags && post.tags.length){ %>
-        <div>
-          tags:
-          <%- partial('tag-list', { className: 'meta-text', tags: post.tags }) %>
-        </div>
-        <% } %>
-    </section>
-    <% } %>
-      <% if (theme.disqus.enable === 'all' || (theme.disqus.enable === 'post' && !isPage)) { %>
-        <section id="list_related_posts">
-            <h2>同系列文章還有...</h2>
-            <%- list_related_posts({maxCount: 6, orderBy: 'date', generateAbstract: true, abstractLength: 84}) %>
-        </section>
-        <section>
-          <div id="disqus_thread"></div>
+            </div>
+            <% if (post.tags && post.tags.length){ %>
+                <div>
+                    tags:
+                    <%- partial('tag-list', { className: 'meta-text', tags: post.tags }) %>
+                </div>
+            <% } %>
         </section>
         <% } %>
-
+        <% if (theme.disqus.enable === 'all' || (theme.disqus.enable === 'post' && !isPage)) { %>
+            <section id="list_related_posts">
+                <h2>同系列文章還有...</h2>
+                <%- list_related_posts({maxCount: 6, orderBy: 'date', generateAbstract: true, abstractLength: 84}) %>
+            </section>
+            <section>
+                <div id="disqus_thread"></div>
+            </section>
+        <% } %>
 </article>

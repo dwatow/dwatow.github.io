@@ -34,7 +34,7 @@ categories: '工具使用'
 
 適用: 設計師
 
-[![](http://facebook.design/public/images/messenger_header.png)](https://developers.facebook.com/docs/messenger-platform/design-resources/design-kit)
+[![](https://facebook.design/public/images/messenger_header.png)](https://developers.facebook.com/docs/messenger-platform/design-resources/design-kit)
 ^(點擊圖到下載頁面)^
 
 # 傳送訊息

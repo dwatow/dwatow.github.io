@@ -1,22 +1,45 @@
-<ul class="Index">
-  <% if (page.tag || page.category) { %>
-    <header class='PageTitle'>
-        <h1>{ <%= page.tag || page.category %> }</h1>
-    </header>
-  <% } %>
-  <% page.posts.each(function (post) { %>
-    <li>
-      <%- partial('_partial/list-view', { post: post }) %>
-    </li>
-  <% }) %>
-</ul>
-<% if (page.total > 1){ %>
-  <section id="nav-wrapper">
-    <nav id="page-nav">
-      <%- paginator({
-        prev_text: "« prev",
-        next_text: "next »"
-      }) %>
-    </nav>
-  </section>
+
+<% if (typeof isIndex !== typeof true) {%>
+    <ul class="Index">
+        <header class='PageTitle'>
+            <h1>最新文章</h1>
+        </header>
+        <% page.posts.each(function (post, index) { %>
+            <% if (!index) { %>
+                <li>
+                    <%- partial('_partial/content-view', { post: post, isPage: true }) %>
+                </li>
+            <% } %>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <ul class="Index">
+        <% if (page.tag || page.category) { %>
+            <header class='PageTitle'>
+                <h1>{ <%= page.tag || page.category %> }</h1>
+            </header>
+        <% } %>
+        <% page.posts.each(function (post) { %>
+            <li>
+                <%- partial('_partial/list-view', { post: post }) %>
+            </li>
+        <% }) %>
+    </ul>
+    <% if (page.total > 1 ){ %>
+        <section id="nav-wrapper">
+            <nav id="page-nav">
+                <%- paginator({
+                prev_text: "« prev",
+                next_text: "next »"
+              }) %>
+            </nav>
+        </section>
+    <% } %>
+<% } %>
+<% if (typeof isIndex !== typeof true) {%>
+    <h2>標籤雲</h2>
+    <%- tagcloud({
+        max_font: 48,
+        min_font: 14
+    }) %>
 <% } %>

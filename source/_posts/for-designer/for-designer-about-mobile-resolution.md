@@ -7,6 +7,8 @@ categories: '給平面設計師的'
 
 # 給平面設計師的: 如何取得手機版面的設計解析度
 
+![](https://i.imgur.com/UvHo0gv.png)
+
 在一般的情況，同一個型的手機可以得到兩種顯示規格。
 下面來介紹一下兩種規格取得的方式以及它們的差異。
 
@@ -20,16 +22,17 @@ categories: '給平面設計師的'
 
 ### Chrome模擬器
 1. 開啟瀏覽器
-2. 打開「開發者模式」
+2. 打開「開發者模式」(滑鼠右鍵: 選「檢查」)
 3. [啟動「手機模擬器」](https://developers.google.com/web/tools/chrome-devtools/device-mode/)
 4. [找出你要模擬的手機型號](https://developers.google.com/web/tools/chrome-devtools/device-mode/emulate-mobile-viewports)
 5. 即可在旁邊看見它的解析度
 
+![](https://i.imgur.com/PVP60Wv.png)
+
 :::info
 官網規格 iPhone6: 1334×750
-Chrome模擬器規格 iPhone6: 667×375
+Chrome模擬器規格 iPhone6: 667×375 ~(為了方便和官方技術規格對照，長邊放前面)~
 :::
-
 
 ## 渲染解析度、物理解析度^[[浅谈iOS屏幕适配](http://liumh.com/2015/10/21/ios-image-related-matching/)]
 
