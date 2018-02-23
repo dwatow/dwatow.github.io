@@ -1,21 +1,21 @@
 ---
 title: Node.js 的 module.exports 和 require
 date: 2018-02-13 13:54:16
-tags: ['js', 'nodejs']
+tags: ['javascript', 'nodejs']
 categories: 技術心得
 ---
 # Node.js 的 module.exports 和 require
 
 今天想要在 JavaScript 做一個 module 被主程式呼叫
 
-- `module.js`
+- `example.js`
 - `main.js`
 
 ## 最基本的使用方式
 
-最基本，要先知道，怎麼樣呼叫過來，會是一個 scop，是一個 object 嗎？
+最基本，要先知道「 `module` 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？
 
-### module.js
+### example.js
 
 ```javascript=
 var text = "hello";
@@ -32,7 +32,7 @@ console.log(example)
 ### 顯示結果
 
 ```shell=
-$ node app.js
+$ node main.js
 hello
 ```
 
@@ -42,7 +42,7 @@ hello
 
 在此，在主程式得到的結果是
 ```javascript=
-var example = text; // var text = "hello";
+var module = text; // var text = "hello";
 ```
 
 `require('./example.js')` 是載入一個檔案。回傳一個...它要回傳的東西。
@@ -55,7 +55,7 @@ var example = text; // var text = "hello";
 
 ## 做一些像物件的東西
 
-### module.js
+### example.js
 
 ```javascript=
 var text = "hello";
@@ -77,13 +77,13 @@ console.log(example.text);
 ### 顯示結果
 
 ```shell=
-$ node index.js
+$ node main.js
 hello
 undefined
 ```
 
 上述推論的沒有錯。
-可以將 module 當作閉包。
+可以將 `module` 當作閉包。
 
 
 ## 小心遇到的雷點
@@ -93,7 +93,7 @@ undefined
 
 在初學 js 寫 object 的時候，也會遇到這一類的問題，在此用一個簡化的方式來說明。
 
-### module.js
+### example.js
 
 ```javascript=
 var text = {
@@ -119,11 +119,11 @@ console.log(example.getText());
 ### 顯示結果
 
 ```shell=
-$ node index.js
+$ node main.js
 { message: 34789 }
 ```
 
-因為 js 的 call by sharing，會讓 module 回傳物件的內容被改掉了。
+因為 js 的 call by sharing，會讓 `module` 回傳物件的內容被改掉了。
 
 ### 想要避免的話
 

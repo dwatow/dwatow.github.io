@@ -1,7 +1,7 @@
 ---
 title: 給想學 JS 的前端「JS 生態系及週邊工具整理」導讀
 date: 2018-02-17 19:33:25
-tags: ['2018鐵人賽', 'js', 'nodejs', 'vuejs', 'webpack', 'vue-cli']
+tags: ['2018鐵人賽', 'javascript', 'nodejs', 'vuejs', 'webpack', 'vue-cli']
 categories: '讀技術書'
 ---
 # 給想學 JS 的前端「JS 生態系及週邊工具整理」導讀

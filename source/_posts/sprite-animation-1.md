@@ -1,7 +1,7 @@
 ---
 title: 互動動畫練習
 date: 2018-01-31 16:39:00
-tags: ['canvas', 'js']
+tags: ['canvas', 'javascript']
 categories: 技術心得
 ---
 
