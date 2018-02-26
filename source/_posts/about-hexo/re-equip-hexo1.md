@@ -50,11 +50,11 @@ $ npm un hexo-renderer-marked --save
 $ npm i hexo-renderer-markdown-it --save
 ```
 
-`hexo-renderer-markdown-it` 是用來初始化 `markdown-it` 並且給外掛參數的地方。有興趣可以看看它的[程式碼](https:// github .com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js)。
+`hexo-renderer-markdown-it` 是用來初始化 `markdown-it` 並且給外掛參數的地方。有興趣可以看看它的[程式碼](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js)。
 
 ### 安裝渲染器外掛
 
-參考 hackmd 的 [`markdown-it` 初始化程式碼](https:// github .com/ hackmd io/ hackmd /blob/master/public/js/extra.js)可以看得出它安裝了什麼外掛。
+參考 hackmd 的 [`markdown-it` 初始化程式碼](https://github.com/hackmdio/hackmd/blob/master/public/js/extra.js)可以看得出它安裝了什麼外掛。
 
 在此直接給安裝指令
 
@@ -85,7 +85,7 @@ $ npm install markdown-it-checkbox --save
 在 hexo的 `_config.yml` 檔最下面加上這一段
 ```yaml
 # Markdown-it config
-## Docs: https:// github .com/celsomiranda/hexo-renderer-markdown-it/wiki
+## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki
 markdown:
   render:
     html: true # Doesn't escape HTML content so the tags will appear as html.
@@ -128,7 +128,7 @@ markdown:
 
 ### 確認 hexo-renderer-markdown-it
 
-在此要確定  [`hexo-renderer-markdown-it/blob/master/lib/renderer.js`](https:// github .com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js) 的內容是否允許外掛程式進行第二個參數的設定
+在此要確定  [`hexo-renderer-markdown-it/blob/master/lib/renderer.js`](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js) 的內容是否允許外掛程式進行第二個參數的設定
 
 ```javascript=11
 if (opt.plugins) {
@@ -156,7 +156,7 @@ hexo 是透過 config 檔案去設定整個部落格是否都一致要有行號�
 
 相當漂亮。
 
-所以，在此修改`lib/plugins/filter/before_post_render/backtick_code_block.js`，並提交了[一份pull request](https:// github .com/hexojs/hexo/pull/2612/files)
+所以，在此修改`lib/plugins/filter/before_post_render/backtick_code_block.js`，並提交了[一份pull request](https://github.com/hexojs/hexo/pull/2612/files)
 
 不過，因為原作者希望使用 config 做設定，所以這一份應該暫時還過不了。
 (還是設定一個 hackmd mode 也許可以XD)
@@ -167,17 +167,17 @@ hexo 是透過 config 檔案去設定整個部落格是否都一致要有行號�
   最開始先是 markdown 轉 html
   有增訂語法，有些會加上額外的 `class="raw"`
 - 第二層: 是靜態轉換，會把一些不需要互動的部分轉換出來
-  有用 jquery
+  有用 jQuery
 - 第三層: 是動態轉換，把需要互動的元素綁定事件
-  有用 jquery
+  有用 jQuery
 
-在 hackmd 的原始碼中，有看見 `ui.area.markdown`，其中[ui物件是這樣](https:// github .com/ hackmd io/ hackmd /blob/master/public/js/lib/editor/ui-elements.js)建出來的，也許就是給第二層或第三層用，使用jQuery的地方。
+在 hackmd 的原始碼中，有看見 `ui.area.markdown`，其中[ui物件是這樣](https://github.com/hackmdio/hackmd/blob/master/public/js/lib/editor/ui-elements.js)建出來的，也許就是給第二層或第三層用，使用jQuery的地方。
 
 ### 也許是進入點的地方
 
 原本想找在 hackmd 中，有沒有markdown-it的渲染呼叫點呢？
 
-就開始找了，終於讓我找到幾個可能的地方，[其中一個地方](https:// github .com/ hackmd io/ hackmd /blob/master/public/js/index.js)如下
+就開始找了，終於讓我找到幾個可能的地方，[其中一個地方](https://github.com/hackmdio/hackmd/blob/master/public/js/index.js)如下
 
 ```javascript=2800
 function updateViewInner () {
@@ -193,7 +193,7 @@ function updateViewInner () {
 ```javascript
   var rendered = md.render(value)
 ```
-和 [hexo-renderer-markdown-it裡](https:// github .com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js) 的這一行好像呀
+和 [hexo-renderer-markdown-it裡](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js) 的這一行好像呀
 ```javascript
   return parser.render(data.text);
 ```
@@ -208,7 +208,7 @@ var value = editor.getValue()
 
 過濾器，也就是語法的後處理器。
 
-前面研究的[「程式碼區塊加行號的參數」](https:// github .com/hexojs/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js)，就是後處理器在進行的。
+前面研究的[「程式碼區塊加行號的參數」](https://github.com/hexojs/hexo/blob/master/lib/plugins/filter/before_post_render/backtick_code_block.js)，就是後處理器在進行的。
 
 ```javascript=
 var util = require('hexo-util');
@@ -238,16 +238,14 @@ var highlight = util.highlight;
 - UML 循序圖[^sequence]
 
 ```shell=
-$ npm install hexo-filter- github -emojis --save
+$ npm install hexo-filter-github-emojis --save
 $ npm install hexo-filter-flowchart --save
 $ npm install hexo-filter-sequence --save
 ```
 
-[^emojis]: [[ github ]hexo-filter- github -emojis](https:// github .com/crimx/hexo-filter- github -emojis)
-
-[^flowchart]: [[ github ]hexo-filter-flowchart](https:// github .com/bubkoo/hexo-filter-flowchart)
-
-[^sequence]: [[ github ]hexo-filter-sequence](https:// github .com/bubkoo/hexo-filter-sequence)
+[^emojis]: [[github]hexo-filter-github-emojis](https://github.com/crimx/hexo-filter-github-emojis)
+[^flowchart]: [[github]hexo-filter-flowchart](https://github.com/bubkoo/hexo-filter-flowchart)
+[^sequence]: [[github]hexo-filter-sequence](https://github.com/bubkoo/hexo-filter-sequence)
 
 ### 設定過濾器
 
@@ -257,7 +255,7 @@ $ npm install hexo-filter-sequence --save
 # github Emojis config
  github Emojis:
   enable: true
-  className: github -emoji
+  className: github-emoji
   unicode: false
   localEmojis:
 flowchart:
