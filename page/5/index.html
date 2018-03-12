@@ -108,16 +108,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-15-iron-man-2018/iron-man-2018-day5/">http://dwatow.github.io/2017/12-15-iron-man-2018/iron-man-2018-day5/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-16-iron-man-2018/iron-man-2018-day6/">http://dwatow.github.io/2017/12-16-iron-man-2018/iron-man-2018-day6/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>前端新手村 CSS 的作用</h1>
+        <h1>前端新手村 Block 和 Inline 排版</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-的作用"><span class="toc-text">css-的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#語法"><span class="toc-text">語法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#術語"><span class="toc-text">術語</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css3-的特色"><span class="toc-text">css3-的特色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vendor-prefix"><span class="toc-text">vendor-prefix</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#瀏覽器比對的方式"><span class="toc-text">瀏覽器比對的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css的-瀏覽器支援度"><span class="toc-text">css的-瀏覽器支援度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#block-和-inline-排版"><span class="toc-text">block-和-inline-排版</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#html-表現形式"><span class="toc-text">html-表現形式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#div-的預設行為"><span class="toc-text">div-的預設行為</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#span"><span class="toc-text">span</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-表現形式"><span class="toc-text">css-表現形式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#排版特性交換-要小心"><span class="toc-text">排版特性交換-要小心</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
   </div>
 
 
@@ -127,90 +127,102 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="css-的作用"><a class="header-anchor" href="#css-的作用">¶</a>CSS 的作用</h1>
-<p>CSS，是「 Cascading Style Sheets 」的縮寫。</p>
-<p>在1996年左右，CSS剛開始被提出來，我自己是在大約1999年才接觸到CSS1，對於一個高中生來說，是很新的東西。在這之前，CSS的功能是做在 HTML attribute上。</p>
+<h1 id="block-和-inline-排版"><a class="header-anchor" href="#block-和-inline-排版">¶</a>Block 和 Inline 排版</h1>
+<p>初學 HTML 開始切版時，先學 <code>div</code> 和 <code>span</code> 這兩個標籤，就可以練習排所有的東西了!!!</p>
+<p>在網頁排版裡，可以粗略的分成兩大系統。</p>
+<ul>
+<li>區塊(Block)元素</li>
+<li>行列(Inline)元素</li>
+</ul>
+<p>這兩種元素，就只是設定「內容的排列環境(formatting context)」。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
+在網頁的排列上</p>
+<p>在 w3c 的文件中，有明確的定義這兩種排列方式，在此節錄一部份相關的內文來看</p>
 <blockquote>
-<p>目的在於，資料歸資料，畫面歸畫面<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p><strong>9.4.1 Block formatting contexts</strong></p>
+<p>In a block formatting context, boxes are laid out one after the other, vertically, beginning at the top of a containing block.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 </blockquote>
-<p>當你覺得，這一段 code 是為了畫面生時，就是使用CSS的時候了。<br>
-也就是說，要讓 CSS 控制「呈現的形式」。</p>
+<blockquote>
+<p><strong>9.4.2 Inline formatting contexts</strong></p>
+<p>In an inline formatting context, boxes are laid out horizontally, one after the other, beginning at the top of a containing block.</p>
+</blockquote>
+<p>這兩段內文，我們會在下面的原始碼中，有更多的體會。</p>
+<h2 id="html-表現形式"><a class="header-anchor" href="#html-表現形式">¶</a>HTML 表現形式</h2>
+<p><code>div</code> 和 <code>span</code> 這兩個元素，就是支援這兩種元素觀念的 HTML 表現形式。</p>
+<p>看個例子</p>
+<blockquote>
+<p>建議<br>
+申請一個 <a href="https://codepen.io/" target="_blank" rel="noopener">code pen</a> 讓你可以隨時做實驗。</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>上面兩種原始碼，可以看出</p>
+<ol>
+<li>無論你的原始碼是橫排還是直排，是不會影響最後呈現的結果。</li>
+<li>div 的內容 由上到下的垂直排列</li>
+<li>span 的內容 由左至右的水平排列</li>
+</ol>
+<h3 id="div-的預設行為"><a class="header-anchor" href="#div-的預設行為">¶</a><code>&lt;div&gt;</code> 的預設行為</h3>
 <ul>
-<li>顯示與否</li>
-<li>排版(直排、橫排、圖繞文)</li>
-<li>字型</li>
-<li>留白、邊框</li>
-<li>頁面圖層</li>
-<li>特效
+<li><code>block</code> 類型元素的代表</li>
+<li>自然排列是直排
 <ul>
-<li>3D</li>
-<li>過場、動畫</li>
-<li>透明、濾鏡</li>
-<li>陰影</li>
+<li><code>div</code> 元素寬與它的容器大小一樣(<code>width: 100%;</code>)。</li>
+<li><code>div</code> 元素高由它的內容撐開。</li>
+</ul>
+</li>
+<li><code>div</code> 本身的作用
+<ul>
+<li>界定區塊尺寸與留白範圍</li>
+<li>賦予執行 <code>block</code> 元素的CSS特性</li>
 </ul>
 </li>
 </ul>
-<p>語法多到你沒想到，他都幫你想好了!!!</p>
-<h2 id="語法"><a class="header-anchor" href="#語法">¶</a>語法</h2>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">Selector</span> &#123;</div><div class="line">    <span class="attribute">Property</span>: Value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="術語"><a class="header-anchor" href="#術語">¶</a>術語</h3>
-<p>新手要知道的是術語，方便和資深的工程師進行溝通(才不會漏學了什麼厲害的技術)</p>
-<p><img src="https://i.imgur.com/8x561cf.png" alt=""></p>
+<p>使用上大多都用在區塊之間的切割，在初次看見設計稿時，腦海的分割畫面行為，大多都可以算是用 <code>div</code> 切割的行為。</p>
+<p>網頁排版大多也是使用 <code>block</code> 區塊，來描述元素之間的關係。</p>
+<h3 id="span"><a class="header-anchor" href="#span">¶</a><code>&lt;span</code>&gt;</h3>
 <ul>
-<li>Selector: 用來決定要對哪個 HTML 進行設定，每個選取器有它自己的 Specificity。</li>
-<li>Property: 這就像查字典一樣，有遇到再來查。之後會介紹一些常用的 Property 在此就不破梗了。</li>
-<li>Value: 隨 Property 的介紹，再來介紹 Value。</li>
-<li>Declaration: Property + Value 。</li>
-<li>Declaration Block: 大括號內的一切。</li>
-<li>Ruleset: Selector + Declaration Block 。</li>
+<li><code>inline</code> 類型元素的代表</li>
+<li>自然排列是橫排
+<ul>
+<li><code>span</code> 元素寬與它的內容撐開，所以可以「水平的一個接著一個」。</li>
+<li><code>span</code> 元素高由它的內容撐開。</li>
 </ul>
-<h2 id="css3-的特色"><a class="header-anchor" href="#css3-的特色">¶</a>CSS3 的特色</h2>
-<p>CSS3 帶來的真是一則以喜，一則以憂呀，對新手來說，隱藏著些許的不友善，但是卻帶來強大的功能。</p>
+</li>
+<li><code>span</code> 本身的作用
+<ul>
+<li>界定內容選取範圍</li>
+<li>賦予執行 <code>inline</code> 元素的CSS特性</li>
+</ul>
+</li>
+</ul>
+<p>使用上，最常搞混的是<code>&lt;img&gt;</code>，其實是一種 <code>inline</code> 元素。</p>
+<h2 id="css-表現形式"><a class="header-anchor" href="#css-表現形式">¶</a>CSS 表現形式</h2>
+<p><code>display</code>屬性中，有兩個值 <code>inline</code> 和 <code>block</code> 。<br>
+發現了嗎？就算你只會 <code>div</code> 也可以透過設定 <code>display: inline</code> 將 <code>div</code> 變成 <code>inline</code> 元素。(但請不要…不要這麼做。)</p>
+<p>看個例子<br>
+承上面的 code，加上 CSS</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">div</span> &#123;</div><div class="line">    <span class="attribute">display</span>: inline;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line">    <span class="attribute">display</span>: block;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="排版特性交換-要小心"><a class="header-anchor" href="#排版特性交換-要小心">¶</a>排版特性交換 (要小心!!!)</h3>
+<p>若你是寫成 HTML 檔，會變這樣</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">media</span>=<span class="string">"screen"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="undefined">        div &#123;</span></div><div class="line"><span class="undefined">            display: inline;</span></div><div class="line"><span class="undefined">        &#125;</span></div><div class="line"><span class="undefined"></span></div><div class="line"><span class="undefined">        span &#123;</span></div><div class="line"><span class="undefined">            display: block;</span></div><div class="line"><span class="undefined">        &#125;</span></div><div class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>div element<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>span element<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>上面兩種原始碼，可以看出</p>
+<ul>
+<li>加上 CSS 之後，兩種元素的排列方式改變(交換)了。</li>
+</ul>
+<p>為什麼不要讓他們屬性交換，原因有兩個</p>
 <ol>
-<li>用<code>,</code>(逗號)隔開，值可以給多組(多重背景、多重陰影、多重 <s>字型</s> )</li>
-<li>有 Vendor Prefix</li>
+<li>每個 HTML 標籤都有預設 CSS 行為，改了一個，還有千千萬萬個。<br>
+不要有「display在手，要怎麼排都有」的 <s>邪</s> 觀念呀!!! &gt;&lt;<br>
+不如在認識每個標籤時，都正確的記得它的用途與英文原文</li>
+<li><code>div</code> 要橫排，要設 <code>inline-block</code> ，內容超過行高就出問題了!!(之後會細談橫排與直排)</li>
 </ol>
-<h3 id="vendor-prefix"><a class="header-anchor" href="#vendor-prefix">¶</a>Vendor Prefix<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h3>
-<p>當你看見 CSS 有加一些特定的前綴</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">-o-</span></div><div class="line"><span class="selector-tag">-moz-</span></div><div class="line"><span class="selector-tag">-ms-</span></div><div class="line"><span class="selector-tag">-webkit-</span></div></pre></td></tr></table></figure>
-<p>看個例子</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">-webkit-border-radius</span>: 5<span class="selector-tag">px</span>;</div><div class="line"><span class="selector-tag">-moz-border-radius</span>: 5<span class="selector-tag">px</span>;</div><div class="line"><span class="selector-tag">border-radius</span>: 5<span class="selector-tag">px</span>;</div></pre></td></tr></table></figure>
-<p>為什麼瀏覽器總是會刪掉幾個？不寫就好了呀!!!<br>
-(寫到這，總算有一點 for 新手的感覺了)</p>
-<p>這種寫法，是一種歷史共業!!!<br>
-當年很新潮的寫法，各家瀏覽器業者先實作，不管標準，之後標準推出，這些若拿掉對不起的是對自家瀏覽器的狂熱開發者(應該啦)。所以各家依然留著這樣的實作內容。</p>
-<p>那要怎麼做呢？</p>
-<p>建議用這樣的原則這麼寫</p>
-<ol>
-<li>把可能支援的瀏覽器都寫出來。</li>
-<li>把標準的寫法，寫在這些 declaration 最下面。</li>
-</ol>
-<p>用意在於，若瀏覽器不支援標準，會自動選一個自己有支援的前綴。<br>
-若有實作標準，還可以吃最後一行標準的 declaration 來覆蓋已支援但有前綴的設定。</p>
-<h2 id="瀏覽器比對的方式"><a class="header-anchor" href="#瀏覽器比對的方式">¶</a>瀏覽器比對的方式</h2>
-<p>瀏覽器為了提高效能，比對選取器的方式，是由右至左。</p>
-<p>看個例子</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</div><div class="line">    <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ol>
-<li>找 HTML 裡是不是有個 HTML 的 class 包含 <code>.nav-link</code>。如果有，再繼續找。</li>
-<li>找 <code>.nav-link</code> 的 tag name 是不是有 <code>a</code>。如果有，再繼續找。</li>
-<li>找 <code>a</code> 的上一層 是不是有 <code>li</code>。如果有，再繼續找。</li>
-<li>(以此類推)</li>
-<li>一直找到 找 HTML 裡是不是有個 HTML 的 id 是 <code>#nav-global</code>。</li>
-</ol>
-<p>以保持瀏覽器高效能。<br>
-也就是說，短一點，瀏覽器可以跑快一點。</p>
-<h2 id="css的-瀏覽器支援度"><a class="header-anchor" href="#css的-瀏覽器支援度">¶</a>CSS的 瀏覽器支援度</h2>
-<p>w3school會在每個語法教學頁，附上語法在各瀏覽器支援程度的訊息。<br>
-若遇到想查詢的時候，也可以直接上 <a href="https://caniuse.com/" target="_blank" rel="noopener">Can I Use</a> 查詢。<br>
-查詢到的資訊，我覺得還是謹供參考，自己實驗之後才確實是如此。</p>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://zh.wikipedia.org/wiki/%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8" target="_blank" rel="noopener">階層式樣式表 - wiki</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
+<li id="fn1" class="footnote-item"><p><a href="http://w3help.org/zh-cn/kb/010/" target="_blank" rel="noopener">KB010: 常規流( Normal flow ) - w3help</a> <a href="#fnref1" class="footnote-backref">↩</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://developer.mozilla.org/zh-TW/docs/Glossary/Vendor_Prefix" target="_blank" rel="noopener">Vendor Prefix - MDN</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/visuren.html#normal-flow" target="_blank" rel="noopener">9 Visual formatting model - w3c</a> <a href="#fnref2" class="footnote-backref">↩</a></p>
 </li>
 </ol>
 </section>
@@ -235,7 +247,11 @@
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/Vendor-Prefix/">Vendor Prefix</a> }
+  { <a href="/tags/Block/">Block</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Inline/">Inline</a> }
   </li>
 
 
@@ -265,7 +281,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 43.14px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 23.71px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.71px;">HTML</a> <a href="/tags/Inline/" style="font-size: 23.71px;">Inline</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 18.86px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 18.86px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 33.43px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 18.86px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 23.71px;">animation</a> <a href="/tags/api/" style="font-size: 18.86px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 23.71px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/display/" style="font-size: 18.86px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/facebook/" style="font-size: 28.57px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/git/" style="font-size: 18.86px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 38.29px;">hexo</a> <a href="/tags/html/" style="font-size: 14px;">html</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/javascript/" style="font-size: 28.57px;">javascript</a> <a href="/tags/js/" style="font-size: 14px;">js</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 18.86px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 18.86px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/nodejs/" style="font-size: 33.43px;">nodejs</a> <a href="/tags/npm/" style="font-size: 14px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 14px;">vue-cli</a> <a href="/tags/vuejs/" style="font-size: 28.57px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 18.86px;">webpack</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 33.43px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 43.75px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 22.5px;">Flex</a> <a href="/tags/HTML/" style="font-size: 22.5px;">HTML</a> <a href="/tags/Inline/" style="font-size: 22.5px;">Inline</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 18.25px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 18.25px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 31px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 18.25px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 22.5px;">animation</a> <a href="/tags/api/" style="font-size: 18.25px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 22.5px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/display/" style="font-size: 18.25px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/facebook/" style="font-size: 26.75px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/git/" style="font-size: 18.25px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 39.5px;">hexo</a> <a href="/tags/html/" style="font-size: 14px;">html</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/javascript/" style="font-size: 26.75px;">javascript</a> <a href="/tags/js/" style="font-size: 18.25px;">js</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 18.25px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 18.25px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 35.25px;">nodejs</a> <a href="/tags/npm/" style="font-size: 14px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 14px;">vue-cli</a> <a href="/tags/vuejs/" style="font-size: 31px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 18.25px;">webpack</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 31px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
