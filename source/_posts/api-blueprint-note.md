@@ -1,7 +1,7 @@
 ---
 title: API Blueprint 學習筆記
 date: 2017-11-14 10:13:40
-tags: ['API', 'API Doc', 'Aglio']
+tags: ['api', 'API Doc', 'Aglio']
 categories: 工具使用
 ---
 
