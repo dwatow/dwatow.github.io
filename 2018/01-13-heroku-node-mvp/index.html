@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶node.js 的 Hello world 在 heroku ¶前言 因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。 所以，特別寫了一篇 比 heroku 清楚 的從零開始教學。 ¶寫給誰 已安裝 node.js 並且想把它佈署到網路空間  後端程式  使用 node.js 不使用 express 框架   用 heroku 空間  ¶開">
+<meta name="keywords" content="npm,nodejs,heroku">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node.js 的 Hello world 在 heroku">
+<meta property="og:url" content="dwatow.github.io/2018/01-13-heroku-node-mvp/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶node.js 的 Hello world 在 heroku ¶前言 因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。 所以，特別寫了一篇 比 heroku 清楚 的從零開始教學。 ¶寫給誰 已安裝 node.js 並且想把它佈署到網路空間  後端程式  使用 node.js 不使用 express 框架   用 heroku 空間  ¶開">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/TRfSpJ2.png">
+<meta property="og:image" content="https://i.imgur.com/rkbEtG0.png">
+<meta property="og:image" content="https://i.imgur.com/S4xxZj2.png">
+<meta property="og:image" content="https://i.imgur.com/nmgO4yo.png">
+<meta property="og:image" content="https://i.imgur.com/IPajyxD.png">
+<meta property="og:updated_time" content="2018-01-13T06:26:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="node.js 的 Hello world 在 heroku">
+<meta name="twitter:description" content="¶node.js 的 Hello world 在 heroku ¶前言 因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。 所以，特別寫了一篇 比 heroku 清楚 的從零開始教學。 ¶寫給誰 已安裝 node.js 並且想把它佈署到網路空間  後端程式  使用 node.js 不使用 express 框架   用 heroku 空間  ¶開">
+<meta name="twitter:image" content="https://i.imgur.com/TRfSpJ2.png">
+  <title>node.js 的 Hello world 在 heroku - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts List</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Head First F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fa fa-github"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>node.js 的 Hello world 在 heroku</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#node-js-的-hello-world-在-heroku"><span class="toc-text">node-js-的-hello-world-在-heroku</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#寫給誰"><span class="toc-text">寫給誰</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#開始囉"><span class="toc-text">開始囉</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先做-node-js-的-hello-world"><span class="toc-text">先做-node-js-的-hello-world</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在-heroku"><span class="toc-text">在-heroku</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改程式碼"><span class="toc-text">修改程式碼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#決定上傳-heroku-的途徑"><span class="toc-text">決定上傳-heroku-的途徑</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-本機-repository-上傳-heroku"><span class="toc-text">1-本機-repository-上傳-heroku</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-github-repository-上傳-heroku"><span class="toc-text">2-github-repository-上傳-heroku</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#設定-heroku-啟動-node-js"><span class="toc-text">設定-heroku-啟動-node-js</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#heroku-預設的啟動指令"><span class="toc-text">heroku-預設的啟動指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化-npm"><span class="toc-text">初始化-npm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#手動設定-heroku-的啟動指令"><span class="toc-text">手動設定-heroku-的啟動指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最後加上-env-檔"><span class="toc-text">最後加上-env-檔</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#這樣-應該就成功了"><span class="toc-text">這樣-應該就成功了</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#看佈署-log"><span class="toc-text">看佈署-log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#看執行-log"><span class="toc-text">看執行-log</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="node-js-的-hello-world-在-heroku"><a class="header-anchor" href="#node-js-的-hello-world-在-heroku">¶</a>node.js 的 Hello world 在 heroku</h1>
+<h1 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h1>
+<p>因為，光是要用 node.js 上傳簡單程式碼到 heroku 測試，就花了很多時間認識 heroku。<br>
+所以，特別寫了一篇 <s>比 heroku 清楚</s> 的從零開始教學。</p>
+<h2 id="寫給誰"><a class="header-anchor" href="#寫給誰">¶</a>寫給誰</h2>
+<p>已安裝 node.js 並且想把它佈署到網路空間</p>
+<ul>
+<li>後端程式
+<ul>
+<li>使用 <a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js</a></li>
+<li>不使用 <a href="http://expressjs.com/zh-tw/" target="_blank" rel="noopener">express</a> 框架</li>
+</ul>
+</li>
+<li>用 <a href="www.heroku.com">heroku</a> 空間</li>
+</ul>
+<h1 id="開始囉"><a class="header-anchor" href="#開始囉">¶</a>開始囉</h1>
+<p>依文章的標題「node.js 的 Hello world 在 heroku」<br>
+可以拆成兩大部份</p>
+<ol>
+<li>node.js 的 Hello world</li>
+<li>在 heroku</li>
+</ol>
+<h2 id="先做-node-js-的-hello-world"><a class="header-anchor" href="#先做-node-js-的-hello-world">¶</a>先做 node.js 的 Hello world</h2>
+<p>到 node 官網，找 doc ，選任一版本，點擊文件裡的 <a href="https://nodejs.org/docs/latest-v7.x/api/synopsis.html" target="_blank" rel="noopener">Usage &amp; Example</a></p>
+<p>此例是使用 Node.js v7.10.1 Documentation 的程式碼</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> hostname = <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> port = <span class="number">3000</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.statusCode = <span class="number">200</span>;</div><div class="line">  res.setHeader(<span class="string">'Content-Type'</span>, <span class="string">'text/plain'</span>);</div><div class="line">  res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.listen(port, hostname, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server running at http://<span class="subst">$&#123;hostname&#125;</span>:<span class="subst">$&#123;port&#125;</span>/`</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>新增一個檔案 (ex: index.js) ，再將程式碼 貼上 → 存檔。</p>
+<p>到該目錄下執行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span> ls</div><div class="line">index.js</div><div class="line"><span class="meta">$</span> node index.js</div><div class="line">Server running at http://127.0.0.1:3000/</div></pre></td></tr></table></figure>
+<p>打開瀏覽器，網址輸入 <code>http://127.0.0.1:3000/</code><br>
+看見 <code>Hello World</code> 的字眼就算這一步成功了</p>
+<h2 id="在-heroku"><a class="header-anchor" href="#在-heroku">¶</a>在 heroku</h2>
+<p>到這，可是「正片開始」<br>
+首先，我們要了解，光是上傳一個 <code>index.js</code> 的話，heroku 是不知道要怎麼執行它。</p>
+<h3 id="修改程式碼"><a class="header-anchor" href="#修改程式碼">¶</a>修改程式碼</h3>
+<p>對於 port 的設定，必須要這樣執行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PORT = process.env.PORT || <span class="number">5000</span>;</div><div class="line"><span class="comment">//...</span></div><div class="line">server.listen(PORT);</div></pre></td></tr></table></figure>
+<p>不像是版本的問題。<br>
+測試下來，線上版本是 8.9.4 但是若使用預設的程式碼依然無法利執行。</p>
+<h3 id="決定上傳-heroku-的途徑"><a class="header-anchor" href="#決定上傳-heroku-的途徑">¶</a>決定上傳 heroku 的途徑</h3>
+<p>這裡就比較多 heroku 的注意事項了。</p>
+<h4 id="1-本機-repository-上傳-heroku"><a class="header-anchor" href="#1-本機-repository-上傳-heroku">¶</a>1. 本機 repository 上傳 heroku</h4>
+<p>如果你是私有專案，要安裝 heroku-cli</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> brew install heroku/brew/heroku</div></pre></td></tr></table></figure>
+<p>學一下它怎麼<a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app" target="_blank" rel="noopener">初始化並上傳程式碼到 heroku</a></p>
+<h4 id="2-github-repository-上傳-heroku"><a class="header-anchor" href="#2-github-repository-上傳-heroku">¶</a>2. Github repository 上傳 heroku</h4>
+<p>如果要透過 Github 傳到 heroku。<br>
+就在 heroku 的服務中，新增 app<br>
+在 app 裡面找 Deploy</p>
+<p>這裡選 Github</p>
+<p><img src="https://i.imgur.com/TRfSpJ2.png" alt=""></p>
+<p>並且指定你要傳過來的 repository 和 branch</p>
+<p>heroku 提供的佈署方式很靈活，算是滿方便的。</p>
+<ol>
+<li>自動佈署的開關
+<ul>
+<li>是否要等 CI 正確再自動部署到 heroku</li>
+</ul>
+</li>
+<li>手動佈署的觸發按鈕</li>
+</ol>
+<h3 id="設定-heroku-啟動-node-js"><a class="header-anchor" href="#設定-heroku-啟動-node-js">¶</a>設定 heroku 啟動 node.js</h3>
+<h4 id="heroku-預設的啟動指令"><a class="header-anchor" href="#heroku-預設的啟動指令">¶</a>heroku 預設的啟動指令</h4>
+<p>在 Web 介面 Overview 上，可看到這個東西</p>
+<p><img src="https://i.imgur.com/rkbEtG0.png" alt=""></p>
+<p>它就是預設的啟動指令。</p>
+<p>heroku 預設 node.js 會使用 <code>npm start</code> ，所以預設使用這樣的指令啟動你的專案。</p>
+<h3 id="初始化-npm"><a class="header-anchor" href="#初始化-npm">¶</a>初始化 npm</h3>
+<p>在專案目錄下執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm init</div></pre></td></tr></table></figure>
+<p>會出現 <code>package.json</code></p>
+<blockquote>
+<p>如果要指定 <code>node.js</code> 或 <code>npm</code> 的版本，要在這時候加上去。</p>
+</blockquote>
+<p>打開 <code>package.json</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">  "start": "node index.js", //加入這一行</div><div class="line">  "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>測試一下啟動指令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line"><span class="meta">$</span> npm start</div></pre></td></tr></table></figure>
+<p>一樣打開瀏覽器，網址輸入 <a href="http://127.0.0.1:3000/" target="_blank" rel="noopener">http://127.0.0.1:3000/</a><br>
+看見 Hello World 的字眼就算 <code>npm</code> 的初始就算成功了</p>
+<p>不過，也可以手動設定</p>
+<p>也就是說，也可以不安裝 <code>npm</code> 改預設啟動指令，也可以用 <code>node index.js</code> 來啟動程式</p>
+<h3 id="手動設定-heroku-的啟動指令"><a class="header-anchor" href="#手動設定-heroku-的啟動指令">¶</a>手動設定 heroku 的啟動指令</h3>
+<p>在 <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile" target="_blank" rel="noopener">node.js 快速啟動教學</a> 中，有介紹 Procfile 檔案。</p>
+<p>它就是 heroku 預設會讀的檔案，若你不設定，空間會提供一個預設檔，內容就是預設指令。</p>
+<div class="danger">
+<p>若你要設定，這是付費功能。</p>
+</div>
+<p>不過，線上就可以修改了</p>
+<h3 id="最後加上-env-檔"><a class="header-anchor" href="#最後加上-env-檔">¶</a>最後加上 .env 檔</h3>
+<p>參考自 <a href="https://github.com/heroku/node-js-getting-started" target="_blank" rel="noopener">node-js-getting-started</a> 這個可執行的專案。</p>
+<p>它有一個 .env 檔。<br>
+而且在佈署時，缺此檔，會有 WARNING</p>
+<p>而檔案內容就一行，(依 key=value 的格式)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><div class="line">TIMES=2</div></pre></td></tr></table></figure>
+<h2 id="這樣-應該就成功了"><a class="header-anchor" href="#這樣-應該就成功了">¶</a>這樣，應該就成功了</h2>
+<p>上傳之後，在瀏覽器看到</p>
+<p><img src="https://i.imgur.com/S4xxZj2.png" alt=""></p>
+<p>就很開心了。</p>
+<p>不用為了上傳 heroku 而必須學 express 這樣奇怪的決策順序。</p>
+<p>有幾個地方要知道，會幫助在這過程找到錯誤的線索。</p>
+<h3 id="看佈署-log"><a class="header-anchor" href="#看佈署-log">¶</a>看佈署 log</h3>
+<p><img src="https://i.imgur.com/nmgO4yo.png" alt=""></p>
+<h3 id="看執行-log"><a class="header-anchor" href="#看執行-log">¶</a>看執行 log</h3>
+<p><img src="https://i.imgur.com/IPajyxD.png" alt=""></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-01-13T04:26:22.000Z" itemprop="datePublished">
+              2018-01-13
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/npm/">npm</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/heroku/">heroku</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-17-webpack-loader-observed/">認識 Webpack Loader</a><div class="related-posts-item-abstract">¶認識 Webpack Loader
+
+為了 vue-cli 而看 webpack ，由於 webpack 看了 webpack loader。
+
+¶快速上手
+以 we</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-13-alex-and-nina-at-wizard-amigos/">來自國德的 Alex 和 Nina 交流</a><div class="related-posts-item-abstract">¶來自國德的 Alex 和 Nina 交流
+
+一切都是因為這一次的交流活動
+前一天晚上在台中的 monospace 隔天來台南的好想工作室。
+
+講的內容有一些好玩的技巧</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-12-node-sass/">node-sass 初探</a><div class="related-posts-item-abstract">¶NODE-SCSS
+除了 ruby 的 compass ，還有其它的方案可以編 scss -&gt; css。
+
+為了 vue-cli 而看 webpack ，由於 </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-08-babel-cli/">Babel 第一次接觸</a><div class="related-posts-item-abstract">¶Babel 第一次接觸
+巴別塔，是一則聖經創世紀的故事。[1]
+一群只說一種語言的人在「大洪水」之後從東方來到了示拿（希伯來語：שנער‎‎）地區，並且決定在這修建一</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/02-22-js-oo-json/">JavaScript 的 OO 與 JSON</a><div class="related-posts-item-abstract">¶JavaScript 的 OO 與 JSON
+今天，想要用 JavaScript 做一個可以重複呼叫的物件，並且產生 JSON。
+
+index.js
+
+¶最基本的使用</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/02-17-iron-man-2018/iron-man-js-ecosystem-of-alex/">給想學 JS 的前端「JS 生態系及週邊工具整理」導讀</a><div class="related-posts-item-abstract">¶給想學 JS 的前端「JS 生態系及週邊工具整理」導讀
+
+原著的系列名稱是「平時沒注意的 JavaScript - JS 生態系及週邊工具整理」因為名字太長，在此的文</div></li></ul>
+        </section>
+        <section>
+            <div id="disqus_thread"></div>
+        </section>
+    
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>
