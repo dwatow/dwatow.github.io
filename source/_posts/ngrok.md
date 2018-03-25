@@ -10,22 +10,19 @@ categories: '工具使用'
 
 ## 安裝
 
-到[官網](https://ngrok.com/)看見左邊是下載，右邊是登入
-
-先登入(用facebook就可以了)
-
-### 下載
-
-下載之後，解壓縮，得到一個執行檔。
-
-### 取得環境變數
+用 hoem brew 安裝，可以將執行檔當作全域指令使用。
 
 ```shell
-$ echo $PATH
+brew cask install ngrok
 ```
-## 完成
 
-放到環境變數路徑之下，就算是安裝完成了
+安裝完成
+
+:::warning
+注意
+不要到[官網](https://ngrok.com/)下載。
+但是要去申請一個帳號。
+:::
 
 ## 使用
 
