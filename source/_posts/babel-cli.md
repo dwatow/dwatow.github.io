@@ -1,10 +1,15 @@
 ---
 title: Babel 第一次接觸
 date: 2018-03-08 14:51:40
-tags: [nodejs, vuejs, babel, js]
+tags: [nodejs, webpack, vuejs, babel, js]
 categories: [工具使用]
 ---
-# Babel
+# Babel 第一次接觸
+
+巴別塔，是一則聖經創世紀的故事。[^babel-wiki]
+一群只說一種語言的人在「大洪水」之後從東方來到了示拿（希伯來語：שנער‎‎）地區，並且決定在這修建一座城市和一座「能夠通天的」高塔；上帝見此情形，就把他們的語言打亂，讓他們再也不能明白對方的意思，還把他們分散到了世界各地。
+
+> 為了 vue-cli 而看 webpack ，由於 webpack 看了 babel-loader，因為看了 babel-loader 知道了 babel-core。
 
 開一個新的 npm 專案，並且初始化完成之後。
 安裝 `babel-core`
@@ -197,6 +202,7 @@ var x = function x(n) {
 其實就是一套指定版本的 preset。
 使用官網的教學，則是用途較為廣泛的設定。
 
+[^babel-wiki]: [巴別塔 - 維基百科](https://zh.wikipedia.org/wiki/%E5%B7%B4%E5%88%A5%E5%A1%94)
 
 [^babel-ruanyifeng]: [Babel 入門教程](http://www.ruanyifeng.com/blog/2016/01/babel.html)
 
