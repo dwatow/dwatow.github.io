@@ -18,7 +18,7 @@ comments: false
     }
 }
 
-.view_style > i {
+.view_style {
     background-color: black;
 }
 
@@ -31,7 +31,7 @@ comments: false
     transition: background-color .3s;
 }
 
-.view_style > i, .labels > li {
+.view_style, .labels > li {
     cursor: pointer;
     line-height: 1.5em;
     border-radius: 3px;
@@ -96,11 +96,11 @@ comments: false
     width: 100%!important;
 }
 
-#view_switch ~ div > .view_style > i {
+#view_switch ~ div > .view_style{
     transform: rotate(270deg);
     transition: transform .3s;
 }
-#view_switch:checked ~ div > .view_style > i {
+#view_switch:checked ~ div > .view_style{
     transform: rotate(0deg);
 }
 
@@ -139,7 +139,7 @@ comments: false
 <input type="checkbox" id="view_switch" checked>
 <div>
     <label for="view_switch" class="view_style">
-        <i class="fa fa-pause"></i>
+        <i class="fas fa-pause"></i>
     </label>
     <ul class="labels">
         <li id="all">All</li>
@@ -150,7 +150,8 @@ comments: false
         <li id="bootstrap">Bootstrap</li>
         <li id="pullRequest">pull request</li>
         <li id="javascript">JavaScript</li>
-        <li id="vue">Vue</li>
+        <li id="node">node.js</li>
+        <li id="vue">Vue.js</li>
         <li id="exercise">Exercise</li>
         <li id="casdk">CA-SDK</li>
         <li id="cpp">C++</li>
@@ -168,6 +169,7 @@ comments: false
 <div class="works">
   <div class="webFrontEnd htmlcss">
       <h2>
+          <a href="##"></a>
           <a href="http://hausenncamp.com/" target="_blank">hausenncamp 官方網站</a>
       </h2>
       <h4>婚紗公司形象網站</h4>
@@ -183,6 +185,7 @@ comments: false
   </div>
   <div class="webFrontEnd htmlcss bootstrap">
       <h2>
+          <a href="##"></a>
           <a href="http://streetobserver.org/" target="_blank">台南路上觀察團 官方網站</a>
       </h2>
       <h4>社群形象網站</h4>
@@ -196,6 +199,7 @@ comments: false
   </div>
   <div class="exercise javascript vue">
       <h2>
+          <a href="##"></a>
           <a href="https://dwatow.github.io/vueExercise/" target="_blank">練習筆記 Vue.js 2</a>
       </h2>
       <h4>初學 vue.js 的學習記錄 & 習作</h4>
@@ -208,8 +212,33 @@ comments: false
           Vuex: 用來管理資料(狀態)更新途徑
       </p>
   </div>
+  <div class="exercise javascript vue">
+      <h2>
+          <a href="##"></a>
+          <a href="https://github.com/dwatow/vue-a-bit/" target="_blank">vue a bit 聚會</a>
+      </h2>
+      <h4>圍繞著 Vue-cli 的學習讀書會</h4>
+      <p>
+          主題包含 Webpack, loader, plgin, vue, npm, node, commonjs<br />
+          從 vue-cli 的 webpack-simple 每個套件的研究，到 webpack 模版的練習
+      </p>
+  </div>
+  <div class="node javascript">
+      <h2>
+          <a href="##"></a>
+          <a href="##" target="_blank">Messager 聊天機器人</a>
+      </h2>
+      <h4>Facebook Messager Chatbot</h4>
+      <p>
+          擔任 PM，技術上是使用 php 的 Laravel 為框架的後端 web service。<br />
+          主要負責與業業主溝通、整理 API Doc 草稿 、 Wireframe 、 Sequence diagram<br />
+          用前端的 JavaScript 做發送 API 的 API 自動化測試<br />
+          另外，還有使用 node.js + Messager webhook 實作練習。
+      </p>
+  </div>
   <div class="pullRequest javascript">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/lukehaas/Scrollify/pull/268" target="_blank">Scrollify - Fix overflow scroll #268</a>
       </h2>
       <h4>修改 Open Source Project</h4>
@@ -221,6 +250,7 @@ comments: false
   </div>
   <div class="exercise javascript">
       <h2>
+          <a href="##"></a>
           <a href="https://dwatow.github.io/JavaScript30/" target="_blank">練習筆記 JavaScript30</a>
       </h2>
       <h4>線上課程的學習記錄 & 習作</h4>
@@ -234,6 +264,7 @@ comments: false
   </div>
   <div class="exercise htmlcss javascript webFrontEnd">
       <h2>
+          <a href="##"></a>
           <a href="https://dwatow.github.io/Web-Front-End-Prototype/" target="_blank">習作 網頁前端</a>
       </h2>
       <h4>進行案子中, 製作的 Propertype </h4>
@@ -241,6 +272,7 @@ comments: false
   </div>
   <div class="pullRequest javascript">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/hexojs/hexo/pull/2612" target="_blank">Hexo - sel code block line number #2612</a>
       </h2>
       <h4>修改 Open Source Project</h4>
@@ -257,6 +289,7 @@ comments: false
   </div>
   <div class="javascript canvas webFrontEnd">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/ImageBinarization" target="_blank">病理切片 影像處理 二值化演算法</a>
       </h2>
       <h4>前端技術處理影像處理</h4>
@@ -267,6 +300,7 @@ comments: false
   </div>
   <div class="python">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/MockKgsDataObjectGenerator" target="_blank">ORM generator for unit test mock</a>
       </h2>
       <h4>XML to C++ Code with python</h4>
@@ -276,6 +310,7 @@ comments: false
   </div>
   <div class="csharp msOfficeTypeLib package">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/xlsf_with_C_sharp" target="_blank">套件實作 xlsf with C#</a>
       </h2>
       <h4>呼叫原生的 Excel Type library 使用 C#</h4>
@@ -285,6 +320,7 @@ comments: false
   </div>
   <div class="django python exercise webBackEnd">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/LaidBackHabitat" target="_blank">習作 網站後端 訂房系統 </a>
       </h2>
       <h4>python 的後端 framework 的專題實作</h4>
@@ -295,6 +331,7 @@ comments: false
   </div>
   <div class="csharp webFrontEnd">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/MsgDemoSilverlight" target="_blank">網站後端 XML傳輸 API測試工具</a>
       </h2>
       <h4>C++ 後端程式的週邊工具系列 - 傳送 XML 給後端程式 (C++) 的小工具。</h4>
@@ -307,6 +344,7 @@ comments: false
   </div>
   <div class="python desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/logAnalysis" target="_blank">網站後端 XML傳輸 效能分析</a>
       </h2>
       <h4>C++ 後端程式的週邊工具系列 - Log 的 Parser</h4>
@@ -316,6 +354,7 @@ comments: false
   </div>
   <div class="csharp bspline desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/BSpline" target="_blank">習作 內插曲線演算法 BSpline</a>
       </h2>
       <h4>NURBUS 演用法</h4>
@@ -325,6 +364,7 @@ comments: false
   </div>
   <div class="django python exercise webBackEnd">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/mysite" target="_blank">習作 Django </a>
       </h2>
       <h4>python 的後端 framework 的習作</h4>
@@ -334,6 +374,7 @@ comments: false
   </div>
   <div class="python cpp exercise desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/python_call_cpp_code" target="_blank">習作 python 呼叫 C++ API</a>
       </h2>
       <h4>python 呼叫 C++ 編譯的 dll檔</h4>
@@ -343,6 +384,7 @@ comments: false
   </div>
   <div class="cpp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/PluginDll" target="_blank">習作 C++寫dll檔</a>
       </h2>
       <h4>Boost C++ Libraries 的 Python 支援功能</h4>
@@ -352,6 +394,7 @@ comments: false
   </div>
   <div class="cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/lottery" target="_blank">樂透模擬器 - 大樂透、威力彩</a>
       </h2>
       <h4>MFC (C++) 的亂數產生練習</h4>
@@ -362,6 +405,7 @@ comments: false
   </div>
   <div class="cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/finder" target="_blank">假裝刪除硬碟檔案的惡作劇程式</a>
       </h2>
       <h4>MFC (C++) 的 Windows API 使用練習</h4>
@@ -371,6 +415,7 @@ comments: false
   </div>
   <div class="cpp desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/fbSignIn" target="_blank">facebook 點名程式 (離線)</a>
       </h2>
       <h4>C++ 的讀檔、字串比對程式</h4>
@@ -380,6 +425,7 @@ comments: false
   </div>
   <div class="cpp designPattern exercise">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/DesignPatternExercise" target="_blank">習作 Design Pattern</a>
       </h2>
       <h4>大話設計模式的 C++ 版實作練習</h4>
@@ -389,6 +435,7 @@ comments: false
   </div>
   <div class="casdk cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/Ca210Sample" target="_blank">Ca210Sample</a>
       </h2>
       <h4>CA-SDK 習作</h4>
@@ -398,6 +445,7 @@ comments: false
   </div>
   <div class="casdk cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/ColorEyeI" target="_blank">ColorEyeI</a>
       </h2>
       <h4>CA-SDK 應用開發</h4>
@@ -409,6 +457,7 @@ comments: false
   </div>
   <div class="cpp mfc msOfficeTypeLib">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/xls2oul" target="_blank">from Excel to Outlook 寄信</a>
       </h2>
       <h4>呼叫原生的 Outlook & Excel Type library 使用 MFC (C++)</h4>
@@ -418,6 +467,7 @@ comments: false
   </div>
   <div class="cpp mfc msOfficeTypeLib package">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/xlsf_with_MFC" target="_blank">套件實作 xlsf with MFC</a>
       </h2>
       <h4>呼叫原生的 Excel Type library 使用 MFC (C++)</h4>
@@ -428,6 +478,7 @@ comments: false
   </div>
   <div class="casdk cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/CASDK-Z" target="_blank">CASDK-Z</a>
       </h2>
       <h4>CA-SDK 應用開發</h4>
@@ -437,6 +488,7 @@ comments: false
   </div>
   <div class="casdk cpp mfc desktopApp">
       <h2>
+          <a href="##"></a>
           <a href="https://github.com/dwatow/Sword" target="_blank">Sword</a>
       </h2>
       <h4>CA-SDK 應用開發</h4>
@@ -452,7 +504,6 @@ comments: false
       filter('all');
   })
   $('.labels').on('click', 'li', function (e) {
-    // console.log(this.id);
     filter(this.id)
   })
 
