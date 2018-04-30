@@ -66,8 +66,8 @@
             const time = Math.min(1, ((now - startTime) / duration));
             const timeFunction = easings[easing](time);
             window.scroll(0, Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start));
-
-            if(window.pageYOffset === destinationOffsetToScroll) {
+            counter += 1;
+            if(counter < 10000 && window.pageYOffset === destinationOffsetToScroll) {
                 if(callback) {
                     callback();
                 }
@@ -76,6 +76,8 @@
 
             requestAnimationFrame(scroll);
         }
+
+        var counter = 0;
 
         scroll();
     }
