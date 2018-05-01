@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Position 定位
 date: 2017-12-27 08:00:06
-tags: ["2018鐵人賽", "CSS", "Position"]
+tags: ["2018鐵人賽", 'CSS', "Position"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -103,7 +103,7 @@ right: 數字
 
 用 JavaScript 加上/移除 CSS 的方式。[^5]
 
-```css
+```CSS
 :root {
  --menu-height: 100px;
 }
@@ -121,9 +121,9 @@ right: 數字
 
 **用純 CSS 的做法**
 
-只需要將 menu 加上這個 css，它就會在可視區 `top: 0` 和 `left: 0` 的範圍內，隨內容滾動，在範圍以外，固定在邊界。
+只需要將 menu 加上這個 CSS，它就會在可視區 `top: 0` 和 `left: 0` 的範圍內，隨內容滾動，在範圍以外，固定在邊界。
 
-```css
+```CSS
 .stickyMenu {
     position: sticky;
     top: 0;
@@ -168,7 +168,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```css
+```CSS
 .sticky-element {
  position: sticky;
  top: 0;
@@ -200,7 +200,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```css
+```CSS
 .container {
   position: relative;
 }
@@ -219,7 +219,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```css
+```CSS
 * {
  margin: 0;
  padding: 0;
@@ -277,7 +277,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```css
+```CSS
 div {
  height: 100px;
  width: 100px;
@@ -295,10 +295,10 @@ div {
 
 # 參考資料
 
-[^1]: [6. Positioning schemes - w3.org](https://www.w3.org/TR/2016/WD-css-position-3-20160517/#rel-pos)
+[^1]: [6. Positioning schemes - w3.org](https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#rel-pos)
 [^2]: [前端新手村 Block 和 Inline 排版](https://ithelp.ithome.com.tw/articles/10191740)
 [^3]: [前端新手村 橫向排列 & 實現純手工 RWD](https://ithelp.ithome.com.tw/articles/10192087)
-[^4]: [6.5. Choosing a positioning scheme: position property - w3.org](https://www.w3.org/TR/2016/WD-css-position-3-20160517/#position-property)
+[^4]: [6.5. Choosing a positioning scheme: position property - w3.org](https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#position-property)
 [^5]: [來聊聊一些個人切版的經驗與個人切版技巧吧！ - LiveCoding.tw](https://www.facebook.com/LiveCoding.tw/videos/1669445373356989/)
 [^6]: [8. Sizing and positioning details - w3.org
-](https://www.w3.org/TR/2016/WD-css-position-3-20160517/#size-and-position-details)
+](https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#size-and-position-details)

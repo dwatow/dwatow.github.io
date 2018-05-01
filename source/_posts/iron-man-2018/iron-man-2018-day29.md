@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Animations (下)
 date: 2018-01-08 07:26:06
-tags: ["2018鐵人賽", "CSS", "animation", "keyframes"]
+tags: ["2018鐵人賽", 'CSS', "animation", "keyframes"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -83,10 +83,10 @@ categories: "前端新手村"
 
 ## 套件
 
-[Animation.css](https://daneden.github.io/animate.css/)
+[Animation.CSS](https://daneden.github.io/animate.CSS/)
 這個套件的好處，就是知道動畫的名字，好跟人溝通。
 好學好上手。
 
 # 參考資料
 
-[1]: [CSS Animations Level 1 - w3.org](https://www.w3.org/TR/css-animations-1/)
+[1]: [CSS Animations Level 1 - w3.org](https://www.w3.org/TR/CSS-animations-1/)

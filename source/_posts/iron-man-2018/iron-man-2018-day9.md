@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 橫向排列 & 實現純手工 RWD
 date: 2017-12-19 07:18:33
-tags: ["2018鐵人賽", "Inline", "CSS", "RWD"]
+tags: ["2018鐵人賽", "Inline", 'CSS', "RWD"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -89,7 +89,7 @@ nm~inline-block!!
 </div>
 ```
 
-```css
+```CSS
 .inline-block > div {
  display: inline-block;
 }
@@ -119,7 +119,7 @@ nm~inline-block!!
 
 在容器設定 `font-size: 0;` 再設定各別的 `font-size` 回到原本的大小即可。
 
-```css
+```CSS
 .inline-block {
  font-size: 0;
 }
@@ -148,7 +148,7 @@ nm~inline-block!!
 </div>
 ```
 
-```css
+```CSS
 .flex {
  display: flex;
 }
@@ -169,6 +169,6 @@ nm~inline-block!!
 
 # 參考資料
 [^1]: [9.2.1.1 Anonymous block boxes](https://www.w3.org/TR/CSS22/visuren.html#anonymous-block-level)
-[^2]: [10. Floating boxes - w3.org](https://www.w3.org/TR/css3-box/#float)
+[^2]: [10. Floating boxes - w3.org](https://www.w3.org/TR/CSS3-box/#float)
 [^3]: [Pen-Pineapple-Apple-Pen](https://zh.wikipedia.org/wiki/Pen-Pineapple-Apple-Pen)
-[^4]: [CSS Layout - inline-block](https://www.w3schools.com/css/css_inline-block.asp)
+[^4]: [CSS Layout - inline-block](https://www.w3schools.com/CSS/CSS_inline-block.asp)

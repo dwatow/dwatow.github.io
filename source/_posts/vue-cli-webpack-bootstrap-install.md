@@ -1,7 +1,7 @@
 ---
 title: 在 Vue-cli 或 Webpack 想使用 Bootstrap
 date: 2018-03-25 10:17:34
-tags: [nodejs, webpack, vuejs, 'bootstrap', 'jquery', js]
+tags: [nodejs, webpack, vuejs, 'bootstrap', 'jquery', 'JavaScript']
 categories: [工具使用]
 ---
 # 在 Vue-cli 或 Webpack 想使用 Bootstrap
@@ -71,30 +71,30 @@ import 'bootstrap/dist/js/bootstrap.js';  //變成 main 的路徑
 (或者是在有用到 bootstrap 的 .vue 檔裡)
 
 ```javascript
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/CSS/bootstrap.CSS'
 ```
 
 表示「引用 Bootstrap 的 CSS」。
 CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 
 :::danger
-在 Webpack 還要設定 css-loader 。
+在 Webpack 還要設定 CSS-loader 。
 :::
 
-## 載入 Bootstrap 的 scss
+## 載入 Bootstrap 的 sCSS
 
-在 vue-cli 裡，要在 webpack 的 `App.vue` 裡的 `<style lang="scss">` 加入這一行。
+在 vue-cli 裡，要在 webpack 的 `App.vue` 裡的 `<style lang="sCSS">` 加入這一行。
 (或者是在有用到 bootstrap 的 .vue 檔裡)
 
-```scss
-@import "~bootstrap/scss/bootstrap";
+```sCSS
+@import "~bootstrap/sCSS/bootstrap";
 ```
 
 表示「引用 Bootstrap 的 SCSS」。
 CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 
 :::danger
-在 Webpack 還要設定 scss-loader 。
+在 Webpack 還要設定 sCSS-loader 。
 :::
 
 但是，事情卻還沒有這麼簡單!!!
@@ -125,16 +125,16 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
     loader: 'vue-loader',
     options: {
       loaders: {
-        scss: [
+        sCSS: [
           'vue-style-loader',
-          'css-loader',
-          'postcss-loader',
+          'CSS-loader',
+          'postCSS-loader',
           'sass-loader',
           {
             loader: 'sass-resources-loader',
             options: {
               resources: [
-                './node_modules/bootstrap/scss/bootstrap.scss'
+                './node_modules/bootstrap/sCSS/bootstrap.sCSS'
               ]
             },
           },
@@ -147,9 +147,9 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 
 ### 2. 如果遇到 "No PostCSS Config found" 的問題
 
-**postcss.config.js**
+**postCSS.config.js**
 
-修正 No PostCSS Config found [^fix-postcss-config]
+修正 No PostCSS Config found [^fix-postCSS-config]
 
 ```javascript
 module.exports = {};
@@ -174,4 +174,4 @@ module.exports = {};
 
 [^webpackconfig-setup-sass-resources-loader]: [Vue组件中使用Sass全局变量](https://xiaogliu.github.io/2017/09/09/use-sass-global-variables-in-every-vue-components/)
 
-[^fix-postcss-config]: [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)
+[^fix-postCSS-config]: [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)

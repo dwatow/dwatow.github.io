@@ -76,7 +76,7 @@ Selector::偽元素
 
 **看個例子**
 
-```css
+```CSS
 p { color: red; font-size: 12pt }
 p::first-letter { color: green; font-size: 200% }
 p::first-line { color: blue }
@@ -147,7 +147,7 @@ p::first-line { color: blue }
 透過相鄰選取器就可以選取到，就算成功了。
 剩下的就是在左邊加上 `|` 就成功了
 
-```css
+```CSS
 span {
  position: relative;
 }
@@ -192,5 +192,5 @@ CSS 的 Selector 會有 `|` 出現。
 
 # 參考資料
 
-[^1]: [7. Pseudo-elements - w3.org](https://www.w3.org/TR/css3-selectors/#pseudo-elements)
+[^1]: [7. Pseudo-elements - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-elements)
 [^2]: [ @namespace - MDN](https://developer.mozilla.org/zh-TW/docs/Web/CSS/@namespace)

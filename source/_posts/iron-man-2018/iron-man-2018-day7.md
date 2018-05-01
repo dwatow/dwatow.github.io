@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 垂直排列 與 Box Model
 date: 2017-12-17 07:38:51
-tags: ["2018鐵人賽", "Box Model", "CSS"]
+tags: ["2018鐵人賽", "Box Model", 'CSS']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -92,7 +92,7 @@ margin: 值;
 
 讓我們準備一段可以重現問題的 code
 
-```css
+```CSS
 body {
  outline: 1px solid red;
 }
@@ -172,7 +172,7 @@ block 元素本身預設 `overflow: visible;` 而它沒有觸發 block formattin
 border: width style color;
 ```
 例如
-```css
+```CSS
 border: 1px solid #000;
 ```
 
@@ -202,7 +202,7 @@ border: 1px solid #000;
 ### `border-style`
 
 
-先來 [w3school 的演示](https://www.w3schools.com/css/css_border.asp)，看看 `border-style` 的值 有幾種預設選項[^7]
+先來 [w3school 的演示](https://www.w3schools.com/CSS/CSS_border.asp)，看看 `border-style` 的值 有幾種預設選項[^7]
 
 ![](https://i.imgur.com/JUnkIqU.png)
 
@@ -225,7 +225,7 @@ border: 1px solid #000;
 色碼 | 顏色名稱 | 色域表示法
 ```
 
-介紹下去有點離題，所以先看[這篇](https://www.w3schools.com/css/css_colors.asp)頂著先。不同的表示法並不會產生新的顏色，只是表示法不同，控制的維度不同。每個表示法的每個顏色，都是可以互相轉換的(應該啦)。
+介紹下去有點離題，所以先看[這篇](https://www.w3schools.com/CSS/CSS_colors.asp)頂著先。不同的表示法並不會產生新的顏色，只是表示法不同，控制的維度不同。每個表示法的每個顏色，都是可以互相轉換的(應該啦)。
 
 ## `padding`
 
@@ -254,7 +254,7 @@ padding: 值;
 
 寬度等同於容器寬，又不確定其高，可以直接給 `padding-top: 100%;` 就會是正方形了。
 
-```css
+```CSS
 .box {
  width: 100px;
  outline: solid;
@@ -282,9 +282,9 @@ padding: 值;
 
 # 參考資料
 [^1]: [定義域 - wiki](https://zh.wikipedia.org/wiki/%E5%AE%9A%E4%B9%89%E5%9F%9F)
-[^2]: [CSS Margins](https://www.w3schools.com/css/css_margin.asp)
+[^2]: [CSS Margins](https://www.w3schools.com/CSS/CSS_margin.asp)
 [^3]: [實數 - wiki](https://zh.wikipedia.org/wiki/%E5%AE%9E%E6%95%B0)
 [^4]: [8 Box model - w3.org](https://www.w3.org/TR/CSS22/box.html)
 [^5]: [9 Visual formatting model - w3.org](https://www.w3.org/TR/2016/WD-CSS22-20160412/visuren.html#block-formatting)
-[^6]: [4. Borders - w3.org](https://www.w3.org/TR/css-backgrounds-3/#borders)
-[^7]: [CSS Border Properties](https://www.w3schools.com/css/css_border.asp)
+[^6]: [4. Borders - w3.org](https://www.w3.org/TR/CSS-backgrounds-3/#borders)
+[^7]: [CSS Border Properties](https://www.w3schools.com/CSS/CSS_border.asp)

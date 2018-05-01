@@ -1,7 +1,7 @@
 ---
 title: 在 Webpack 使用 Font Awesome
 date: 2018-03-25 16:03:45
-tags: [nodejs, webpack, vuejs, 'fontawesome', js]
+tags: [nodejs, webpack, vuejs, 'fontawesome', 'JavaScript']
 categories: [工具使用]
 ---
 # 在 Webpack 使用 Font Awesome

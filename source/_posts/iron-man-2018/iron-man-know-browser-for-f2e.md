@@ -16,7 +16,7 @@ categories: '讀技術書'
 - [深入探討瀏覽器引擎如何進行解析](https://ithelp.ithome.com.tw/articles/10191579)
 概念性的了解一下瀏覽器核心運作原理
 - [瀏覽器引擎處理 CSS 的簡易版（一）](https://ithelp.ithome.com.tw/articles/10191842)
-解釋瀏覽器如何解析 css 語法
+解釋瀏覽器如何解析 CSS 語法
 - [瀏覽器引擎處理 CSS 的簡易版（二）](https://ithelp.ithome.com.tw/articles/10191967)
 解釋術語: Specified, computed, and actual values
 - [瀏覽器引擎處理版面佈局的簡易版（一）](https://ithelp.ithome.com.tw/articles/10192871)

@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 CSS 的作用
 date: 2017-12-15 08:02:10
-tags: ["2018鐵人賽", "CSS", "Vendor Prefix"]
+tags: ["2018鐵人賽", 'CSS', "Vendor Prefix"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -38,7 +38,7 @@ CSS，是「 Cascading Style Sheets 」的縮寫。
 
 ## 語法
 
-```css
+```CSS
 Selector {
     Property: Value;
 }
@@ -68,7 +68,7 @@ CSS3 帶來的真是一則以喜，一則以憂呀，對新手來說，隱藏著
 
 當你看見 CSS 有加一些特定的前綴
 
-```css
+```CSS
 -o-
 -moz-
 -ms-
@@ -77,7 +77,7 @@ CSS3 帶來的真是一則以喜，一則以憂呀，對新手來說，隱藏著
 
 看個例子
 
-```css
+```CSS
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
 border-radius: 5px;
@@ -105,7 +105,7 @@ border-radius: 5px;
 
 看個例子
 
-```css
+```CSS
 #nav-global > ul > li > a.nav-link {
     color: red;
 }

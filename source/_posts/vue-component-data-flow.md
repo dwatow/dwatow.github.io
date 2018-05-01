@@ -1,7 +1,7 @@
 ---
 title: 用 vue-loader 的 component 資料傳遞
 date: 2018-04-05 22:23:04
-tags: [vuejs, js, 'vue-loader']
+tags: [vuejs, 'JavaScript', 'vue-loader']
 categories: 技術心得
 ---
 # 用 vue-loader 的 component 資料傳遞

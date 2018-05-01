@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 都市傳說之body範圍
 date: 2018-01-04 05:56:41
-tags: ["2018鐵人賽", "body", "background", "outline", "border", "html"]
+tags: ["2018鐵人賽", "body", "background", "outline", "border", 'HTML']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -81,6 +81,6 @@ root element: 根元素，在 HTML 文件中指的是 `<html>`
 # 參考資料
 
 [^1]: [4.3.1. The body element - w3.org](https://www.w3.org/TR/html5/sections.html#the-body-element)
-[^2]: [3.11. Backgrounds of Special Elements - w3.org](https://www.w3.org/TR/css-backgrounds-3/#special-backgrounds)
+[^2]: [3.11. Backgrounds of Special Elements - w3.org](https://www.w3.org/TR/CSS-backgrounds-3/#special-backgrounds)
 [^3]: [2.3.1 The canvas - w3.org](https://www.w3.org/TR/CSS22/intro.html#the-canvas)
 [^4]: [14.2 The background - w3.org](https://www.w3.org/TR/CSS22/colors.html#background)

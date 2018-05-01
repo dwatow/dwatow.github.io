@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 @import 開心的結構化 CSS
 date: 2018-01-05 07:27:46
-tags: ["2018鐵人賽", "CSS", "CSS3", "import"]
+tags: ["2018鐵人賽", 'CSS', "CSS3", "import"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -25,20 +25,20 @@ categories: "前端新手村"
 
 指定路徑檔名 和 URI同名字串 都是常見的做法。
 
-```css
-@import "cssFileName.css";
-@import url(cssFileName.css);
-@import url("cssFileName.css");
+```CSS
+@import "CSSFileName.CSS";
+@import url(CSSFileName.CSS);
+@import url("CSSFileName.CSS");
 ```
 
 和 Media Query 一起使用，預設 `all`
 
-```css
-@import url(color.css) screen and (color);
-@import url(example.css) screen and (color), projection and (color);
-@import url("fineprint.css") print;
-@import url("bluish.css") projection, tv;
-@import url("narrow.css") handheld and (max-width: 400px);
+```CSS
+@import url(color.CSS) screen and (color);
+@import url(example.CSS) screen and (color), projection and (color);
+@import url("fineprint.CSS") print;
+@import url("bluish.CSS") projection, tv;
+@import url("narrow.CSS") handheld and (max-width: 400px);
 ```
 
 ## `@import` 的行為
@@ -47,7 +47,7 @@ categories: "前端新手村"
 
 ## 怎麼結構化 CSS
 
-w3.org 有定義一份 [CSSOM](https://www.w3.org/TR/cssom-1/)
+w3.org 有定義一份 [CSSOM](https://www.w3.org/TR/CSSom-1/)
 不過，我們不詳細介紹，有興趣的朋友可以去看看。
 
 只是，在學習一些前置處理器時，往往會強調一些「 CSS 原生功能」當 SASS 的功能。
@@ -61,26 +61,26 @@ w3.org 有定義一份 [CSSOM](https://www.w3.org/TR/cssom-1/)
 stylesheets/
 |
 |-- modules/              # Common modules
-|   |-- _all.scss         # Include to get all modules
-|   |-- _utility.scss     # Module name
-|   |-- _colors.scss      # Etc...
+|   |-- _all.sCSS         # Include to get all modules
+|   |-- _utility.sCSS     # Module name
+|   |-- _colors.sCSS      # Etc...
 |   ...
 |
 |-- partials/             # Partials
 |   |-- _base.sass        # imports for all mixins + global project variables
-|   |-- _buttons.scss     # buttons
-|   |-- _figures.scss     # figures
-|   |-- _grids.scss       # grids
-|   |-- _typography.scss  # typography
-|   |-- _reset.scss       # reset
+|   |-- _buttons.sCSS     # buttons
+|   |-- _figures.sCSS     # figures
+|   |-- _grids.sCSS       # grids
+|   |-- _typography.sCSS  # typography
+|   |-- _reset.sCSS       # reset
 |   ...
 |
 |-- vendor/               # CSS or Sass from other projects
-|   |-- _colorpicker.scss
-|   |-- _jquery.ui.core.scss
+|   |-- _colorpicker.sCSS
+|   |-- _jquery.ui.core.sCSS
 |   ...
 |
-`-- main.scss            # primary Sass file
+`-- main.sCSS            # primary Sass file
 ```
 
 我個人不參考這篇文章作者的使用方式 (將 mixin, functions, variables 放一起)，我傾向於「不管是 variables、function ... 將宣告與使用，放得愈近愈好」
@@ -99,23 +99,23 @@ stylesheets/
 CSS 有可能在 SASS 的建議架構之下應用嗎？
 
 ```shell
-css/
+CSS/
 |-- partials/           # Partials
-|   |-- reset.css       # reset setting
-|   |-- colors.scss     # colors
-|   |-- buttons.css     # buttons
-|   |-- figures.css     # figures
-|   |-- grids.css       # grids
-|   |-- typography.css  # typography
+|   |-- reset.CSS       # reset setting
+|   |-- colors.sCSS     # colors
+|   |-- buttons.CSS     # buttons
+|   |-- figures.CSS     # figures
+|   |-- grids.CSS       # grids
+|   |-- typography.CSS  # typography
 |   ...
 |
 |-- vendor/             # CSS from other projects
-|   |-- animate.css
+|   |-- animate.CSS
 |   ...
 |
-|-- index.css           # primary CSS file
-|-- function.css        # primary CSS file
-`-- payment.css         # primary CSS file
+|-- index.CSS           # primary CSS file
+|-- function.CSS        # primary CSS file
+`-- payment.CSS         # primary CSS file
 ```
 
 換成 CSS 就是這樣用
@@ -129,5 +129,5 @@ css/
 
 # 參考資料
 
-[^1]: [2. Importing Style Sheets: the @import rule - w3.org](https://www.w3.org/TR/css-cascade-3/#at-import)
+[^1]: [2. Importing Style Sheets: the @import rule - w3.org](https://www.w3.org/TR/CSS-cascade-3/#at-import)
 [^2]: [How to structure a Sass project](http://thesassway.com/beginner/how-to-structure-a-sass-project)

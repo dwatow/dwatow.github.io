@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Transition
 date: 2018-01-01 09:42:05
-tags: ["2018鐵人賽", "CSS", "Transition"]
+tags: ["2018鐵人賽", 'CSS', "Transition"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -18,7 +18,7 @@ categories: "前端新手村"
 如果想要中間變化的過程，隨時間顯示在畫面上，transition 是一個簡單又直覺的選擇。
 
 transition 可以計算數值，從舊的到新的變化過程。只有可動畫化的屬性[^1]，才可以用在 transition。
-transition 還有一個「隨時可以中斷」的特性。若在 running transition 時，css 改變了，就會馬上改變，而不會等完成 transition 之後才套用。
+transition 還有一個「隨時可以中斷」的特性。若在 running transition 時，CSS 改變了，就會馬上改變，而不會等完成 transition 之後才套用。
 
 **語法**
 
@@ -77,7 +77,7 @@ delay時間 變化函數 都是使用預設值。
 <div class="box"></div>
 ```
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -129,7 +129,7 @@ delay時間 變化函數 都是使用預設值。
 
 先來看看原始碼
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -174,7 +174,7 @@ delay時間 變化函數 都是使用預設值。
 <div class="box"></div>
 ```
 
-```css
+```CSS
 #c1:checked ~ .box {
   margin-left: 0px;
 }
@@ -194,7 +194,7 @@ delay時間 變化函數 都是使用預設值。
 若我們要在一開始消失，後來出現。
 在 CSS 加上 `display: none` -> `display: block` 的切換
 
-```css
+```CSS
 #c1:checked ~ .box {
   /* 和上面的一樣 */
   display: block;
@@ -217,5 +217,5 @@ delay時間 變化函數 都是使用預設值。
 
 # 參考資料
 
-[^1]: [9.1. Properties from CSS - w3.org](https://www.w3.org/TR/2017/WD-css-transitions-1-20171130/#animatable-css)
-[^2]: [CSS Timing Functions Level 1](https://drafts.csswg.org/css-timing/)
+[^1]: [9.1. Properties from CSS - w3.org](https://www.w3.org/TR/2017/WD-CSS-transitions-1-20171130/#animatable-CSS)
+[^2]: [CSS Timing Functions Level 1](https://drafts.CSSwg.org/CSS-timing/)

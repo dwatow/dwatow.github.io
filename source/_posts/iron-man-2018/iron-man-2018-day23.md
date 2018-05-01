@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 細說 Timing function
 date: 2018-01-02 07:53:59
-tags: ["2018鐵人賽", "CSS", "Transition"]
+tags: ["2018鐵人賽", 'CSS', "Transition"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -90,7 +90,7 @@ step position 的意思
 
 舉例
 
-```css
+```CSS
 transition-timing-function: steps(1, start);
 transition-timing-function: steps(1, end);
 transition-timing-function: steps(3, start);
@@ -115,7 +115,7 @@ frames(大於1的正整數)
 
 例子
 
-```css
+```CSS
 transition-timing-function: frames(3);
 ```
 
@@ -124,4 +124,4 @@ transition-timing-function: frames(3);
 [^1]: [ 動畫的12項基本法則 - wiki](https://zh.wikipedia.org/wiki/%E5%8B%95%E7%95%AB%E7%9A%8412%E9%A0%85%E5%9F%BA%E6%9C%AC%E6%B3%95%E5%89%87)
 [^2]: [ 第 3 章：Pure Function－單純的幸福](https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch3.html)
 [^3]: [Bézier curve - wiki](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
-[^4]: [ CSS Timing Functions Level 1](https://drafts.csswg.org/css-timing/)
+[^4]: [ CSS Timing Functions Level 1](https://drafts.CSSwg.org/CSS-timing/)

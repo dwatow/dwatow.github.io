@@ -28,7 +28,7 @@ categories: "前端新手村"
 </div>
 ```
 
-```css
+```CSS
 .outter {
   outline : solid 1px black;
   display: flex;

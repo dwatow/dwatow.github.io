@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Animations (前傳)
 date: 2018-01-06 10:01:14
-tags: ["2018鐵人賽", "CSS", "animation", "transition"]
+tags: ["2018鐵人賽", 'CSS', "animation", "transition"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -78,7 +78,7 @@ transition: CSS屬性 持續時間;
 <div class="box"></div>
 ```
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -107,7 +107,7 @@ input:checked + .box {
 只要改 CSS，將屬性 改成 `@keyframe` 的名稱
 並且將要動畫的屬性 `left` ，放到動畫播放的位置
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -136,7 +136,7 @@ input:checked + .box {
 
 `載入` 時，播放 `10 次`
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -173,7 +173,7 @@ input:checked + .box {
 在 `hover` 時，box 的 `transition` 會下降 `30px` 並且變紅色。
 
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -214,4 +214,4 @@ input:checked + .box {
 
 # 參考資料
 
-[^1]: [3. Animations - w3.org](https://www.w3.org/TR/css-animations-1/#animations)
+[^1]: [3. Animations - w3.org](https://www.w3.org/TR/CSS-animations-1/#animations)

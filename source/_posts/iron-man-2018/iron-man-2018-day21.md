@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Media Query
 date: 2017-12-31 07:18:37
-tags: ["2018鐵人賽", "CSS", "Media Query"]
+tags: ["2018鐵人賽", 'CSS', "Media Query"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -18,28 +18,28 @@ categories: "前端新手村"
 
 ## 有幾個地方可以使用
 
-在 html 插入 css 時加條件。
+在 html 插入 CSS 時加條件。
 
 ```html
-<link rel="stylesheet" media="screen and (color)" href="example.css" />
+<link rel="stylesheet" media="screen and (color)" href="example.CSS" />
 ```
 
-在 css 插入 css 時加條件。
+在 CSS 插入 CSS 時加條件。
 
-```css
-@import url(color.css) screen and (color);
+```CSS
+@import url(color.CSS) screen and (color);
 ```
 
-在使用 css 時加條件
+在使用 CSS 時加條件
 
-```css
+```CSS
 @media all and (min-width:500px) { ... }
 @media (min-width:500px) { ... }
 ```
 
 media type 是 `all` 時，可以省略。
 
-```css
+```CSS
 @media (orientation: portrait) { ... }
 @media all and (orientation: portrait) { ... }
 ```
@@ -48,13 +48,13 @@ media type 是 `all` 時，可以省略。
 - `, ` 和 CSS 的 Combinators 一樣
 - `and` 就是「邏輯 AND」
 
-```css
+```CSS
 @media screen and (color), projection and (color) { ... }
 ```
 
 如果沒有給 media type 和 條件式，結果 always true
 
-```css
+```CSS
 @media all { ... }
 @media { ... }
 ```
@@ -62,10 +62,10 @@ media type 是 `all` 時，可以省略。
 在寫 media query 一開始，可以用 `not` 做「邏輯 NOT」
 
 ```html
-<link rel="stylesheet" media="not screen and (color)" href="example.css" />
+<link rel="stylesheet" media="not screen and (color)" href="example.CSS" />
 ```
 
-```css
+```CSS
 @media not screen and (color) { ... }
 ```
 
@@ -73,20 +73,20 @@ media type 是 `all` 時，可以省略。
 
 
 ```html
-<link rel="stylesheet" media="only screen and (color)" href="example.css" />
+<link rel="stylesheet" media="only screen and (color)" href="example.CSS" />
 ```
 
 可以在 `@import` 時加上 media query 的條件
 
-```css
-@import url(example.css) screen and (color), projection and (color);
+```CSS
+@import url(example.CSS) screen and (color), projection and (color);
 ```
 
 使用時要注意 media type 和 media feature 的單位是否匹配，若不適用會使結果變成 false
 
 ## Media features
 
-雖然 media query 在撰寫時，有一種在寫 css 的感覺。但是們還是有一些要注意的地方
+雖然 media query 在撰寫時，有一種在寫 CSS 的感覺。但是們還是有一些要注意的地方
 
 - 的內容是「輸出設備的要求」。
 - 不可以使用 `>` 和 `<` 取代常出現的 `max-` 和 `min-` 前綴字。
@@ -158,7 +158,7 @@ media type 是 `all` 時，可以省略。
 
 
 來看看這個 `.col-sm-8
-```css
+```CSS
 .col,  /*...*/.col-sm-8 /*...*/ {
     position: relative;
     width: 100%;
@@ -167,7 +167,7 @@ media type 是 `all` 時，可以省略。
     padding-left: 15px;
 }
 ```
-```css
+```CSS
 @media (min-width: 576px) {
 /* ... */
     .col-sm-8 {
@@ -197,7 +197,7 @@ media type 是 `all` 時，可以省略。
 
 來看看 CSS 發現側邊欄 `#mw-navigation` 和其它的 selector 在列印中有設定隱藏。
 
-```css
+```CSS
 @media print {
     .noprint,
     .catlinks,
@@ -231,5 +231,5 @@ media type 是 `all` 時，可以省略。
 
 # 參考資料
 
-[^1]: [Media Queries - w3.org](https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/)
+[^1]: [Media Queries - w3.org](https://www.w3.org/TR/2012/REC-CSS3-mediaqueries-20120619/)
 [^2]: [7 Media types - w3.org](https://www.w3.org/TR/CSS22/media.html#media-groups)

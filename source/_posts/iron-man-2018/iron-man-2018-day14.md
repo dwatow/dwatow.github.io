@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 CSS Selector 的 Combinators
 date: 2017-12-24 08:33:20
-tags: ["2018鐵人賽", "Selector", "CSS"]
+tags: ["2018鐵人賽", "Selector", 'CSS']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -79,7 +79,7 @@ categories: "前端新手村"
 透過相鄰選取器就可以選取到，就算成功了。
 剩下的就是在左邊加上 `|` 就成功了
 
-```css
+```CSS
 span {
  position: relative;
 }
@@ -94,4 +94,4 @@ span + span {
 
 # 參考資料
 
-[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/css3-selectors/#pseudo-classes)
+[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-classes)

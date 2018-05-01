@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Animations (上)
 date: 2018-01-07 09:18:19
-tags: ["2018鐵人賽", "CSS", "animation", "keyframes"]
+tags: ["2018鐵人賽", 'CSS', "animation", "keyframes"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -46,7 +46,7 @@ frames 有翻成 影格、幀 ，amination 最大的色就是將所有和動畫�
 - declaration-list 可以使用任何的 CSS 屬性，不過它不參與 CSS cascade，所以會忽略 `!important` (不管它設在 keyframe 裡還是外)
 
 
-```css
+```CSS
 /* 這兩個等價 */
 @keyframes foo { ... }
 @keyframes "foo" { ... }
@@ -63,7 +63,7 @@ frames 有翻成 影格、幀 ，amination 最大的色就是將所有和動畫�
 
 ## `animation-name`[^1]
 
-```css
+```CSS
 .box {
     animation-name: 動畫名稱;
 }
@@ -121,7 +121,7 @@ animation 的 `@keyframe` 變化函數。
 
 給一段正常的原始碼
 
-```css
+```CSS
 .box {
   height: 100px;
   width: 100px;
@@ -154,7 +154,7 @@ animation 的 `@keyframe` 變化函數。
 
 將它改成不正常的情況
 
-```css
+```CSS
 .box {
 /* ... */
 
@@ -170,4 +170,4 @@ animation 的 `@keyframe` 變化函數。
 ```
 # 參考資料
 
-[^1]: [CSS Animations Level 1 - w3.org](https://www.w3.org/TR/css-animations-1/)
+[^1]: [CSS Animations Level 1 - w3.org](https://www.w3.org/TR/CSS-animations-1/)

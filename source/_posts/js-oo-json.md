@@ -1,7 +1,7 @@
 ---
 title: JavaScript 的 OO 與 JSON
 date: 2018-02-22 11:55:09
-tags: ['json', 'javascript', 'oo', 'nodejs']
+tags: ['json', 'JavaScript', 'oo', 'nodejs']
 categories: '技術心得'
 ---
 # JavaScript 的 OO 與 JSON
@@ -65,7 +65,7 @@ $ node index.js
   age: 18,
   skills: [ 'html', 'css', 'javascript' ],
   devTool: { name: 'macbook12', year: 2017 } }
-{"name":"chris","age":18,"skills":["html","css","javascript"],"devTool":{"name":"macbook12","year":2017}}
+{"name":"chris","age":18,"skills":["html",'css',"javascript"],"devTool":{"name":"macbook12","year":2017}}
 ```
 
 到目前為止，都是 JSON 原本的用法。
@@ -115,7 +115,7 @@ $ node index.js
   addSkill: [Function: addSkill],  ## method
   devTool: { name: 'macbook12', year: 2017 },
   setDevTool: [Function: setDevTool] }  ## method
-{"name":"chris","age":18,"skills":["html","css","javascript"],"devTool":{"name":"macbook12","year":2017}}
+{"name":"chris","age":18,"skills":["html",'css',"javascript"],"devTool":{"name":"macbook12","year":2017}}
 ```
 
 從輸出可以看出一點不同的地方。
@@ -180,7 +180,7 @@ human {
   addSkill: [Function],
   devTool: { name: 'macbook12', year: 2017 },
   setDevTool: [Function] }
-{"name":"chris","age":18,"skills":["html","css","javascript"],"devTool":{"name":"macbook12","
+{"name":"chris","age":18,"skills":["html",'css',"javascript"],"devTool":{"name":"macbook12","
 year":2017}}
 human {
   name: 'mary',

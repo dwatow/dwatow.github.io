@@ -37,7 +37,7 @@ vue，是一種類MVVM的設計方式。
 ### 加一個
 在`attrValue`直接加一個`vue.data`的屬性
 
-將一些cssClass一起加入
+將一些CSSClass一起加入
 
 條件判斷方式
 className是否出現，取決於vue.data是否擁有該屬性。
@@ -47,7 +47,7 @@ v-bind:attr="data1"
 ```
 ```javascript
 data: {
-    data1: 'cssClass1 cssClass2',
+    data1: 'CSSClass1 CSSClass2',
 }
 ```
 ### 加很多
@@ -58,7 +58,7 @@ v-bind:attr="[arrayElem, ...]"
 ```
 ```javascript
 data: {
-    arrayElem: 'cssClass1 cssClass2',
+    arrayElem: 'CSSClass1 CSSClass2',
 }
 ```
 
@@ -69,7 +69,7 @@ data: {
 
 1. attr=匿名物件
 ```htmlmixed
-v-bind:attr="{cssClass: isActive}"
+v-bind:attr="{CSSClass: isActive}"
 ```
 ```javascript
 data: {
@@ -83,7 +83,7 @@ v-bind:attr="objectName"
 ```javascript
 data: {
     objectName: {
-        cssClass: true | false
+        CSSClass: true | false
     }
 }
 ```
@@ -169,7 +169,7 @@ msg是js變數，內容當作含有HTML的字串，會渲染
 ## 遺珠之憾(十日整理之外)
 
 - `v-bind` array要加判斷式(用object)的混合技法
-- `v-bind:style` 的使用，很像css的使用方式
+- `v-bind:style` 的使用，很像CSS的使用方式
 - 自動補上 vendor prefix
 - `v-if` in `template`
 - `v-else`

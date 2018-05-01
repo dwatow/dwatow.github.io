@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 Block 和 Inline 排版
 date: 2017-12-16 07:17:35
-tags: ["2018鐵人賽", "CSS", "Block", "Inline"]
+tags: ["2018鐵人賽", 'CSS', "Block", "Inline"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -97,7 +97,7 @@ categories: "前端新手村"
 看個例子
 承上面的 code，加上 CSS
 
-```css=
+```CSS=
 div {
     display: inline;
 }

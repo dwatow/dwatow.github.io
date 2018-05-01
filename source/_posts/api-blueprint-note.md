@@ -364,7 +364,7 @@ containing a question and a collection of answers in the form of choices.
 + choices (array[Choice], required)
 
 ### Choice
-+ choice: Javascript (required)
++ choice: JavaScript (required)
 + url: /questions/1/choices/1 (required)
 + votes: 2048 (number, required)
 ```

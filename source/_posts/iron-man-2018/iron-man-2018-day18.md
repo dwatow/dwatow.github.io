@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 flex (上)
 date: 2017-12-28 07:25:29
-tags: ["2018鐵人賽", "CSS", "Flex"]
+tags: ["2018鐵人賽", 'CSS', "Flex"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -50,7 +50,7 @@ categories: "前端新手村"
 
 在容器使用
 
-```css
+```CSS
 display: flex;
 display: inline-flex;
 ```
@@ -61,7 +61,7 @@ display: inline-flex;
 - `::first-letter` 、 `::first-line`、`float` 以及 `clear` 和 `vertical-align` 沒有作用。
 - `margin` 不會 margins collapsing
 - `margin` 和 `padding` 不要用在元素上，目前未定案
-- `margin: auto` 特別規定在 [8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins)
+- `margin: auto` 特別規定在 [8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#auto-margins)
 
 ## 在 flex 容器排元素
 
@@ -126,11 +126,11 @@ flex-flow: <flex-direction>
 
 ## 學習管道
 
-- [CSS-Tricks flex box](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [CSS-Tricks flex box](https://CSS-tricks.com/snippets/CSS/a-guide-to-flexbox/)
 - [小青蛙練習](http://flexboxfroggy.com/)
 
 # 參考資料
 
 [^1]: [ Flexbox的奇怪歷史](https://yuguo.us/weblog/flexbox-history)
 [^2]: [ Align or justify text - InDesign User Guide](https://helpx.adobe.com/indesign/using/aligning-text.html)
-[^3]: [ 5.4. Display Order: the order property - w3.org](https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#order-property)
+[^3]: [ 5.4. Display Order: the order property - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#order-property)

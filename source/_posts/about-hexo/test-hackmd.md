@@ -225,7 +225,7 @@ alert(s);
 {%slideshare briansolis/26-disruptive-technology-trends-2016-2018-56796196 %}
 
 ### Speakerdeck
-{%speakerdeck sugarenia/xxlcss-how-to-scale-css-and-keep-your-sanity %}
+{%speakerdeck sugarenia/xxlCSS-how-to-scale-CSS-and-keep-your-sanity %}
 
 ### PDF
 **注意：請使用 https 的網址，否則可能會被您的瀏覽器阻擋載入**
@@ -547,6 +547,6 @@ _緊密樣式：_
 ### 縮寫
 
 這是 HTML 的縮寫範例
-它會轉換 "HTML"，但是縮寫旁邊其他的部分，例如："xxxHTMLyyy"，不受影響
+它會轉換 'HTML'，但是縮寫旁邊其他的部分，例如："xxxHTMLyyy"，不受影響
 
 *[HTML]: Hyper Text Markup Language

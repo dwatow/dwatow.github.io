@@ -24,18 +24,18 @@ categories: ["工具使用"]
 
 在 webpack 裡想要編寫 JS 其它語言，就要用 loader 系列的套件。它們將其它語言變成 JS 。這麼一來才可以讓 webpack 看得懂
 
-### [Loading CSS](https://webpack.js.org/guides/asset-management/#loading-css)
+### [Loading CSS](https://webpack.js.org/guides/asset-management/#loading-CSS)
 
-載入 css 要安裝兩個套件
-- css-loader: 將 css 轉成 js
+載入 CSS 要安裝兩個套件
+- CSS-loader: 將 CSS 轉成 js
 - style-loader 將轉好的 js 轉成 html 可以使用的樣式
 
 ```shell
-npm install --save-dev style-loader css-loader
+npm install --save-dev style-loader CSS-loader
 ```
 
-> [postcss](https://webpack.js.org/loaders/postcss-loader), [sass](https://webpack.js.org/loaders/sass-loader), [less](https://webpack.js.org/loaders/less-loader) 都可以唷
-(postcss 幫你加 prefix)
+> [postCSS](https://webpack.js.org/loaders/postCSS-loader), [sass](https://webpack.js.org/loaders/sass-loader), [less](https://webpack.js.org/loaders/less-loader) 都可以唷
+(postCSS 幫你加 prefix)
 
 ### [Loading Images](https://webpack.js.org/guides/asset-management/#loading-images)
 
@@ -206,7 +206,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 ```
 
-### [Split CSS](https://webpack.js.org/guides/production/#split-css)
+### [Split CSS](https://webpack.js.org/guides/production/#split-CSS)
 
 使用[ExtractTextWebpackPlugin](https://webpack.js.org/plugins/extract-text-webpack-plugin)可以分離 CSS 檔
 

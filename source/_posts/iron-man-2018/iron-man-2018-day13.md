@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 CSS 的 簡單 Selector (下篇)
 date: 2017-12-23 07:17:11
-tags: ["2018鐵人賽", "Selector", "CSS"]
+tags: ["2018鐵人賽", "Selector", 'CSS']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -12,7 +12,7 @@ categories: "前端新手村"
 
 讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。
 
-# css 的 簡單 Selector (下篇)
+# CSS 的 簡單 Selector (下篇)
 
 ## The UI element states pseudo-classes
 
@@ -88,7 +88,7 @@ n也可以是 `±Zn±Z` 或 `±Zn` (Z是整數) [^2]
 
 ![](https://i.imgur.com/lDb98ya.png)
 
-```css
+```CSS
 input:checked + span {
  color: red;
 }
@@ -121,7 +121,7 @@ n = 9n+6
 原始碼長這樣
 將 `margin-left: 50px;` 解除註解就可以看到成功的案例囉
 
-```css
+```CSS
 .box {
  padding-bottom: 50px;
  width: 100px;
@@ -153,5 +153,5 @@ n = 9n+6
 
 # 參考資料
 
-[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/css3-selectors/#pseudo-classes)
+[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-classes)
 [^2]: [整數 - wiki](https://zh.wikipedia.org/wiki/%E6%95%B4%E6%95%B0)

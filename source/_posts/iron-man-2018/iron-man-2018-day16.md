@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 CSS Cascade 串接
 date: 2017-12-26 07:43:34
-tags: ["2018鐵人賽", "Specificity", "Rulest Order", "CSS"]
+tags: ["2018鐵人賽", "Specificity", "Rulest Order", 'CSS']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -22,7 +22,7 @@ Cascade 動作是由 Specificity 和 Ruleset order 作用，決定要套用的 C
 
 Specificity 在中文翻譯成「特定度」。
 
-千言萬語，透過[一個頁面](http://cssspecificity.com/)可以說盡。
+千言萬語，透過[一個頁面](http://CSSspecificity.com/)可以說盡。
 看不懂沒關係，只要繼續看下去。
 
 
@@ -58,7 +58,7 @@ Specificity 在中文翻譯成「特定度」。
 
 看個例子
 
-```css
+```CSS
 #nav-global > ul > li > a.nav-link /* 0, 1, 1, 3 */
 ```
 - a = 0: 沒有寫在 HTML 的 `style`
@@ -84,7 +84,7 @@ Rulest order 翻譯成 規則集順序。
 
 看個例子
 
-```css
+```CSS
 #nav-global > ul > li > a.nav-link {
     color: blue;
 }
@@ -98,4 +98,4 @@ Rulest order 翻譯成 規則集順序。
 # 參考資料
 [^1]: 《重構 CSS》
 [^2]: [9. Calculating a selector's specificity - w3.org
-](https://www.w3.org/TR/css3-selectors/#specificity)
+](https://www.w3.org/TR/CSS3-selectors/#specificity)

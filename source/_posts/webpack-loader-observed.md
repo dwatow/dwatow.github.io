@@ -1,7 +1,7 @@
 ---
 title: 認識 Webpack Loader
 date: 2018-03-17 11:04:05
-tags: [nodejs, webpack, vuejs, 'webpack loader', js]
+tags: [nodejs, webpack, vuejs, 'webpack loader', 'JavaScript']
 categories: [工具使用]
 ---
 # 認識 Webpack Loader
@@ -273,5 +273,5 @@ loader 在 webpack 的用途，在官網寫得很清楚。
 
 [^unit-test-structor]: [\[Day 3\]動手寫Unit Test, 3A原則](https://ithelp.ithome.com.tw/articles/10102643)
 
-[^async-await-bible]: [\[Javascript\] ES7 Async Await 聖經, 3- Constructing Async function
+[^async-await-bible]: [\[JavaScript\] ES7 Async Await 聖經, 3- Constructing Async function
 ](https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29)

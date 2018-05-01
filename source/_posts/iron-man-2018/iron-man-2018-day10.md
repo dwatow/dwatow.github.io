@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 再論 ex, em
 date: 2017-12-20 07:11:03
-tags: ["2018鐵人賽", "CSS", "CSS Unit"]
+tags: ["2018鐵人賽", 'CSS', "CSS Unit"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -64,7 +64,7 @@ xz
 
 同理可證，不過，還是寫個程式比一下字母
 
-```css
+```CSS
 .letters {
     position: relative;
     top: 0;

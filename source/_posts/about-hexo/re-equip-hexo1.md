@@ -215,7 +215,7 @@ var util = require('hexo-util');
 var highlight = util.highlight;
 ```
 
-由上面的程式碼得知，參數與程式碼則是丟進了外掛程式 `hexo-util` 的 `highlight` 函數中。進行後處理，hexo在處理程式碼加行號時，會使用 `table` 語法確定排列不與 `css` 相依，也可以排列出想要的位置。
+由上面的程式碼得知，參數與程式碼則是丟進了外掛程式 `hexo-util` 的 `highlight` 函數中。進行後處理，hexo在處理程式碼加行號時，會使用 `table` 語法確定排列不與 `CSS` 相依，也可以排列出想要的位置。
 
 
 ### 過濾器與渲染器兩者之間差在哪呢？
@@ -267,10 +267,10 @@ sequence:
   # snap:        # optional, the source url of snap.svg.js
   # underscore:  # optional, the source url of underscore.js
   # sequence:    # optional, the source url of sequence-diagram.js
-  # css: # optional, the url for css, such as hand drawn theme
+  # CSS: # optional, the url for CSS, such as hand drawn theme
   options:
     theme:
-    css_class:
+    CSS_class:
 ```
 
 ## 改上文章目錄[^toc]

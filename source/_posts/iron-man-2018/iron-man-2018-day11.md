@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 CSS 簡單 Selector (上篇) & Groups
 date: 2017-12-21 07:30:03
-tags: ["2018鐵人賽", "Selector", "CSS"]
+tags: ["2018鐵人賽", "Selector", 'CSS']
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -94,16 +94,16 @@ console.log(abcde)  //<div id="abcde"></div>
 無需再宣告！這是一個有趣的現象。
 而且每個 id 名稱在每一頁，不能重複。
 就像是變數命名一樣，所以通常 id 是留給 js 用的。
-(不過 js 還是有在用 class ，css 還是有在用 id 的)
+(不過 js 還是有在用 class ，CSS 還是有在用 id 的)
 
-css 還是會建議以 class 優先使用。
-原因是「大多數的 css 修改不具備畫面唯一性」。
+CSS 還是會建議以 class 優先使用。
+原因是「大多數的 CSS 修改不具備畫面唯一性」。
 
 ## Groups of Selectors
 
 可以使用`,`符號，將 Selector 串起來，這是將 Selector 組成群組 (Group)。
 
-```css
+```CSS
 *, .className {}
 #id, .className {}
 ```
@@ -114,5 +114,5 @@ css 還是會建議以 class 優先使用。
 
 # 參考資料
 
-[^1]: [Selectors Level 3 - w3.org](https://www.w3.org/TR/css3-selectors/)
+[^1]: [Selectors Level 3 - w3.org](https://www.w3.org/TR/CSS3-selectors/)
 [^2]: [Simple Tree Transformation Sheets 3 - w3.org](https://www.w3.org/TR/NOTE-STTS3)

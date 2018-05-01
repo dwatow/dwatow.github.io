@@ -62,7 +62,7 @@ $ hexo init dwatow.github.io
 Hexo的主題更換，理論上確實是非常簡單的。
 [官網的教學](https://hexo.io/zh-tw/docs/themes.html)說明如下
 
->「打造 Hexo 主題非常容易，您只要在 themes 資料夾內，新增一個資料夾，並修改 _config.yml 內的 theme 設定，即可切換主題。一個主題可能會有以下的結構：」
+>「打造 Hexo 主題非常容易，您只要在 themes 資料夾內，新增一個資料夾，並修改 \_config.yml 內的 theme 設定，即可切換主題。一個主題可能會有以下的結構：」
 
 簡要的說，就是四個步驟:
 1. 在 themes 資料夾內，新增一個資料夾
@@ -156,8 +156,8 @@ $ hexo deploy --generate
 [^指令]: [Hexo指令說明](https://hexo.io/zh-tw/docs/commands.html)
 
 
-[^clean]: `$ hexo generate`之後，套不上CSS，console裡無報錯。
-要先下`$ hexo clean`
+[^clean]: `$ hexo generate` 之後，套不上 CSS，console 裡無報錯。
+要先下 `$ hexo clean`
 
 [^$hexoPath]: 「你的hexo部落格目錄」
 [^註2]: 通常在github上的主題，會命名成`hexo-theme-主題名稱`。

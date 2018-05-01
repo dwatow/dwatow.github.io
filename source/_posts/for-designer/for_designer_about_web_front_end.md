@@ -120,7 +120,7 @@ categories: '給平面設計師的'
 ## 若平面設計師想~~認識的 RWD~~ 跨 UI 設計的建議
 
 針對網頁`RWD`的特性出現的幾個規格要...過目。
-`vh`, `vw`, `em`, `rem`。^[[CSS Unit](https://www.w3schools.com/cssref/css_units.asp)]
+`vh`, `vw`, `em`, `rem`。^[[CSS Unit](https://www.w3schools.com/CSSref/CSS_units.asp)]
 
 # 還是要溝通!!
 

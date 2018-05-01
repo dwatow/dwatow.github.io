@@ -248,7 +248,7 @@ Term 2
 
 This is HTML abbreviation example.
 
-It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
+It converts 'HTML', but keep intact partial entries like "xxxHTMLyyy" and so on.
 
 *[HTML]: Hyper Text Markup Language
 

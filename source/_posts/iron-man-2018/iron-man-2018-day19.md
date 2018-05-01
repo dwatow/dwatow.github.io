@@ -1,7 +1,7 @@
 ---
 title: 前端新手村 flex (下)
 date: 2017-12-29 07:38:50
-tags: ["2018鐵人賽", "CSS", "Flex"]
+tags: ["2018鐵人賽", 'CSS', "Flex"]
 categories: "前端新手村"
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
@@ -88,7 +88,7 @@ flex 可以搭配 `min-width` 和 `min-height` 改變壓縮時的幅度。
 
 - 要避免在 flex item 的 `margin` 和 `padding` 使用百分比，會跨瀏覽器的問題
 
-一般在 `flex item` 的 `margin` 的排法，寫在[排版演算法](https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#layout-algorithm)，但是當 `margin: auto` ，flex 希望比較像是 `block` 的排版，所以有下列幾點要注意:
+一般在 `flex item` 的 `margin` 的排法，寫在[排版演算法](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#layout-algorithm)，但是當 `margin: auto` ，flex 希望比較像是 `block` 的排版，所以有下列幾點要注意:
 
 - 計算 `flex-basis` 時，`margin` 會直接當作 0
 - 在 `justify-content` 和 `align-self` 計算之前，會先分配正數的剩餘空間給該方向的 `margin: auto`
@@ -100,5 +100,5 @@ flex item 都使用 `flex` 處理剩餘空間了，就不應該又使用 `margin
 
 # 參考資料
 
-[^1]: [ 7.1. The flex Shorthand - w3.org](https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#flex-property)
-[^2]: [ 8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-css-flexbox-1-20171019/#auto-margins)
+[^1]: [ 7.1. The flex Shorthand - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#flex-property)
+[^2]: [ 8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#auto-margins)
