@@ -109,16 +109,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-24-iron-man-2018/iron-man-2018-day14/">http://dwatow.github.io/2017/12-24-iron-man-2018/iron-man-2018-day14/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-25-iron-man-2018/iron-man-2018-day15/">http://dwatow.github.io/2017/12-25-iron-man-2018/iron-man-2018-day15/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>前端新手村 CSS Selector 的 Combinators</h1>
+        <h1>前端新手村 偽元素</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-的-selector-combinators"><span class="toc-text">css-的-selector-combinators</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#常見又不建議的關係整理"><span class="toc-text">常見又不建議的關係整理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常見的應用"><span class="toc-text">常見的應用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#偽元素"><span class="toc-text">偽元素</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一行-first-line"><span class="toc-text">第一行-first-line</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一個字-first-letter"><span class="toc-text">第一個字-first-letter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常見的用途"><span class="toc-text">常見的用途</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#內容前-後-before-after"><span class="toc-text">內容前-後-before-after</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#selector-遺珠"><span class="toc-text">selector-遺珠</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dtd"><span class="toc-text">dtd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#namespace"><span class="toc-text">namespace</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
   </div>
 
 
@@ -128,88 +128,115 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="css-的-selector-combinators"><a class="header-anchor" href="#css-的-selector-combinators">¶</a>CSS 的 Selector Combinators<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
-<p>在介紹完 Simple selectors 之後，其實就可以做各式各樣的選擇，並且可以將它組成 Group。</p>
-<p>這還沒結束， Selector 還可以用 Combinators 來將它以某種關係組合起來。</p>
-<p>常見的應用，描述 Selector 透過 HTML 結構的耦合關係，套用特定 HTML element 的 CSS。</p>
-<p>英文稱為 Combinators，不過我後來想一想，這個的概念像是英文的連結詞: and, but 之類的。</p>
+<h1 id="偽元素"><a class="header-anchor" href="#偽元素">¶</a>偽元素</h1>
+<p>偽類 不是 偽元素。<br>
+偽元素，是元素!!!會出現在 DOM 樹上，偽類不會出現在 DOM 樹上。</p>
 <ul>
-<li>
-<p>Descendant combinator 後裔組合</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">a b</div></pre></td></tr></table></figure>
-</li>
-<li>
-<p>Child combinators  孩子組合</p>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">a&gt;b</div></pre></td></tr></table></figure>
-</li>
-<li>
-<p>Sibling combinators  同層組合<br>
-在考慮相鄰關係時，略過非元素節點</p>
+<li>作用在 HTML element 裡的「內容」選擇器</li>
+<li>使用 <code>::first-line</code>或<code>::first-letter</code>可以描述(選到的)內容的特定位置</li>
+<li>使用 <code>::after</code> 或 <code>::before</code> 是「建立頭/尾內容」的偽元素</li>
+</ul>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Selector::偽元素</div></pre></td></tr></table></figure>
 <ul>
-<li>Adjacent sibling combinator  相鄰同層組合</li>
+<li>使用2個<code>:</code>是CSS3的規定，1個<code>:</code>也可以用的原因是對CSS1&amp;2的相向下容性</li>
+<li>一個 Selector 只能有一個偽元素</li>
 </ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">A+B</div></pre></td></tr></table></figure>
+<blockquote>
+<p>未來的版本會出現多重偽元素!!</p>
+</blockquote>
+<h2 id="第一行-first-line"><a class="header-anchor" href="#第一行-first-line">¶</a>第一行 <code>::first-line</code></h2>
 <ul>
-<li>General sibling combinator 向後同層組合</li>
+<li>作用在第一行內容</li>
+<li>第一行的 <code>inline-table</code>, <code>inline-block</code> CSS會失效</li>
+<li>作用在 <code>block</code> 或 <code>table</code> 元素裡的 <code>inline</code> 內容(才有分行)。</li>
+<li>會依寬度而影響被選到的對象(斷行就沒選到了)</li>
+<li>第一行出現 <code>&lt;br&gt;</code> 那就是 <code>&lt;br&gt;</code> 之前的才算被選到</li>
+<li>選出來的第一行特性接近 <code>inline</code> 元素</li>
 </ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">A~B</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="常見又不建議的關係整理"><a class="header-anchor" href="#常見又不建議的關係整理">¶</a>常見又不建議的關係整理</h2>
-<table>
-<thead>
-<tr>
-<th>邏輯</th>
-<th>Selector</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>AND</td>
-<td>.A.B</td>
-<td>同時擁有.A和.B</td>
-</tr>
-<tr>
-<td>OR</td>
-<td>.A, .B</td>
-<td>只要有.A或.B</td>
-</tr>
-<tr>
-<td>INCLUDE</td>
-<td>.A .B</td>
-<td>.B包含在.A裡</td>
-</tr>
-<tr>
-<td>IN</td>
-<td>.A &gt; .B</td>
-<td>.B下一層有.A</td>
-</tr>
-</tbody>
-</table>
-<p>其實，不推薦這樣理解它們。<br>
-原因在於，初學會有許許多多的疑問</p>
-<ul>
-<li>不知道最後選到了誰</li>
-<li>它們是不是運算式，有沒有先乘除後加減的規則？</li>
-</ul>
-<p>還是用正確的分類一個一個來認識它們。</p>
-<h2 id="常見的應用"><a class="header-anchor" href="#常見的應用">¶</a>常見的應用</h2>
-<p>在 menu 或 footer 的設計上，常出現元素中間需要間隔線。</p>
 <p>看個例子</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">DIV</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span>First paragraph<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span>Second paragraph<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">DIV</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>其實瀏覽器會這麼讀它</p>
+<blockquote>
+<p>注意<br>
+此例有把偽元素的作用範圍、順序精確的(以虛擬標籤的方式)標示在原始碼上。</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">DIV</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span><span class="tag">&lt;<span class="name">DIV::first-line</span>&gt;</span><span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span>First paragraph<span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">DIV::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">P</span>&gt;</span><span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span>Second paragraph<span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">DIV</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="第一個字-first-letter"><a class="header-anchor" href="#第一個字-first-letter">¶</a>第一個字 <code>::first-letter</code></h2>
+<ul>
+<li>作用在一個字(母)</li>
+<li>第一個字的 <code>inline-table</code>, <code>inline-block</code> CSS會失效</li>
+<li>作用在 <code>block</code> 或 <code>table</code> 元素裡的 <code>inline</code> 內容(才有分行)。</li>
+<li>第一個字的位置是圖，則沒有任何字被選上</li>
+<li>標點符號起始的文章，標點符號會與字母一起被選取
+<ul>
+<li>ex1: <img src="https://i.imgur.com/t9nk5TS.png" alt=""></li>
+<li>ex2: <img src="https://i.imgur.com/9Fswp9g.png" alt=""></li>
+</ul>
+</li>
+<li>第一個字出現 <code>&lt;br&gt;</code> 那就是沒有任何字母被選上</li>
+<li>選出來的第一個字特性接近 <code>inline</code> 元素</li>
+</ul>
+<p><strong>看個例子</strong></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: red; <span class="attribute">font-size</span>: <span class="number">12pt</span> &#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-letter</span> &#123; <span class="attribute">color</span>: green; <span class="attribute">font-size</span>: <span class="number">200%</span> &#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-line</span> &#123; <span class="attribute">color</span>: blue &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">P</span>&gt;</span>Some text that ends up on two lines<span class="tag">&lt;/<span class="name">P</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>其實瀏覽器會這麼讀它</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">P</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">P::first-line</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">P::first-letter</span>&gt;</span></div><div class="line">            S</div><div class="line">        <span class="tag">&lt;/<span class="name">P::first-letter</span>&gt;</span></div><div class="line">        ome text that</div><div class="line">    <span class="tag">&lt;/<span class="name">P::first-line</span>&gt;</span></div><div class="line">    ends up on two lines</div><div class="line"><span class="tag">&lt;/<span class="name">P</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>結果是這樣</p>
+<p><img src="https://i.imgur.com/xCKbqdr.png" alt=""></p>
+<blockquote>
+<p>注意<br>
+若同時設定 <code>::first-letter</code> 和 <code>::first-line</code><br>
+<code>::first-letter</code> 會繼承<code>::first-line</code> 的 CSS，若有衝突，會使用 <code>::first-letter</code> 的設定(會覆蓋)</p>
+</blockquote>
+<h3 id="常見的用途"><a class="header-anchor" href="#常見的用途">¶</a>常見的用途</h3>
+<p>“initial caps” and “drop caps”</p>
+<p><img src="https://i.imgur.com/8qTDKd3.png" alt=""></p>
+<h2 id="內容前-後-before-after"><a class="header-anchor" href="#內容前-後-before-after">¶</a>內容前&amp;後 <code>::before</code> &amp; <code>::after</code></h2>
+<p>適用在可以裝子元素的 HTML element</p>
+<ul>
+<li><code>::before</code> 建立第一個子元素內容</li>
+<li><code>::after</code> 建立最後一個子元素內容</li>
+</ul>
+<p><strong>使用注意</strong></p>
+<p>要有 <code>content: ''</code> 這兩個偽元素才會 work ，是用來放偽元素的內容。</p>
+<ul>
+<li>優點
+<ul>
+<li>使用 CSS 控制是不是要加內容</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>SEO 不好(內容寫在 CSS)</li>
+</ul>
+</li>
+</ul>
+<p><strong>看個例子</strong></p>
 <p><img src="https://i.imgur.com/GLqxrjl.png" alt=""></p>
 <figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>A<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure>
 <p><img src="https://i.imgur.com/JUB7s4C.png" alt=""></p>
 <p>透過相鄰選取器就可以選取到，就算成功了。<br>
 剩下的就是在左邊加上 <code>|</code> 就成功了</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> + <span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">color</span>: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">span</span> &#123;</div><div class="line"> <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">span</span> + <span class="selector-tag">span</span><span class="selector-pseudo">::after</span> &#123;</div><div class="line"> <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line"> <span class="attribute">display</span>: block;</div><div class="line"> <span class="attribute">position</span>: absolute;</div><div class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line"> <span class="attribute">margin</span>: auto;</div><div class="line"> <span class="attribute">width</span>: <span class="number">1px</span>;</div><div class="line"> <span class="attribute">height</span>: <span class="number">15px</span>;</div><div class="line"> <span class="attribute">background-color</span>: <span class="number">#000</span>;</div><div class="line"> <span class="attribute">left</span>: -<span class="number">2px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>下次再來分享怎麼加上 <code>|</code><br>
 (不是用 <code>border</code> 當然也不是 <code>outline</code>)</p>
+<h2 id="selector-遺珠"><a class="header-anchor" href="#selector-遺珠">¶</a>Selector 遺珠</h2>
+<h3 id="dtd"><a class="header-anchor" href="#dtd">¶</a>DTD</h3>
+<p>DTD: Document Type Definition<br>
+XML 的事，和網頁前端新手可以先跳過<br>
+在此不介紹</p>
+<h3 id="namespace"><a class="header-anchor" href="#namespace">¶</a>namespace</h3>
+<p><code>w3.org</code> 的文件的介紹，有講到 namespace<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">namespace | Selector &#123;&#125;</div></pre></td></tr></table></figure>
+<p>CSS 的 Selector 會有 <code>|</code> 出現。<br>
+不過，在此不討論 namespace。</p>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS3-selectors/#pseudo-classes" target="_blank" rel="noopener">Selectors Level 3, 6.6. Pseudo-classes - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://developer.mozilla.org/zh-TW/docs/Web/CSS/@namespace" target="_blank" rel="noopener"> @namespace - MDN</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -226,15 +253,15 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
-  </li>
-
-  <li class="meta-text">
   { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/Selector/">Selector</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Pseudo-elements/">Pseudo-elements</a> }
   </li>
 
 
@@ -264,7 +291,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 38.73px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 17.09px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.09px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 14px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vuejs/" style="font-size: 35.64px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 29.45px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 38.73px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 17.09px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.09px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 14px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vuejs/" style="font-size: 35.64px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 29.45px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
