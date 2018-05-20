@@ -4,7 +4,7 @@ date: 2018-03-13 08:34:44
 tags: [npm, unpkg, codepen]
 categories: [工具使用]
 ---
-# 來自國德的 Alex 和 Nina 交流
+# 來自德國的 Alex 和 Nina 交流
 
 <iframe src="//slides.com/ninabreznik/wizard-amigos/embed?style=light" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
