@@ -61,26 +61,26 @@ w3.org 有定義一份 [CSSOM](https://www.w3.org/TR/CSSom-1/)
 stylesheets/
 |
 |-- modules/              # Common modules
-|   |-- _all.sCSS         # Include to get all modules
-|   |-- _utility.sCSS     # Module name
-|   |-- _colors.sCSS      # Etc...
+|   |-- _all.scss         # Include to get all modules
+|   |-- _utility.scss     # Module name
+|   |-- _colors.scss      # Etc...
 |   ...
 |
 |-- partials/             # Partials
 |   |-- _base.sass        # imports for all mixins + global project variables
-|   |-- _buttons.sCSS     # buttons
-|   |-- _figures.sCSS     # figures
-|   |-- _grids.sCSS       # grids
-|   |-- _typography.sCSS  # typography
-|   |-- _reset.sCSS       # reset
+|   |-- _buttons.scss     # buttons
+|   |-- _figures.scss     # figures
+|   |-- _grids.scss       # grids
+|   |-- _typography.scss  # typography
+|   |-- _reset.scss       # reset
 |   ...
 |
 |-- vendor/               # CSS or Sass from other projects
-|   |-- _colorpicker.sCSS
-|   |-- _jquery.ui.core.sCSS
+|   |-- _colorpicker.scss
+|   |-- _jquery.ui.core.scss
 |   ...
 |
-`-- main.sCSS            # primary Sass file
+`-- main.scss            # primary Sass file
 ```
 
 我個人不參考這篇文章作者的使用方式 (將 mixin, functions, variables 放一起)，我傾向於「不管是 variables、function ... 將宣告與使用，放得愈近愈好」
@@ -102,7 +102,7 @@ CSS 有可能在 SASS 的建議架構之下應用嗎？
 CSS/
 |-- partials/           # Partials
 |   |-- reset.css       # reset setting
-|   |-- colors.sCSS     # colors
+|   |-- colors.scss     # colors
 |   |-- buttons.css     # buttons
 |   |-- figures.css     # figures
 |   |-- grids.css       # grids

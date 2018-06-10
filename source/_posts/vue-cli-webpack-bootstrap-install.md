@@ -81,20 +81,20 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 在 Webpack 還要設定 CSS-loader 。
 :::
 
-## 載入 Bootstrap 的 sCSS
+## 載入 Bootstrap 的 scss
 
-在 vue-cli 裡，要在 webpack 的 `App.vue` 裡的 `<style lang="sCSS">` 加入這一行。
+在 vue-cli 裡，要在 webpack 的 `App.vue` 裡的 `<style lang="scss">` 加入這一行。
 (或者是在有用到 bootstrap 的 .vue 檔裡)
 
-```sCSS
-@import "~bootstrap/sCSS/bootstrap";
+```scss
+@import "~bootstrap/scss/bootstrap";
 ```
 
 表示「引用 Bootstrap 的 SCSS」。
 CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 
 :::danger
-在 Webpack 還要設定 sCSS-loader 。
+在 Webpack 還要設定 scss-loader 。
 :::
 
 但是，事情卻還沒有這麼簡單!!!
@@ -125,7 +125,7 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
     loader: 'vue-loader',
     options: {
       loaders: {
-        sCSS: [
+        scss: [
           'vue-style-loader',
           'CSS-loader',
           'postCSS-loader',
@@ -134,7 +134,7 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
             loader: 'sass-resources-loader',
             options: {
               resources: [
-                './node_modules/bootstrap/sCSS/bootstrap.sCSS'
+                './node_modules/bootstrap/scss/bootstrap.scss'
               ]
             },
           },
