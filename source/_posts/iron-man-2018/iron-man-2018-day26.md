@@ -26,19 +26,19 @@ categories: "前端新手村"
 指定路徑檔名 和 URI同名字串 都是常見的做法。
 
 ```CSS
-@import "CSSFileName.CSS";
-@import url(CSSFileName.CSS);
-@import url("CSSFileName.CSS");
+@import "CSSFileName.css";
+@import url(CSSFileName.css);
+@import url("CSSFileName.css");
 ```
 
 和 Media Query 一起使用，預設 `all`
 
 ```CSS
-@import url(color.CSS) screen and (color);
-@import url(example.CSS) screen and (color), projection and (color);
-@import url("fineprint.CSS") print;
-@import url("bluish.CSS") projection, tv;
-@import url("narrow.CSS") handheld and (max-width: 400px);
+@import url(color.css) screen and (color);
+@import url(example.css) screen and (color), projection and (color);
+@import url("fineprint.css") print;
+@import url("bluish.css") projection, tv;
+@import url("narrow.css") handheld and (max-width: 400px);
 ```
 
 ## `@import` 的行為
@@ -101,21 +101,21 @@ CSS 有可能在 SASS 的建議架構之下應用嗎？
 ```shell
 CSS/
 |-- partials/           # Partials
-|   |-- reset.CSS       # reset setting
+|   |-- reset.css       # reset setting
 |   |-- colors.sCSS     # colors
-|   |-- buttons.CSS     # buttons
-|   |-- figures.CSS     # figures
-|   |-- grids.CSS       # grids
-|   |-- typography.CSS  # typography
+|   |-- buttons.css     # buttons
+|   |-- figures.css     # figures
+|   |-- grids.css       # grids
+|   |-- typography.css  # typography
 |   ...
 |
 |-- vendor/             # CSS from other projects
-|   |-- animate.CSS
+|   |-- animate.css
 |   ...
 |
-|-- index.CSS           # primary CSS file
-|-- function.CSS        # primary CSS file
-`-- payment.CSS         # primary CSS file
+|-- index.css           # primary CSS file
+|-- function.css        # primary CSS file
+`-- payment.css         # primary CSS file
 ```
 
 換成 CSS 就是這樣用

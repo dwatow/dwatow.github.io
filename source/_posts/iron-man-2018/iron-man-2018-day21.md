@@ -21,13 +21,13 @@ categories: "前端新手村"
 在 html 插入 CSS 時加條件。
 
 ```html
-<link rel="stylesheet" media="screen and (color)" href="example.CSS" />
+<link rel="stylesheet" media="screen and (color)" href="example.css" />
 ```
 
 在 CSS 插入 CSS 時加條件。
 
 ```CSS
-@import url(color.CSS) screen and (color);
+@import url(color.css) screen and (color);
 ```
 
 在使用 CSS 時加條件
@@ -62,7 +62,7 @@ media type 是 `all` 時，可以省略。
 在寫 media query 一開始，可以用 `not` 做「邏輯 NOT」
 
 ```html
-<link rel="stylesheet" media="not screen and (color)" href="example.CSS" />
+<link rel="stylesheet" media="not screen and (color)" href="example.css" />
 ```
 
 ```CSS
@@ -73,13 +73,13 @@ media type 是 `all` 時，可以省略。
 
 
 ```html
-<link rel="stylesheet" media="only screen and (color)" href="example.CSS" />
+<link rel="stylesheet" media="only screen and (color)" href="example.css" />
 ```
 
 可以在 `@import` 時加上 media query 的條件
 
 ```CSS
-@import url(example.CSS) screen and (color), projection and (color);
+@import url(example.css) screen and (color), projection and (color);
 ```
 
 使用時要注意 media type 和 media feature 的單位是否匹配，若不適用會使結果變成 false

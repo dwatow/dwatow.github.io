@@ -96,5 +96,5 @@ div {
 
 # 參考資料
 
-[^1]: [Selectors Level 3, 6.6. Pseudo-classes](https://www.w3.org/TR/CSS3-selectors/#pseudo-classes)
-[^2]: [7.3.1 Media groups](https://www.w3.org/TR/REC-CSS2/media.html#interactive-media-group)
+[^1]: [Selectors Level 3, 6.6. Pseudo-classes](https://www.w3.org/TR/selectors-3/#pseudo-classes)
+[^2]: [7.3.1 Media groups](https://www.w3.org/TR/CSS22/media.html#media-groups)

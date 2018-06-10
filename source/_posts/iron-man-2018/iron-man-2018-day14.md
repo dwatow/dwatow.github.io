@@ -48,7 +48,7 @@ categories: "前端新手村"
 |AND|.A.B|同時擁有.A和.B|
 |OR|.A, .B|只要有.A或.B|
 |INCLUDE|.A .B|.B包含在.A裡|
-|IN|.A > .B|.B下一層有.A|
+|IN|.A > .B|.A下一層有.B|
 
 其實，不推薦這樣理解它們。
 原因在於，初學會有許許多多的疑問
@@ -94,4 +94,4 @@ span + span {
 
 # 參考資料
 
-[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-classes)
+[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](hhttps://www.w3.org/TR/selectors-3/#pseudo-classes)

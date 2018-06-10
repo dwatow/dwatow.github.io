@@ -71,7 +71,7 @@ import 'bootstrap/dist/js/bootstrap.js';  //變成 main 的路徑
 (或者是在有用到 bootstrap 的 .vue 檔裡)
 
 ```javascript
-import 'bootstrap/dist/CSS/bootstrap.CSS'
+import 'bootstrap/dist/css/bootstrap.css'
 ```
 
 表示「引用 Bootstrap 的 CSS」。

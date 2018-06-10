@@ -8,11 +8,11 @@ categories: "工具使用"
 # Google fonts 繁中字體 Demo
 
 <style media="screen">
-    @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.CSS);
-    @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.CSS);
-    @import url(https://fonts.googleapis.com/earlyaccess/cwtexfangsong.CSS);
-    @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.CSS);
-    @import url(https://fonts.googleapis.com/earlyaccess/cwtexming.CSS);
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css);
+    @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexming.css);
     .demo-fonts {
         font-size: 100px;
         line-height: 2ex;

@@ -124,4 +124,4 @@ transition-timing-function: frames(3);
 [^1]: [ 動畫的12項基本法則 - wiki](https://zh.wikipedia.org/wiki/%E5%8B%95%E7%95%AB%E7%9A%8412%E9%A0%85%E5%9F%BA%E6%9C%AC%E6%B3%95%E5%89%87)
 [^2]: [ 第 3 章：Pure Function－單純的幸福](https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch3.html)
 [^3]: [Bézier curve - wiki](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
-[^4]: [ CSS Timing Functions Level 1](https://drafts.CSSwg.org/CSS-timing/)
+[^4]: [ CSS Timing Functions Level 1](https://drafts.csswg.org/CSS-timing/)

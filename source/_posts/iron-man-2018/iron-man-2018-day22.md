@@ -218,4 +218,4 @@ delay時間 變化函數 都是使用預設值。
 # 參考資料
 
 [^1]: [9.1. Properties from CSS - w3.org](https://www.w3.org/TR/2017/WD-CSS-transitions-1-20171130/#animatable-CSS)
-[^2]: [CSS Timing Functions Level 1](https://drafts.CSSwg.org/CSS-timing/)
+[^2]: [CSS Timing Functions Level 1](https://drafts.csswg.org/CSS-timing/)

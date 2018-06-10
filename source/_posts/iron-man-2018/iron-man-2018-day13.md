@@ -153,5 +153,5 @@ n = 9n+6
 
 # 參考資料
 
-[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-classes)
+[^1]: [Selectors Level 3, 6.6. Pseudo-classes - w3.org](https://www.w3.org/TR/selectors-3/#pseudo-classes)
 [^2]: [整數 - wiki](https://zh.wikipedia.org/wiki/%E6%95%B4%E6%95%B0)

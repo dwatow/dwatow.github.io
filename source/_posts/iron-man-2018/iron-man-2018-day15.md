@@ -192,5 +192,5 @@ CSS 的 Selector 會有 `|` 出現。
 
 # 參考資料
 
-[^1]: [7. Pseudo-elements - w3.org](https://www.w3.org/TR/CSS3-selectors/#pseudo-elements)
+[^1]: [7. Pseudo-elements - w3.org](https://www.w3.org/TR/selectors-3/#pseudo-elements)
 [^2]: [ @namespace - MDN](https://developer.mozilla.org/zh-TW/docs/Web/CSS/@namespace)

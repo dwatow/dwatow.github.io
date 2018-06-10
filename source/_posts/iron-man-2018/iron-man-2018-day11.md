@@ -114,5 +114,5 @@ CSS 還是會建議以 class 優先使用。
 
 # 參考資料
 
-[^1]: [Selectors Level 3 - w3.org](https://www.w3.org/TR/CSS3-selectors/)
+[^1]: [Selectors Level 3 - w3.org](https://www.w3.org/TR/selectors-3/)
 [^2]: [Simple Tree Transformation Sheets 3 - w3.org](https://www.w3.org/TR/NOTE-STTS3)

@@ -29,7 +29,7 @@ markdown:
 ## 加上 CSS
 
 ```
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.CSS">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 ```
 
 就可以渲染了

@@ -83,7 +83,7 @@ categories: "前端新手村"
 
 ## 套件
 
-[Animation.CSS](https://daneden.github.io/animate.CSS/)
+[Animation.css](https://daneden.github.io/animate.css/)
 這個套件的好處，就是知道動畫的名字，好跟人溝通。
 好學好上手。
 

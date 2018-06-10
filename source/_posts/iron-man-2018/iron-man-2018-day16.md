@@ -98,4 +98,4 @@ Rulest order 翻譯成 規則集順序。
 # 參考資料
 [^1]: 《重構 CSS》
 [^2]: [9. Calculating a selector's specificity - w3.org
-](https://www.w3.org/TR/CSS3-selectors/#specificity)
+](https://www.w3.org/TR/selectors-3/#specificity)

@@ -65,7 +65,7 @@ body {
 
 下指令
 ```shell=
-npm run build-CSS ./index.sCSS ./index.CSS
+npm run build-CSS ./index.sCSS ./index.css
 ```
 
 
