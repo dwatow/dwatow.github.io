@@ -4,6 +4,20 @@ date: 2017-06-14 18:01:14
 comments: false
 ---
 
+# 開發者介紹
+
+從 C++ 到 JavaScript, 是我過去慣用的, 也希望未來可以慣用的語言。寫程式的生涯有 7年以上實戰經驗。
+
+過去接觸過的技術 C++, MFC, OLE, CppUnit, Jenkins, Git, Boost C++, python, Django, C#, Silverlight...等，最熟練的是標準 C++ 的語言本身, 用 Git 版本控制, CppUnit 輔助自動化測試, Jenkins 自動化工作流程, 用 python 寫小工具。
+
+希望未來, 是以「網頁前端技術」, 有機會面對&解決當代有價值的問題, 繼續開發者的路。
+
+目前熟悉的語言 HTML 和 CSS ，可以參考 Blog 選單中的 Novice F2E (前端新手村)，以及 JavaScript，熟悉的前端框架是 Vue.js 是個小巧快速的好工具。
+
+除了「寫程式」之外, 我也很喜歡「設計」, 曾經去成大旁聽一年的工業設計課程，覺得解鎖設計技能樹，有助於在工作上與設計師溝通。
+
+## 作品介紹
+
 <style media="screen">
 
 .labels {
@@ -153,22 +167,6 @@ img.mobile {
   vertical-align: middle;
 }
 </style>
-
-
-
-# 開發者介紹
-
-從 C++ 到 JavaScript, 是我過去慣用的, 也希望未來可以慣用的語言。寫程式的生涯有 7年以上實戰經驗。
-
-過去接觸過的技術 C++, MFC, OLE, CppUnit, Jenkins, Git, Boost C++, python, Django, C#, Silverlight...等，最熟練的是標準 C++ 的語言本身, 用 Git 版本控制, CppUnit 輔助自動化測試, Jenkins 自動化工作流程, 用 python 寫小工具。
-
-希望未來, 是以「網頁前端技術」, 有機會面對&解決當代有價值的問題, 繼續開發者的路。
-
-目前熟悉的語言 HTML 和 CSS ，可以參考 Blog 選單中的 Novice F2E (前端新手村)，以及 JavaScript，熟悉的前端框架是 Vue.js 是個小巧快速的好工具。
-
-除了「寫程式」之外, 我也很喜歡「設計」, 曾經去成大旁聽一年的工業設計課程，覺得解鎖設計技能樹，有助於在工作上與設計師溝通。
-
-## 作品介紹
 
 以下是我這幾年來寫過東西、用過的技術或做過的練習。
 

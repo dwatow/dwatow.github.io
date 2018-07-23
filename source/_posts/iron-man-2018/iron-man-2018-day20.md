@@ -67,7 +67,7 @@ categories: "前端新手村"
 
 運算式如下
 
-![](https://i.imgur.com/P6dZATs.png)
+![](https://i.imgur.com/Qm1M8hA.png)
 
 由公式可以看出(真的可以看出嗎？)
 
@@ -79,7 +79,7 @@ categories: "前端新手村"
 
 運算式如下
 
-![](https://i.imgur.com/wnMAhMG.png)
+![](https://i.imgur.com/IYfVNCs.png)
 
 由公式可以看出(真的可以看出嗎？)
 
