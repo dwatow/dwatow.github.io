@@ -1,7 +1,7 @@
 ---
 title: Vue-cli 2 的使用
 date: 2018-09-21 09:56:29
-tags: ["vue-cli", "vuejs"]
+tags: ["vue-cli", "vuejs", "webpack"]
 categories: 工具使用
 ---
 
@@ -15,7 +15,7 @@ vue.js 有了自己初始專案的 cli (Command Line Interface) 工具，稱為 
 
 找到 [`vue-cli`](https://github.com/vuejs/vue-cli) (現在已是 VUE CLI 3)
 
-```shell=
+```shell
 $ npm install -g vue-cli
 ```
 
@@ -80,7 +80,7 @@ vue-cli   · Generated "vue-webpack-demo".
 
 進入資料夾、初始化、進入開發模式
 
-```shell=
+```shell
 $ cd my-project
 $ npm install
 $ npm run dev
@@ -90,8 +90,8 @@ $ npm run dev
 
 這些問題中， vue build 的問題讓我不太了解它要問什麼，所以拿來比較了一下。
 
-**Vue Build 選 1**: 就是一般的選擇
-Runtime + Compiler: recommended for most users
+**Vue Build 選 1**: Runtime + Compiler: recommended for most users
+就是一般的選擇
 
 **build/webpack.base.conf.js**
 
@@ -99,7 +99,7 @@ Runtime + Compiler: recommended for most users
 
 以下是 使用 `git diff` 看差異的結果。 `+` 的是 vue build 選 1 的 code
 
-```
+```javascript=
 module.exports = {
    //...
    resolve: {
@@ -114,7 +114,7 @@ module.exports = {
 
 **src/main.js**
 
-```javascript
+```javascript=
 + // The Vue build version to load with the `import` command
 + // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
@@ -136,7 +136,7 @@ required elsewhere
 
 意思是使用更接近編譯器的模版替代方案: 使用自訂的渲染函數來初始 vue 的 root
 
-```javascript
+```javascript=
 render: function (createElement) {
  return createElement(
    'h' \+ this.level,   // tag name: h1~h6
@@ -155,7 +155,7 @@ A simple Webpack + vue-loader setup for quick prototyping.
 
 個人覺得是學習 vue + webpack 的過渡環境。
 
-```shell=
+```shell
 $ vue init webpack-simple my-project
 $ cd my-project
 $ npm install
@@ -168,7 +168,7 @@ A full-featured Browserify + vueify setup with hot-reload, linting & unit testin
 
 使用 browserify 的選項
 
-```shell=
+```shell
 $ vue init browserify my-project
 $ cd my-project
 $ npm install
@@ -181,7 +181,7 @@ A simple Browserify + vueify setup for quick prototyping.
 
 使用 browserify 簡化環境 的選項
 
-```shell=
+```shell
 $ vue init browserify-simple my-project
 $ cd my-project
 $ npm install
@@ -194,7 +194,7 @@ PWA template for vue-cli based on the webpack template
 
 用 Vue 寫 PWA。
 
-```shell=
+```shell
 $ vue init pwa my-project
 $ cd my-project
 $ npm install
@@ -205,7 +205,7 @@ $ npm run dev
 
 The simplest possible Vue setup in a single HTML file
 
-```shell=
+```shell
 $ vue init simple my-project  # Create a new project based on this template
 $ cd my-project               # Navigate into your new project folder
 
