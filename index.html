@@ -118,7 +118,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#webpack-處理-vue-專案的路徑規則整理"><span class="toc-text">¶Webpack 處理 Vue 專案的路徑規則整理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#asset-resolving-rules"><span class="toc-text">¶Asset Resolving Rules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-loader"><span class="toc-text">¶CSS-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-資料"><span class="toc-text">¶static 資料</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#webpack-處理-vue-專案的路徑規則整理"><span class="toc-text">¶Webpack 處理 Vue 專案的路徑規則整理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-loader"><span class="toc-text">¶vue-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-loader"><span class="toc-text">¶CSS-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-資料"><span class="toc-text">¶static 資料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#asset-resolving-rules-參考"><span class="toc-text">¶Asset Resolving Rules (參考)</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
@@ -128,7 +128,35 @@
 有 vue 檔，vue-loader，轉成 JavaScript<br>
 有 CSS 檔，它本身會透過 css-loader， CSS 的 <code>@import</code> 轉成 JavaScript<br>
 JavaScript 的 <code>require</code> 或 <code>import</code> 就會呼叫 file-loader</p>
-<h2 id="asset-resolving-rules"><a class="header-anchor" href="#asset-resolving-rules">¶</a>Asset Resolving Rules</h2>
+<h2 id="vue-loader"><a class="header-anchor" href="#vue-loader">¶</a>vue-loader</h2>
+<p><a href="https://vue-loader.vuejs.org/" target="_blank" rel="noopener"><code>vue-loader</code></a></p>
+<p>vue-cli 的核心 loader</p>
+<p><strong>路徑處理</strong></p>
+<ul>
+<li>絕對路徑: 保留</li>
+<li><code>./</code> =&gt; <code>/</code></li>
+<li><code>../</code> =&gt; <code>/../</code></li>
+<li><code>~</code>: node_module</li>
+<li><code>@</code> =&gt; <code>./src</code></li>
+<li>css-loader
+<ul>
+<li><code>file.png</code> =&gt; <code>./file.png</code></li>
+<li><code>~module/file.png</code> =&gt; <code>module/file.png</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="css-loader"><a class="header-anchor" href="#css-loader">¶</a>CSS-loader</h2>
+<ul>
+<li>url(image.png) =&gt; require(’./image.png’)</li>
+<li>url(~module/image.png) =&gt; require(‘module/image.png’)</li>
+</ul>
+<h2 id="static-資料"><a class="header-anchor" href="#static-資料">¶</a>static 資料</h2>
+<p>webpack config 設定</p>
+<p><strong>config/index.js</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  // ...</span><br><span class="line">  build: &#123;</span><br><span class="line">    assetsPublicPath: &apos;/&apos;,</span><br><span class="line">    assetsSubDirectory: &apos;static&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用絕對路徑</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/static/[filename]</span><br></pre></td></tr></table></figure>
+<h3 id="asset-resolving-rules-參考"><a class="header-anchor" href="#asset-resolving-rules-參考">¶</a>Asset Resolving Rules (參考)</h3>
 <ul>
 <li>相對路徑 <code>./assets/login.png</code>
 <ul>
@@ -152,17 +180,6 @@ JavaScript 的 <code>require</code> 或 <code>import</code> 就會呼叫 file-lo
 </ul>
 </li>
 </ul>
-<h2 id="css-loader"><a class="header-anchor" href="#css-loader">¶</a>CSS-loader</h2>
-<ul>
-<li>url(image.png) =&gt; require(’./image.png’)</li>
-<li>url(~module/image.png) =&gt; require(‘module/image.png’)</li>
-</ul>
-<h2 id="static-資料"><a class="header-anchor" href="#static-資料">¶</a>static 資料</h2>
-<p>webpack config 設定</p>
-<p><strong>config/index.js</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  // ...</span><br><span class="line">  build: &#123;</span><br><span class="line">    assetsPublicPath: &apos;/&apos;,</span><br><span class="line">    assetsSubDirectory: &apos;static&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用絕對路徑</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/static/[filename]</span><br></pre></td></tr></table></figure>
 
     
     </section>
