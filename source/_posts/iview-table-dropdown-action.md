@@ -41,7 +41,7 @@ categories: [技術心得]
 
 > 如果想要知道，要在 Table 放 Dropdown，要先知要[怎麼放 Button](https://www.iviewui.com/components/table#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%97%E6%A8%A1%E6%9D%BF) 吧？！
 
-```htmlmixed=
+```html=
 <template>
     <Table border :columns="columns7" :data="data6"></Table>
 </template>

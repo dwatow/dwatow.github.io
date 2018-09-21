@@ -72,7 +72,7 @@ component/HelloWorld.vue
 
 改寫成下面這樣
 
-```htmlmixed=
+```html=
 <template>
     <Slider v-model="value" range></Slider>
 </template>

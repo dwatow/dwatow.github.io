@@ -61,7 +61,7 @@ import {
 
 這樣才是萬事俱備，使用方式就如同一般在手刻切版一樣使用 `font awesome`
 
-```htmlmixed
+```html
 <i class="far fa-envelope"></i>
 <i class="fab fa-facebook-f"></i>
 <i class="fab fa-twitter"></i>

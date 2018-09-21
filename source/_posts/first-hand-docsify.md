@@ -76,7 +76,7 @@ docs/
 
 這裡面就像是 vue.js 的 code
 
-```htmlmixed=
+```html=
   <div id="app">Loading...</div>
   <script>
     window.$docsify = {
@@ -90,7 +90,7 @@ docs/
 其中 `script` 中，預設為 `el: '#app'`
 若 `template` (html) 改變 `id` 值
 
-```htmlmixed=
+```html=
 <div id="myComponent">Loading...</div>
 ```
 
@@ -179,7 +179,7 @@ window.$docsify = {
 
 加入 `<nav>`
 
-```htmlmixed=
+```html=
 <body>
   <nav>
     <a href="#/">EN</a>

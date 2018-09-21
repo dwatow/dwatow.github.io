@@ -264,7 +264,7 @@ padding: 值;
 }
 ```
 
-```htmlmixed=
+```html=
 <div class="box">
  <div></div>
 </div>

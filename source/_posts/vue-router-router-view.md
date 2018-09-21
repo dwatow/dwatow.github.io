@@ -50,7 +50,7 @@ const router = new VueRouter({
 
 第一層 Component 的 `router-view`
 
-```htmlmixed=
+```html=
 <div id="app">
   <h1>Hello App!</h1>
   <router-link to="/user/foo/abcfoode">Go to Foo</router-link>
@@ -92,7 +92,7 @@ const Bar = {
 
 這個做法是一個 component 裡有兩個 `router-view` 那為了不讓 component 放錯位置，所以要對 `router-view` 命名
 
-```htmlmixed=
+```html=
 <router-view class="view one"></router-view>
 <router-view class="view two" name="a"></router-view>
 <router-view class="view three" name="b"></router-view>

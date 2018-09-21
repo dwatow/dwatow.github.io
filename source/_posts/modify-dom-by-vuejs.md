@@ -17,7 +17,7 @@ vue，是一種類 MVVM 的設計方式。
 
 首先，我們有一個 html tag
 
-```htmlmixed
+```html
 <tagName attrProperty="attrValue">content</tagName>
 ```
 
@@ -43,7 +43,7 @@ vue，是一種類 MVVM 的設計方式。
 條件判斷方式
 className 是否出現，取決於 vue.data 是否擁有該屬性。
 
-```htmlmixed
+```html
 v-bind:attr="data1"
 ```
 
@@ -57,7 +57,7 @@ data: {
 
 在`attrValue`加「classNames 陣列」，加多個 vue.data 屬性
 
-```htmlmixed
+```html
 v-bind:attr="[arrayElem, ...]"
 ```
 
@@ -74,7 +74,7 @@ data: {
 
 1. attr=匿名物件
 
-```htmlmixed
+```html
 v-bind:attr="{CSSClass: isActive}"
 ```
 
@@ -86,7 +86,7 @@ data: {
 
 2. attr=物件名稱
 
-```htmlmixed
+```html
 v-bind:attr="objectName"
 ```
 
