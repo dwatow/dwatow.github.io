@@ -2,7 +2,7 @@
 title: Webpack 處理 Vue 專案的路徑規則整理
 date: 2018-09-21 13:56:34
 tags: [webpack, vuejs, "file-loader", "css-loader"]
-categories: 工具心得
+categories: 技術心得
 ---
 
 # Webpack 處理 Vue 專案的路徑規則整理
