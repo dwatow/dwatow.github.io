@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶Vue router 的 router-view 使用技巧 在此整理一些 vue-router 的 router-view 的使用技巧。 ¶點擊 改變路徑 前端 router 主要是由網址決定要運作的 route ， route 決定要顯示的 component 常見的兩種手法如下 最簡單又常見的「一個 url → 一個 route → 一個 component」 用 HTML 裡記錄路徑 &amp;l">
+<meta name="keywords" content="vuejs,vue-router">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue router 的 router-view 使用技巧">
+<meta property="og:url" content="dwatow.github.io/2018/09-21-vue-router-router-view/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Vue router 的 router-view 使用技巧 在此整理一些 vue-router 的 router-view 的使用技巧。 ¶點擊 改變路徑 前端 router 主要是由網址決定要運作的 route ， route 決定要顯示的 component 常見的兩種手法如下 最簡單又常見的「一個 url → 一個 route → 一個 component」 用 HTML 裡記錄路徑 &amp;l">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-09-21T06:05:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue router 的 router-view 使用技巧">
+<meta name="twitter:description" content="¶Vue router 的 router-view 使用技巧 在此整理一些 vue-router 的 router-view 的使用技巧。 ¶點擊 改變路徑 前端 router 主要是由網址決定要運作的 route ， route 決定要顯示的 component 常見的兩種手法如下 最簡單又常見的「一個 url → 一個 route → 一個 component」 用 HTML 裡記錄路徑 &amp;l">
+  <title>Vue router 的 router-view 使用技巧 - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vue router 的 router-view 使用技巧</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-router-的-router-view-使用技巧"><span class="toc-text">¶Vue router 的 router-view 使用技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#點擊-改變路徑"><span class="toc-text">¶點擊 改變路徑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#點擊-改變多層路徑"><span class="toc-text">¶點擊 改變多層路徑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#點擊-多個-router-view"><span class="toc-text">¶點擊 多個 router-view</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="vue-router-的-router-view-使用技巧"><a class="header-anchor" href="#vue-router-的-router-view-使用技巧">¶</a>Vue router 的 router-view 使用技巧</h1>
+<p>在此整理一些 vue-router 的 <code>router-view</code> 的使用技巧。</p>
+<h2 id="點擊-改變路徑"><a class="header-anchor" href="#點擊-改變路徑">¶</a>點擊 改變路徑</h2>
+<p>前端 router 主要是由網址決定要運作的 route ， route 決定要顯示的 component<br>
+常見的兩種手法如下</p>
+<p>最簡單又常見的「一個 url → 一個 route → 一個 component」</p>
+<p>用 HTML 裡記錄路徑</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">"/user"</span> &gt;</span><span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>用 JavaScript 裡記錄路徑</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;...&#125;);</span><br><span class="line">router.push(<span class="string">'/user'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="點擊-改變多層路徑"><a class="header-anchor" href="#點擊-改變多層路徑">¶</a>點擊 改變多層路徑</h2>
+<p>巢狀式的 route 又要怎麼控制要顯示的 component 呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [&#123;</span><br><span class="line">    path: <span class="string">'/user/:id'</span>,</span><br><span class="line">    component: User,</span><br><span class="line">    children: [</span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">'/user/foo/:key'</span>, <span class="attr">component</span>: Foo &#125;,</span><br><span class="line">      &#123; <span class="attr">path</span>: <span class="string">'/user/bar/:key'</span>, <span class="attr">component</span>: Bar &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>第一層 Component 的 <code>router-view</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;app&quot;&gt;</span><br><span class="line">  &lt;h1&gt;Hello App!&lt;/h1&gt;</span><br><span class="line">  &lt;router-link to=&quot;/user/foo/abcfoode&quot;&gt;Go to Foo&lt;/router-link&gt;</span><br><span class="line">  &lt;router-link to=&quot;/user/bar/abarbcde&quot;&gt;Go to Bar&lt;/router-link&gt;</span><br><span class="line">  &lt;router-view&gt;&lt;/router-view&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>第二層 Component 的 <code>router-view</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = &#123;</span><br><span class="line">  template: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div class="user"&gt;</span></span><br><span class="line"><span class="string">    &lt;h2&gt;User &#123;&#123; $route.params.id &#125;&#125;&lt;/h2&gt;</span></span><br><span class="line"><span class="string">    &lt;router-view&gt;&lt;/router-view&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三層 Components</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Foo = &#123; <span class="attr">template</span>: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    foo &#123;&#123; $route.params.key &#125;&#125;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> Bar = &#123; <span class="attr">template</span>: <span class="string">`</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    bar &#123;&#123; $route.params.key &#125;&#125;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="點擊-多個-router-view"><a class="header-anchor" href="#點擊-多個-router-view">¶</a>點擊 多個 router-view</h3>
+<p>這個做法是一個 component 裡有兩個 <code>router-view</code> 那為了不讓 component 放錯位置，所以要對 <code>router-view</code> 命名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-view class=&quot;view one&quot;&gt;&lt;/router-view&gt;</span><br><span class="line">&lt;router-view class=&quot;view two&quot; name=&quot;a&quot;&gt;&lt;/router-view&gt;</span><br><span class="line">&lt;router-view class=&quot;view three&quot; name=&quot;b&quot;&gt;&lt;/router-view&gt;</span><br></pre></td></tr></table></figure>
+<p>在一次 route 裡設定 指定多個 component，而且要對應到指定名稱。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [&#123;</span><br><span class="line">    path: <span class="string">'/'</span>,</span><br><span class="line">    components: &#123;</span><br><span class="line">      <span class="keyword">default</span>: Foo,</span><br><span class="line">      a: Bar,</span><br><span class="line">      b: Baz</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-21T05:31:07.000Z" itemprop="datePublished">
+              2018-09-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-router/">vue-router</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-20-vue-router-action/">Vue router 實戰</a><div class="related-posts-item-abstract">¶Vue router 實戰
+網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。
+在沒有這個之前，一個網址就是一個頁面，要路由，就是透過網址下的檔案目錄結構決定
+但</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/04-05-vue-component-data-flow/">用 vue-loader 的 component 資料傳遞</a><div class="related-posts-item-abstract">¶用 vue-loader 的 component 資料傳遞
+¶加入 component
+先將 .vue 檔案 import 進來，並且宣告在 vue instance</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/07-28-first-hand-docsify/">初次使用 Docsify</a><div class="related-posts-item-abstract">¶初次使用 Docsify
+這是一個 markdown + vue 組合的文件網站產生器。
+markdown 渲染器只能用 marked
+
+它不會生成靜態 .html </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-20-iview-table-dropdown-action/">iView Table 裡放 Dropdown</a><div class="related-posts-item-abstract">¶iView Table 裡放 Dropdown
+¶前言
+聽朋友 1 號介紹 iView
+
+切版套 Bootstrap，用 vue 就要套 iView
+
+覺得很潮，所以</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-09-iview-install-config/">iView 安裝與配置</a><div class="related-posts-item-abstract">¶iView 安裝與配置
+這一篇是因為官網文件讓我實在是太挫折了！所以特別寫一篇來指正
+用 vue-cli 的專案，初始化一個 webpack
+¶安裝
+https://</div></li></ul>
+        </section>
+        <section>
+            <div id="disqus_thread"></div>
+        </section>
+    
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>
