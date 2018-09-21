@@ -109,16 +109,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-30-iron-man-2018/iron-man-2018-day20/">http://dwatow.github.io/2017/12-30-iron-man-2018/iron-man-2018-day20/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-31-iron-man-2018/iron-man-2018-day21/">http://dwatow.github.io/2017/12-31-iron-man-2018/iron-man-2018-day21/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>前端新手村 flex grow &amp; shrink 演算法</h1>
+        <h1>前端新手村 Media Query</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">¶前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#flex-grow-shrink-演算法"><span class="toc-text">¶flex grow &amp; shrink 演算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#flex-grow"><span class="toc-text">¶flex-grow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flex-shrink-flex-basis"><span class="toc-text">¶flex-shrink &amp; flex-basis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">¶參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">¶前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#media-query"><span class="toc-text">¶Media Query[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#有幾個地方可以使用"><span class="toc-text">¶有幾個地方可以使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#media-features"><span class="toc-text">¶Media features</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#有這些-media-features-可以使用"><span class="toc-text">¶有這些 Media features 可以使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常見的應用"><span class="toc-text">¶常見的應用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">¶參考資料</span></a>
   </div>
 
 
@@ -128,39 +128,217 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="flex-grow-shrink-演算法"><a class="header-anchor" href="#flex-grow-shrink-演算法">¶</a>flex grow &amp; shrink 演算法</h1>
-<blockquote>
-<p>此演算法，是和邦友 <a href="https://ithelp.ithome.com.tw/users/20107334/profile" target="_blank" rel="noopener">OTree</a> 一起研究，我只是寫 JavaScript 驗證。</p>
-</blockquote>
-<p>新手若覺得這種學術路線不適合你，那這一篇就跳過吧！我還是想寫一下。</p>
-<p>來說說伸縮與壓縮的尺寸計算方式<br>
-直接用例子來試算一下。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outter"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"div2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.outter</span> &#123;</div><div class="line">  <span class="attribute">outline </span>: solid <span class="number">1px</span> black;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line"></div><div class="line">  .div1 &#123;</div><div class="line">    <span class="selector-tag">height</span><span class="selector-pseudo">:100px</span>;</div><div class="line">    <span class="selector-tag">background</span> : <span class="selector-tag">red</span>;</div><div class="line">    <span class="selector-tag">flex-grow</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-shrink</span><span class="selector-pseudo">:5</span>;</div><div class="line">    <span class="selector-tag">flex-basis</span><span class="selector-pseudo">:400px</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="selector-class">.div2</span> &#123;</div><div class="line">    <span class="attribute">height</span>:<span class="number">100px</span>;</div><div class="line">    <span class="attribute">background </span>: blue;</div><div class="line">    <span class="attribute">flex-grow</span>:<span class="number">1</span>;</div><div class="line">    <span class="attribute">flex-shrink</span>:<span class="number">1</span>;</div><div class="line">    flex-basis:200px; //預借空間</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><strong>渲染結果</strong></p>
-<p><img src="https://i.imgur.com/FpQeB3q.png" alt=""></p>
-<p><strong>描述問題</strong></p>
-<p>元素 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.65952em;"></span><span class="strut bottom" style="height:0.65952em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">i</span></span></span></span> (每個元素) 在 flex container 中，因為伸展和壓縮，需要重新計算寬度。</p>
-<p>運算式的名詞定義</p>
-<p><img src="https://i.imgur.com/nK4Baef.png" alt=""></p>
-<h2 id="flex-grow"><a class="header-anchor" href="#flex-grow">¶</a><code>flex-grow</code></h2>
-<p>運算式如下</p>
-<p><img src="https://i.imgur.com/Qm1M8hA.png" alt=""></p>
-<p>由公式可以看出(真的可以看出嗎？)</p>
-<p>最後的寬度，是由預借空間加上「伸展量」<br>
-伸展量是該元素佔有剩餘空間的比例。<br>
-(描述這個，跟本就是數學運算式要轉成國小應用問題的能力)</p>
-<h2 id="flex-shrink-flex-basis"><a class="header-anchor" href="#flex-shrink-flex-basis">¶</a><code>flex-shrink</code> &amp; <code>flex-basis</code></h2>
-<p>運算式如下</p>
-<p><img src="https://i.imgur.com/IYfVNCs.png" alt=""></p>
-<p>由公式可以看出(真的可以看出嗎？)</p>
-<p>最後的寬度，是由預借空間加上「壓縮量」(負數)<br>
-壓縮量是該元素的預借空間佔有剩餘空間的比例。</p>
+<h1 id="media-query"><a class="header-anchor" href="#media-query">¶</a>Media Query<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
+<p>它是由一個 <a href="https://www.w3.org/TR/CSS22/media.html#media-groups" target="_blank" rel="noopener">media type</a> <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>  和 media feature 的條件式組成。條件式的結果，不是 true 就是 false</p>
+<h2 id="有幾個地方可以使用"><a class="header-anchor" href="#有幾個地方可以使用">¶</a>有幾個地方可以使用</h2>
+<p>在 html 插入 CSS 時加條件。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在 CSS 插入 CSS 時加條件。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">import</span> url(color.css) screen and (color);</span><br></pre></td></tr></table></figure>
+<p>在使用 CSS 時加條件</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> all and (min-width:<span class="number">500px</span>) &#123; ... &#125;</span><br><span class="line">@<span class="keyword">media</span> (min-width:<span class="number">500px</span>) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>media type 是 <code>all</code> 時，可以省略。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> (orientation: portrait) &#123; ... &#125;</span><br><span class="line">@<span class="keyword">media</span> all and (orientation: portrait) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p><code>@media</code> 的條件可以用 <code>,</code> 和 <code>and</code> 組成。</p>
+<ul>
+<li><code>,</code> 和 CSS 的 Combinators 一樣</li>
+<li><code>and</code> 就是「邏輯 AND」</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> screen and (color), projection and (color) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>如果沒有給 media type 和 條件式，結果 always true</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> all &#123; ... &#125;</span><br><span class="line">@<span class="keyword">media</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>在寫 media query 一開始，可以用 <code>not</code> 做「邏輯 NOT」</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"not screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> not screen and (color) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>對於比較舊的 CSS 可以用 <code>only</code> <s>給 IE</s></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">media</span>=<span class="string">"only screen and (color)"</span> <span class="attr">href</span>=<span class="string">"example.css"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以在 <code>@import</code> 時加上 media query 的條件</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">import</span> url(example.css) screen and (color), projection and (color);</span><br></pre></td></tr></table></figure>
+<p>使用時要注意 media type 和 media feature 的單位是否匹配，若不適用會使結果變成 false</p>
+<h2 id="media-features"><a class="header-anchor" href="#media-features">¶</a>Media features</h2>
+<p>雖然 media query 在撰寫時，有一種在寫 CSS 的感覺。但是們還是有一些要注意的地方</p>
+<ul>
+<li>的內容是「輸出設備的要求」。</li>
+<li>不可以使用 <code>&gt;</code> 和 <code>&lt;</code> 取代常出現的 <code>max-</code> 和 <code>min-</code> 前綴字。</li>
+<li>常使用 <code>max-</code> 和 <code>min-</code> 前綴字的屬性也可以單獨使用</li>
+<li>可以只有屬性，也可以指定值(0可以不給單位)</li>
+<li>使用 <code>max-</code> 和 <code>min-</code> 的前綴字時，一定要給值才有作用</li>
+<li>不可以使用 <code>calc()</code>，只能在一個屬性後面給一個簡單的值。</li>
+</ul>
+<h3 id="有這些-media-features-可以使用"><a class="header-anchor" href="#有這些-media-features-可以使用">¶</a>有這些 Media features 可以使用</h3>
+<table>
+<thead>
+<tr>
+<th>media feature</th>
+<th>value</th>
+<th>Applies to which media type</th>
+<th>prefixes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>width</td>
+<td>length</td>
+<td>visual, tactile</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>height</td>
+<td>length</td>
+<td>visual, tactile</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>device-width</td>
+<td>length</td>
+<td>visual, tactile</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>device-height</td>
+<td>length</td>
+<td>visual, tactile</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>“portrait”, “landscape”</td>
+<td>bitmap</td>
+<td>no</td>
+</tr>
+<tr>
+<td>aspect-ratio</td>
+<td>“ratio”</td>
+<td>bitmap</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>device-aspect-ratio</td>
+<td>“ratio”</td>
+<td>bitmap</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>color</td>
+<td>integer</td>
+<td>visual</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>color-index</td>
+<td>integer</td>
+<td>visual</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>monochrome</td>
+<td>integer</td>
+<td>visual</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>resolution</td>
+<td>resolution</td>
+<td>bitmap</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>scan</td>
+<td>“progressive”, “interlace”</td>
+<td>tv</td>
+<td>no</td>
+</tr>
+<tr>
+<td>grid</td>
+<td>integer(1 or 0)</td>
+<td>visual, tactile</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>width/height: 可視區大小</li>
+<li>device-width/device-height: 單一螢幕大小</li>
+<li>orientation: 橫向/縱向顯示
+<ul>
+<li><code>@media all and (orientation:portrait) { … }</code></li>
+<li><code>@media all and (orientation:landscape) { … }</code></li>
+</ul>
+</li>
+<li>aspect-ratio: width/height 視窗寬高比</li>
+<li>device-aspect-ratio: device-width/device-height 設備寬高比
+<ul>
+<li><code>@media screen and (device-aspect-ratio: 16/9) { … }</code></li>
+<li><code>@media screen and (device-aspect-ratio: 32/18) { … }</code></li>
+<li><code>@media screen and (device-aspect-ratio: 1280/720) { … }</code></li>
+<li><code>@media screen and (device-aspect-ratio: 2560/1440) { … }</code></li>
+</ul>
+</li>
+<li>color: 在彩色顯示器中，值代表每個顏色至少幾bit
+<ul>
+<li><code>@media all and (color) { … }</code><br>
+<code>@media all and (min-color: 1) { … }</code></li>
+</ul>
+</li>
+<li>color-index: 自訂調色盤(顏色查表法)大小
+<ul>
+<li><code>@media all and (color-index) { … }</code></li>
+<li><code>@media all and (min-color-index: 1) { … }</code></li>
+<li><code>&lt;?xml-stylesheet media=&quot;all and (min-color-index: 256)&quot; href=&quot;http://www.example.com/…&quot; ?&gt;</code></li>
+</ul>
+</li>
+<li>monochrome: 在單色顯示器中，值代表每個像素幾bit
+<ul>
+<li><code>@media all and (monochrome) { … }</code> 黑白畫面</li>
+<li><code>@media all and (min-monochrome: 2) { … }</code></li>
+<li><code>&lt;link rel=&quot;stylesheet&quot; media=&quot;print and (color)&quot; href=&quot;http://…&quot; /&gt;</code><br>
+<code>&lt;link rel=&quot;stylesheet&quot; media=&quot;print and (monochrome)&quot; href=&quot;http://…&quot; /&gt;</code></li>
+</ul>
+</li>
+<li>resolution: pixel 密度(dpi 或 dpcm)
+<ul>
+<li><code>@media print and (min-resolution: 300dpi) { … }</code></li>
+<li><code>@media print and (min-resolution: 118dpcm) { … }</code></li>
+</ul>
+</li>
+<li>scan: 顯示器掃描線的方式，其值等同於 1080i 和 1080p 的字尾英文意思
+<ul>
+<li><code>@media tv and (scan: progressive) { … }</code></li>
+</ul>
+</li>
+<li>grid: 像是 terminal 或者是固定寬度字體的顯示方式
+<ul>
+<li><code>@media handheld and (grid) and (max-width: 15em) { … }</code></li>
+<li><code>@media handheld and (grid) and (device-max-height: 7em) { … }</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="常見的應用"><a class="header-anchor" href="#常見的應用">¶</a>常見的應用</h2>
+<p><strong>例子1: RWD (以 bootstrap 為例)</strong></p>
+<p>桌機版<br>
+<img src="https://i.imgur.com/YvyIxrR.png" alt=""></p>
+<p>手機版<br>
+<img src="https://i.imgur.com/mbadJh9.png" alt=""></p>
+<p>來看看這個 `.col-sm-8</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.col</span>,  <span class="comment">/*...*/</span><span class="selector-class">.col-sm-8</span> <span class="comment">/*...*/</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">min-height</span>: <span class="number">1px</span>;</span><br><span class="line">    <span class="attribute">padding-right</span>: <span class="number">15px</span>;</span><br><span class="line">    <span class="attribute">padding-left</span>: <span class="number">15px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> (min-width: <span class="number">576px</span>) &#123;</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">    <span class="selector-class">.col-sm-8</span> &#123;</span><br><span class="line">        <span class="attribute">-webkit-box-flex</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">-ms-flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">66.666667%</span>;</span><br><span class="line">        <span class="attribute">flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">66.666667%</span>;</span><br><span class="line">        <span class="attribute">max-width</span>: <span class="number">66.666667%</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>.col-sm-8</code> 預設是寬度 100%，<br>
+是在任何的 media 中可視區 576px 以上，最大寬度改成 66.666667%;</p>
+<p><strong>例子2: 瀏覽與預覽列印</strong></p>
+<p>找一個頁面來看看</p>
+<p><img src="https://i.imgur.com/6eR8ghR.png" alt=""></p>
+<p>進入列印的預覽</p>
+<p><img src="https://i.imgur.com/ckySHZ8.png" alt=""></p>
+<p>發現不同了嗎？</p>
+<p>來看看 CSS 發現側邊欄 <code>#mw-navigation</code> 和其它的 selector 在列印中有設定隱藏。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">media</span> print &#123;</span><br><span class="line">    <span class="selector-class">.noprint</span>,</span><br><span class="line">    <span class="selector-class">.catlinks</span>,</span><br><span class="line">    <span class="selector-class">.magnify</span>,</span><br><span class="line">    <span class="selector-class">.mw-cite-backlink</span>,</span><br><span class="line">    <span class="selector-class">.mw-jump</span>,</span><br><span class="line">    <span class="selector-class">.mw-editsection</span>,</span><br><span class="line">    <span class="selector-class">.mw-editsection-like</span>,</span><br><span class="line">    <span class="selector-class">.mw-hidden-catlinks</span>,</span><br><span class="line">    <span class="selector-class">.mw-indicators</span>,</span><br><span class="line">    <span class="selector-class">.mw-redirectedfrom</span>,</span><br><span class="line">    <span class="selector-class">.patrollink</span>,</span><br><span class="line">    <span class="selector-class">.usermessage</span>,</span><br><span class="line">    <span class="selector-id">#column-one</span>,</span><br><span class="line">    <span class="selector-id">#footer-places</span>,</span><br><span class="line">    <span class="selector-id">#jump-to-nav</span>,</span><br><span class="line">    <span class="selector-id">#mw-navigation</span>,</span><br><span class="line">    <span class="selector-id">#siteNotice</span>,</span><br><span class="line">    <span class="selector-id">#f-poweredbyico</span>,</span><br><span class="line">    <span class="selector-id">#f-copyrightico</span>,</span><br><span class="line">    <span class="selector-tag">li</span><span class="selector-id">#about</span>,</span><br><span class="line">    <span class="selector-tag">li</span><span class="selector-id">#disclaimer</span>,</span><br><span class="line">    <span class="selector-tag">li</span><span class="selector-id">#mobileview</span>,</span><br><span class="line">    <span class="selector-tag">li</span><span class="selector-id">#privacy</span> &#123;</span><br><span class="line">        <span class="attribute">display</span>: none</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://codepen.io/dwatow/pen/Nwmojy" target="_blank" rel="noopener">flex-basis excerise</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2012/REC-CSS3-mediaqueries-20120619/" target="_blank" rel="noopener">Media Queries - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/media.html#media-groups" target="_blank" rel="noopener">7 Media types - w3.org</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -177,19 +355,15 @@
                         tags:
                         
   <li class="meta-text">
+  { <a href="/tags/CSS/">CSS</a> }
+  </li>
+
+  <li class="meta-text">
   { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/Flex/">Flex</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/flex-grow/">flex-grow</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/flex-shrink/">flex-shrink</a> }
+  { <a href="/tags/Media-Query/">Media Query</a> }
   </li>
 
 
@@ -219,7 +393,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 17.09px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 38.73px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.09px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 14px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 14px;">vue-router</a> <a href="/tags/vuejs/" style="font-size: 41.82px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 29.45px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 17.09px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 38.73px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.09px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 14px;">vue-router</a> <a href="/tags/vuejs/" style="font-size: 41.82px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 29.45px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
