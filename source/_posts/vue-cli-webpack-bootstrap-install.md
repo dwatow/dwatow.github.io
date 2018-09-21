@@ -1,9 +1,10 @@
 ---
 title: 在 Vue-cli 或 Webpack 想使用 Bootstrap
 date: 2018-03-25 10:17:34
-tags: [nodejs, webpack, vuejs, 'bootstrap', 'jquery', 'JavaScript']
+tags: [nodejs, webpack, vuejs, "bootstrap", "jquery", "JavaScript"]
 categories: [工具使用]
 ---
+
 # 在 Vue-cli 或 Webpack 想使用 Bootstrap
 
 雖然官網文件[^webpack-bootstrap]有記載如何安裝，但是我在沒有很順利的情況之下，最後成功了。
@@ -33,14 +34,8 @@ npm install bootstrap
 
 1. npm 套件並沒有放入 `index.js`
 2. `package.json` [^npm-package.json]
-    ```
-    {
-        ...
-        "main": "dist/js/bootstrap",
-        ...    
-    }
-    ```
-身為 npm 套件的程式進入點在 `dist/js/bootstrap` 。
+   `{ ... "main": "dist/js/bootstrap", ... }`
+   身為 npm 套件的程式進入點在 `dist/js/bootstrap` 。
 
 ## 載入 Bootstrap 的 JavaScript
 
@@ -51,15 +46,15 @@ npm install bootstrap
 > 對 jQuery 有 `peerDependencies`，所以記得要自己安裝
 
 ```javascript
-import 'jquery';
-import 'bootstrap';
+import "jquery";
+import "bootstrap";
 ```
 
 等同於
 
 ```javascript
-import 'jquery';
-import 'bootstrap/dist/js/bootstrap.js';  //變成 main 的路徑
+import "jquery";
+import "bootstrap/dist/js/bootstrap.js"; //變成 main 的路徑
 ```
 
 表示「引用 Bootstrap 的 JavaScript」。
@@ -71,7 +66,7 @@ import 'bootstrap/dist/js/bootstrap.js';  //變成 main 的路徑
 (或者是在有用到 bootstrap 的 .vue 檔裡)
 
 ```javascript
-import 'bootstrap/dist/css/bootstrap.css'
+import "bootstrap/dist/css/bootstrap.css";
 ```
 
 表示「引用 Bootstrap 的 CSS」。
@@ -149,7 +144,7 @@ CSS 和 JavaScript 都引用進來，才算是有引用整個 Bootstrap。
 
 **postCSS.config.js**
 
-修正 No PostCSS Config found [^fix-postCSS-config]
+修正 No PostCSS Config found [^fix-postcss-config]
 
 ```javascript
 module.exports = {};
@@ -164,14 +159,26 @@ module.exports = {};
 這是一套將 bootstrap 的內容加工成 vue 形式的 source code 。
 有興趣的人可以上它的官網看看其中的有趣。
 
-[^download-bootstrap]: [Download · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/download/#npm)
+[^download-bootstrap]:
 
-[^npm-package.json]: [package.json | npm Documentation](https://docs.npmjs.com/files/package.json#main)
+  [Download · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/download/#npm)
 
-[^webpack-bootstrap]: [Webpack · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/webpack/)
+[^npm-package.json]:
 
-[^vue-loader-sass-resources-loader]: [預處理器 · vue-loader, 加載一個全局設置文件](https://vue-loader.vuejs.org/zh-cn/configurations/pre-processors.html)
+  [package.json | npm Documentation](https://docs.npmjs.com/files/package.json#main)
 
-[^webpackconfig-setup-sass-resources-loader]: [Vue组件中使用Sass全局变量](https://xiaogliu.github.io/2017/09/09/use-sass-global-variables-in-every-vue-components/)
+[^webpack-bootstrap]:
 
-[^fix-postCSS-config]: [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)
+  [Webpack · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/webpack/)
+
+[^vue-loader-sass-resources-loader]:
+
+  [預處理器 · vue-loader, 加載一個全局設置文件](https://vue-loader.vuejs.org/zh-cn/configurations/pre-processors.html)
+
+[^webpackconfig-setup-sass-resources-loader]:
+
+  [Vue 组件中使用 Sass 全局变量](https://xiaogliu.github.io/2017/09/09/use-sass-global-variables-in-every-vue-components/)
+
+[^fix-postcss-config]:
+
+  [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)

@@ -4,6 +4,7 @@ date: 2018-01-13 12:26:22
 tags: ["nodejs", "heroku", "npm"]
 categories: "工具使用"
 ---
+
 # node.js 的 Hello world 在 heroku
 
 # 前言
@@ -16,14 +17,15 @@ categories: "工具使用"
 已安裝 node.js 並且想把它佈署到網路空間
 
 - 後端程式
-    - 使用 [node.js](https://nodejs.org/en/)
-    - 不使用 [express](http://expressjs.com/zh-tw/) 框架
+  - 使用 [node.js](https://nodejs.org/en/)
+  - 不使用 [express](http://expressjs.com/zh-tw/) 框架
 - 用 [heroku](www.heroku.com) 空間
 
 # 開始囉
 
 依文章的標題「node.js 的 Hello world 在 heroku」
 可以拆成兩大部份
+
 1. node.js 的 Hello world
 2. 在 heroku
 
@@ -32,16 +34,17 @@ categories: "工具使用"
 到 node 官網，找 doc ，選任一版本，點擊文件裡的 [Usage & Example](https://nodejs.org/docs/latest-v7.x/api/synopsis.html)
 
 此例是使用 Node.js v7.10.1 Documentation 的程式碼
-```javascript=
-const http = require('http');
 
-const hostname = '127.0.0.1';
+```javascript=
+const http = require("http");
+
+const hostname = "127.0.0.1";
 const port = 3000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
+  res.setHeader("Content-Type", "text/plain");
+  res.end("Hello World\n");
 });
 
 server.listen(port, hostname, () => {
@@ -67,7 +70,6 @@ Server running at http://127.0.0.1:3000/
 
 到這，可是「正片開始」
 首先，我們要了解，光是上傳一個 `index.js` 的話，heroku 是不知道要怎麼執行它。
-
 
 ### 修改程式碼
 
@@ -109,12 +111,12 @@ $ brew install heroku/brew/heroku
 並且指定你要傳過來的 repository 和 branch
 
 heroku 提供的佈署方式很靈活，算是滿方便的。
+
 1. 自動佈署的開關
-    - 是否要等 CI 正確再自動部署到 heroku
+   - 是否要等 CI 正確再自動部署到 heroku
 2. 手動佈署的觸發按鈕
 
 ### 設定 heroku 啟動 node.js
-
 
 #### heroku 預設的啟動指令
 
@@ -135,10 +137,11 @@ $ npm init
 ```
 
 會出現 `package.json`
+
 > 如果要指定 `node.js` 或 `npm` 的版本，要在這時候加上去。
 
-
 打開 `package.json`
+
 ```json=
   "scripts": {
     "start": "node index.js", //加入這一行
@@ -179,6 +182,7 @@ $ npm start
 而且在佈署時，缺此檔，會有 WARNING
 
 而檔案內容就一行，(依 key=value 的格式)
+
 ```shell
 TIMES=2
 ```
@@ -196,7 +200,9 @@ TIMES=2
 有幾個地方要知道，會幫助在這過程找到錯誤的線索。
 
 ### 看佈署 log
+
 ![](https://i.imgur.com/nmgO4yo.png)
 
 ### 看執行 log
+
 ![](https://i.imgur.com/IPajyxD.png)

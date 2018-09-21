@@ -1,9 +1,10 @@
 ---
 title: 認識 Webpack Loader
 date: 2018-03-17 11:04:05
-tags: [nodejs, webpack, vuejs, 'webpack loader', 'JavaScript']
+tags: [nodejs, webpack, vuejs, "webpack loader", "JavaScript"]
 categories: [工具使用]
 ---
+
 # 認識 Webpack Loader
 
 > 為了 vue-cli 而看 webpack ，由於 webpack 看了 webpack loader。
@@ -11,7 +12,6 @@ categories: [工具使用]
 ## 快速上手
 
 以 [webpack 官網的測試程式](https://webpack.js.org/contribute/writing-a-loader/#testing)為例，先來快速上手一波吧!!!
-
 
 ### 安裝
 
@@ -55,14 +55,14 @@ testloader
 **src/loader.js**
 
 ```javascript=
-const getOptions = require('loader-utils').getOptions;
+const getOptions = require("loader-utils").getOptions;
 
 module.exports = function loader(source) {
   const options = getOptions(this);
 
   source = source.replace(/\[name\]/g, options.name);
 
-  return `module.exports = ${ JSON.stringify(source) }`;
+  return `module.exports = ${JSON.stringify(source)}`;
 };
 ```
 
@@ -75,9 +75,9 @@ Hey [name]!
 **test/compiler.js**
 
 ```javascript=
-const path = require('path');
-const webpack = require('webpack');
-const memoryfs = require('memory-fs');
+const path = require("path");
+const webpack = require("webpack");
+const memoryfs = require("memory-fs");
 
 module.exports = (fixture, options = {}) => {
   const compiler = webpack({
@@ -85,18 +85,20 @@ module.exports = (fixture, options = {}) => {
     entry: `./${fixture}`,
     output: {
       path: path.resolve(__dirname),
-      filename: 'bundle.js',
+      filename: "bundle.js"
     },
     module: {
-      rules: [{
-        test: /\.txt$/,
-        use: {
-          loader: path.resolve(__dirname, '../src/loader.js'),
-          options: {
-            name: 'Alice'
+      rules: [
+        {
+          test: /\.txt$/,
+          use: {
+            loader: path.resolve(__dirname, "../src/loader.js"),
+            options: {
+              name: "Alice"
+            }
           }
         }
-      }]
+      ]
     }
   });
 
@@ -109,16 +111,16 @@ module.exports = (fixture, options = {}) => {
       resolve(stats);
     });
   });
-}
+};
 ```
 
 **test/loader.test.js**
 
 ```javascript=
-const compiler = require('./compiler.js');
+const compiler = require("./compiler.js");
 
-test('Inserts name and outputs JavaScript', async () => {
-  const stats = await compiler('example.txt');
+test("Inserts name and outputs JavaScript", async () => {
+  const stats = await compiler("example.txt");
   const output = stats.toJson().modules[0].source;
 
   expect(output).toBe(`module.exports = "Hey Alice!\\n"`);
@@ -167,9 +169,9 @@ Ran all test suites.
 來看看它的教學文件裡，給的一段範例程式碼[^jest-getting-started]
 
 ```javascript=
-const sum = require('./sum');
-    test('adds 1 + 2 to equal 3', () => {
-    expect(sum(1, 2)).toBe(3);
+const sum = require("./sum");
+test("adds 1 + 2 to equal 3", () => {
+  expect(sum(1, 2)).toBe(3);
 });
 ```
 
@@ -178,10 +180,10 @@ const sum = require('./sum');
 **test/loader.test.js**
 
 ```javascript=
-const compiler = require('./compiler.js');
+const compiler = require("./compiler.js");
 
-test('Inserts name and outputs JavaScript', async () => {
-  const stats = await compiler('example.txt');
+test("Inserts name and outputs JavaScript", async () => {
+  const stats = await compiler("example.txt");
   const output = stats.toJson().modules[0].source;
 
   expect(output).toBe(`module.exports = "Hey Alice!\\n"`);
@@ -191,11 +193,11 @@ test('Inserts name and outputs JavaScript', async () => {
 發現屬於 jest 的部份是這樣[^unit-test-structor]
 
 ```javascript=
-test('test topic', function callback () {
-    // Arrange
-    // Act
-    // Assert
-    expect(result).toBe(answer);
+test("test topic", function callback() {
+  // Arrange
+  // Act
+  // Assert
+  expect(result).toBe(answer);
 });
 ```
 
@@ -209,15 +211,14 @@ test('test topic', function callback () {
 可以將程式改寫成這樣，即可印出 loader 的結果。
 
 ```javascript=
-const compiler = module.require('./compiler.js');
+const compiler = module.require("./compiler.js");
 
-async function go () {
-
-  const stats = await compiler('example.txt');
+async function go() {
+  const stats = await compiler("example.txt");
   console.log(stats.toJson().modules.shift().source);
 }
 
-go ();
+go();
 ```
 
 ### 看看 Loader 的 code
@@ -242,8 +243,8 @@ module.exports = function loader(source) {
 觀察它與 `webpack.config.js` 之間的關聯，並且反覆把玩一下這段程式碼可以了解
 
 1. 輸入的 source 是「文件」，在設定檔的 entry 裡
-1. 輸入的 option 是「loader參數」，在設定檔的 module 裡
-2. 輸出的字串，必須是 JavaScript 的模組。
+1. 輸入的 option 是「loader 參數」，在設定檔的 module 裡
+1. 輸出的字串，必須是 JavaScript 的模組。
 
 ## 所以我說 Loader 是一個什麼？
 
@@ -269,9 +270,16 @@ loader 在 webpack 的用途，在官網寫得很清楚。
 
 # 參考資料
 
-[^jest-getting-started]: [Getting Started · Jest](https://facebook.github.io/jest/docs/en/getting-started.htmlGetting)
+[^jest-getting-started]:
 
-[^unit-test-structor]: [\[Day 3\]動手寫Unit Test, 3A原則](https://ithelp.ithome.com.tw/articles/10102643)
+  [Getting Started · Jest](https://facebook.github.io/jest/docs/en/getting-started.htmlGetting)
 
-[^async-await-bible]: [\[JavaScript\] ES7 Async Await 聖經, 3- Constructing Async function
+[^unit-test-structor]:
+
+  [\[Day 3\]動手寫 Unit Test, 3A 原則](https://ithelp.ithome.com.tw/articles/10102643)
+
+[^async-await-bible]:
+
+  [\[JavaScript\] ES7 Async Await  聖經, 3- Constructing Async function
+
 ](https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29)

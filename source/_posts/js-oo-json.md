@@ -1,9 +1,10 @@
 ---
 title: JavaScript 的 OO 與 JSON
 date: 2018-02-22 11:55:09
-tags: ['json', 'JavaScript', 'oo', 'nodejs']
-categories: '技術心得'
+tags: ["json", "JavaScript", "oo", "nodejs"]
+categories: "技術心得"
 ---
+
 # JavaScript 的 OO 與 JSON
 
 今天，想要用 JavaScript 做一個可以重複呼叫的物件，並且產生 JSON。
@@ -22,8 +23,8 @@ categories: '技術心得'
 
 ```javascript=
 var chris = {
-    name: 'chris',
-    age: 18
+  name: "chris",
+  age: 18
 };
 console.log(chris);
 console.log(JSON.stringify(chris));
@@ -73,33 +74,32 @@ $ node index.js
 ## JavaScript 的「物件導向味」
 
 > 「物件導向味」因為它並不是演示封裝、繼承、動態連結。
-而是除了物件的屬性，還加入了描述了物件行為的 method。
+> 而是除了物件的屬性，還加入了描述了物件行為的 method。
 
 OO 之所以解決了軟體開發的副屬性問題，好用的原因之一。
 就是「將 method 放在物件裡」，讓 function 不再自由的全域放置。
-
 
 ### index.js
 
 ```javascript=
 var chris = {
-    name: 'chris',
-    age: 18,
-    skills: [],
-    addSkill: function (skill) {
-        this.skills.push(skill)
-    },
-    devTool: {},
-    setDevTool: function (tool) {
-        this.devTool = tool
-    }
+  name: "chris",
+  age: 18,
+  skills: [],
+  addSkill: function(skill) {
+    this.skills.push(skill);
+  },
+  devTool: {},
+  setDevTool: function(tool) {
+    this.devTool = tool;
+  }
 };
-chris.addSkill('html');
-chris.addSkill('css');
-chris.addSkill('javascript');
+chris.addSkill("html");
+chris.addSkill("css");
+chris.addSkill("javascript");
 chris.setDevTool({
-    name: 'macbook12',
-    year: 2017
+  name: "macbook12",
+  year: 2017
 });
 console.log(chris);
 console.log(JSON.stringify(chris));
@@ -131,37 +131,36 @@ $ node index.js
 
 如果資料庫選用 NoSql 就又更希望可以直送 JSON ，無須轉來轉去的。
 
-
 ### index.js
 
 ```javascript=
-function human (name, age) {
-    this.name = name;
-    this.age = 18;
-    this.skills = [];
-    this.addSkill = function (skill) {
-        this.skills.push(skill)
-    };
-    this.devTool = {};
-    this.setDevTool = function (tool) {
-        this.devTool = tool
-    };
-};
-var chris = new human('chris', 18);
-chris.addSkill('html');
-chris.addSkill('css');
-chris.addSkill('javascript');
+function human(name, age) {
+  this.name = name;
+  this.age = 18;
+  this.skills = [];
+  this.addSkill = function(skill) {
+    this.skills.push(skill);
+  };
+  this.devTool = {};
+  this.setDevTool = function(tool) {
+    this.devTool = tool;
+  };
+}
+var chris = new human("chris", 18);
+chris.addSkill("html");
+chris.addSkill("css");
+chris.addSkill("javascript");
 chris.setDevTool({
-    name: 'macbook12',
-    year: 2017
+  name: "macbook12",
+  year: 2017
 });
-var mary = new human('mary', 15);
-mary.addSkill('nurse');
-mary.addSkill('cook');
-mary.addSkill('bake');
+var mary = new human("mary", 15);
+mary.addSkill("nurse");
+mary.addSkill("cook");
+mary.addSkill("bake");
 mary.setDevTool({
-    name: 'kitchen',
-    year: 2000
+  name: "kitchen",
+  year: 2000
 });
 console.log(chris);
 console.log(JSON.stringify(chris));

@@ -1,9 +1,10 @@
 ---
 title: 用 vue-loader 的 component 資料傳遞
 date: 2018-04-05 22:23:04
-tags: [vuejs, 'JavaScript', 'vue-loader']
+tags: [vuejs, "JavaScript", "vue-loader"]
 categories: 技術心得
 ---
+
 # 用 vue-loader 的 component 資料傳遞
 
 ## 加入 component
@@ -52,9 +53,8 @@ export default {
 在 component 要使用 props ，就當作一般的 data 這樣用。
 
 > ex:
-JavaScript: `this.childProp`
-HTML: `{ { childProp } }`
-
+> JavaScript: `this.childProp`
+> HTML: `{ { childProp } }`
 
 ```html
 <script>
@@ -100,7 +100,7 @@ export default {
 ### 先回憶，在 jQuery 的用法
 
 ```javascript
-$('element').on(eventName, eventCallback);
+$("element").on(eventName, eventCallback);
 ```
 
 再看看，在 vue 這樣使用
@@ -133,7 +133,7 @@ export default {
 
 **parent component**
 
-`$event` 就是 callback function  的參數。在 parent 層可以直接引用。
+`$event` 就是 callback function 的參數。在 parent 層可以直接引用。
 
 ```html
 <template>

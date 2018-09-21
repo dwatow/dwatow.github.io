@@ -4,6 +4,7 @@ date: 2018-02-26 16:20:16
 tags: webpack
 categories: ["工具使用"]
 ---
+
 # Webpack 官網文件內介紹過的套件
 
 ## 緣起
@@ -27,6 +28,7 @@ categories: ["工具使用"]
 ### [Loading CSS](https://webpack.js.org/guides/asset-management/#loading-CSS)
 
 載入 CSS 要安裝兩個套件
+
 - CSS-loader: 將 CSS 轉成 js
 - style-loader 將轉好的 js 轉成 html 可以使用的樣式
 
@@ -35,7 +37,7 @@ npm install --save-dev style-loader CSS-loader
 ```
 
 > [postCSS](https://webpack.js.org/loaders/postCSS-loader), [sass](https://webpack.js.org/loaders/sass-loader), [less](https://webpack.js.org/loaders/less-loader) 都可以唷
-(postCSS 幫你加 prefix)
+> (postCSS 幫你加 prefix)
 
 ### [Loading Images](https://webpack.js.org/guides/asset-management/#loading-images)
 
@@ -44,6 +46,7 @@ npm install --save-dev style-loader CSS-loader
 ```shell
 npm install --save-dev file-loader
 ```
+
 ### [Loading Data](https://webpack.js.org/guides/asset-management/#loading-data)
 
 處理 csv, xml 格式的檔案
@@ -55,7 +58,6 @@ npm install --save-dev csv-loader xml-loader
 ## Output Management
 
 修改 `webpack.config.js` 自動生成 html 。
-
 
 ### [Setting up HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin)
 
@@ -98,34 +100,41 @@ npm install clean-webpack-plugin --save-dev
 有三種做法。
 
 1. webpack's Watch Mode
-    優點: 內建功能
-    缺點: 需要自己重新整理瀏覽器畫面
+   優點: 內建功能
+   缺點: 需要自己重新整理瀏覽器畫面
 1. webpack-dev-server
-    需安裝 `webpack-dev-server`
-    ```shell
-    npm install --save-dev webpack-dev-server
-    ```
-    優點: live-reload
-    :::warning
-    遇到問題: 使用 webpack-dev-server ，啟動時出現錯誤訊息
-    ```shell
-    Error: Cannot find module 'webpack-cli/bin/config-yargs'
-    ```
+   需安裝 `webpack-dev-server`
 
-    解決方案: 安裝套件
-    ```shell
-    npm install webpack-cli
-    ```
-    :::
+   ```shell
+   npm install --save-dev webpack-dev-server
+   ```
+
+   優點: live-reload
+   :::warning
+   遇到問題: 使用 webpack-dev-server ，啟動時出現錯誤訊息
+
+   ```shell
+   Error: Cannot find module 'webpack-cli/bin/config-yargs'
+   ```
+
+   解決方案: 安裝套件
+
+   ```shell
+   npm install webpack-cli
+   ```
+
+   :::
+
 1. webpack-dev-middleware
-    可以和 express 結合在一起的做法
+   可以和 express 結合在一起的做法
 
 ## Tree Shaking
 
 > 此名稱引用自知名套件: [Rollup](https://github.com/rollup/rollup)
+
 - dead-code: 用不到的 code
 
->You can imagine your application as a tree. The source code and libraries you actually use represent the green, living leaves of the tree. Dead code represents the brown, dead leaves of the tree that are consumed by autumn. In order to get rid of the dead leaves, you have to shake the tree, causing them to fall.
+> You can imagine your application as a tree. The source code and libraries you actually use represent the green, living leaves of the tree. Dead code represents the brown, dead leaves of the tree that are consumed by autumn. In order to get rid of the dead leaves, you have to shake the tree, causing them to fall.
 
 JavaScript 模組化之後，出現引用，卻沒使用的情況，就是 dead code ，希望可以自動編出無 dead code 的程式碼
 
@@ -159,14 +168,14 @@ npm install --save-dev webpack-merge
 ```
 
 - webpack.common.js
-    - entry
-    - output
-    - plugins
+  - entry
+  - output
+  - plugins
 - webpack.dev.js
-    - devtool
-    - devServer (or watch)
+  - devtool
+  - devServer (or watch)
 - webpack.prod.js
-    - tree shaking (UglifyJSPlugin)
+  - tree shaking (UglifyJSPlugin)
 
 ### [NPM Scripts](https://webpack.js.org/guides/production/#npm-scripts)
 
@@ -201,8 +210,8 @@ webpack.prod.js
 內建的套件 [`DefinePlugin`](https://webpack.js.org/plugins/define-plugin) 設定環境變數，讓 dev 模式可以寫條件編譯
 
 ```javascript
-if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
+if (process.env.NODE_ENV !== "production") {
+  console.log("Looks like we are in development mode!");
 }
 ```
 
@@ -217,14 +226,17 @@ if (process.env.NODE_ENV !== 'production') {
 ```shell=
 --optimize-minimize
 ```
+
 包含 `UglifyJSPlugin`
 
 ```shell=
 --define process.env.NODE_ENV="'production'"
 ```
+
 包含 `DefinePlugin`
 
 ```shell=
 webpack -p
 ```
+
 包含上述兩個

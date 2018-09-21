@@ -1,7 +1,7 @@
 ---
 title: 互動動畫練習
 date: 2018-01-31 16:39:00
-tags: ['canvas', 'JavaScript']
+tags: ["canvas", "JavaScript"]
 categories: 技術心得
 ---
 
@@ -15,6 +15,7 @@ categories: 技術心得
 ## 金幣旋轉
 
 <canvas id="coinAnimation" width="44" height="40"></canvas>
+
 <script src="https://dwatow.github.io/spriteAnimation/sprite0.js" charset="utf-8"></script>
 <script type="text/javascript">
     const image = new Image();

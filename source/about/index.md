@@ -6,7 +6,7 @@ comments: false
 
 # 開發者介紹
 
-從 C++ 到 JavaScript, 是我過去慣用的, 也希望未來可以慣用的語言。寫程式的生涯有 7年以上實戰經驗。
+從 C++ 到 JavaScript, 是我過去慣用的, 也希望未來可以慣用的語言。寫程式的生涯有 7 年以上實戰經驗。
 
 過去接觸過的技術 C++, MFC, OLE, CppUnit, Jenkins, Git, Boost C++, python, Django, C#, Silverlight...等，最熟練的是標準 C++ 的語言本身, 用 Git 版本控制, CppUnit 輔助自動化測試, Jenkins 自動化工作流程, 用 python 寫小工具。
 

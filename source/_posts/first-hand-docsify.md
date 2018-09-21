@@ -1,9 +1,10 @@
 ---
 title: 初次使用 Docsify
 date: 2018-07-28 17:10:50
-tags: ['docsify', 'markdown', 'vuejs']
-categories: '工具使用'
+tags: ["docsify", "markdown", "vuejs"]
+categories: "工具使用"
 ---
+
 # 初次使用 Docsify
 
 這是一個 markdown + vue 組合的文件網站產生器。
@@ -34,7 +35,6 @@ markdown 渲染器只能用 marked
 找到了[Awesome Static Web Site Generators](https://github.com/myles/awesome-static-generators)
 
 還是不知道為什麼，就找到 [Docsify](https://docsify.js.org/)
-
 
 # 安裝
 
@@ -125,25 +125,25 @@ docs/zh-cn/guide.md   → http://domain.com/#/zh-cn/guide
 ### 指定側邊欄 md 檔
 
 - 使用預設檔名
-  1. 加入 `loadSidebar: true`*
+  1. 加入 `loadSidebar: true`\*
   2. 新增文件 `./docs/_sidebar.md`
 - 使用自訂檔名 `sidebarConfig.md`
-  1. 加入 `loadSidebar: 'sidebarConfig'`*
+  1. 加入 `loadSidebar: 'sidebarConfig'`\*
   2. 新增文件 `./docs/sidebarConfig.md`
 
-*在 `./docs/index.html` 中的 `script`
+\*在 `./docs/index.html` 中的 `script`
 
 **index.html**
 
 ```javascript
 window.$docsify = {
-  name: 'docsify-demo',
-  repo: '',
-  loadSidebar: true, //加入這一行
-}
+  name: "docsify-demo",
+  repo: "",
+  loadSidebar: true //加入這一行
+};
 ```
 
-**_sidebar.md**
+**\_sidebar.md**
 
 ```
 * [首页](zh-cn/)
@@ -165,10 +165,10 @@ window.$docsify = {
 
 ```javascript
 window.$docsify = {
-  name: 'docsify-demo',
-  repo: '',
-  subMaxLevel: 2, //加入這一行
-}
+  name: "docsify-demo",
+  repo: "",
+  subMaxLevel: 2 //加入這一行
+};
 ```
 
 ## 導覽列
@@ -192,25 +192,25 @@ window.$docsify = {
 ### 指定導覽列 md 檔
 
 - 使用預設檔名
-  1. 加入 `loadNavbar: true`*
+  1. 加入 `loadNavbar: true`\*
   2. 新增文件 `./docs/_navbar.md`
 - 使用自訂檔名 `navbarConfig.md`
-  1. 加入 `loadNavbar: 'navbarConfig'`*
+  1. 加入 `loadNavbar: 'navbarConfig'`\*
   2. 新增文件 `./docs/navbarConfig.md`
 
-*在 `./docs/index.html` 中的 `script`
+\*在 `./docs/index.html` 中的 `script`
 
 **index.html**
 
 ```javascript
 window.$docsify = {
-  name: 'docsify-demo',
-  repo: '',
-  loadNavbar: true, //加入這一行
-}
+  name: "docsify-demo",
+  repo: "",
+  loadNavbar: true //加入這一行
+};
 ```
 
-**_navbar.md**
+**\_navbar.md**
 
 ```
 * [快速开始](zh-cn/quickstart.md)
@@ -230,25 +230,25 @@ window.$docsify = {
 ### 指定封面頁 md 檔
 
 - 使用預設檔名
-  1. 加入 `coverpage: true`*
+  1. 加入 `coverpage: true`\*
   2. 新增文件 `./docs/_coverpage.md`
 - 使用自訂檔名 `coverPage.md`
-  1. 加入 `coverpage: 'coverPage'`*
+  1. 加入 `coverpage: 'coverPage'`\*
   2. 新增文件 `./docs/coverPage.md`
 
-*在 `./docs/index.html` 中的 `script`
+\*在 `./docs/index.html` 中的 `script`
 
 **index.html**
 
 ```javascript
 window.$docsify = {
-  name: 'docsify-demo',
-  repo: '',
-  coverpage: true, //加入這一行
-}
+  name: "docsify-demo",
+  repo: "",
+  coverpage: true //加入這一行
+};
 ```
 
-**_coverpage.md**
+**\_coverpage.md**
 
 ```
 ![logo](_media/icon.svg)

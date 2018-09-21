@@ -1,9 +1,10 @@
 ---
 title: Node.js 的 module.exports 和 require
 date: 2018-02-13 13:54:16
-tags: ['JavaScript', 'nodejs']
+tags: ["JavaScript", "nodejs"]
 categories: 技術心得
 ---
+
 # Node.js 的 module.exports 和 require
 
 今天想要在 JavaScript 做一個 module 被主程式呼叫
@@ -25,8 +26,8 @@ module.exports = text;
 ### main.js
 
 ```javascript=
-var example = require('./example.js');
-console.log(example)
+var example = require("./example.js");
+console.log(example);
 ```
 
 ### 顯示結果
@@ -37,10 +38,12 @@ hello
 ```
 
 在此，可以得到一些初步的收獲
+
 1. `module.exports` 像是 `return`
 2. `require` 像是 call function ，等號左值會得到 return 值，無論它是什麼。
 
 在此，在主程式得到的結果是
+
 ```javascript=
 var module = text; // var text = "hello";
 ```
@@ -60,16 +63,16 @@ var module = text; // var text = "hello";
 ```javascript=
 var text = "hello";
 module.exports = {
-    getText: function () {
-        return text;
-    }
+  getText: function() {
+    return text;
+  }
 };
 ```
 
 ### main.js
 
 ```javascript=
-var example = require('./example.js');
+var example = require("./example.js");
 console.log(example.getText());
 console.log(example.text);
 ```
@@ -85,7 +88,6 @@ undefined
 上述推論的沒有錯。
 可以將 `module` 當作閉包。
 
-
 ## 小心遇到的雷點
 
 在物件導向語言寫 getter 時要小心回傳值是一個參考(或指標)。
@@ -97,20 +99,20 @@ undefined
 
 ```javascript=
 var text = {
-    message: "hello"
+  message: "hello"
 };
 
 module.exports = {
-    getText: function () {
-        return text;
-    }
+  getText: function() {
+    return text;
+  }
 };
 ```
 
 ### main.js
 
 ```javascript=
-var example = require('./example.js');
+var example = require("./example.js");
 var text = example.getText();
 text.message = 34789;
 console.log(example.getText());
@@ -135,12 +137,12 @@ $ node main.js
 
 ```javascript=
 var text = {
-    message: "hello"
+  message: "hello"
 };
 
 module.exports = {
-    getText: function () {
-        return Object.assign({}, text);
-    }
+  getText: function() {
+    return Object.assign({}, text);
+  }
 };
 ```

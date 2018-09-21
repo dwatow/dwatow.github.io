@@ -1,9 +1,10 @@
 ---
 title: Vue router 實戰
 date: 2018-05-20 14:11:20
-tags: [vuejs, 'vue-router']
+tags: [vuejs, "vue-router"]
 categories: [技術心得]
 ---
+
 # Vue router 實戰
 
 網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。
@@ -31,7 +32,7 @@ categories: [技術心得]
 
 - 主頁和首頁要切換
 - 主頁要包含其它的內頁
-    - 在主頁中，內頁要彼此切換
+  - 在主頁中，內頁要彼此切換
 
 路徑結構會像這樣 (列舉一些內頁可能的例子)
 
@@ -70,31 +71,30 @@ categories: [技術心得]
 var route = new Router({
   routes: [
     {
-      path: '/',
-      redirect: '/login',
+      path: "/",
+      redirect: "/login"
     },
     {
-      path: '/login',
-      name: 'login',
-      component: login,
+      path: "/login",
+      name: "login",
+      component: login
     },
     {
-      path: '/main',
-      name: 'main',
+      path: "/main",
+      name: "main",
       component: main,
-      redirect: '/main/index',
+      redirect: "/main/index",
       children: [
-          //...
-      ],
-    },
-  ],
-})
+        //...
+      ]
+    }
+  ]
+});
 ```
 
 :::danger
 一個看似簡單的巢狀結構，其實還要搭配畫面的結構才可以順利運作。
 :::
-
 
 ## 切換必做 beforeEach
 
@@ -117,7 +117,6 @@ var route = new Router({
 第一點，只有在第一次畫面載入時，才會發生。透過 router 切換頁面內容，是不會造成 components 消滅或重新生成 (vue 本來的設計，就是這樣)。
 第二點， router 原生的設計，就有這一個時機 (`beforeEach`) 可以使用。
 
-
 直接對 router 物件使用 method
 
 ```javascript=
@@ -137,6 +136,7 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 ```
+
 - to: 下一個 route
 - from: 上一個 route (進入首頁 = null)
 - next: 通通弄好要執行這個 function
@@ -163,20 +163,18 @@ router.beforeEach(async (to, from, next) => {
 
 若遇到這種(語意上相同)「切換頁面，若....要導向」的 Story，就要考慮使用 JavaScript ，有邏輯的「選擇式導向」。
 
-
 ```javascript
 router.push(location, onComplete?, onAbort?)
 ```
 
 - location
-    - 一個 `route`
-    - `route` 裡的 `path`
-
+  - 一個 `route`
+  - `route` 裡的 `path`
 
 就可以寫這樣
 
 ```javascript
-router.push('/');
+router.push("/");
 ```
 
 :::danger

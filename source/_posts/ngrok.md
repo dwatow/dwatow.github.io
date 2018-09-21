@@ -1,10 +1,11 @@
 ---
 title: 神器ngrok
 date: 2017-06-16 18:37:29
-tags: ['ngork', '測試工具']
-categories: '工具使用'
+tags: ["ngork", "測試工具"]
+categories: "工具使用"
 ---
-# 初探ngrok神器
+
+# 初探 ngrok 神器
 
 ![](https://ngrok.com/static/img/demo.png)
 
@@ -26,7 +27,8 @@ brew cask install ngrok
 
 ## 使用
 
-執行ngrok，用http接到port 3000。
+執行 ngrok，用 http 接到 port 3000。
+
 ```shell
 $ ngrok http 3000
 ```

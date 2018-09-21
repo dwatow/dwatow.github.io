@@ -6,9 +6,9 @@ permalink: /404.html
 
 # 404!!!你要找的頁面還沒有出現
 
-那就看我幾行code吧!!
+那就看我幾行 code 吧!!
 
-## 一開始，學了C++。
+## 一開始，學了 C++。
 
 ```c++
 #include <iostream>
@@ -45,7 +45,7 @@ int main() {
 }
 ```
 
-## 學了Design Pattern...
+## 學了 Design Pattern...
 
 ```c++
 #include <iostream>

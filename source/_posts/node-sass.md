@@ -1,9 +1,10 @@
 ---
 title: node-sass 初探
 date: 2018-03-12 21:52:31
-tags: [nodejs, webpack, vuejs, 'node-sass', 'JavaScript']
+tags: [nodejs, webpack, vuejs, "node-sass", "JavaScript"]
 categories: [工具使用]
 ---
+
 # NODE-SCSS
 
 除了 ruby 的 compass ，還有其它的方案可以編 `scss -> CSS`。
@@ -33,25 +34,27 @@ npm install node-sass
 有含 `@import` 的指令
 
 index.scss
+
 ```scss
 @import "bigFont";
 
 body {
-    color: red;
+  color: red;
 }
 ```
 
 bigFont.scss
+
 ```scss
 body {
-    font-size: 36px;
+  font-size: 36px;
 }
 ```
 
 ### 改 package.json
 
 > node-sass 安裝在 local 而不是 global 。
-讓 scss 可以用 npm 的指令觸發
+> 讓 scss 可以用 npm 的指令觸發
 
 指令要加在 package.json[^node-sass-note]
 
@@ -64,10 +67,10 @@ body {
 ### 執行
 
 下指令
+
 ```shell=
 npm run build-CSS ./index.scss ./index.css
 ```
-
 
 ## 那... `compass watch` 呢？
 
@@ -91,7 +94,10 @@ npm run build-CSS ./index.scss ./index.css
 ```
 
 [^node-sass]: [node-sass github](https://github.com/sass/node-sass)
+[^node-sass-note]:
 
-[^node-sass-note]: [Node sass 入門 \[筆記\]](http://adon988.logdown.com/posts/4736822-node-sass-tutorial)
+  [Node sass 入門 \[筆記\]](http://adon988.logdown.com/posts/4736822-node-sass-tutorial)
 
-[^node-sass-15min]: [SCSS 15分鐘入門](http://eddychang.me/blog/others/91-scss-15-mins.html)
+[^node-sass-15min]:
+
+  [SCSS 15 分鐘入門](http://eddychang.me/blog/others/91-scss-15-mins.html)

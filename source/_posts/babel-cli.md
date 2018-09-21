@@ -1,9 +1,10 @@
 ---
 title: Babel 第一次接觸
 date: 2018-03-08 14:51:40
-tags: [nodejs, webpack, vuejs, babel, 'JavaScript']
+tags: [nodejs, webpack, vuejs, babel, "JavaScript"]
 categories: [工具使用]
 ---
+
 # Babel 第一次接觸
 
 巴別塔，是一則聖經創世紀的故事。[^babel-wiki]
@@ -14,13 +15,11 @@ categories: [工具使用]
 開一個新的 npm 專案，並且初始化完成之後。
 安裝 `babel-core`
 
-
 試著將這段程式碼從 es6 轉譯成 es5
 
 ```javascript
 let x = n => n + 1;
 ```
-
 
 > 學習的過程，有找到阮一峰的教學[^babel-ruanyifeng]
 > 跟著文章裡的範例做，但是失敗了！
@@ -41,11 +40,10 @@ npm install --save-dev babel-core
 ```javascript=
 var babel = require("babel-core");
 
-var es6Code = 'let x = n => n + 1';
+var es6Code = "let x = n => n + 1";
 var es5Code = babel.transform(es6Code, {
-    presets: ['es2015']
-  })
-  .code;
+  presets: ["es2015"]
+}).code;
 console.log(es5Code);
 ```
 
@@ -73,6 +71,7 @@ var x = function x(n) {
 總算是可以透過安裝 `babel-core` 來同作 babel 的核心功能。
 
 但是，這並不能解決心中的疑問。
+
 1. babel-core 是什麼？
 2. babel-preset-es2015 是什麼？
 
@@ -87,6 +86,7 @@ npm install --save-dev babel-cli babel-preset-env
 ```
 
 官網一開始就叫我們安裝兩個套件
+
 - `babel-cli`
 - `babel-preset-env`
 
@@ -97,11 +97,10 @@ npm install --save-dev babel-cli babel-preset-env
 ```javascript=
 var babel = require("babel-core");
 
-var es6Code = 'let x = n => n + 1';
+var es6Code = "let x = n => n + 1";
 var es5Code = babel.transform(es6Code, {
-    //presets: ['es2015']
-  })
-  .code;
+  //presets: ['es2015']
+}).code;
 console.log(es5Code);
 ```
 
@@ -120,14 +119,15 @@ let x = n => n + 1;
 
 [Plugins · Babel](https://babeljs.io/docs/plugins/) 頁面可以看到簡單的介紹
 
-
 在此官網開頭就解釋[^babel-preset] ~(看原文會更好)~
+
 > Babel is a compiler, 一種吃 code 吐 code 的東西。
-將程式碼解析之後，再吐出來，並沒有做任何的處理。
-想要處理，要給 plugin。
+> 將程式碼解析之後，再吐出來，並沒有做任何的處理。
+> 想要處理，要給 plugin。
 
 其中 `preset` 就是一種 plubin
 而 `env` 是一種 `preset`
+
 ## env
 
 env 是一套 babel 官方套件，也是新手入門的好選擇
@@ -135,6 +135,7 @@ env 是一套 babel 官方套件，也是新手入門的好選擇
 > babel 首頁就是叫我們安裝這一套
 
 安裝
+
 ```shell
 npm install babel-preset-env --save-dev
 ```
@@ -142,7 +143,7 @@ npm install babel-preset-env --save-dev
 設定 options
 在 babel-core 的 options 這樣設定
 
->babel 也建議這樣設定
+> babel 也建議這樣設定
 
 ```javascript
 {
@@ -153,15 +154,13 @@ npm install babel-preset-env --save-dev
 ```javascript=
 var babel = require("babel-core");
 
-var es6Code = 'let x = n => n + 1';
+var es6Code = "let x = n => n + 1";
 var es5Code = babel.transform(es6Code, {
-    //presets: ['es2015']
-    "presets": ["env"]
-  })
-  .code;
+  //presets: ['es2015']
+  presets: ["env"]
+}).code;
 console.log(es5Code);
 ```
-
 
 執行程式，可以轉譯出來
 
@@ -181,7 +180,7 @@ var x = function x(n) {
 
 例如:
 所有瀏覽器最近的兩版, 並且 Safari 的
-7版(含)以上
+7 版(含)以上
 
 ```javascript=
 {
@@ -202,8 +201,12 @@ var x = function x(n) {
 其實就是一套指定版本的 preset。
 使用官網的教學，則是用途較為廣泛的設定。
 
-[^babel-wiki]: [巴別塔 - 維基百科](https://zh.wikipedia.org/wiki/%E5%B7%B4%E5%88%A5%E5%A1%94)
+[^babel-wiki]:
 
-[^babel-ruanyifeng]: [Babel 入門教程](http://www.ruanyifeng.com/blog/2016/01/babel.html)
+  [巴別塔 - 維基百科](https://zh.wikipedia.org/wiki/%E5%B7%B4%E5%88%A5%E5%A1%94)
+
+[^babel-ruanyifeng]:
+
+  [Babel 入門教程](http://www.ruanyifeng.com/blog/2016/01/babel.html)
 
 [^babel-preset]: [Plugins · Babel](https://babeljs.io/docs/plugins/)

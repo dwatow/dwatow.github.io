@@ -4,6 +4,7 @@ date: 2018-05-20 17:12:07
 tags: [vuejs, iview]
 categories: [技術心得]
 ---
+
 # iView Table 裡放 Dropdown
 
 ## 前言
@@ -13,7 +14,6 @@ categories: [技術心得]
 > 切版套 Bootstrap，用 vue 就要套 iView
 
 覺得很潮，所以用了一下。
-
 
 用起來的感覺，真的是很不錯。
 元件的封裝做得很好。
@@ -49,49 +49,57 @@ categories: [技術心得]
 
 ```javascript=
 export default {
-  data () {
+  data() {
     return {
       columns7: [
         //...'Name', 'Age', 'Address',
         {
-          title: 'Action',
+          title: "Action",
           //...
           render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                      this.show(params.index)
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index);
+                    }
                   }
-                }
-              }, 'View'),
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
                 },
-                on: {
-                  click: () => {
-                    this.remove(params.index)
+                "View"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
                   }
-                }
-              }, 'Delete')
+                },
+                "Delete"
+              )
             ]);
           }
         }
-      ],
+      ]
       //...
-    }
-  },
+    };
+  }
   //...
-}
+};
 ```
 
 在這，是使用 render function 的方式將 Button 產生出來，而且 code 看起來...
@@ -176,7 +184,6 @@ export default {
 3. 顯示 id name 的格式
 4. 選擇時，在 on-click 吐 id 進 callback
 
-
 ```javascript=26
 }, this.$store.getters.vuex_list
   .sort((a, b) => a.id - b.id)
@@ -210,7 +217,6 @@ on: {
 },
 ```
 
-
 這樣就可以在 Table 裡，看見美美的 dropdown 了。
 
 ## 細部調整 dropdown
@@ -218,15 +224,18 @@ on: {
 參考[官網文件](https://www.iviewui.com/components/dropdown)
 
 ```javascript=
-return h('Dropdown-item', {
-  props: {
-    name: index,
-    disabled: true, // 無效選項
-    selected: true, // 被選擇標示
-  }
-}, item)
+return h(
+  "Dropdown-item",
+  {
+    props: {
+      name: index,
+      disabled: true, // 無效選項
+      selected: true // 被選擇標示
+    }
+  },
+  item
+);
 ```
-
 
 ## 後續
 
