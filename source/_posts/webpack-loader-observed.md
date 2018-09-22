@@ -270,16 +270,8 @@ loader 在 webpack 的用途，在官網寫得很清楚。
 
 # 參考資料
 
-[^jest-getting-started]:
-
-  [Getting Started · Jest](https://facebook.github.io/jest/docs/en/getting-started.htmlGetting)
-
-[^unit-test-structor]:
-
-  [\[Day 3\]動手寫 Unit Test, 3A 原則](https://ithelp.ithome.com.tw/articles/10102643)
-
-[^async-await-bible]:
-
-  [\[JavaScript\] ES7 Async Await  聖經, 3- Constructing Async function
-
-](https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29)
+<!-- prettier-ignore-start -->
+[^jest-getting-started]: [Getting Started · Jest](https://facebook.github.io/jest/docs/en/getting-started.htmlGetting)
+[^unit-test-structor]: [\[Day 3\]動手寫 Unit Test, 3A 原則](https://ithelp.ithome.com.tw/articles/10102643)
+[^async-await-bible]: [\[JavaScript\] ES7 Async Await  聖經, 3- Constructing Async function](https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29)
+<!-- prettier-ignore-end -->

@@ -41,5 +41,8 @@ $ npm install hexo-list-related-posts --save
 也許需要改造的朋友可以看一下[別人的文章](https://coffee0127.github.io/blog/2016/08/11/hexo-abstract-of-related-post/) [^改裝]
 
 # 參考資料
+
+<!-- prettier-ignore-start -->
 [^npm]: [hexo-list-related-posts](https://www.npmjs.com/package/hexo-list-related-posts)
 [^改裝]: [Hexo 相關文章摘要](https://coffee0127.github.io/blog/2016/08/11/hexo-abstract-of-related-post/)
+<!-- prettier-ignore-end -->

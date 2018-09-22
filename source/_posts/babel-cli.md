@@ -201,12 +201,8 @@ var x = function x(n) {
 其實就是一套指定版本的 preset。
 使用官網的教學，則是用途較為廣泛的設定。
 
-[^babel-wiki]:
-
-  [巴別塔 - 維基百科](https://zh.wikipedia.org/wiki/%E5%B7%B4%E5%88%A5%E5%A1%94)
-
-[^babel-ruanyifeng]:
-
-  [Babel 入門教程](http://www.ruanyifeng.com/blog/2016/01/babel.html)
-
+<!-- prettier-ignore-start -->
+[^babel-wiki]: [巴別塔 - 維基百科](https://zh.wikipedia.org/wiki/%E5%B7%B4%E5%88%A5%E5%A1%94)
+[^babel-ruanyifeng]:  [Babel 入門教程](http://www.ruanyifeng.com/blog/2016/01/babel.html)
 [^babel-preset]: [Plugins · Babel](https://babeljs.io/docs/plugins/)
+<!-- prettier-ignore-end -->

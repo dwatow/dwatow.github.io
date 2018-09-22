@@ -159,26 +159,11 @@ module.exports = {};
 這是一套將 bootstrap 的內容加工成 vue 形式的 source code 。
 有興趣的人可以上它的官網看看其中的有趣。
 
-[^download-bootstrap]:
-
-  [Download · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/download/#npm)
-
-[^npm-package.json]:
-
-  [package.json | npm Documentation](https://docs.npmjs.com/files/package.json#main)
-
-[^webpack-bootstrap]:
-
-  [Webpack · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/webpack/)
-
-[^vue-loader-sass-resources-loader]:
-
-  [預處理器 · vue-loader, 加載一個全局設置文件](https://vue-loader.vuejs.org/zh-cn/configurations/pre-processors.html)
-
-[^webpackconfig-setup-sass-resources-loader]:
-
-  [Vue 组件中使用 Sass 全局变量](https://xiaogliu.github.io/2017/09/09/use-sass-global-variables-in-every-vue-components/)
-
-[^fix-postcss-config]:
-
-  [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)
+<!-- prettier-ignore-start -->
+[^download-bootstrap]: [Download · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/download/#npm)
+[^npm-package.json]: [package.json | npm Documentation](https://docs.npmjs.com/files/package.json#main)
+[^webpack-bootstrap]: [Webpack · Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/webpack/)
+[^vue-loader-sass-resources-loader]: [預處理器 · vue-loader, 加載一個全局設置文件](https://vue-loader.vuejs.org/zh-cn/configurations/pre-processors.html)
+[^webpackconfig-setup-sass-resources-loader]: [Vue 组件中使用 Sass 全局变量](https://xiaogliu.github.io/2017/09/09/use-sass-global-variables-in-every-vue-components/)
+[^fix-postcss-config]: [No PostCSS Config found with build:prod #604](https://github.com/akveo/ngx-admin/issues/604#issuecomment-271974780)
+<!-- prettier-ignore-end -->

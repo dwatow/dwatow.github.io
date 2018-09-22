@@ -60,6 +60,6 @@ minixhr(url, function(data) {
 <p data-height="265" data-theme-id="0" data-slug-hash="vdOOBv" data-default-tab="js,result" data-user="ninabreznik" data-embed-version="2" data-pen-title="vdOOBv" class="codepen">See the Pen <a href="https://codepen.io/ninabreznik/pen/vdOOBv/">vdOOBv</a> by Nina (<a href="https://codepen.io/ninabreznik">@ninabreznik</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
-[^goodidea-usercard]:
-
-  [goodideas-usercard](https://www.npmjs.com/package/goodideas-usercard)
+<!-- prettier-ignore-start -->
+[^goodidea-usercard]: [goodideas-usercard](https://www.npmjs.com/package/goodideas-usercard)
+<!-- prettier-ignore-end -->

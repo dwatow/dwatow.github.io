@@ -93,6 +93,8 @@ npm run build-CSS ./index.scss ./index.css
     },
 ```
 
+<!-- prettier-ignore-start -->
+
 [^node-sass]: [node-sass github](https://github.com/sass/node-sass)
 [^node-sass-note]:
 
@@ -101,3 +103,5 @@ npm run build-CSS ./index.scss ./index.css
 [^node-sass-15min]:
 
   [SCSS 15 分鐘入門](http://eddychang.me/blog/others/91-scss-15-mins.html)
+
+    <!-- prettier-ignore-end -->

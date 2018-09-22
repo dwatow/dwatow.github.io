@@ -74,6 +74,10 @@ import {
 
 例子 看 [Vue.js example](https://fontawesome.com/how-to-use/use-with-node-js#using-the-library)
 
+<!-- prettier-ignore-start -->
+
 [^font-awesome-free]:
 
   [Free version](https://fontawesome.com/how-to-use/use-with-node-js#free)
+
+    <!-- prettier-ignore-end -->

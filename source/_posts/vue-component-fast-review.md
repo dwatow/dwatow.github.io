@@ -50,6 +50,10 @@ categories: 技術心得
    - `solt`, 無命名 = default
    - 多個 `solt` 可命名指定，也可設定 `solt` 預設內容
 
+   <!-- prettier-ignore-start -->
+
 [^vue-hooks]:
 
   [Understanding Vue.js Lifecycle Hooks, other hooks](https://alligator.io/vuejs/component-lifecycle/#other-hooks)
+
+    <!-- prettier-ignore-end -->

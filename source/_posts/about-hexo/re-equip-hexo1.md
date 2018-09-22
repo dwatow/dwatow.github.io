@@ -243,9 +243,6 @@ $ npm install hexo-filter-flowchart --save
 $ npm install hexo-filter-sequence --save
 ```
 
-[^emojis]: [[github]hexo-filter-github-emojis](https://github.com/crimx/hexo-filter-github-emojis)
-[^flowchart]: [[github]hexo-filter-flowchart](https://github.com/bubkoo/hexo-filter-flowchart)
-[^sequence]: [[github]hexo-filter-sequence](https://github.com/bubkoo/hexo-filter-sequence)
 
 ### 設定過濾器
 
@@ -286,4 +283,9 @@ sequence:
     <%- post.content %>
 ```
 
-[^toc]: [Hexo小书 > 添加文章目录](https://pengloo53.gitbooks.io/hexo/content/chapter2/7%20%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95.html)
+<!-- prettier-ignore-start -->
+[^emojis]: [[github]hexo-filter-github-emojis](https://github.com/crimx/hexo-filter-github-emojis)
+[^flowchart]: [[github]hexo-filter-flowchart](https://github.com/bubkoo/hexo-filter-flowchart)
+[^sequence]: [[github]hexo-filter-sequence](https://github.com/bubkoo/hexo-filter-sequence)
+[^toc]: [Hexo小書 > 添加文章目錄](https://pengloo53.gitbooks.io/hexo/content/chapter2/7%20%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95.html)
+<!-- prettier-ignore-end -->
