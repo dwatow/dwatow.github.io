@@ -1,11 +1,11 @@
 ---
-title: Vue-cli 2 的使用
+title: 使用 Vue-cli 2
 date: 2018-09-21 09:56:29
 tags: ["vue-cli", "vuejs", "webpack"]
 categories: 工具使用
 ---
 
-# Vue-cli 2 的使用
+# 使用 Vue-cli 2
 
 雖然 vue-cli 出了 3 版，在此先聊聊 2 版怎麼開始，也許新手對 vue-cli 3 接受度會大增。
 vue.js 有了自己初始專案的 cli (Command Line Interface) 工具，稱為 vue-cli，用途在於初始專案。
@@ -78,7 +78,7 @@ vue-cli   · Generated "vue-webpack-demo".
 ⸨   ░░░░░░░░░░░░░░░░░⸩ ⠴ fetchMetadata: sill   pacote range manifest for glob-base@^0.3.0 fetched in
 ```
 
-進入資料夾、初始化、進入開發模式
+初始化完成後，輸入下列指令，可看見初始化好的成果
 
 ```shell
 $ cd my-project
@@ -166,11 +166,42 @@ $ npm run dev
 
 A full-featured Browserify + vueify setup with hot-reload, linting & unit testing.
 
+- A full-featured Browserify
+- vueify setup with hot-reload
+- linting
+- unit testing.
+
 使用 browserify 的選項
 
 ```shell
-$ vue init browserify my-project
-$ cd my-project
+$ vue init browserify vue-browserify-demo
+
+  A newer version of vue-cli is available.
+
+  latest:    2.9.3
+  installed: 2.9.2
+
+? Project name vue-browserify-demo
+? The version of the package 0.1.0
+? Project description A Vue.js project
+? Author chris <dwatow@gmail.com>
+? Vue build standalone
+? Use ESLint to lint your code? Yes
+? Setup unit tests with Karma + Jasmine? Yes
+
+   vue-cli · Generated "vue-browserify-demo".
+
+   To get started:
+
+     cd vue-browserify-demo
+     npm install
+     npm run dev
+```
+
+初始化完成後，輸入下列指令，可看見初始化好的成果
+
+```shell
+$ cd vue-browserify-demo
 $ npm install
 $ npm run dev
 ```
@@ -182,8 +213,29 @@ A simple Browserify + vueify setup for quick prototyping.
 使用 browserify 簡化環境 的選項
 
 ```shell
-$ vue init browserify-simple my-project
-$ cd my-project
+$ vue init browserify-simple vue-browserify-simple-demo
+A newer version of vue-cli is available.
+
+latest:    2.9.3
+installed: 2.9.2
+
+? Project name vue-browserify-simple-demo
+? Project description A Vue.js project
+? Author chris <dwatow@gmail.com>
+
+ vue-cli · Generated "vue-browserify-simple-demo".
+
+ To get started:
+
+   cd vue-browserify-simple-demo
+   npm install
+   npm run dev
+```
+
+初始化完成後，輸入下列指令，可看見初始化好的成果
+
+```shell
+$ cd vue-browserify-simple-demo
 $ npm install
 $ npm run dev
 ```
@@ -196,6 +248,37 @@ PWA template for vue-cli based on the webpack template
 
 ```shell
 $ vue init pwa my-project
+
+A newer version of vue-cli is available.
+
+latest:    2.9.3
+installed: 2.9.2
+
+? Project name vue-pwa-demo
+? Project short name: fewer than 12 characters to not be truncated on homescreens (default: same as name)
+? Project description A Vue.js project
+? Author chris <dwatow@gmail.com>
+? Vue build standalone
+? Install vue-router? Yes
+? Use ESLint to lint your code? Yes
+? Pick an ESLint preset Standard
+? Setup unit tests with Karma + Mocha? Yes
+? Setup e2e tests with Nightwatch? Yes
+
+ vue-cli · Generated "vue-pwa-demo".
+
+ To get started:
+
+   cd vue-pwa-demo
+   npm install
+   npm run dev
+
+ Documentation can be found at https://vuejs-templates.github.io/webpack
+```
+
+初始化完成後，輸入下列指令，可看見初始化好的成果
+
+```shell
 $ cd my-project
 $ npm install
 $ npm run dev
@@ -207,6 +290,21 @@ The simplest possible Vue setup in a single HTML file
 
 ```shell
 $ vue init simple my-project  # Create a new project based on this template
+
+A newer version of vue-cli is available.
+
+latest:    2.9.3
+installed: 2.9.2
+
+? name vue-simple-demo
+? author chris <dwatow@gmail.com>
+
+ vue-cli · Generated "vue-simple-demo".
+```
+
+初始化完成後，輸入下列指令，可看見初始化好的成果
+
+```shell
 $ cd my-project               # Navigate into your new project folder
 
 $ npm install -g live-server  # Install live-server if you haven't already
