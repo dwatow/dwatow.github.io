@@ -1,11 +1,11 @@
 ---
-title: 認識 Webpack Loader
+title: Webpack Loader 初探
 date: 2018-03-17 11:04:05
 tags: [nodejs, webpack, vuejs, "webpack loader", "JavaScript"]
 categories: [工具使用]
 ---
 
-# 認識 Webpack Loader
+# Webpack Loader 初探
 
 > 為了 vue-cli 而看 webpack ，由於 webpack 看了 webpack loader。
 

@@ -47,6 +47,7 @@ categories: 技術心得
      - `$emit('event', <$event> )`: 在 component 裡事件回傳值的出口
    - `$event`: 從 component 傳出來的回傳值
 4. content:
+
    - `solt`, 無命名 = default
    - 多個 `solt` 可命名指定，也可設定 `solt` 預設內容
 
@@ -56,4 +57,4 @@ categories: 技術心得
 
   [Understanding Vue.js Lifecycle Hooks, other hooks](https://alligator.io/vuejs/component-lifecycle/#other-hooks)
 
-    <!-- prettier-ignore-end -->
+  <!-- prettier-ignore-end -->

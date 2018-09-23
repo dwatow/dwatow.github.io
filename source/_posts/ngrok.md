@@ -32,3 +32,34 @@ brew cask install ngrok
 ```shell
 $ ngrok http 3000
 ```
+
+## 功能介紹
+
+ngrok 的在做的事情是叫做[`HTTP tunneling`](https://en.wikipedia.org/wiki/HTTP_tunnel)
+
+### 需求之一
+
+在實作 fb 聊天機器人時， facebook 會需要你提供一串網址
+來讓 facebook 的伺服器丟聊天室的訊息給你
+
+## 問題點
+
+但是我們在本地端開的伺服器，只能產生本地端的網址(`localhost`)
+一般情況，要能建立一個能讓網路上任何人都連的到的網址
+你會需要去買一個`網域(像是 www.goodidea.com)`
+並且將你的 IP 跟他做綁定
+
+但是因為那樣很麻煩，我們這裡使用 ngrok 的服務
+
+## ngrok 幫我們做了什麼
+
+ngrok 在做的事情是，他們在自己的公司裡有買一個域名(`ngrok.com`)
+你使用 ngrok 的服務時，他會自動幫你產生一段臨時的網址給你用
+(`xxxx.ngrok.com`)
+
+這時候 facebook 就可以用這個臨時產生的網址來傳送訊息了
+一但 ngrok 的伺服器收到 facebook 丟的訊息
+
+他就會把這個訊息原封不動的丟回來給你，就好像是你的伺服器是直接接收到的一樣
+(關於 ngrok 的伺服器是怎麼找到你家的電腦的)
+(有興趣可以去找 HTTP、IP 的文章來閱讀)
