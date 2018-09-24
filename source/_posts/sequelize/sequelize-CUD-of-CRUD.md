@@ -4,9 +4,10 @@ date: 2018-09-24 21:56:27
 tags: [Sequelize, CRUD]
 categories: 技術心得
 ---
+
 # Sequelize 資料寫入
 
-### Create
+## Create
 
 `Module.build(options: Object)`
 回傳一個 instance
@@ -31,6 +32,7 @@ task.rating // ==> 3 (default)
 ```
 
 `Instance.save(options: Object)`
+
 回傳 Promise
 儲存至 table
 
@@ -59,7 +61,7 @@ Task.create({ title: 'foo', description: 'bar', deadline: new Date() }).then(fun
 })
 ```
 
-### Update
+## Update
 
 ```javascript
 // way 1
@@ -72,7 +74,7 @@ task.update({
 }).then(function() {})
 ```
 
-### Delete
+## Delete
 
 `Model.destroy(options: Object)`
 回傳 `Promise`
@@ -87,11 +89,11 @@ Task.create({ title: 'a task' }).then(function(task) {
 
 在 `Model.define()` 裡設定 `paranoid: true` 時，執行 `instance.destroy()` 則會執行「寫入刪除時間」，執行 `instance.destroy({force: true})` ，就會真的刪掉這筆資料，從資料庫蒸發
 
-## 批次處理
+# 批次處理
 一次多筆 create/update/delete
 
+## 大量新增
 
-### 大量新增
 create: `Model.bulkCreate([{}])` 回傳值不要使用
 
 ```javascript=
@@ -104,7 +106,7 @@ models.member.bulkCreate([{ name: 'John Doe', age: 20},
 })
 ```
 
-### 大量修改，加 WHERE
+## 大量修改，加 WHERE
 update: `Model.update(update: Object, where: Object)` 回傳 符合條件被修改的資料總數
 
 ```javascript=
@@ -118,7 +120,7 @@ models.member.update(
 })
 ```
 
-### 大量刪除(，加 WHERE)
+## 大量刪除(，加 WHERE)
 delete: `Model.destory()`
 
 ```javascript=
