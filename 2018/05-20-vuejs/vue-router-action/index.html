@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶Vue router 實戰 網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。 在沒有這個之前，一個網址就是一個頁面，要路由，就是透過網址下的檔案目錄結構決定 但是由於資訊的複雜與需求提昇，搜尋、過濾…等條件，希望也可以不用重複操作也可以回到該頁面 所以，開始出現將資料庫搜尋條件放到網址的做法(這樣會造成注入攻擊，不過是另外的故事了) 網址內容，會被程式判定為輸入的條件轉譯成資料庫搜尋條件，">
+<meta name="keywords" content="vuejs,vue-router">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue router 實戰">
+<meta property="og:url" content="dwatow.github.io/2018/05-20-vuejs/vue-router-action/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Vue router 實戰 網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。 在沒有這個之前，一個網址就是一個頁面，要路由，就是透過網址下的檔案目錄結構決定 但是由於資訊的複雜與需求提昇，搜尋、過濾…等條件，希望也可以不用重複操作也可以回到該頁面 所以，開始出現將資料庫搜尋條件放到網址的做法(這樣會造成注入攻擊，不過是另外的故事了) 網址內容，會被程式判定為輸入的條件轉譯成資料庫搜尋條件，">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-09-20T09:56:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue router 實戰">
+<meta name="twitter:description" content="¶Vue router 實戰 網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。 在沒有這個之前，一個網址就是一個頁面，要路由，就是透過網址下的檔案目錄結構決定 但是由於資訊的複雜與需求提昇，搜尋、過濾…等條件，希望也可以不用重複操作也可以回到該頁面 所以，開始出現將資料庫搜尋條件放到網址的做法(這樣會造成注入攻擊，不過是另外的故事了) 網址內容，會被程式判定為輸入的條件轉譯成資料庫搜尋條件，">
+  <title>Vue router 實戰 - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vue router 實戰</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-router-實戰"><span class="toc-text">¶Vue router 實戰</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nested-routes"><span class="toc-text">¶Nested Routes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#story"><span class="toc-text">¶Story</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工程師的思考"><span class="toc-text">¶工程師的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#切換必做-beforeeach"><span class="toc-text">¶切換必做 beforeEach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#story-v2"><span class="toc-text">¶Story</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工程師的思考-v2"><span class="toc-text">¶工程師的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#programmatic-navigation"><span class="toc-text">¶Programmatic Navigation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#story-v3"><span class="toc-text">¶Story</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工程師的思考-v3"><span class="toc-text">¶工程師的思考</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="vue-router-實戰"><a class="header-anchor" href="#vue-router-實戰">¶</a>Vue router 實戰</h1>
+<p>網頁路由技術，可以讓使用者透過網址，決定要顯示的頁面。<br>
+在沒有這個之前，一個網址就是一個頁面，要路由，就是透過網址下的檔案目錄結構決定<br>
+但是由於資訊的複雜與需求提昇，搜尋、過濾…等條件，希望也可以不用重複操作也可以回到該頁面<br>
+所以，開始出現將資料庫搜尋條件放到網址的做法(這樣會造成注入攻擊，不過是另外的故事了)</p>
+<p>網址內容，會被程式判定為輸入的條件轉譯成資料庫搜尋條件，再吐回相對應的網頁。<br>
+而這樣的流程原本是在後端執行。</p>
+<p>隨著 JavaScript 的進步，前端框架的盛行，這一件事也搬到前端來了。<br>
+透過網址，決定 JavaScript 要執行的動作，決定頁面呈現的內容，就稱為「前端 router」</p>
+<p>在此介紹幾個入門的使用案例，並且使用 vue-router 實作。</p>
+<h2 id="nested-routes"><a class="header-anchor" href="#nested-routes">¶</a>Nested Routes</h2>
+<h3 id="story"><a class="header-anchor" href="#story">¶</a>Story</h3>
+<ul>
+<li>首頁是登入頁面，使用者登入成功之後，才可以進入主頁</li>
+</ul>
+<p>主頁有選單，選單切換會換網頁內容</p>
+<h3 id="工程師的思考"><a class="header-anchor" href="#工程師的思考">¶</a>工程師的思考</h3>
+<ul>
+<li>主頁和首頁要切換</li>
+<li>主頁要包含其它的內頁
+<ul>
+<li>在主頁中，內頁要彼此切換</li>
+</ul>
+</li>
+</ul>
+<p>路徑結構會像這樣 (列舉一些內頁可能的例子)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+ 首頁</span><br><span class="line">+ 主頁</span><br><span class="line">    + 最新消息</span><br><span class="line">    + 產品內容</span><br><span class="line">    + 購物車</span><br><span class="line">    + 關於我們</span><br><span class="line">    + ...</span><br></pre></td></tr></table></figure>
+<p>若加上網址，結構就會像這樣<br>
+(假設 host: <a href="http://dwatow.github.io">dwatow.github.io</a>)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+ 首頁: dwatow.github.io/</span><br><span class="line">+ 主頁: dwatow.github.io/main</span><br><span class="line">    + 最新消息: dwatow.github.io/main/news</span><br><span class="line">    + 產品內容: dwatow.github.io/main/products</span><br><span class="line">    + 購物車:   dwatow.github.io/main/carts</span><br><span class="line">    + 關於我們: dwatow.github.io/main/about</span><br><span class="line">    + ...</span><br></pre></td></tr></table></figure>
+<p>有發現嗎？網址會有部份共用，就像是檔案結構般(但其實不是)</p>
+<p><strong>實作上</strong></p>
+<p>根目錄 和 主頁 要放一個 <code>&lt;router-view&gt;&lt;/router-view&gt;</code><br>
+在 vue-router 的 router 設計，要使用 <code>children</code> 代表某一層要共用，有子層結構<br>
+在共用層要使用 <code>redirect</code> 指向某一個子層</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> route = <span class="keyword">new</span> Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">"/"</span>,</span><br><span class="line">      redirect: <span class="string">"/login"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">"/login"</span>,</span><br><span class="line">      name: <span class="string">"login"</span>,</span><br><span class="line">      component: login</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">"/main"</span>,</span><br><span class="line">      name: <span class="string">"main"</span>,</span><br><span class="line">      component: main,</span><br><span class="line">      redirect: <span class="string">"/main/index"</span>,</span><br><span class="line">      children: [</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<div class="danger">
+<p>一個看似簡單的巢狀結構，其實還要搭配畫面的結構才可以順利運作。</p>
+</div>
+<h2 id="切換必做-beforeeach"><a class="header-anchor" href="#切換必做-beforeeach">¶</a>切換必做 beforeEach</h2>
+<p>其實這叫 Navigation Guards ，可以看作是一種 hooks<br>
+在切換頁面的某個時機點，會做一次</p>
+<h3 id="story-v2"><a class="header-anchor" href="#story-v2">¶</a>Story</h3>
+<ul>
+<li>使用者進入頁面一次，要更新內容一次</li>
+</ul>
+<h3 id="工程師的思考-v2"><a class="header-anchor" href="#工程師的思考-v2">¶</a>工程師的思考</h3>
+<p>不同的頁面，要更新不同的內容<br>
+也許會呼叫不同的 API 來更新內容。<br>
+除了非同步的問題要處理之外，還要思考這個呼叫的時機是否適合。</p>
+<ol>
+<li>頁面生成時 created of components</li>
+<li>路由改變時 beforeEach of router</li>
+</ol>
+<p>第一點，只有在第一次畫面載入時，才會發生。透過 router 切換頁面內容，是不會造成 components 消滅或重新生成 (vue 本來的設計，就是這樣)。<br>
+第二點， router 原生的設計，就有這一個時機 (<code>beforeEach</code>) 可以使用。</p>
+<p>直接對 router 物件使用 method</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123; ... &#125;)</span><br><span class="line"></span><br><span class="line">router.beforeEach(<span class="keyword">async</span> (to, <span class="keyword">from</span>, next) =&gt; &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">switch</span>(to.name) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'news'</span>:</span><br><span class="line">      <span class="keyword">await</span> router.app.$store.dispatch(<span class="string">'API'</span>, <span class="string">'/news'</span>)</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">'products'</span>:</span><br><span class="line">      <span class="keyword">await</span> router.app.$store.dispatch(<span class="string">'API'</span>, <span class="string">'/products'</span>)</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">  next()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>to: 下一個 route</li>
+<li>from: 上一個 route (進入首頁 = null)</li>
+<li>next: 通通弄好要執行這個 function</li>
+</ul>
+<p>前往每一個頁面前的判斷，就可以區隔開來，為各別頁面執行各別的邏輯</p>
+<div class="danger">
+<p>為了讓業主才可以容易「再許願，再實現」!!<br>
+工程師除了實現這個，還要寫得好維護 !!!</p>
+</div>
+<h2 id="programmatic-navigation"><a class="header-anchor" href="#programmatic-navigation">¶</a>Programmatic Navigation</h2>
+<h3 id="story-v3"><a class="header-anchor" href="#story-v3">¶</a>Story</h3>
+<ul>
+<li>使用者在切換頁面時，或重新 reload 時，若登入資料失效，要導向登入頁</li>
+</ul>
+<p>登入資料失效，另外定義</p>
+<h3 id="工程師的思考-v3"><a class="header-anchor" href="#工程師的思考-v3">¶</a>工程師的思考</h3>
+<p>在使用 vue 時，這種流程、頁面切換的條件、程式碼執行。都會使用 vue router<br>
+通常入門 vue router 時，會先學用 HTML 指定的方式 <code>&lt;router-link :to=&quot;...&quot;&gt;</code>，按下就會前往某個 <code>path</code>，但是就謹止於此的簡單需求。</p>
+<p>若遇到這種(語意上相同)「切換頁面，若…要導向」的 Story，就要考慮使用 JavaScript ，有邏輯的「選擇式導向」。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.push(location, onComplete?, onAbort?)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>location
+<ul>
+<li>一個 <code>route</code></li>
+<li><code>route</code> 裡的 <code>path</code></li>
+</ul>
+</li>
+</ul>
+<p>就可以寫這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.push(<span class="string">"/"</span>);</span><br></pre></td></tr></table></figure>
+<div class="danger">
+<p>短短一句 code 要先懂這些事呀</p>
+</div>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-05-20T06:11:20.000Z" itemprop="datePublished">
+              2018-05-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-router/">vue-router</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-router-view/">Vue router 的 router-view 使用技巧</a><div class="related-posts-item-abstract">¶Vue router 的 router-view 使用技巧
+在此整理一些 vue-router 的 router-view 的使用技巧。
+¶點擊 改變路徑
+前端 ro</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-add-filter/">在 Vue 中 加入 filter 的 method</a><div class="related-posts-item-abstract">¶在 Vue 中 加入 filter 的 method
+¶第一種
+加在 component 裡
+src/App.vue
+123456789101112131415161</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-with-v-model/">Vue Component 也可以用 v-model</a><div class="related-posts-item-abstract">¶Vue Component 也可以用 v-model
+前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-slot/">用 Vue Component Slot 實現自定義 HTML</a><div class="related-posts-item-abstract">¶用 Vue Component Slot 實現自定義 HTML
+之前有
+其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li></ul>
+        </section>
+        <section>
+            <div id="disqus_thread"></div>
+        </section>
+    
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

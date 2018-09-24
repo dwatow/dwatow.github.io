@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js 123456789101112131415export const fruitMixin = &amp;#123;  data() &amp;#123;    return &amp;#123;      fruits: [">
+<meta name="keywords" content="vuejs,mixin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue 的 mixin 快速指南">
+<meta property="og:url" content="dwatow.github.io/2018/09-21-vuejs/vue-mixin-quick-guide/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js 123456789101112131415export const fruitMixin = &amp;#123;  data() &amp;#123;    return &amp;#123;      fruits: [">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-09-21T12:19:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue 的 mixin 快速指南">
+<meta name="twitter:description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js 123456789101112131415export const fruitMixin = &amp;#123;  data() &amp;#123;    return &amp;#123;      fruits: [">
+  <title>Vue 的 mixin 快速指南 - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vue 的 mixin 快速指南</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-的-mixin-快速指南"><span class="toc-text">¶Vue 的 mixin 快速指南</span></a></li></ol>
+  </div>
+
+
+    <h1 id="vue-的-mixin-快速指南"><a class="header-anchor" href="#vue-的-mixin-快速指南">¶</a>Vue 的 mixin 快速指南</h1>
+<p>建立 component 共用程式碼</p>
+<blockquote>
+<p>無法共用資料</p>
+</blockquote>
+<p><strong>mixin.js</strong></p>
+<p>建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> fruitMixin = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      fruits: [<span class="string">"Apple"</span>, <span class="string">"Banna"</span>, <span class="string">"Mango"</span>, <span class="string">"Melon"</span>],</span><br><span class="line">      filterText: <span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  computed: &#123;</span><br><span class="line">    filterFruits() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.fruits.filter(<span class="function"><span class="params">element</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> element.match(<span class="keyword">this</span>.filterText);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>components/myComponent</strong></p>
+<p>在 component 加入 mixin</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fruitMixin &#125; <span class="keyword">from</span> <span class="string">"./mixin.js"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [fruitMixin]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-21T12:17:15.000Z" itemprop="datePublished">
+              2018-09-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/mixin/">mixin</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/04-20-vuejs/vue-component-fast-review/">Vue 的 Component 相關的導讀</a><div class="related-posts-item-abstract">¶Vue 的 Component 相關的導讀
+希望有助於初學在看文件時，對於關鍵字有一些初步的概念，看英文文件會比較容易上手或者複習。
+¶Component 邏輯
+
+d</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-with-v-model/">Vue Component 也可以用 v-model</a><div class="related-posts-item-abstract">¶Vue Component 也可以用 v-model
+前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-slot/">用 Vue Component Slot 實現自定義 HTML</a><div class="related-posts-item-abstract">¶用 Vue Component Slot 實現自定義 HTML
+之前有
+其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-router-view/">Vue router 的 router-view 使用技巧</a><div class="related-posts-item-abstract">¶Vue router 的 router-view 使用技巧
+在此整理一些 vue-router 的 router-view 的使用技巧。
+¶點擊 改變路徑
+前端 ro</div></li></ul>
+        </section>
+        <section>
+            <div id="disqus_thread"></div>
+        </section>
+    
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>
