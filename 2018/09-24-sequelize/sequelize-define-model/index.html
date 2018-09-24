@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <meta name="description" content="¶Sequelize 的 define model 定義 table 與 model 的映射，使用 sequelize.define() 使用了 sequelize-cli 後， model 的寫法如下 models/project.js 123456module.exports = function(sequelize, DataTypes) &amp;#123;  return sequelize.d">
+<meta name="keywords" content="Sequelize,define">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequelize 的 define model">
+<meta property="og:url" content="dwatow.github.io/2018/09-24-sequelize/sequelize-define-model/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sequelize 的 define model 定義 table 與 model 的映射，使用 sequelize.define() 使用了 sequelize-cli 後， model 的寫法如下 models/project.js 123456module.exports = function(sequelize, DataTypes) &amp;#123;  return sequelize.d">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-09-24T07:01:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sequelize 的 define model">
+<meta name="twitter:description" content="¶Sequelize 的 define model 定義 table 與 model 的映射，使用 sequelize.define() 使用了 sequelize-cli 後， model 的寫法如下 models/project.js 123456module.exports = function(sequelize, DataTypes) &amp;#123;  return sequelize.d">
+  <title>Sequelize 的 define model - 《Chris 技術筆記》</title>
+    
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-106752702-1');
+    </script>
+
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Sequelize 的 define model</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sequelize-的-define-model"><span class="toc-text">¶Sequelize 的 define model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sequelize-define-使用方式"><span class="toc-text">¶Sequelize Define 使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attributes"><span class="toc-text">¶attributes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#datatypes"><span class="toc-text">¶DataTypes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getter-setter"><span class="toc-text">¶Getter/Setter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#關聯-foreign-key"><span class="toc-text">¶關聯 (foreign key)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#config"><span class="toc-text">¶config</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#擴充-model-的-methods"><span class="toc-text">¶擴充 model 的 methods</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="sequelize-的-define-model"><a class="header-anchor" href="#sequelize-的-define-model">¶</a>Sequelize 的 define model</h1>
+<p>定義 table 與 model 的映射，使用 <code>sequelize.define()</code><br>
+使用了 sequelize-cli 後， model 的寫法如下</p>
+<p><strong>models/project.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">sequelize, DataTypes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> sequelize.define(<span class="string">"project"</span>, &#123;</span><br><span class="line">    name: DataTypes.STRING,</span><br><span class="line">    description: DataTypes.TEXT</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="sequelize-define-使用方式"><a class="header-anchor" href="#sequelize-define-使用方式">¶</a>Sequelize Define 使用方式</h2>
+<p>Sequelize 將自動添加 <code>createdAt</code> 和 <code>updatedAt</code> 屬性</p>
+<p><strong>語法</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> attributes = &#123;&#125;</span><br><span class="line"><span class="keyword">const</span> config = &#123;&#125;</span><br><span class="line"><span class="keyword">var</span> myModel = sequelize.define(<span class="string">'name'</span>, attributes, config)</span><br></pre></td></tr></table></figure>
+<p>回傳的是可以操作資料表的 <code>class</code> , 要取得資料表的實例化物件，可以用 <code>myModel.build()</code> 不過不是一般的用法</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">myModel <span class="comment">//class</span></span><br><span class="line">myModel.build() <span class="comment">//instance</span></span><br></pre></td></tr></table></figure>
+<h2 id="attributes"><a class="header-anchor" href="#attributes">¶</a>attributes</h2>
+<p>直接看示範</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Foo = sequelize.define(<span class="string">'foo'</span>, &#123;</span><br><span class="line">  columnName: &#123;</span><br><span class="line">    type: Sequelize. &lt; 欄位的資料型別 &gt; ,</span><br><span class="line">    <span class="comment">//primary keys</span></span><br><span class="line">    primaryKey: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 自動遞增 (incrementing) 整數 (type: Sequelize.INTEGER)</span></span><br><span class="line">    autoIncrement: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// 自訂義欄位名稱</span></span><br><span class="line">    field: <span class="string">"field_with_underscores"</span>,</span><br><span class="line">    <span class="comment">// 欄位的預設值:</span></span><br><span class="line">    defaultValue: Sequelize.NOW, <span class="comment">//預設 目前時間 (type: Sequelize.DATE)</span></span><br><span class="line">    defaultValue: <span class="literal">true</span> <span class="comment">// 預設 true (type: Sequelize.BOOLEAN)</span></span><br><span class="line">    <span class="comment">// 允許 NULL: false</span></span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// 在 MySQL and PG 可以指定各別欄位的 comment</span></span><br><span class="line">    comment: <span class="string">"I'm a comment!"</span>,  </span><br><span class="line">    <span class="comment">// 獨一無二欄位 (unique)</span></span><br><span class="line">    unique: <span class="literal">true</span>,<span class="comment">// 此欄位是 unique, 複合式 unique, 要看下面的例子</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 複合式 unique</span></span><br><span class="line">  uniqueOne: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    unique: <span class="string">'compositeIndex'</span> <span class="comment">// 同名</span></span><br><span class="line">  &#125;,</span><br><span class="line">  uniqueTwo: &#123;</span><br><span class="line">    type: Sequelize.INTEGER,</span><br><span class="line">    unique: <span class="string">'compositeIndex'</span> <span class="comment">// 同名</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 這是一種 unique 的縮寫方式</span></span><br><span class="line">  someUnique: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    unique: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// unique 詳細的寫法，要另外寫一個 models 的 indexes 選項，並且將欄位填上</span></span><br><span class="line">  &#123;</span><br><span class="line">    someUnique: &#123;</span><br><span class="line">      type: Sequelize.STRING</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    indexes: [&#123;</span><br><span class="line">      unique: <span class="literal">true</span>,</span><br><span class="line">      fields: [<span class="string">'someUnique'</span>]</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="datatypes"><a class="header-anchor" href="#datatypes">¶</a>DataTypes</h3>
+<p>參考 <a href="http://sequelize.readthedocs.io/en/v3/api/datatypes/" target="_blank" rel="noopener">Data types</a></p>
+<p><strong>example: 列舉</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sequelize.define(<span class="string">'model'</span>, &#123;</span><br><span class="line">  states: &#123;</span><br><span class="line">    type:   Sequelize.ENUM,</span><br><span class="line">    values: [<span class="string">'active'</span>, <span class="string">'pending'</span>, <span class="string">'deleted'</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="getter-setter"><a class="header-anchor" href="#getter-setter">¶</a>Getter/Setter</h3>
+<p>在 <code>sequelize.define()</code> 裡，<code>attributes</code>, <code>config</code> 都可以定義 getter/setter</p>
+<p>getter/setter 有兩種。</p>
+<ol>
+<li>可以映射成資料表欄位: protecting properties</li>
+<li>可以只當作 model 的屬性: pseudo properties<br>
+pseudo properties (不真實存在 database schema 的 attribute)。</li>
+</ol>
+<blockquote>
+<p>注意: 同名屬性，後定義優先覆蓋前定義<br>
+要使用 ES6 的寫法實現。</p>
+</blockquote>
+<p>在 name 裡定義 getter, 在 title 裡定義 setter</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Employee = sequelize.define(<span class="string">'employee'</span>, &#123;</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> title = ;</span><br><span class="line">      <span class="comment">// 'this' instance of 資料庫資料</span></span><br><span class="line">      <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.getDataValue(<span class="string">'name'</span>)&#125;</span> (<span class="subst">$&#123;<span class="keyword">this</span>.getDataValue(<span class="string">'title'</span>)&#125;</span>)`</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  title: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    set: <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.setDataValue(<span class="string">'title'</span>, value.toUpperCase());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<div class="info">
+<p>使用時這樣使用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Employee</span><br><span class="line">  .create(&#123; <span class="attr">name</span>: <span class="string">'John Doe'</span>, <span class="attr">title</span>: <span class="string">'senior engineer'</span> &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">employee</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(employee.get(<span class="string">'name'</span>)); <span class="comment">// John Doe (SENIOR ENGINEER)</span></span><br><span class="line">    <span class="built_in">console</span>.log(employee.get(<span class="string">'title'</span>)); <span class="comment">// SENIOR ENGINEER</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</div>
+<h3 id="關聯-foreign-key"><a class="header-anchor" href="#關聯-foreign-key">¶</a>關聯 (foreign key)</h3>
+<p>在 sequelize 的 define 階段只要宣告 <code>hasOne</code> 這一類的 method 即可</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">Foo.member.hasOne(Bar, &#123;<span class="attr">foreignKey</span>: <span class="string">'foo_id'</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="config"><a class="header-anchor" href="#config">¶</a>config</h2>
+<p>時間戳記可以單獨使用 (要先開，再指定是否要使用)</p>
+<ul>
+<li>資料表
+<ul>
+<li>tableName: 自訂 table name</li>
+</ul>
+</li>
+<li>資料欄位
+<ul>
+<li>underscored (false): 是否全小寫欄位名稱</li>
+<li>freezeTableName (true): 不改成複數型的 table name</li>
+<li>comment (’’): 欄位註解 (MYSQL, PG only)</li>
+</ul>
+</li>
+<li>自動生成欄位
+<ul>
+<li>timestamps (true): 是否加上 updatedAt, createdAt 欄位
+<ul>
+<li>createdAt: false or ‘自訂欄位名稱’</li>
+<li>updatedAt: false or ‘自訂欄位名稱’</li>
+</ul>
+</li>
+<li>paranoid (false): 當 timestamps: true 時，是否加上 deletedAt
+<ul>
+<li>deletedAt: false or ‘自訂欄位名稱’</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Bar = sequelize.define(<span class="string">'bar'</span>, &#123; <span class="comment">/* attributes */</span> &#125;, &#123;</span><br><span class="line"><span class="comment">// 新增/修改 時間戳記</span></span><br><span class="line">  timestamps: <span class="literal">false</span>,  <span class="comment">// 自動加上 updatedAt, createdAt</span></span><br><span class="line">  createdAt: <span class="literal">false</span>, <span class="comment">//加上 createdAt</span></span><br><span class="line">  updatedAt: <span class="string">'updateTimestamp'</span>, <span class="comment">// 加上 updatedAt as updateTimestamp</span></span><br><span class="line"><span class="comment">// 刪除 時間戳記 刪除不刪資料，而是記錄刪除時間</span></span><br><span class="line">  paranoid: <span class="literal">true</span>,  <span class="comment">// 加上 deletedAt 先 timestamps: true</span></span><br><span class="line">  deletedAt: <span class="string">'destoryTime'</span>, <span class="comment">// 加上 deletedAt as destoryTime</span></span><br><span class="line"><span class="comment">// 欄位名稱</span></span><br><span class="line">  underscored: <span class="literal">true</span>,  <span class="comment">// 全小寫欄位名稱</span></span><br><span class="line">  <span class="comment">// so updatedAt will be updated_at</span></span><br><span class="line"><span class="comment">// 資料表名稱</span></span><br><span class="line">  freezeTableName: <span class="literal">true</span>,  <span class="comment">// 禁止改成複數型的 table name: 預設 true</span></span><br><span class="line">  tableName: <span class="string">'custom_table_name'</span>,  <span class="comment">// table name</span></span><br><span class="line"><span class="comment">// Comment (MYSQL, PG only)</span></span><br><span class="line">  comment: <span class="string">"I'm a table comment!"</span>,</span><br><span class="line">  indexes: [</span><br><span class="line">    <span class="comment">// 建立不重複 index on email</span></span><br><span class="line">    &#123;</span><br><span class="line">      unique: <span class="literal">true</span>,</span><br><span class="line">      fields: [<span class="string">'email'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// Creates a gin index on data with the jsonb_path_ops operator</span></span><br><span class="line">    &#123;</span><br><span class="line">      fields: [<span class="string">'data'</span>],</span><br><span class="line">      using: <span class="string">'gin'</span>,</span><br><span class="line">      operator: <span class="string">'jsonb_path_ops'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// By default index name will be [table]_[fields]</span></span><br><span class="line">    <span class="comment">// Creates a multi column partial index</span></span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">'public_by_author'</span>,</span><br><span class="line">      fields: [<span class="string">'author'</span>, <span class="string">'status'</span>],</span><br><span class="line">      where: &#123;</span><br><span class="line">        status: <span class="string">'public'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// A BTREE index with a ordered field</span></span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">'title_index'</span>,</span><br><span class="line">      method: <span class="string">'BTREE'</span>,</span><br><span class="line">      fields: [<span class="string">'author'</span>, &#123;<span class="attr">attribute</span>: <span class="string">'title'</span>, <span class="attr">collate</span>: <span class="string">'en_US'</span>, <span class="attr">order</span>: <span class="string">'DESC'</span>, <span class="attr">length</span>: <span class="number">5</span>&#125;]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="擴充-model-的-methods"><a class="header-anchor" href="#擴充-model-的-methods">¶</a>擴充 model 的 methods</h3>
+<p>超重要，這一個部份是大部份的重要邏輯放置的做法。</p>
+<p>Model 之所以重要，並不是因為它可以把 table 的欄位，當作 object 的 property 而已。而是因為它可以將屬於 table 的邏輯放在 model 上，就是這個功能。</p>
+<p>v3 文件的寫法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Bar = sequelize.define(<span class="string">'bar'</span>, &#123; <span class="comment">/* attributes */</span> &#125;, &#123;</span><br><span class="line">  <span class="comment">//無效寫法 建議使用 v4 的寫法</span></span><br><span class="line">  classMethods: &#123;</span><br><span class="line">    method1: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="keyword">return</span> <span class="string">'smth'</span> &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//有效寫法</span></span><br><span class="line">  instanceMethods: &#123;</span><br><span class="line">    method2: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">'foo'</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>v4 文件的寫法 (ES6)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Adding a class level method</span></span><br><span class="line">Bar.classLevelMethod = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'foo'</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Adding an instance level method</span></span><br><span class="line">Bar.prototype.instanceLevelMethod = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'bar'</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>初始化會執行 <code>sequelize-cli</code> 生成的 <code>associate</code> method 就是要在這裡處理。<br>
+它算是一種 class method (static function) 執行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Bar = sequelize.define(<span class="string">'bar'</span>, &#123; <span class="comment">/* attributes */</span> &#125;, &#123;</span><br><span class="line">  <span class="comment">//有效寫法</span></span><br><span class="line">  instanceMethods: &#123;</span><br><span class="line">    method2: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">'foo'</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">Bar.associate = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  Foo.member.hasOne(Bar, &#123;<span class="attr">foreignKey</span>: <span class="string">'foo_id'</span>&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-24T04:12:03.000Z" itemprop="datePublished">
+              2018-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Sequelize/">Sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/define/">define</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+            <h2>同系列文章還有...</h2>
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-first-hand/">初探 Sequelize</a><div class="related-posts-item-abstract">¶Sequelize 初探
+Sequelize 是一個使用 JavaScript 的 ORM。
+我自己的使用方式是與 Express 搭配，當作 MVC 的 M
+另外，</div></li></ul>
+        </section>
+        <section>
+            <div id="disqus_thread"></div>
+        </section>
+    
+</article>
+
+  <script>
+window.disqus_config = function () {
+  this.page.url = window.location.toString()
+  this.page.identifier = window.location.pathname
+}
+if (typeof DISQUS === 'undefined') {
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://dwatow-github.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+} else {
+  DISQUS.reset({
+      reload: true,
+      config: window.disqus_config
+  })
+}
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2016 - 2018 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

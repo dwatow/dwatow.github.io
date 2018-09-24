@@ -109,62 +109,97 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2018/04-05-vue-component-data-flow/">http://dwatow.github.io/2018/04-05-vue-component-data-flow/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2018/04-20-vue-component-fast-review/">http://dwatow.github.io/2018/04-20-vue-component-fast-review/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>用 vue-loader 的 component 資料傳遞</h1>
+        <h1>Vue 的 Component 相關的導讀</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用-vue-loader-的-component-資料傳遞"><span class="toc-text">¶用 vue-loader 的 component 資料傳遞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加入-component"><span class="toc-text">¶加入 component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-flow-parent-to-child"><span class="toc-text">¶Data flow: Parent to Child</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-flow-child-to-parent-like-jquery"><span class="toc-text">¶Data flow: Child to Parent (like jQuery)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#先回憶-在-jquery-的用法"><span class="toc-text">¶先回憶，在 jQuery 的用法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-flow-child-to-parent-vue-way"><span class="toc-text">¶Data flow: Child to Parent (Vue way)</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-的-component-相關的導讀"><span class="toc-text">¶Vue 的 Component 相關的導讀</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#component-邏輯"><span class="toc-text">¶Component 邏輯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#component-生命週期"><span class="toc-text">¶Component 生命週期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#component-傳值"><span class="toc-text">¶Component 傳值</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="用-vue-loader-的-component-資料傳遞"><a class="header-anchor" href="#用-vue-loader-的-component-資料傳遞">¶</a>用 vue-loader 的 component 資料傳遞</h1>
-<h2 id="加入-component"><a class="header-anchor" href="#加入-component">¶</a>加入 component</h2>
-<p>先將 <code>.vue</code> 檔案 <code>import</code> 進來，並且宣告在 vue instance 的 component 裡面。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">import</span> componentName <span class="keyword">from</span> <span class="string">'path/component.vue'</span>;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">  components: &#123;</span></span><br><span class="line"><span class="undefined">    componentName,</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>再以 <code>import</code> 進來後宣告的名字，當作自定義的 HTML tag name ，在想顯示 component 的地方放置。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">componentName</span>&gt;</span><span class="tag">&lt;/<span class="name">componentName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="data-flow-parent-to-child"><a class="header-anchor" href="#data-flow-parent-to-child">¶</a>Data flow: Parent to Child</h2>
-<p>靠 component 的 <code>props</code></p>
-<p><strong>parent component</strong></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">componentName</span> <span class="attr">:child-data</span>=<span class="string">parentData</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">componentName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+    <h1 id="vue-的-component-相關的導讀"><a class="header-anchor" href="#vue-的-component-相關的導讀">¶</a>Vue 的 Component 相關的導讀</h1>
+<p>希望有助於初學在看文件時，對於關鍵字有一些初步的概念，看英文文件會比較容易上手或者複習。</p>
+<h2 id="component-邏輯"><a class="header-anchor" href="#component-邏輯">¶</a>Component 邏輯</h2>
+<ol>
+<li>data: component 的資料，有時是存放「控制 view 的變數」</li>
+<li>watch: 監聽 data 改變，連動其它 data 改變的行為</li>
+<li>computed: data 的 setter/getter ，尤其是 getter 使用，當作是新的值</li>
+<li>methods: 就像是一般的 method 。</li>
+<li>filter: 修飾 data 的 getter
+<ul>
+<li>用法: <code>data | filter | filter</code> (由左執行到右)</li>
+<li>輸入: method 參數</li>
+<li>輸出: method 回傳值</li>
+</ul>
+</li>
+<li>mixins: 共用 component 結構的 js object</li>
+</ol>
+<h2 id="component-生命週期"><a class="header-anchor" href="#component-生命週期">¶</a>Component 生命週期</h2>
+<ul>
+<li>created: 出現 data</li>
+<li>mounted: 出現畫面</li>
+<li>updated: data 變動</li>
+<li>destoryed: component 消滅</li>
+<li>keep-alive<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>
+<ul>
+<li>activated: <code>keep-alive</code> 的 component 再生</li>
+<li>deactivated: <code>keep-alive</code> 的 component 消滅</li>
+</ul>
+</li>
+</ul>
 <blockquote>
-<p>parentData 也可以放 parentComputed 的函數名稱</p>
+<p>關於<a href="https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram" target="_blank" rel="noopener">生命週期</a>，還有很多可以關心的</p>
+<ol>
+<li>before 上述 hook</li>
+<li>Vue, vue instance, component 的同名 hook 執行先後時機</li>
+</ol>
 </blockquote>
-<p><strong>child component</strong></p>
-<p>在 component 要使用 props ，就當作一般的 data 這樣用。</p>
-<blockquote>
-<p>ex:<br>
-JavaScript: <code>this.childProp</code><br>
-HTML: <code>{ { childProp } }</code></p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="javascript">  props: [<span class="string">"childProp"</span>],</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;childProp&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="data-flow-child-to-parent-like-jquery"><a class="header-anchor" href="#data-flow-child-to-parent-like-jquery">¶</a>Data flow: Child to Parent (like jQuery)</h2>
-<p>靠 component 的 <code>$emit</code></p>
-<p><strong>parent component</strong></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">componentName</span> @<span class="attr">childEvent</span>=<span class="string">"parentMethod"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">componentName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">  method: &#123;</span></span><br><span class="line"><span class="undefined">      parentMethod (e) &#123;</span></span><br><span class="line"><span class="javascript">          <span class="keyword">this</span>.parentData = e</span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><strong>child component</strong></p>
-<p>在 component 要使用 <code>$emit</code></p>
-<h3 id="先回憶-在-jquery-的用法"><a class="header-anchor" href="#先回憶-在-jquery-的用法">¶</a>先回憶，在 jQuery 的用法</h3>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="string">"element"</span>).on(eventName, eventCallback);</span><br></pre></td></tr></table></figure>
-<p>再看看，在 vue 這樣使用<br>
-將真實的事件定義成一個 <code>$emit</code>。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">"$emit(childEvent, childMethod())"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">  method: &#123;</span></span><br><span class="line"><span class="undefined">      childMethod () &#123;</span></span><br><span class="line"><span class="javascript">          <span class="keyword">return</span> <span class="string">'e'</span>; <span class="comment">// partne method 的參數</span></span></span><br><span class="line"><span class="undefined">      &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="javascript">  <span class="comment">//...</span></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<div class="danger">
-<p>到此 <code>$emit</code> 的用法，和 jQuery 滿像的…<br>
-而事實上，卻不是這麼一回事。</p>
-</div>
-<h2 id="data-flow-child-to-parent-vue-way"><a class="header-anchor" href="#data-flow-child-to-parent-vue-way">¶</a>Data flow: Child to Parent (Vue way)</h2>
-<p><strong>parent component</strong></p>
-<p><code>$event</code> 就是 callback function 的參數。在 parent 層可以直接引用。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">componentName</span> @<span class="attr">childEvent</span>=<span class="string">"parentData = $event"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">componentName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><strong>child component</strong></p>
-<p><code>$emit</code> 回傳的東西，其實是 eventCallback 的參數，如果要在 <code>$emit</code> 第二個參數使用 function 一定要 return 值。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">"$emit(childEvent, 'e')"</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!-- e =&gt; partne method 的參數 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="component-傳值"><a class="header-anchor" href="#component-傳值">¶</a>Component 傳值</h2>
+<ol>
+<li>
+<p>tag name: component 名稱，在 parent component 裡宣告時決定</p>
+</li>
+<li>
+<p>attribute:</p>
+<ul>
+<li><code>attr</code>: 傳字串到 component 裡當常數</li>
+<li><code>:attr</code>: 傳變數到 component 裡當 <code>props</code></li>
+</ul>
+</li>
+<li>
+<p>event:</p>
+<ul>
+<li><code>v-on:event</code> 綁定 method 到自訂 event 上
+<ul>
+<li><code>$emit('event', &lt;$event&gt; )</code>: 在 component 裡事件回傳值的出口</li>
+</ul>
+</li>
+<li><code>$event</code>: 從 component 傳出來的回傳值</li>
+</ul>
+</li>
+<li>
+<p>content:</p>
+<ul>
+<li><code>solt</code>, 無命名 = default</li>
+<li>多個 <code>solt</code> 可命名指定，也可設定 <code>solt</code> 預設內容</li>
+</ul>
+<!-- prettier-ignore-start -->
+</li>
+</ol>
+<p><a href="https://alligator.io/vuejs/component-lifecycle/#other-hooks" target="_blank" rel="noopener">Understanding Vue.js Lifecycle Hooks, other hooks</a></p>
+<pre><code>&lt;!-- prettier-ignore-end --&gt;
+</code></pre>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"> <a href="#fnref1" class="footnote-backref">↩︎</a></li>
+</ol>
+</section>
 
     
     </section>
@@ -183,10 +218,6 @@ HTML: <code>{ { childProp } }</code></p>
 
   <li class="meta-text">
   { <a href="/tags/JavaScript/">JavaScript</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/vue-loader/">vue-loader</a> }
   </li>
 
 
@@ -216,7 +247,7 @@ HTML: <code>{ { childProp } }</code></p>
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.22px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 21.56px;">Flex</a> <a href="/tags/HTML/" style="font-size: 25.33px;">HTML</a> <a href="/tags/Inline/" style="font-size: 21.56px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 36.67px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.78px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.78px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 29.11px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 14px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.78px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 21.56px;">animation</a> <a href="/tags/api/" style="font-size: 17.78px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 21.56px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 17.78px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 25.33px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 25.33px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 36.67px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.78px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.78px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.89px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.78px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.78px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 21.56px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 40.44px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 32.89px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 29.11px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.22px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 21.56px;">Flex</a> <a href="/tags/HTML/" style="font-size: 25.33px;">HTML</a> <a href="/tags/Inline/" style="font-size: 21.56px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 36.67px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.78px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.78px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 29.11px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 17.78px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.78px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 21.56px;">animation</a> <a href="/tags/api/" style="font-size: 17.78px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 21.56px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.78px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 25.33px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 25.33px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 36.67px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.78px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.78px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.89px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.78px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.78px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 21.56px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 40.44px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 32.89px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 29.11px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
