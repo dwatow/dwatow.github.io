@@ -28,6 +28,7 @@ return queryInterface.addColumn(
 ```
 
 ## define 關聯 類型
+
 ```
 Model.hasOne(target: Model, options: object): HasOne
 ```
@@ -39,13 +40,14 @@ Project model is **target**
 foreign key = (target model + primary key) 的名字
 預設 `camelCase`。`underscored: true` 會變 `snake_case`。
 
-### hasOne & belongsTo 一對一
+### 一對一 hasOne & belongsTo
 
-一對一: one source with one target.
+one source with one target.
 
 `.hasOne()` 在 target model 放上 key
 `.belongsTo()` 在 source model 放上 key
-```javascript
+
+```javascript=
 // Project 有一個 memberId 欄位，放 member 的 id
 // target = member
 Member.hasOne(Project)  // 擁有
@@ -55,9 +57,9 @@ Member.hasOne(Project)  // 擁有
 Member.belongsTo(Project) // 屬於
 ```
 
-用 `hasOne` 會贈送 getter/setter
+用 `.hasOne()` 會贈送 getter/setter
 
-```javascript
+```javascript=
 Project.hasOne(models.member)
 
 Project.findById(1)
@@ -71,8 +73,8 @@ Project.findById(1)
 - foreignKey 的名字是給 database 用的
 - as 的名字是給 getter/setter 用的
 - targetKey 的名字是用來指定 foreignKey 儲存哪個欄位
-	- 使用 `.belongsTo()` 時指定 foreignKey 只會增加這個欄位, 儲存 targetKey 指定的欄位
-	- 使用 `.hasOne()` 時指定 targetKey 無效，增加預設 primary key 之外，還會加上 foreignKey 的欄位名稱
+  - 使用 `.belongsTo()` 時指定 foreignKey 只會增加這個欄位, 儲存 targetKey 指定的欄位
+  - 使用 `.hasOne()` 時指定 targetKey 無效，增加預設 primary key 之外，還會加上 foreignKey 的欄位名稱
 
 ```javascript
 options: {as: 'forJs'}
@@ -91,17 +93,16 @@ person.getFather()
 person.setFather()
 ```
 
-### `.hasMany()`  一對多
+### 一對多 `.hasMany()`
 
-一對多: one source with multiple targets
-(one target to one source)
+one source with multiple targets (one target to one source)
 
 ```javascript=
 Project.hasMany(User, {as: 'Workers'})
 project.getWorkers
 ```
 
-### `.belongsToMany()` 多對多
+### 多對多 `.belongsToMany()`
 
 使用 `.belongsToMany()` 時，使用 `through` 指定事先定義好的 model-`UserProject` (用來產生 join table 用的)
 這個 model 會有 `projectId` 和 `userId`。
