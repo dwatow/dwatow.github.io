@@ -10,8 +10,8 @@ categories: 技術心得
 ## Create
 
 `Module.build(options: Object)`
-回傳一個 instance
 
+回傳一個 instance
 欄位放預設值 + 產生 instance
 
 ```javascript=
@@ -53,7 +53,7 @@ Task.build({ title: 'foo', description: 'bar', deadline: new Date() })
 
 `build` + `save` = `create`
 
-```javascript
+```javascript=
 Task.create({ title: 'foo', description: 'bar', deadline: new Date() }).then(function(user) {
   console.log(user.get({
     plain: true
@@ -63,7 +63,7 @@ Task.create({ title: 'foo', description: 'bar', deadline: new Date() }).then(fun
 
 ## Update
 
-```javascript
+```javascript=
 // way 1
 task.title = 'a very different title now'
 task.save().then(function() {})
