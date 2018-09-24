@@ -7,14 +7,14 @@
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <meta name="description" content="¶Sequelize 的 Relations/Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 1234567891011121314return queryInterfa">
-<meta name="keywords" content="sequelize,sequelize-associations">
+<meta name="keywords" content="Sequelize,foreign key">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sequelize 的 Relations&#x2F;Associations">
 <meta property="og:url" content="dwatow.github.io/2018/09-24-sequelize/sequelize-associations/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶Sequelize 的 Relations/Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 1234567891011121314return queryInterfa">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-09-24T13:47:56.000Z">
+<meta property="og:updated_time" content="2018-09-24T13:55:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sequelize 的 Relations&#x2F;Associations">
 <meta name="twitter:description" content="¶Sequelize 的 Relations/Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 1234567891011121314return queryInterfa">
@@ -145,8 +145,8 @@ foreign key = (target model + primary key) 的名字<br>
 </li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">options: &#123;<span class="attr">as</span>: <span class="string">'forJs'</span>&#125;</span><br><span class="line">options: &#123;<span class="attr">foreignKey</span>: <span class="string">'forDb'</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>看例子</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Person 關聯自己</span></span><br><span class="line"><span class="keyword">const</span> Person = sequelize.define(<span class="string">'person'</span>, &#123; <span class="comment">/* ... */</span>&#125;)</span><br><span class="line"></span><br><span class="line">Person.hasOne(Person, &#123;<span class="attr">as</span>: <span class="string">'Father'</span>, <span class="attr">foreignKey</span>: <span class="string">'DadId'</span>&#125;)</span><br><span class="line"><span class="comment">// this will add the attribute FatherId to Person</span></span><br><span class="line">person.getFather()</span><br><span class="line">person.setFather()</span><br></pre></td></tr></table></figure>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Person 關聯自己</span></span><br><span class="line"><span class="keyword">const</span> Person = sequelize.define(<span class="string">'person'</span>, &#123; <span class="comment">/* ... */</span>&#125;)</span><br><span class="line"></span><br><span class="line">Person.hasOne(Person, &#123;<span class="attr">as</span>: <span class="string">'Father'</span>, <span class="attr">foreignKey</span>: <span class="string">'DadId'</span>&#125;)</span><br><span class="line"><span class="comment">// this will add the attribute FatherId to Person</span></span><br><span class="line">person.getFather()</span><br><span class="line">person.setFather()</span><br></pre></td></tr></table></figure>
 <h3 id="一對多-hasmany"><a class="header-anchor" href="#一對多-hasmany">¶</a>一對多 <code>.hasMany()</code></h3>
 <p>one source with multiple targets (one target to one source)</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project.hasMany(User, &#123;<span class="attr">as</span>: <span class="string">'Workers'</span>&#125;)</span><br><span class="line">project.getWorkers</span><br></pre></td></tr></table></figure>
@@ -157,6 +157,7 @@ foreign key = (target model + primary key) 的名字<br>
 <li><code>Project</code> 會有 <code>getUsers</code>, <code>setUsers</code>, <code>addUser</code>, <code>addUsers</code></li>
 <li><code>User</code> 會有 <code>getProjects</code>, <code>setProjects</code>, <code>addPrject</code>, <code>addProjects</code></li>
 </ul>
+<p><strong>example:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">UserProject = sequelize.define(<span class="string">'user_project'</span>, &#123;</span><br><span class="line">  role: Sequelize.STRING</span><br><span class="line">&#125;);</span><br><span class="line">User.belongsToMany(Project, &#123; <span class="attr">through</span>: UserProject &#125;);</span><br><span class="line">Project.belongsToMany(User, &#123; <span class="attr">through</span>: UserProject &#125;);</span><br><span class="line"><span class="comment">// through is required!</span></span><br><span class="line"></span><br><span class="line">user.addProject(project, &#123;</span><br><span class="line">  through: &#123; <span class="attr">role</span>: <span class="string">'manager'</span> &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h2 id="define-修改-刪除-hook"><a class="header-anchor" href="#define-修改-刪除-hook">¶</a>define 修改/刪除 hook</h2>
 <p>建立關聯，增加 foreign key 到屬性。<br>
@@ -175,7 +176,8 @@ foreign key = (target model + primary key) 的名字<br>
 <li><code>SET DEFAULT</code>, 子表 foreign key 設為 default (Innodb not use)</li>
 <li><code>SET NULL</code>, 子表 foreign key 設為 null</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Category.hasMany(models.Product, &#123; onDelete: &apos;cascade&apos; &#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Category.hasMany(models.Product, &#123;</span><br><span class="line">  onDelete: <span class="string">'cascade'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -193,11 +195,11 @@ foreign key = (target model + primary key) 的名字<br>
                     tags:
                     
   <li class="meta-text">
-  { <a href="/tags/sequelize/">sequelize</a> }
+  { <a href="/tags/Sequelize/">Sequelize</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/sequelize-associations/">sequelize-associations</a> }
+  { <a href="/tags/foreign-key/">foreign key</a> }
   </li>
 
 
@@ -208,10 +210,23 @@ foreign key = (target model + primary key) 的名字<br>
     
         <section id="list_related_posts">
             <h2>同系列文章還有...</h2>
-            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-migration/">Sequelize Migration</a><div class="related-posts-item-abstract">¶Sequelize Migration
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-CUD-of-CRUD/">Sequelize 資料寫入</a><div class="related-posts-item-abstract">¶Sequelize 資料寫入
+¶Create
+Module.build(options: Object)
+回傳一個 instance
+欄位放預設值 + 產生 inst</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-R-of-CRUD/">Sequelize 資料讀取</a><div class="related-posts-item-abstract">¶Sequelize 資料讀取
+使用者需求 -&gt; 搜尋的功能
+要盡可能的多熟悉
+¶Module.find()
+找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-migration/">Sequelize Migration</a><div class="related-posts-item-abstract">¶Sequelize Migration
 Sequelize 2 之後，增加了 cli 的功能
 透過一次又一次的維護檔，確保移植時有相同的建構過程
-migration </div></li></ul>
+migration </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-define-model/">Sequelize 的 define model</a><div class="related-posts-item-abstract">¶Sequelize 的 define model
+定義 table 與 model 的映射，使用 sequelize.define()
+使用了 sequelize-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-first-hand/">初探 Sequelize</a><div class="related-posts-item-abstract">¶Sequelize 初探
+Sequelize 是一個使用 JavaScript 的 ORM。
+我自己的使用方式是與 Express 搭配，當作 MVC 的 M
+另外，</div></li></ul>
         </section>
         <section>
             <div id="disqus_thread"></div>

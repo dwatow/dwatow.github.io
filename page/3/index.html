@@ -109,69 +109,50 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2018/05-01-relayout-google-translate/">http://dwatow.github.io/2018/05-01-relayout-google-translate/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2018/05-09-iview-install-config/">http://dwatow.github.io/2018/05-09-iview-install-config/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>想讓 Google 翻譯的畫面直排</h1>
+        <h1>iView 安裝與配置</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#想讓-google-翻譯的畫面直排"><span class="toc-text">¶想讓 Google 翻譯的畫面直排</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先教怎麼改"><span class="toc-text">¶先教怎麼改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#來解釋一下原理吧"><span class="toc-text">¶來解釋一下原理吧！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-src-c-和-gt-res-c"><span class="toc-text">¶gt-src-c 和 gt-res-c</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gt-c"><span class="toc-text">¶gt-c</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iview-安裝與配置"><span class="toc-text">¶iView 安裝與配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">¶安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官網配置"><span class="toc-text">¶官網配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正確的配置"><span class="toc-text">¶正確的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#測試"><span class="toc-text">¶測試</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="想讓-google-翻譯的畫面直排"><a class="header-anchor" href="#想讓-google-翻譯的畫面直排">¶</a>想讓 Google 翻譯的畫面直排</h1>
-<p>有時候，我們想要邊逛一些英文網站，一邊使用 Google 翻譯。<br>
-但是當螢幕排成橫自併排時，Google 卻不能理想的將原文與翻譯結果放在上下做對照，原本預設的排版是橫排。</p>
-<p>這個我試了很久，終於讓我找到一個最小修改的方法</p>
-<p>今天就讓我們來解析 Google 翻譯的排版，並且以最小改動的方式將排版改成直排吧！</p>
-<h2 id="先教怎麼改"><a class="header-anchor" href="#先教怎麼改">¶</a>先教怎麼改</h2>
-<ol>
-<li>
-<p>找 <code>gt-src-c</code> 和 <code>gt-res-c</code> ，位置大概是在這。</p>
-<p><img src="https://i.imgur.com/7QpRi7n.png" alt=""></p>
-<p>它有一個屬性 <code>width: 50%;</code></p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#gt-src-c</span>, <span class="selector-id">#gt-res-c</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>改成 <code>width: 100%</code></p>
-</li>
-<li>
-<p>找 <code>gt-c</code> ，位置大概是在這。</p>
-<p><img src="https://i.imgur.com/18byang.png" alt=""></p>
-<p>它有一個屬性 <code>min-width: 765px</code></p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#gt-c</span> &#123;</span><br><span class="line">    <span class="attribute">min-width</span>: <span class="number">765px</span>;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">100%</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>將 <code>min-width: 765px</code> 取消。</p>
-</li>
-<li>
-<p>改好了<br>
-畫面就可以併排，而且可以像這樣使用<br>
-<img src="https://i.imgur.com/JgRwYBM.png" alt=""></p>
-</li>
-</ol>
-<h2 id="來解釋一下原理吧"><a class="header-anchor" href="#來解釋一下原理吧">¶</a>來解釋一下原理吧！</h2>
-<h3 id="gt-src-c-和-gt-res-c"><a class="header-anchor" href="#gt-src-c-和-gt-res-c">¶</a><code>gt-src-c</code> 和 <code>gt-res-c</code></h3>
-<p>這兩個元素的排版，主要是靠 <code>float</code> 一左一右</p>
-<ol>
-<li>
-<p><code>float</code> 是為了處理元素「內容可以並排」(或文繞圖)，使 <code>block</code> 重疊的情況。在此並沒有看見，因為同層的元素都是 <code>float</code> 。改變可橫排元素寬度，即可決定元素要橫排還是直排(橫排會斷行)，所以在此只要將寬度改成 <code>100%</code></p>
-</li>
-<li>
-<p>而同層的元素 <code>gt-promo-lr</code> ，出現 <code>display: inline-block</code> 與 <code>float</code> 共用的情況。<br>
-<img src="https://i.imgur.com/Zxu9cbq.png" alt=""></p>
-</li>
-</ol>
-<p>我個人覺得，這樣不是很好，因為 <code>inline-block</code> 是一種允許 <code>block</code> 之間排列用 <code>inline</code> 排版方式，算是排橫的語法重複使用。</p>
-<ol start="3">
-<li><code>float</code> 和 <code>clear</code> 搭配使用，在這並沒有看見，不過倒是在 <code>gt-text-top</code> 看見了「定訂最小高度」。</li>
-</ol>
-<p><img src="https://i.imgur.com/RCr2QCX.png" alt=""></p>
-<p>我個人也覺得這樣並不是很好，因為內容排版方式改變，其實容器就無法容納內容元素，即使使用了 <code>min-height</code> 也一樣。</p>
-<p>改成直排之後，其實 <code>gt-text-top</code> 變這樣</p>
-<p><img src="https://i.imgur.com/IeQbtd6.png" alt="" width="300"></p>
-<p>原因是元素都受 <code>float</code> 影響，早就不在 <code>block</code> 佔任何面積，所以其實 <code>gt-text-top</code> 裡早就不存在任何佔有面積的元素內容了。</p>
-<h2 id="gt-c"><a class="header-anchor" href="#gt-c">¶</a><code>gt-c</code></h2>
-<p>在此視它是一個容器，內容物的大小，大多使用百分比決定。並且在容器設定了一個 <code>min-width: 765px</code> ，找不到為什麼使用 <code>765px</code> ，但是在此 Google 要限制最小寬度，當 <code>viewport</code> 再變小，就開始出現捲軸，所以要將這個縮小的限制打破，讓它可以在縮小視窗時，還是可以顯示所有內容。</p>
+    <h1 id="iview-安裝與配置"><a class="header-anchor" href="#iview-安裝與配置">¶</a>iView 安裝與配置</h1>
+<p>這一篇是因為官網文件讓我實在是太挫折了！所以特別寫一篇來指正</p>
+<p>用 vue-cli 的專案，初始化一個 webpack</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p><a href="https://www.iviewui.com/docs/guide/install#NPM_%E5%AE%89%E8%A3%85" target="_blank" rel="noopener">https://www.iviewui.com/docs/guide/install#NPM_安装</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install iview --save</span><br></pre></td></tr></table></figure>
+<h2 id="官網配置"><a class="header-anchor" href="#官網配置">¶</a>官網配置</h2>
+<p><a href="https://www.iviewui.com/docs/guide/start#%E5%BC%95%E5%85%A5_iView" target="_blank" rel="noopener">https://www.iviewui.com/docs/guide/start#引入_iView</a></p>
+<blockquote>
+<p>官網文件有誤，要小心</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">"vue"</span>;</span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">"vue-router"</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">"components/app.vue"</span>;</span><br><span class="line"><span class="keyword">import</span> Routers <span class="keyword">from</span> <span class="string">"./router.js"</span>;</span><br><span class="line"><span class="keyword">import</span> iView <span class="keyword">from</span> <span class="string">"iview"</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"iview/dist/styles/iview.css"</span>;</span><br><span class="line"></span><br><span class="line">Vue.use(VueRouter);</span><br><span class="line">Vue.use(iView);</span><br></pre></td></tr></table></figure>
+<p>會出現 <code>iView is unidefined</code></p>
+<h2 id="正確的配置"><a class="header-anchor" href="#正確的配置">¶</a>正確的配置</h2>
+<p>src/iview/index.js</p>
+<blockquote>
+<p><code>import iview from 'iview'</code><br>
+前面的 <code>iview</code> 要用小寫</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">"vue"</span>;</span><br><span class="line"><span class="keyword">import</span> iview <span class="keyword">from</span> <span class="string">"iview"</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"iview/dist/styles/iview.css"</span>;</span><br><span class="line"></span><br><span class="line">Vue.use(iview);</span><br></pre></td></tr></table></figure>
+<p>src/main.js</p>
+<p>加入這一行即可</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"./iview"</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="測試"><a class="header-anchor" href="#測試">¶</a>測試</h2>
+<p><a href="https://www.iviewui.com/docs/guide/introduce#%E7%A4%BA%E4%BE%8B" target="_blank" rel="noopener">https://www.iviewui.com/docs/guide/introduce#示例</a></p>
+<p>將專案中的</p>
+<p>component/HelloWorld.vue</p>
+<p>改寫成下面這樣</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Slider</span> <span class="attr">v-model</span>=<span class="string">"value"</span> <span class="attr">range</span>&gt;</span><span class="tag">&lt;/<span class="name">Slider</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">  data () &#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="undefined">      value: [20, 50]</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>畫面</p>
+<p><img src="https://i.imgur.com/fnrw5KI.png" alt=""></p>
 
     
     </section>
@@ -185,7 +166,11 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/ivuew/">ivuew</a> }
   </li>
 
 
@@ -215,7 +200,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CSS/" style="font-size: 44.22px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 21.56px;">Flex</a> <a href="/tags/HTML/" style="font-size: 25.33px;">HTML</a> <a href="/tags/Inline/" style="font-size: 21.56px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 36.67px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.78px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.78px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 29.11px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 17.78px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.78px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 21.56px;">animation</a> <a href="/tags/api/" style="font-size: 17.78px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 21.56px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.78px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 25.33px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/git/" style="font-size: 25.33px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 36.67px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.78px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.78px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.89px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.78px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/sequelize/" style="font-size: 17.78px;">sequelize</a> <a href="/tags/sequelize-associations/" style="font-size: 14px;">sequelize-associations</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.78px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 21.56px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 40.44px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 32.89px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 29.11px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.4px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.2px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 37.8px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.4px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 41.2px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 34.4px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
