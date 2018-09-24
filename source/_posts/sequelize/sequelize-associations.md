@@ -1,7 +1,7 @@
 ---
 title: Sequelize 的 Relations/Associations
 date: 2018-09-24 16:15:35
-tags: [sequelize, 'sequelize-associations']
+tags: [Sequelize, 'foreign key']
 categories: 技術心得
 ---
 # Sequelize 的 Relations/Associations
@@ -81,9 +81,9 @@ options: {as: 'forJs'}
 options: {foreignKey: 'forDb'}
 ```
 
-看例子
+**example:**
 
-```javascript
+```javascript=
 // Person 關聯自己
 const Person = sequelize.define('person', { /* ... */})
 
@@ -109,6 +109,8 @@ project.getWorkers
 
 - `Project` 會有 `getUsers`, `setUsers`, `addUser`, `addUsers`
 - `User` 會有 `getProjects`, `setProjects`, `addPrject`, `addProjects`
+
+**example:**
 
 ```javascript=
 UserProject = sequelize.define('user_project', {
@@ -144,6 +146,10 @@ user.addProject(project, {
 1. `SET DEFAULT`, 子表 foreign key 設為 default (Innodb not use)
 1. `SET NULL`, 子表 foreign key 設為 null
 
-```
-Category.hasMany(models.Product, { onDelete: 'cascade' });
+**example:**
+
+```javascript=
+Category.hasMany(models.Product, {
+  onDelete: 'cascade'
+});
 ```

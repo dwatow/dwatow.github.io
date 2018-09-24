@@ -1,7 +1,7 @@
 ---
 title: Sequelize Migration
 date: 2018-09-24 14:53:11
-tags: [sequelize]
+tags: [Sequelize, Migration]
 categories: 技術心得
 ---
 # Sequelize Migration
