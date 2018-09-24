@@ -63,108 +63,24 @@ module.exports = {
 
 [參考 attribute, options 用法](http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-init)
 
-### createTable
+[QueryInterface.methods](http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html)
 
-Create a table with given set of attributes
-
-```javascript=
-QueryInterface.createTable(
-  tableName: String,
-  attributes: Object,
-  options: Object,
-  model: Model
-)
-```
-回傳: Promise
-
-### addColumn
-
-Add a new column into a table
-```javascript=
-QueryInterface.addColumn(
-  table: String,
-  newAttributeName: String,
-  attribute: Object,
-  options: Object
-)
-```
-回傳: Promise
-
-### changeColumn
-
-Change a column definition
-
-```javascript=
-QueryInterface.changeColumn(
-  tableName: String,
-  attributeName: String,
-  dataTypeOrOptions: Object,
-  options: Object
-)
-```
-回傳: Promise
-
-### removeColumn
-
-Remove a column from table
-
-```javascript=
-QueryInterface.removeColumn(
-  tableName: String,
-  attributeName: String,
-  options: Object
-)
-```
-回傳: Promise
-
-### addIndex
-
-Add index to a column
-
-```javascript=
-QueryInterface.addIndex(
-  tableName: String,
-  options: Object
-)
-```
-回傳: Promise
-
-### removeIndex
-
-Remove an already existing index from a table
-
-```javascript=
-QueryInterface.removeIndex(
-  tableName: String,
-  indexNameOrAttributes: String,
-  options: Object
-)
-```
-回傳: Promise
-
-### addConstraint
-
-Add constraints to table
-
-```javascript=
-QueryInterface.addConstraint(
-  tableName: String,
-  attributes: Array,
-  options: Object
-)
-```
-回傳: Promise
-
-### removeConstraint
-
-```javascript=
-QueryInterface.removeConstraint(
-  tableName: String,
-  constraintName: String,
-  options: Object
-)
-```
-回傳: Promise
+- 變動資料表
+  - 新增資料表 `createTable(tableName, attributes, options)`
+  - 刪除資料表 `dropTable(tableName, options)`
+  - 刪除所有資料表 `dropAllTables(options)`
+  - 重新命名資料表 `renameTable(before, after, options)`
+  - 顯示資料表陣列 `showAllTables(options)`
+    - `tableNames` 的 datatype `Array`
+  - 顯示資料表 schema `describeTable(tableName, options)`
+- 變動欄位
+  - 增加欄位 `addColumn(tableName, attributeName, dataTypeOrOptions, options)`
+  - 刪除欄位 `removeColumn(tableName, attributeName, options)`
+  - 修改欄位設定 `changeColumn(tableName, attributeName, dataTypeOrOptions, options)`
+  - 重新命名欄位 `renameColumn(tableName, attrNameBefore, attrNameAfter, options)`
+- 變動索引(資料表屬性的功能)
+  - 建立索引 `addIndex(tableName, attributes, options)`
+  - 移除索引 `removeIndex(tableName, indexNameOrAttributes, options)`
 
 ## 資料表關聯
 

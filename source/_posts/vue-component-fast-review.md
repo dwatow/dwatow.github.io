@@ -57,4 +57,4 @@ categories: 技術心得
 
   [Understanding Vue.js Lifecycle Hooks, other hooks](https://alligator.io/vuejs/component-lifecycle/#other-hooks)
 
-    <!-- prettier-ignore-end -->
+  <!-- prettier-ignore-end -->
