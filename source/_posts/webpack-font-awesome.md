@@ -80,4 +80,4 @@ import {
 
   [Free version](https://fontawesome.com/how-to-use/use-with-node-js#free)
 
-  <!-- prettier-ignore-end -->
+    <!-- prettier-ignore-end -->

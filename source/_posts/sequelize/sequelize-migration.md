@@ -168,7 +168,7 @@ QueryInterface.removeConstraint(
 
 ## 資料表關聯
 
-在 queryInterface.createTable 中， attributes 物件裡定義欄位時，寫 reference 就可以成為
+在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。
 
 ```javascript=
 return queryInterface.addColumn(
