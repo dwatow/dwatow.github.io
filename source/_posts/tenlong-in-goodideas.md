@@ -98,21 +98,16 @@ function list2masonry(list) {
   }).join("");
 }
 
-let $grid;
-
 function initMasonry () {
-  $grid = $('#masonry').masonry({
+  const $grid = $('#masonry').masonry({
     itemSelector: '.book',
     columnWidth: '.book',
-    // gutter: 10,
     percentPosition: true
   });
   setTimeout(() => {
     $grid.masonry('layout');
   }, 1500);
 }
-
-let books = [];
 
 window.addEventListener('load', e => {
   axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
@@ -122,7 +117,6 @@ window.addEventListener('load', e => {
   })
   .then(list => {
     return list.map(book => {
-      // book.isShow = true;
       book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
       book.getDiscount = function () {
         if (this.discount.toString().split('').pop() == "0")
@@ -134,8 +128,7 @@ window.addEventListener('load', e => {
     })
   })
   .then(list => {
-    books = list;
-    render(books);
+    render(list);
     initMasonry ();
   });
 })
