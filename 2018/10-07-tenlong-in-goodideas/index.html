@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
-  <meta name="description" content="#masonry {   transition: .3s; } .book {   display: inline-block;   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 5px; } .book img {   width: 80%;   margin: auto;   heig">
-<meta name="keywords" content="axios,monent,jquery,masonry">
+  <meta name="description" content="#masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show {   display: inline-">
+<meta name="keywords" content="jquery,axios,monent,masonry">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta property="og:url" content="dwatow.github.io/2018/10-07-tenlong-in-goodideas/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="#masonry {   transition: .3s; } .book {   display: inline-block;   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 5px; } .book img {   width: 80%;   margin: auto;   heig">
+<meta property="og:description" content="#masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show {   display: inline-">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-07T07:40:41.000Z">
+<meta property="og:updated_time" content="2018-10-07T09:29:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
-<meta name="twitter:description" content="#masonry {   transition: .3s; } .book {   display: inline-block;   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 5px; } .book img {   width: 80%;   margin: auto;   heig">
+<meta name="twitter:description" content="#masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show {   display: inline-">
   <title>好想工作室裡的天瓏書目 (持續更新) - 《Chris 技術筆記》</title>
     
     
@@ -124,14 +124,25 @@
   transition: .3s;
 }
 .book {
-  display: inline-block;
   vertical-align: top;
   width: 100%;
   box-sizing: border-box;
-  padding: 5px;
+  padding: 15px 10px;
+  border-radius: 10px;
+  display: none;
 }
+
+.show {
+  display: inline-block;
+}
+
+.book:hover {
+  background-color: #d7e6ff;
+}
+
 .book img {
   width: 80%;
+  display: block;
   margin: auto;
   height: auto;
 }
@@ -167,20 +178,19 @@
 <div id="books">Loading...</div>
 <script type="text/javascript">
 function price (book) {
-  const discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
-  // console.log('discount: ', discount);
   if (parseInt(book.originPrice) > parseInt(book.sellPrice)) {
-    return `<div class="originPrice">${book.originPrice}</div>
-    <div class="sellPrice">${book.sellPrice} (${Math.floor(discount)}折) </div>`
+    return `<div class="originPrice">${book.originPrice}元 </div>
+    <div class="sellPrice">${book.sellPrice}元 (${Math.floor(book.getDiscount())}折) </div>`
   }
   else {
-    return `<div class="sellPrice">${book.sellPrice}</div>`
+    return `<div class="sellPrice">${book.sellPrice}元 </div>`
   }
 }
 
 function list2masonry(list) {
   return list.map(book => {
-    return `<div class="book">
+    // const isActive = (book.isShow) ? 'show' : '';
+    return `<div class="book show">
       <a href="${book.link}">
         <div class="isbn">${book.ISBN}</div>
         <img src="${book.image}" alt="">
@@ -191,10 +201,13 @@ function list2masonry(list) {
   }).join("");
 }
 
+let $grid;
+
 function initMasonry () {
   $grid = $('#masonry').masonry({
     itemSelector: '.book',
     columnWidth: '.book',
+    // gutter: 10,
     percentPosition: true
   });
   setTimeout(() => {
@@ -202,17 +215,38 @@ function initMasonry () {
   }, 1500);
 }
 
+let books = [];
+
 window.addEventListener('load', e => {
   axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
   .then(data => {
-    document.querySelector('#books').innerHTML = `<span class="latestUpdateDate">最新更新日期${moment(data.updatedAt).format('YYYY-MM-DD')}</span>`;
+    document.querySelector('#books').innerHTML = `<span class="latestUpdateDate">最新更新日期${moment(data.updatedAt).format('YYYY-MM-DD')}</span><div id="masonry"></div>`;
     return data.list;
   })
   .then(list => {
-    document.querySelector('#books').innerHTML += `<div id="masonry">${list2masonry(list)}</div>`;
+    return list.map(book => {
+      // book.isShow = true;
+      book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
+      book.getDiscount = function () {
+        if (this.discount.toString().split('').pop() == "0")
+          return this.discount / 10;
+        else
+          return this.discount;
+      }
+      return book;
+    })
+  })
+  .then(list => {
+    books = list;
+    render(books);
     initMasonry ();
   });
 })
+
+function render (books) {
+  document.querySelector('#masonry').innerHTML = `${list2masonry(books)}`;
+}
+
 </script>
 
     
@@ -231,15 +265,15 @@ window.addEventListener('load', e => {
                     tags:
                     
   <li class="meta-text">
+  { <a href="/tags/jquery/">jquery</a> }
+  </li>
+
+  <li class="meta-text">
   { <a href="/tags/axios/">axios</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/monent/">monent</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/jquery/">jquery</a> }
   </li>
 
   <li class="meta-text">
