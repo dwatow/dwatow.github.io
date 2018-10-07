@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="#masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show {   display: inline-">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-07T09:29:48.000Z">
+<meta property="og:updated_time" content="2018-10-07T09:33:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="#masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show {   display: inline-">
@@ -201,21 +201,16 @@ function list2masonry(list) {
   }).join("");
 }
 
-let $grid;
-
 function initMasonry () {
-  $grid = $('#masonry').masonry({
+  const $grid = $('#masonry').masonry({
     itemSelector: '.book',
     columnWidth: '.book',
-    // gutter: 10,
     percentPosition: true
   });
   setTimeout(() => {
     $grid.masonry('layout');
   }, 1500);
 }
-
-let books = [];
 
 window.addEventListener('load', e => {
   axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
@@ -225,7 +220,6 @@ window.addEventListener('load', e => {
   })
   .then(list => {
     return list.map(book => {
-      // book.isShow = true;
       book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
       book.getDiscount = function () {
         if (this.discount.toString().split('').pop() == "0")
@@ -237,8 +231,7 @@ window.addEventListener('load', e => {
     })
   })
   .then(list => {
-    books = list;
-    render(books);
+    render(list);
     initMasonry ();
   });
 })
