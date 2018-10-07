@@ -115,7 +115,7 @@ function initMasonry () {
 let books = [];
 
 window.addEventListener('load', e => {
-  axios.get('http://bookshelf.goodideas-studio.com/api').then(item => item.data)
+  axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
   .then(data => {
     document.querySelector('#books').innerHTML = `<span class="latestUpdateDate">最新更新日期${moment(data.updatedAt).format('YYYY-MM-DD')}</span><div id="masonry"></div>`;
     return data.list;
