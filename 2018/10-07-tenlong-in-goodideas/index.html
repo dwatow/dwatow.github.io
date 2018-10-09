@@ -7,14 +7,14 @@
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
-<meta name="keywords" content="vuejs,axios,monent,masonry,jquery">
+<meta name="keywords" content="vuejs,axios,monent,jquery,vue-masonry">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta property="og:url" content="dwatow.github.io/2018/10-07-tenlong-in-goodideas/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-09T03:34:24.000Z">
+<meta property="og:updated_time" content="2018-10-09T07:49:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
@@ -111,7 +111,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#好想工作室裡的天瓏書目-持續更新"><span class="toc-text">¶好想工作室裡的天瓏書目 (持續更新)</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#好想工作室裡的天瓏書目-持續更新"><span class="toc-text">¶好想工作室裡的天瓏書目 (持續更新)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">找找你要書名</span></a></li></ol></li></ol>
   </div>
 
 
@@ -177,9 +177,13 @@
 <div id="app">
   {{ message }}
   <div id="books">
+    <h2>找找你要書名</h2>
+    <div>
+      <input type="text" class="filterName" v-model="filterName"><span>目前 {{totalBooks}} 本</span>
+    </div>
     <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
     <div v-masonry="" transition-duration="3s" item-selector=".book" column-width=".book" class="masonry-container">
-      <books :abooks="books"></books>
+      <books :abooks="filtedBooks"></books>
     </div>
   </div>
 </div>
@@ -233,7 +237,8 @@ var app = new Vue({
   data: {
     message: 'Loading...',
     updateDate: null,
-    books: null
+    books: null,
+    filterName: null
   },
   created () {
     axios.get('http://bookshelf.goodideas-studio.com/api').then(item => item.data)
@@ -248,6 +253,17 @@ var app = new Vue({
         return book;
       })
     })
+  },
+  computed: {
+    filtedBooks () {
+      if (!!this.books && !!this.filterName)
+        return this.books.filter(item => item.name.includes(this.filterName))
+      else
+        return this.books
+    },
+    totalBooks () {
+      return !this.filtedBooks ? 0 : this.filtedBooks.length
+    }
   }
 })
 </script>
@@ -280,11 +296,11 @@ var app = new Vue({
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/masonry/">masonry</a> }
+  { <a href="/tags/jquery/">jquery</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/jquery/">jquery</a> }
+  { <a href="/tags/vue-masonry/">vue-masonry</a> }
   </li>
 
 
