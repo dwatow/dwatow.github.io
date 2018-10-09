@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
-  <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show">
-<meta name="keywords" content="axios,monent,masonry,jquery">
+  <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
+<meta name="keywords" content="vuejs,axios,monent,masonry,jquery">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta property="og:url" content="dwatow.github.io/2018/10-07-tenlong-in-goodideas/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show">
+<meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-07T13:47:30.000Z">
+<meta property="og:updated_time" content="2018-10-09T03:34:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
-<meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: none; }  .show">
+<meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)        #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inl">
   <title>好想工作室裡的天瓏書目 (持續更新) - 《Chris 技術筆記》</title>
     
     
@@ -118,10 +118,12 @@
     <h1 id="好想工作室裡的天瓏書目-持續更新"><a class="header-anchor" href="#好想工作室裡的天瓏書目-持續更新">¶</a>好想工作室裡的天瓏書目 (持續更新)</h1>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js" charset="utf-8"></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+<!-- <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script> -->
+<script src="https://unpkg.com/vue-masonry@0.11.3/dist/vue-masonry-plugin-window.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <style>
-#masonry {
+#masonry-container {
   transition: .3s;
 }
 .book {
@@ -130,10 +132,6 @@
   box-sizing: border-box;
   padding: 15px 10px;
   border-radius: 10px;
-  display: none;
-}
-
-.show {
   display: inline-block;
 }
 
@@ -175,71 +173,83 @@
   }
 }
 </style>
-<div id="books">Loading...</div>
+
+<div id="app">
+  {{ message }}
+  <div id="books">
+    <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
+    <div v-masonry="" transition-duration="3s" item-selector=".book" column-width=".book" class="masonry-container">
+      <books :abooks="books"></books>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
-function price (book) {
-  if (parseInt(book.originPrice) > parseInt(book.sellPrice)) {
-    return `<div class="originPrice">${book.originPrice}元 </div>
-    <div class="sellPrice">${book.sellPrice}元 (${Math.floor(book.getDiscount())}折) </div>`
-  }
-  else {
-    return `<div class="sellPrice">${book.sellPrice}元 </div>`
-  }
-}
-
-function list2masonry(list) {
-  return list.map(book => {
-    // const isActive = (book.isShow) ? 'show' : '';
-    return `<div class="book show">
-      <a href="${book.link}">
-        <div class="isbn">${book.ISBN}</div>
-        <img src="${book.image}" alt="">
-        <div class="name">${book.name}</div>
+var VueMasonryPlugin = window["vue-masonry-plugin"].VueMasonryPlugin
+Vue.use(VueMasonryPlugin)
+Vue.component('books', {
+  props: ['abooks'],
+  template: `<div>
+    <div v-for="abook in abooks" :key="abook.isbn" class="book" v-show="isShow">
+      <a :href="abook.link" target="_blank">
+        <div class="isbn" v-html="abook.ISBN"></div>
+        <img :src="abook.image" alt="">
+        <div class="name" v-html="abook.name"></div>
       </a>
-        ${price(book)}
-    </div>`;
-  }).join("");
-}
-
-function initMasonry () {
-  const $grid = $('#masonry').masonry({
-    itemSelector: '.book',
-    columnWidth: '.book',
-    percentPosition: true
-  });
-  $('.book img').on('load', () => {
-    $grid.masonry('layout');
-  })
-}
-
-window.addEventListener('load', e => {
-  axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
-  .then(data => {
-    document.querySelector('#books').innerHTML = `<span class="latestUpdateDate">最新更新日期: ${moment(data.updatedAt*1000).format('YYYY-MM-DD')}</span><div id="masonry"></div>`;
-    return data.list;
-  })
-  .then(list => {
-    return list.map(book => {
-      book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
-      book.getDiscount = function () {
-        if (this.discount.toString().split('').pop() == "0")
-          return this.discount / 10;
-        else
-          return this.discount;
-      }
-      return book;
-    })
-  })
-  .then(list => {
-    render(list);
-    initMasonry ();
-  });
+      <div class="originPrice" v-show="isSell(abook)" v-html="abook.originPrice + '元'"></div>
+      <span class="sellPrice" v-html="abook.sellPrice + '元'">
+      </span>
+      <span v-show="isSell(abook)" v-html=" '(' + getDiscount(abook) + '折)' "></span>
+    </div>
+  </div>`,
+  methods: {
+    getDiscount (currbook) {
+      let discount;
+      if (currbook.discount.toString().split('').pop() == "0")
+        discount = currbook.discount / 10;
+      else
+        discount = currbook.discount;
+      return Math.floor(discount)
+    },
+    isSell (currbook) {
+      return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
+      // return true;
+    }
+  },
+  updated () {
+    if (typeof this.$redrawVueMasonry === 'function') {
+      setTimeout(() => this.$redrawVueMasonry(), 500)
+    }
+  },
+  computed: {
+    isShow () {
+      return true;
+    },
+  }
 })
 
-function render (books) {
-  document.querySelector('#masonry').innerHTML = `${list2masonry(books)}`;
-}
-
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Loading...',
+    updateDate: null,
+    books: null
+  },
+  created () {
+    axios.get('http://bookshelf.goodideas-studio.com/api').then(item => item.data)
+    .then(data => {
+      this.updateDate = moment(data.updatedAt*1000).format('YYYY-MM-DD')
+      return data.list;
+    })
+    .then(list => {
+      this.books = list.map(book => {
+        book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
+        this.message = '';
+        return book;
+      })
+    })
+  }
+})
 </script>
 
     
@@ -257,6 +267,10 @@ function render (books) {
                 <div>
                     tags:
                     
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
   <li class="meta-text">
   { <a href="/tags/axios/">axios</a> }
   </li>
@@ -283,7 +297,21 @@ function render (books) {
             <h2>同系列文章還有...</h2>
             <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-vuejs/vue-cli-webpack-bootstrap-install/">在 Vue-cli 或 Webpack 想使用 Bootstrap</a><div class="related-posts-item-abstract">¶在 Vue-cli 或 Webpack 想使用 Bootstrap
 雖然官網文件[1]有記載如何安裝，但是我在沒有很順利的情況之下，最後成功了。
-回過頭再去看文件才看</div></li></ul>
+回過頭再去看文件才看</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-09-iview-install-config/">iView 安裝與配置</a><div class="related-posts-item-abstract">¶iView 安裝與配置
+這一篇是因為官網文件讓我實在是太挫折了！所以特別寫一篇來指正
+用 vue-cli 的專案，初始化一個 webpack
+¶安裝
+https://</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-add-filter/">在 Vue 中 加入 filter 的 method</a><div class="related-posts-item-abstract">¶在 Vue 中 加入 filter 的 method
+¶第一種
+加在 component 裡
+src/App.vue
+123456789101112131415161</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-with-v-model/">Vue Component 也可以用 v-model</a><div class="related-posts-item-abstract">¶Vue Component 也可以用 v-model
+前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-slot/">用 Vue Component Slot 實現自定義 HTML</a><div class="related-posts-item-abstract">¶用 Vue Component Slot 實現自定義 HTML
+之前有
+其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li></ul>
         </section>
         <section>
             <div id="disqus_thread"></div>
