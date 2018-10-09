@@ -118,7 +118,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#好想工作室裡的天瓏書目-持續更新"><span class="toc-text">¶好想工作室裡的天瓏書目 (持續更新)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">找找你要書名</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#好想工作室裡的天瓏書目-持續更新"><span class="toc-text">¶好想工作室裡的天瓏書目 (持續更新)</span></a></li></ol>
   </div>
 
 
@@ -182,13 +182,14 @@
 </style>
 
 <div id="app">
-  {{ message }}
   <div id="books">
-    <h2>找找你要書名</h2>
     <div>
-      <input type="text" class="filterName" v-model="filterName"><span>目前 {{totalBooks}} 本</span>
+      <label><b>找找你要書名</b></label><br>
+      <input type="text" class="filterName" v-model="filterName"><br>
+      <span>有 {{totalBooks}} 本</span>
     </div>
     <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
+    {{ message }}
     <div v-masonry="" transition-duration="3s" item-selector=".book" column-width=".book" class="masonry-container">
       <books :abooks="filtedBooks"></books>
     </div>
@@ -201,7 +202,7 @@ Vue.use(VueMasonryPlugin)
 Vue.component('books', {
   props: ['abooks'],
   template: `<div>
-    <div v-for="abook in abooks" :key="abook.isbn" class="book" v-show="isShow">
+    <div v-for="abook in abooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
         <div class="isbn" v-html="abook.ISBN"></div>
         <img :src="abook.image" alt="">
@@ -215,27 +216,22 @@ Vue.component('books', {
   </div>`,
   methods: {
     getDiscount (currbook) {
-      let discount;
+      let discount = currbook.discount;
       if (currbook.discount.toString().split('').pop() == "0")
-        discount = currbook.discount / 10;
-      else
-        discount = currbook.discount;
+        discount /= 10;
+
       return Math.floor(discount)
     },
     isSell (currbook) {
       return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
-      // return true;
     }
   },
   updated () {
-    if (typeof this.$redrawVueMasonry === 'function') {
-      setTimeout(() => this.$redrawVueMasonry(), 500)
-    }
-  },
-  computed: {
-    isShow () {
-      return true;
-    },
+    this.$nextTick(() => {
+      if (typeof this.$redrawVueMasonry === 'function') {
+        this.$redrawVueMasonry()
+      }
+    })
   }
 })
 
@@ -263,7 +259,7 @@ var app = new Vue({
   },
   computed: {
     filtedBooks () {
-      if (!!this.books && !!this.filterName)
+      if ( !!this.filterName )
         return this.books.filter(item => item.name.includes(this.filterName))
       else
         return this.books
