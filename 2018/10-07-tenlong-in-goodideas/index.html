@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
-  <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
+  <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
 <meta name="keywords" content="vuejs,axios,monent,vue-masonry">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta property="og:url" content="dwatow.github.io/2018/10-07-tenlong-in-goodideas/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
+<meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-10T01:37:01.000Z">
+<meta property="og:updated_time" content="2018-10-10T02:04:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
-<meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
+<meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
   <title>好想工作室裡的天瓏書目 (持續更新) - 《Chris 技術筆記》</title>
     
     
@@ -128,7 +128,7 @@
   vertical-align: top;
   width: 100%;
   box-sizing: border-box;
-  padding: 15px 10px;
+  padding: 20px 10px;
   border-radius: 10px;
   display: inline-block;
 }
@@ -138,10 +138,15 @@
 }
 
 .book img {
-  width: 80%;
-  display: block;
-  margin: auto;
+  width: 40%;
   height: auto;
+  /* display: inline-block; */
+  /* margin: auto; */
+}
+
+.book .price, .book img {
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 .book .isbn {
@@ -149,7 +154,7 @@
 }
 
 .book .name {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .book .originPrice {
@@ -158,16 +163,41 @@
 }
 
 .book .sellPrice {
-  font-size: 14px;
+  font-size: 20px;
+  padding-bottom: 10px;
 }
 
 .book a {
   display: block;
 }
 
+.totalBooks {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+}
+
+input {
+  outline: none;
+  border: solid 1px #C0C0C0;
+  border-radius: 5px;
+  padding: 2px 3px;
+}
+
 @media screen and (min-width: 720px) {
   .book {
     width: 25%;
+  }
+
+  .book img {
+    width: 80%;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+
+  .book .price {
+    display: block;
   }
 }
 </style>
@@ -194,17 +224,18 @@ Vue.use(VueMasonryPlugin)
 Vue.component('books', {
   props: ['abooks'],
   template: `<div>
-    <span v-html="'有' + totalBooks + '本'"></span>
+    <span class="totalBooks" v-html="'有' + totalBooks + '本'"></span>
     <div v-for="abook in abooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
-        <div class="isbn" v-html="abook.ISBN"></div>
-        <img :src="abook.image" alt="">
         <div class="name" v-html="abook.name"></div>
+        <img :src="abook.image" alt="">
+        <div class="price">
+          <div class="isbn" v-html="abook.ISBN"></div>
+          <span class="originPrice" v-show="isSell(abook)" v-html="abook.originPrice + '元'"></span>
+          <span v-show="isSell(abook)" v-html=" '(' + getDiscount(abook) + '折)' "></span>
+          <div class="sellPrice" v-html="abook.sellPrice + '元'"></div>
+        </div>
       </a>
-      <div class="originPrice" v-show="isSell(abook)" v-html="abook.originPrice + '元'"></div>
-      <span class="sellPrice" v-html="abook.sellPrice + '元'">
-      </span>
-      <span v-show="isSell(abook)" v-html=" '(' + getDiscount(abook) + '折)' "></span>
     </div>
   </div>`,
   methods: {
@@ -260,7 +291,7 @@ var app = new Vue({
         listOnlyOne.push(m.get(key))
 
       this.books = listOnlyOne.map(book => {
-        book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
+        book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice || book.sellPrice) * 100;
         return book;
       })
       this.message = '';
@@ -278,7 +309,6 @@ var app = new Vue({
         return books.filter(item => {
           const currDiscount = item.discount < 10 ? item.discount*10 : item.discount;
           const filterDiscount = discount < 10 ? discount*10 : discount;
-          // console.log(parseInt(discount), filterDiscount);
           return parseInt(currDiscount) <= filterDiscount;
         })
       else
