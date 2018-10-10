@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-10T03:32:19.000Z">
+<meta property="og:updated_time" content="2018-10-10T05:12:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
@@ -211,19 +211,44 @@ input {
     <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
     {{ message }}
     <div v-masonry="" transition-duration=".3s" item-selector=".book" column-width=".book" class="masonry-container">
-      <books :abooks="books | byName(filterName) | byDiscount(filterDiscount)"></books>
+      <books :total-pre-page="show" :abooks="books | byName(filterName) | byDiscount(filterDiscount)"></books>
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
+
+function debounce(func, wait = 20, immediate = true) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+document.addEventListener('scroll', debounce(infiniteLoading, 50, true));
+
+function infiniteLoading () {
+  const currTotal = app.$data.show;
+  const maxTotal = app.$data.books.length;
+  if (currTotal < maxTotal)
+    app.$data.show += 10;
+}
+
 var VueMasonryPlugin = window["vue-masonry-plugin"].VueMasonryPlugin
 Vue.use(VueMasonryPlugin)
 Vue.component('books', {
-  props: ['abooks'],
+  props: ['abooks', 'total-pre-page'],
   template: `<div>
     <span class="totalBooks" v-html="'有' + totalBooks + '本'"></span>
-    <div v-for="abook in abooks" :key="abook.isbn" class="book">
+    <div v-for="abook in showBooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
         <div class="name" v-html="abook.name"></div>
         <img :src="abook.image" alt="" @load="layoutMasonry()">
@@ -247,19 +272,22 @@ Vue.component('books', {
     isSell (currbook) {
       return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
     },
-    layoutMasonry (e) {
+    layoutMasonry () {
       if (typeof this.$redrawVueMasonry === 'function') {
         this.$redrawVueMasonry()
       }
     }
   },
   computed: {
+    showBooks () {
+      return !this.abooks ? [] : this.abooks.slice(0, this.totalPrePage)
+    },
     totalBooks () {
       return !this.abooks ? 0 : this.abooks.length
     }
   }
 })
-
+//------------------------------------------------------------------------------
 var app = new Vue({
   el: '#app',
   data: {
@@ -267,7 +295,8 @@ var app = new Vue({
     updateDate: null,
     books: null,
     filterName: null,
-    filterDiscount: null
+    filterDiscount: null,
+    show: 10
   },
   created () {
     axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
