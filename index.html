@@ -215,7 +215,7 @@ input {
       <label for="filterName"><b>找找你要書名</b></label>
       <input type="text" id="filterByName" v-model="filterName"><br>
       <label for="filterDiscount">至少打幾折</label>
-      <input type="number" id="filterByDiscount" max="100" min="1" v-model.number="myDiscount"><br>
+      <input type="number" id="filterByDiscount" step="1" max="100" min="1" v-model.number="myDiscount"><br>
     </div>
     <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
     {{ message }}
@@ -332,12 +332,13 @@ var app = new Vue({
   computed: {
     myDiscount: {
       get: function() {
-        return this.filterDiscount
+        return this.filterDiscount;
       },
       set: function(discount) {
-        console.log('> ', discount, discount <= 1, typeof discount);
+        console.log('> ', discount, discount >= 100, discount <= 1, typeof discount);
         if (typeof discount !== 'number')
-          this.filterDiscount = 100;
+          this.filterDiscount = 1;
+
         if (discount >= 100)
           this.filterDiscount = 100;
         else if (discount < 0)
