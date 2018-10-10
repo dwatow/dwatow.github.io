@@ -7,14 +7,14 @@
   <meta itemprop="name" content="Chris">
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <meta name="description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
-<meta name="keywords" content="vuejs,axios,monent,vue-masonry,jquery">
+<meta name="keywords" content="vuejs,axios,monent,vue-masonry">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta property="og:url" content="dwatow.github.io/2018/10-07-tenlong-in-goodideas/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-10T00:08:24.000Z">
+<meta property="og:updated_time" content="2018-10-10T01:37:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 15px 10px;   border-radius: 10px;   display: inlin">
@@ -175,14 +175,15 @@
 <div id="app">
   <div id="books">
     <div>
-      <label><b>找找你要書名</b></label><br>
-      <input type="text" class="filterName" v-model="filterName"><br>
-      <span>有 {{totalBooks}} 本</span>
+      <label for="filterName"><b>找找你要書名</b></label>
+      <input type="text" id="filterByName" v-model="filterName"><br>
+      <label for="filterDiscount">至少打幾折</label>
+      <input type="number" id="filterByDiscount" max="100" min="1" v-model.number="filterDiscount"><br>
     </div>
     <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
     {{ message }}
     <div v-masonry="" transition-duration=".3s" item-selector=".book" column-width=".book" class="masonry-container">
-      <books :abooks="filtedBooks"></books>
+      <books :abooks="books | byName(filterName) | byDiscount(filterDiscount)"></books>
     </div>
   </div>
 </div>
@@ -193,6 +194,7 @@ Vue.use(VueMasonryPlugin)
 Vue.component('books', {
   props: ['abooks'],
   template: `<div>
+    <span v-html="'有' + totalBooks + '本'"></span>
     <div v-for="abook in abooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
         <div class="isbn" v-html="abook.ISBN"></div>
@@ -217,13 +219,18 @@ Vue.component('books', {
       return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
     }
   },
+  computed: {
+    totalBooks () {
+      return !this.abooks ? 0 : this.abooks.length
+    }
+  },
   updated () {
     this.$nextTick(() => {
       setTimeout (() => {
         if (typeof this.$redrawVueMasonry === 'function') {
           this.$redrawVueMasonry()
         }
-      }, 350)
+      }, 500)
     })
   }
 })
@@ -234,7 +241,8 @@ var app = new Vue({
     message: 'Loading...',
     updateDate: null,
     books: null,
-    filterName: null
+    filterName: null,
+    filterDiscount: null
   },
   created () {
     axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
@@ -243,7 +251,6 @@ var app = new Vue({
       return data.list;
     })
     .then(list => {
-      console.log(list.length);
       const m = new Map();
       list.forEach(book => {
         m.set(book.ISBN, book)
@@ -251,23 +258,31 @@ var app = new Vue({
       const listOnlyOne = []
       for (let [ key, val ] of m.entries())
         listOnlyOne.push(m.get(key))
-      console.log(listOnlyOne.length);
+
       this.books = listOnlyOne.map(book => {
         book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
-        this.message = '';
         return book;
       })
+      this.message = '';
     })
   },
-  computed: {
-    filtedBooks () {
-      if ( !!this.filterName )
-        return this.books.filter(item => item.name.toLowerCase().includes(this.filterName.toLowerCase()))
+  filters: {
+    byName (books, name) {
+      if (!!books && !!name )
+        return books.filter(item => item.name.toLowerCase().includes(name.toLowerCase()))
       else
-        return this.books
+        return books
     },
-    totalBooks () {
-      return !this.filtedBooks ? 0 : this.filtedBooks.length
+    byDiscount (books, discount) {
+      if (!!books && !!discount )
+        return books.filter(item => {
+          const currDiscount = item.discount < 10 ? item.discount*10 : item.discount;
+          const filterDiscount = discount < 10 ? discount*10 : discount;
+          // console.log(parseInt(discount), filterDiscount);
+          return parseInt(currDiscount) <= filterDiscount;
+        })
+      else
+        return books
     }
   }
 })
@@ -304,10 +319,6 @@ var app = new Vue({
   { <a href="/tags/vue-masonry/">vue-masonry</a> }
   </li>
 
-  <li class="meta-text">
-  { <a href="/tags/jquery/">jquery</a> }
-  </li>
-
 
                 </div>
             
@@ -316,13 +327,19 @@ var app = new Vue({
     
         <section id="list_related_posts">
             <h2>同系列文章還有...</h2>
-            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-vuejs/vue-cli-webpack-bootstrap-install/">在 Vue-cli 或 Webpack 想使用 Bootstrap</a><div class="related-posts-item-abstract">¶在 Vue-cli 或 Webpack 想使用 Bootstrap
-雖然官網文件[1]有記載如何安裝，但是我在沒有很順利的情況之下，最後成功了。
-回過頭再去看文件才看</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-09-iview-install-config/">iView 安裝與配置</a><div class="related-posts-item-abstract">¶iView 安裝與配置
+            <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-09-iview-install-config/">iView 安裝與配置</a><div class="related-posts-item-abstract">¶iView 安裝與配置
 這一篇是因為官網文件讓我實在是太挫折了！所以特別寫一篇來指正
 用 vue-cli 的專案，初始化一個 webpack
 ¶安裝
-https://</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-add-filter/">在 Vue 中 加入 filter 的 method</a><div class="related-posts-item-abstract">¶在 Vue 中 加入 filter 的 method
+https://</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-component-add-filter/">在 Vue 中 加入 filter 的 method</a><div class="related-posts-item-abstract">¶在 Vue 中 加入 filter 的 method
 ¶第一種
 加在 component 裡
 src/App.vue
