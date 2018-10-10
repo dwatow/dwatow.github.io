@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-10-10T02:04:34.000Z">
+<meta property="og:updated_time" content="2018-10-10T03:32:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
@@ -140,8 +140,6 @@
 .book img {
   width: 40%;
   height: auto;
-  /* display: inline-block; */
-  /* margin: auto; */
 }
 
 .book .price, .book img {
@@ -228,7 +226,7 @@ Vue.component('books', {
     <div v-for="abook in abooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
         <div class="name" v-html="abook.name"></div>
-        <img :src="abook.image" alt="">
+        <img :src="abook.image" alt="" @load="layoutMasonry()">
         <div class="price">
           <div class="isbn" v-html="abook.ISBN"></div>
           <span class="originPrice" v-show="isSell(abook)" v-html="abook.originPrice + '元'"></span>
@@ -248,21 +246,17 @@ Vue.component('books', {
     },
     isSell (currbook) {
       return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
+    },
+    layoutMasonry (e) {
+      if (typeof this.$redrawVueMasonry === 'function') {
+        this.$redrawVueMasonry()
+      }
     }
   },
   computed: {
     totalBooks () {
       return !this.abooks ? 0 : this.abooks.length
     }
-  },
-  updated () {
-    this.$nextTick(() => {
-      setTimeout (() => {
-        if (typeof this.$redrawVueMasonry === 'function') {
-          this.$redrawVueMasonry()
-        }
-      }, 500)
-    })
   }
 })
 

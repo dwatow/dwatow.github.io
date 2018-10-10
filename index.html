@@ -147,8 +147,6 @@
 .book img {
   width: 40%;
   height: auto;
-  /* display: inline-block; */
-  /* margin: auto; */
 }
 
 .book .price, .book img {
@@ -235,7 +233,7 @@ Vue.component('books', {
     <div v-for="abook in abooks" :key="abook.isbn" class="book">
       <a :href="abook.link" target="_blank">
         <div class="name" v-html="abook.name"></div>
-        <img :src="abook.image" alt="">
+        <img :src="abook.image" alt="" @load="layoutMasonry()">
         <div class="price">
           <div class="isbn" v-html="abook.ISBN"></div>
           <span class="originPrice" v-show="isSell(abook)" v-html="abook.originPrice + '元'"></span>
@@ -255,21 +253,17 @@ Vue.component('books', {
     },
     isSell (currbook) {
       return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
+    },
+    layoutMasonry (e) {
+      if (typeof this.$redrawVueMasonry === 'function') {
+        this.$redrawVueMasonry()
+      }
     }
   },
   computed: {
     totalBooks () {
       return !this.abooks ? 0 : this.abooks.length
     }
-  },
-  updated () {
-    this.$nextTick(() => {
-      setTimeout (() => {
-        if (typeof this.$redrawVueMasonry === 'function') {
-          this.$redrawVueMasonry()
-        }
-      }, 500)
-    })
   }
 })
 
