@@ -123,9 +123,7 @@
 
 
     <h1 id="好想工作室裡的天瓏書目-持續更新"><a class="header-anchor" href="#好想工作室裡的天瓏書目-持續更新">¶</a>好想工作室裡的天瓏書目 (持續更新)</h1>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js" charset="utf-8"></script>
-<!-- <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script> -->
 <script src="https://unpkg.com/vue-masonry@0.11.3/dist/vue-masonry-plugin-window.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js" charset="utf-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
@@ -252,7 +250,16 @@ var app = new Vue({
       return data.list;
     })
     .then(list => {
-      this.books = list.map(book => {
+      console.log(list.length);
+      const m = new Map();
+      list.forEach(book => {
+        m.set(book.ISBN, book)
+      })
+      const listOnlyOne = []
+      for (let [ key, val ] of m.entries())
+        listOnlyOne.push(m.get(key))
+      console.log(listOnlyOne.length);
+      this.books = listOnlyOne.map(book => {
         book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
         this.message = '';
         return book;
@@ -261,12 +268,8 @@ var app = new Vue({
   },
   computed: {
     filtedBooks () {
-
       if ( !!this.filterName )
-        return this.books.filter(item =>
-          // console.log(item.name.toLowerCase(), this.filterName.toLowerCase(), item.name.toLowerCase().includes(this.filterName.toLowerCase()));
-          item.name.toLowerCase().includes(this.filterName.toLowerCase())
-        )
+        return this.books.filter(item => item.name.toLowerCase().includes(this.filterName.toLowerCase()))
       else
         return this.books
     },
