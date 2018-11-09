@@ -82,11 +82,11 @@
         scroll();
     }
 
-    document.querySelectorAll('.toc-text').forEach((tocItem) => {
+    document.querySelectorAll('.toc-link').forEach(tocItem => {
         tocItem.addEventListener('click', function () {
-            // console.log(document.querySelector(`#${this.textContent}`));
+            // console.log(this.getAttribute('href'));
             scrollIt(
-                document.querySelector(`#${this.textContent}`),
+                document.querySelector(`[href='${this.getAttribute('href')}']`),
                 500,
                 'easeInOutCubic',
                 // () => console.log(`Just finished scrolling to ${window.pageYOffset}px`)

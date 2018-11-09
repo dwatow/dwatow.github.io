@@ -1,33 +1,30 @@
 ---
 title: 好想工作室裡的天瓏書目 (持續更新)
 date: 2018-10-07 13:51:23
-tags: [axios, monent, masonry, jquery]
+tags: [axios, monent, "vue-masonry", vuejs]
 categories: 技術練習
 ---
 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+# 好想工作室裡的天瓏書目 (持續更新)
+
 <script src="https://unpkg.com/axios/dist/axios.min.js" charset="utf-8"></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+<script src="https://unpkg.com/vue-masonry@0.11.3/dist/vue-masonry-plugin-window.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
 <style>
-#masonry {
+#masonry-container {
   transition: .3s;
 }
 .book {
   vertical-align: top;
   width: 100%;
   box-sizing: border-box;
-  padding: 15px 10px;
+  padding: 20px 10px;
   border-radius: 10px;
-  display: none;
-}
-
-.show {
   display: inline-block;
+  position: absolute;
+  top: 100%;
 }
 
 .book:hover {
@@ -35,10 +32,13 @@ categories: 技術練習
 }
 
 .book img {
-  width: 80%;
-  display: block;
-  margin: auto;
+  width: 40%;
   height: auto;
+}
+
+.book .price, .book img {
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 .book .isbn {
@@ -46,7 +46,7 @@ categories: 技術練習
 }
 
 .book .name {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .book .originPrice {
@@ -55,86 +55,238 @@ categories: 技術練習
 }
 
 .book .sellPrice {
-  font-size: 14px;
+  font-size: 20px;
+  padding-bottom: 10px;
 }
 
 .book a {
   display: block;
 }
 
+.totalBooks {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+}
+
+input {
+  outline: none;
+  border: solid 1px #C0C0C0;
+  border-radius: 5px;
+  padding: 2px 3px;
+}
+
+input:invalid {
+  color: red;
+}
+
 @media screen and (min-width: 720px) {
   .book {
     width: 25%;
   }
+
+  .book img {
+    width: 80%;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+
+  .book .price {
+    display: block;
+  }
 }
 </style>
 
-# 好想工作室裡的天瓏書目 (持續更新)
+- [書單 API](https://bookshelf.goodideas-studio.com/api)
+- [許願表單](https://goo.gl/forms/9A7LYHhkJiQ6JnN33)
+- [現有許願書單](https://goo.gl/7PqNcD)
+- [天瓏書局](https://www.tenlong.com.tw/)
 
-<div id="books">Loading...</div>
+## 找找你要的書
+
+{% raw %}
+
+<div id="app">
+  <div id="books">
+    <div>
+      <label for="filterName"><b>書名</b></label>
+      <input type="text" id="filterByName" v-model="myName"><br />
+      <label for="filterDiscount">至少打幾折</label>
+      <input type="number" id="filterByDiscount" step="1" v-model.number="myDiscount"><br />
+    </div>
+    <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
+    {{ message }}
+    <div v-masonry transition-duration=".3s" item-selector=".book" column-width=".book" class="masonry-container">
+      <books :total-pre-page="show" :abooks="books | byName(filterName) | byDiscount(filterDiscount)"></books>
+    </div>
+  </div>
+</div>
+{% endraw %}
 
 <script type="text/javascript">
-function price (book) {
-  if (parseInt(book.originPrice) > parseInt(book.sellPrice)) {
-    return `<div class="originPrice">${book.originPrice}元 </div>
-    <div class="sellPrice">${book.sellPrice}元 (${Math.floor(book.getDiscount())}折) </div>`
-  }
-  else {
-    return `<div class="sellPrice">${book.sellPrice}元 </div>`
+
+function debounce(func, wait = 20, immediate = true) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+document.addEventListener('scroll', debounce(infiniteLoading, 20, false));
+
+function infiniteLoading (e) {
+  const currTotal = !app.$data.show || app.$data.show;
+  const maxTotal = !app.$data.books || app.$data.books.length;
+
+  const currScroll = document.documentElement.scrollTop;
+  const maxScroll = document.documentElement.scrollHeight;
+  if (currTotal < maxTotal && Math.abs(maxScroll - currScroll) < 2000) {
+    app.$data.show += 10;
   }
 }
 
-function list2masonry(list) {
-  return list.map(book => {
-    // const isActive = (book.isShow) ? 'show' : '';
-    return `<div class="book show">
-      <a href="${book.link}">
-        <div class="isbn">${book.ISBN}</div>
-        <img src="${book.image}" alt="">
-        <div class="name">${book.name}</div>
+var VueMasonryPlugin = window["vue-masonry-plugin"].VueMasonryPlugin
+Vue.use(VueMasonryPlugin)
+
+
+Vue.component('books', {
+  props: ['abooks', 'total-pre-page'],
+  template: `<div>
+  {% raw %}
+    <span class="totalBooks">{{'有' + totalBooks + '本'}}</span>
+    <div v-for="abook in showBooks" :key="abook.isbn" class="book">
+      <a :href="abook.link" target="_blank">
+        <div class="name">{{abook.name}}</div>
+        <img :src="abook.image" alt="" @load="layoutMasonry()">
+        <div class="price">
+          <div class="isbn">{{abook.ISBN}}</div>
+          <span class="originPrice" v-show="isSell(abook)">{{abook.originPrice + '元'}}</span>
+          <span v-show="isSell(abook)">{{ '(' + getDiscount(abook) + '折)' }}</span>
+          <div class="sellPrice">{{abook.sellPrice + '元'}}</div>
+        </div>
       </a>
-        ${price(book)}
-    </div>`;
-  }).join("");
-}
+    </div>
+    {% endraw %}
+  </div>`,
+  methods: {
+    getDiscount (currbook) {
+      let discount = currbook.discount;
+      if (currbook.discount.toString().split('').pop() == "0")
+        discount /= 10;
 
-function initMasonry () {
-  const $grid = $('#masonry').masonry({
-    itemSelector: '.book',
-    columnWidth: '.book',
-    percentPosition: true
-  });
-  setTimeout(() => {
-    $grid.masonry('layout');
-  }, 1500);
-}
-
-window.addEventListener('load', e => {
-  axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
-  .then(data => {
-    document.querySelector('#books').innerHTML = `<span class="latestUpdateDate">最新更新日期${moment(data.updatedAt).format('YYYY-MM-DD')}</span><div id="masonry"></div>`;
-    return data.list;
-  })
-  .then(list => {
-    return list.map(book => {
-      book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice) * 100;
-      book.getDiscount = function () {
-        if (this.discount.toString().split('').pop() == "0")
-          return this.discount / 10;
-        else
-          return this.discount;
+      return Math.floor(discount)
+    },
+    isSell (currbook) {
+      return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
+    },
+    layoutMasonry () {
+      if (typeof this.$redrawVueMasonry === 'function') {
+        this.$redrawVueMasonry()
       }
-      return book;
-    })
-  })
-  .then(list => {
-    render(list);
-    initMasonry ();
-  });
+    }
+  },
+  computed: {
+    showBooks () {
+      return !this.abooks ? [] : this.abooks.slice(0, this.totalPrePage)
+    },
+    totalBooks () {
+      return !this.abooks ? 0 : this.abooks.length
+    }
+  }
 })
+//------------------------------------------------------------------------------
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Loading...',
+    updateDate: null,
+    books: null,
+    filterName: null,
+    filterDiscount: null,
+    show: 10
+  },
+  created () {
+    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
+    .then(data => {
+      this.updateDate = moment(data.updatedAt*1000).format('YYYY-MM-DD')
+      return data.list;
+    })
+    .then(list => list.reverse())
+    .then(list => {
+      const m = new Map();
+      list.forEach(book => {
+        m.set(book.ISBN, book)
+      })
+      const listOnlyOne = []
+      for (let [ key, val ] of m.entries())
+        listOnlyOne.push(m.get(key))
 
-function render (books) {
-  document.querySelector('#masonry').innerHTML = `${list2masonry(books)}`;
-}
-
+      this.books = listOnlyOne.map(book => {
+        book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice || book.sellPrice) * 100;
+        return book;
+      })
+      this.message = '';
+    })
+  },
+  computed: {
+    myName: {
+      get: function () {
+        return this.filterName;
+      },
+      set: function (name) {
+        this.show = 10;
+        this.filterName = name;
+      }
+    },
+    myDiscount: {
+      get: function() {
+        if (this.filterDiscount >= 100) {
+          this.filterDiscount = 100;
+          return 100;
+        }
+        else if (this.filterDiscount < 0) {
+          this.filterDiscount = 1;
+          return discount * -1;
+        }
+        else {
+          return this.filterDiscount;
+        }
+      },
+      set: function(discount) {
+        this.show = 10;
+        if (typeof discount !== 'number')
+          this.filterDiscount = 1;
+        else
+          this.filterDiscount = discount;
+      }
+    }
+  },
+  filters: {
+    byName (books, name) {
+      if (!!books && !!name )
+        return books.filter(item => item.name.toLowerCase().includes(name.toLowerCase()));
+      else
+        return books;
+    },
+    byDiscount (books, discount) {
+      if (!!books && !!discount )
+        return books.filter(item => {
+          const currDiscount = item.discount < 10 ? item.discount*10 : item.discount;
+          const filterDiscount = discount < 10 ? discount*10 : discount;
+          return parseInt(currDiscount) <= filterDiscount;
+        })
+      else
+        return books
+    }
+  }
+})
 </script>

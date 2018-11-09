@@ -41,13 +41,13 @@ categories: 'hexo改裝'
 刪除原本的渲染器
 
 ```shell
-$ npm un hexo-renderer-marked --save
+$ npm uninstall hexo-renderer-marked
 ```
 
 在hexo的專案中，安裝套件 `hexo-renderer-markdown-it`
 
 ```shell
-$ npm i hexo-renderer-markdown-it --save
+$ npm install hexo-renderer-markdown-it --save
 ```
 
 `hexo-renderer-markdown-it` 是用來初始化 `markdown-it` 並且給外掛參數的地方。有興趣可以看看它的[程式碼](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js)。
@@ -119,7 +119,7 @@ markdown:
     - markdown-it-sup
     - markdown-it-checkbox
     anchors:
-      level: 1, 2 # Minimum level for ID creation. (Ex. h2 to h6)
+      level: 1 # Minimum level for ID creation. (Ex. h2 to h6)
       collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
       permalink: true # If true, creates an anchor tag with a permalink besides the heading.
       permalinkClass: header-anchor # Class used for the permalink anchor tag.
@@ -144,7 +144,7 @@ if (opt.plugins) {
 
 因為在研究時， npm 下載下來的版本並不是這麼寫，但是 github 已經更新成這樣了。
 
-## 程式碼區塊的行號
+## 程式碼區塊的行號 (已經 merge 進 hexo)
 
 在 hackmd 中，程式碼區塊的行號指定方式和hexo並不同。
 hexo 是透過 config 檔案去設定整個部落格是否都一致要有行號，而且每一個程式碼區塊的第一個行號都是 1 開始計數。
@@ -158,10 +158,9 @@ hexo 是透過 config 檔案去設定整個部落格是否都一致要有行號�
 
 所以，在此修改`lib/plugins/filter/before_post_render/backtick_code_block.js`，並提交了[一份pull request](https://github.com/hexojs/hexo/pull/2612/files)
 
-不過，因為原作者希望使用 config 做設定，所以這一份應該暫時還過不了。
-(還是設定一個 hackmd mode 也許可以XD)
+目前已經成為內建功能，安裝完成就有囉。
 
-## hacmkd 在渲染器上的處理
+## 認識 hacmkd 在渲染器上的處理
 
 - 第一層: 直接自訂 markdown-it
   最開始先是 markdown 轉 html
@@ -171,13 +170,13 @@ hexo 是透過 config 檔案去設定整個部落格是否都一致要有行號�
 - 第三層: 是動態轉換，把需要互動的元素綁定事件
   有用 jQuery
 
-在 hackmd 的原始碼中，有看見 `ui.area.markdown`，其中[ui物件是這樣](https://github.com/hackmdio/hackmd/blob/master/public/js/lib/editor/ui-elements.js)建出來的，也許就是給第二層或第三層用，使用jQuery的地方。
+在 hackmd 的原始碼中，有看見 `ui.area.markdown`，其中[ui物件是這樣](https://github.com/hackmdio/hackmd/blob/master/public/js/lib/editor/ui-elements.js)建出來的，也許就是給第二層或第三層用，使用 jQuery 的地方。
 
-### 也許是進入點的地方
+### 找到 markdown-it 的程式進入點
 
-原本想找在 hackmd 中，有沒有markdown-it的渲染呼叫點呢？
+原本想找在 hackmd 中，有沒有呼叫 markdown-it 的渲染器的地方呢？
 
-就開始找了，終於讓我找到幾個可能的地方，[其中一個地方](https://github.com/hackmdio/hackmd/blob/master/public/js/index.js)如下
+就開始找了，終於找到幾個可能的地方，[其中一個地方](https://github.com/hackmdio/hackmd/blob/master/public/js/index.js)如下
 
 ```javascript=2800
 function updateViewInner () {
@@ -189,22 +188,24 @@ function updateViewInner () {
   var rendered = md.render(value)
 ```
 
-這一行
+這一行的 `.render()` method
+
 ```javascript
   var rendered = md.render(value)
 ```
-和 [hexo-renderer-markdown-it裡](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js) 的這一行好像呀
+和 [hexo-renderer-markdown-it](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js)裡的這一行好像呀
+
 ```javascript
   return parser.render(data.text);
 ```
 
-所以 hackmd 的這一行指的是，使用者 keyin 原本的 markdown source code
+所以 hackmd 的這一行指的是，使用者 keyin 原本的 markdown syntax
 
 ```javascript=
 var value = editor.getValue()
 ```
 
-## 過濾器
+## 過濾器 (後處理器)
 
 過濾器，也就是語法的後處理器。
 
@@ -216,7 +217,6 @@ var highlight = util.highlight;
 ```
 
 由上面的程式碼得知，參數與程式碼則是丟進了外掛程式 `hexo-util` 的 `highlight` 函數中。進行後處理，hexo在處理程式碼加行號時，會使用 `table` 語法確定排列不與 `CSS` 相依，也可以排列出想要的位置。
-
 
 ### 過濾器與渲染器兩者之間差在哪呢？
 
@@ -243,31 +243,17 @@ $ npm install hexo-filter-flowchart --save
 $ npm install hexo-filter-sequence --save
 ```
 
-
 ### 設定過濾器
 
 一樣在 hexo 的 `_config.yml` 檔下面貼上
 
 ```yaml
 # github Emojis config
- github Emojis:
+ githubEmojis:
   enable: true
   className: github-emoji
   unicode: false
   localEmojis:
-flowchart:
-  # raphael:   # optional, the source url of raphael.js
-  # flowchart: # optional, the source url of flowchart.js
-  options: # options used for `drawSVG`
-sequence:
-  # webfont:     # optional, the source url of webfontloader.js
-  # snap:        # optional, the source url of snap.svg.js
-  # underscore:  # optional, the source url of underscore.js
-  # sequence:    # optional, the source url of sequence-diagram.js
-  # CSS: # optional, the url for CSS, such as hand drawn theme
-  options:
-    theme:
-    CSS_class:
 ```
 
 ## 改上文章目錄[^toc]
