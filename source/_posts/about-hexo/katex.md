@@ -15,7 +15,7 @@ categories: 'hexo改裝'
 ## 安裝
 
 ```shell
-npm install markdown-it-katex
+npm install markdown-it-katex --save
 ```
 
 ## 配置 hexo

@@ -233,12 +233,10 @@ var highlight = util.highlight;
 
 有一些外掛程式支援與 hackmd 一樣的寫法，並且出現相同的效果
 
-- 表情符號(彩色的)[^emojis]
 - 流程圖[^flowchart]
 - UML 循序圖[^sequence]
 
 ```shell=
-$ npm install hexo-filter-github-emojis --save
 $ npm install hexo-filter-flowchart --save
 $ npm install hexo-filter-sequence --save
 ```
@@ -265,8 +263,8 @@ $ npm install hexo-filter-sequence --save
 改好如下
 
 ```
-    <%- partial('toc') %>  ##加上這一行
-    <%- post.content %>
+<%- partial('toc') %>  ##加上這一行
+<%- post.content %>
 ```
 
 <!-- prettier-ignore-start -->
