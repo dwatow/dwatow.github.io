@@ -47,7 +47,7 @@ $ npm uninstall hexo-renderer-marked
 在hexo的專案中，安裝套件 `hexo-renderer-markdown-it`
 
 ```shell
-$ npm install hexo-renderer-markdown-it --save
+$ npm install git+https://github.com/hexojs/hexo-renderer-markdown-it.git --save
 ```
 
 `hexo-renderer-markdown-it` 是用來初始化 `markdown-it` 並且給外掛參數的地方。有興趣可以看看它的[程式碼](https://github.com/hexojs/hexo-renderer-markdown-it/blob/master/lib/renderer.js)。
@@ -229,7 +229,7 @@ var highlight = util.highlight;
 
 最後的 html 並不會和 hackmd 一模一樣。(但是沒關係)
 
-### 安裝過濾器
+## 安裝過濾器
 
 有一些外掛程式支援與 hackmd 一樣的寫法，並且出現相同的效果
 
