@@ -325,25 +325,31 @@ var app = new Vue({
     show: 10
   },
   created () {
-    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
+    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => {
+      return item.data
+    })
     .then(data => {
       this.updateDate = moment(data.updatedAt*1000).format('YYYY-MM-DD')
-      return data.list;
+      return data.list.filter(book => !!book.image);
     })
     .then(list => list.reverse())
     .then(list => {
+      console.log(list);
       const m = new Map();
       list.forEach(book => {
-        m.set(book.ISBN, book)
+        m.set(book.image, book)
       })
+      console.log(m);
       const listOnlyOne = []
       for (let [ key, val ] of m.entries())
         listOnlyOne.push(m.get(key))
 
       this.books = listOnlyOne.map(book => {
         book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice || book.sellPrice) * 100;
+        book.ISBN = book.ISBN.split('?').shift()
         return book;
       })
+      console.log(this.books);
       this.message = '';
     })
   },

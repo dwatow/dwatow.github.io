@@ -22,7 +22,7 @@
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-11-09T14:41:47.000Z">
+<meta property="og:updated_time" content="2018-11-16T07:39:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好想工作室裡的天瓏書目 (持續更新)">
 <meta name="twitter:description" content="¶好想工作室裡的天瓏書目 (持續更新)      #masonry-container {   transition: .3s; } .book {   vertical-align: top;   width: 100%;   box-sizing: border-box;   padding: 20px 10px;   border-radius: 10px;   display: inlin">
@@ -318,25 +318,31 @@ var app = new Vue({
     show: 10
   },
   created () {
-    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => item.data)
+    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => {
+      return item.data
+    })
     .then(data => {
       this.updateDate = moment(data.updatedAt*1000).format('YYYY-MM-DD')
-      return data.list;
+      return data.list.filter(book => !!book.image);
     })
     .then(list => list.reverse())
     .then(list => {
+      console.log(list);
       const m = new Map();
       list.forEach(book => {
-        m.set(book.ISBN, book)
+        m.set(book.image, book)
       })
+      console.log(m);
       const listOnlyOne = []
       for (let [ key, val ] of m.entries())
         listOnlyOne.push(m.get(key))
 
       this.books = listOnlyOne.map(book => {
         book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice || book.sellPrice) * 100;
+        book.ISBN = book.ISBN.split('?').shift()
         return book;
       })
+      console.log(this.books);
       this.message = '';
     })
   },
