@@ -7,6 +7,8 @@ categories: 技術心得
 
 # AngularJS + Gulp → Webpack
 
+![](https://i.imgur.com/fW5jyVi.png)
+
 ## 源起
 
 目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
@@ -154,8 +156,7 @@ angular.module("module", ['module1', 'module2', 'module3']);
 使用 bower 的套件要改用 npm 安裝。(注意版本)
 原本使用 html script tag 的方式引入，改由 javascript 的 `require()` 的方式引入。
 
-
-## angular-route 套件版本匹配問題
+### angular-route 套件版本匹配問題
 
 錯誤訊息
 
@@ -197,7 +198,7 @@ angular-route 換新版
 
 > AngularJS 適用的 angular-route 版本最新就是 1.5.11
 
-## bootstrap 要用的全域 jQuery
+### bootstrap 要用的全域 jQuery
 
 錯誤訊息
 
