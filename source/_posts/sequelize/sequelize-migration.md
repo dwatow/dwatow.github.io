@@ -82,6 +82,22 @@ module.exports = {
   - 建立索引 `addIndex(tableName, attributes, options)`
   - 移除索引 `removeIndex(tableName, indexNameOrAttributes, options)`
 
+## 執行 migrate 後要執行 SQL
+
+使用 `queryInterface.sequelize.query(SQL 語法)` 的用法，可以讓 migration 完成時，也增加當時必要的 SQL 語法。
+
+雖然是 `query` 的 method ，它卻是一個可以執行 SQL 語法，改變資料庫資料的 method。
+
+```javascript
+up: (queryInterface, Sequelize) => {
+  return queryInterface.method(
+      //...
+    }).then(() => {
+      queryInterface.sequelize.query(`UPDATE table SET column=field`)
+    })
+}
+```
+
 ## 資料表關聯
 
 在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。
