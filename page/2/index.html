@@ -106,33 +106,47 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2018/09-21-git-ftp-first-hand/">http://dwatow.github.io/2018/09-21-git-ftp-first-hand/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2018/09-21-vuejs/vue-router-infinitely-route/">http://dwatow.github.io/2018/09-21-vuejs/vue-router-infinitely-route/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Git 的支線 git-ftp</h1>
+        <h1>vue-router 遇到無窮循環 route</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git-的支線-git-ftp"><span class="toc-text">¶Git 的支線 git-ftp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">¶安裝[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">¶使用</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-router-遇到無窮循環-route"><span class="toc-text">¶vue-router 遇到無窮循環 route</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源起"><span class="toc-text">¶源起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#錯誤訊息"><span class="toc-text">¶錯誤訊息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜尋關鍵字"><span class="toc-text">¶搜尋關鍵字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#發生原因"><span class="toc-text">¶發生原因</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="git-的支線-git-ftp"><a class="header-anchor" href="#git-的支線-git-ftp">¶</a>Git 的支線 git-ftp</h1>
-<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
-<p>因為我已經用了 xcode 的命令工具，所以就有 git 了。<br>
-只安裝下面這三個</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install curl --with-libssh2</span><br><span class="line">brew install brotli</span><br><span class="line">brew install git-ftp</span><br></pre></td></tr></table></figure>
-<h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
-<p>使用時要小心，記得上次使用是要將自己的檔案同步到對方那裡，所以會蓋到對方的檔案。</p>
-<p>然後就不敢用了。</p>
-<p>哈哈</p>
-<p>有機會使用的朋友，請再確認一下</p>
+    <h1 id="vue-router-遇到無窮循環-route"><a class="header-anchor" href="#vue-router-遇到無窮循環-route">¶</a>vue-router 遇到無窮循環 route</h1>
+<h2 id="源起"><a class="header-anchor" href="#源起">¶</a>源起</h2>
+<p>錯誤訊息並不是指向自己的程式碼<br>
+而是指向框架的錯誤</p>
+<p>所以，算是一個不直覺處理的 bug</p>
+<h2 id="錯誤訊息"><a class="header-anchor" href="#錯誤訊息">¶</a>錯誤訊息</h2>
+<p><strong>截圖</strong></p>
+<p><img src="https://i.imgur.com/6DRZcKB.png" alt=""></p>
+<p><strong>文字</strong></p>
+<p>webpack-internal:///./node_modules/regenerator-runtime/runtime.js:288</p>
+<div class="danger">
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Uncaught (in promise) RangeError: Maximum call stack size exceeded</span><br><span class="line">    at Generator.invoke [as _invoke] (webpack-internal:///./node_modules/regenerator-runtime/runtime.js:288)</span><br><span class="line">    at Generator.prototype.(:8080/anonymous function) [as next] (webpack-internal:///./node_modules/regenerator-runtime/runtime.js:114:21)</span><br><span class="line">    at step (webpack-internal:///./node_modules/babel-runtime/helpers/asyncToGenerator.js:17)</span><br><span class="line">    at eval (webpack-internal:///./node_modules/babel-runtime/helpers/asyncToGenerator.js:35)</span><br><span class="line">    at new Promise (&lt;anonymous&gt;)</span><br><span class="line">    at new F (webpack-internal:///./node_modules/core-js/library/modules/_export.js:36)</span><br><span class="line">    at eval (webpack-internal:///./node_modules/babel-runtime/helpers/asyncToGenerator.js:14)</span><br><span class="line">    at eval (webpack-internal:///./src/router/index.js:204)</span><br><span class="line">    at iterator (webpack-internal:///./node_modules/vue-router/dist/vue-router.esm.js:1943)</span><br><span class="line">    at step (webpack-internal:///./node_modules/vue-router/dist/vue-router.esm.js:1717)</span><br></pre></td></tr></table></figure>
+</div>
+<h2 id="搜尋關鍵字"><a class="header-anchor" href="#搜尋關鍵字">¶</a>搜尋關鍵字</h2>
+<p>這兩條關鍵字一起搜尋</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Uncaught (in promise) RangeError: Maximum call stack size exceeded</span><br><span class="line">at step (webpack-internal:///./node_modules/vue-router/dist/vue-router.esm.js:1717)</span><br></pre></td></tr></table></figure>
+<h2 id="發生原因"><a class="header-anchor" href="#發生原因">¶</a>發生原因</h2>
+<p>同時使用 <code>redirect</code> 和 <code>beforEach</code> 時<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> ，<code>beforeEach</code> 的條件沒有設定好，造成無窮 router</p>
+<p>下面的例子的執行順序</p>
+<ol>
+<li>程式會先執行 <code>beforeEach</code> 將程式導回 <code>/</code> ，觸發 hash change</li>
+<li>再執行 <code>routes</code> 裡的 <code>redirect</code> 將頁面重新引導到 <code>/Index</code> ，觸發 <code>beforeEach</code> 回到 1.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> route = <span class="keyword">new</span> Router(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'/'</span>,</span><br><span class="line">      redirect: <span class="string">'/Index'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">'/Index'</span>,</span><br><span class="line">      name: <span class="string">'Index'</span>,</span><br><span class="line">      component: Index,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">route.beforeEach(<span class="keyword">async</span> (to, <span class="keyword">from</span>, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">from</span>.name === <span class="literal">null</span> &amp;&amp;</span><br><span class="line">      to.name !== <span class="string">'Login'</span> &amp;&amp;</span><br><span class="line">      (route.app.$store === <span class="literal">undefined</span> ||</span><br><span class="line">       route.app.$store.getters.token.length === <span class="number">0</span>)) &#123;</span><br><span class="line">         route.push(<span class="string">'/'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>setup: <a href="https://github.com/git-ftp/git-ftp/blob/master/INSTALL.md#macos" target="_blank" rel="noopener">INSTALL, macOS</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://forum.vuejs.org/t/vue-router-uncaught-rangeerror-maximum-call-stack-size-exceeded/1994/2" target="_blank" rel="noopener">Vue-router：Uncaught RangeError：超出最大調用堆棧大小</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -149,11 +163,11 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/git/">git</a> }
+  { <a href="/tags/vuejs/">vuejs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/git-ftp/">git-ftp</a> }
+  { <a href="/tags/vue-router/">vue-router</a> }
   </li>
 
 
