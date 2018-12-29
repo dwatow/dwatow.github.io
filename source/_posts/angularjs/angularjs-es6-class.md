@@ -18,6 +18,11 @@ categories: '技術心得'
 
 [^angularjs-component]: [AngularJS 1.5 最佳實務](https://amobiz.github.io/2016/04/15/angularjs-1.5-best-practices/)
 
+## 套件版本
+
+- webpack 4
+- babel 7
+
 ## controller → component
 
 **javascript**
@@ -79,7 +84,7 @@ function route ($routeProvider, $locationProvider) {
 
   $routeProvider
   //...
-  .when('/addReport', { //工務報表新增頁面
+  .when('/addReport', {
     templateUrl: './addReport.html',
     controller: 'myController'
   })
@@ -94,7 +99,7 @@ function route ($routeProvider, $locationProvider) {
 
   $routeProvider
   //...
-  .when('/addReport', { //工務報表新增頁面
+  .when('/addReport', {
     template: `<tag-name is-show="true"></tag-name>`
   })
 }
