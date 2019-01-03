@@ -106,205 +106,104 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2019/01-03-test-doc/">http://dwatow.github.io/2019/01-03-test-doc/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2019/01-02-angularjs/angularjs-component-lifecycle/">http://dwatow.github.io/2019/01-02-angularjs/angularjs-component-lifecycle/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Understanding Components of AngularJS 1.7.x</h1>
+        <h1>AngularJS 1.5+ Component lifecycle</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#understanding-components-of-angularjs-1-7-x"><span class="toc-text">¶Understanding Components of AngularJS 1.7.x</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#contents"><span class="toc-text">¶CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-and-configuring-a-component"><span class="toc-text">¶Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#comparison-between-directive-definition-and-component-definition"><span class="toc-text">¶Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#component-based-application-architecture"><span class="toc-text">¶Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#components-as-route-templates"><span class="toc-text">¶Components as route templates</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#angularjs-1-5-component-lifecycle"><span class="toc-text">¶AngularJS 1.5+ Component lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#component"><span class="toc-text">¶component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#angularjs-binding-of-component"><span class="toc-text">¶AngularJS Binding of Component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以下用一個例子來說說-要怎麼寫-input-output"><span class="toc-text">¶以下用一個例子來說說，要怎麼寫 input/output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#input-of-component"><span class="toc-text">¶Input of Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output-of-component"><span class="toc-text">¶Output of Component</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lifecycle"><span class="toc-text">¶Lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#實際執行"><span class="toc-text">¶實際執行</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="understanding-components-of-angularjs-1-7-x"><a class="header-anchor" href="#understanding-components-of-angularjs-1-7-x">¶</a>Understanding Components of AngularJS 1.7.x</h1>
-<h2 id="contents"><a class="header-anchor" href="#contents">¶</a>CONTENTS</h2>
+    <h1 id="angularjs-1-5-component-lifecycle"><a class="header-anchor" href="#angularjs-1-5-component-lifecycle">¶</a>AngularJS 1.5+ Component lifecycle</h1>
+<h2 id="component"><a class="header-anchor" href="#component">¶</a>component</h2>
+<p>在前端框架引入 virtual dom 時，意味著前端工程師有多了幾個必須要知道的觀念。而這個觀念一直延用到了今天。 (vue-cli3 出來的這一年都還適用)</p>
+<ul>
+<li>component input/output of one-way binding</li>
+<li>lifecycle</li>
+</ul>
+<h2 id="angularjs-binding-of-component"><a class="header-anchor" href="#angularjs-binding-of-component">¶</a>AngularJS Binding of Component</h2>
+<p>AngularJS 使用符號來表達 bindings 的方式。有 4 種方式。</p>
+<ol>
+<li><code>=</code></li>
+<li><code>&lt;</code></li>
+<li><code>@</code></li>
+<li><code>&amp;</code></li>
+</ol>
+<p>最早，有如魔法般的 two-way binding <code>=</code> 。</p>
+<p>後期較推崇的 onw-way binding 而希望取消 two-way binding。<br>
+所以出現了 <code>&lt;</code> + <code>$onChange()</code> + <code>&amp;</code> 可以做到 two-way binding 的效果。</p>
+<p>最後是傳入 <code>const string</code> 的 one-way binding <code>@</code></p>
+<h3 id="以下用一個例子來說說-要怎麼寫-input-output"><a class="header-anchor" href="#以下用一個例子來說說-要怎麼寫-input-output">¶</a>以下用一個例子來說說，要怎麼寫 input/output</h3>
+<p>在 parent 層使用 component</p>
+<p><strong>tabs.html</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫</p>
+<p><strong>tabHome/index.html</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"home"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>Home component<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; vm.text &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span> <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>tabHome/index.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">'angular'</span>;</span><br><span class="line"><span class="keyword">import</span> template <span class="keyword">from</span> <span class="string">'./index.html'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">controller</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular</span><br><span class="line">  .module(<span class="string">'tabHome'</span>, [])</span><br><span class="line">  .component(<span class="string">'tabHome'</span>, &#123;</span><br><span class="line">    template,</span><br><span class="line">    controller,</span><br><span class="line">    controllerAs: <span class="string">'vm'</span>,</span><br><span class="line">    bindings: &#123;</span><br><span class="line">      text: <span class="string">'&lt;'</span>,</span><br><span class="line">      myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).name;</span><br></pre></td></tr></table></figure>
+<h3 id="input-of-component"><a class="header-anchor" href="#input-of-component">¶</a>Input of Component</h3>
+<p>在 parent 層使用 component 時<br>
+直接給自訂的 attribute 並且放入參數</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫<br>
+使用<code>&lt;</code> one-way binding 傳入變數</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  text: <span class="string">'&lt;'</span>,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要「連動修改」要記得使用 <code>$onChanged()</code></p>
+<h3 id="output-of-component"><a class="header-anchor" href="#output-of-component">¶</a>Output of Component</h3>
+<p>使用 component 時，直接給自訂的 attribute<br>
+並且放入 function 執行，參數要使用 <code>{}</code> 並且在裡面寫下要被傳出來的 property。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫</p>
+<p>指定真實事件觸發的地方，執行傳入的 function name，並且傳入 object 當 component output 的參數</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>(在此可以假想像是這樣的 object)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">vm = &#123;</span><br><span class="line">  text: <span class="string">'Hi'</span>,  &lt;- 這是 parent 層會接收到的變數</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用 <code>&amp;</code> binding 傳入 function</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="lifecycle"><a class="header-anchor" href="#lifecycle">¶</a>Lifecycle</h2>
+<p><img src="https://i.imgur.com/dUPq5C8.png" alt="AngularJS lifecycle"></p>
+<p>在此簡單的介紹一下</p>
+<p><strong><code>$onChanges(changesObj)</code></strong></p>
+<p>每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</p>
+<p><strong><code>$onInit()</code></strong></p>
+<p>完成 bindings 初始化時，用來初始化 controller data 的好地方。<br>
+在 directives 的 pre &amp; post linking 之前觸發。</p>
+<p><strong><code>$postLink()</code></strong></p>
+<p>controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></p>
+<p><strong><code>$onDestroy()</code></strong></p>
+<p>銷毀 controller 和它的 scope 時，用在釋放資源。</p>
+<p>較特別的是</p>
+<p><strong><code>$doCheck()</code></strong></p>
+<p>每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。用來當 watch^[[Replacing Angular’s Deep Watches with the $doCheck Lifecycle Hook</p>
+<ul>
+<li><a href="http://codelord.net" target="_blank" rel="noopener">codelord.net</a>](<a href="https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/" target="_blank" rel="noopener">https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/</a>)]</li>
+</ul>
+<h3 id="實際執行"><a class="header-anchor" href="#實際執行">¶</a>實際執行</h3>
+<p>以一個 tab 轉換的練習來看看 lifecycle 是什麼時候發生的</p>
+<p><img src="https://i.imgur.com/9xkn5ZD.png" alt=""></p>
+<p>相同的練習用 Vue 和 AngularJS 做了一次。並且把 lifecycle 都印出來看，下面的圖左邊是 Vue 右邊是 AngularJS。</p>
+<p><strong>切到 Posts，清空 log 切回 Home</strong></p>
 <blockquote>
-<p>Creating and configuring a Component<br>
-Comparison between Directive definition and Component definition<br>
-Component-based application architecture<br>
-Example of a component tree<br>
-Components as route templates<br>
-Intercomponent Communication<br>
-Unit-testing Component Controllers</p>
+<p>AngularJS 使用 <code>ng-if</code> 切換觸發完整 lifecycle 的做法</p>
 </blockquote>
-<p>在 AngularJS, Component 是一種使用簡易組態 (config) 的 directive 。適合用在 component-base 應用的結構。</p>
-<p>更容易用類似 Web Component 或新的 AngularJS style 的架構製作網站。</p>
-<p>優點</p>
-<ul>
-<li>比 directives 更容易設定組態</li>
-<li>合理的預設值 &amp; 最佳實踐</li>
-<li>最佳化 components-base 架構</li>
-<li>components 的寫法更容易升級到 Angular</li>
-</ul>
-<p>不推薦理由</p>
-<ul>
-<li>編譯和 pre-link 執行操作的 directives</li>
-<li>使用 directive 的進階定義選項 像是 priority, terminal, multi-element</li>
-<li>要透過 attribute 或 css class 觸發 directive</li>
-</ul>
-<h2 id="creating-and-configuring-a-component"><a class="header-anchor" href="#creating-and-configuring-a-component">¶</a>Creating and configuring a Component</h2>
-<p>可以用 AngularJS module (由 <code>angular.module()</code> 回傳)的 <code>.component()</code> 註冊 Components<br>
-這個 method 有兩個 arguments</p>
-<ul>
-<li>Components 的名字</li>
-<li>組態物件 (注意，不像是 <code>.directive()</code> ，這個 method 沒有 factory 功能)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;hero-detail hero=&quot;ctrl.hero&quot;&gt;&lt;/hero-detail&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'heroApp'</span>)</span><br><span class="line">.component(<span class="string">'heroDetail'</span>, &#123;</span><br><span class="line">  template: <span class="string">`&lt;span&gt;Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span&gt;`</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    hero: <span class="string">'='</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="comparison-between-directive-definition-and-component-definition"><a class="header-anchor" href="#comparison-between-directive-definition-and-component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
-<p>比較 Component vs Directive</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Directive</th>
-<th>Component</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bindings</td>
-<td>無</td>
-<td>有 (binds controller)</td>
-</tr>
-<tr>
-<td>controller</td>
-<td>有</td>
-<td>有 (預設 <code>function () {}</code>)</td>
-</tr>
-<tr>
-<td>controllerAs</td>
-<td>有 (預設 <code>false</code>)</td>
-<td>有 (預設 <code>$ctrl</code> )</td>
-</tr>
-<tr>
-<td>require</td>
-<td>無</td>
-<td>有</td>
-</tr>
-<tr>
-<td>template</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>templateUrl</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>transclude</td>
-<td>有(預設<code>false</code>)</td>
-<td>有(預設<code>false</code>)</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>bindToController</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>compile function</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>link functions</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>multiElement</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>priority</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>replace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>restrict</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>templateNamespace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>terminal</td>
-<td>Yes</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="component-based-application-architecture"><a class="header-anchor" href="#component-based-application-architecture">¶</a>Component-based application architecture</h2>
-<p>如前所述，component helper 有助於用簡單的 component-base 架構你的應用程式。但是 component helper 在建構一個 componet 時，還額外做了哪些事？</p>
-<ul>
-<li>
-<p><strong>Components 只控制自己的 View 和 Data</strong><br>
-Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一般而言，AngularJS 可以透過強化 scope 和 watches 修改整個程式裡的任何資料。這很好用，但也導致修改應用程式的資料混亂不清的問題。這也是為什麼 component 使用 isolate scope，所以操作整個 scope 的類別是不可能的。</p>
-</li>
-<li>
-<p><strong>Components 有明確的對外 API - 輸入和輸出</strong><br>
-然而，scope 只隔離到這裡，因為 AngularJS 使用 two-way binidng。所以如果傳入一個物件進 component 像是 <code>bindings: {item: '='}</code> ，並且在 component 裡修改它的 property，修改會反射到 component 外層(原本那層)。對 components 來說，只有擁有 data 才可以修改它，更易於除錯。因此， components 要遵守一些簡單的約定:</p>
-<ul>
-<li>輸入使用 <code>&lt;</code> (one-way) 和 <code>@</code> (string) bindings。<br>
-<code>&lt;</code> 從 1.5 版出現，不同於 <code>=</code> ，在 components scope 裡綁定屬性，不被 watched ，意思是你指定新的值在 component scope ，不會更新到外面這一層。<br>
-但請注意，內外 scope 參考的是相同的物件，所以如果在 component 裡改變了物件屬性或陣列元素，外層會反射出修改結果。原則上，永遠不要修改 component scope 裡的物件或陣列內容。<br>
-傳入字串可以使用 <code>@</code> ，尤其是不會改變這個值時。</li>
-<li>用 <code>&amp;</code> bindings 實現 Output 當作 components 的 callback。<br>
-反而不是操作 Input Data，component 呼叫正確的 Output Event 改變資料。以 deletion 來說，意思是 component 不刪除 hero 自己，但是用正確的 event 傳給 owner component ，用 hero 當變數。</li>
-</ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;</span><br><span class="line">&lt;button ng-click=&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;/button&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>用這個方式，外層的 component 可以決定 event 回傳值回來之後，還要做什麼。</li>
-</ul>
-  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">editable-field</span> <span class="attr">on-delete</span>=<span class="string">"$ctrl.deleteHero(&#123;hero&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">editable-field</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure>
-  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 class</span></span><br><span class="line">deleteHero (result) &#123; <span class="comment">//result =&#123; hero &#125;</span></span><br><span class="line">  <span class="keyword">this</span>.$http.delete(...).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;<span class="comment">/*...*/</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>Components 有明確的 lifecycle:<br>
-每一個 component 可以實作 lifecycle hooks。這些 methods 會在 component 生命週期中的特定時間點被呼叫。下列這些 hook methods 可以實作:</p>
-<ul>
-<li><code>$onInit()</code> 完成 bindings 初始化時。在 directives 的 pre &amp; post linking 之前。<br>
-初始化你的 controller 的好地方</li>
-<li><code>$onChanges(changesObj)</code> 每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</li>
-<li><code>$doCheck()</code> 每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。</li>
-<li><code>$onDestroy()</code> 銷毀 controller 和它的 scope 時，用在釋放資源。</li>
-<li><code>$postLink()</code> controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></li>
-</ul>
-</li>
-</ul>
-<p>透過實作這些 method 你可以參與你的 component 的生命週期。</p>
-<ul>
-<li>應用程式是樹狀的 component:<br>
-理想情況，整個應用程式應該是一個實現明確定義的輸入和輸出的組件樹，並最小化雙向綁定。可以更容易地預測數據何時發生變化以及組件的狀態。</li>
-</ul>
-<h2 id="components-as-route-templates"><a class="header-anchor" href="#components-as-route-templates">¶</a>Components as route templates</h2>
-<p>Components 也可以用在 route 的 <code>template</code> (以 <code>ngRoute</code> 為例)。在 component-base 的應用程式 ，每一個 view 都是一個 component:</p>
-<p>當使用 <code>$routeProvider</code> ，你可以避免一些重複的寫法 (boilerplate)，透過解析 route 相依直接傳遞給 component。從 1.5 版開始，ngRoute 自動解析 route scope 指定給 <code>$resolve</code> (你也可以用 <code>resolveAs</code> 改變它)。當使用 component ，你可以利用此功能直接傳遞 component，無需另外指定 controller。</p>
-<p>換句話說(上面如果看不懂)，指的是透過 route 的 resolve 功能，可以直接給 component binding 的變數內容。</p>
-<p><strong>home.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> home = angular.module(<span class="string">'home'</span>).component(<span class="string">'home'</span>, &#123;</span><br><span class="line">  template: <span class="string">'&lt;h1&gt;Home&lt;/h1&gt;&lt;p&gt;Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p&gt;'</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    user: <span class="string">'&lt;'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>route.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> route = angular.module(<span class="string">'route'</span>, []).config(<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>) </span>&#123;</span><br><span class="line">  $routeProvider.when(<span class="string">'/'</span>, &#123;</span><br><span class="line">    template: <span class="string">'&lt;home user="$resolve.user"&gt;&lt;/home&gt;'</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>) </span>&#123; <span class="keyword">return</span> $http.get(<span class="string">'...'</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>main.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> route <span class="keyword">from</span> <span class="string">'./route.js'</span></span><br><span class="line"><span class="keyword">import</span> home <span class="keyword">from</span> <span class="string">'./home.js'</span></span><br><span class="line">angular.module(<span class="string">'myMod'</span>, [route, home])</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/7m6En0B.png" alt=""> <img src="https://i.imgur.com/8dnCSKv.png" alt=""></p>
+<p><strong>keep-alive</strong></p>
+<blockquote>
+<p>AngularJS 使用 <code>ng-show</code> 切換當作是保持不滅的做法</p>
+</blockquote>
+<p><img src="https://i.imgur.com/ualJGFb.png" alt=""> <img src="https://i.imgur.com/9Iddhvo.png" alt=""></p>
+<p><strong>初始化完，切到 Posts</strong></p>
+<p>把 Archive 嵌到 Posts 裡的 lifecycle 練習</p>
+<p><img src="https://i.imgur.com/U3snr2d.png" alt=""><br>
+<img src="https://i.imgur.com/Y3eklNy.png" alt=""></p>
+<p>印出巢狀 component 的 lifecycle 狀況</p>
+<p><img src="https://i.imgur.com/nJfpTOH.png" alt="" width="200"> <img src="https://i.imgur.com/kImYRh1.png" alt="" width="200"></p>
 
     
     </section>
@@ -319,10 +218,6 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
                         
   <li class="meta-text">
   { <a href="/tags/angularjs/">angularjs</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/angular1/">angular1</a> }
   </li>
 
 
@@ -352,7 +247,7 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 41.2px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.4px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.2px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.4px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 41.2px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.4px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 20.8px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.2px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 17.4px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 14px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
