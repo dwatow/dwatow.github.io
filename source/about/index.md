@@ -600,7 +600,6 @@ img.mobile {
   })
 
   function filter(label_id) {
-    console.log(label_id);
     if (label_id != "all") {
       $('.works > div').removeClass('show');
       $('.works > div').addClass('hidden');
