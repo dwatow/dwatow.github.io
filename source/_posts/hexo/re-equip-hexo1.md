@@ -83,6 +83,7 @@ $ npm install markdown-it-checkbox --save
 ### 修改hexo設定檔
 
 在 hexo的 `_config.yml` 檔最下面加上這一段
+
 ```yaml
 # Markdown-it config
 ## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki
@@ -118,12 +119,12 @@ markdown:
     - markdown-it-sub
     - markdown-it-sup
     - markdown-it-checkbox
-    anchors:
-      level: 1 # Minimum level for ID creation. (Ex. h2 to h6)
-      collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
-      permalink: true # If true, creates an anchor tag with a permalink besides the heading.
-      permalinkClass: header-anchor # Class used for the permalink anchor tag.
-      permalinkSymbol: '' # The symbol used to make the permalink.
+anchors:
+  level: 1 # Minimum level for ID creation. (Ex. h2 to h6)
+  collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
+  permalink: true # If true, creates an anchor tag with a permalink besides the heading.
+  permalinkClass: header-anchor # Class used for the permalink anchor tag.
+  permalinkSymbol: '' # The symbol used to make the permalink.
 ```
 
 ### 確認 hexo-renderer-markdown-it
@@ -239,19 +240,6 @@ var highlight = util.highlight;
 ```shell=
 $ npm install hexo-filter-flowchart --save
 $ npm install hexo-filter-sequence --save
-```
-
-### 設定過濾器
-
-一樣在 hexo 的 `_config.yml` 檔下面貼上
-
-```yaml
-# github Emojis config
- githubEmojis:
-  enable: true
-  className: github-emoji
-  unicode: false
-  localEmojis:
 ```
 
 ## 改上文章目錄[^toc]
