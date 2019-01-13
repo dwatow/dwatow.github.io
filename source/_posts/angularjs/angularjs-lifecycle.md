@@ -160,8 +160,9 @@ controller 的元素和它的 children linked 完時。在這時可以操作 DOM
 
 **`$doCheck()`**
 
-每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。用來當 watch^[[Replacing Angular's Deep Watches with the $doCheck Lifecycle Hook
- - codelord.net](https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/)]
+每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。用來當 watch [^codelord.net]
+
+[^codelord.net]: [Replacing Angular's Deep Watches with the $doCheck Lifecycle Hook - codelord.net](https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/)
 
 ### 實際執行
 

@@ -119,12 +119,6 @@ markdown:
     - markdown-it-sub
     - markdown-it-sup
     - markdown-it-checkbox
-anchors:
-  level: 1 # Minimum level for ID creation. (Ex. h2 to h6)
-  collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
-  permalink: true # If true, creates an anchor tag with a permalink besides the heading.
-  permalinkClass: header-anchor # Class used for the permalink anchor tag.
-  permalinkSymbol: '' # The symbol used to make the permalink.
 ```
 
 ### 確認 hexo-renderer-markdown-it
@@ -253,6 +247,18 @@ $ npm install hexo-filter-sequence --save
 ```
 <%- partial('toc') %>  ##加上這一行
 <%- post.content %>
+```
+
+如果 toc 的連結出現 undefined 檢查 config 的這一段，是不是有設定錯誤或縮排不正確。
+
+```yaml
+markdown:
+  anchors:
+    level: 1 # Minimum level for ID creation. (Ex. h2 to h6)
+    collisionSuffix: 'v' # A suffix that is prepended to the number given if the ID is repeated.
+    permalink: true # If true, creates an anchor tag with a permalink besides the heading.
+    permalinkClass: header-anchor # Class used for the permalink anchor tag.
+    permalinkSymbol: '' # The symbol used to make the permalink.
 ```
 
 <!-- prettier-ignore-start -->
