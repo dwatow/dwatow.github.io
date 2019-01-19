@@ -1,7 +1,7 @@
 ---
 title: 讓 Code review 再也不會出現 Coding Style 的問題
 date: 2018-09-20 16:50:20
-tags: ["prettier", "husky"]
+tags: ["prettier", "husky", "webpack"]
 categories: 工具使用
 ---
 
@@ -110,8 +110,8 @@ module.exports = {
 }
 ```
 
+<!-- prettier-ignore-start -->
 [^husky]: [husky](https://github.com/typicode/husky)
 [^prettier]: [prettier](https://prettier.io/)
-[^prettier-loader]:
-
-  [prettier-loader](https://github.com/iamolegga/prettier-loader)
+[^prettier-loader]: [prettier-loader](https://github.com/iamolegga/prettier-loader)
+<!-- prettier-ignore-end -->
