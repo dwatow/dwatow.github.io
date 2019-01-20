@@ -83,17 +83,15 @@ npm install prettier-loader --save-dev
 module.exports = {
   // ...
   module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        use: {
-          loader: "prettier-loader",
-          enforce: "pre",
-          exclude: /node_modules/
-        }
-      }
-    ]
-  }
+    rules: [{
+    test: /\.js$/,
+    exclude : /(node_modules)/,
+    include: [resolve('src')],
+    enforce: "pre",
+    use: [
+      loader: "prettier-loader"
+    }]
+  }]
 };
 ```
 
@@ -104,9 +102,8 @@ module.exports = {
 
 ```javascript
 {
-  trailingComma: 'es5',
   tabWidth: 4,
-  trailingComma: 'all',
+  trailingComma: 'all'
 }
 ```
 
