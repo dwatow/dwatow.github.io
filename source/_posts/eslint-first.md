@@ -1,8 +1,8 @@
 ---
 title: ESlint 初次安裝
 date: 2019-01-20 17:36:20
-tags:
-categories:
+tags: [eslint, prettier, webpack]
+categories: 技術心得
 ---
 
 # ESlint 初次安裝
