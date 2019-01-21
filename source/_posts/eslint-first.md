@@ -24,6 +24,28 @@ npm install eslint --save-dev
 npm install eslint-loader --save-dev
 ```
 
+**webpack.config.js**
+
+```javascript=
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        include: [resolve("src")],
+        enforce: "pre",
+        use: [
+          {
+            loader: "eslint-loader"
+          }
+        ]
+      }
+    ]
+  }
+};
+```
+
 ## Style 設定
 
 使用問答來進行 `.eslintrc.json` 檔的生成^[[Global Installation and Usage](https://eslint.org/docs/user-guide/getting-started#global-installation-and-usage)]
@@ -93,3 +115,19 @@ module.exports = {
 ## 省略不 lint
 
 如果目前正在 debug 的地方，要加上 `console.log()`，想省略不要 lint ，可以利用 eslint 的特殊註解來標註^[[disabling-rules-with-inline-comments](https://eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments)]
+
+兩種基本的用法
+
+**單行**
+
+```javascript
+console.log("這一行沒有 eslint"); // eslint-disable-line
+```
+
+**多行的區塊**
+
+```javascript
+/* eslint-disable */
+console.log("這裡沒有 eslint");
+/* eslint-enable */
+```
