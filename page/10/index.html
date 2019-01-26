@@ -104,100 +104,73 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/09-02-vuejs/modify-dom-by-vuejs/">http://dwatow.github.io/2017/09-02-vuejs/modify-dom-by-vuejs/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/09-10-js-for-cppdevlper/">http://dwatow.github.io/2017/09-10-js-for-cppdevlper/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>用vue修改dom</h1>
+        <h1>從C++到《你所不知道的JS》系列</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用-vue-修改-dom"><span class="toc-text">用 vue 修改 dom</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#修改-tagname"><span class="toc-text">修改 tagName</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改-attr"><span class="toc-text">修改 attr</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#簡寫"><span class="toc-text">簡寫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加一個"><span class="toc-text">加一個</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加很多"><span class="toc-text">加很多</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#條件控制加不加"><span class="toc-text">條件控制加不加</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用在component"><span class="toc-text">用在component</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改-content"><span class="toc-text">修改 content</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#只是加內文"><span class="toc-text">只是加內文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#內文後製"><span class="toc-text">內文後製</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加一個-html-內文"><span class="toc-text">加一個 HTML+內文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重複很多相同的-html-內文"><span class="toc-text">重複很多相同的 HTML+內文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重複很多不同-群組-的-html-內文"><span class="toc-text">重複很多不同(群組)的 HTML+內文</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遺珠之憾-十日整理之外"><span class="toc-text">遺珠之憾(十日整理之外)</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#從-c-到-你所不知道的-js-系列"><span class="toc-text">從 C++到《你所不知道的 JS》系列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#誤解"><span class="toc-text">誤解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#typeof-型別"><span class="toc-text">typeof 型別</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#why-typeof-null-object"><span class="toc-text">why typeof null === &#39;object&#39;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#值"><span class="toc-text">值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#array"><span class="toc-text">Array</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#like-array"><span class="toc-text">like-Array</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string"><span class="toc-text">string</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#number"><span class="toc-text">number</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#number-1"><span class="toc-text">number &lt; 1</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="用-vue-修改-dom"><a class="header-anchor" href="#用-vue-修改-dom">¶</a>用 vue 修改 dom</h1>
-<p>目前看<a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener">vue2 官網教學</a>也看了有十天了，這一篇就來總結一下這十天來的學習心得吧！<br>
-有一些加不進去的就列到遺珠之憾了。哈哈</p>
-<p>vue，是一種類 MVVM 的設計方式。<br>
-也就是說，最主要的目的在於「修改 view(HTML)」</p>
-<p>在此，簡單的介紹一下 vue 的各種用法</p>
-<p>首先，我們有一個 html tag</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tagName</span> <span class="attr">attrProperty</span>=<span class="string">"attrValue"</span>&gt;</span>content<span class="tag">&lt;/<span class="name">tagName</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>下面就以「修改各部份」為文章結構，一一介紹 vue 的功能吧!!</p>
-<h2 id="修改-tagname"><a class="header-anchor" href="#修改-tagname">¶</a>修改 tagName</h2>
-<p>用<code>component</code>，比較複雜<br>
-另外寫一篇再講。XDDD</p>
-<h2 id="修改-attr"><a class="header-anchor" href="#修改-attr">¶</a>修改 attr</h2>
-<h3 id="簡寫"><a class="header-anchor" href="#簡寫">¶</a>簡寫</h3>
-<p>用<code>v-bind:attrProperty</code>,簡寫成<code>:attrProperty</code></p>
-<h3 id="加一個"><a class="header-anchor" href="#加一個">¶</a>加一個</h3>
-<p>在<code>attrValue</code>直接加一個<code>vue.data</code>的屬性</p>
-<p>將一些 CSSClass 一起加入</p>
-<p>條件判斷方式<br>
-className 是否出現，取決於 vue.data 是否擁有該屬性。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">v-bind:attr="data1"</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: &#123;</span><br><span class="line">    data1: <span class="string">'CSSClass1 CSSClass2'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="加很多"><a class="header-anchor" href="#加很多">¶</a>加很多</h3>
-<p>在<code>attrValue</code>加「classNames 陣列」，加多個 vue.data 屬性</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">v-bind:attr="[arrayElem, ...]"</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: &#123;</span><br><span class="line">    arrayElem: <span class="string">'CSSClass1 CSSClass2'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="條件控制加不加"><a class="header-anchor" href="#條件控制加不加">¶</a>條件控制加不加</h3>
-<p>在<code>attrValue</code>加「classNames 物件」<br>
-判斷物件內容<code>true</code> or <code>false</code></p>
+    <h1 id="從-c-到-你所不知道的-js-系列"><a class="header-anchor" href="#從-c-到-你所不知道的-js-系列">¶</a>從 C++到《你所不知道的 JS》系列</h1>
+<p>《你所不知道的 JS》原作: <a href="https://github.com/getify/You-Dont-Know-JS" target="_blank" rel="noopener">https://github.com/getify/You-Dont-Know-JS</a><br>
+我讀的是 O’RELLY 的書本</p>
+<p>在此，針對我所不知道的 JS，進行紀錄。</p>
+<h2 id="誤解"><a class="header-anchor" href="#誤解">¶</a>誤解</h2>
+<p>以下都是誤解</p>
 <ol>
-<li>attr=匿名物件</li>
+<li>JS 是一種直譯式語言，不會經過編譯。</li>
+<li>this 關鍵字是參考所有在的函式</li>
+<li>type null 是 null</li>
+<li>弱型別，就是沒有型別</li>
+<li>javascript 的類別、繼承…(物件導向特性)</li>
+<li>想要完整學會 javascript</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">v-bind:attr="&#123;CSSClass: isActive&#125;"</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: &#123;</span><br><span class="line">  isActive: <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>attr=物件名稱</li>
+<p>粗略的正確的情況:</p>
+<ol>
+<li>JS 會在即將使用前，會先編譯。</li>
+<li>this 是「誰呼叫函式」</li>
+<li>type null 是 object</li>
+<li>是「值型別」，無「變數型別」，typeof() 是「該變數的值型別」</li>
+<li>javascript 的行為委派</li>
+<li>javascript 還在持續發展中，永遠都有未知的部份</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">v-bind:attr="objectName"</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">data: &#123;</span><br><span class="line">  objectName: &#123;</span><br><span class="line">    CSSClass: <span class="literal">true</span> | <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="用在component"><a class="header-anchor" href="#用在component">¶</a>用在<code>component</code></h3>
-<pre><code>- 另外加和`component`上的attr內容，取聯集。
-</code></pre>
-<h2 id="修改-content"><a class="header-anchor" href="#修改-content">¶</a>修改 content</h2>
-<p>先把 example 的 js 寫好，所有的內容都以它為主</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">"#app"</span>,</span><br><span class="line">  data: &#123;</span><br><span class="line">    msg: <span class="string">"&lt;b&gt;這是被&#123;&#123;msg&#125;&#125;取代的結果&lt;/b&gt;"</span>,</span><br><span class="line">    seen: <span class="literal">true</span>,</span><br><span class="line">    url: <span class="string">"https://dwatow.github.io/"</span>,</span><br><span class="line">    items: [</span><br><span class="line">      &#123; <span class="attr">text</span>: a, <span class="attr">number</span>: <span class="string">"1"</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">text</span>: b, <span class="attr">number</span>: <span class="string">"2"</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">text</span>: c, <span class="attr">number</span>: <span class="string">"3"</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">text</span>: d, <span class="attr">number</span>: <span class="string">"4"</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  filter: &#123;</span><br><span class="line">    upperCase: <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (!value) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">      value = value.toString();</span><br><span class="line">      <span class="keyword">return</span> value.toUpperCase();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="只是加內文"><a class="header-anchor" href="#只是加內文">¶</a>只是加內文</h3>
-<p>msg 是 js 變數，內容當作字串，不會渲染</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;msg&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p><code>&lt;b&gt;這是被取代的結果&lt;/b&gt;</code></p>
-<h3 id="內文後製"><a class="header-anchor" href="#內文後製">¶</a>內文後製</h3>
-<p>承上，<code>upperCase</code>是<code>filter</code>裡的 function</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123;msg | upperCase&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p><code>&lt;B&gt;這是被取代的結果&lt;/B&gt;</code></p>
-<h3 id="加一個-html-內文"><a class="header-anchor" href="#加一個-html-內文">¶</a>加一個 HTML+內文</h3>
-<p>msg 是 js 變數，內容當作含有 HTML 的字串，會渲染</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p v-html=&quot;msg&quot;&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
-<p><code>&lt;b&gt;這是被取代的結果&lt;/b&gt;</code></p>
-<h3 id="重複很多相同的-html-內文"><a class="header-anchor" href="#重複很多相同的-html-內文">¶</a>重複很多相同的 HTML+內文</h3>
-<ul>
-<li><code>v-for</code> 所在的 HTML tag 會複製</li>
-<li>items 內容 item 由<code>v-for</code>命名指定</li>
-<li>一個一個加到指定位置，(可以也用 v-bind 加到屬性)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p v-for=&quot;item in items&quot;&gt;&#123;&#123;item.text&#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="重複很多不同-群組-的-html-內文"><a class="header-anchor" href="#重複很多不同-群組-的-html-內文">¶</a>重複很多不同(群組)的 HTML+內文</h3>
-<ul>
-<li>承上，<code>v-for</code>寫在 template 將要複製的 HTML tag 括起來</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;template v-for=&quot;item in items&quot;&gt;</span><br><span class="line">    &lt;p&gt;&#123;&#123;item.text&#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;&#123;&#123;item.number&#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="遺珠之憾-十日整理之外"><a class="header-anchor" href="#遺珠之憾-十日整理之外">¶</a>遺珠之憾(十日整理之外)</h2>
-<ul>
-<li><code>v-bind</code> array 要加判斷式(用 object)的混合技法</li>
-<li><code>v-bind:style</code> 的使用，很像 CSS 的使用方式</li>
-<li>自動補上 vendor prefix</li>
-<li><code>v-if</code> in <code>template</code></li>
-<li><code>v-else</code></li>
-<li><code>v-else-if</code></li>
-<li><code>v-show</code></li>
-<li><code>key, value</code> in <code>v-for</code></li>
-<li><code>v-for</code>的詳細用法(在 object, array, 不會觸發 view 更新的地方，後製函數)</li>
-</ul>
+<h2 id="typeof-型別"><a class="header-anchor" href="#typeof-型別">¶</a>typeof 型別</h2>
+<h3 id="why-typeof-null-object"><a class="header-anchor" href="#why-typeof-null-object">¶</a>why <code>typeof null === 'object'</code></h3>
+<p>用來檢查未宣告的變數</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Uncaught ReferenceError: b is not defined</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> b !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">  <span class="comment">// false</span></span><br><span class="line">  <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="值"><a class="header-anchor" href="#值">¶</a>值</h2>
+<h3 id="array"><a class="header-anchor" href="#array">¶</a>Array</h3>
+<p>以文字字串存取: 不會更新.length。</p>
+<p>以數字字串存取: 數字字串當作數字型別使用。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [];</span><br><span class="line">a[<span class="string">"5"</span>] = <span class="string">"aaaaa"</span>;</span><br><span class="line">a.length = <span class="number">6</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="like-array"><a class="header-anchor" href="#like-array">¶</a>like-Array</h3>
+<p>轉成 Array</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> larr = <span class="built_in">document</span>.querySelectorAll(<span class="string">".class"</span>); <span class="comment">//like array</span></span><br><span class="line"><span class="keyword">var</span> arr = <span class="built_in">Array</span>.prototype.slice.call(larr);</span><br><span class="line"><span class="comment">//or by ES6</span></span><br><span class="line"><span class="keyword">var</span> arr = <span class="built_in">Array</span>.from(larr);</span><br></pre></td></tr></table></figure>
+<h3 id="string"><a class="header-anchor" href="#string">¶</a>string</h3>
+<p>如果常常需要用<code>array</code>的思維處理<code>string</code>。<br>
+建議將該<code>string</code>，存成<code>array</code>再用<code>.join()</code>印出即可。</p>
+<p>需要使用的時機<br>
+以「反序」的需求為例，若常常這麼寫的時候:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"foo"</span>;</span><br><span class="line">str = str</span><br><span class="line">  .split(<span class="string">""</span>)</span><br><span class="line">  .reveres()</span><br><span class="line">  .join(<span class="string">""</span>);</span><br></pre></td></tr></table></figure>
+<p>就可以考慮這麼寫</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = <span class="string">'foo'</span>split(<span class="string">''</span>)</span><br><span class="line">arr.reveres()  <span class="comment">//代表處理很多其它的邏輯</span></span><br><span class="line">str = arr.join(<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+<p>或參考<a href="https://github.com/mathiasbynens/esrever" target="_blank" rel="noopener">Esrever</a></p>
+<h2 id="number"><a class="header-anchor" href="#number">¶</a>number</h2>
+<p>詳閱<a href="https://zh.wikipedia.org/zh-tw/IEEE_754" target="_blank" rel="noopener">IEEE 754</a></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="number">42.</span>toFixed(<span class="number">3</span>)  <span class="comment">//Uncaught SyntaxError: Invalid or unexpected token</span></span><br><span class="line">(<span class="number">42</span>).toFixed(<span class="number">3</span>)</span><br><span class="line"><span class="number">42.</span>.toFixed(<span class="number">3</span>)  <span class="comment">//很少見的用法</span></span><br><span class="line"><span class="number">42</span> .toFixed(<span class="number">3</span>)  <span class="comment">//除了混淆，沒有其它更好的用途</span></span><br></pre></td></tr></table></figure>
+<p>其它進制的<code>number</code>表示法<br>
+小寫前綴是個好習慣，大寫也可以，但是「除了混淆，沒有其它更好的用途」</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="number">0x2a</span>; <span class="comment">//16進制的42</span></span><br><span class="line"><span class="number">0o52</span>; <span class="comment">//8進制的42</span></span><br><span class="line"><span class="number">0b101010</span>; <span class="comment">//2進制的42</span></span><br></pre></td></tr></table></figure>
+<h3 id="number-1"><a class="header-anchor" href="#number-1">¶</a><code>number &lt; 1</code></h3>
+<p>這是所有 IEEE 754 所有的語言都有的問題。<br>
+<code>Number.EPSILON</code>是定義誤差容許範圍</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">0.3</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="number">0.1</span> + <span class="number">0.2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//是否相等</span></span><br><span class="line">a === b; <span class="comment">// false</span></span><br><span class="line">a - b &lt; <span class="built_in">Number</span>.EPSILON; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -211,7 +184,7 @@ className 是否出現，取決於 vue.data 是否擁有該屬性。</p>
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/vuejs/">vuejs</a> }
+  { <a href="/tags/你所不知道的js/">你所不知道的js</a> }
   </li>
 
 
@@ -241,7 +214,7 @@ className 是否出現，取決於 vue.data 是否擁有該屬性。</p>
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 20.18px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 14px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 20.18px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 14px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
