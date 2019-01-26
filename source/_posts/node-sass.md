@@ -25,7 +25,7 @@ project
 
 ### 安裝[^node-sass]
 
-```shell=
+```shell
 npm install node-sass
 ```
 
@@ -59,9 +59,9 @@ body {
 指令要加在 package.json[^node-sass-note]
 
 ```javascript=
-  "scripts": {
-    "build-CSS": "node-sass",
-  },
+"scripts": {
+  "build-CSS": "node-sass",
+},
 ```
 
 ### 執行
@@ -77,9 +77,9 @@ npm run build-CSS ./index.scss ./index.css
 如果要 `watch` 就是將 npm
 
 ```javascript=
-    "scripts": {
-        "build-CSS": "node-sass -w",
-    },
+"scripts": {
+    "build-CSS": "node-sass -w",
+},
 ```
 
 ## 那... 要結構化 sass 呢？
@@ -88,20 +88,13 @@ npm run build-CSS ./index.scss ./index.css
 就要將指令做成這樣
 
 ```javascript=
-    "scripts": {
-        "build-CSS": "node-sass --output-style=expanded --watch scss/ -o CSS/"
-    },
+"scripts": {
+    "build-CSS": "node-sass --output-style=expanded --watch scss/ -o CSS/"
+},
 ```
 
 <!-- prettier-ignore-start -->
-
 [^node-sass]: [node-sass github](https://github.com/sass/node-sass)
-[^node-sass-note]:
-
-  [Node sass 入門 \[筆記\]](http://adon988.logdown.com/posts/4736822-node-sass-tutorial)
-
-[^node-sass-15min]:
-
-  [SCSS 15 分鐘入門](http://eddychang.me/blog/others/91-scss-15-mins.html)
-
-  <!-- prettier-ignore-end -->
+[^node-sass-note]: [Node sass 入門 \[筆記\]](http://adon988.logdown.com/posts/4736822-node-sass-tutorial)
+[^node-sass-15min]: [SCSS 15 分鐘入門](http://eddychang.me/blog/others/91-scss-15-mins.html)
+<!-- prettier-ignore-end -->
