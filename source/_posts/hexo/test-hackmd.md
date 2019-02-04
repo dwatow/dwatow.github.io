@@ -1,7 +1,7 @@
 ---
 title: 測試 hackmd 支援的markdown寫法
 date: 2017-06-18 16:30:34
-tags: ['hexo', 'markdown測試']
+tags: ['hexo', 'markdown測試', 'hackmd']
 categories: 'hexo改裝'
 ---
 
@@ -278,8 +278,6 @@ cond(yes)->e
 cond(no)->op2
 ```
 
-:::danger
-(這一段語法不吃)
 ### Graphviz
 ```graphviz
 digraph hierarchy {
@@ -296,6 +294,8 @@ digraph hierarchy {
 }
 ```
 
+:::danger
+(這一段語法不吃)
 ### Mermaid
 ```mermaid
 gantt
