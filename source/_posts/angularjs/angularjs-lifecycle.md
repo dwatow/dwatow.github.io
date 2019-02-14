@@ -135,7 +135,8 @@ bindings: {
 
 ## Lifecycle
 
-![AngularJS lifecycle](https://i.imgur.com/dUPq5C8.png)
+![AngularJS lifecycle](https://i.imgur.com/PXSdTNq.png)
+
 
 在此簡單的介紹一下
 
