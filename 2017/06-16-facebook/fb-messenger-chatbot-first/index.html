@@ -143,7 +143,7 @@ bot -&gt; FB server</p>
 <hr>
 <h2 id="執行ngrok"><a class="header-anchor" href="#執行ngrok">¶</a>執行ngrok</h2>
 <p>在任意的位置執行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> ngrok http 3000</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ngrok http 3000</span></span><br></pre></td></tr></table></figure>
 <p>就好了!!</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ngrok by @inconshreveable                                 (Ctrl+C to quit)</span><br><span class="line"></span><br><span class="line">Session Status                online</span><br><span class="line">Version                       2.2.4               </span><br><span class="line">Region                        United States (us)</span><br><span class="line">Web Interface                 http://127.0.0.1:4040</span><br><span class="line">Forwarding                    http://db9ba35e.ngrok.io -&gt; localhost:3000        </span><br><span class="line">Forwarding                    https://db9ba35e.ngrok.io -&gt; localhost:3000       </span><br><span class="line"></span><br><span class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</span><br><span class="line">                              0       0       0.00    0.00    0.00    0.00</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -212,7 +212,7 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <ol start="4">
 <li>執行伺服器</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> node app.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node app.js</span></span><br></pre></td></tr></table></figure>
 <p>接下來<a href="http://localhost:3000" target="_blank" rel="noopener">開瀏覽器</a>，看見 <ins>hello world</ins>，就算成功讓伺服器運作起來。</p>
 <h3 id="設定回覆給-facebook的訊息"><a class="header-anchor" href="#設定回覆給-facebook的訊息">¶</a>設定回覆給 facebook的訊息</h3>
 <p>回到<code>app.js</code>改寫<code>get</code>的<code>request</code>的處理函數，改掉原本的 “<ins>Hello World!</ins>”</p>
@@ -223,7 +223,7 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <hr>
 <h3 id="完成-webhook"><a class="header-anchor" href="#完成-webhook">¶</a>完成 webhook</h3>
 <p>按下驗證之前，要先把伺服器跑起來!!!</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> node app.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node app.js</span></span><br></pre></td></tr></table></figure>
 <p>這樣就可以按下「驗證並儲存」，即可完成 webhook 的設定<br>
 <img src="https://i.imgur.com/r4lIszF.png" alt=""></p>
 <p>檢查一下是否有訂閱 <code>messages</code> 的 webhook。<br>
@@ -253,14 +253,14 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
 <h2 id="寫程式-抓到文字訊息"><a class="header-anchor" href="#寫程式-抓到文字訊息">¶</a>寫程式，抓到文字訊息!!</h2>
 <h3 id="在此先安裝"><a class="header-anchor" href="#在此先安裝">¶</a>在此先安裝</h3>
 <p>在此，需要讓 node.js 收到 <code>POST</code> 的 JSON。並且從 <code>request.body</code> 找得到，並且可以處理，必須安裝一個套件 <code>body-parser</code> 。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> npm install body-parser --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install body-parser --save</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> body = req.body;</span><br><span class="line">    <span class="comment">//body["object"] is "page"</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>這樣就可以處理收到的 <code>POST</code> 的 JSON 囉。</p>
 <h2 id="寫程式-回覆訊息"><a class="header-anchor" href="#寫程式-回覆訊息">¶</a>寫程式，回覆訊息!!</h2>
 <p>可參考<a href="https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start" target="_blank" rel="noopener">官網教學</a></p>
 <p>在此，需要讓 <strong>web service</strong> 發送 <strong>request</strong>，必須安裝一個外掛<a href="https://github.com/request/request" target="_blank" rel="noopener">request</a>(在你的專案資料夾)，<br>
 讓你的<code>node.js</code>可以送request。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> npm install request --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install request --save</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>「發送request」這件事一般來說都是瀏覽器在做的，伺服器是負責接收的，<br>
 若伺服器要和伺服器溝通，就要讓伺服器「發送request」。</p>

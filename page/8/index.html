@@ -104,16 +104,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-28-iron-man-2018/iron-man-2018-day18/">http://dwatow.github.io/2017/12-28-iron-man-2018/iron-man-2018-day18/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2018/01-03-iron-man-2018/iron-man-2018-day24/">http://dwatow.github.io/2018/01-03-iron-man-2018/iron-man-2018-day24/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>前端新手村 flex (上)</h1>
+        <h1>前端新手村 都市傳說之隱藏元素的手法</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#flex-上"><span class="toc-text">flex (上)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#歷史"><span class="toc-text">歷史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flex-術語"><span class="toc-text">flex 術語</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flex-container"><span class="toc-text">flex container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在-flex-容器排元素"><span class="toc-text">在 flex 容器排元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flex-flow"><span class="toc-text">flex-flow</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#flex-direction"><span class="toc-text">flex-direction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex-wrap"><span class="toc-text">flex-wrap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order"><span class="toc-text">order</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#學習管道"><span class="toc-text">學習管道</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#都市傳說之隱藏元素的手法"><span class="toc-text">都市傳說之隱藏元素的手法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#visibility"><span class="toc-text">visibility [1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#diaplsy"><span class="toc-text">diaplsy [2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#opacity"><span class="toc-text">opacity [5]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#整理一下"><span class="toc-text">整理一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#從瀏覽器渲染引擎來看"><span class="toc-text">從瀏覽器渲染引擎來看 [6]</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
   </li></div>
 
 
@@ -123,130 +123,101 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="flex-上"><a class="header-anchor" href="#flex-上">¶</a>flex (上)</h1>
-<h2 id="歷史"><a class="header-anchor" href="#歷史">¶</a>歷史</h2>
-<p>跟著我的步調，先來看看 flex 對於內容排版，有什麼基本的功能吧！</p>
-<p>以《眾妙之門》這本簡中翻譯書的內容對照出版日，來看看 flex 為什麼是現在這個名字[^1]。</p>
+<h1 id="都市傳說之隱藏元素的手法"><a class="header-anchor" href="#都市傳說之隱藏元素的手法">¶</a>都市傳說之隱藏元素的手法</h1>
+<ul>
+<li><code>visibility: hidden</code></li>
+<li><code>display: none</code></li>
+<li><code>opacity: 0</code></li>
+</ul>
+<h2 id="visibility"><a class="header-anchor" href="#visibility">¶</a>visibility <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>指的是無論有無渲染，都會佔有 layout 空間。</p>
+<ul>
+<li>visible<br>
+萬物預設值，設定此值，box 可以顯示在畫面上</li>
+<li>hidden<br>
+box 不可顯示在畫面上，完全透明，但是仍佔空間。若容器設定 <code>visibility: hidden</code> ，而元素 設定 <code>visibility: visible</code> 元素是可見的。</li>
+<li>collapse<br>
+和 <code>hidden</code> 的設定值一模一樣。此關鍵字是參考 table 的動態跨欄或跨列效果。</li>
+</ul>
+<h2 id="diaplsy"><a class="header-anchor" href="#diaplsy">¶</a>diaplsy <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<p><code>display</code> 會影響自身元素與包在元素內的子元素們，是否被生成在畫面上。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<p>預設值: <code>inline</code></p>
+<ul>
+<li>block<br>
+生成一個 block 的元素</li>
+<li>inline-block<br>
+生成一個 inline-block 的容器，容器與容器外元素之間是 inline 關係，容器與容器內元素是 block 關係。</li>
+<li>inline<br>
+生成一個 inline 的元素</li>
+<li>list-item<br>
+生成一個 block 元素，並且在開頭會有標記。</li>
+<li>none<br>
+沒有任何元素會在生成，並佔據排版空間。<br>
+容器設定 <code>display: none</code> , 元素設定 <code>display: block</code> 元素還是不會顯示。</li>
+<li>其它 <code>table</code>, <code>inline-table</code>, <code>table-row-group</code>, <code>table-column</code>, <code>table-column-group</code>, <code>table-header-group</code>, <code>table-footer-group</code>, <code>table-row</code>, <code>table-cell</code>, <code>and table-caption</code> 讓元素有 table 的表現形式。欲知詳情可以查看 <a href="https://www.w3.org/TR/CSS22/tables.html" target="_blank" rel="noopener">17 Tables</a> <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
+</ul>
+<h2 id="opacity"><a class="header-anchor" href="#opacity">¶</a>opacity <sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></h2>
+<p><code>opacity</code> 不透明度，可以被認為是最後處理的步驟，在元素被渲染在畫面上後，再將畫面區域的不透明度加上去。</p>
+<p>值: alpha 值(0~1的實數)</p>
+<p>容器設定不透明度，則容器內的元素也會有相同的不透明度。</p>
+<h2 id="整理一下"><a class="header-anchor" href="#整理一下">¶</a>整理一下</h2>
 <table>
 <thead>
 <tr>
-<th>年份</th>
-<th>display</th>
-<th>屬性名稱</th>
+<th>屬性</th>
+<th>佔據空間</th>
+<th>子元素獨立設定</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>2009年以前</td>
-<td><code>display:box;</code></td>
-<td><code>box-{*}</code></td>
+<td><code>display: none</code></td>
+<td>no</td>
+<td>no</td>
 </tr>
 <tr>
-<td>2011年的左右</td>
-<td><code>display:flexbox;</code></td>
-<td><code>flex()</code></td>
+<td><code>visibility: hidden</code></td>
+<td>yes</td>
+<td>yes</td>
 </tr>
 <tr>
-<td>2012-2013年</td>
-<td><code>display:flex</code></td>
-<td><code>flex-{*}</code></td>
+<td><code>opacity: 0</code></td>
+<td>yes</td>
+<td>no</td>
 </tr>
 </tbody>
 </table>
-<p>在繁中的一些早期就有出的書(ex: 《HTML5 完美風暴》)，也可以看得出這些語法的版本改變，講的都是同一件事，就是 flex box<br>
-在現在(2017年底)講的版本，相對穩定許多。(硬要酸一下)</p>
-<p>在 CSS2.1 中，定義了四種排版方式。</p>
-<ol>
-<li>block 排版，為文章排版而設計。</li>
-<li>inline 排版，為文字排版而設計。</li>
-<li>table 排版，為了將資料攤成表格。</li>
-<li>position 排版，為了依位置而不是依內容關係排版而設計</li>
-</ol>
-<p>在此介紹第五種排版方式</p>
-<ol start="5">
-<li>flex 排版，為了複雜排版畫面而設計。</li>
-</ol>
-<h2 id="flex-術語"><a class="header-anchor" href="#flex-術語">¶</a>flex 術語</h2>
-<ul>
-<li><strong>flex container</strong> 使用 <code>flex</code> 或 <code>inline-flex</code> 的容器，內容以 flex formatting context 方式排列。</li>
-<li><strong>flex items</strong> 在 flex container 裡的元素們(整行的元素)</li>
-<li><strong>flex directions</strong> 在 flex container 裡的排列方向</li>
-</ul>
-<h2 id="flex-container"><a class="header-anchor" href="#flex-container">¶</a>flex container</h2>
-<p>在容器使用</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">flex</span>;</span><br><span class="line"><span class="selector-tag">display</span>: <span class="selector-tag">inline-flex</span>;</span><br></pre></td></tr></table></figure>
-<p>容器裡的元素排列會以 <code>flex</code> 的排列方式進行。</p>
-<ul>
-<li>排列方式會像 <code>inline</code> 可以橫向並且一行一行的排列，也像 <code>block</code> 這樣控制每個元素</li>
-<li><code>::first-letter</code> 、 <code>::first-line</code>、<code>float</code> 以及 <code>clear</code> 和 <code>vertical-align</code> 沒有作用。</li>
-<li><code>margin</code> 不會 margins collapsing</li>
-<li><code>margin</code> 和 <code>padding</code> 不要用在元素上，目前未定案</li>
-<li><code>margin: auto</code> 特別規定在 <a href="https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#auto-margins" target="_blank" rel="noopener">8.1. Aligning with auto margins - w3.org</a></li>
-</ul>
-<h2 id="在-flex-容器排元素"><a class="header-anchor" href="#在-flex-容器排元素">¶</a>在 flex 容器排元素</h2>
-<p>理解方式，就像是理解 <code>inline</code> 排版的方式。<br>
-一邊看語法，一邊用 <code>inline</code> 的圖複習一下</p>
-<ul>
-<li><strong>justify</strong> 指的是每一行的頭尾對齊<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> (主軸方向)
-<ul>
-<li><code>justify-content</code> 文章的行頭尾對齊</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://i.imgur.com/oyl3mjs.png" alt=""></p>
-<ul>
-<li><strong>align</strong> 指的是「以行為單位」的對齊(副軸方向)
-<ul>
-<li><code>align-content</code> 行與行副軸空間分配(副軸頭尾對齊)</li>
-<li><code>align-items</code> 整排元素(整行)的對齊(上下調整)</li>
-<li><code>align-self</code> 個別元素的對齊(上下調整)</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://i.imgur.com/boIyUpF.png" alt=""></p>
-<h2 id="flex-flow"><a class="header-anchor" href="#flex-flow">¶</a><code>flex-flow</code></h2>
-<p>縮寫語法</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flex-flow: &lt;flex-direction&gt;  &lt;flex-wrap&gt;</span><br><span class="line">flex-flow: &lt;flex-wrap&gt;</span><br><span class="line">flex-flow: &lt;flex-direction&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="flex-direction"><a class="header-anchor" href="#flex-direction">¶</a><code>flex-direction</code></h3>
-<p>設定在容器</p>
-<p>調整文字排列方向，預設 <code>row</code></p>
-<ul>
-<li><code>col</code> 上→下排
-<ul>
-<li><code>col-reverse</code> 下→上</li>
-</ul>
-</li>
-<li><code>row</code> 左→右排
-<ul>
-<li><code>row-reverse</code> 右→左</li>
-</ul>
-</li>
-</ul>
-<h3 id="flex-wrap"><a class="header-anchor" href="#flex-wrap">¶</a><code>flex-wrap</code></h3>
-<p>設定在容器</p>
-<p>自動換行，預設 <code>nowrap</code></p>
-<ul>
-<li><code>nowrap</code> 可以選擇不換行</li>
-<li><code>wrap</code> 滿了換到下一行</li>
-<li><code>wrap-reverse</code> 滿了換到上一行</li>
-</ul>
-<h2 id="order"><a class="header-anchor" href="#order">¶</a><code>order</code></h2>
-<p>設定在元素</p>
-<p>改變元素順序，預設 0</p>
-<ul>
-<li>正數靠右排</li>
-<li>負數靠左排</li>
-</ul>
-<h2 id="學習管道"><a class="header-anchor" href="#學習管道">¶</a>學習管道</h2>
-<ul>
-<li><a href="https://CSS-tricks.com/snippets/CSS/a-guide-to-flexbox/" target="_blank" rel="noopener">CSS-Tricks flex box</a></li>
-<li><a href="http://flexboxfroggy.com/" target="_blank" rel="noopener">小青蛙練習</a></li>
-</ul>
+<h2 id="從瀏覽器渲染引擎來看"><a class="header-anchor" href="#從瀏覽器渲染引擎來看">¶</a>從瀏覽器渲染引擎來看 <sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></h2>
+<p>先看一下 Webkit(chrome, safari) 的流程圖<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup><br>
+<img src="https://i.imgur.com/Ex41AeZ.png" alt="webkit 的流程圖"></p>
+<p>再看一下 Gecko(firefox) 的流程圖<sup class="footnote-ref"><a href="#fn7" id="fnref7:1">[7:1]</a></sup><br>
+<img src="https://i.imgur.com/LrgHZst.png" alt="gecko 的流程圖"></p>
+<p>在 Gecko 裡的術語在 render tree 的 element 叫 frame。在 webkit 稱 render 或 render object。而每一個 element 都知道它自己的 child element</p>
+<p>webkit 瀏覽器會建立一棵叫 Rendering Tree (渲染樹)的資料結構。讓內容可以依照正確的順序繪製。每一個 element 都代表一個矩形區域，通常是符合 CSS2 的 box 規範。<br>
+在 render tree 階段，每一個 box 的形態，會受到 display 設定的影響。</p>
+<p>看看 webkit 的程式碼。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)</span><br><span class="line">&#123;</span><br><span class="line">    Document* doc = node-&gt;document();</span><br><span class="line">    RenderArena* arena = doc-&gt;renderArena();</span><br><span class="line">    ...</span><br><span class="line">    RenderObject* o = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (style-&gt;display()) &#123;</span><br><span class="line">        <span class="keyword">case</span> NONE:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderInline(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE_BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> LIST_ITEM:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderListItem(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以 <code>display: none</code> 不會把 DOM tree 的元素放到 render tree 上，但是 <code>visibility: hidden</code> 會放到 render tree。所以 DOM tree 和 render tree 並非完全有對應關係。</p>
+<p><img src="https://i.imgur.com/FjcIu6q.png" alt=""></p>
+<p>上圖所示，HTML 中的 head 就是設定 <code>display: none</code> 。</p>
+<p>畫面渲染結束，才會使用 <code>opacity</code> 設定畫面不透明度。</p>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://helpx.adobe.com/indesign/using/aligning-text.html" target="_blank" rel="noopener"> Align or justify text - InDesign User Guide</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/visufx.html#visibility" target="_blank" rel="noopener">11.2 Visibility: the ‘visibility’ property - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/tables.html#dynamic-effects" target="_blank" rel="noopener">17.5.5 Dynamic row and column effects - w3.org</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/visuren.html#display-prop" target="_blank" rel="noopener">9.2.4 The ‘display’ property - w3.org</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS22/tables.html" target="_blank" rel="noopener">17 Tables - w3.org</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://www.w3.org/TR/CSS-color-3/#opacity" target="_blank" rel="noopener">3.2. Transparency: the ‘opacity’ property - w3.org</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a href="http://taligarsiel.com/Projects/howbrowserswork1.htm#Render_tree_construction" target="_blank" rel="noopener">Render tree construction</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><a href="https://ithelp.ithome.com.tw/articles/10191579" target="_blank" rel="noopener">深入探討瀏覽器引擎如何進行解析</a> <a href="#fnref7" class="footnote-backref">↩︎</a> <a href="#fnref7:1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -263,15 +234,23 @@
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/CSS/">CSS</a> }
-  </li>
-
-  <li class="meta-text">
   { <a href="/tags/2018鐵人賽/">2018鐵人賽</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/Flex/">Flex</a> }
+  { <a href="/tags/display/">display</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/visibility/">visibility</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/opacity/">opacity</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Render-tree/">Render tree</a> }
   </li>
 
 
@@ -301,7 +280,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 23.27px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.18px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 23.27px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 20.18px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.09px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.09px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>

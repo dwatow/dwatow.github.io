@@ -104,70 +104,74 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/06-29-for-designer/about-mobile-resolution/">http://dwatow.github.io/2017/06-29-for-designer/about-mobile-resolution/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/08-28-vuejs/vue-computed-watch/">http://dwatow.github.io/2017/08-28-vuejs/vue-computed-watch/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>如何取得手機版面的設計解析度</h1>
+        <h1>vue的computed和watch比較</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#給平面設計師的-如何取得手機版面的設計解析度"><span class="toc-text">給平面設計師的: 如何取得手機版面的設計解析度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用前端的-手機模擬器"><span class="toc-text">使用前端的「手機模擬器」</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#手機官網"><span class="toc-text">手機官網</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chrome模擬器"><span class="toc-text">Chrome模擬器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#渲染解析度-物理解析度"><span class="toc-text">渲染解析度、物理解析度[1]</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-的-computed-和-watch-比較"><span class="toc-text">vue 的 computed 和 watch 比較</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#語法差異"><span class="toc-text">語法差異</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#語意上的差異"><span class="toc-text">語意上的差異</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="給平面設計師的-如何取得手機版面的設計解析度"><a class="header-anchor" href="#給平面設計師的-如何取得手機版面的設計解析度">¶</a>給平面設計師的: 如何取得手機版面的設計解析度</h1>
-<p><img src="https://i.imgur.com/UvHo0gv.png" alt=""></p>
-<p>在一般的情況，同一個型的手機可以得到兩種顯示規格。<br>
-下面來介紹一下兩種規格取得的方式以及它們的差異。</p>
-<h2 id="使用前端的-手機模擬器"><a class="header-anchor" href="#使用前端的-手機模擬器">¶</a>使用前端的「手機模擬器」</h2>
-<p>由於手機的螢幕解析度有Retina，它是一種針對文字可以精細化。<br>
-但是這樣的規格並不適合用在網頁設計，字會太小。</p>
-<h3 id="手機官網"><a class="header-anchor" href="#手機官網">¶</a>手機官網</h3>
-<p><img src="https://i.imgur.com/UddGE6H.png" alt=""></p>
-<h3 id="chrome模擬器"><a class="header-anchor" href="#chrome模擬器">¶</a>Chrome模擬器</h3>
-<ol>
-<li>開啟瀏覽器</li>
-<li>打開「開發者模式」(滑鼠右鍵: 選「檢查」)</li>
-<li><a href="https://developers.google.com/web/tools/chrome-devtools/device-mode/" target="_blank" rel="noopener">啟動「手機模擬器」</a></li>
-<li><a href="https://developers.google.com/web/tools/chrome-devtools/device-mode/emulate-mobile-viewports" target="_blank" rel="noopener">找出你要模擬的手機型號</a></li>
-<li>即可在旁邊看見它的解析度</li>
-</ol>
-<p><img src="https://i.imgur.com/PVP60Wv.png" alt=""></p>
-<div class="info">
-<p>官網規格 iPhone6: 1334×750<br>
-Chrome模擬器規格 iPhone6: 667×375 <sub>(為了方便和官方技術規格對照，長邊放前面)</sub></p>
-</div>
-<h2 id="渲染解析度-物理解析度"><a class="header-anchor" href="#渲染解析度-物理解析度">¶</a>渲染解析度、物理解析度<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+    <h1 id="vue-的-computed-和-watch-比較"><a class="header-anchor" href="#vue-的-computed-和-watch-比較">¶</a>vue 的 computed 和 watch 比較</h1>
+<p>最近在學<a href="https://github.com/dwatow/vueExercise" target="_blank" rel="noopener">vue</a>，學到了<code>watch</code>和<code>computed</code>時，發現它們兩個極像又很難區分。</p>
+<p>今天早上騎車時，想到了它們之間的差別了！就趕快來記錄下來。</p>
+<h2 id="語法差異"><a class="header-anchor" href="#語法差異">¶</a>語法差異</h2>
+<p>在此也順便的比較了<code>data</code>和<code>methods</code>。<br>
+而<code>watch</code>在語法上的特性是可以和<code>data</code>同名，我自己理解成是掛在<code>data</code>的<code>onchange</code>事件上的<code>function</code>。</p>
+<table>
+<thead>
+<tr>
+<th>觸發方式</th>
+<th>呼叫方式</th>
+<th>必須和變數同名?</th>
+<th>呼叫</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td>「變數」被賦值，渲染 view</td>
+<td>o</td>
+<td><code>vue.value</code></td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td>「同名的變數」被賦值就執行</td>
+<td>o</td>
+<td><code>vue.value</code></td>
+</tr>
+<tr>
+<td><code>computed</code></td>
+<td>「取用的變數」被賦值就執行</td>
+<td>x</td>
+<td><code>vue.xValue</code></td>
+</tr>
+<tr>
+<td><code>methods</code></td>
+<td>被呼叫就執行</td>
+<td>x</td>
+<td><code>vue.value()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="語意上的差異"><a class="header-anchor" href="#語意上的差異">¶</a>語意上的差異</h2>
+<p>在使用上，<code>vue</code>是一種接 api 資料之後，再將接到的資料，填入<code>html</code>的內容。<br>
+所以!!!先被決定的是接到的「資料欄位」，也就是<code>data</code>。</p>
+<ul>
+<li>watch 使用時機<br>
+改變<code>data</code>時，要非同步執行的函數。<br>
+運算負擔很大時的函數</li>
+<li>computed 使用時機<br>
+一種寫<code>get</code>、<code>set</code>的設計。</li>
+</ul>
 <blockquote>
-<p>渲染: 網頁呈現過程的一種瀏覽器處理方式</p>
+<p>以上是不負責任的…新手小小心得。</p>
 </blockquote>
-<p>渲染解析度是為了讓小螢幕上保持內容可讀性而設計的。讓使用者在小螢幕，高解析的情況之下，也可以看得見文字的清析度。</p>
-<p>但是這和平設計師無關呀！這是工程師的事！<br>
-對！這是瀏覽器開發和手機開發工程師的事，也不是前端工程師的事。</p>
-<p>我們只是在他們開發出來的基礎上進行創作行為。<br>
-所以和平面設計師、前端工程師有關的是「要用什麼解析度開規格」!!</p>
-<p>要使用渲染解析度</p>
-<blockquote>
-<p>以iPhone6為例<br>
-官網規格是物理解析度: 1334×750<br>
-Chrome模擬器規格是渲染解析度: 667×375</p>
-</blockquote>
-<p>可以將「物理解析度」除以「渲染解析度」即可得到畫面的渲染原則</p>
-<blockquote>
-<p>以iPhone6為例<br>
-寬度: 1334 ÷ 667 = 2<br>
-高度: 750 ÷ 375 = 2<br>
-所以瀏覽器以四個pixel圍成的正方形當作一個pixel給顯示訊號。</p>
-</blockquote>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="http://liumh.com/2015/10/21/ios-image-related-matching/" target="_blank" rel="noopener">浅谈iOS屏幕适配</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
 
     
     </section>
@@ -181,7 +185,7 @@ Chrome模擬器規格是渲染解析度: 667×375</p>
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/團隊溝通技巧/">團隊溝通技巧</a> }
+  { <a href="/tags/vuejs/">vuejs</a> }
   </li>
 
 
@@ -211,7 +215,7 @@ Chrome模擬器規格是渲染解析度: 667×375</p>
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 17.09px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 23.27px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 14px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.91px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.18px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 23.27px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 20.18px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.82px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.09px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.09px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 38.73px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a>
 
 
                 <footer>
