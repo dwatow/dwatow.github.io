@@ -113,7 +113,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端的-file-api"><span class="toc-text">前端的 File API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#從-filelist-取得-file"><span class="toc-text">從 FileList 取得 File</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#從-file-下載"><span class="toc-text">從 File 下載</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-image"><span class="toc-text">File to Image</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#image-to-canvas"><span class="toc-text">Image to Canvas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#canvas-as-base64"><span class="toc-text">Canvas as Base64</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-base64"><span class="toc-text">File to Base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-text"><span class="toc-text">File to text</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-binary"><span class="toc-text">File to binary</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端的-file-api"><span class="toc-text">前端的 File API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#從-filelist-取得-file"><span class="toc-text">從 FileList 取得 File</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#從-file-下載"><span class="toc-text">從 File 下載</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-image"><span class="toc-text">File to Image</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#image-to-canvas"><span class="toc-text">Image to Canvas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#canvas-as-base64"><span class="toc-text">Canvas as Base64</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-base64"><span class="toc-text">File to Base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-text"><span class="toc-text">File to text</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-to-binary"><span class="toc-text">File to binary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最後"><span class="toc-text">最後</span></a></li></ol></li></ol>
   </div>
 
 
@@ -134,11 +134,23 @@
 <p>因為偽元素是用來修飾容器中的內容的頭尾，若 HTML tag 本身就是內容，就沒有「內容的頭尾」這件事。自然也就不會有偽元素。<br>
 所以這些 HTML tag 都會自我結尾。</p>
 <p><strong>前端 File API</strong></p>
-<p>有幾個要先知道的</p>
+<p>有幾個要先知道的<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <ul>
 <li>File &amp; Blob: File 是一個有名字的 Blob</li>
 <li>FileList: 以 File 為元素的 List，但它並不是 Array</li>
-<li>FileReader: 用來讀取 File 的內容</li>
+<li>FileReader: 用來讀取 File 的內容
+<ul>
+<li>分成同步和非同步，2 種方式</li>
+<li>可將檔案轉成四種資料
+<ol>
+<li>文字</li>
+<li>二進制陣列 (建議)</li>
+<li>二進制字串 (不建議)</li>
+<li>Data URL (blob url)</li>
+</ol>
+</li>
+</ul>
+</li>
 <li>URL: 用來將 File 使用在其它的 Web 環境中 (包含 DOM tree)</li>
 </ul>
 <h2 id="從-filelist-取得-file"><a class="header-anchor" href="#從-filelist-取得-file">¶</a>從 FileList 取得 File</h2>
@@ -192,10 +204,10 @@
 <h3 id="canvas-as-base64"><a class="header-anchor" href="#canvas-as-base64">¶</a>Canvas as Base64</h3>
 <p><button id="showBase64Button" type="button" name="button">canvas to base64</button><br>
 <textarea id="base64" name="name" rows="8" cols="80"></textarea></p>
-<p><code>canvas.toDataURL()</code> 的輸出是一個至少還有 “data:” 的 <code>DataURL</code><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p><code>canvas.toDataURL()</code> 的輸出是一個至少還有 “data:” 的 <code>DataURL</code><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <blockquote>
 <p>DataURL 依照 MIME type 判斷輸出方式<br>
-如果是文字，就會輸出文字，不然就會給 Base64<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+如果是文字，就會輸出文字，不然就會給 Base64<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 </blockquote>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">"base64"</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">rows</span>=<span class="string">"8"</span> <span class="attr">cols</span>=<span class="string">"80"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.querySelector(<span class="string">'#canvas'</span>); <span class="comment">// 要先有 &lt;canvas /&gt;</span></span><br><span class="line"><span class="comment">// const ctx = canvas.getContext('2d');</span></span><br><span class="line"><span class="comment">// ctx.drawImage(img, 0, 0, img.width, img.height);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> base64 = <span class="built_in">document</span>.querySelector(<span class="string">'#base64'</span>);</span><br><span class="line">base64.value = canvas.toDataURL(<span class="string">'image/jpeg'</span>)</span><br></pre></td></tr></table></figure>
@@ -223,10 +235,12 @@
 <ol>
 <li>宣告 FileReader 物件</li>
 <li>設定 onload 事件，用 <code>e.target.result</code> 取得內容</li>
-<li>圖形檔案的資料是 0~255 (8 bit 的大小)，所以用 <code>new Uint8Array</code> 將內容丟進去建構。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></li>
+<li>圖形檔案的資料是 0~255 (8 bit 的大小)，所以用 <code>new Uint8Array</code> 將內容丟進去建構。<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
 <li>取得 File 物件的 Blob url</li>
 <li>將 Blob url 放進 FileReader 物件的 <code>readAsArrayBuffer</code> method</li>
 </ol>
+<h2 id="最後"><a class="header-anchor" href="#最後">¶</a>最後</h2>
+<p>程式碼會同步在 github 更新<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
 <script src="https://dwatow.github.io/web-file-api/public/uploadFile.js" charset="utf-8"></script>
 <script src="https://dwatow.github.io/web-file-api/public/text.js" charset="utf-8"></script>
 <script src="https://dwatow.github.io/web-file-api/public/image.js" charset="utf-8"></script>
@@ -238,11 +252,15 @@
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL#Return_value" target="_blank" rel="noopener">HTMLCanvas​Element​.toDataURL() - MDN</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/FileAPI/" target="_blank" rel="noopener">File API - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs" target="_blank" rel="noopener">Data URLs - MDN</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL#Return_value" target="_blank" rel="noopener">HTMLCanvas​Element​.toDataURL() - MDN</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B" target="_blank" rel="noopener">Typed_arrays</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs" target="_blank" rel="noopener">Data URLs - MDN</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B" target="_blank" rel="noopener">Typed_arrays</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://dwatow.github.io/web-file-api/">File API Exercise</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
