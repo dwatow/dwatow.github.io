@@ -251,7 +251,9 @@ reader.readAsArrayBuffer(blobUrl);
   [Typed_arrays](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B)
 
 [^w3.org-file-api]: [File API - w3.org](https://www.w3.org/TR/FileAPI/)
-[^web-file-api]: [File API Exercise](https://dwatow.github.io/web-file-api/)
+[^web-file-api]:
+
+  [File API Exercise](https://www.github.com/dwatow/web-file-api/)
 
 <script src="https://dwatow.github.io/web-file-api/public/uploadFile.js" charset="utf-8"></script>
 <script src="https://dwatow.github.io/web-file-api/public/text.js" charset="utf-8"></script>
