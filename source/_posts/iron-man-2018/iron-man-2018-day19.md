@@ -53,7 +53,7 @@ flex 可以搭配 `min-width` 和 `min-height` 改變壓縮時的幅度。
 
 定義 flex grow factor 伸延因數
 
-- 預設值: 1
+- 預設值: 0
 - 值: 負數無效
 
 當容器的「分配空間」是**正數**時，就使用 `flex-grow`
