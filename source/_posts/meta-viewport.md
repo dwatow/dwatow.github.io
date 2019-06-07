@@ -63,6 +63,4 @@ initial-scale = visual viewport / layout viewport
 **若兩個都不設定**
 `scale` 最後的值也許會變成瀏覽器用預設值算出來的結果
 
-[^ref1]:
-
-  [消除 viewport 的疑惑-移動網頁開發](https://www.zybuluo.com/gongzhen/note/170557)
+[^ref1]: [消除 viewport 的疑惑-移動網頁開發](https://www.zybuluo.com/gongzhen/note/170557)

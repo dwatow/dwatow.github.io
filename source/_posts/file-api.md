@@ -155,13 +155,11 @@ ctx.drawImage(img, 0, 0, img.width, img.height); // 重新繪製大小
 > DataURL 依照 MIME type 判斷輸出方式
 > 如果是文字，就會輸出文字，不然就會給 Base64[^data-urls]
 
-[^data-urls]:
+<!-- prettier-ignore-start -->
+[^data-urls]: [Data URLs - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
 
-  [Data URLs - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)
-
-[^canvas-todataurl-return]:
-
-  [HTMLCanvas​Element​.toDataURL() - MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL#Return_value)
+[^canvas-todataurl-return]: [HTMLCanvas​Element​.toDataURL() - MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL#Return_value)
+<!-- prettier-ignore-end -->
 
 ```html
 <textarea id="base64" name="name" rows="8" cols="80"></textarea>
@@ -246,14 +244,12 @@ reader.readAsArrayBuffer(blobUrl);
 
 程式碼會同步在 github 更新[^web-file-api]
 
-[^typed_arrays]:
 
-  [Typed_arrays](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B)
-
+<!-- prettier-ignore-start -->
+[^typed_arrays]: [Typed_arrays](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B)
 [^w3.org-file-api]: [File API - w3.org](https://www.w3.org/TR/FileAPI/)
-[^web-file-api]:
-
-  [File API Exercise](https://www.github.com/dwatow/web-file-api/)
+[^web-file-api]: [File API Exercise](https://www.github.com/dwatow/web-file-api/)
+<!-- prettier-ignore-end -->
 
 <script src="https://dwatow.github.io/web-file-api/public/uploadFile.js" charset="utf-8"></script>
 <script src="https://dwatow.github.io/web-file-api/public/text.js" charset="utf-8"></script>

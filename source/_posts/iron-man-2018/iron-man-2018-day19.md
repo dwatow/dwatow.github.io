@@ -107,5 +107,5 @@ flex item 都使用 `flex` 處理剩餘空間了，就不應該又使用 `margin
 
 # 參考資料
 
-[^1]: [ 7.1. The flex Shorthand - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#flex-property)
-[^2]: [ 8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#auto-margins)
+[^1]: [7.1. The flex Shorthand - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#flex-property)
+[^2]: [8.1. Aligning with auto margins - w3.org](https://www.w3.org/TR/2017/CR-CSS-flexbox-1-20171019/#auto-margins)

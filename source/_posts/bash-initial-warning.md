@@ -35,6 +35,6 @@ brew upgrade gawk
 竟然就好了。
 提供給遇到相同的問題的人參考
 
-[^brewgawk]:
-
-  [mac Referenced from: /usr/local/bin/awk 問題](https://blog.csdn.net/qq_22833925/article/details/78871364)
+<!-- prettier-ignore-start -->
+[^brewgawk]: [mac Referenced from: /usr/local/bin/awk 問題](https://blog.csdn.net/qq_22833925/article/details/78871364)
+<!-- prettier-ignore-end -->

@@ -134,9 +134,10 @@ SSL 服務網站會提供給你一個檔案、內容
 
 ## 設定 CRT 和 Private key[^nginx-config-crt]
 
-[^nginx-config-crt]:
+<!-- prettier-ignore-start -->
+[^nginx-config-crt]: [Nginx 如何配置證書？](https://blog.freessl.cn/how-to-install-cert-in-nginx/)
+<!-- prettier-ignore-end -->
 
-  [Nginx 如何配置證書？](https://blog.freessl.cn/how-to-install-cert-in-nginx/)
 
 ```
 example.com.crt
