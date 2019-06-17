@@ -13,6 +13,11 @@ categories: "技術練習"
   button {
     display: block;
   }
+
+  [id^=graphviz] {
+    width: 100%;
+    overflow: auto;
+  }
 </style>
 
 # 前端的 File API
@@ -41,6 +46,65 @@ categories: "技術練習"
     3. 二進制字串 (不建議)
     4. Data URL (blob url)
 - URL: 用來將 File 使用在其它的 Web 環境中 (包含 DOM tree)
+
+## 地圖
+
+(圖有點大，左右可滑動)
+
+```graphviz
+digraph {
+
+httpUrl [label="HTTP URL" shape=box]
+xhr [label="ajax"]
+
+inputFile [label="HTML input\n(type='file')" shape=box]
+files [label="FileList" color=darkorange]
+
+reader [label="FileReader" color=darkorange]
+Text [label="Text Data" shape=box]
+dataURI [label="DataURL\n(Base64)"]
+binaryString
+TypeArray [label="Type Array\n(ArrayBuffer)"]
+
+img [label="Image"]
+file [label="File\/Blob" color=darkorange]
+
+download [label="Download File" shape=box]
+blobUrl [label="Blob URL" color=darkorange]
+
+{rank=same;blobUrl reader}
+{rank=same;download Text}
+
+httpUrl->img [label="&lt;img src=http url /&gt;"]
+httpUrl->xhr->file [label="load: callback"]
+
+inputFile->files [label="files = input.files\n"]
+files->file [label="file = files.item(0)"]
+file->blobUrl [label="URL.createObjectURL(file)"]
+file->reader [label="reader.readAsArrayBuffer(blob)\nreader.readAsText(blob, 'UTF-8')\nreader.readAsDataURL(blob)"]
+
+img->canvas [label="ctx.drawImage(img)" color=Red]
+
+dataURI->img [label="&lt;img src='dataURI'&gt;"]
+dataURI->binaryString [label="字串處理"]
+binaryString->TypeArray [label="new Uint8Array(size)\neveryChar.charCodeAt(index)"]
+
+canvas [label="HTML Canvas"]
+canvas->dataURI [label="canvas.getDataURL()" color=Red]
+canvas->TypeArray [label="ctx.getImageData().data\n( Uint8ClampedArray)" color=Red]
+
+blobUrl->img [label="&lt;img src='blob url'&gt;"]
+blobUrl->download [label="&lt;a href='blob url'\n download='file name'/&gt;"]
+
+reader->Text [label="load: callback" color=Blue]
+reader->TypeArray [label="(readAsArrayBuffer)" color=Blue]
+reader->binaryString [label="不建議" color=Blue]
+reader->dataURI [label="load: callback" color=Blue]
+
+TypeArray->file [label="new Blob([uint8array], {type})"]
+TypeArray->dataURI [label="btoa(\nString.fromCharCode.apply(null, typeArray)\n)"]
+}
+```
 
 ## 從 FileList 取得 File
 
