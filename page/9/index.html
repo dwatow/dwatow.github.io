@@ -104,16 +104,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-26-iron-man-2018/iron-man-2018-day16/">http://dwatow.github.io/2017/12-26-iron-man-2018/iron-man-2018-day16/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/12-27-iron-man-2018/iron-man-2018-day17/">http://dwatow.github.io/2017/12-27-iron-man-2018/iron-man-2018-day17/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>前端新手村 CSS Cascade 串接</h1>
+        <h1>前端新手村 Position 定位</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#css-cascade"><span class="toc-text">CSS Cascade[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#specificity"><span class="toc-text">Specificity[2]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定義-specificity"><span class="toc-text">定義 Specificity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#計算-specificity"><span class="toc-text">計算 Specificity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rulest-order"><span class="toc-text">Rulest order</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定義-rulest-order"><span class="toc-text">定義 Rulest order</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#position-定位"><span class="toc-text">Position 定位</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static-無定位"><span class="toc-text">Static 無定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#relative-相對定位"><span class="toc-text">Relative 相對定位[4]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#absolute-絕對定位"><span class="toc-text">Absolute 絕對定位[4:1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fixed-可視區的絕對定位"><span class="toc-text">Fixed 可視區的絕對定位[4:2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sticky-滾動黏滯定位"><span class="toc-text">Sticky 滾動黏滯定位[4:3]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常見用法"><span class="toc-text">常見用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#圖層"><span class="toc-text">圖層</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#參考資料"><span class="toc-text">參考資料</span></a>
   </li></div>
 
 
@@ -123,83 +123,130 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="css-cascade"><a class="header-anchor" href="#css-cascade">¶</a>CSS Cascade<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h1>
-<p>Cascade 中文翻譯成「串接」。</p>
-<p>Cascade 動作是由 Specificity 和 Ruleset order 作用，決定要套用的 CSS。</p>
-<h2 id="specificity"><a class="header-anchor" href="#specificity">¶</a>Specificity<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
-<p>Specificity 在中文翻譯成「特定度」。</p>
-<p>千言萬語，透過<a href="http://CSSspecificity.com/" target="_blank" rel="noopener">一個頁面</a>可以說盡。<br>
-看不懂沒關係，只要繼續看下去。</p>
-<h3 id="定義-specificity"><a class="header-anchor" href="#定義-specificity">¶</a>定義 Specificity</h3>
-<p>首先，我們想知道 specificity 是多少，要計算 <code>a</code>, <code>b</code>, <code>c</code>, <code>d</code> 四個數字<br>
-所以，目的在搞懂這四個數字怎麼計算，就可以掌握 specificity</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(a, b, c, d)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>a
-<ul>
-<li><code>style</code>，直接寫在 HTML element 的 <code>style</code> attribute，a = 1</li>
-</ul>
-</li>
-<li>b
-<ul>
-<li>b = 出現 <code>id</code> 選取器的次數</li>
-</ul>
-</li>
-<li>c
-<ul>
-<li>c = 出現 <code>class</code> 類別選取器的次數</li>
-<li>c = 出現 <code>[attribute=value]</code> 屬性選取器的次數</li>
-<li>c = 出現 <code>:pseudoclasses</code> 偽類選取器的次數</li>
-</ul>
-</li>
-<li>d
-<ul>
-<li>d = 出現 <code>:sudoelements</code> 偽元素選取器的次數</li>
-<li>d = 出現 <code>tagname</code> 類型(HTML標籤)選取器的次數</li>
-</ul>
-</li>
-</ul>
-<h3 id="計算-specificity"><a class="header-anchor" href="#計算-specificity">¶</a>計算 Specificity</h3>
+<h1 id="position-定位"><a class="header-anchor" href="#position-定位">¶</a><code>Position</code> 定位</h1>
+<p>呼！花了五天介紹 CSS 的 Selector!!介紹完 Selector 之後，來介紹常用的 <code>position</code> 吧！</p>
+<p>在 CSS 中，有三種可控制的方式，放置 box <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <ol>
-<li>a, b, c, d 彼此不換算。(很重要)</li>
-<li>a, b, c, d 各別只會相加</li>
-<li>結果是四個數字</li>
-<li>特例
-<ol>
-<li>value後面加 <code>!important</code> 直接在 a 前的第五位 +1</li>
-<li><code>*</code> 選取器，不佔任何分數 +0</li>
+<li>Normal flow 自然排列<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
+<li><code>float</code> 排列<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></li>
+<li><code>position</code> 定位</li>
 </ol>
-</li>
-</ol>
-<p>看個例子</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> <span class="comment">/* 0, 1, 1, 3 */</span></span><br></pre></td></tr></table></figure>
+<p>語法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">position: 定位方法</span><br><span class="line">top: 數字</span><br><span class="line">bottom: 數字</span><br><span class="line">left: 數字</span><br><span class="line">right: 數字</span><br></pre></td></tr></table></figure>
 <ul>
-<li>a = 0: 沒有寫在 HTML 的 <code>style</code></li>
-<li>b = 1: <code>#nav-blobal</code></li>
-<li>c = 1: <code>.nav-link</code></li>
-<li>d = 3: <code>ul</code>, <code>li</code>, <code>a</code></li>
+<li>上下左右的設定用得上再使用</li>
+<li>定位並不會造成單位變化，所以可以這樣換算 <code>left</code> = -<code>right</code>, <code>top</code> = -<code>bottom</code></li>
 </ul>
-<h2 id="rulest-order"><a class="header-anchor" href="#rulest-order">¶</a>Rulest order</h2>
-<p>Rulest order 翻譯成 規則集順序。</p>
-<p>千言萬語，只要開「開發者模式」就可以看結果。</p>
-<p><img src="https://i.imgur.com/EcCbRuB.png" alt=""></p>
-<p>以結果來說圖中的 <code>margin-top</code>被覆寫。</p>
-<h3 id="定義-rulest-order"><a class="header-anchor" href="#定義-rulest-order">¶</a>定義 Rulest order</h3>
-<p>若出現兩個 Specificity 強度相同的 Ruleset ，晚宣告有較高的優先權。</p>
+<h2 id="static-無定位"><a class="header-anchor" href="#static-無定位">¶</a>Static 無定位</h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<ul>
+<li><code>position: staic</code> 是每個 HTML element 的預設值。</li>
+<li><code>position</code> 設定成這個值時, <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code> 將不會有任何作用。</li>
+</ul>
+<h2 id="relative-相對定位"><a class="header-anchor" href="#relative-相對定位">¶</a>Relative 相對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<p>假設有個叫 box 的HTML element 設定 <code>position: relative</code>  會有什麼影響</p>
+<ul>
+<li>在 normal flow 佔有的空間，依然佔有。</li>
+<li>不會影響其它 normal flow 的 HTML Element</li>
+<li>偏移量是相對於在 normal flow 的位置</li>
+<li>會導致元素重疊</li>
+<li>在 table 有些跨欄偏移的應用 (有明確的定義，不過在此不細講)</li>
+</ul>
+<h2 id="absolute-絕對定位"><a class="header-anchor" href="#absolute-絕對定位">¶</a>Absolute 絕對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:1">[4:1]</a></sup></h2>
+<p>原本畫面上的 box 會依照 Normal flow 排列。</p>
+<p>假設有個叫 box 的HTML element 設定 <code>position: absolute</code> 會有什麼影響</p>
+<ul>
+<li>跳脫 normal flow 排列規則，不佔有任何空間。</li>
+<li>不會影響其它 normal flow 的 HTML Element</li>
+<li>偏移量是相對於有「非 <code>position: static</code> 」的位置</li>
+<li>box 以內有 normal flow 和 <code>position: absolute</code> 的都與 box 相關</li>
+<li>會導致元素重疊</li>
+</ul>
+<h2 id="fixed-可視區的絕對定位"><a class="header-anchor" href="#fixed-可視區的絕對定位">¶</a>Fixed 可視區的絕對定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:2">[4:2]</a></sup></h2>
+<p>可視區的絕對定位，唸起來很呦口。我也不知道怎麼翻才好。</p>
+<p>這是一種類似絕對定位的定位方式。唯一的區別在於偏移量參考點</p>
+<ul>
+<li>absolute 參考容器(的容器)中，使用「非 static 定位」的容器</li>
+<li>偏移量是相對於可視區 (viewport)</li>
+<li>每個可視區都會重複 fixed 定位的內容</li>
+</ul>
+<p>在內容捲動時，被 <code>fixed</code> 的元素會固定不移動。類似固定背景的效果</p>
 <blockquote>
-<p>是要改套件樣式，要掌握這個訣竅</p>
+<p>有 Media Query 時，有用到 paged 類型，要注意重複的情況。<br>
+每個頁面固定放置簽名，是個很有效的做法。</p>
 </blockquote>
-<p>看個例子</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-id">#nav-global</span> &gt; <span class="selector-tag">ul</span> &gt; <span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-class">.nav-link</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最後的字型顏色，是紅色的。</p>
+<h2 id="sticky-滾動黏滯定位"><a class="header-anchor" href="#sticky-滾動黏滯定位">¶</a>Sticky 滾動黏滯定位<sup class="footnote-ref"><a href="#fn4" id="fnref4:3">[4:3]</a></sup></h2>
+<p>在介紹 sticky 之前，先說說一個實例</p>
+<p>在此這個頁面，在內容向上捲動時，希望 menu 離開頁面時，會固定在最上面，一直到 menu 上面的部份再出現時，menu 再跟著頁面往下捲動。(如下圖)</p>
+<p><img src="https://i.imgur.com/r99VCN2.gif" alt=""></p>
+<p>但是<br>
+理想與現實之間<br>
+是有的差距的(如下圖)!!!</p>
+<p>常見的實作bug，有「內容跳動」的情況。<br>
+當 menu 要變成 <code>fixed</code> 時，由於從佔 normal flow 空間改成不佔空間的定位方式。跳動的現象，就是後面的元素因為 normal flow 的排列往前排造成的。</p>
+<p><img src="https://i.imgur.com/LM7iO1b.gif" alt=""></p>
+<p><strong>過去的做法</strong></p>
+<p>用 JavaScript 加上/移除 CSS 的方式。<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line"> <span class="attribute">--menu-height</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.fixMenu</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: fixed;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.fixMenu</span> + * &#123;</span><br><span class="line">    <span class="attribute">padding-top</span>: <span class="built_in">var</span>(--menu-height)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>用純 CSS 的做法</strong></p>
+<p>只需要將 menu 加上這個 CSS，它就會在可視區 <code>top: 0</code> 和 <code>left: 0</code> 的範圍內，隨內容滾動，在範圍以外，固定在邊界。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.stickyMenu</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: sticky;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看似很符合需求，<code>sticky</code> 卻不只是可以這樣。</p>
+<blockquote>
+<p>名詞解釋: sticky-constraint rectangle<br>
+容器或 viewport，裡面的<code>div</code>之類的區塊中，其中一個包含著設定 <code>position: sticky</code> 的元素。</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-constraintrectangle"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-element"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>sticky</code> 是一種類似 <code>relative</code> 的定位方式，偏移量是參考有 scroll 的容器或者是 可視區 (viewport)。</p>
+<ul>
+<li>保留原有 normal flow 所佔用的空間</li>
+<li><code>sticky</code> 元素的活動範圍界於 sticky-constraint rectangle 四邊裡面與容器四邊裡面，若之間的空間小於<code>sticky</code> 元素，則<code>sticky</code> 元素被捲出容器四邊</li>
+<li>偏移量，捲動到離各邊多少，單位使用百分比，其 100% 是該方向容器的尺寸</li>
+<li>element 滾到上下邊界時， margin 會 margins collapse</li>
+</ul>
+<p><strong>千言萬語，先看例子就知道</strong></p>
+<ol>
+<li><code>sticky</code> 定位效果與捲動容器邊界之間的關係。</li>
+<li><code>sticky</code> 定位效果與自身容器(sticky-constraint rectangle)之間的關係。</li>
+<li>上述兩點裡的容器，影響優先權如何</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line"> Lorem Ipsum</span><br><span class="line">"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-constraintrectangle"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"sticky-element"</span>&gt;</span>"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, vehicula nulla non, luctus mauris. Etiam venenatis massa vitae eros vestibulum, elementum feugiat lectus rhoncus. Integer tincidunt justo id laoreet facilisis. Praesent tristique malesuada ipsum, id tincidunt felis mattis eu. Aliquam interdum id tortor nec varius. Etiam hendrerit, dolor nec luctus rhoncus, magna magna sagittis sem, a faucibus ex erat sed metus. Praesent pretium lacinia nisl nec elementum. Morbi varius finibus turpis ac facilisis.</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.sticky-element</span> &#123;</span><br><span class="line"> <span class="attribute">position</span>: sticky;</span><br><span class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.sticky-constraintrectangle</span> &#123;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line"> <span class="attribute">overflow</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常見用法"><a class="header-anchor" href="#常見用法">¶</a>常見用法</h2>
+<p>例子1: 容器設 <code>relative</code> 給後代元素做 <code>absolute</code> 的偏移參考</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!--   很多的 box    --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.container</span> <span class="selector-class">.box</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例子2: box 置中<br>
+新手常遇到的問題，是置中很難處理。<br>
+其實絕對定位可以完美的將 box 置中</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"centerbox"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">* &#123;</span><br><span class="line"> <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line"> <span class="attribute">width</span>: <span class="number">100vw</span>;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">100vh</span>;</span><br><span class="line"> <span class="attribute">outline</span>: <span class="number">1px</span> solid;</span><br><span class="line"></span><br><span class="line"> <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.centerbox</span> &#123;</span><br><span class="line"> <span class="attribute">position</span>: absolute;</span><br><span class="line"> <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line"> <span class="attribute">margin</span>: auto;</span><br><span class="line"></span><br><span class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line"> <span class="attribute">background-color</span>: <span class="number">#f00</span>;</span><br><span class="line"> <span class="attribute">border</span>: <span class="number">1px</span> solid red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因為 <code>fixed</code> 和 <code>absolute</code> 要符上這個公式<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos;left&apos; + &apos;margin-left&apos; + &apos;border-left-width&apos; + &apos;padding-left&apos; + &apos;width&apos; + &apos;padding-right&apos; + &apos;border-right-width&apos; + &apos;margin-right&apos; + &apos;right&apos; = width of containing block</span><br></pre></td></tr></table></figure>
+<h2 id="圖層"><a class="header-anchor" href="#圖層">¶</a>圖層</h2>
+<p>由於 <code>position</code> 會造成 HTML element 互疊，甚至是內容遮蔽，所以在此必須使用 <code>z-index</code> 調整前景與背景的關係。</p>
+<p>在未使用 <code>z-index</code> 時，HTML element 的層級順序，同層是由 html 檔排列順序(由上而下)，下面的 html 會渲染在前景。</p>
+<p><strong>看個例子</strong></p>
+<p><img src="https://i.imgur.com/ehFFhTz.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"blue"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"gray"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"green"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"red"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"orange"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line"> <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line"> <span class="attribute">border</span>: solid;</span><br><span class="line"> <span class="attribute">position</span>: absolute;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.blue</span>   &#123; <span class="attribute">top</span>: <span class="number">10px</span>;             <span class="attribute">background-color</span>: blue;   &#125;</span><br><span class="line"><span class="selector-class">.gray</span>   &#123; <span class="attribute">top</span>: <span class="number">20px</span>;             <span class="attribute">background-color</span>: gray;   &#125;</span><br><span class="line"><span class="selector-class">.green</span>  &#123; <span class="attribute">top</span>: <span class="number">30px</span>;             <span class="attribute">background-color</span>: green;  &#125;</span><br><span class="line"><span class="selector-class">.red</span>    &#123; <span class="attribute">top</span>: <span class="number">40px</span>; <span class="attribute">left</span>: <span class="number">50px</span>; <span class="attribute">background-color</span>: red;    &#125;</span><br><span class="line"><span class="selector-class">.orange</span> &#123; <span class="attribute">top</span>: <span class="number">50px</span>; <span class="attribute">left</span>: <span class="number">50px</span>; <span class="attribute">background-color</span>: orange; &#125;</span><br></pre></td></tr></table></figure>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>《重構 CSS》 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#rel-pos" target="_blank" rel="noopener">6. Positioning schemes - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://www.w3.org/TR/selectors-3/#specificity" target="_blank" rel="noopener">9. Calculating a selector’s specificity - w3.org<br>
-</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a href="https://ithelp.ithome.com.tw/articles/10191740" target="_blank" rel="noopener">前端新手村 Block 和 Inline 排版</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://ithelp.ithome.com.tw/articles/10192087" target="_blank" rel="noopener">前端新手村 橫向排列 &amp; 實現純手工 RWD</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#position-property" target="_blank" rel="noopener">6.5. Choosing a positioning scheme: position property - w3.org</a> <a href="#fnref4" class="footnote-backref">↩︎</a> <a href="#fnref4:1" class="footnote-backref">↩︎</a> <a href="#fnref4:2" class="footnote-backref">↩︎</a> <a href="#fnref4:3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://www.facebook.com/LiveCoding.tw/videos/1669445373356989/" target="_blank" rel="noopener">來聊聊一些個人切版的經驗與個人切版技巧吧！ - LiveCoding.tw</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a href="https://www.w3.org/TR/2016/WD-CSS-position-3-20160517/#size-and-position-details" target="_blank" rel="noopener">8. Sizing and positioning details - w3.org<br>
+</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -224,11 +271,7 @@
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/Specificity/">Specificity</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Rulest-Order/">Rulest Order</a> }
+  { <a href="/tags/Position/">Position</a> }
   </li>
 
 
@@ -258,7 +301,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/好想工作室/" style="font-size: 14px;">好想工作室</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
 
 
                 <footer>

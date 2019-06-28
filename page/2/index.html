@@ -104,50 +104,161 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2019/01-26-node-with-env-first/">http://dwatow.github.io/2019/01-26-node-with-env-first/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2019/01-26-angularjs/angularjs-e2e-protractor/">http://dwatow.github.io/2019/01-26-angularjs/angularjs-e2e-protractor/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>Node.js 使用 .env 加上環境變數</h1>
+        <h1>Protractor 快速指南</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#node-js-使用-env-加上環境變數"><span class="toc-text">Node.js 使用 .env 加上環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#node-js-的環境變數使用方式"><span class="toc-text">node.js 的環境變數使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-dotenv-套件"><span class="toc-text">使用 dotenv 套件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#protractor-快速指南"><span class="toc-text">Protractor 快速指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#e2e-測試的觀念"><span class="toc-text">E2E 測試的觀念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用前置步驟"><span class="toc-text">使用前置步驟</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#先準備的第一個測試"><span class="toc-text">先準備的第一個測試</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#執行測試環境"><span class="toc-text">執行測試環境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#執行"><span class="toc-text">執行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#page-object-pattern-架構"><span class="toc-text">Page Object Pattern 架構</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各種語法查詢"><span class="toc-text">各種語法查詢</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#element-dom-元素"><span class="toc-text">element Dom 元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#locator"><span class="toc-text">locator</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="node-js-使用-env-加上環境變數"><a class="header-anchor" href="#node-js-使用-env-加上環境變數">¶</a>Node.js 使用 .env 加上環境變數</h1>
-<div class="danger">
-<p>這就是不要 git commit 上去的檔案!!!<br>
-通常是拿來存放敏感的資料，例如: 帳號密碼</p>
-<p>這次研究是為了 e2e 測試，要使用 admin 的帳號密碼!!</p>
-</div>
-<h2 id="node-js-的環境變數使用方式"><a class="header-anchor" href="#node-js-的環境變數使用方式">¶</a>node.js 的環境變數使用方式</h2>
-<p>官網只有說，可以在使用前，將環境變數儲存在 <code>process.env</code> <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
-用法下面的程式碼這樣，還可以用 delete 刪掉</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">process.env.TEST = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(process.env.test);</span><br><span class="line"><span class="comment">// =&gt; 1</span></span><br><span class="line"><span class="keyword">delete</span> process.env.TEST;</span><br><span class="line"><span class="built_in">console</span>.log(process.env.TEST);</span><br><span class="line"><span class="comment">// =&gt; undefined</span></span><br></pre></td></tr></table></figure>
-<p>所以，要有一個載入的機制。<br>
-就可以將它儲存成 <code>process.env</code> 的 object</p>
-<h2 id="使用-dotenv-套件"><a class="header-anchor" href="#使用-dotenv-套件">¶</a>使用 dotenv 套件</h2>
-<p>為了不在程式碼的各處加入新的環境變數，而想要集中在 <code>.env</code> 檔中管理它，所以有大神寫了 dotenv <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 可以在程式一開始就載入所有的環境變數。</p>
-<p>也可以避免在不同的應用程式之間，使用了共用的環境變數。(因為是用 .env 檔載入在該專案中)</p>
-<h3 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h3>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install dotenv --save</span><br></pre></td></tr></table></figure>
-<h3 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h3>
-<p>建立 <code>.env</code> 檔 (不要加入 git)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHRIS=chris</span><br><span class="line">DB_HOST=DB_HOST</span><br><span class="line">DB_PORT=DB_PORT</span><br><span class="line">DB_USER=DB_USER</span><br><span class="line">DB_PASS=DB_PASS</span><br></pre></td></tr></table></figure>
-<p>在程式剛啟動時，就可以載入</p>
-<p><strong>app.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"dotenv"</span>).load();</span><br><span class="line"><span class="built_in">console</span>.log(process.env.CHRIS); <span class="comment">//chris</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_HOST"</span>]); <span class="comment">//DB_HOST</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_PORT"</span>]); <span class="comment">//DB_PORT</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_USER"</span>]); <span class="comment">//DB_USER</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_PASS"</span>]); <span class="comment">//DB_PASS</span></span><br></pre></td></tr></table></figure>
-<!-- prettier-ignore-start -->
-<!-- prettier-ignore-end -->
+    <h1 id="protractor-快速指南"><a class="header-anchor" href="#protractor-快速指南">¶</a>Protractor 快速指南</h1>
+<h2 id="e2e-測試的觀念"><a class="header-anchor" href="#e2e-測試的觀念">¶</a>E2E 測試的觀念</h2>
+<p>E2E 測試，主要是測試使用者操作與想要的結果是否符合規格。</p>
+<p>所以，需要連上一個可測試的使用者介面的環境<br>
+抓到畫面上的資訊，再判斷是否正確</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p>要把它當作是一個主程式，而不是開發工具。<br>
+它有自己的程式進入點。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install protractor</span><br></pre></td></tr></table></figure>
+<p>測試是否安裝成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx protractor --version</span><br></pre></td></tr></table></figure>
+<p>要將 Selenium Server 跑起來，所以要先更新它<br>
+還要另外安裝 JDK</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx webdriver-manager update</span><br></pre></td></tr></table></figure>
+<h2 id="使用前置步驟"><a class="header-anchor" href="#使用前置步驟">¶</a>使用前置步驟</h2>
+<h3 id="先準備的第一個測試"><a class="header-anchor" href="#先準備的第一個測試">¶</a>先準備的第一個測試</h3>
+<p>依照官網的教學<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，要拿 <a href="http://juliemr.github.io/protractor-demo/" target="_blank" rel="noopener">http://juliemr.github.io/protractor-demo/</a> 來測試</p>
+<p>先寫 <code>conf.js</code> 再寫 <code>spec.js</code></p>
+<p><strong>conf.js</strong></p>
+<p>Protractor 執行時，要使用的設定</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// conf.js</span></span><br><span class="line">exports.config = &#123;</span><br><span class="line">  framework: <span class="string">'jasmine'</span>,</span><br><span class="line">  seleniumAddress: <span class="string">'http://localhost:4444/wd/hub'</span>,</span><br><span class="line">  specs: [<span class="string">'spec.js'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>spec.js</strong></p>
+<p>對於測試內容的操作腳本。使用 JavaScript 撰寫</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spec.js</span></span><br><span class="line">describe(<span class="string">'Protractor Demo App'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  it(<span class="string">'should have a title'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    browser.get(<span class="string">'http://juliemr.github.io/protractor-demo/'</span>);</span><br><span class="line"></span><br><span class="line">    expect(browser.getTitle()).toEqual(<span class="string">'Super Calculator'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="執行測試環境"><a class="header-anchor" href="#執行測試環境">¶</a>執行測試環境</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx webdriver-manager start</span><br></pre></td></tr></table></figure>
+<p>測試環境 <a href="http://localhost:4444/wd/hub" target="_blank" rel="noopener">http://localhost:4444/wd/hub</a></p>
+<h2 id="執行"><a class="header-anchor" href="#執行">¶</a>執行</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx protractor conf.js</span><br></pre></td></tr></table></figure>
+<h2 id="page-object-pattern-架構"><a class="header-anchor" href="#page-object-pattern-架構">¶</a>Page Object Pattern 架構</h2>
+<p>參考 <a href="https://github.com/SeleniumHQ/selenium/wiki/PageObjects" target="_blank" rel="noopener">Using Page Objects to Organize Tests</a></p>
+<p>這是個 e2e 測試常見的 pattern</p>
+<p><strong>原本沒有 page object</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'angularjs homepage'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  it(<span class="string">'should greet the named user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    browser.get(<span class="string">'http://www.angularjs.org'</span>);</span><br><span class="line">    element(by.model(<span class="string">'yourName'</span>)).sendKeys(<span class="string">'Julie'</span>);</span><br><span class="line">    <span class="keyword">var</span> greeting = element(by.binding(<span class="string">'yourName'</span>));</span><br><span class="line">    expect(greeting.getText()).toEqual(<span class="string">'Hello Julie!'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>改成有 page object</strong></p>
+<p>有 <code>async/await</code> 的 code</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> angularHomepage = <span class="built_in">require</span>(<span class="string">'./AngularHomepage'</span>);</span><br><span class="line"></span><br><span class="line">describe(<span class="string">'angularjs homepage'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  it(<span class="string">'should greet the named user'</span>, <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">await</span> angularHomepage.get();</span><br><span class="line">    <span class="keyword">await</span> angularHomepage.setName(<span class="string">'Julie'</span>);</span><br><span class="line">    expect(<span class="keyword">await</span> angularHomepage.getGreetingText()).toEqual(<span class="string">'Hello Julie!'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>conf.js</strong></p>
+<p>可以把測試 腳本 (spec) 和頁面 (page) 分離。<br>
+並且可以一套一套的執行腳本。不用每一次都跑全部</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">exports.config = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Spec patterns are relative to the location of the spec file. They may</span></span><br><span class="line">  <span class="comment">// include glob patterns.</span></span><br><span class="line">  suites: &#123;</span><br><span class="line">    homepage: <span class="string">'tests/e2e/homepage/**/*Spec.js'</span>,</span><br><span class="line">    search: [</span><br><span class="line">      <span class="string">'tests/e2e/contact_search/**/*Spec.js'</span>,</span><br><span class="line">      <span class="string">'tests/e2e/venue_search/**/*Spec.js'</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="各種語法查詢"><a class="header-anchor" href="#各種語法查詢">¶</a>各種語法查詢</h2>
+<p>參考: <a href="https://www.protractortest.org/#/api" target="_blank" rel="noopener">https://www.protractortest.org/#/api</a></p>
+<h3 id="element-dom-元素"><a class="header-anchor" href="#element-dom-元素">¶</a><code>element</code> Dom 元素</h3>
+<p><a href="https://github.com/angular/protractor/blob/5.4.1/spec/basic/elements_spec.js" target="_blank" rel="noopener">豪華範例</a></p>
+<p>主要是代表抓到的 Dom 元素</p>
+<p>抓單一個用 <code>element()</code><br>
+抓列表用 <code>element.all()</code></p>
+<p>參數要丟 <code>locator</code> 物件</p>
+<blockquote>
+<p><code>$('.parent')</code> = <code>element(by.css('.abc'))</code><br>
+<code>$$('.abc')</code> = <code>element.all(by.css('.abc'))</code></p>
+</blockquote>
+<p><strong>element() methods</strong></p>
+<table>
+<thead>
+<tr>
+<th>methods</th>
+<th>descripts</th>
+<th>return</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.getText()</code></td>
+<td>類似 <code>innerText</code></td>
+<td>回傳 promise</td>
+</tr>
+<tr>
+<td><code>.getAttribute()</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>.isPresent()</code></td>
+<td>是否存在</td>
+<td></td>
+</tr>
+<tr>
+<td><code>.element()</code></td>
+<td>繼續往下找</td>
+<td></td>
+</tr>
+<tr>
+<td><code>.sendKeys()</code></td>
+<td>keyin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>.click()</code></td>
+<td>mouse click</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>element.all() methods</strong></p>
+<table>
+<thead>
+<tr>
+<th>methods</th>
+<th>descripts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.first()</code></td>
+<td>最後放進 list 裡的</td>
+</tr>
+<tr>
+<td><code>.last()</code></td>
+<td>最早放進 list 裡的</td>
+</tr>
+<tr>
+<td><code>.filter(callback)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>.map(callback)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>.count()</code></td>
+<td>總數</td>
+</tr>
+<tr>
+<td><code>.get(n)</code></td>
+<td>取得第幾個 正數正數，負數倒數</td>
+</tr>
+<tr>
+<td><code>.then(callback)</code></td>
+<td>抓到之後要做什麼</td>
+</tr>
+</tbody>
+</table>
+<h3 id="locator"><a class="header-anchor" href="#locator">¶</a>locator</h3>
+<p>更多看這個 <a href="https://www.protractortest.org/#/locators" target="_blank" rel="noopener">Using Locators</a></p>
+<p>用 <code>by</code> 的 methods 產生各種 locator，放進 element 可以取得元素。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">element(by.css(<span class="string">''</span>)) <span class="comment">// like querySelector()</span></span><br><span class="line">element.all(by.css(<span class="string">''</span>)) <span class="comment">// like querySelectorAll()</span></span><br></pre></td></tr></table></figure>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_env" target="_blank" rel="noopener">process.env - node</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a href="https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html" target="_blank" rel="noopener">Working with Environment Variables in Node.js</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://www.protractortest.org/#/tutorial#step-0-write-a-test" target="_blank" rel="noopener">Step 0: write a test, Tutorial - Protractor</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -164,15 +275,11 @@
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/nodejs/">nodejs</a> }
+  { <a href="/tags/angularjs/">angularjs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/env/">env</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/e2e/">e2e</a> }
+  { <a href="/tags/protractor/">protractor</a> }
   </li>
 
 
@@ -202,7 +309,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/好想工作室/" style="font-size: 14px;">好想工作室</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
 
 
                 <footer>

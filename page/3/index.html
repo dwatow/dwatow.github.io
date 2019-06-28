@@ -104,70 +104,306 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2018/09-24-sequelize/sequelize-CUD-of-CRUD/">http://dwatow.github.io/2018/09-24-sequelize/sequelize-CUD-of-CRUD/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2018/10-07-tenlong-in-goodideas/">http://dwatow.github.io/2018/10-07-tenlong-in-goodideas/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>Sequelize 資料寫入</h1>
+        <h1>好想工作室裡的天瓏書目 (持續更新)</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sequelize-資料寫入"><span class="toc-text">Sequelize 資料寫入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#create"><span class="toc-text">Create</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#update"><span class="toc-text">Update</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#delete"><span class="toc-text">Delete</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#批次處理"><span class="toc-text">批次處理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#大量新增"><span class="toc-text">大量新增</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大量修改-加-where"><span class="toc-text">大量修改，加 WHERE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大量刪除-加-where"><span class="toc-text">大量刪除(，加 WHERE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#value-of-an-instance"><span class="toc-text">Value of an instance</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#好想工作室裡的天瓏書目-持續更新"><span class="toc-text">好想工作室裡的天瓏書目 (持續更新)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#找找你要的書"><span class="toc-text">找找你要的書</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="sequelize-資料寫入"><a class="header-anchor" href="#sequelize-資料寫入">¶</a>Sequelize 資料寫入</h1>
-<h2 id="create"><a class="header-anchor" href="#create">¶</a>Create</h2>
-<p><code>Module.build(options: Object)</code></p>
-<p>回傳一個 instance<br>
-欄位放預設值 + 產生 instance</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// define the model</span></span><br><span class="line"><span class="keyword">var</span> Task = sequelize.define(<span class="string">'task'</span>, &#123;</span><br><span class="line">  title: Sequelize.STRING,</span><br><span class="line">  rating: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">  defaultValue: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// now instantiate an object</span></span><br><span class="line"><span class="keyword">var</span> task = Task.build(&#123;<span class="attr">title</span>: <span class="string">'very important task'</span>&#125;)</span><br><span class="line"></span><br><span class="line">task.title  <span class="comment">// ==&gt; 'very important task'</span></span><br><span class="line">task.rating <span class="comment">// ==&gt; 3 (default)</span></span><br></pre></td></tr></table></figure>
-<p><code>Instance.save(options: Object)</code></p>
-<p>回傳 Promise<br>
-儲存至 table</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// you can also build, save and access the object with chaining:</span></span><br><span class="line">Task.build(&#123; <span class="attr">title</span>: <span class="string">'foo'</span>, <span class="attr">description</span>: <span class="string">'bar'</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;)</span><br><span class="line">.save().then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><code>Model.create(options: Object)</code><br>
-回傳 Promise<br>
-新增一筆資料至 table</p>
-<p><code>build</code> + <code>save</code> = <code>create</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">'foo'</span>, <span class="attr">description</span>: <span class="string">'bar'</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="update"><a class="header-anchor" href="#update">¶</a>Update</h2>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// way 1</span></span><br><span class="line">task.title = <span class="string">'a very different title now'</span></span><br><span class="line">task.save().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// way 2</span></span><br><span class="line">task.update(&#123;</span><br><span class="line">  title: <span class="string">'a very different title now'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="delete"><a class="header-anchor" href="#delete">¶</a>Delete</h2>
-<p><code>Model.destroy(options: Object)</code><br>
-回傳 <code>Promise</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">'a task'</span> &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> task.destroy();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">deleted_object</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(deleted_object)  <span class="comment">//剛剛刪掉的資料</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>在 <code>Model.define()</code> 裡設定 <code>paranoid: true</code> 時，執行 <code>instance.destroy()</code> 則會執行「寫入刪除時間」，執行 <code>instance.destroy({force: true})</code> ，就會真的刪掉這筆資料，從資料庫蒸發</p>
-<h1 id="批次處理"><a class="header-anchor" href="#批次處理">¶</a>批次處理</h1>
-<p>一次多筆 create/update/delete</p>
-<h2 id="大量新增"><a class="header-anchor" href="#大量新增">¶</a>大量新增</h2>
-<p>create: <code>Model.bulkCreate([{}])</code> 回傳值不要使用</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">models.member.bulkCreate([&#123; <span class="attr">name</span>: <span class="string">'John Doe'</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'Chris Doe'</span>, <span class="attr">age</span>: <span class="number">22</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'Mary Doe'</span>, <span class="attr">age</span>: <span class="number">24</span>&#125;</span><br><span class="line">]).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(result)); <span class="comment">// id: null in everyone</span></span><br><span class="line">  <span class="keyword">return</span> models.member.findAll();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="大量修改-加-where"><a class="header-anchor" href="#大量修改-加-where">¶</a>大量修改，加 WHERE</h2>
-<p>update: <code>Model.update(update: Object, where: Object)</code> 回傳 符合條件被修改的資料總數</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">models.member.update(</span><br><span class="line">	<span class="comment">/* set attributes' value */</span></span><br><span class="line">    &#123; <span class="attr">age</span>: <span class="number">18</span> &#125;,</span><br><span class="line">	<span class="comment">/* condition for find*/</span></span><br><span class="line">    &#123; <span class="attr">where</span>: &#123; <span class="attr">name</span>: <span class="string">'Mary Doe'</span> &#125;&#125;</span><br><span class="line">).spread(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);  <span class="comment">// result 1</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="大量刪除-加-where"><a class="header-anchor" href="#大量刪除-加-where">¶</a>大量刪除(，加 WHERE)</h2>
-<p>delete: <code>Model.destory()</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">models.project.destroy(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    location: <span class="string">'Tainan'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  truncate: <span class="literal">true</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);</span><br><span class="line">  <span class="comment">// Notice</span></span><br><span class="line">  <span class="comment">// affectedCount will be 2</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>options.truncate</strong> (optional)<br>
-Type: Boolean<br>
-default: false<br>
-description: 如果設定 true，支援 <code>TRUNCATE</code> 的 SQL 就會使用 <code>TRUNCATE</code> (快) 而不是 <code>DELETE FROM</code> (慢)<br>
-實際使用的狀況: 刪除資料表裡所有資料，忽略 where，再加入的資料 id 重數</p>
-</blockquote>
-<h2 id="value-of-an-instance"><a class="header-anchor" href="#value-of-an-instance">¶</a>Value of an instance</h2>
-<p>instance 的樣貌 (類似 JSON 的樣子)</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">john.get(&#123;</span><br><span class="line">  plain: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><code>instance.reload()</code> 值同步: table → model</p>
-<p>遞增</p>
-<p><code>instance.increment('fieldName')</code><br>
-<code>instance.increment('fieldName', {by: 2})</code><br>
-<code>instance.increment(['fieldName1', 'fieldName2'])</code><br>
-<code>instance.increment({ 'fieldName1': 2, 'fieldName2': 3 })</code></p>
-<p>遞減</p>
-<p><code>instance.decrement()</code> 用法同上</p>
+    <h1 id="好想工作室裡的天瓏書目-持續更新"><a class="header-anchor" href="#好想工作室裡的天瓏書目-持續更新">¶</a>好想工作室裡的天瓏書目 (持續更新)</h1>
+<script src="https://unpkg.com/axios/dist/axios.min.js" charset="utf-8"></script>
+<script src="https://unpkg.com/vue-masonry@0.11.3/dist/vue-masonry-plugin-window.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<style>
+#masonry-container {
+  transition: .3s;
+}
+.book {
+  vertical-align: top;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  position: absolute;
+  top: 100%;
+}
+
+.book:hover {
+  background-color: #d7e6ff;
+}
+
+.book img {
+  width: 40%;
+  height: auto;
+}
+
+.book .price, .book img {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.book .isbn {
+  font-size: 8px;
+}
+
+.book .name {
+  font-size: 14px;
+}
+
+.book .originPrice {
+  text-decoration: line-through;
+  font-size: 12px;
+}
+
+.book .sellPrice {
+  font-size: 20px;
+  padding-bottom: 10px;
+}
+
+.book a {
+  display: block;
+}
+
+.totalBooks {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+}
+
+input {
+  outline: none;
+  border: solid 1px #C0C0C0;
+  border-radius: 5px;
+  padding: 2px 3px;
+}
+
+input:invalid {
+  color: red;
+}
+
+@media screen and (min-width: 720px) {
+  .book {
+    width: 25%;
+  }
+
+  .book img {
+    width: 80%;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+
+  .book .price {
+    display: block;
+  }
+}
+</style>
+<ul>
+<li><a href="https://bookshelf.goodideas-studio.com/api" target="_blank" rel="noopener">書單 API</a></li>
+<li><a href="https://goo.gl/forms/9A7LYHhkJiQ6JnN33" target="_blank" rel="noopener">許願表單</a></li>
+<li><a href="https://goo.gl/7PqNcD" target="_blank" rel="noopener">現有許願書單</a></li>
+<li><a href="https://www.tenlong.com.tw/" target="_blank" rel="noopener">天瓏書局</a></li>
+</ul>
+<h2 id="找找你要的書"><a class="header-anchor" href="#找找你要的書">¶</a>找找你要的書</h2>
+
+
+<div id="app">
+  <div id="books">
+    <div>
+      <label for="filterName"><b>書名</b></label>
+      <input type="text" id="filterByName" v-model="myName"><br>
+      <label for="filterDiscount">至少打幾折</label>
+      <input type="number" id="filterByDiscount" step="1" v-model.number="myDiscount"><br>
+    </div>
+    <span class="latestUpdateDate">最新更新日期: {{updateDate}}</span>
+    {{ message }}
+    <div v-masonry="" transition-duration=".3s" item-selector=".book" column-width=".book" class="masonry-container">
+      <books :total-pre-page="show" :abooks="books | byName(filterName) | byDiscount(filterDiscount)"></books>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+function debounce(func, wait = 20, immediate = true) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
+document.addEventListener('scroll', debounce(infiniteLoading, 20, false));
+
+function infiniteLoading (e) {
+  const currTotal = !app.$data.show || app.$data.show;
+  const maxTotal = !app.$data.books || app.$data.books.length;
+
+  const currScroll = document.documentElement.scrollTop;
+  const maxScroll = document.documentElement.scrollHeight;
+  if (currTotal < maxTotal && Math.abs(maxScroll - currScroll) < 2000) {
+    app.$data.show += 10;
+  }
+}
+
+var VueMasonryPlugin = window["vue-masonry-plugin"].VueMasonryPlugin
+Vue.use(VueMasonryPlugin)
+
+
+Vue.component('books', {
+  props: ['abooks', 'total-pre-page'],
+  template: `<div>
+  
+    <span class="totalBooks">{{'有' + totalBooks + '本'}}</span>
+    <div v-for="abook in showBooks" :key="abook.isbn" class="book">
+      <a :href="abook.link" target="_blank">
+        <div class="name">{{abook.name}}</div>
+        <img :src="abook.image" alt="" @load="layoutMasonry()">
+        <div class="price">
+          <div class="isbn">{{abook.ISBN}}</div>
+          <span class="originPrice" v-show="isSell(abook)">{{abook.originPrice + '元'}}</span>
+          <span v-show="isSell(abook)">{{ '(' + getDiscount(abook) + '折)' }}</span>
+          <div class="sellPrice">{{abook.sellPrice + '元'}}</div>
+        </div>
+      </a>
+    </div>
+    
+  </div>`,
+  methods: {
+    getDiscount (currbook) {
+      let discount = currbook.discount;
+      if (currbook.discount.toString().split('').pop() == "0")
+        discount /= 10;
+
+      return Math.floor(discount)
+    },
+    isSell (currbook) {
+      return parseInt(currbook.originPrice) > parseInt(currbook.sellPrice)
+    },
+    layoutMasonry () {
+      if (typeof this.$redrawVueMasonry === 'function') {
+        this.$redrawVueMasonry()
+      }
+    }
+  },
+  computed: {
+    showBooks () {
+      return !this.abooks ? [] : this.abooks.slice(0, this.totalPrePage)
+    },
+    totalBooks () {
+      return !this.abooks ? 0 : this.abooks.length
+    }
+  }
+})
+//------------------------------------------------------------------------------
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Loading...',
+    updateDate: null,
+    books: null,
+    filterName: null,
+    filterDiscount: null,
+    show: 10
+  },
+  created () {
+    axios.get('https://bookshelf.goodideas-studio.com/api').then(item => {
+      return item.data
+    })
+    .then(data => {
+      this.updateDate = moment(data.updatedAt*1000).format('YYYY-MM-DD')
+      return data.list.filter(book => !!book.image);
+    })
+    .then(list => list.reverse())
+    .then(list => {
+      console.log(list);
+      const m = new Map();
+      list.forEach(book => {
+        m.set(book.image, book)
+      })
+      console.log(m);
+      const listOnlyOne = []
+      for (let [ key, val ] of m.entries())
+        listOnlyOne.push(m.get(key))
+
+      this.books = listOnlyOne.map(book => {
+        book.discount = parseInt(book.sellPrice) / parseInt(book.originPrice || book.sellPrice) * 100;
+        book.ISBN = book.ISBN.split('?').shift()
+        return book;
+      })
+      console.log(this.books);
+      this.message = '';
+    })
+  },
+  computed: {
+    myName: {
+      get: function () {
+        return this.filterName;
+      },
+      set: function (name) {
+        this.show = 10;
+        this.filterName = name;
+      }
+    },
+    myDiscount: {
+      get: function() {
+        if (this.filterDiscount >= 100) {
+          this.filterDiscount = 100;
+          return 100;
+        }
+        else if (this.filterDiscount < 0) {
+          this.filterDiscount = 1;
+          return discount * -1;
+        }
+        else {
+          return this.filterDiscount;
+        }
+      },
+      set: function(discount) {
+        this.show = 10;
+        if (typeof discount !== 'number')
+          this.filterDiscount = 1;
+        else
+          this.filterDiscount = discount;
+      }
+    }
+  },
+  filters: {
+    byName (books, name) {
+      if (!!books && !!name )
+        return books.filter(item => item.name.toLowerCase().includes(name.toLowerCase()));
+      else
+        return books;
+    },
+    byDiscount (books, discount) {
+      if (!!books && !!discount )
+        return books.filter(item => {
+          const currDiscount = item.discount < 10 ? item.discount*10 : item.discount;
+          const filterDiscount = discount < 10 ? discount*10 : discount;
+          return parseInt(currDiscount) <= filterDiscount;
+        })
+      else
+        return books
+    }
+  }
+})
+</script>
 
     
     </section>
@@ -181,11 +417,19 @@ description: 如果設定 true，支援 <code>TRUNCATE</code> 的 SQL 就會使�
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/Sequelize/">Sequelize</a> }
+  { <a href="/tags/vuejs/">vuejs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/CRUD/">CRUD</a> }
+  { <a href="/tags/axios/">axios</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/monent/">monent</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-masonry/">vue-masonry</a> }
   </li>
 
 
@@ -215,7 +459,7 @@ description: 如果設定 true，支援 <code>TRUNCATE</code> 的 SQL 就會使�
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/好想工作室/" style="font-size: 14px;">好想工作室</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
 
 
                 <footer>
