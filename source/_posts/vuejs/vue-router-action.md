@@ -2,7 +2,7 @@
 title: Vue router 實戰
 date: 2018-05-20 14:11:20
 tags: [vuejs, "vue-router"]
-categories: [技術心得]
+categories: ['技術心得']
 ---
 
 # Vue router 實戰

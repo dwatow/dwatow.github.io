@@ -2,7 +2,7 @@
 title: Node.js 使用 .env 加上環境變數
 date: 2019-01-26 11:42:42
 tags: ["nodejs", "env", "e2e"]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # Node.js 使用 .env 加上環境變數

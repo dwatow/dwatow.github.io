@@ -2,7 +2,7 @@
 title: git reset <參數>
 date: 2017-08-04 10:22:10
 tags: [git, "git reset"]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # git reset <參數>

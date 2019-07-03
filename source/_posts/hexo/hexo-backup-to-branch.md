@@ -2,7 +2,7 @@
 title: Hexo 備份 md 檔
 date: 2019-01-03 19:27:41
 tags: [hexo, git, npm]
-categories: 技術心得
+categories: '技術心得'
 ---
 # Hexo 備份 md 檔到另一個分支
 

@@ -2,7 +2,7 @@
 title: Sequelize 資料寫入
 date: 2018-09-24 21:56:27
 tags: [Sequelize, CRUD]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # Sequelize 資料寫入

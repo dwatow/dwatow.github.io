@@ -2,7 +2,7 @@
 title: JavaScript 的 OO 與 JSON
 date: 2018-02-22 11:55:09
 tags: ["json", "JavaScript", "oo", "nodejs"]
-categories: "技術心得"
+categories: '技術心得'
 ---
 
 # JavaScript 的 OO 與 JSON

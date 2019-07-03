@@ -2,7 +2,7 @@
 title: Sequelize 的 define model
 date: 2018-09-24 12:12:03
 tags: [Sequelize, define]
-categories: 技術心得
+categories: '技術心得'
 ---
 # Sequelize 的 define model
 

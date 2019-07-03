@@ -2,7 +2,7 @@
 title: 初探 Sequelize
 date: 2018-09-24 10:49:42
 tags: [Sequelize, JavaScript]
-categories: 技術心得
+categories: '技術心得'
 ---
 # Sequelize 初探
 

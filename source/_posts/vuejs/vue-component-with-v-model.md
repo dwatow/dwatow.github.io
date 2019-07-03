@@ -2,7 +2,7 @@
 title: Vue Component 也可以用 v-model
 date: 2018-09-21 16:37:51
 tags: [vuejs, "v-model"]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # Vue Component 也可以用 v-model

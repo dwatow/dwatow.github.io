@@ -2,7 +2,7 @@
 title: Vue 的 Component 相關的導讀
 date: 2018-04-20 20:27:01
 tags: [vuejs, "JavaScript"]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # Vue 的 Component 相關的導讀

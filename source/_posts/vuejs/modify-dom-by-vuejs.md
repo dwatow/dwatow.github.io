@@ -2,7 +2,7 @@
 title: 用vue修改dom
 date: 2017-09-02 20:11:15
 tags: vuejs
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # 用 vue 修改 dom

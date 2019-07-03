@@ -2,7 +2,7 @@
 title: 想讓 Google 翻譯的畫面直排
 date: 2018-05-01 07:46:32
 tags: "CSS"
-categories: ["技術心得"]
+categories: ['技術心得']
 ---
 
 # 想讓 Google 翻譯的畫面直排

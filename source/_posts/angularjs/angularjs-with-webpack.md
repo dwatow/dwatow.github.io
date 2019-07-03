@@ -2,7 +2,7 @@
 title: AngularJS + Gulp → Webpack
 date: 2018-12-06 08:58:58
 tags: [angularjs, gulp, webpack]
-categories: 技術心得
+categories: '技術心得'
 ---
 
 # AngularJS + Gulp → Webpack
