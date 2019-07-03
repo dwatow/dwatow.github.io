@@ -104,205 +104,53 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2017/06-16-facebook/fb-messenger-chatbot-first/">http://dwatow.github.io/2017/06-16-facebook/fb-messenger-chatbot-first/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2017/06-16-ngrok/">http://dwatow.github.io/2017/06-16-ngrok/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>初探Facebook Messager 聊天機器人</h1>
+        <h1>神器ngrok</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初探facebook-messager-聊天機器人"><span class="toc-text">初探Facebook Messager 聊天機器人</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事前準備"><span class="toc-text">事前準備</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#執行ngrok"><span class="toc-text">執行ngrok</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建立-webhook"><span class="toc-text">建立 webhook</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#看看facebook傳什麼過來"><span class="toc-text">看看facebook傳什麼過來</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建立機器人運作的-service"><span class="toc-text">建立機器人運作的 Service</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#node-js-的-hello-world"><span class="toc-text">node.js 的 Hello World!!</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#設定回覆給-facebook的訊息"><span class="toc-text">設定回覆給 facebook的訊息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成-webhook"><span class="toc-text">完成 webhook</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#設定-messager"><span class="toc-text">設定 Messager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#確認伺服器有收到訊息"><span class="toc-text">確認伺服器有收到訊息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寫程式-抓到文字訊息"><span class="toc-text">寫程式，抓到文字訊息!!</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#在此先安裝"><span class="toc-text">在此先安裝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寫程式-回覆訊息"><span class="toc-text">寫程式，回覆訊息!!</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#json"><span class="toc-text">JSON</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#改寫-request"><span class="toc-text">改寫 request</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最後的最後"><span class="toc-text">最後的最後</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完成"><span class="toc-text">完成</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初探-ngrok-神器"><span class="toc-text">初探 ngrok 神器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#功能介紹"><span class="toc-text">功能介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求之一"><span class="toc-text">需求之一</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#問題點"><span class="toc-text">問題點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ngrok-幫我們做了什麼"><span class="toc-text">ngrok 幫我們做了什麼</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="初探facebook-messager-聊天機器人"><a class="header-anchor" href="#初探facebook-messager-聊天機器人">¶</a>初探Facebook Messager 聊天機器人</h1>
-<p>基本架構圖<br>
-<img src="https://i.imgur.com/g20l9NE.jpg" alt=""></p>
-<p>client -&gt; FB server<br>
-FB server hook -&gt; bot<br>
-bot -&gt; FB server</p>
-<hr>
-<h2 id="事前準備"><a class="header-anchor" href="#事前準備">¶</a>事前準備</h2>
-<ul>
-<li><a href="https://hackmd.io/EwM2DYA4BMEMEYC0BOcwAMiAsWDMwV8BWRAY13CICM4Jpkqg" target="_blank" rel="noopener">安裝 <strong>ngrok</strong></a></li>
-<li>建立facebook粉絲頁</li>
-<li>建立<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">facebook開發者帳號</a></li>
-<li>安裝 <strong>node.js</strong> <strong>+</strong> <a href="https://expressjs.com/zh-tw/starter/installing.html" target="_blank" rel="noopener">安裝Express</a></li>
-</ul>
-<hr>
-<h2 id="執行ngrok"><a class="header-anchor" href="#執行ngrok">¶</a>執行ngrok</h2>
-<p>在任意的位置執行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ngrok http 3000</span></span><br></pre></td></tr></table></figure>
-<p>就好了!!</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ngrok by @inconshreveable                                 (Ctrl+C to quit)</span><br><span class="line"></span><br><span class="line">Session Status                online</span><br><span class="line">Version                       2.2.4               </span><br><span class="line">Region                        United States (us)</span><br><span class="line">Web Interface                 http://127.0.0.1:4040</span><br><span class="line">Forwarding                    http://db9ba35e.ngrok.io -&gt; localhost:3000        </span><br><span class="line">Forwarding                    https://db9ba35e.ngrok.io -&gt; localhost:3000       </span><br><span class="line"></span><br><span class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</span><br><span class="line">                              0       0       0.00    0.00    0.00    0.00</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Web Interface[color=blue]                 <a href="http://127.0.0.1:4040" target="_blank" rel="noopener">http://127.0.0.1:4040</a></p>
-</blockquote>
-<p>可以看見<code>request</code>的明細。等一下可以用它看粉絲團小編是不是有收到訊息。</p>
-<blockquote>
-<p>Forwarding                    <a href="http://db9ba35e.ngrok.io" target="_blank" rel="noopener">http://db9ba35e.ngrok.io</a> -&gt; localhost:3000<br>
-Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" target="_blank" rel="noopener">https://db9ba35e.ngrok.io</a> -&gt; localhost:3000</p>
-</blockquote>
-<p>這兩個就是可以連線的對外網址，等一下要用它。</p>
-<div class="danger">
-<p>這個東西，從頭到尾都不能關掉。<br>
-因為一旦重開對外的網址就改變！！<br>
-相關的設定都會改變唷。</p>
+    <h1 id="初探-ngrok-神器"><a class="header-anchor" href="#初探-ngrok-神器">¶</a>初探 ngrok 神器</h1>
+<p><img src="https://ngrok.com/static/img/demo.png" alt=""></p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p>用 hoem brew 安裝，可以將執行檔當作全域指令使用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew cask install ngrok</span><br></pre></td></tr></table></figure>
+<p>安裝完成</p>
+<div class="warning">
+<p>注意<br>
+不要到<a href="https://ngrok.com/" target="_blank" rel="noopener">官網</a>下載。<br>
+但是要去申請一個帳號。</p>
 </div>
-<hr>
-<h2 id="建立-webhook"><a class="header-anchor" href="#建立-webhook">¶</a>建立 webhook</h2>
-<p><a href="https://developers.facebook.com/docs/messenger-platform/getting-started/webhook-setup" target="_blank" rel="noopener">官網文件</a>寫得相當得好。很推薦看一下</p>
-<ol>
-<li>
-<p>進入<a href="https://developers.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">開發者帳號</a>之後，按右上角的「新增應用程式」<br>
-<img src="https://i.imgur.com/ip2RRfK.png" alt=""></p>
-</li>
-<li>
-<p>選 webhooks<br>
-<img src="https://i.imgur.com/w5XOZmC.png" alt=""><br>
-點擊開始使用</p>
-</li>
-<li>
-<p>進入畫面之後，找到 Edit Subscription<br>
-<img src="https://i.imgur.com/7nTNfQl.png" alt=""><br>
-下面的就勾<code>messages</code>就好，其它隨你</p>
-</li>
-<li>
-<p>在此要填入兩個東西<br>
-<img src="https://i.imgur.com/r4lIszF.png" alt=""></p>
-</li>
-</ol>
-<ul>
-<li>回呼網址: bot 的 api 網址 (在此篇文章<code>http://db9ba35e.ngrok.io</code>)<br>
-為了讓facebook伺服器知道要把收到的訊息，丟到哪給機器人。</li>
-<li>驗證權杖: 一個自訂的字串 (亂打就好…真的!!!)</li>
-</ul>
-<blockquote>
-<p>在此，一定會出現下面的錯誤訊息<br>
-<img src="https://i.imgur.com/xkKAlYf.png" alt=""></p>
-</blockquote>
-<p>原因在於，facebook 伺服器傳過來一個 <code>GET</code> 的 request，要求回覆一個 echo 值(在此要回<code>1770261222</code>)給他，不然就報錯。</p>
-<h3 id="看看facebook傳什麼過來"><a class="header-anchor" href="#看看facebook傳什麼過來">¶</a>看看facebook傳什麼過來</h3>
-<p>從<a href="http://127.0.0.1:4040" target="_blank" rel="noopener">Web Interface</a>可以看到</p>
-<p><img src="https://i.imgur.com/ZZFJwRM.png" alt=""></p>
-<p>其中 <code>1770261222</code>值藏在<code>hub.challenge</code>裡面。</p>
-<p>所以，接下來要寫程式，處理 <code>GET</code> 請求，並回傳正確的訊息給 facebook 伺服器。</p>
-<hr>
-<h2 id="建立機器人運作的-service"><a class="header-anchor" href="#建立機器人運作的-service">¶</a>建立機器人運作的 Service</h2>
-<h3 id="node-js-的-hello-world"><a class="header-anchor" href="#node-js-的-hello-world">¶</a><code>node.js</code> 的 Hello World!!</h3>
-<p>在此使用<code>node.js</code>。</p>
-<ol>
-<li>建立一個資料夾</li>
-<li>進入資料夾</li>
-<li>新增一個 <mark>***.js</mark> 檔案(在此使用 <mark>app.js</mark>的檔名)</li>
-</ol>
-<p>找<a href="http://expressjs.com/zh-tw/starter/hello-world.html" target="_blank" rel="noopener">nodejs hello world</a> 從這裡面貼上接下來要使用的程式碼</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'Hello World!'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>執行伺服器</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node app.js</span></span><br></pre></td></tr></table></figure>
-<p>接下來<a href="http://localhost:3000" target="_blank" rel="noopener">開瀏覽器</a>，看見 <ins>hello world</ins>，就算成功讓伺服器運作起來。</p>
-<h3 id="設定回覆給-facebook的訊息"><a class="header-anchor" href="#設定回覆給-facebook的訊息">¶</a>設定回覆給 facebook的訊息</h3>
-<p>回到<code>app.js</code>改寫<code>get</code>的<code>request</code>的處理函數，改掉原本的 “<ins>Hello World!</ins>”</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'Hello World!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>改寫成下面這樣，就可以回覆facebook要的訊息囉</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(req.query[<span class="string">'hub.challenge'</span>]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>再回到 facebook的開發者頁面</p>
-<hr>
-<h3 id="完成-webhook"><a class="header-anchor" href="#完成-webhook">¶</a>完成 webhook</h3>
-<p>按下驗證之前，要先把伺服器跑起來!!!</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node app.js</span></span><br></pre></td></tr></table></figure>
-<p>這樣就可以按下「驗證並儲存」，即可完成 webhook 的設定<br>
-<img src="https://i.imgur.com/r4lIszF.png" alt=""></p>
-<p>檢查一下是否有訂閱 <code>messages</code> 的 webhook。<br>
-<img src="https://i.imgur.com/fRDqAnu.png" alt=""></p>
-<h2 id="設定-messager"><a class="header-anchor" href="#設定-messager">¶</a>設定 Messager</h2>
-<p>新增 <code>Messager</code><br>
-<img src="https://i.imgur.com/cKAg7dD.png" alt=""></p>
-<p>先取得權杖 <ins>(真是中二的翻譯)</ins>，它指的就是<mark>token</mark><br>
-<img src="https://i.imgur.com/CZ9DRL0.png" alt=""></p>
-<p>在同頁面滑下來一點。<br>
-<img src="https://i.imgur.com/b7hFrNK.png" alt=""></p>
-<p>按下「選擇粉絲專頁」&gt;「訂閱」</p>
-<h3 id="確認伺服器有收到訊息"><a class="header-anchor" href="#確認伺服器有收到訊息">¶</a>確認伺服器有收到訊息</h3>
-<p>打開<a href="http://127.0.0.1:4040/" target="_blank" rel="noopener">Web Interface</a>可以看見目前收到的 <strong>request</strong> 明細。</p>
-<p>用 facebook 帳號跟你申請的粉絲頁傳訊息(對話)，<br>
-送出訊息後，看看是不是可以在 Web Interface 看見你送出的訊息？</p>
-<blockquote>
-<p><em>例圖 ↓</em><br>
-<img src="https://i.imgur.com/31WMgqv.png" alt=""></p>
-</blockquote>
-<p>想要看得懂這個結構，可以參考<a href="https://developers.facebook.com/docs/messenger-platform/webhook-reference/message" target="_blank" rel="noopener">官方網站的文件</a></p>
-<p>可以看見送出的「測試訊息」 <code>!!!</code> 放在資料結構的哪個位置。</p>
-<blockquote>
-<p>在此要注意: <code>sender.id</code> 等一下會用上</p>
-</blockquote>
-<hr>
-<h2 id="寫程式-抓到文字訊息"><a class="header-anchor" href="#寫程式-抓到文字訊息">¶</a>寫程式，抓到文字訊息!!</h2>
-<h3 id="在此先安裝"><a class="header-anchor" href="#在此先安裝">¶</a>在此先安裝</h3>
-<p>在此，需要讓 node.js 收到 <code>POST</code> 的 JSON。並且從 <code>request.body</code> 找得到，並且可以處理，必須安裝一個套件 <code>body-parser</code> 。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install body-parser --save</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">'/'</span>, (req, res) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> body = req.body;</span><br><span class="line">    <span class="comment">//body["object"] is "page"</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>這樣就可以處理收到的 <code>POST</code> 的 JSON 囉。</p>
-<h2 id="寫程式-回覆訊息"><a class="header-anchor" href="#寫程式-回覆訊息">¶</a>寫程式，回覆訊息!!</h2>
-<p>可參考<a href="https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start" target="_blank" rel="noopener">官網教學</a></p>
-<p>在此，需要讓 <strong>web service</strong> 發送 <strong>request</strong>，必須安裝一個外掛<a href="https://github.com/request/request" target="_blank" rel="noopener">request</a>(在你的專案資料夾)，<br>
-讓你的<code>node.js</code>可以送request。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install request --save</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>「發送request」這件事一般來說都是瀏覽器在做的，伺服器是負責接收的，<br>
-若伺服器要和伺服器溝通，就要讓伺服器「發送request」。</p>
-</blockquote>
-<p>讓<code>node.js</code>可以送出POST的request。</p>
-<p><a href="https://stackoverflow.com/questions/27190447/pass-json-to-http-post-request" target="_blank" rel="noopener">上網找一下怎麼送出POST的request的寫法</a>，找到一個簡單的寫</p>
-<p>回到<code>app.js</code>，上面加上 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>);</span><br></pre></td></tr></table></figure>
-<p>下面加上接收post的函數 <ins><sub>(不改寫既有的程式碼)</sub></ins></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在函數裡面加上「發送request」的功能</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">request(&#123;</span><br><span class="line">    <span class="string">"uri"</span>: url,</span><br><span class="line">    <span class="string">"qs"</span>: &#123;</span><br><span class="line">        <span class="string">"access_token"</span>: token</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"POST"</span>,</span><br><span class="line">    <span class="string">"json"</span>: requestData</span><br><span class="line">&#125;, ...</span><br></pre></td></tr></table></figure>
-<p>讓機器人收到 facebook傳過來的訊息之後，再發送訊息回去給 facebook伺服器</p>
-<p>其中有兩個資料要填入：</p>
-<ul>
-<li>url<br>
-這個網址就是 facebook messager 伺服器的位址<br>
-是固定的 <code>https://graph.facebook.com/v2.6/me/messages</code></li>
-<li>token 在下圖的位置取得<br>
-<img src="https://i.imgur.com/JJPRQDb.png" alt=""></li>
-<li>json</li>
-</ul>
-<h4 id="json"><a class="header-anchor" href="#json">¶</a><strong>JSON</strong></h4>
-<p>找到要回覆的格式…的 JSON<br>
-到<a href="https://developers.facebook.com/docs/messenger-platform/send-api-reference" target="_blank" rel="noopener">Messager的開發文件&gt;傳送 API 參考資料&gt;要求</a><br>
-(和剛剛同一份文件的同一段中的範例…)</p>
-<blockquote>
-<p><img src="https://i.imgur.com/g15sRhp.png" alt=""><br>
-(facebook提供的範例是使用<code>curl</code>這隻程式來送出請求，可以把curl想成postman的指令版)</p>
-</blockquote>
-<p>取出來之後</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"recipient"</span>: &#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="xml"><span class="tag">&lt;<span class="name">傳給誰</span>&gt;</span></span></span><br><span class="line"><span class="xml">  &#125;,</span></span><br><span class="line"><span class="xml">  "message": &#123;</span></span><br><span class="line"><span class="xml">    "text": <span class="tag">&lt;<span class="name">傳什麼文字</span>&gt;</span></span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>填入回覆者的 id 和要給他的訊息就可以囉~<br>
-到<a href="#%E7%A2%BA%E8%AA%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9C%89%E6%94%B6%E5%88%B0%E8%A8%8A%E6%81%AF">這裡</a>找 <code>sender.id</code></p>
-<h3 id="改寫-request"><a class="header-anchor" href="#改寫-request">¶</a>改寫 request</h3>
-<p>剩下在<code>text</code>寫上你要回傳的訊息。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">request(&#123;</span><br><span class="line">    <span class="string">"uri"</span>: <span class="string">"https://graph.facebook.com/v2.6/me/messages"</span>,</span><br><span class="line">    <span class="string">"qs"</span>: &#123;</span><br><span class="line">        <span class="string">"access_token"</span>: <span class="string">"EEAbyth...****"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"POST"</span>,</span><br><span class="line">    <span class="string">"json"</span>: &#123;</span><br><span class="line">      <span class="string">"recipient"</span>: &#123;</span><br><span class="line">        <span class="string">"id"</span>: <span class="string">"1555445211145246"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"message"</span>: &#123;</span><br><span class="line">        <span class="string">"text"</span>: <span class="string">"!!!"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="最後的最後"><a class="header-anchor" href="#最後的最後">¶</a>最後的最後</h3>
-<p>為了防止鬼擋牆，查了一下<a href="https://developers.facebook.com/docs/messenger-platform/faq#faq_144542125979728" target="_blank" rel="noopener">官方文件</a></p>
-<blockquote>
-<p>為什麼我持續收到 Webhook 一直未接受更新的開發人員重要通知，或持續不斷收到相同的 Webhook 呼叫？[color=red]</p>
-<blockquote>
-<p>請確定 Webhook 以狀態代碼 200 回應。這樣會告知我們已成功收到 Webhook。如果您未傳回狀態代碼 200，我們會重新嘗試呼叫，直到成功完成為止。此外，如果 Webhook 很長一段時間都未傳回狀態代碼 200，我們就會傳送開發人員重要通知。[color=lightblue]<br>
-另請注意，成功狀態代碼必須即時傳回。Webhook 呼叫會在 20 秒後逾時。請務必在設計程式碼架構時，以非同步的方式處理 Webhook，以便可立即傳回成功狀態代碼，然後分別處理 Wehbook。</p>
-</blockquote>
-</blockquote>
-<p>在你的post函數最後，加入下面程式碼的第3行。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    res.status(<span class="number">200</span>);</span><br><span class="line">    <span class="comment">//後面不要放程式</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="完成"><a class="header-anchor" href="#完成">¶</a>完成</h2>
-<p><em>改好之後，重開伺服器，再發訊息給小編就可以囉!!!</em></p>
+<h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
+<p>執行 ngrok，用 http 接到 port 3000。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ngrok http 3000</span></span><br></pre></td></tr></table></figure>
+<h2 id="功能介紹"><a class="header-anchor" href="#功能介紹">¶</a>功能介紹</h2>
+<p>ngrok 的在做的事情是叫做<a href="https://en.wikipedia.org/wiki/HTTP_tunnel" target="_blank" rel="noopener"><code>HTTP tunneling</code></a></p>
+<h3 id="需求之一"><a class="header-anchor" href="#需求之一">¶</a>需求之一</h3>
+<p>在實作 fb 聊天機器人時， facebook 會需要你提供一串網址<br>
+來讓 facebook 的伺服器丟聊天室的訊息給你</p>
+<h2 id="問題點"><a class="header-anchor" href="#問題點">¶</a>問題點</h2>
+<p>但是我們在本地端開的伺服器，只能產生本地端的網址(<code>localhost</code>)<br>
+一般情況，要能建立一個能讓網路上任何人都連的到的網址<br>
+你會需要去買一個<code>網域(像是 www.goodidea.com)</code><br>
+並且將你的 IP 跟他做綁定</p>
+<p>但是因為那樣很麻煩，我們這裡使用 ngrok 的服務</p>
+<h2 id="ngrok-幫我們做了什麼"><a class="header-anchor" href="#ngrok-幫我們做了什麼">¶</a>ngrok 幫我們做了什麼</h2>
+<p>ngrok 在做的事情是，他們在自己的公司裡有買一個域名(<code>ngrok.com</code>)<br>
+你使用 ngrok 的服務時，他會自動幫你產生一段臨時的網址給你用<br>
+(<code>xxxx.ngrok.com</code>)</p>
+<p>這時候 facebook 就可以用這個臨時產生的網址來傳送訊息了<br>
+一但 ngrok 的伺服器收到 facebook 丟的訊息</p>
+<p>他就會把這個訊息原封不動的丟回來給你，就好像是你的伺服器是直接接收到的一樣<br>
+(關於 ngrok 的伺服器是怎麼找到你家的電腦的)<br>
+(有興趣可以去找 HTTP、IP 的文章來閱讀)</p>
 
     
     </section>
@@ -316,15 +164,11 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/api/">api</a> }
+  { <a href="/tags/ngork/">ngork</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/facebook/">facebook</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/chatbot/">chatbot</a> }
+  { <a href="/tags/測試工具/">測試工具</a> }
   </li>
 
 
@@ -338,11 +182,13 @@ Forwarding[color=red]                    <a href="https://db9ba35e.ngrok.io" tar
         
             
         
+            
+        
     </ul>
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.4px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 44.6px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.8px;">Flex</a> <a href="/tags/HTML/" style="font-size: 24.2px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.8px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.8px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.8px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.4px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 27.6px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 31px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.4px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.2px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.8px;">animation</a> <a href="/tags/api/" style="font-size: 17.4px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.8px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.4px;">display</a> <a href="/tags/docker/" style="font-size: 20.8px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 24.2px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 27.6px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.4px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 41.2px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.4px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.4px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.4px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.4px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 34.4px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.8px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.4px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.4px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.8px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.6px;">vuejs</a> <a href="/tags/webpack/" style="font-size: 37.8px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 27.6px;">團隊溝通技巧</a> <a href="/tags/好想工作室/" style="font-size: 14px;">好想工作室</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
+    <a href="/tags/2018鐵人賽/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 41.82px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.18px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/angularjs/" style="font-size: 23.27px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 14px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 20.18px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 38.73px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.09px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown測試/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.09px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell-which/" style="font-size: 14px;">shell which</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/ted/" style="font-size: 14px;">ted</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/vuex/" style="font-size: 14px;">vuex</a> <a href="/tags/webpack/" style="font-size: 35.64px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/你所不知道的js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/動畫特效/" style="font-size: 14px;">動畫特效</a> <a href="/tags/團隊溝通技巧/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/好想工作室/" style="font-size: 14px;">好想工作室</a> <a href="/tags/測試工具/" style="font-size: 14px;">測試工具</a> <a href="/tags/看書/" style="font-size: 14px;">看書</a>
 
 
                 <footer>
