@@ -104,35 +104,57 @@
         </header>
         
             
-                <li>本文永久連結: <a href="http://dwatow.github.io/2019/04-16-bash-initial-warning/">http://dwatow.github.io/2019/04-16-bash-initial-warning/</a></li>
+                <li>本文永久連結: <a href="http://dwatow.github.io/2019/04-16-meta-viewport/">http://dwatow.github.io/2019/04-16-meta-viewport/</a></li>
                 <li>
                     <article class="ContentView">
     <header class="PageTitle">
-        <h1>bash 開啟出現錯誤訊息</h1>
+        <h1>認識 meta viewport</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#bash-開啟出現錯誤訊息"><span class="toc-text">bash 開啟出現錯誤訊息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#問題描述"><span class="toc-text">問題描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解決方式"><span class="toc-text">解決方式</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#認識-meta-viewport"><span class="toc-text">認識 meta viewport</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前導觀念"><span class="toc-text">前導觀念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#visual-viewport"><span class="toc-text">visual viewport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layout-viewport"><span class="toc-text">layout viewport</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#設定字串"><span class="toc-text">設定字串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#手機直置變橫置-會出現無法預測的縮放行為"><span class="toc-text">手機直置變橫置，會出現無法預測的縮放行為</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="bash-開啟出現錯誤訊息"><a class="header-anchor" href="#bash-開啟出現錯誤訊息">¶</a>bash 開啟出現錯誤訊息</h1>
-<h2 id="問題描述"><a class="header-anchor" href="#問題描述">¶</a>問題描述</h2>
-<p>開啟 bash 時，初始化會出現錯誤訊息</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Last login: Fri Apr 12 19:22:12 on ttys002</span><br><span class="line">dyld: Library not loaded: /usr/local/opt/readline/lib/libreadline.7.dylib</span><br><span class="line">  Referenced from: /usr/local/bin/awk</span><br><span class="line">  Reason: image not found</span><br><span class="line">dyld: Library not loaded: /usr/local/opt/readline/lib/libreadline.7.dylib</span><br><span class="line">  Referenced from: /usr/local/bin/awk</span><br><span class="line">  Reason: image not found</span><br><span class="line"><span class="meta">$</span> ## bash 啟動之後 第一次可以下指令的位置</span><br></pre></td></tr></table></figure>
-<h2 id="解決方式"><a class="header-anchor" href="#解決方式">¶</a>解決方式</h2>
-<p>有些解決方式建議重裝 bash ，但是已試過無用。</p>
-<p>重新安裝 gawk<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> (GNU awk)</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew upgrade gawk</span><br></pre></td></tr></table></figure>
-<p>竟然就好了。<br>
-提供給遇到相同的問題的人參考</p>
-<!-- prettier-ignore-start -->
-<!-- prettier-ignore-end -->
+    <h1 id="認識-meta-viewport"><a class="header-anchor" href="#認識-meta-viewport">¶</a>認識 meta viewport</h1>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在這一段，寫了很多 <code>viewport</code> 的 <code>content</code> 設定字串。<br>
+這篇文章就是想來聊聊這些東西</p>
+<h2 id="前導觀念"><a class="header-anchor" href="#前導觀念">¶</a>前導觀念</h2>
+<p>首先，要先知道 <code>viewport</code> 有兩種</p>
+<ol>
+<li>visual viewport<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li>
+<li>layout viewport</li>
+</ol>
+<h3 id="visual-viewport"><a class="header-anchor" href="#visual-viewport">¶</a>visual viewport</h3>
+<p>Visual viewport 是一個 js 物件，就存在 window 物件之下。可以在瀏覽器的 console 中找到它的寬度</p>
+<p>用螢幕看，就等同於 <code>screen.width</code> 的值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">visualViewport.width; <span class="comment">// = screen.width</span></span><br></pre></td></tr></table></figure>
+<h3 id="layout-viewport"><a class="header-anchor" href="#layout-viewport">¶</a>layout viewport</h3>
+<p>在使用模擬器看手機排版時，可以用如圖的方式看見目前的 layout viewport 大小</p>
+<p><img src="https://i.imgur.com/EB5ugA8.png" alt=""></p>
+<p>一般而言，瀏覽器會給一個預設值，而這個值，會因設備而異，而 Apple 的設備，預設值是 <code>980px</code> <a href="%E5%BE%8C%E9%9D%A2%E5%B0%B1%E7%9F%A5%E9%81%93%E6%80%8E%E9%BA%BC%E6%89%BE%E9%A0%90%E8%A8%AD%E5%80%BC">^ref1</a></p>
+<h2 id="設定字串"><a class="header-anchor" href="#設定字串">¶</a>設定字串</h2>
+<p><code>width=device-width</code></p>
+<p>用來設定 layout viewport 的寬度，改變設備提供的預設值</p>
+<p><code>initial-scale=1.0</code></p>
+<p>有個江湖上的算法<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">initial-scale = visual viewport / layout viewport</span><br></pre></td></tr></table></figure>
+<p>若 <code>initial-scale</code> 值沒有設定，有時也是會正常的原因是因為有設定 <code>width</code> (layout viewport)</p>
+<blockquote>
+<p><strong>設定 initial-scale 或 width</strong> 二選一<br>
+有時候會覺得這兩個變數設定其中一個就好了。</p>
+</blockquote>
+<h3 id="手機直置變橫置-會出現無法預測的縮放行為"><a class="header-anchor" href="#手機直置變橫置-會出現無法預測的縮放行為">¶</a>手機直置變橫置，會出現無法預測的縮放行為</h3>
+<p><strong>若兩個都不設定</strong><br>
+<code>scale</code> 最後的值也許會變成瀏覽器用預設值算出來的結果</p>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://blog.csdn.net/qq_22833925/article/details/78871364" target="_blank" rel="noopener">mac Referenced from: /usr/local/bin/awk 問題</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport" target="_blank" rel="noopener">VisualViewport - MDN</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.zybuluo.com/gongzhen/note/170557" target="_blank" rel="noopener">消除 viewport 的疑惑-移動網頁開發</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -149,11 +171,11 @@
                         tags:
                         
   </li><li class="meta-text">
-  { <a href="/tags/bash/">bash</a> }
+  { <a href="/tags/viewport/">viewport</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/awk/">awk</a> }
+  { <a href="/tags/RWD/">RWD</a> }
   </li>
 
 
