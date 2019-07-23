@@ -1,7 +1,7 @@
 ---
 title: Vue Component 技巧 - 共用 Form
 date: 2019-07-03 23:18:37
-tags: ['vuejs', 'vuex']
+tags: ['vuejs', 'vuex', 'pure component']
 categories: '技術心得'
 ---
 
@@ -247,7 +247,7 @@ export default {
 
 ![](https://i.imgur.com/JvEgTd0.png)
 
-只有 36 行，要呼叫的 `action` 有差而已。
+只有 39 行，要呼叫的 `action` 有差而已。
 
 ## 重新定義問題
 
