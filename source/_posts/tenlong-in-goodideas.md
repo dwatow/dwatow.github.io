@@ -1,8 +1,13 @@
 ---
 title: 好想工作室裡的天瓏書目 (持續更新)
 date: 2018-10-07 13:51:23
-tags: [axios, monent, "vue-masonry", vuejs]
-categories: 技術練習
+tags: 
+- axios
+- monent
+- "vue-masonry"
+- vuejs
+categories: 
+- 技術練習
 ---
 
 # 好想工作室裡的天瓏書目 (持續更新)

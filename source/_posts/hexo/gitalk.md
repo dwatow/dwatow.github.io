@@ -1,8 +1,11 @@
 ---
 title: Hexo 加上 gitalk
 date: 2019-01-08 10:53:06
-tags: ['hexo', 'gitalk']
-categories: 'hexo改裝'
+tags: 
+- hexo
+- gitalk
+categories: 
+- hexo改裝
 ---
 ## Hexo 加上 gitalk
 

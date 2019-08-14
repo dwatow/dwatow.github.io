@@ -1,8 +1,10 @@
 ---
 title: Hexo 從無到發佈第一篇文章
 date: 2017-06-11 14:55:36
-tags: "hexo"
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 # Hexo 從無到發佈第一篇文章
 

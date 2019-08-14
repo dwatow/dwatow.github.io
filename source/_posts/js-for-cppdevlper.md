@@ -1,8 +1,10 @@
 ---
 title: 從C++到《你所不知道的JS》系列
 date: 2017-09-10 09:43:55
-tags: 你所不知道的js
-categories: 讀技術書
+tags: 
+- 你所不知道的js
+categories: 
+- 讀技術書
 ---
 
 # 從 C++到《你所不知道的 JS》系列

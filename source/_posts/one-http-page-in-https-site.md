@@ -1,8 +1,12 @@
 ---
 title: 設定 Nginx 在 https 中，留下一頁 http
 date: 2019-04-16 11:04:40
-tags: ["nginx", "https", "http"]
-categories: '技術心得'
+tags: 
+- nginx
+- https
+- http
+categories: 
+- 技術心得
 ---
 
 # 設定 Nginx 在 https 中，留下一頁 http

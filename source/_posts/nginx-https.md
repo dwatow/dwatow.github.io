@@ -1,8 +1,12 @@
 ---
 title: 幫你的網址加上 https (設定 SSL)
 date: 2019-04-16 10:05:49
-tags: ["nginx", "ssl", "https"]
-categories: 工具使用
+tags: 
+- nginx
+- ssl
+- https
+categories: 
+- 工具使用
 ---
 
 # 幫你的網址加上 https (設定 SSL)

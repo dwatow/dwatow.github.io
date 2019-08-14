@@ -1,8 +1,10 @@
 ---
 title: 修改 Hexo 程式碼區段 後處理
 date: 2017-06-14 14:07:48
-tags: "hexo"
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # 修改 Hexo程式碼區段 後處理

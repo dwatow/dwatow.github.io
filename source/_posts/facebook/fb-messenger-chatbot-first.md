@@ -1,8 +1,12 @@
 ---
 title: 初探Facebook Messager 聊天機器人
 date: 2017-06-16 18:03:20
-tags: ['facebook', 'chatbot', 'api']
-categories: "技術練習"
+tags: 
+- facebook
+- chatbot
+- api
+categories: 
+- 技術練習
 ---
 # 初探Facebook Messager 聊天機器人
 基本架構圖

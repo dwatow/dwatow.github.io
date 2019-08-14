@@ -1,8 +1,12 @@
 ---
 title: 讓 Code review 再也不會出現 Coding Style 的問題
 date: 2018-09-20 16:50:20
-tags: ["prettier", "husky", "webpack"]
-categories: 工具使用
+tags: 
+- prettier
+- husky
+- webpack
+categories: 
+- 工具使用
 ---
 
 # 讓 Code review 再也不會出現 Coding Style 的問題

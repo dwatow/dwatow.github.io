@@ -1,8 +1,10 @@
 ---
 title: 極簡易的 git server
 date: 2017-10-24 15:47:57
-tags: git
-categories: '技術心得'
+tags: 
+- git
+categories: 
+- 技術心得
 ---
 
 # 極簡易的 git server

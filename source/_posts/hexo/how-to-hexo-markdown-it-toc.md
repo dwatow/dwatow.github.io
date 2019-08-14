@@ -1,8 +1,10 @@
 ---
 title: markdown-it 如何順利使用 toc 在 hexo
 date: 2018-01-28 22:05
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 # markdown-it 如何順利使用 toc 在 hexo
 

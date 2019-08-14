@@ -1,8 +1,10 @@
 ---
 title: hexo加上流程圖
 date: 2017-06-18 19:22:32
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # hexo加上流程圖

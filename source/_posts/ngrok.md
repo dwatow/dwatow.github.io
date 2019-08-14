@@ -1,8 +1,11 @@
 ---
 title: 神器ngrok
 date: 2017-06-16 18:37:29
-tags: ["ngork", "測試工具"]
-categories: "工具使用"
+tags: 
+- ngork
+- 測試工具
+categories: 
+- 工具使用
 ---
 
 # 初探 ngrok 神器

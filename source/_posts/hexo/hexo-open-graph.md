@@ -1,8 +1,10 @@
 ---
 title: hexo 加上 Open Graph
 date: 2018-02-07 14:55:07
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # hexo 加上 Open Graph

@@ -1,8 +1,10 @@
 ---
 title: 實戰 Webpack 的 file-loader 和 url-loader
 date: 2018-12-29 23:06:43
-tags: [webpack]
-categories: '技術心得'
+tags: 
+- webpack
+categories: 
+- 技術心得
 ---
 # 實戰 Webpack 的 file-loader 和 url-loader
 

@@ -1,8 +1,11 @@
 ---
 title: Hexo 自訂程式碼區塊的行號 (用起來像 Hackmd)
 date: 2019-01-09 07:54:05
-tags: ['hackmd', 'hexo']
-categories: 'hexo改裝'
+tags: 
+- hackmd
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # Hexo 自訂程式碼區塊的行號 (像 Hackmd)

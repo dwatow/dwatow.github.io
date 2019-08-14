@@ -1,8 +1,12 @@
 ---
 title: Jest for Vue 發送 API 用 axios
 date: 2019-07-22 14:10:38
-tags: ['jest', 'vuejs', 'axios']
-categories: '技術心得'
+tags: 
+- jest
+- vuejs
+- axios
+categories: 
+- 技術心得
 ---
 # Jest for Vue 發送 API 用 axios
 

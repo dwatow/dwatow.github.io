@@ -1,8 +1,11 @@
 ---
 title: Sequelize 的 Relations/Associations
 date: 2018-09-24 16:15:35
-tags: [Sequelize, 'foreign key']
-categories: '技術心得'
+tags: 
+- Sequelize
+- 'foreign key'
+categories: 
+- 技術心得
 ---
 # Sequelize 的 Relations/Associations
 

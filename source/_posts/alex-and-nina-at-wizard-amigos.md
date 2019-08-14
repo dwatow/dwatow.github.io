@@ -1,8 +1,12 @@
 ---
 title: 來自德國的 Alex 和 Nina 交流
 date: 2018-03-13 08:34:44
-tags: [npm, unpkg, codepen]
-categories: [工具使用]
+tags: 
+- npm
+- unpkg
+- codepen
+categories: 
+- 工具使用
 ---
 
 # 來自德國的 Alex 和 Nina 交流

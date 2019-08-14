@@ -1,8 +1,14 @@
 ---
 title: Node-Sass 初探
 date: 2018-03-12 21:52:31
-tags: [nodejs, webpack, vuejs, "node-sass", "JavaScript"]
-categories: [工具使用]
+tags: 
+- nodejs
+- webpack
+- vuejs
+- "node-sass"
+- JavaScript
+categories: 
+- 工具使用
 ---
 
 # Node-Sass 初探

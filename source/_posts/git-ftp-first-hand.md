@@ -1,8 +1,11 @@
 ---
 title: Git 的支線 git-ftp
 date: 2018-09-21 20:52:28
-tags: ["git-ftp", git]
-categories: 工具使用
+tags: 
+- "git-ftp"
+- git
+categories: 
+- 工具使用
 ---
 
 # Git 的支線 git-ftp

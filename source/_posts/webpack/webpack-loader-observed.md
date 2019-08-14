@@ -1,8 +1,14 @@
 ---
 title: Webpack Loader 初探
 date: 2018-03-17 11:04:05
-tags: [nodejs, webpack, vuejs, "webpack loader", "JavaScript"]
-categories: [工具使用]
+tags: 
+- nodejs
+- webpack
+- vuejs
+- "webpack loader"
+- "JavaScript"
+categories: 
+- 工具使用
 ---
 
 # Webpack Loader 初探

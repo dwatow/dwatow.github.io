@@ -1,8 +1,11 @@
 ---
 title: 用 vue 切換 class
 date: 2018-04-05 22:26:33
-tags: [vuejs, "JavaScript"]
-categories: '技術心得'
+tags: 
+- vuejs
+- JavaScript
+categories: 
+- 技術心得
 ---
 
 # 用 vue 切換 class

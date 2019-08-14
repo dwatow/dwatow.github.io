@@ -1,8 +1,10 @@
 ---
 title: TED 二十歲的人生不能等到三十才開始
 date: 2017-06-19 13:10:45
-tags: ted
-categories: 聽演講
+tags: 
+- TED
+categories: 
+- 聽演講
 ---
 
 # [TED]Meg Jay: 二十歲的人生不能等到三十才開始

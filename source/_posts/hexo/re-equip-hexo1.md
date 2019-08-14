@@ -1,8 +1,10 @@
 ---
 title: Hexo研究筆記 1
 date: 2017-06-18 22:40:21
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # Hexo 研究筆記 1

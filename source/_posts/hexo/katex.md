@@ -1,8 +1,10 @@
 ---
 title: hexo加上數學式 MathJax
 date: 2018-01-28 20:45:21
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # hexo 加上數學式 MathJax

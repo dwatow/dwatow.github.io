@@ -1,8 +1,10 @@
 ---
 title: Webpack 官網文件內介紹過的套件
 date: 2018-02-26 16:20:16
-tags: webpack
-categories: ["工具使用"]
+tags: 
+- webpack
+categories: 
+- 工具使用
 ---
 
 # Webpack 官網文件內介紹過的套件

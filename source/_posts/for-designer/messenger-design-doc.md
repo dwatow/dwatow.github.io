@@ -1,8 +1,11 @@
 ---
 title: 給非工程人員的 Messager 引導手冊
 date: 2018-01-27 14:53:10
-tags: ['chatbot', 'facebook']
-categories: '工具使用'
+tags: 
+- chatbot
+- facebook
+categories: 
+- 工具使用
 ---
 # 給非工程人員的 Messager Chatbot 引導手冊
 

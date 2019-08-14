@@ -1,8 +1,12 @@
 ---
 title: node.js 的 Hello world 在 heroku
 date: 2018-01-13 12:26:22
-tags: ["nodejs", "heroku", "npm"]
-categories: "工具使用"
+tags: 
+- nodejs
+- heroku
+- npm
+categories: 
+- 工具使用
 ---
 
 # node.js 的 Hello world 在 heroku

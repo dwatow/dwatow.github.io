@@ -1,8 +1,11 @@
 ---
 title: Node.js 的 module.exports 和 require
 date: 2018-02-13 13:54:16
-tags: ["JavaScript", "nodejs"]
-categories: '技術心得'
+tags: 
+- JavaScript
+- nodejs
+categories: 
+- 技術心得
 ---
 
 # Node.js 的 module.exports 和 require

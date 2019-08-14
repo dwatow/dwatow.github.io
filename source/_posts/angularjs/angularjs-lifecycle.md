@@ -1,8 +1,10 @@
 ---
 title: AngularJS 1.5+ Component lifecycle
 date: 2019-01-02 10:30:34
-tags: 'angularjs'
-categories: '技術心得'
+tags: 
+- angularjs
+categories: 
+- 技術心得
 ---
 
 # AngularJS 1.5+ Component lifecycle

@@ -1,8 +1,11 @@
 ---
 title: 在 Vue 中 加入 filter 的 method
 date: 2018-09-21 16:47:45
-tags: [vuejs, filter]
-categories: '技術心得'
+tags: 
+- vuejs
+- filter
+categories: 
+- 技術心得
 ---
 
 # 在 Vue 中 加入 filter 的 method

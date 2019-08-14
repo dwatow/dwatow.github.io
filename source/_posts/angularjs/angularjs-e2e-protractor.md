@@ -1,8 +1,11 @@
 ---
 title: Protractor 快速指南
 date: 2019-01-26 12:49:28
-tags: ['angularjs', 'protractor']
-categories: 工具使用
+tags: 
+- angularjs
+- protractor
+categories: 
+- 工具使用
 ---
 
 # Protractor 快速指南

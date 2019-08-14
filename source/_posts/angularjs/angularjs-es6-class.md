@@ -1,8 +1,11 @@
 ---
 title: AngularJS 1.5+ Component style with es6-class
 date: 2018-12-23 20:32:28
-tags: ['angularjs', 'webpack']
-categories: '技術心得'
+tags: 
+- angularjs
+- webpack
+categories: 
+- 技術心得
 ---
 
 # AngularJS 1.5+ Component style with es6-class

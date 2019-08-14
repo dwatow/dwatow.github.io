@@ -1,8 +1,11 @@
 ---
 title: Vue 的 mixin 快速指南
 date: 2018-09-21 20:17:15
-tags: ["vuejs", "mixin"]
-categories: '技術心得'
+tags: 
+- vuejs
+- mixin
+categories: 
+- 技術心得
 ---
 
 # Vue 的 mixin 快速指南

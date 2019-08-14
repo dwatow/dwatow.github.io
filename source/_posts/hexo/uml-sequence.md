@@ -1,8 +1,10 @@
 ---
 title: hexo加上UML循序圖
 date: 2017-06-18 19:29:24
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # hexo 加上 UML 循序圖

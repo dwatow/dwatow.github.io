@@ -1,8 +1,12 @@
 ---
 title: 認識 meta viewport
 date: 2019-04-16 09:48:51
-tags: ["viewport", "RWD"]
-categories: ["聽演講", '技術心得']
+tags: 
+- viewport
+- RWD
+categories: 
+- 聽演講
+- 技術心得
 ---
 
 # 認識 meta viewport

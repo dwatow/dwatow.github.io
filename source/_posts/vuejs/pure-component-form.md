@@ -1,8 +1,12 @@
 ---
 title: Vue Component 技巧 - 共用 Form
 date: 2019-07-03 23:18:37
-tags: ['vuejs', 'vuex', 'pure component']
-categories: '技術心得'
+tags: 
+- vuejs
+- vuex
+- 'pure component'
+categories: 
+- 技術心得
 ---
 
 # Vue Component 技巧 - 共用 Form

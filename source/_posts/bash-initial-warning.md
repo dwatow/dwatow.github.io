@@ -1,8 +1,11 @@
 ---
 title: bash 開啟出現錯誤訊息
 date: 2019-04-16 09:42:18
-tags: ["bash", "awk"]
-categories: "macOS"
+tags: 
+- bash
+- awk
+categories: 
+- macOS
 ---
 
 # bash 開啟出現錯誤訊息

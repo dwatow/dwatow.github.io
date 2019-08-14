@@ -1,8 +1,10 @@
 ---
 title: Hexo 加上 Graphviz 功能
 date: 2019-02-04 22:57:53
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # Hexo 加上 Graphviz 功能

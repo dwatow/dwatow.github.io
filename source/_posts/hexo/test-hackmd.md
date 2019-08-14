@@ -1,8 +1,12 @@
 ---
 title: 測試 hackmd 支援的markdown寫法
 date: 2017-06-18 16:30:34
-tags: ['hexo', 'markdown測試', 'hackmd']
-categories: 'hexo改裝'
+tags: 
+- hexo
+- markdown測試
+- hackmd
+categories: 
+- hexo改裝
 ---
 
 # 測試 hackmd 語法

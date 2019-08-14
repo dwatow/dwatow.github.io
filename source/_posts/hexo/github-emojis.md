@@ -1,8 +1,10 @@
 ---
 title: hexo加上github表情符號
 date: 2017-06-18 19:45:54
-tags: 'hexo'
-categories: 'hexo改裝'
+tags: 
+- hexo
+categories: 
+- hexo改裝
 ---
 
 # hexo 加上 github 表情符號

@@ -1,8 +1,11 @@
 ---
 title: iView 安裝與配置
 date: 2018-05-09 10:03:42
-tags: [vuejs, ivuew]
-categories: '技術心得'
+tags: 
+- vuejs
+- ivuew
+categories: 
+- 技術心得
 ---
 
 # iView 安裝與配置

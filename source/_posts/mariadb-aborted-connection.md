@@ -1,8 +1,14 @@
 ---
 title: Mariadb 的 Docker 會 Aborted connection
 date: 2019-04-16 09:57:48
-tags: ["pm2", "nodejs", "docker", "sequelize", "express"]
-categories: 工具使用
+tags: 
+- pm2
+- nodejs
+- docker
+- sequelize
+- express
+categories: 
+- 工具使用
 ---
 
 # Mariadb 的 Docker 在每次寫入會 Aborted connection

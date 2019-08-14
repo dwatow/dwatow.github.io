@@ -1,8 +1,10 @@
 ---
 title: 《鳳凰專案》
 date: 2019-05-27 11:45:18
-tags: '看書'
-categories: '讀書心得'
+tags: 
+- 看書
+categories: 
+- 讀書心得
 ---
 
 # 鳳凰專案

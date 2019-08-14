@@ -1,8 +1,11 @@
 ---
 title: 前端的 File API
 date: 2019-05-22 10:20:22
-tags: ["file api", "JavaScript"]
-categories: "技術練習"
+tags: 
+- file api
+- JavaScript
+categories: 
+- 技術練習
 ---
 
 <style media="screen">

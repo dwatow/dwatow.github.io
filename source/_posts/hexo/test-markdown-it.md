@@ -1,8 +1,11 @@
 ---
 title: 測試 markdown-it 渲染器
 date: 2017-06-17 19:38:18
-tags: ['hexo', 'markdown測試']
-categories: 'hexo改裝'
+tags: 
+- hexo
+- markdown測試
+categories: 
+- hexo改裝
 ---
 
 # 測試 markdown-it 渲染器

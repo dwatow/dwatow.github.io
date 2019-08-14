@@ -1,10 +1,15 @@
 ---
 title: AngularJS + Jest 實戰
 date: 2019-08-14 17:33:58
-tags: ['jest', 'angularjs']
-categories: ['技術心得']
+tags: 
+- jest
+- angularjs
+categories: 
+- 技術心得
 ---
 # AngularJS + Jest 實戰
+
+![](https://i.imgur.com/toh1v1q.png)
 
 實做專案: https://github.com/dwatow/AngularJS-demo/tree/jest-demo
 
