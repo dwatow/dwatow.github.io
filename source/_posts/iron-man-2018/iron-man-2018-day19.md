@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 flex (下)
 date: 2017-12-29 07:38:50
-tags: ["2018鐵人賽", 'CSS', "Flex"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- Flex
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 

@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 CSS 的 簡單 Selector (下篇)
 date: 2017-12-23 07:17:11
-tags: ["2018鐵人賽", "Selector", 'CSS']
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- Selector
+- CSS
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -44,7 +48,6 @@ n 可以是 `odd` 或 `even` 單數、偶數。
 所以 `odd` 是奇數，`even` 是偶數
 
 n也可以是 `±Zn±Z` 或 `±Zn` (Z是整數) [^2]
-
 
 無差別計數。
 像是家裡的第幾個小孩
@@ -88,7 +91,7 @@ n也可以是 `±Zn±Z` 或 `±Zn` (Z是整數) [^2]
 
 ![](https://i.imgur.com/lDb98ya.png)
 
-```CSS
+```css
 input:checked + span {
  color: red;
 }
@@ -121,7 +124,7 @@ n = 9n+6
 原始碼長這樣
 將 `margin-left: 50px;` 解除註解就可以看到成功的案例囉
 
-```CSS
+```css
 .box {
  padding-bottom: 50px;
  width: 100px;

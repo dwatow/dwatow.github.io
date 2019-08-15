@@ -1,8 +1,13 @@
 ---
 title: 前端新手村 @import 開心的結構化 CSS
 date: 2018-01-05 07:27:46
-tags: ["2018鐵人賽", 'CSS', "CSS3", "import"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- CSS3
+- import
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -14,7 +19,7 @@ categories: "前端新手村"
 
 # `@import` 開心的結構化 CSS
 
-在 w3.org 的文件[^1]中， `@import` 和[ CSS Cascade ](https://ithelp.ithome.com.tw/articles/10191613) 是寫在一起的。
+在 w3.org 的文件[^1]中， `@import` 和 [CSS Cascade](https://ithelp.ithome.com.tw/articles/10191613) 是寫在一起的。
  `@import` 可以利用 CSS Cascade 的持性做一些讓程式碼變好的安排。所以在此特別提出來介紹一下。
 
 第一次知道這個語法，還是一個看到一個高中生的 source code，他把雲端字型用 `@import "URI"` 插入到 CSS 檔中，而不是常見的，使用 `<link href="URI">`，不然之前都只是在 SASS 的環境中使用。(初學看不懂這一段沒關係~XD)
@@ -25,7 +30,7 @@ categories: "前端新手村"
 
 指定路徑檔名 和 URI同名字串 都是常見的做法。
 
-```CSS
+```css
 @import "CSSFileName.css";
 @import url(CSSFileName.css);
 @import url("CSSFileName.css");
@@ -33,7 +38,7 @@ categories: "前端新手村"
 
 和 Media Query 一起使用，預設 `all`
 
-```CSS
+```css
 @import url(color.css) screen and (color);
 @import url(example.css) screen and (color), projection and (color);
 @import url("fineprint.css") print;

@@ -1,8 +1,14 @@
 ---
 title: 給前端的「來做個網路瀏覽器吧！」導讀
 date: 2018-02-12 09:19:02
-tags: ['2018鐵人賽', 'HTML', 'CSS', 'display', 'Render tree']
-categories: ['讀技術書']
+tags:
+- 2018鐵人賽
+- HTML
+- CSS
+- display
+- "Render tree"
+categories: 
+- 讀技術書
 ---
 # 給前端的「來做個網路瀏覽器吧！」導讀
 

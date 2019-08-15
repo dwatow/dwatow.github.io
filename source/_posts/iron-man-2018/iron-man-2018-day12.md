@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 CSS 的 簡單 Selector (中篇)
 date: 2017-12-22 07:10:54
-tags: ["2018鐵人賽", "Selector", 'CSS']
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- Selector
+- CSS
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -58,7 +62,7 @@ categories: "前端新手村"
 
 ### The target pseudo-class
 
-網址後面有時會接著一個 `#` 後面再接一段字，那段字若等同於某個 id ，則擁有 id 的 HTML element 稱為 target element ，就會用到 `:target` 的 CSS
+網址後面有時會接著一個 `#` 後面再接一段字，那段字若等同於某個 id ，則擁有 id 的 HTML element 稱為 target element ，就會用到 `:target`
 
 使用情境
 
@@ -70,7 +74,7 @@ categories: "前端新手村"
 <div id="mary">mary</div>
 ```
 
-```CSS
+```css
 :target {
  display: block;
 }
@@ -80,8 +84,8 @@ div {
 }
 ```
 
-- `:target` = `*:target` 任何 html element 的 id 在網址上，就會被套用 `:target` CSS。
-- `div:target` 就是只有 div 的 id 在網址上，才會套用 `:target` CSS。
+- `:target` = `*:target` 任何 html element 的 id 在網址上，就會被套用 `:target`。
+- `div:target` 就是只有 div 的 id 在網址上，才會套用 `:target`。
 
 > 注意，捲軸會重新捲到顯示 `id` 的地方。
 > 若使用 `:target` 出現無法解釋的捲軸移動現象，就只是為了顯示擁有該 `id` 的元素。

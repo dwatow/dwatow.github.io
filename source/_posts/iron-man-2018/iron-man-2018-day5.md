@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 CSS 的作用
 date: 2017-12-15 08:02:10
-tags: ["2018鐵人賽", 'CSS', "Vendor Prefix"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- Vendor Prefix
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -16,11 +20,11 @@ categories: "前端新手村"
 
 CSS，是「 Cascading Style Sheets 」的縮寫。
 
-在1996年左右，CSS剛開始被提出來，我自己是在大約1999年才接觸到CSS1，對於一個高中生來說，是很新的東西。在這之前，CSS的功能是做在 HTML attribute上。
+在1996年左右，CSS 剛開始被提出來，我自己是在大約1999年才接觸到 CSS1，對於一個高中生來說，是很新的東西。在這之前，CSS 的功能是做在 HTML attribute上。
 
 > 目的在於，資料歸資料，畫面歸畫面[^1]
 
-當你覺得，這一段 code 是為了畫面生時，就是使用CSS的時候了。
+當你覺得，這一段 code 是為了畫面生時，就是使用 CSS 的時候了。
 也就是說，要讓 CSS 控制「呈現的形式」。
 
 - 顯示與否
@@ -38,7 +42,7 @@ CSS，是「 Cascading Style Sheets 」的縮寫。
 
 ## 語法
 
-```CSS
+```css
 Selector {
     Property: Value;
 }
@@ -68,7 +72,7 @@ CSS3 帶來的真是一則以喜，一則以憂呀，對新手來說，隱藏著
 
 當你看見 CSS 有加一些特定的前綴
 
-```CSS
+```css
 -o-
 -moz-
 -ms-
@@ -77,7 +81,7 @@ CSS3 帶來的真是一則以喜，一則以憂呀，對新手來說，隱藏著
 
 看個例子
 
-```CSS
+```css
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
 border-radius: 5px;
@@ -105,7 +109,7 @@ border-radius: 5px;
 
 看個例子
 
-```CSS
+```css
 #nav-global > ul > li > a.nav-link {
     color: red;
 }

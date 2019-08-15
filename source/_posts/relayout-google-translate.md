@@ -24,7 +24,7 @@ categories:
 
    它有一個屬性 `width: 50%;`
 
-   ```CSS
+   ```css
    #gt-src-c, #gt-res-c {
        width: 50%;
        margin: 0;
@@ -39,7 +39,7 @@ categories:
 
    它有一個屬性 `min-width: 765px`
 
-   ```CSS
+   ```css
    #gt-c {
        min-width: 765px;
        position: relative;

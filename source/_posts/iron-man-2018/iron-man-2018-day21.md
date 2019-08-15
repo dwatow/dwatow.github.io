@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 Media Query
 date: 2017-12-31 07:18:37
-tags: ["2018鐵人賽", 'CSS', "Media Query"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- "Media Query"
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -26,20 +30,20 @@ categories: "前端新手村"
 
 在 CSS 插入 CSS 時加條件。
 
-```CSS
+```css
 @import url(color.css) screen and (color);
 ```
 
 在使用 CSS 時加條件
 
-```CSS
+```css
 @media all and (min-width:500px) { ... }
 @media (min-width:500px) { ... }
 ```
 
 media type 是 `all` 時，可以省略。
 
-```CSS
+```css
 @media (orientation: portrait) { ... }
 @media all and (orientation: portrait) { ... }
 ```
@@ -48,13 +52,13 @@ media type 是 `all` 時，可以省略。
 - `, ` 和 CSS 的 Combinators 一樣
 - `and` 就是「邏輯 AND」
 
-```CSS
+```css
 @media screen and (color), projection and (color) { ... }
 ```
 
 如果沒有給 media type 和 條件式，結果 always true
 
-```CSS
+```css
 @media all { ... }
 @media { ... }
 ```
@@ -65,7 +69,7 @@ media type 是 `all` 時，可以省略。
 <link rel="stylesheet" media="not screen and (color)" href="example.css" />
 ```
 
-```CSS
+```css
 @media not screen and (color) { ... }
 ```
 
@@ -78,7 +82,7 @@ media type 是 `all` 時，可以省略。
 
 可以在 `@import` 時加上 media query 的條件
 
-```CSS
+```css
 @import url(example.css) screen and (color), projection and (color);
 ```
 
@@ -158,7 +162,7 @@ media type 是 `all` 時，可以省略。
 
 
 來看看這個 `.col-sm-8
-```CSS
+```css
 .col,  /*...*/.col-sm-8 /*...*/ {
     position: relative;
     width: 100%;
@@ -167,7 +171,7 @@ media type 是 `all` 時，可以省略。
     padding-left: 15px;
 }
 ```
-```CSS
+```css
 @media (min-width: 576px) {
 /* ... */
     .col-sm-8 {
@@ -197,7 +201,7 @@ media type 是 `all` 時，可以省略。
 
 來看看 CSS 發現側邊欄 `#mw-navigation` 和其它的 selector 在列印中有設定隱藏。
 
-```CSS
+```css
 @media print {
     .noprint,
     .catlinks,

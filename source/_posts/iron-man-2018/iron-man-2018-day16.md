@@ -1,8 +1,13 @@
 ---
 title: 前端新手村 CSS Cascade 串接
 date: 2017-12-26 07:43:34
-tags: ["2018鐵人賽", "Specificity", "Rulest Order", 'CSS']
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- Specificity
+- Rulest Order
+- CSS
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -58,7 +63,7 @@ Specificity 在中文翻譯成「特定度」。
 
 看個例子
 
-```CSS
+```css
 #nav-global > ul > li > a.nav-link /* 0, 1, 1, 3 */
 ```
 - a = 0: 沒有寫在 HTML 的 `style`
@@ -84,7 +89,7 @@ Rulest order 翻譯成 規則集順序。
 
 看個例子
 
-```CSS
+```css
 #nav-global > ul > li > a.nav-link {
     color: blue;
 }

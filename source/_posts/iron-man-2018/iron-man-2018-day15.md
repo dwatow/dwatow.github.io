@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 偽元素
 date: 2017-12-25 13:26:48
-tags: ["2018鐵人賽", "Selector", "Pseudo-elements"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- Selector
+- "Pseudo-elements"
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -27,7 +31,7 @@ categories: "前端新手村"
 Selector::偽元素
 ```
 
-- 使用2個`:`是CSS3的規定，1個`:`也可以用的原因是對CSS1&2的相向下容性
+- 使用 2 個`:`是 CSS3 的規定，1個`:`也可以用的原因是對 CSS1 & 2 的相向下容性
 - 一個 Selector 只能有一個偽元素
 
 > 未來的版本會出現多重偽元素!!
@@ -64,7 +68,7 @@ Selector::偽元素
 ## 第一個字 `::first-letter`
 
 - 作用在一個字(母)
-- 第一個字的 `inline-table`, `inline-block` CSS會失效
+- 第一個字的 `inline-table`, `inline-block` CSS 會失效
 - 作用在 `block` 或 `table` 元素裡的 `inline` 內容(才有分行)。
 - 第一個字的位置是圖，則沒有任何字被選上
 - 標點符號起始的文章，標點符號會與字母一起被選取
@@ -76,7 +80,7 @@ Selector::偽元素
 
 **看個例子**
 
-```CSS
+```css
 p { color: red; font-size: 12pt }
 p::first-letter { color: green; font-size: 200% }
 p::first-line { color: blue }
@@ -147,7 +151,7 @@ p::first-line { color: blue }
 透過相鄰選取器就可以選取到，就算成功了。
 剩下的就是在左邊加上 `|` 就成功了
 
-```CSS
+```css
 span {
  position: relative;
 }

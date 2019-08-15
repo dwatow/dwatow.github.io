@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 Position 定位
 date: 2017-12-27 08:00:06
-tags: ["2018鐵人賽", 'CSS', "Position"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- Position
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -103,7 +107,7 @@ right: 數字
 
 用 JavaScript 加上/移除 CSS 的方式。[^5]
 
-```CSS
+```css
 :root {
  --menu-height: 100px;
 }
@@ -123,7 +127,7 @@ right: 數字
 
 只需要將 menu 加上這個 CSS，它就會在可視區 `top: 0` 和 `left: 0` 的範圍內，隨內容滾動，在範圍以外，固定在邊界。
 
-```CSS
+```css
 .stickyMenu {
     position: sticky;
     top: 0;
@@ -168,7 +172,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```CSS
+```css
 .sticky-element {
  position: sticky;
  top: 0;
@@ -200,7 +204,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```CSS
+```css
 .container {
   position: relative;
 }
@@ -219,7 +223,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```CSS
+```css
 * {
  margin: 0;
  padding: 0;
@@ -277,7 +281,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tellus ornare, 
 </div>
 ```
 
-```CSS
+```css
 div {
  height: 100px;
  width: 100px;

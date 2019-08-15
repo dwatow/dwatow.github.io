@@ -1,8 +1,15 @@
 ---
 title: 前端新手村 都市傳說之body範圍
 date: 2018-01-04 05:56:41
-tags: ["2018鐵人賽", "body", "background", "outline", "border", 'HTML']
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- body
+- background
+- outline
+- border
+- HTML
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 

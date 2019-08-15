@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 細說 Timing function
 date: 2018-01-02 07:53:59
-tags: ["2018鐵人賽", 'CSS', "Transition"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- Transition
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -90,7 +94,7 @@ step position 的意思
 
 舉例
 
-```CSS
+```css
 transition-timing-function: steps(1, start);
 transition-timing-function: steps(1, end);
 transition-timing-function: steps(3, start);
@@ -115,7 +119,7 @@ frames(大於1的正整數)
 
 例子
 
-```CSS
+```css
 transition-timing-function: frames(3);
 ```
 

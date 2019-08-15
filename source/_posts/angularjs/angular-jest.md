@@ -282,7 +282,10 @@ class controller {
 
 - 沒有一個好的方式可以觸發 event 。
 只能直接操作 component 的 event callback 假裝操作了 event。
-- 不能自動執行 component 的 lifecycle
+- 不能自動執行 component 的 lifecycle [^lifecycle][^PCHR3944]
+
+[^lifecycle]: [Angular’s $componentController](https://medium.com/@defields923/angulars-componentcontroller-c5370d7c16c7)
+[^PCHR3944]: [PCHR-3944: Update to AngularJS v1.7 #2790, Use of $onInit hook in components](https://github.com/compucorp/civihr/pull/2790)
 
 angularjs-jest 的 render 功能
 

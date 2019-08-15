@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 Transition
 date: 2018-01-01 09:42:05
-tags: ["2018鐵人賽", 'CSS', "Transition"]
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- CSS
+- Transition
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -77,7 +81,7 @@ delay時間 變化函數 都是使用預設值。
 <div class="box"></div>
 ```
 
-```CSS
+```css
 .box {
   height: 100px;
   width: 100px;
@@ -129,7 +133,7 @@ delay時間 變化函數 都是使用預設值。
 
 先來看看原始碼
 
-```CSS
+```css
 .box {
   height: 100px;
   width: 100px;
@@ -174,7 +178,7 @@ delay時間 變化函數 都是使用預設值。
 <div class="box"></div>
 ```
 
-```CSS
+```css
 #c1:checked ~ .box {
   margin-left: 0px;
 }
@@ -194,7 +198,7 @@ delay時間 變化函數 都是使用預設值。
 若我們要在一開始消失，後來出現。
 在 CSS 加上 `display: none` -> `display: block` 的切換
 
-```CSS
+```css
 #c1:checked ~ .box {
   /* 和上面的一樣 */
   display: block;

@@ -1,8 +1,12 @@
 ---
 title: 前端新手村 CSS 簡單 Selector (上篇) & Groups
 date: 2017-12-21 07:30:03
-tags: ["2018鐵人賽", "Selector", 'CSS']
-categories: "前端新手村"
+tags: 
+- 2018鐵人賽
+- Selector
+- CSS
+categories: 
+- 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻
 
@@ -17,7 +21,7 @@ categories: "前端新手村"
 ## CSS Selector
 
 > Selectors are patterns that match against elements[^1]
->
+
 選擇器是一種樹狀元素匹配的 Pattern，可以高效率的選取 HTML 和 XML 節點。
 
 **運作原理[^1]**
@@ -103,7 +107,7 @@ CSS 還是會建議以 class 優先使用。
 
 可以使用`,`符號，將 Selector 串起來，這是將 Selector 組成群組 (Group)。
 
-```CSS
+```css
 *, .className {}
 #id, .className {}
 ```
