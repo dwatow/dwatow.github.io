@@ -64,7 +64,7 @@ DB_PASS=DB_PASS
 **app.js**
 
 ```javascript
-require("dotenv").load();
+require('dotenv').config();
 console.log(process.env.CHRIS); //chris
 console.log(process.env["DB_HOST"]); //DB_HOST
 console.log(process.env["DB_PORT"]); //DB_PORT
@@ -72,7 +72,10 @@ console.log(process.env["DB_USER"]); //DB_USER
 console.log(process.env["DB_PASS"]); //DB_PASS
 ```
 
+> 感謝 [cytsunny](https://github.com/cytsunny) 的提醒
+> 確實是 `require('dotenv').config();`[^dotenv-npm] 沒有什麼 `require('dotenv').load();`
+
 <!-- prettier-ignore-start -->
 [^node]: [process.env - node](https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_env)
 [^dotenv]: [Working with Environment Variables in Node.js](https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html)
-<!-- prettier-ignore-end -->
+[^dotenv-npm]: [dotenv - npm](https://www.npmjs.com/package/dotenv)
