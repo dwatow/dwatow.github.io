@@ -1,5 +1,5 @@
 ---
-title: Jest for Vue with Vuex 實戰
+title: Jest for Vue with Vuex 演練
 date: 2019-07-03 23:29:07
 tags: 
 - jest
@@ -8,7 +8,7 @@ tags:
 categories: 
 - 技術心得
 ---
-# Jest for Vue with Vuex 實戰
+# Jest for Vue with Vuex 演練
 
 這次測試，要測試的是模仿使用者操作。
 在畫面顯示的變化要出現
@@ -43,7 +43,6 @@ categories:
 所以，文件的使用情境，是初學者無法一眼看明白的挫折，怎麼弄程式碼就是跑不起來，原來是搞錯了文件的情境。
 
 **Vue 官網的 Unit test 的情用情況是 vue-cli**[^vueUnitTest]
-
 
 [^vueUnitTest]: [Unit Testing - Vue](https://vuejs.org/v2/guide/unit-testing.html)
 
