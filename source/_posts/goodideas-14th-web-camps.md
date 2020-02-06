@@ -4,7 +4,7 @@ date: 2019-11-15 17:24:09
 tags: 
 - 好想工作室
 categories: 
-- 好想工作室
+- "關於 mentor 這件事"
 ---
 
 # 好想工作室第 14 梯 Web Camp 招生

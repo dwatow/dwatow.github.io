@@ -17,6 +17,14 @@ categories:
 > 要注意你自己的主題是不是 `ejs` 做的
 如果不是，就不適用官網的介紹。
 
+**2020/02/05 更新**
+
+因 GitHub 的授權政策修改。
+Gitalk 的授權 token 要改成 access_token ，不使用 `clientID`/`clientSecret` 。
+~~否則 GitHub 就灌爆你的信箱~~
+若[pull request 334](https://github.com/gitalk/gitalk/pull/344) 尚未合併，考慮採用臨時解決方案
+臨時解決方案: 參考 https://github.com/gitalk/gitalk/issues/343#issuecomment-581758733
+
 ## 加上 CDN
 
 引用 npm 的檔案
@@ -27,10 +35,22 @@ categories:
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 ```
 
+:::info
+臨時解決方案，使用網友改好的 js 檔。
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+```
+:::
+
 可以貼上 theme 的模版。看看是不是要貼在 `<head>`
 
 
 ## 開啟 github 權限
+
+:::danger
+舊版的做法，不要再這麼做了
 
 直接去 [Github > Profile > Settings Developer > settings > New OAuth App](https://github.com/settings/applications/new)
 
@@ -47,6 +67,17 @@ categories:
 成功會看見這個畫面
 
 ![](https://i.imgur.com/24Bepdi.png)
+:::
+
+直接去 [Github > Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
+
+1. 按下 「Generate new token」，進入新增 token 頁面
+2. 填上 Note，捲到最下面，直接按下「Generate token」[註1]
+3. 成功之後，複製 token，先存好，之後就看不到了，這就是 access token 囉。
+
+> 註1: 沒錯，不用勾選任何勾勾就是 (no scope)，等同於 read-only token
+> 出處: https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/#available-scopes
+
 
 ## 加上留言區
 
@@ -76,6 +107,8 @@ categories:
 
 這一段初始化最後會渲染在 `#gitalk-container` 的位置
 
+:::danger
+這是舊版的做法
 ```html
 <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <script src="https://unpkg.com/gitalk/dist/gitalk.js"></script>
@@ -83,6 +116,27 @@ categories:
     var gitalk = new Gitalk({
         clientID: '<%= theme.gitalk.clientID %>',
         clientSecret: '<%= theme.gitalk.clientSecret %>',
+        id: window.location.pathname,
+        repo: '<%= theme.gitalk.repo %>',
+        owner: '<%= theme.gitalk.owner %>',
+        admin: '<%= theme.gitalk.admin %>',
+        distractionFreeMode: '<%= theme.gitalk.on %>'
+    })
+    gitalk.render('gitalk-container')
+</script>
+```
+:::
+
+加上 accessToken 的欄位。(打算從 _config.yml 讀進來)
+目前先使用臨時解決方案的 js 檔。
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<!-- <script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script> -->
+<!-- 臨時解決方案 --> <script src="https://unpkg.com/gitalk/dist/gitalk.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '<%= theme.gitalk.accessToken %>',
         id: window.location.pathname,
         repo: '<%= theme.gitalk.repo %>',
         owner: '<%= theme.gitalk.owner %>',
@@ -119,6 +173,8 @@ categories:
 
 所以上面那一段初始化 javascript 的渲染現在才 work
 
+:::danger
+這是舊版的做法
 ```yaml=
 gitalk:
   on: true
@@ -129,6 +185,20 @@ gitalk:
   clientSecret: ...
   labels: ['Gitalk']
 ```
+:::
+
+
+```yaml=
+gitalk:
+  enable: post
+  on: true
+  owner: dwatow
+  repo: dwatow.github.io
+  admin: ['dwatow']
+  accessToken: ...
+  labels: ['Gitalk']
+```
+
 
 ## 驗證成功
 
