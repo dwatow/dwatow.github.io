@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶實戰 Webpack 的 file-loader 和 url-loader ¶用途 Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。 後來發現一些小的 icon 檔圖 image 檔，會為了幾 KB 的大小而進行 Web API 的請求來來回回幾次很浪費時間，所以，出現了 url-loader[2] 將這些小檔案變成 base64 的格式放在前端。 ¶url-lo">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="實戰 Webpack 的 file-loader 和 url-loader">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;12-29-webpack&#x2F;action-url-loader-file-loader&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶實戰 Webpack 的 file-loader 和 url-loader ¶用途 Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。 後來發現一些小的 icon 檔圖 image 檔，會為了幾 KB 的大小而進行 Web API 的請求來來回回幾次很浪費時間，所以，出現了 url-loader[2] 將這些小檔案變成 base64 的格式放在前端。 ¶url-lo">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.521Z">
+<meta name="twitter:card" content="summary">
+  <title>實戰 Webpack 的 file-loader 和 url-loader - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>實戰 Webpack 的 file-loader 和 url-loader</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#實戰-Webpack-的-file-loader-和-url-loader"><span class="toc-text">實戰 Webpack 的 file-loader 和 url-loader</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用途"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#url-loader-file-loader-的關係"><span class="toc-text">url-loader &amp; file-loader 的關係</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="實戰-Webpack-的-file-loader-和-url-loader"><a class="header-anchor" href="#實戰-Webpack-的-file-loader-和-url-loader">¶</a>實戰 Webpack 的 file-loader 和 url-loader</h1>
+<h2 id="用途"><a class="header-anchor" href="#用途">¶</a>用途</h2>
+<p>Webpack 在處理檔案時，可以使用 file-loader<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> 進行處理。<br>
+後來發現一些小的 icon 檔圖 image 檔，會為了幾 KB 的大小而進行 Web API 的請求來來回回幾次很浪費時間，所以，出現了 url-loader<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 將這些小檔案變成 base64 的格式放在前端。</p>
+<h2 id="url-loader-file-loader-的關係"><a class="header-anchor" href="#url-loader-file-loader-的關係">¶</a>url-loader &amp; file-loader 的關係</h2>
+<p>套件 url-loader 有和 file-loader 有相依性<br>
+url-loader 預設超過 limit 參數大小的檔案，會傳給 file-loader 處理。</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p>url-loader 和 file-loader 都要安裝。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install url-loader file-loader --save-dev</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
+<p>在 Webpack 設定，只需要設定 url-loader 即可，因為 url-loader 有一個 <code>fallback</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 參數，預設值是 <code>file-loader</code> ，所以在預設的情況下，會呼叫 file-loader，不用另外設定。</p>
+<p>在 url-loader 的 options 中，其實和 file-loader 是共用的，可以將 file-loader 的參數也設定在其中。</p>
+<p><strong>example</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.(woff|woff2|eot|ttf|otf|png|svg|jpg|gif)$/</span>,</span><br><span class="line">      use: &#123;</span><br><span class="line">        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          limit: <span class="number">1000</span>, <span class="comment">//bytes</span></span><br><span class="line">          name: <span class="string">'[hash:7].[ext]'</span>,</span><br><span class="line">          outputPath: <span class="string">'assets'</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>file-loader 的輸入是依照程式碼裡的檔案路徑，找到相對應的檔案之後，輸出成 webpack config 指定的位置與檔名格式。</p>
+<p>url-loader 不會變檔案，所以沒有指定檔名格式的參數。</p>
+</blockquote>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://github.com/webpack-contrib/file-loader" target="_blank" rel="noopener">file-loader</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/webpack-contrib/url-loader" target="_blank" rel="noopener">url-loader</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://github.com/webpack-contrib/url-loader#fallback" target="_blank" rel="noopener">fallback - url-loader</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-12-29T15:06:43.000Z" itemprop="datePublished">
+              2018-12-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/webpack/">webpack</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
+這是一種很常見的網路字型變 icon 的魔法。
+有免費版和付費的專業版
+可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-20-eslint-first/">ESlint 初次安裝</a><div class="related-posts-item-abstract">¶ESlint 初次安裝
+之前都是靠 vue-cli 安裝。
+這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。
+¶安裝
+在官網找到 npm 上的安</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
+
+¶源起
+目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
+也許種種原</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-cli2/">使用 Vue-cli 2</a><div class="related-posts-item-abstract">¶使用 Vue-cli 2
+雖然 vue-cli 出了 3 版，在此先聊聊 2 版怎麼開始，也許新手對 vue-cli 3 接受度會大增。
+vue.js 有了自己初始專</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-20-code-review-no-coding-style-worning/">讓 Code review 再也不會出現 Coding Style 的問題</a><div class="related-posts-item-abstract">¶讓 Code review 再也不會出現 Coding Style 的問題
+用 prettier 當作整理程式碼的工具，希望可以在每一次操作 git commit 之</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

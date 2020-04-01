@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="前端工程師技術分享部落格">
+<meta property="og:type" content="website">
+<meta property="og:title" content="《Chris 技術筆記》">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;page&#x2F;5&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="前端工程師技術分享部落格">
+<meta property="og:locale" content="zh-tw">
+<meta name="twitter:card" content="summary">
+  <title>《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                
+
+    <ul class="Index">
+        <header class='PageTitle'>
+            <h1>最新。頭版</h1>
+        </header>
+        
+            
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-21-vuejs/vue-component-with-v-model/">https://dwatow.github.io/2018/09-21-vuejs/vue-component-with-v-model/</a></li>
+                <li>
+                    <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vue Component 也可以用 v-model</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-Component-也可以用-v-model"><span class="toc-text">Vue Component 也可以用 v-model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#解析-v-model"><span class="toc-text">解析 v-model</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Vue-Component-也可以用-v-model"><a class="header-anchor" href="#Vue-Component-也可以用-v-model">¶</a>Vue Component 也可以用 v-model</h1>
+<p>前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的設定。<br>
+而在 vue2 裡有 <code>v-model</code> 其實是一種用單向綁定與事件而實現的雙向綁定語法。</p>
+<p>又要如何實作，才可以讓 <code>v-model</code> 作用在自己設計的 component 呢？</p>
+<h2 id="解析-v-model"><a class="header-anchor" href="#解析-v-model">¶</a>解析 <code>v-model</code></h2>
+<p>先知道</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">v-model</span>=<span class="string">"parentData"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其實是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">"parentData"</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">"parentData = $event.target.value"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>所以，也是有可能可以設計一個可化用 <code>v-model</code> 的 component</p>
+<p><strong>parents</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">my-component</span> <span class="attr">v-model</span>=<span class="string">"parentData"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">my-component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./myComponent.vue'</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line">      data () &#123;</span><br><span class="line"><span class="actionscript">          parentData: <span class="string">''</span></span></span><br><span class="line">      &#125;,</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>child</strong></p>
+<p>對照 parent 的真實面貌</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">"parentData"</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">"parentData = $event.target.value"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 的實作</p>
+<ul>
+<li><code>:value</code> 在 component 裡要 <code>props</code></li>
+<li><code>@input</code> 在 component 裡要 <code>$emit</code></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">"$emit('input', retuanValue)"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./myComponent.vue'</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">        props: [<span class="string">'value'</span>],</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+    
+</article>
+
+                </li>
+                
+                    <li class="meta-text">
+                        tags:
+                        
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/v-model/">v-model</a> }
+  </li>
+
+
+                    </li>
+                
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </ul>
+
+
+    <h2>標籤雲</h2>
+    <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 17.09px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 41.82px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 20.18px;">Flex</a> <a href="/tags/HTML/" style="font-size: 23.27px;">HTML</a> <a href="/tags/Inline/" style="font-size: 20.18px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.64px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 20.18px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 17.09px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 26.36px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 29.45px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/Transition/" style="font-size: 17.09px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 26.36px;">angularjs</a> <a href="/tags/animation/" style="font-size: 20.18px;">animation</a> <a href="/tags/api/" style="font-size: 17.09px;">api</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 17.09px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 20.18px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 17.09px;">display</a> <a href="/tags/docker/" style="font-size: 20.18px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 23.27px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 26.36px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 17.09px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 38.73px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 17.09px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jest/" style="font-size: 23.27px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 17.09px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown%E6%B8%AC%E8%A9%A6/" style="font-size: 17.09px;">markdown測試</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 17.09px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.55px;">nodejs</a> <a href="/tags/npm/" style="font-size: 20.18px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 17.09px;">prettier</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 17.09px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 20.18px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 44.91px;">vuejs</a> <a href="/tags/vuex/" style="font-size: 14px;">vuex</a> <a href="/tags/vuex/" style="font-size: 17.09px;">vuex'</a> <a href="/tags/web-camp/" style="font-size: 14px;">web camp</a> <a href="/tags/webpack/" style="font-size: 35.64px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 26.36px;">團隊溝通技巧</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 23.27px;">好想工作室</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 14px;">看書</a>
+
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

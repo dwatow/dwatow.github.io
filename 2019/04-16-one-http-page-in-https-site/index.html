@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶設定 Nginx 在 https 中，留下一頁 http  在看之前，想問來看文章的讀者們 (厲害的開發者們) 瀏覽器是否會 catch 某一版本的設定？ 設定 Web Server 時，修改並不會即時反映，需要每一次都開新的無痕才可以驗證正確的結果。  這個問題，有兩個地方要注意  Web Server 前端 router   這個 Web Server 的設定，在有前端 router 時，要">
+<meta name="keywords" content="nginx,https,http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="設定 Nginx 在 https 中，留下一頁 http">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;04-16-one-http-page-in-https-site&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶設定 Nginx 在 https 中，留下一頁 http  在看之前，想問來看文章的讀者們 (厲害的開發者們) 瀏覽器是否會 catch 某一版本的設定？ 設定 Web Server 時，修改並不會即時反映，需要每一次都開新的無痕才可以驗證正確的結果。  這個問題，有兩個地方要注意  Web Server 前端 router   這個 Web Server 的設定，在有前端 router 時，要">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.512Z">
+<meta name="twitter:card" content="summary">
+  <title>設定 Nginx 在 https 中，留下一頁 http - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>設定 Nginx 在 https 中，留下一頁 http</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#設定-Nginx-在-https-中，留下一頁-http"><span class="toc-text">設定 Nginx 在 https 中，留下一頁 http</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#最後的解法如下。"><span class="toc-text">最後的解法如下。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正規表示式"><span class="toc-text">正規表示式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#設定檔的關鍵字"><span class="toc-text">設定檔的關鍵字[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#listen"><span class="toc-text">listen</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#location"><span class="toc-text">location[1:1]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#try-files"><span class="toc-text">try-files</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="設定-Nginx-在-https-中，留下一頁-http"><a class="header-anchor" href="#設定-Nginx-在-https-中，留下一頁-http">¶</a>設定 Nginx 在 https 中，留下一頁 http</h1>
+<div class="info">
+<p>在看之前，想問來看文章的讀者們 (厲害的開發者們) 瀏覽器是否會 catch 某一版本的設定？<br>
+設定 Web Server 時，修改並不會即時反映，需要每一次都開新的無痕才可以驗證正確的結果。</p>
+</div>
+<p>這個問題，有兩個地方要注意</p>
+<ol>
+<li>Web Server</li>
+<li>前端 router</li>
+</ol>
+<div class="warning">
+<p>這個 Web Server 的設定，在有前端 router 時，要注意。<br>
+如果沒有重新整理的 route 都算是前端 route 的執行結果，與 web server 無關。</p>
+</div>
+<h2 id="最後的解法如下。"><a class="header-anchor" href="#最後的解法如下。">¶</a>最後的解法如下。</h2>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">80</span> default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">80</span> default_server;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">root</span> /front_end/index/path;</span><br><span class="line">  <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 特定路徑之下，執行 http</span></span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^(/target/path)(.[^/]+)$</span> &#123;</span><br><span class="line">    <span class="attribute">try_files</span> /index.html =<span class="number">404</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 不符合特定路徑，通通導回 https</span></span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^(?!/target/path)(.*)$</span> &#123;</span><br><span class="line">    <span class="attribute">rewrite</span><span class="regexp"> ^(/.*)$</span> https://<span class="variable">$host</span>/<span class="variable">$1</span> <span class="literal">permanent</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="comment"># SSL configuration</span></span><br><span class="line">  <span class="attribute">listen</span> <span class="number">443</span> ssl default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl default_server;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 憑證與金鑰的路徑</span></span><br><span class="line">  <span class="attribute">ssl_certificate</span> /nginx_path/ssl.crt;</span><br><span class="line">  <span class="attribute">ssl_certificate_key</span> /nginx_path/ssl.key;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Add index.php to the list if you are using PHP</span></span><br><span class="line">  <span class="attribute">root</span> /front_end/index/path;</span><br><span class="line">  <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">server_name</span> _;</span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^.*$</span> &#123;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html =<span class="number">404</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中最重要的有兩個地方。</p>
+<ul>
+<li>正規表示式 使用<a href="https://regex101.com/" target="_blank" rel="noopener">工具</a> 驗證寫出來的正規表示式。</li>
+<li>讀懂 nginx 的設定</li>
+</ul>
+<h2 id="正規表示式"><a class="header-anchor" href="#正規表示式">¶</a>正規表示式</h2>
+<p>設定檔幾個 regex</p>
+<p>基本</p>
+<table>
+<thead>
+<tr>
+<th>語法</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^</code></td>
+<td>開頭處</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>結尾處</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>非斷行的任意字元</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>只是反斜線 (正規表示式為<code>\/</code> nginx 無需跳脫字元)</td>
+</tr>
+</tbody>
+</table>
+<p>邏輯</p>
+<table>
+<thead>
+<tr>
+<th>語法</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^</code></td>
+<td>邏輯 not</td>
+</tr>
+<tr>
+<td><code>?!</code></td>
+<td>負向預查</td>
+</tr>
+</tbody>
+</table>
+<p>次數</p>
+<table>
+<thead>
+<tr>
+<th>語法</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>匹配前面的子運算式一次或多次。</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>匹配前面的子運算式零次或多次。</td>
+</tr>
+</tbody>
+</table>
+<p>參考: <a href="http://ccckmit.wikidot.com/regularexpression" target="_blank" rel="noopener">正規表示式 Regular Expression</a></p>
+<ol>
+<li><code>^(/target/path)(.[^/]+)$</code><br>
+開頭是 <code>/target/path</code> 且要接「任意字元，任意長度，但不能包含<code>/</code>(階層) 」，就成立</li>
+<li><code>^(?!/target/path)(.+)$</code><br>
+開頭 條件不符合 <code>/target/path</code> 時，且要接「任意字元」，就成立</li>
+<li><code>^.*$</code><br>
+「任意字元」，就成立</li>
+</ol>
+<h2 id="設定檔的關鍵字"><a class="header-anchor" href="#設定檔的關鍵字">¶</a>設定檔的關鍵字<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>參考: <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener">Module ngx_http_core_module - nginx</a></p>
+<ul>
+<li>server
+<ul>
+<li>listen 指定監聽 socket (TCP) port</li>
+<li>root</li>
+<li>index</li>
+<li>location
+<ul>
+<li>return</li>
+<li>try_files</li>
+<li>rewrite</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="listen"><a class="header-anchor" href="#listen">¶</a>listen</h3>
+<p>能用在 server 內</p>
+<p>指定 IP:port</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span> <span class="number">192.168.1.1:80</span>;</span><br></pre></td></tr></table></figure>
+<p>指定 port (該主機的任意 IP)</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span> <span class="number">80</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="location"><a class="header-anchor" href="#location">¶</a>location<sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup></h3>
+<p>能用在 server 或 location 內<br>
+所有的 location 都會組成一棵樹</p>
+<p>語法:</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location [ = | ~ | ~* | ^~ ] uri &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>=</code> URI 當字串匹配</li>
+<li><code>^~</code> URI 當字串，字串字首比對</li>
+<li><code>~</code> URI 當正規表示式匹配，區分大小寫</li>
+<li><code>~*</code> URI 當正規表示式匹配，不區分大小寫</li>
+</ul>
+<p><a href="http://seanlook.com/2015/05/17/nginx-location-rewrite/" target="_blank" rel="noopener">nginx 配置 location 總結及 rewrite 規則寫法</a></p>
+<h3 id="try-files"><a class="header-anchor" href="#try-files">¶</a>try-files</h3>
+<p>能用在 server 或 location 內</p>
+<p>依次判斷檔案是否存在，並且回傳，都不存在則由 fallback 處理</p>
+<p>語法:<br>
+一種連續 if 判斷的指令</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">try_files</span> file1 [file2 file3 file4 ... fileN] fallback;</span><br></pre></td></tr></table></figure>
+<p>example</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /error.html =<span class="number">404</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>$uri<br>
+The value of $uri may change during request processing, e.g. when doing internal redirects, or when using index files.</p>
+</blockquote>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>《一手掌握短小精幹的 Nginx》, p.10-3 <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2019-04-16T03:04:40.000Z" itemprop="datePublished">
+              2019-04-16
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/nginx/">nginx</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/https/">https</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/http/">http</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/04-16-nginx-https/">幫你的網址加上 https (設定 SSL)</a><div class="related-posts-item-abstract">¶幫你的網址加上 https (設定 SSL)
+
+開啟 web server 的 443 port，用來傳送 https 的 port
+申請憑證
+
+¶nginx 開 4</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

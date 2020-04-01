@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶iView Table 裡放 Dropdown ¶前言 聽朋友 1 號介紹 iView  切版套 Bootstrap，用 vue 就要套 iView  覺得很潮，所以用了一下。 用起來的感覺，真的是很不錯。 元件的封裝做得很好。 但是，卻有一個地方，讓我覺得很麻煩弄很久才搞定。 Story  「禮物」可以選擇要給誰，再送出嗎？  先知道，禮物是一個 API 回來的 array 禮物資料，用 iV">
+<meta name="keywords" content="vuejs,iview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iView Table 裡放 Dropdown">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;05-20-iview-table-dropdown-action&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶iView Table 裡放 Dropdown ¶前言 聽朋友 1 號介紹 iView  切版套 Bootstrap，用 vue 就要套 iView  覺得很潮，所以用了一下。 用起來的感覺，真的是很不錯。 元件的封裝做得很好。 但是，卻有一個地方，讓我覺得很麻煩弄很久才搞定。 Story  「禮物」可以選擇要給誰，再送出嗎？  先知道，禮物是一個 API 回來的 array 禮物資料，用 iV">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;jw4FOcB.png">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.504Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;jw4FOcB.png">
+  <title>iView Table 裡放 Dropdown - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>iView Table 裡放 Dropdown</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iView-Table-裡放-Dropdown"><span class="toc-text">iView Table 裡放 Dropdown</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Table-裡放-Button"><span class="toc-text">Table 裡放 Button</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Table-裡放-Dropdown"><span class="toc-text">Table 裡放 Dropdown</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解決延伸問題"><span class="toc-text">解決延伸問題</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#細部調整-dropdown"><span class="toc-text">細部調整 dropdown</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#後續"><span class="toc-text">後續</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="iView-Table-裡放-Dropdown"><a class="header-anchor" href="#iView-Table-裡放-Dropdown">¶</a>iView Table 裡放 Dropdown</h1>
+<h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
+<p>聽朋友 1 號介紹 <a href="https://www.iviewui.com/components" target="_blank" rel="noopener">iView</a></p>
+<blockquote>
+<p>切版套 Bootstrap，用 vue 就要套 iView</p>
+</blockquote>
+<p>覺得很潮，所以用了一下。</p>
+<p>用起來的感覺，真的是很不錯。<br>
+元件的封裝做得很好。</p>
+<p>但是，卻有一個地方，讓我覺得很麻煩弄很久才搞定。</p>
+<p><strong>Story</strong></p>
+<ul>
+<li>「禮物」可以選擇要給誰，再送出嗎？</li>
+</ul>
+<p>先知道，禮物是一個 API 回來的 array<br>
+禮物資料，用 iView 的 Table 呈現，這個過程真的很爽，很好搞定</p>
+<p>但是…贈予對象是另一個 API 回來的 array<br>
+要…要在 Table 裡放 Dropdown</p>
+<p>要怎麼做呢？<br>
+看看官網文件說了什麼</p>
+<h2 id="Table-裡放-Button"><a class="header-anchor" href="#Table-裡放-Button">¶</a>Table 裡放 Button</h2>
+<p><img src="https://i.imgur.com/jw4FOcB.png" alt=""></p>
+<p>最接近這個需求的，我想就是這個範例了，先看看它</p>
+<blockquote>
+<p>如果想要知道，要在 Table 放 Dropdown，要先知要<a href="https://www.iviewui.com/components/table#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%97%E6%A8%A1%E6%9D%BF" target="_blank" rel="noopener">怎麼放 Button</a> 吧？！</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Table</span> <span class="attr">border</span> <span class="attr">:columns</span>=<span class="string">"columns7"</span> <span class="attr">:data</span>=<span class="string">"data6"</span>&gt;</span><span class="tag">&lt;/<span class="name">Table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      columns7: [</span><br><span class="line">        <span class="comment">//...'Name', 'Age', 'Address',</span></span><br><span class="line">        &#123;</span><br><span class="line">          title: <span class="string">"Action"</span>,</span><br><span class="line">          <span class="comment">//...</span></span><br><span class="line">          render: <span class="function">(<span class="params">h, params</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> h(<span class="string">"div"</span>, [</span><br><span class="line">              h(</span><br><span class="line">                <span class="string">"Button"</span>,</span><br><span class="line">                &#123;</span><br><span class="line">                  props: &#123;</span><br><span class="line">                    type: <span class="string">"primary"</span>,</span><br><span class="line">                    size: <span class="string">"small"</span></span><br><span class="line">                  &#125;,</span><br><span class="line">                  style: &#123;</span><br><span class="line">                    marginRight: <span class="string">"5px"</span></span><br><span class="line">                  &#125;,</span><br><span class="line">                  on: &#123;</span><br><span class="line">                    click: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                      <span class="keyword">this</span>.show(params.index);</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"View"</span></span><br><span class="line">              ),</span><br><span class="line">              h(</span><br><span class="line">                <span class="string">"Button"</span>,</span><br><span class="line">                &#123;</span><br><span class="line">                  props: &#123;</span><br><span class="line">                    type: <span class="string">"error"</span>,</span><br><span class="line">                    size: <span class="string">"small"</span></span><br><span class="line">                  &#125;,</span><br><span class="line">                  on: &#123;</span><br><span class="line">                    click: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                      <span class="keyword">this</span>.remove(params.index);</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"Delete"</span></span><br><span class="line">              )</span><br><span class="line">            ]);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在這，是使用 render function 的方式將 Button 產生出來，而且 code 看起來…</p>
+<blockquote>
+<p>render 函數傳入兩個參數，<code>h</code> (函數) 和 <code>params</code> (物件)</p>
+</blockquote>
+<p>看到這，只有兩個念頭。</p>
+<ol>
+<li>學 render function 怎麼用</li>
+<li>搜尋看看有沒什麼好方法或者人家寫好的 code</li>
+</ol>
+<h2 id="Table-裡放-Dropdown"><a class="header-anchor" href="#Table-裡放-Dropdown">¶</a>Table 裡放 Dropdown</h2>
+<p>搜尋到了一段程式碼 (讚嘆 Google!!)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  title: <span class="string">'贈予人'</span>,</span><br><span class="line">  key: <span class="string">'give2user'</span></span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  render: <span class="function">(<span class="params">h, params</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> h(<span class="string">'Dropdown'</span>, &#123;</span><br><span class="line">      props: &#123;</span><br><span class="line">        trigger: <span class="string">'click'</span></span><br><span class="line">      &#125;,</span><br><span class="line">        on: &#123;</span><br><span class="line">          <span class="string">'on-click'</span>: <span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">//選取 event</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, [</span><br><span class="line">      h(<span class="string">'Button'</span>, [</span><br><span class="line">        h(<span class="string">'span'</span>, <span class="string">'顯示文字'</span>),</span><br><span class="line">        h(<span class="string">'Icon'</span>, &#123;</span><br><span class="line">          props: &#123;</span><br><span class="line">            type: <span class="string">'arrow-down-b'</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      ]),</span><br><span class="line">      h(<span class="string">'Dropdown-menu'</span>, &#123;</span><br><span class="line">        slot: <span class="string">'list'</span></span><br><span class="line">      &#125;, <span class="keyword">this</span>.status_list.map(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> h(<span class="string">'Dropdown-item'</span>, &#123;</span><br><span class="line">          props: &#123;</span><br><span class="line">            name: index  <span class="comment">//on-click 的 callback param</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, item)  <span class="comment">//選項的顯示文字</span></span><br><span class="line">      &#125;))</span><br><span class="line">    ])</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>把這一段 code 貼上</p>
+<div class="success">
+<p>在此要細看一下，可以省掉一些實驗的時間</p>
+</div>
+<p>有幾個收獲</p>
+<ol>
+<li>點擊事件寫在第 12 行</li>
+<li>點擊後取得的內容是什麼，在第 29 行</li>
+<li>顯示文字在第 31 行</li>
+</ol>
+<p>這些，基本上就夠了，但是，還會有一些問題</p>
+<ol>
+<li>選取前後，都是顯示第 17 行的文字</li>
+<li>下拉式選單的內容，由第 26 行的 <code>status_list</code> 決定。</li>
+</ol>
+<p>修改之前，要先知道</p>
+<ol>
+<li><code>on-click</code> 觸發時，第 11 行的 name 會是第 29 行的值。</li>
+<li><code>params.row</code> 指的是該筆資料的 row</li>
+<li><code>status_list</code> 每個元素要加上 <code>give2user</code> 的屬性，並且填上初始值(未選時顯示的文字)。</li>
+</ol>
+<h2 id="解決延伸問題"><a class="header-anchor" href="#解決延伸問題">¶</a>解決延伸問題</h2>
+<p><strong>將 code 改成這樣</strong></p>
+<ol>
+<li>可以用 vuex 的 array</li>
+<li>加上排序</li>
+<li>顯示 id name 的格式</li>
+<li>選擇時，在 on-click 吐 id 進 callback</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#125;, <span class="keyword">this</span>.$store.getters.vuex_list</span><br><span class="line">  .sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.id - b.id)</span><br><span class="line">  .map(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> h(<span class="string">'Dropdown-item'</span>, &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">      name: item.id,  <span class="comment">//on-click 的 callback param</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="string">`<span class="subst">$&#123;item.id&#125;</span> <span class="subst">$&#123;item.name&#125;</span>`</span>)  <span class="comment">//選項的顯示文字</span></span><br></pre></td></tr></table></figure>
+<p><strong>再來改初始狀態</strong></p>
+<p>可以讓選擇之後，顯示文字會改變</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">h(<span class="string">'span'</span>, <span class="string">`<span class="subst">$&#123;params.row[give2user].id&#125;</span> <span class="subst">$&#123;params.row[give2user].name&#125;</span> `</span>),</span><br></pre></td></tr></table></figure>
+<p><strong>最後改事件內容</strong></p>
+<p>這樣可以決定選到了哪一個物件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">on: &#123;</span><br><span class="line">  <span class="string">'on-click'</span>: <span class="function">(<span class="params">value</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> item <span class="keyword">this</span>.$store.getters.vuex_list</span><br><span class="line">      .filter(item.id === value).shift()</span><br><span class="line">    params.row[give2user] = item</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>這樣就可以在 Table 裡，看見美美的 dropdown 了。</p>
+<h2 id="細部調整-dropdown"><a class="header-anchor" href="#細部調整-dropdown">¶</a>細部調整 dropdown</h2>
+<p>參考<a href="https://www.iviewui.com/components/dropdown" target="_blank" rel="noopener">官網文件</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> h(</span><br><span class="line">  <span class="string">"Dropdown-item"</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">      name: index,</span><br><span class="line">      disabled: <span class="literal">true</span>, <span class="comment">// 無效選項</span></span><br><span class="line">      selected: <span class="literal">true</span> <span class="comment">// 被選擇標示</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  item</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="後續"><a class="header-anchor" href="#後續">¶</a>後續</h2>
+<p>聽朋友 2 號介紹…</p>
+<blockquote>
+<p>你也用 iView 呀？那你知道 <a href="https://element.eleme.io/#/zh-CN" target="_blank" rel="noopener">Element</a> 嗎？<br>
+iView 幾乎是參考它的，Element 比較早出現</p>
+</blockquote>
+<p>所以，還是有很多樣的選擇</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-05-20T09:12:07.000Z" itemprop="datePublished">
+              2018-05-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/iview/">iview</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/07-28-first-hand-docsify/">初次使用 Docsify</a><div class="related-posts-item-abstract">¶初次使用 Docsify
+這是一個 markdown + vue 組合的文件網站產生器。
+markdown 渲染器只能用 marked
+
+它不會生成靜態 .html </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/11-26-vuejs/jest-for-vue-router/">Jest for Vue with Vue Router 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vue Router 演練
+這次測試，要測試的是模仿使用者操作。
+隨著網址的變化，畫面也要變化到指定的 Component
+這次的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/jest-for-vue-x/">Jest for Vue with Vuex 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vuex 演練
+這次測試，要測試的是模仿使用者操作。
+在畫面顯示的變化要出現
+這次的練習，是由 Testing Vuex in c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/pure-component-form/">Vue Component 技巧 - 共用 Form</a><div class="related-posts-item-abstract">¶Vue Component 技巧 - 共用 Form
+
+本文會大量使用 Component 一詞，但是它會有兩個意思，在此先進行名詞定義:
+
+Vue componen</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/10-07-tenlong-in-goodideas/">好想工作室裡的天瓏書目 (持續更新)</a><div class="related-posts-item-abstract">¶好想工作室裡的天瓏書目 (持續更新)
+
+
+
+
+
+#masonry-container {
+  transition: .3s;
+}
+.book {
+  vertica</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

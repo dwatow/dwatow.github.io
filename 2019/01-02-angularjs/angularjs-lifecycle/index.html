@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶AngularJS 1.5+ Component lifecycle ¶component 在前端框架引入 virtual dom 時，意味著前端工程師有多了幾個必須要知道的觀念。而這個觀念一直延用到了今天。 (vue-cli3 出來的這一年都還適用)  component input&#x2F;output of one-way binding lifecycle  ¶AngularJS Binding">
+<meta name="keywords" content="angularjs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS 1.5+ Component lifecycle">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;01-02-angularjs&#x2F;angularjs-lifecycle&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶AngularJS 1.5+ Component lifecycle ¶component 在前端框架引入 virtual dom 時，意味著前端工程師有多了幾個必須要知道的觀念。而這個觀念一直延用到了今天。 (vue-cli3 出來的這一年都還適用)  component input&#x2F;output of one-way binding lifecycle  ¶AngularJS Binding">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;PXSdTNq.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;9xkn5ZD.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;7m6En0B.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;8dnCSKv.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;ualJGFb.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;9Iddhvo.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;U3snr2d.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;Y3eklNy.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;nJfpTOH.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;kImYRh1.png">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.482Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;PXSdTNq.png">
+  <title>AngularJS 1.5+ Component lifecycle - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>AngularJS 1.5+ Component lifecycle</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AngularJS-1-5-Component-lifecycle"><span class="toc-text">AngularJS 1.5+ Component lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#component"><span class="toc-text">component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AngularJS-Binding-of-Component"><span class="toc-text">AngularJS Binding of Component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以下用一個例子來說說，要怎麼寫-input-output"><span class="toc-text">以下用一個例子來說說，要怎麼寫 input/output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Input-of-Component"><span class="toc-text">Input of Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Output-of-Component"><span class="toc-text">Output of Component</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lifecycle"><span class="toc-text">Lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#實際執行"><span class="toc-text">實際執行</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="AngularJS-1-5-Component-lifecycle"><a class="header-anchor" href="#AngularJS-1-5-Component-lifecycle">¶</a>AngularJS 1.5+ Component lifecycle</h1>
+<h2 id="component"><a class="header-anchor" href="#component">¶</a>component</h2>
+<p>在前端框架引入 virtual dom 時，意味著前端工程師有多了幾個必須要知道的觀念。而這個觀念一直延用到了今天。 (vue-cli3 出來的這一年都還適用)</p>
+<ul>
+<li>component input/output of one-way binding</li>
+<li>lifecycle</li>
+</ul>
+<h2 id="AngularJS-Binding-of-Component"><a class="header-anchor" href="#AngularJS-Binding-of-Component">¶</a>AngularJS Binding of Component</h2>
+<p>AngularJS 使用符號來表達 bindings 的方式。有 4 種方式。</p>
+<ol>
+<li><code>=</code></li>
+<li><code>&lt;</code></li>
+<li><code>@</code></li>
+<li><code>&amp;</code></li>
+</ol>
+<p>最早，有如魔法般的 two-way binding <code>=</code> 。</p>
+<p>後期較推崇的 onw-way binding 而希望取消 two-way binding。<br>
+所以出現了 <code>&lt;</code> + <code>$onChange()</code> + <code>&amp;</code> 可以做到 two-way binding 的效果。</p>
+<p>最後是傳入 <code>const string</code> 的 one-way binding <code>@</code></p>
+<h3 id="以下用一個例子來說說，要怎麼寫-input-output"><a class="header-anchor" href="#以下用一個例子來說說，要怎麼寫-input-output">¶</a>以下用一個例子來說說，要怎麼寫 input/output</h3>
+<p>在 parent 層使用 component</p>
+<p><strong>tabs.html</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫</p>
+<p><strong>tabHome/index.html</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"home"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>Home component<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; vm.text &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span> <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>tabHome/index.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">'angular'</span>;</span><br><span class="line"><span class="keyword">import</span> template <span class="keyword">from</span> <span class="string">'./index.html'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">controller</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular</span><br><span class="line">  .module(<span class="string">'tabHome'</span>, [])</span><br><span class="line">  .component(<span class="string">'tabHome'</span>, &#123;</span><br><span class="line">    template,</span><br><span class="line">    controller,</span><br><span class="line">    controllerAs: <span class="string">'vm'</span>,</span><br><span class="line">    bindings: &#123;</span><br><span class="line">      text: <span class="string">'&lt;'</span>,</span><br><span class="line">      myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).name;</span><br></pre></td></tr></table></figure>
+<h3 id="Input-of-Component"><a class="header-anchor" href="#Input-of-Component">¶</a>Input of Component</h3>
+<p>在 parent 層使用 component 時<br>
+直接給自訂的 attribute 並且放入參數</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫<br>
+使用<code>&lt;</code> one-way binding 傳入變數</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  text: <span class="string">'&lt;'</span>,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要「連動修改」要記得使用 <code>$onChanged()</code></p>
+<h3 id="Output-of-Component"><a class="header-anchor" href="#Output-of-Component">¶</a>Output of Component</h3>
+<p>使用 component 時，直接給自訂的 attribute<br>
+並且放入 function 執行，參數要使用 <code>{}</code> 並且在裡面寫下要被傳出來的 property。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 這樣寫</p>
+<p>指定真實事件觸發的地方，執行傳入的 function name，並且傳入 object 當 component output 的參數</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>(在此可以假想像是這樣的 object)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">vm = &#123;</span><br><span class="line">  text: <span class="string">'Hi'</span>,  &lt;- 這是 parent 層會接收到的變數</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用 <code>&amp;</code> binding 傳入 function</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Lifecycle"><a class="header-anchor" href="#Lifecycle">¶</a>Lifecycle</h2>
+<p><img src="https://i.imgur.com/PXSdTNq.png" alt="AngularJS lifecycle"></p>
+<p>在此簡單的介紹一下</p>
+<p><strong><code>$onChanges(changesObj)</code></strong></p>
+<p>每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</p>
+<p><strong><code>$onInit()</code></strong></p>
+<p>完成 bindings 初始化時，用來初始化 controller data 的好地方。<br>
+在 directives 的 pre &amp; post linking 之前觸發。</p>
+<p><strong><code>$postLink()</code></strong></p>
+<p>controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></p>
+<p><strong><code>$onDestroy()</code></strong></p>
+<p>銷毀 controller 和它的 scope 時，用在釋放資源。</p>
+<p>較特別的是</p>
+<p><strong><code>$doCheck()</code></strong></p>
+<p>每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。用來當 watch <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<h3 id="實際執行"><a class="header-anchor" href="#實際執行">¶</a>實際執行</h3>
+<p>以一個 tab 轉換的練習來看看 lifecycle 是什麼時候發生的</p>
+<p><img src="https://i.imgur.com/9xkn5ZD.png" alt=""></p>
+<p>相同的練習用 Vue 和 AngularJS 做了一次。並且把 lifecycle 都印出來看，下面的圖左邊是 Vue 右邊是 AngularJS。</p>
+<p><strong>切到 Posts，清空 log 切回 Home</strong></p>
+<blockquote>
+<p>AngularJS 使用 <code>ng-if</code> 切換觸發完整 lifecycle 的做法</p>
+</blockquote>
+<p><img src="https://i.imgur.com/7m6En0B.png" alt=""> <img src="https://i.imgur.com/8dnCSKv.png" alt=""></p>
+<p><strong>keep-alive</strong></p>
+<blockquote>
+<p>AngularJS 使用 <code>ng-show</code> 切換當作是保持不滅的做法</p>
+</blockquote>
+<p><img src="https://i.imgur.com/ualJGFb.png" alt=""> <img src="https://i.imgur.com/9Iddhvo.png" alt=""></p>
+<p><strong>初始化完，切到 Posts</strong></p>
+<p>把 Archive 嵌到 Posts 裡的 lifecycle 練習</p>
+<p><img src="https://i.imgur.com/U3snr2d.png" alt=""><br>
+<img src="https://i.imgur.com/Y3eklNy.png" alt=""></p>
+<p>印出巢狀 component 的 lifecycle 狀況</p>
+<p><img src="https://i.imgur.com/nJfpTOH.png" alt="" width="200"> <img src="https://i.imgur.com/kImYRh1.png" alt="" width="200"></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/" target="_blank" rel="noopener">Replacing Angular’s Deep Watches with the $doCheck Lifecycle Hook - codelord.net</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2019-01-02T02:30:34.000Z" itemprop="datePublished">
+              2019-01-02
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/angularjs/">angularjs</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/08-14-angularjs/angular-jest/">AngularJS + Jest 實戰</a><div class="related-posts-item-abstract">¶AngularJS + Jest 實戰
+
+實做專案: https://github.com/dwatow/AngularJS-demo/tree/jest-demo
+</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-26-angularjs/angularjs-e2e-protractor/">Protractor 快速指南</a><div class="related-posts-item-abstract">¶Protractor 快速指南
+¶E2E 測試的觀念
+E2E 測試，主要是測試使用者操作與想要的結果是否符合規格。
+所以，需要連上一個可測試的使用者介面的環境
+抓到畫</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-23-angularjs/angularjs-es6-class/">AngularJS 1.5+ Component style with es6-class</a><div class="related-posts-item-abstract">¶AngularJS 1.5+ Component style with es6-class
+
+在接手了 AngularJS 的專案到現在，一直在處理寫作風格造成除錯上</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
+
+¶源起
+目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
+也許種種原</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

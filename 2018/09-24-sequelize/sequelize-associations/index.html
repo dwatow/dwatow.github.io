@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 1234567891011121314return queryInterfa">
+<meta name="keywords" content="Sequelize,foreign key">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequelize 的 Relations&#x2F;Associations">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-24-sequelize&#x2F;sequelize-associations&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 1234567891011121314return queryInterfa">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.513Z">
+<meta name="twitter:card" content="summary">
+  <title>Sequelize 的 Relations/Associations - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Sequelize 的 Relations/Associations</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-的-Relations-Associations"><span class="toc-text">Sequelize 的 Relations/Associations</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#migrations-關聯-foreign-key-欄位"><span class="toc-text">migrations 關聯 (foreign key 欄位)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#define-關聯-類型"><span class="toc-text">define 關聯 類型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一對一-hasOne-belongsTo"><span class="toc-text">一對一 hasOne &amp; belongsTo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#foreign-key-as"><span class="toc-text">foreign key &amp; as</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一對多-hasMany"><span class="toc-text">一對多 .hasMany()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多對多-belongsToMany"><span class="toc-text">多對多 .belongsToMany()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#define-修改-刪除-hook"><span class="toc-text">define 修改/刪除 hook</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Sequelize-的-Relations-Associations"><a class="header-anchor" href="#Sequelize-的-Relations-Associations">¶</a>Sequelize 的 Relations/Associations</h1>
+<h2 id="migrations-關聯-foreign-key-欄位"><a class="header-anchor" href="#migrations-關聯-foreign-key-欄位">¶</a>migrations 關聯 (foreign key 欄位)</h2>
+<p>在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> queryInterface.addColumn(</span><br><span class="line">  <span class="string">'tableName'</span>,</span><br><span class="line">  <span class="string">'fieldName'</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    type: Sequelize.INTEGER.UNSIGNED,</span><br><span class="line">    references: &#123;</span><br><span class="line">      model: <span class="string">'tableName'</span>,</span><br><span class="line">      key: <span class="string">'fieldName'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    onDelete: <span class="string">'SET NULL'</span>,</span><br><span class="line">    onUpdate: <span class="string">'CASCADE'</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h2 id="define-關聯-類型"><a class="header-anchor" href="#define-關聯-類型">¶</a>define 關聯 類型</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Model.hasOne(target: Model, options: object): HasOne</span><br></pre></td></tr></table></figure>
+<p>User model is <strong>source</strong><br>
+Project model is <strong>target</strong></p>
+<p><strong>命名</strong><br>
+foreign key = (target model + primary key) 的名字<br>
+預設 <code>camelCase</code>。<code>underscored: true</code> 會變 <code>snake_case</code>。</p>
+<h3 id="一對一-hasOne-belongsTo"><a class="header-anchor" href="#一對一-hasOne-belongsTo">¶</a>一對一 hasOne &amp; belongsTo</h3>
+<p>one source with one target.</p>
+<p><code>.hasOne()</code> 在 target model 放上 key<br>
+<code>.belongsTo()</code> 在 source model 放上 key</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Project 有一個 memberId 欄位，放 member 的 id</span></span><br><span class="line"><span class="comment">// target = member</span></span><br><span class="line">Member.hasOne(Project)  <span class="comment">// 擁有</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Member 有一個 projectId 欄位，放 project 的 id</span></span><br><span class="line"><span class="comment">// target = project</span></span><br><span class="line">Member.belongsTo(Project) <span class="comment">// 屬於</span></span><br></pre></td></tr></table></figure>
+<p>用 <code>.hasOne()</code> 會贈送 getter/setter</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Project.hasOne(models.member)</span><br><span class="line"></span><br><span class="line">Project.findById(<span class="number">1</span>)</span><br><span class="line">.then(<span class="function"><span class="params">project</span> =&gt;</span> project.getMember) <span class="comment">// function</span></span><br><span class="line">Project.findById(<span class="number">1</span>)</span><br><span class="line">.then(<span class="function"><span class="params">project</span> =&gt;</span> project.setMember) <span class="comment">// function</span></span><br></pre></td></tr></table></figure>
+<h3 id="foreign-key-as"><a class="header-anchor" href="#foreign-key-as">¶</a>foreign key &amp; as</h3>
+<ul>
+<li>foreignKey 的名字是給 database 用的</li>
+<li>as 的名字是給 getter/setter 用的</li>
+<li>targetKey 的名字是用來指定 foreignKey 儲存哪個欄位
+<ul>
+<li>使用 <code>.belongsTo()</code> 時指定 foreignKey 只會增加這個欄位, 儲存 targetKey 指定的欄位</li>
+<li>使用 <code>.hasOne()</code> 時指定 targetKey 無效，增加預設 primary key 之外，還會加上 foreignKey 的欄位名稱</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">options: &#123;<span class="attr">as</span>: <span class="string">'forJs'</span>&#125;</span><br><span class="line">options: &#123;<span class="attr">foreignKey</span>: <span class="string">'forDb'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Person 關聯自己</span></span><br><span class="line"><span class="keyword">const</span> Person = sequelize.define(<span class="string">'person'</span>, &#123; <span class="comment">/* ... */</span>&#125;)</span><br><span class="line"></span><br><span class="line">Person.hasOne(Person, &#123;<span class="attr">as</span>: <span class="string">'Father'</span>, <span class="attr">foreignKey</span>: <span class="string">'DadId'</span>&#125;)</span><br><span class="line"><span class="comment">// this will add the attribute FatherId to Person</span></span><br><span class="line">person.getFather()</span><br><span class="line">person.setFather()</span><br></pre></td></tr></table></figure>
+<h3 id="一對多-hasMany"><a class="header-anchor" href="#一對多-hasMany">¶</a>一對多 <code>.hasMany()</code></h3>
+<p>one source with multiple targets (one target to one source)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Project.hasMany(User, &#123;<span class="attr">as</span>: <span class="string">'Workers'</span>&#125;)</span><br><span class="line">project.getWorkers</span><br></pre></td></tr></table></figure>
+<h3 id="多對多-belongsToMany"><a class="header-anchor" href="#多對多-belongsToMany">¶</a>多對多 <code>.belongsToMany()</code></h3>
+<p>使用 <code>.belongsToMany()</code> 時，使用 <code>through</code> 指定事先定義好的 model-<code>UserProject</code> (用來產生 join table 用的)<br>
+這個 model 會有 <code>projectId</code> 和 <code>userId</code>。</p>
+<ul>
+<li><code>Project</code> 會有 <code>getUsers</code>, <code>setUsers</code>, <code>addUser</code>, <code>addUsers</code></li>
+<li><code>User</code> 會有 <code>getProjects</code>, <code>setProjects</code>, <code>addPrject</code>, <code>addProjects</code></li>
+</ul>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">UserProject = sequelize.define(<span class="string">'user_project'</span>, &#123;</span><br><span class="line">  role: Sequelize.STRING</span><br><span class="line">&#125;);</span><br><span class="line">User.belongsToMany(Project, &#123; <span class="attr">through</span>: UserProject &#125;);</span><br><span class="line">Project.belongsToMany(User, &#123; <span class="attr">through</span>: UserProject &#125;);</span><br><span class="line"><span class="comment">// through is required!</span></span><br><span class="line"></span><br><span class="line">user.addProject(project, &#123;</span><br><span class="line">  through: &#123; <span class="attr">role</span>: <span class="string">'manager'</span> &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="define-修改-刪除-hook"><a class="header-anchor" href="#define-修改-刪除-hook">¶</a>define 修改/刪除 hook</h2>
+<p>建立關聯，增加 foreign key 到屬性。<br>
+所有的關聯，更新用 <code>CASCADE</code> ，刪除用 <code>SET NULL</code> ，除了 n:m 關聯，用 <code>CASCADE</code> 刪除。</p>
+<p>介於 users 和 task 的關聯，在 tasks 插入 <code>user_id</code> 的 foreign key ，標記參考來自 User 。<br>
+預設的情況，刪除 <code>user_id</code> 的話 <code>user_id</code> 將設定成 <code>NULL</code> ；更新 <code>user_id</code> 的話 <code>user_id</code> 會跟著更新。</p>
+<p>可以在呼叫 association 時，設定 <code>onUpdate</code>, <code>onDelete</code> 選項。</p>
+<p>可以設定這些值<br>
+主表 (無foreign key)<br>
+子表 (有foreign key)<br>
+若主表有 update/delete</p>
+<ol>
+<li><code>RESTRICT</code>, 同 <code>NO ACTION</code></li>
+<li><code>CASCADE</code>, 同步 update/delete 更新子表 foreign key</li>
+<li><code>NO ACTION</code>, 不允許主表 update/delete</li>
+<li><code>SET DEFAULT</code>, 子表 foreign key 設為 default (Innodb not use)</li>
+<li><code>SET NULL</code>, 子表 foreign key 設為 null</li>
+</ol>
+<p><strong>example:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Category.hasMany(models.Product, &#123;</span><br><span class="line">  onDelete: <span class="string">'cascade'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-24T08:15:35.000Z" itemprop="datePublished">
+              2018-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Sequelize/">Sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/foreign-key/">foreign key</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-CUD-of-CRUD/">Sequelize 資料寫入</a><div class="related-posts-item-abstract">¶Sequelize 資料寫入
+¶Create
+Module.build(options: Object)
+回傳一個 instance
+欄位放預設值 + 產生 inst</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-R-of-CRUD/">Sequelize 資料讀取</a><div class="related-posts-item-abstract">¶Sequelize 資料讀取
+使用者需求 -&gt; 搜尋的功能
+要盡可能的多熟悉
+¶Module.find()
+找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-migration/">Sequelize Migration</a><div class="related-posts-item-abstract">¶Sequelize Migration
+Sequelize 2 之後，增加了 cli 的功能
+透過一次又一次的維護檔，確保移植時有相同的建構過程
+migration </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-define-model/">Sequelize 的 define model</a><div class="related-posts-item-abstract">¶Sequelize 的 define model
+定義 table 與 model 的映射，使用 sequelize.define()
+使用了 sequelize-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-first-hand/">初探 Sequelize</a><div class="related-posts-item-abstract">¶Sequelize 初探
+Sequelize 是一個使用 JavaScript 的 ORM。
+我自己的使用方式是與 Express 搭配，當作 MVC 的 M
+另外，</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

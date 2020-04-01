@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Sequelize 資料寫入 ¶Create Module.build(options: Object) 回傳一個 instance 欄位放預設值 + 產生 instance 1234567891011121314&#x2F;&#x2F; define the modelvar Task = sequelize.define(&amp;apos;task&amp;apos;, &amp;#123;  title: Sequelize.STRING,  rat">
+<meta name="keywords" content="Sequelize,CRUD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequelize 資料寫入">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-24-sequelize&#x2F;sequelize-CUD-of-CRUD&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sequelize 資料寫入 ¶Create Module.build(options: Object) 回傳一個 instance 欄位放預設值 + 產生 instance 1234567891011121314&#x2F;&#x2F; define the modelvar Task = sequelize.define(&amp;apos;task&amp;apos;, &amp;#123;  title: Sequelize.STRING,  rat">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.513Z">
+<meta name="twitter:card" content="summary">
+  <title>Sequelize 資料寫入 - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Sequelize 資料寫入</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-資料寫入"><span class="toc-text">Sequelize 資料寫入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create"><span class="toc-text">Create</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Update"><span class="toc-text">Update</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Delete"><span class="toc-text">Delete</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#批次處理"><span class="toc-text">批次處理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#大量新增"><span class="toc-text">大量新增</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大量修改，加-WHERE"><span class="toc-text">大量修改，加 WHERE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大量刪除-，加-WHERE"><span class="toc-text">大量刪除(，加 WHERE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Value-of-an-instance"><span class="toc-text">Value of an instance</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Sequelize-資料寫入"><a class="header-anchor" href="#Sequelize-資料寫入">¶</a>Sequelize 資料寫入</h1>
+<h2 id="Create"><a class="header-anchor" href="#Create">¶</a>Create</h2>
+<p><code>Module.build(options: Object)</code></p>
+<p>回傳一個 instance<br>
+欄位放預設值 + 產生 instance</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// define the model</span></span><br><span class="line"><span class="keyword">var</span> Task = sequelize.define(<span class="string">'task'</span>, &#123;</span><br><span class="line">  title: Sequelize.STRING,</span><br><span class="line">  rating: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">  defaultValue: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// now instantiate an object</span></span><br><span class="line"><span class="keyword">var</span> task = Task.build(&#123;<span class="attr">title</span>: <span class="string">'very important task'</span>&#125;)</span><br><span class="line"></span><br><span class="line">task.title  <span class="comment">// ==&gt; 'very important task'</span></span><br><span class="line">task.rating <span class="comment">// ==&gt; 3 (default)</span></span><br></pre></td></tr></table></figure>
+<p><code>Instance.save(options: Object)</code></p>
+<p>回傳 Promise<br>
+儲存至 table</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// you can also build, save and access the object with chaining:</span></span><br><span class="line">Task.build(&#123; <span class="attr">title</span>: <span class="string">'foo'</span>, <span class="attr">description</span>: <span class="string">'bar'</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;)</span><br><span class="line">.save().then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>Model.create(options: Object)</code><br>
+回傳 Promise<br>
+新增一筆資料至 table</p>
+<p><code>build</code> + <code>save</code> = <code>create</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">'foo'</span>, <span class="attr">description</span>: <span class="string">'bar'</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Update"><a class="header-anchor" href="#Update">¶</a>Update</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// way 1</span></span><br><span class="line">task.title = <span class="string">'a very different title now'</span></span><br><span class="line">task.save().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// way 2</span></span><br><span class="line">task.update(&#123;</span><br><span class="line">  title: <span class="string">'a very different title now'</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Delete"><a class="header-anchor" href="#Delete">¶</a>Delete</h2>
+<p><code>Model.destroy(options: Object)</code><br>
+回傳 <code>Promise</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">'a task'</span> &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> task.destroy();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">deleted_object</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(deleted_object)  <span class="comment">//剛剛刪掉的資料</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>在 <code>Model.define()</code> 裡設定 <code>paranoid: true</code> 時，執行 <code>instance.destroy()</code> 則會執行「寫入刪除時間」，執行 <code>instance.destroy({force: true})</code> ，就會真的刪掉這筆資料，從資料庫蒸發</p>
+<h1 id="批次處理"><a class="header-anchor" href="#批次處理">¶</a>批次處理</h1>
+<p>一次多筆 create/update/delete</p>
+<h2 id="大量新增"><a class="header-anchor" href="#大量新增">¶</a>大量新增</h2>
+<p>create: <code>Model.bulkCreate([{}])</code> 回傳值不要使用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">models.member.bulkCreate([&#123; <span class="attr">name</span>: <span class="string">'John Doe'</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'Chris Doe'</span>, <span class="attr">age</span>: <span class="number">22</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'Mary Doe'</span>, <span class="attr">age</span>: <span class="number">24</span>&#125;</span><br><span class="line">]).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(result)); <span class="comment">// id: null in everyone</span></span><br><span class="line">  <span class="keyword">return</span> models.member.findAll();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="大量修改，加-WHERE"><a class="header-anchor" href="#大量修改，加-WHERE">¶</a>大量修改，加 WHERE</h2>
+<p>update: <code>Model.update(update: Object, where: Object)</code> 回傳 符合條件被修改的資料總數</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">models.member.update(</span><br><span class="line">	<span class="comment">/* set attributes' value */</span></span><br><span class="line">    &#123; <span class="attr">age</span>: <span class="number">18</span> &#125;,</span><br><span class="line">	<span class="comment">/* condition for find*/</span></span><br><span class="line">    &#123; <span class="attr">where</span>: &#123; <span class="attr">name</span>: <span class="string">'Mary Doe'</span> &#125;&#125;</span><br><span class="line">).spread(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);  <span class="comment">// result 1</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="大量刪除-，加-WHERE"><a class="header-anchor" href="#大量刪除-，加-WHERE">¶</a>大量刪除(，加 WHERE)</h2>
+<p>delete: <code>Model.destory()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">models.project.destroy(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    location: <span class="string">'Tainan'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  truncate: <span class="literal">true</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);</span><br><span class="line">  <span class="comment">// Notice</span></span><br><span class="line">  <span class="comment">// affectedCount will be 2</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>options.truncate</strong> (optional)<br>
+Type: Boolean<br>
+default: false<br>
+description: 如果設定 true，支援 <code>TRUNCATE</code> 的 SQL 就會使用 <code>TRUNCATE</code> (快) 而不是 <code>DELETE FROM</code> (慢)<br>
+實際使用的狀況: 刪除資料表裡所有資料，忽略 where，再加入的資料 id 重數</p>
+</blockquote>
+<h2 id="Value-of-an-instance"><a class="header-anchor" href="#Value-of-an-instance">¶</a>Value of an instance</h2>
+<p>instance 的樣貌 (類似 JSON 的樣子)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">john.get(&#123;</span><br><span class="line">  plain: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>instance.reload()</code> 值同步: table → model</p>
+<p>遞增</p>
+<p><code>instance.increment('fieldName')</code><br>
+<code>instance.increment('fieldName', {by: 2})</code><br>
+<code>instance.increment(['fieldName1', 'fieldName2'])</code><br>
+<code>instance.increment({   'fieldName1': 2,   'fieldName2': 3 })</code></p>
+<p>遞減</p>
+<p><code>instance.decrement()</code> 用法同上</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-24T13:56:27.000Z" itemprop="datePublished">
+              2018-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Sequelize/">Sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CRUD/">CRUD</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-R-of-CRUD/">Sequelize 資料讀取</a><div class="related-posts-item-abstract">¶Sequelize 資料讀取
+使用者需求 -&gt; 搜尋的功能
+要盡可能的多熟悉
+¶Module.find()
+找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-associations/">Sequelize 的 Relations/Associations</a><div class="related-posts-item-abstract">¶Sequelize 的 Relations/Associations
+¶migrations 關聯 (foreign key 欄位)
+在 queryInterface</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-migration/">Sequelize Migration</a><div class="related-posts-item-abstract">¶Sequelize Migration
+Sequelize 2 之後，增加了 cli 的功能
+透過一次又一次的維護檔，確保移植時有相同的建構過程
+migration </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-define-model/">Sequelize 的 define model</a><div class="related-posts-item-abstract">¶Sequelize 的 define model
+定義 table 與 model 的映射，使用 sequelize.define()
+使用了 sequelize-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-first-hand/">初探 Sequelize</a><div class="related-posts-item-abstract">¶Sequelize 初探
+Sequelize 是一個使用 JavaScript 的 ORM。
+我自己的使用方式是與 Express 搭配，當作 MVC 的 M
+另外，</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

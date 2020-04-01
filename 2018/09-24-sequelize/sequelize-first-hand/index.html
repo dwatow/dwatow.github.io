@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Sequelize 初探 Sequelize 是一個使用 JavaScript 的 ORM。 我自己的使用方式是與 Express 搭配，當作 MVC 的 M 另外，因為官網文件很鳥，所以寫了一個教學流程 ¶安裝 使用 Node.js 盡量不要安裝 -g 因為每個 project 需要的工具，不管是初始化專案還是要維護時使用的套件，都是應該安裝的套件。 $ npm install --save">
+<meta name="keywords" content="JavaScript,Sequelize">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初探 Sequelize">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-24-sequelize&#x2F;sequelize-first-hand&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sequelize 初探 Sequelize 是一個使用 JavaScript 的 ORM。 我自己的使用方式是與 Express 搭配，當作 MVC 的 M 另外，因為官網文件很鳥，所以寫了一個教學流程 ¶安裝 使用 Node.js 盡量不要安裝 -g 因為每個 project 需要的工具，不管是初始化專案還是要維護時使用的套件，都是應該安裝的套件。 $ npm install --save">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.514Z">
+<meta name="twitter:card" content="summary">
+  <title>初探 Sequelize - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>初探 Sequelize</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-初探"><span class="toc-text">Sequelize 初探</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成的檔案"><span class="toc-text">生成的檔案</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Sequelize-初探"><a class="header-anchor" href="#Sequelize-初探">¶</a>Sequelize 初探</h1>
+<p>Sequelize 是一個使用 JavaScript 的 ORM。<br>
+我自己的使用方式是與 Express 搭配，當作 MVC 的 <code>M</code></p>
+<p>另外，因為官網文件很鳥，所以寫了一個教學流程</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p>使用 Node.js 盡量不要安裝 <code>-g</code> 因為每個 project 需要的工具，不管是初始化專案還是要維護時使用的套件，都是應該安裝的套件。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save sequelize@<span class="string">"&lt;4.0.0"</span>  //我需要 v3 版</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save mysql2</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save sequelize-cli</span></span><br></pre></td></tr></table></figure>
+<h2 id="初始化"><a class="header-anchor" href="#初始化">¶</a>初始化</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize init</span></span><br></pre></td></tr></table></figure>
+<h3 id="生成的檔案"><a class="header-anchor" href="#生成的檔案">¶</a>生成的檔案</h3>
+<p><strong>config/config.json</strong></p>
+<p>這是用來儲存連線資訊的設定檔，看預設給的，有分成 <code>development</code>, <code>test</code>, <code>production</code> 三種環境變數設定。<br>
+可依自己的需要與設定進行修改</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;development&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;password&quot;: null,</span><br><span class="line">    &quot;database&quot;: &quot;database_development&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;test&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;password&quot;: null,</span><br><span class="line">    &quot;database&quot;: &quot;database_test&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;production&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;password&quot;: null,</span><br><span class="line">    &quot;database&quot;: &quot;database_production&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>models/index.js</strong></p>
+<p>這個檔案很長，是 sequelize-cli 的重點。<br>
+透過這段程式碼，幫你管理的幾個部份，成為 MVC 的 <code>M</code></p>
+<ul>
+<li>資料庫連線設定 <code>config.json</code></li>
+<li>還有 Models 的內容 <code>models/index.js</code></li>
+</ul>
+<p>來導讀一下這一段程式碼</p>
+<p>第一段，將需要的功能載進來，包含 Sequelize 的套件程式。<br>
+並且環境變數設定預設 development<br>
+引入 <code>config.json</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fs        = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> path      = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> Sequelize = <span class="built_in">require</span>(<span class="string">'sequelize'</span>);</span><br><span class="line"><span class="keyword">var</span> basename  = path.basename(__filename);</span><br><span class="line"><span class="keyword">var</span> env       = process.env.NODE_ENV || <span class="string">'development'</span>;</span><br><span class="line"><span class="keyword">var</span> config    = <span class="built_in">require</span>(__dirname + <span class="string">'/../config/config.json'</span>)[env];</span><br><span class="line"><span class="keyword">var</span> db        = &#123;&#125;;</span><br></pre></td></tr></table></figure>
+<p>第二段，就是官網文件會介紹到的連線設定。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
+引入的 <code>config.json</code> 存成變數 <code>config</code> 並在這此使用它。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (config.use_env_variable) &#123;</span><br><span class="line">  <span class="keyword">var</span> sequelize = <span class="keyword">new</span> Sequelize(process.env[config.use_env_variable], config);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> sequelize = <span class="keyword">new</span> Sequelize(config.database, config.username, config.password, config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="info">
+<p>如果要使用 env file 的設定，就是使用連線字串的方式連線</p>
+<p><strong>env file</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"production"</span>: &#123;</span><br><span class="line">        <span class="string">"use_env_variable"</span>: <span class="string">'mysql://root:password@mysql_host.com/database_name'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div>
+<p>第三段，<code>require</code> 將相同目錄底下的 <code>.js</code> 以 <code>model.name</code> 當索引值放到 <code>db</code> 物件中。<br>
+執行每一個 model 的 「<code>define</code>」將 資料表與 js 對應上</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">fs</span><br><span class="line">  .readdirSync(__dirname)</span><br><span class="line">  .filter(<span class="function"><span class="params">file</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (file.indexOf(<span class="string">'.'</span>) !== <span class="number">0</span>) &amp;&amp; (file !== basename) &amp;&amp; (file.slice(<span class="number">-3</span>) === <span class="string">'.js'</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .forEach(<span class="function"><span class="params">file</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> model = sequelize[<span class="string">'import'</span>](path.join(__dirname, file));</span><br><span class="line">    db[model.name] = model;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>第四段，用來執行 <code>db</code> 物件裡的每一個 <code>.associate</code> method<br>
+執行每一個 「model 關聯」 的設定，也就是關聯式資料庫的 foreign key 的設定與 js 對應上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.keys(db).forEach(<span class="function"><span class="params">modelName</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (db[modelName].associate) &#123;</span><br><span class="line">    db[modelName].associate(db);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>將全域的物件與類別，也放進 <code>db</code> 物件中。<br>
+將所有關於 MVC 的 <code>M</code> 都收斂在 <code>db</code> 裡</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">db.sequelize = sequelize;</span><br><span class="line">db.Sequelize = Sequelize;</span><br><span class="line"></span><br><span class="line">module.exports = db;</span><br></pre></td></tr></table></figure>
+<p>這兩個資料夾目前都還是空的。</p>
+<p><strong>migrations</strong><br>
+<strong>seeders</strong></p>
+<p>就先不要管它。<br>
+先看懂程式碼比較重要，對於之後，要如何維護 Model 心裡要有一個底。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://sequelize.readthedocs.io/en/v3/docs/getting-started/" target="_blank" rel="noopener">Getting Started - Setting up a connection</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-24T02:49:42.000Z" itemprop="datePublished">
+              2018-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/JavaScript/">JavaScript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Sequelize/">Sequelize</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
+這是一種很常見的網路字型變 icon 的魔法。
+有免費版和付費的專業版
+可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/05-22-file-api/">前端的 File API</a><div class="related-posts-item-abstract">
+  img {
+    width: 200px;
+    height: auto;
+  }
+  button {
+    display: block;
+  }
+</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-R-of-CRUD/">Sequelize 資料讀取</a><div class="related-posts-item-abstract">¶Sequelize 資料讀取
+使用者需求 -&gt; 搜尋的功能
+要盡可能的多熟悉
+¶Module.find()
+找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-associations/">Sequelize 的 Relations/Associations</a><div class="related-posts-item-abstract">¶Sequelize 的 Relations/Associations
+¶migrations 關聯 (foreign key 欄位)
+在 queryInterface</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-migration/">Sequelize Migration</a><div class="related-posts-item-abstract">¶Sequelize Migration
+Sequelize 2 之後，增加了 cli 的功能
+透過一次又一次的維護檔，確保移植時有相同的建構過程
+migration </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-define-model/">Sequelize 的 define model</a><div class="related-posts-item-abstract">¶Sequelize 的 define model
+定義 table 與 model 的映射，使用 sequelize.define()
+使用了 sequelize-c</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

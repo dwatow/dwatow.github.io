@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶極簡易的 git server 這是一篇，教你利用簡易的 Web server，開一個臨時的 git server。提供給區網內的人可以git clone。 ¶Server 查看自己的 IP 1~&#x2F;code $ ifconfig 假設，在此取得的 ip 是192.168.94.87 先開一個簡易 Server 12~&#x2F;code $ python -m SimpleHTTPServer# or ~">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="極簡易的 git server">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2017&#x2F;10-24-git-server-simple-example&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶極簡易的 git server 這是一篇，教你利用簡易的 Web server，開一個臨時的 git server。提供給區網內的人可以git clone。 ¶Server 查看自己的 IP 1~&#x2F;code $ ifconfig 假設，在此取得的 ip 是192.168.94.87 先開一個簡易 Server 12~&#x2F;code $ python -m SimpleHTTPServer# or ~">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.488Z">
+<meta name="twitter:card" content="summary">
+  <title>極簡易的 git server - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>極簡易的 git server</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#極簡易的-git-server"><span class="toc-text">極簡易的 git server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Server"><span class="toc-text">Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Client"><span class="toc-text">Client</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="極簡易的-git-server"><a class="header-anchor" href="#極簡易的-git-server">¶</a>極簡易的 git server</h1>
+<p>這是一篇，教你利用簡易的 Web server，開一個臨時的 git server。提供給區網內的人可以<code>git clone</code>。</p>
+<h2 id="Server"><a class="header-anchor" href="#Server">¶</a>Server</h2>
+<p>查看自己的 IP</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/code $ ifconfig</span><br></pre></td></tr></table></figure>
+<p>假設，在此取得的 ip 是<code>192.168.94.87</code></p>
+<p>先開一個簡易 Server</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~/code $ python -m SimpleHTTPServer</span><br><span class="line"><span class="meta">#</span><span class="bash"> or ~/code $ php -S localhost:8000</span></span><br></pre></td></tr></table></figure>
+<p>先新增一個<code>repo</code>並且初始化成一個<code>git bare</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/code $ mkdir myRepo.git</span><br><span class="line">~/code $ cd myRepo.git</span><br><span class="line">~/myRepo.git $ git init --bare</span><br></pre></td></tr></table></figure>
+<p>然後再加上這一行<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/myRepo.git $ git update-server-info</span><br></pre></td></tr></table></figure>
+<h2 id="Client"><a class="header-anchor" href="#Client">¶</a>Client</h2>
+<p>現在就可以試著<code>git clone</code> 一下看看</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~ $ git clone http://192.168.94.87:8000/myRepo.git</span><br></pre></td></tr></table></figure>
+<p>應該就可以成功了，但是經我自己的實驗，目前還無法<code>git push</code>。QQ</p>
+<p><a href="http://blog.xuite.net/zack_pan/blog/65273998-GIT+over+HTTP+%28GIT+HTTP+Transparent%29" target="_blank" rel="noopener">GIT over HTTP (GIT HTTP Transparent)</a></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"> <a href="#fnref1" class="footnote-backref">↩︎</a></li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2017-10-24T07:47:57.000Z" itemprop="datePublished">
+              2017-10-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/git/">git</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-03-hexo/hexo-backup-to-branch/">Hexo 備份 md 檔</a><div class="related-posts-item-abstract">¶Hexo 備份 md 檔到另一個分支
+¶源由
+因為 hexo g -d 只會幫你上傳 public 。對於 .md 檔的備份，hexo 似乎沒有提供什麼解決方案。
+¶</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-git-ftp-first-hand/">Git 的支線 git-ftp</a><div class="related-posts-item-abstract">¶Git 的支線 git-ftp
+¶安裝[1]
+因為我已經用了 xcode 的命令工具，所以就有 git 了。
+只安裝下面這三個
+brew install curl -</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-git-cmd-auto-complete/">在 Mac OS X 用 Bash 安裝 git auto complete</a><div class="related-posts-item-abstract">¶在 Mac OS X 用 Bash 安裝 git auto complete
+在 terminal 下，我們都會想要按 tab 就出現指令的自動補完
+$ git co</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/08-04-git-reset-parameters/">git reset <參數></a><div class="related-posts-item-abstract">¶git reset &lt;參數&gt;
+git reset &lt;參數&gt;
+
+--hard
+跳到指定的 commit, 檔案狀態: 取消所有變更
+--soft</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

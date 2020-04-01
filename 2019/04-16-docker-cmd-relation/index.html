@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Docker 指令關係筆記 一種將 OS 弄成 App 的技術。 將服務的執行環境完全隔離，彼此不受影響  ¶docker pull 拉下 ubuntu docker pull ubuntu 指定版號 docker pull ubuntu:14.04 ¶Dockerfile alpine 版本 專為 docker 而設 node:&amp;lt;version&amp;gt;-alpine 用 docker e">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 指令關係筆記">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;04-16-docker-cmd-relation&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Docker 指令關係筆記 一種將 OS 弄成 App 的技術。 將服務的執行環境完全隔離，彼此不受影響  ¶docker pull 拉下 ubuntu docker pull ubuntu 指定版號 docker pull ubuntu:14.04 ¶Dockerfile alpine 版本 專為 docker 而設 node:&amp;lt;version&amp;gt;-alpine 用 docker e">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.484Z">
+<meta name="twitter:card" content="summary">
+  <title>Docker 指令關係筆記 - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Docker 指令關係筆記</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-指令關係筆記"><span class="toc-text">Docker 指令關係筆記</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile"><span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile-images"><span class="toc-text">Dockerfile -&gt; images</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#images-container"><span class="toc-text">images -&gt; container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#container-操作"><span class="toc-text">container 操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#container-image"><span class="toc-text">container -&gt; image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上傳-docker-hub"><span class="toc-text">上傳 docker hub</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Docker-指令關係筆記"><a class="header-anchor" href="#Docker-指令關係筆記">¶</a>Docker 指令關係筆記</h1>
+<p>一種將 OS 弄成 App 的技術。<br>
+將服務的執行環境完全隔離，彼此不受影響</p>
+<div id="graphviz-0"></div>
+<h2 id="docker-pull"><a class="header-anchor" href="#docker-pull">¶</a>docker pull</h2>
+<p>拉下 ubuntu<br>
+<code>docker pull ubuntu</code></p>
+<p>指定版號<br>
+<code>docker pull ubuntu:14.04</code></p>
+<h2 id="Dockerfile"><a class="header-anchor" href="#Dockerfile">¶</a>Dockerfile</h2>
+<p>alpine 版本 專為 docker 而設<br>
+<code>node:&lt;version&gt;-alpine</code><br>
+用 <code>docker exec -it erpbackend_web_1 /bin/sh</code> 使用 bash</p>
+<h2 id="Dockerfile-images"><a class="header-anchor" href="#Dockerfile-images">¶</a>Dockerfile -&gt; images</h2>
+<h2 id="images-container"><a class="header-anchor" href="#images-container">¶</a>images -&gt; container</h2>
+<p>從本地環境的 image 建立 container<br>
+<code>docker run -idt nginx</code></p>
+<ul>
+<li><code>-d</code> 背景執行</li>
+</ul>
+<p>互動式介面 tty<br>
+<code>docker run -it ubuntu</code></p>
+<p>container 建立同時命名<br>
+<code>docker run -it --name XXX ubuntu /bin/bash</code></p>
+<h2 id="container-操作"><a class="header-anchor" href="#container-操作">¶</a>container 操作</h2>
+<p>將 container 弄活<br>
+<code>docker start &lt;container id&gt;</code></p>
+<p>將 container 弄死<br>
+<code>sudo docker stop &lt;container id&gt;</code></p>
+<p>進入正在跑的 conatiner<br>
+<code>docker attache &lt;container id&gt;</code></p>
+<p>移除 container (要先弄死 container)<br>
+<code>docker rm &lt;container id&gt;</code></p>
+<p>列出 所有活的 containers<br>
+<code>docker ps</code></p>
+<p>列出 所有的活的死的 containers<br>
+<code>docker ps -a</code></p>
+<p>列出 container 執行 log<br>
+<code>docker logs &lt;container id&gt;</code></p>
+<h2 id="container-image"><a class="header-anchor" href="#container-image">¶</a>container -&gt; image</h2>
+<p><code>docker commit -m &quot;add index.html&quot; -a &quot;curt&quot; &lt;container_id&gt; &lt;image id&gt;</code></p>
+<ul>
+<li>-a 作者</li>
+</ul>
+<h2 id="上傳-docker-hub"><a class="header-anchor" href="#上傳-docker-hub">¶</a>上傳 docker hub</h2>
+<p>要先把上傳的路徑<br>
+<code>docker tag &lt;image id&gt;</code><br>
+<code>docker tag repository &lt;帳號/reponame&gt;</code></p>
+<p>上傳去!!!<br>
+<code>docker push reponame/projectname</code></p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><textarea id="graphviz-0-code" style="display: none">digraph graphname {
+  "docker hub" -> Dockerfile [label="docker push"]
+  Dockerfile -> "docker hub" [label="docker pull"]
+
+  Dockerfile -> "show list" [label="ls"]
+  image -> "show list" [label="docker images"]
+  container -> "show list" [label="docker ps"]
+
+  Dockerfile -> remove [label="rm Dockerfile"]
+  image -> remove [label="docker rmi"]
+  container -> remove [label="docker rm"]
+
+  Dockerfile -> image [label="docker build"]
+  image -> container [label="docker run"]
+  container->image [label="docker commit"]
+}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script>
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2019-04-16T01:52:59.000Z" itemprop="datePublished">
+              2019-04-16
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/docker/">docker</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/04-16-mariadb-aborted-connection/">Mariadb 的 Docker 會 Aborted connection</a><div class="related-posts-item-abstract">¶Mariadb 的 Docker 在每次寫入會 Aborted connection
+¶執行環境
+node.js + express
+pm2
+docker
+¶出錯描述</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/10-26-docker-commands/">Docker 指令們</a><div class="related-posts-item-abstract">¶Docker 指令們
+¶docker 指令
+
+version
+Show the Docker version information
+顯示 Docker 版本信息
+
+</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶用 Vue Component Slot 實現自定義 HTML 之前有 其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別介紹一下。 parent 外層 template 這樣使用 在放在 component 的 content, 是用來取代 slot 多個 slot 時，要指定 slot &amp;lt;template&amp;gt;  &amp;lt;div&amp;gt;">
+<meta name="keywords" content="vuejs,vue-slot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Vue Component Slot 實現自定義 HTML">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-21-vuejs&#x2F;vue-component-slot&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶用 Vue Component Slot 實現自定義 HTML 之前有 其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別介紹一下。 parent 外層 template 這樣使用 在放在 component 的 content, 是用來取代 slot 多個 slot 時，要指定 slot &amp;lt;template&amp;gt;  &amp;lt;div&amp;gt;">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.519Z">
+<meta name="twitter:card" content="summary">
+  <title>用 Vue Component Slot 實現自定義 HTML - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>用 Vue Component Slot 實現自定義 HTML</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#用-Vue-Component-Slot-實現自定義-HTML"><span class="toc-text">用 Vue Component Slot 實現自定義 HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dynamic-component"><span class="toc-text">dynamic component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#不滅的-dynamic-component"><span class="toc-text">不滅的 dynamic component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可觸發-hook-又永生的-component"><span class="toc-text">可觸發 hook 又永生的 component</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="用-Vue-Component-Slot-實現自定義-HTML"><a class="header-anchor" href="#用-Vue-Component-Slot-實現自定義-HTML">¶</a>用 Vue Component Slot 實現自定義 HTML</h1>
+<p>之前有<br>
+其中有說到 component 傳值到 content 要靠 slot，是什麼意思呢？在此特別介紹一下。</p>
+<p><strong>parent</strong></p>
+<p>外層 template 這樣使用</p>
+<p>在放在 component 的 content, 是用來取代 <code>slot</code><br>
+多個 <code>slot</code> 時，要指定 <code>slot</code></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p</span> <span class="attr">slot</span>=<span class="string">"slotName"</span>&gt;</span>指定 slot, 要插入 component 的 html<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>不指定 slot, 要插入 component 的 html<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>child</strong></p>
+<p>在 component 內，定義 <code>slot</code> : 提供外部 html 插入 <code>template</code> 的位置</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">slot</span> <span class="attr">name</span>=<span class="string">"slotName"</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="dynamic-component"><a class="header-anchor" href="#dynamic-component">¶</a>dynamic component</h2>
+<p>觸發 created, destroyed 的 component，只要 component 不出現在畫面上，就會把 component 消滅掉，並且下次出現時所有的數值歸 0</p>
+<p><strong>hook</strong></p>
+<ul>
+<li>created</li>
+<li>destroyed</li>
+</ul>
+<p><strong>parents</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"targetComponent"</span>&gt;</span><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">  name: <span class="string">'App'</span>,</span></span><br><span class="line">  data () &#123;</span><br><span class="line"><span class="actionscript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="actionscript">      targetComponent: <span class="string">'componentName'</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  created () &#123;</span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">'created'</span>)</span></span><br><span class="line">  &#125;,</span><br><span class="line">  destroyed () &#123;</span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">'destoryed'</span>)</span></span><br><span class="line">  &#125;,</span><br><span class="line"><span class="actionscript">  <span class="comment">//...</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="不滅的-dynamic-component"><a class="header-anchor" href="#不滅的-dynamic-component">¶</a>不滅的 dynamic component</h3>
+<p>component 要永生就加 <code>&lt;keep-alive&gt;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">keep-alive</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"targetComponent"</span>&gt;</span><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>永生不死，終究有遺憾，不知死為何物。<br>
+無法觸發 destory 的 hook</p>
+<h3 id="可觸發-hook-又永生的-component"><a class="header-anchor" href="#可觸發-hook-又永生的-component">¶</a>可觸發 hook 又永生的 component</h3>
+<p><strong>hook</strong></p>
+<ul>
+<li>deactivated</li>
+<li>activated</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">keep-alive</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"targetComponent"</span>&gt;</span><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">  name: <span class="string">'App'</span>,</span></span><br><span class="line">  data () &#123;</span><br><span class="line"><span class="actionscript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="actionscript">      targetComponent: <span class="string">'componentName'</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  deactivated () &#123;</span><br><span class="line"><span class="javascript">  	<span class="built_in">console</span>.log(<span class="string">'deactivated'</span>)</span></span><br><span class="line">  &#125;,</span><br><span class="line">  activated () &#123;</span><br><span class="line"><span class="javascript">  	<span class="built_in">console</span>.log(<span class="string">'activated'</span>)</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="actionscript">  <span class="comment">//...</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-21T06:23:32.000Z" itemprop="datePublished">
+              2018-09-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-slot/">vue-slot</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-20-iview-table-dropdown-action/">iView Table 裡放 Dropdown</a><div class="related-posts-item-abstract">¶iView Table 裡放 Dropdown
+¶前言
+聽朋友 1 號介紹 iView
+
+切版套 Bootstrap，用 vue 就要套 iView
+
+覺得很潮，所以</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/11-26-vuejs/jest-for-vue-router/">Jest for Vue with Vue Router 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vue Router 演練
+這次測試，要測試的是模仿使用者操作。
+隨著網址的變化，畫面也要變化到指定的 Component
+這次的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/jest-for-vue-x/">Jest for Vue with Vuex 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vuex 演練
+這次測試，要測試的是模仿使用者操作。
+在畫面顯示的變化要出現
+這次的練習，是由 Testing Vuex in c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/pure-component-form/">Vue Component 技巧 - 共用 Form</a><div class="related-posts-item-abstract">¶Vue Component 技巧 - 共用 Form
+
+本文會大量使用 Component 一詞，但是它會有兩個意思，在此先進行名詞定義:
+
+Vue componen</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/10-07-tenlong-in-goodideas/">好想工作室裡的天瓏書目 (持續更新)</a><div class="related-posts-item-abstract">¶好想工作室裡的天瓏書目 (持續更新)
+
+
+
+
+
+#masonry-container {
+  transition: .3s;
+}
+.book {
+  vertica</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

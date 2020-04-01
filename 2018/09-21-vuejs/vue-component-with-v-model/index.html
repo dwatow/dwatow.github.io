@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Vue Component 也可以用 v-model 前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的設定。 而在 vue2 裡有 v-model 其實是一種用單向綁定與事件而實現的雙向綁定語法。 又要如何實作，才可以讓 v-model 作用在自己設計的 component 呢？ ¶解析 v-model 先知道 &amp;lt;input">
+<meta name="keywords" content="vuejs,v-model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue Component 也可以用 v-model">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-21-vuejs&#x2F;vue-component-with-v-model&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Vue Component 也可以用 v-model 前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的設定。 而在 vue2 裡有 v-model 其實是一種用單向綁定與事件而實現的雙向綁定語法。 又要如何實作，才可以讓 v-model 作用在自己設計的 component 呢？ ¶解析 v-model 先知道 &amp;lt;input">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.519Z">
+<meta name="twitter:card" content="summary">
+  <title>Vue Component 也可以用 v-model - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vue Component 也可以用 v-model</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-Component-也可以用-v-model"><span class="toc-text">Vue Component 也可以用 v-model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#解析-v-model"><span class="toc-text">解析 v-model</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Vue-Component-也可以用-v-model"><a class="header-anchor" href="#Vue-Component-也可以用-v-model">¶</a>Vue Component 也可以用 v-model</h1>
+<p>前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的設定。<br>
+而在 vue2 裡有 <code>v-model</code> 其實是一種用單向綁定與事件而實現的雙向綁定語法。</p>
+<p>又要如何實作，才可以讓 <code>v-model</code> 作用在自己設計的 component 呢？</p>
+<h2 id="解析-v-model"><a class="header-anchor" href="#解析-v-model">¶</a>解析 <code>v-model</code></h2>
+<p>先知道</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">v-model</span>=<span class="string">"parentData"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其實是</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">"parentData"</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">"parentData = $event.target.value"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>所以，也是有可能可以設計一個可化用 <code>v-model</code> 的 component</p>
+<p><strong>parents</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">my-component</span> <span class="attr">v-model</span>=<span class="string">"parentData"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">my-component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./myComponent.vue'</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line">      data () &#123;</span><br><span class="line"><span class="actionscript">          parentData: <span class="string">''</span></span></span><br><span class="line">      &#125;,</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>child</strong></p>
+<p>對照 parent 的真實面貌</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">"parentData"</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">"parentData = $event.target.value"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>component 的實作</p>
+<ul>
+<li><code>:value</code> 在 component 裡要 <code>props</code></li>
+<li><code>@input</code> 在 component 裡要 <code>$emit</code></li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">"$emit('input', retuanValue)"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./myComponent.vue'</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">        props: [<span class="string">'value'</span>],</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-21T08:37:51.000Z" itemprop="datePublished">
+              2018-09-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/v-model/">v-model</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/05-20-iview-table-dropdown-action/">iView Table 裡放 Dropdown</a><div class="related-posts-item-abstract">¶iView Table 裡放 Dropdown
+¶前言
+聽朋友 1 號介紹 iView
+
+切版套 Bootstrap，用 vue 就要套 iView
+
+覺得很潮，所以</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/11-26-vuejs/jest-for-vue-router/">Jest for Vue with Vue Router 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vue Router 演練
+這次測試，要測試的是模仿使用者操作。
+隨著網址的變化，畫面也要變化到指定的 Component
+這次的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/jest-for-vue-x/">Jest for Vue with Vuex 演練</a><div class="related-posts-item-abstract">¶Jest for Vue with Vuex 演練
+這次測試，要測試的是模仿使用者操作。
+在畫面顯示的變化要出現
+這次的練習，是由 Testing Vuex in c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/07-03-vuejs/pure-component-form/">Vue Component 技巧 - 共用 Form</a><div class="related-posts-item-abstract">¶Vue Component 技巧 - 共用 Form
+
+本文會大量使用 Component 一詞，但是它會有兩個意思，在此先進行名詞定義:
+
+Vue componen</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/10-07-tenlong-in-goodideas/">好想工作室裡的天瓏書目 (持續更新)</a><div class="related-posts-item-abstract">¶好想工作室裡的天瓏書目 (持續更新)
+
+
+
+
+
+#masonry-container {
+  transition: .3s;
+}
+.book {
+  vertica</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-router-infinitely-route/">vue-router 遇到無窮循環 route</a><div class="related-posts-item-abstract">¶vue-router 遇到無窮循環 route
+¶源起
+錯誤訊息並不是指向自己的程式碼
+而是指向框架的錯誤
+所以，算是一個不直覺處理的 bug
+¶錯誤訊息
+截圖
+
+文</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

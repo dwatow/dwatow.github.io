@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Sequelize Migration Sequelize 2 之後，增加了 cli 的功能 透過一次又一次的維護檔，確保移植時有相同的建構過程 migration 就是拿來變動資料表的。 所以，會有幾種動作在這裡處理。  變動資料表 變動欄位 變動資料表關聯  ¶指令 要新增一次的 migration ，只要下這個指令，並且想好 migration message 。 $ sequelize">
+<meta name="keywords" content="Sequelize,Migration">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequelize Migration">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-24-sequelize&#x2F;sequelize-migration&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sequelize Migration Sequelize 2 之後，增加了 cli 的功能 透過一次又一次的維護檔，確保移植時有相同的建構過程 migration 就是拿來變動資料表的。 所以，會有幾種動作在這裡處理。  變動資料表 變動欄位 變動資料表關聯  ¶指令 要新增一次的 migration ，只要下這個指令，並且想好 migration message 。 $ sequelize">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.514Z">
+<meta name="twitter:card" content="summary">
+  <title>Sequelize Migration - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Sequelize Migration</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-Migration"><span class="toc-text">Sequelize Migration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#指令"><span class="toc-text">指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#檔案架構"><span class="toc-text">檔案架構</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#資料表-資料表欄位"><span class="toc-text">資料表 &amp; 資料表欄位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#執行-migrate-後要執行-SQL"><span class="toc-text">執行 migrate 後要執行 SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#資料表關聯"><span class="toc-text">資料表關聯</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hook"><span class="toc-text">Hook</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Available-constraints"><span class="toc-text">Available constraints:</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Sequelize-Migration"><a class="header-anchor" href="#Sequelize-Migration">¶</a>Sequelize Migration</h1>
+<p>Sequelize 2 之後，增加了 cli 的功能<br>
+透過一次又一次的維護檔，確保移植時有相同的建構過程</p>
+<p>migration 就是拿來變動資料表的。<br>
+所以，會有幾種動作在這裡處理。</p>
+<ul>
+<li>變動資料表</li>
+<li>變動欄位</li>
+<li>變動資料表關聯</li>
+</ul>
+<h2 id="指令"><a class="header-anchor" href="#指令">¶</a>指令</h2>
+<p>要新增一次的 migration ，只要下這個指令，並且想好 migration message 。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize migration:create --name &lt;migration message&gt;</span></span><br></pre></td></tr></table></figure>
+<p>就會產生檔案 <code>migrations/20180703032321-&lt;migration message&gt;.js</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate</span><br></pre></td></tr></table></figure>
+<p>執行檔案裡的 <code>up()</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate:undo</span><br></pre></td></tr></table></figure>
+<p>執行檔案裡的 <code>down()</code></p>
+<h2 id="檔案架構"><a class="header-anchor" href="#檔案架構">¶</a>檔案架構</h2>
+<p>function <code>up</code>, <code>down</code> ，都回傳 promise</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 要增加內容的動作</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 要減少內容的動作</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面來介紹一下，<code>up()</code> 和 <code>down()</code> 裡面要怎麼寫</p>
+<h2 id="資料表-資料表欄位"><a class="header-anchor" href="#資料表-資料表欄位">¶</a>資料表 &amp; 資料表欄位</h2>
+<p><a href="http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-init" target="_blank" rel="noopener">參考 attribute, options 用法</a></p>
+<p><a href="http://docs.sequelizejs.com/class/lib/query-interface.js~QueryInterface.html" target="_blank" rel="noopener">QueryInterface.methods</a></p>
+<ul>
+<li>變動資料表
+<ul>
+<li>新增資料表 <code>createTable(tableName, attributes, options)</code></li>
+<li>刪除資料表 <code>dropTable(tableName, options)</code></li>
+<li>刪除所有資料表 <code>dropAllTables(options)</code></li>
+<li>重新命名資料表 <code>renameTable(before, after, options)</code></li>
+<li>顯示資料表陣列 <code>showAllTables(options)</code>
+<ul>
+<li><code>tableNames</code> 的 datatype <code>Array</code></li>
+</ul>
+</li>
+<li>顯示資料表 schema <code>describeTable(tableName, options)</code></li>
+</ul>
+</li>
+<li>變動欄位
+<ul>
+<li>增加欄位 <code>addColumn(tableName, attributeName, dataTypeOrOptions, options)</code></li>
+<li>刪除欄位 <code>removeColumn(tableName, attributeName, options)</code></li>
+<li>修改欄位設定 <code>changeColumn(tableName, attributeName, dataTypeOrOptions, options)</code></li>
+<li>重新命名欄位 <code>renameColumn(tableName, attrNameBefore, attrNameAfter, options)</code></li>
+</ul>
+</li>
+<li>變動索引(資料表屬性的功能)
+<ul>
+<li>建立索引 <code>addIndex(tableName, attributes, options)</code></li>
+<li>移除索引 <code>removeIndex(tableName, indexNameOrAttributes, options)</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="執行-migrate-後要執行-SQL"><a class="header-anchor" href="#執行-migrate-後要執行-SQL">¶</a>執行 migrate 後要執行 SQL</h2>
+<p>使用 <code>queryInterface.sequelize.query(SQL 語法)</code> 的用法，可以讓 migration 完成時，也增加當時必要的 SQL 語法。</p>
+<p>雖然是 <code>query</code> 的 method ，它卻是一個可以執行 SQL 語法，改變資料庫資料的 method。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> queryInterface.method(</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      queryInterface.sequelize.query(<span class="string">`UPDATE table SET column=field`</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="資料表關聯"><a class="header-anchor" href="#資料表關聯">¶</a>資料表關聯</h2>
+<p>在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> queryInterface.addColumn(</span><br><span class="line">  <span class="string">'tableName'</span>,</span><br><span class="line">  <span class="string">'fieldName'</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    type: Sequelize.INTEGER.UNSIGNED,</span><br><span class="line">    references: &#123;</span><br><span class="line">      model: <span class="string">'tableName'</span>,</span><br><span class="line">      key: <span class="string">'fieldName'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    onDelete: <span class="string">'SET NULL'</span>,</span><br><span class="line">    onUpdate: <span class="string">'CASCADE'</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="Hook"><a class="header-anchor" href="#Hook">¶</a>Hook</h3>
+<p>當呼叫 add/set 函數時，beforeUpdate/afterUpdate 也會執行<br>
+唯一可以執行 beforeDestroy/afterDestroy 的方式，就是設定 associations 屬性 onDelete: ‘cascade’<br>
+參考: <a href="http://docs.sequelizejs.com/manual/tutorial/hooks.html" target="_blank" rel="noopener">http://docs.sequelizejs.com/manual/tutorial/hooks.html</a></p>
+<p>呼叫 association 時，設定 hook 選項 ex: <code>onUpdate</code>, <code>onDelete</code>。<br>
+預設所有的關聯，更新用 <code>CASCADE</code> ，刪除用 <code>SET NULL</code> ，除了 n:m 關聯，用 <code>CASCADE</code> 刪除。</p>
+<ol>
+<li><code>RESTRICT</code>, 同 <code>NO ACTION</code></li>
+<li><code>CASCADE</code>, 同步 update/delete 更新子表 foreign key</li>
+<li><code>NO ACTION</code>, 不允許主表 update/delete</li>
+<li><code>SET DEFAULT</code>, 子表 foreign key 設為 default (Innodb not use)</li>
+<li><code>SET NULL</code>, 子表 foreign key 設為 null</li>
+</ol>
+<h3 id="Available-constraints"><a class="header-anchor" href="#Available-constraints">¶</a>Available constraints:</h3>
+<ul>
+<li>UNIQUE</li>
+<li>DEFAULT (MSSQL only)</li>
+<li>CHECK (MySQL - Ignored by the database engine )</li>
+<li>FOREIGN KEY</li>
+<li>PRIMARY KEY</li>
+</ul>
+<p>UNIQUE</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">'Users'</span>, [<span class="string">'email'</span>], &#123;</span><br><span class="line">  type: <span class="string">'unique'</span>,</span><br><span class="line">  name: <span class="string">'custom_unique_constraint_name'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>CHECK</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">'Users'</span>, [<span class="string">'roles'</span>], &#123;</span><br><span class="line">  type: <span class="string">'check'</span>,</span><br><span class="line">  where: &#123;</span><br><span class="line">     roles: [<span class="string">'user'</span>, <span class="string">'admin'</span>, <span class="string">'moderator'</span>, <span class="string">'guest'</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Default - MSSQL only</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">'Users'</span>, [<span class="string">'roles'</span>], &#123;</span><br><span class="line">   type: <span class="string">'default'</span>,</span><br><span class="line">   defaultValue: <span class="string">'guest'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Primary Key</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">'Users'</span>, [<span class="string">'username'</span>], &#123;</span><br><span class="line">   type: <span class="string">'primary key'</span>,</span><br><span class="line">   name: <span class="string">'custom_primary_constraint_name'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Foreign Key</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">'Posts'</span>, [<span class="string">'username'</span>], &#123;</span><br><span class="line">  type: <span class="string">'foreign key'</span>,</span><br><span class="line">  name: <span class="string">'custom_fkey_constraint_name'</span>,</span><br><span class="line">  references: &#123; <span class="comment">//Required field</span></span><br><span class="line">    table: <span class="string">'target_table_name'</span>,</span><br><span class="line">    field: <span class="string">'target_column_name'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  onDelete: <span class="string">'cascade'</span>,</span><br><span class="line">  onUpdate: <span class="string">'cascade'</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-24T06:53:11.000Z" itemprop="datePublished">
+              2018-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Sequelize/">Sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Migration/">Migration</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-CUD-of-CRUD/">Sequelize 資料寫入</a><div class="related-posts-item-abstract">¶Sequelize 資料寫入
+¶Create
+Module.build(options: Object)
+回傳一個 instance
+欄位放預設值 + 產生 inst</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-R-of-CRUD/">Sequelize 資料讀取</a><div class="related-posts-item-abstract">¶Sequelize 資料讀取
+使用者需求 -&gt; 搜尋的功能
+要盡可能的多熟悉
+¶Module.find()
+找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-associations/">Sequelize 的 Relations/Associations</a><div class="related-posts-item-abstract">¶Sequelize 的 Relations/Associations
+¶migrations 關聯 (foreign key 欄位)
+在 queryInterface</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-define-model/">Sequelize 的 define model</a><div class="related-posts-item-abstract">¶Sequelize 的 define model
+定義 table 與 model 的映射，使用 sequelize.define()
+使用了 sequelize-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-24-sequelize/sequelize-first-hand/">初探 Sequelize</a><div class="related-posts-item-abstract">¶Sequelize 初探
+Sequelize 是一個使用 JavaScript 的 ORM。
+我自己的使用方式是與 Express 搭配，當作 MVC 的 M
+另外，</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

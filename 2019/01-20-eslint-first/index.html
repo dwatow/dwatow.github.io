@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶ESlint 初次安裝 之前都是靠 vue-cli 安裝。 這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。 ¶安裝 在官網找到 npm 上的安裝方式[1] npm install eslint --save-dev 如果你要用在 webpack 可以使用 eslint-loader[2] npm install eslint-loader --save-dev webpa">
+<meta name="keywords" content="prettier,webpack,eslint">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESlint 初次安裝">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;01-20-eslint-first&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶ESlint 初次安裝 之前都是靠 vue-cli 安裝。 這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。 ¶安裝 在官網找到 npm 上的安裝方式[1] npm install eslint --save-dev 如果你要用在 webpack 可以使用 eslint-loader[2] npm install eslint-loader --save-dev webpa">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.484Z">
+<meta name="twitter:card" content="summary">
+  <title>ESlint 初次安裝 - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>ESlint 初次安裝</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ESlint-初次安裝"><span class="toc-text">ESlint 初次安裝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Style-設定"><span class="toc-text">Style 設定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#若要和-prettier-併用"><span class="toc-text">若要和 prettier 併用[4]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#若要在-webpack-和-prettier-併用"><span class="toc-text">若要在 webpack 和 prettier 併用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#省略不-lint"><span class="toc-text">省略不 lint</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="ESlint-初次安裝"><a class="header-anchor" href="#ESlint-初次安裝">¶</a>ESlint 初次安裝</h1>
+<p>之前都是靠 vue-cli 安裝。<br>
+這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。</p>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p>在官網找到 npm 上的安裝方式<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install eslint --save-dev</span><br></pre></td></tr></table></figure>
+<p>如果你要用在 webpack 可以使用 eslint-loader<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install eslint-loader --save-dev</span><br></pre></td></tr></table></figure>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/(node_modules)/</span>,</span><br><span class="line">        include: [resolve(<span class="string">"src"</span>)],</span><br><span class="line">        enforce: <span class="string">"pre"</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">"eslint-loader"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Style-設定"><a class="header-anchor" href="#Style-設定">¶</a>Style 設定</h2>
+<p>使用問答來進行 <code>.eslintrc.json</code> 檔的生成<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx eslint --init</span><br></pre></td></tr></table></figure>
+<p>生成的檔案內容</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"env"</span>: &#123;</span><br><span class="line">    <span class="attr">"es6"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"node"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"browser"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"extends"</span>: <span class="string">"eslint:recommended"</span>,</span><br><span class="line">  <span class="attr">"parserOptions"</span>: &#123;</span><br><span class="line">    <span class="attr">"ecmaVersion"</span>: <span class="number">2015</span>,</span><br><span class="line">    <span class="attr">"sourceType"</span>: <span class="string">"module"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  "rules": &#123; ... &#125; 請刪除整段</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="若要和-prettier-併用"><a class="header-anchor" href="#若要和-prettier-併用">¶</a>若要和 prettier 併用<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h3>
+<ol>
+<li>打開 <code>.eslintrc</code> 檔</li>
+<li>刪掉 rule 的區段 (或安裝 <code>eslint-config-prettier</code>)</li>
+<li>安裝 Prettier</li>
+</ol>
+<h3 id="若要在-webpack-和-prettier-併用"><a class="header-anchor" href="#若要在-webpack-和-prettier-併用">¶</a>若要在 webpack 和 prettier 併用</h3>
+<p>除了上述的事要做之外，還要</p>
+<ol>
+<li>用在 webpack 要安裝 prettier-loader</li>
+<li>設定 webpack.config.js</li>
+</ol>
+<p><strong>webpack.config.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/(node_modules)/</span>,</span><br><span class="line">        include: [resolve(<span class="string">"src"</span>)],</span><br><span class="line">        enforce: <span class="string">"pre"</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">"eslint-loader"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">"prettier-loader"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>這樣就可以跑完 prettier 跑 eslint 設定檔衝突也不會發生了。</p>
+<h2 id="省略不-lint"><a class="header-anchor" href="#省略不-lint">¶</a>省略不 lint</h2>
+<p>如果目前正在 debug 的地方，要加上 <code>console.log()</code>，想省略不要 lint ，可以利用 eslint 的特殊註解來標註<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<p>兩種基本的用法</p>
+<p><strong>單行</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"這一行沒有 eslint"</span>); <span class="comment">// eslint-disable-line</span></span><br></pre></td></tr></table></figure>
+<p><strong>多行的區塊</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* eslint-disable */</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"這裡沒有 eslint"</span>);</span><br><span class="line"><span class="comment">/* eslint-enable */</span></span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://eslint.org/docs/user-guide/getting-started" target="_blank" rel="noopener">Getting Started with ESLint</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/webpack-contrib/eslint-loader" target="_blank" rel="noopener">eslint-loader - github</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="https://eslint.org/docs/user-guide/getting-started#global-installation-and-usage" target="_blank" rel="noopener">Global Installation and Usage</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://twitter.com/dan_abramov/status/1086215004808978434?fbclid=IwAR2fib4Nvr4Lq5Onc1VXS7rguHkoFbt-Egu0O9-I_InJ4uVu6onQgSe-5jA" target="_blank" rel="noopener">You’ll thank me - Dan Abramov</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a href="https://eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments" target="_blank" rel="noopener">disabling-rules-with-inline-comments</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2019-01-20T09:36:20.000Z" itemprop="datePublished">
+              2019-01-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/prettier/">prettier</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/webpack/">webpack</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/eslint/">eslint</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-20-code-review-no-coding-style-worning/">讓 Code review 再也不會出現 Coding Style 的問題</a><div class="related-posts-item-abstract">¶讓 Code review 再也不會出現 Coding Style 的問題
+用 prettier 當作整理程式碼的工具，希望可以在每一次操作 git commit 之</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
+這是一種很常見的網路字型變 icon 的魔法。
+有免費版和付費的專業版
+可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
+
+¶源起
+目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
+也許種種原</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-cli2/">使用 Vue-cli 2</a><div class="related-posts-item-abstract">¶使用 Vue-cli 2
+雖然 vue-cli 出了 3 版，在此先聊聊 2 版怎麼開始，也許新手對 vue-cli 3 接受度會大增。
+vue.js 有了自己初始專</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-29-webpack/action-url-loader-file-loader/">實戰 Webpack 的 file-loader 和 url-loader</a><div class="related-posts-item-abstract">¶實戰 Webpack 的 file-loader 和 url-loader
+¶用途
+Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。
+</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

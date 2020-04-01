@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶node-sass 初探 除了 ruby sass 和 compass ，還有其它的方案可以處理 SCSS -&amp;gt; CSS。  為了 vue-cli 而看 webpack ，由於 webpack 看了 sass-loader，因為看了 sass-loader 知道了 node-sass。  使用 node-sass 的原因，除了因為 webpack 而接觸之外，盡可能的使用 JavaScri">
+<meta name="keywords" content="webpack,JavaScript,vuejs,nodejs,node-sass">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node-sass 初探">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;03-12-node-sass&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶node-sass 初探 除了 ruby sass 和 compass ，還有其它的方案可以處理 SCSS -&amp;gt; CSS。  為了 vue-cli 而看 webpack ，由於 webpack 看了 sass-loader，因為看了 sass-loader 知道了 node-sass。  使用 node-sass 的原因，除了因為 webpack 而接觸之外，盡可能的使用 JavaScri">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.511Z">
+<meta name="twitter:card" content="summary">
+  <title>node-sass 初探 - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>node-sass 初探</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#node-sass-初探"><span class="toc-text">node-sass 初探</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什麼是-SCSS"><span class="toc-text">什麼是 SCSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#程式碼"><span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝[2]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#是否安裝成功"><span class="toc-text">是否安裝成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#執行"><span class="toc-text">執行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#那…-compass-watch-呢？"><span class="toc-text">那… compass watch 呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#那…-要結構化-sass-呢？"><span class="toc-text">那… 要結構化 sass 呢？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#設定不處理的檔案"><span class="toc-text">設定不處理的檔案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一次執行就生成-CSS。"><span class="toc-text">第一次執行就生成 CSS。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它功能"><span class="toc-text">其它功能</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="node-sass-初探"><a class="header-anchor" href="#node-sass-初探">¶</a>node-sass 初探</h1>
+<p>除了 ruby sass 和 compass ，還有其它的方案可以處理 <code>SCSS -&gt; CSS</code>。</p>
+<blockquote>
+<p>為了 vue-cli 而看 webpack ，由於 webpack 看了 sass-loader，因為看了 sass-loader 知道了 node-sass。</p>
+</blockquote>
+<p>使用 node-sass 的原因，除了因為 webpack 而接觸之外，盡可能的使用 JavaScript 造出來的工具，也是我選用的原因。<br>
+node-sass 是一套在 node.js 用 <a href="https://github.com/sass/libsass" target="_blank" rel="noopener">LibSass</a> 處理 SCSS 的工具。</p>
+<p>這一篇就來談談，如何用 node-sass 處理 SCSS -&gt; CSS</p>
+<h2 id="什麼是-SCSS"><a class="header-anchor" href="#什麼是-SCSS">¶</a>什麼是 SCSS</h2>
+<p>SCSS 是 superset of CSS<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。<br>
+一種語法相容 CSS 又多了 Sass 的寫法。</p>
+<h2 id="程式碼"><a class="header-anchor" href="#程式碼">¶</a>程式碼</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">project</span><br><span class="line">├ index.scss</span><br><span class="line">└ bigFont.scss</span><br></pre></td></tr></table></figure>
+<p><strong>index.scss</strong></p>
+<figure class="highlight scss"><table><tr><td class="code"><pre><span class="line">@<span class="keyword">import</span> <span class="string">"bigFont"</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>bigFont.scss</strong></p>
+<figure class="highlight scss"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">36px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm init -y # 要先有 package.json，如果已經有可以略過這一行</span><br><span class="line">npm install --save node-sass</span><br></pre></td></tr></table></figure>
+<h3 id="是否安裝成功"><a class="header-anchor" href="#是否安裝成功">¶</a>是否安裝成功</h3>
+<blockquote>
+<p>把 node-sass 安裝在 local 而不是 global<br>
+只能用 npm 的指令觸發 node-sass。</p>
+</blockquote>
+<p><strong>修改 package.json<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></strong></p>
+<p>指令要加在 script 段落裡 (沒有的話，要自己加入)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build-css"</span>: <span class="string">"node-sass"</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若安裝成功，會出現以下訊息</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">chris$</span><span class="bash"> npm run build-css</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> node-sass-demo@1.0.0 build-css /Users/chris/code/node-sass-demo</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> node-sass</span></span><br><span class="line"></span><br><span class="line">Provide a Sass file to render</span><br><span class="line"></span><br><span class="line">Example: Compile foobar.scss to foobar.css</span><br><span class="line">  node-sass --output-style compressed foobar.scss &gt; foobar.css</span><br><span class="line">  cat foobar.scss | node-sass --output-style compressed &gt; foobar.css</span><br><span class="line"></span><br><span class="line">Example: Watch the sass directory for changes, compile with sourcemaps to the css directory</span><br><span class="line">  node-sass --watch --recursive --output css</span><br><span class="line">    --source-map true --source-map-contents sass</span><br><span class="line">npm ERR! code ELIFECYCLE</span><br><span class="line">npm ERR! errno 1</span><br><span class="line">npm ERR! node-sass-demo@1.0.0 build-css: `node-sass`</span><br><span class="line">npm ERR! Exit status 1</span><br><span class="line">npm ERR! </span><br><span class="line">npm ERR! Failed at the node-sass-demo@1.0.0 build-css script.</span><br><span class="line">npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in:</span><br><span class="line">npm ERR!     /Users/chris/.npm/_logs/2020-01-01T05_03_49_078Z-debug.log</span><br></pre></td></tr></table></figure>
+<h2 id="執行"><a class="header-anchor" href="#執行">¶</a>執行</h2>
+<p>將 index.scss 處理成 index.css</p>
+<p>下指令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm run build-css ./index.scss ./index.css</span><br></pre></td></tr></table></figure>
+<p>這樣一來，指令就會組成</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">node-sass index.scss index.css</span><br></pre></td></tr></table></figure>
+<p>就會依 <code>node-sass 輸入檔 輸出檔</code> 的格式執行。</p>
+<h2 id="那…-compass-watch-呢？"><a class="header-anchor" href="#那…-compass-watch-呢？">¶</a>那… <code>compass watch</code> 呢？</h2>
+<p><em>不過，處理一次就要下一次指令，是不是也太累了？<br>
+想要改一次檔案就處理一次可以嗎？</em><br>
+當然可以，不過這問題要重新定義成「儲存一次 scss 檔，就處理一次 CSS」</p>
+<p>有用過 ruby sass 的朋友們，如果安裝 compass 的話，使用 <code>compass watch</code> 就可以利用 compass 執行了<br>
+那在 compass 已成時代眼淚之後，使用 node-sass 的我們要怎麼做呢？</p>
+<p><code>watch</code> 就是「一直修改一直處理、一直修改一直處理…」</p>
+<p>如果要 <code>watch</code> 就是將指令加上 <code>-w</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build-css"</span>: <span class="string">"node-sass -w"</span>,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>這樣一來，指令就會組成</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">node-sass -w index.scss index.css</span><br></pre></td></tr></table></figure>
+<p>就會依 <code>node-sass -w 輸入檔 輸出檔</code> 的格式執行。</p>
+<h2 id="那…-要結構化-sass-呢？"><a class="header-anchor" href="#那…-要結構化-sass-呢？">¶</a>那… 要結構化 sass 呢？</h2>
+<p>如果要處理出相對應的資料夾結構。</p>
+<p>我們設定好的資料夾像這樣</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">project</span><br><span class="line">└ scss</span><br><span class="line">  ├ index.scss</span><br><span class="line">  └ bigFont.scss</span><br></pre></td></tr></table></figure>
+<p>指令要做成這樣<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build-css"</span>: <span class="string">"node-sass -wr scss/ -o css/"</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>使用時，只要這樣寫</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm run build-css</span><br></pre></td></tr></table></figure>
+<p>加上了一個 <code>-r</code> 是為了巢狀式資料來而設定的，如果資料夾很深，也可以生成一樣的結構。</p>
+<h3 id="設定不處理的檔案"><a class="header-anchor" href="#設定不處理的檔案">¶</a>設定不處理的檔案</h3>
+<p>這樣生成兩個 css 檔。</p>
+<p>bigFont.css</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">font-size</span>: <span class="number">36px</span>; &#125;</span><br></pre></td></tr></table></figure>
+<p>index.css</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">font-size</span>: <span class="number">36px</span>; &#125;</span><br><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">color</span>: red; &#125;</span><br></pre></td></tr></table></figure>
+<p>因為 index.scss 引用了 bigFont.scss 所以，如果兩個檔案都生成 css 檔，會讓 <code>body { font-size: 36px; }</code> 重複了一次。為了不會出現「不直接引用到 .html 檔的檔案」，Sass 在檔名的設定上有一個默契，加上「底線前綴」就可以告訴 Sass 不處理這個檔案，但是引用時不用加入底線前綴。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">project</span><br><span class="line">└ scss</span><br><span class="line">  ├ index.scss</span><br><span class="line">  └ _bigFont.scss</span><br></pre></td></tr></table></figure>
+<h2 id="第一次執行就生成-CSS。"><a class="header-anchor" href="#第一次執行就生成-CSS。">¶</a>第一次執行就生成 CSS。</h2>
+<p>指令要做成這樣</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build-css"</span>: <span class="string">"node-sass -r scss/ -o css/ &amp;&amp; node-sass -wr scss/ -o css/"</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>這其實是兩個指令，用 &amp;&amp; 串起來，第一次不給 <code>-w</code> 第二次給 <code>-w</code>。<br>
+因為第一次給的指令，就是「要處理時，才下指令」<br>
+第二次給的指令是「每次存檔時才處理」</p>
+<h2 id="其它功能"><a class="header-anchor" href="#其它功能">¶</a>其它功能</h2>
+<p>其它指令參數</p>
+<ul>
+<li><code>--source-comments</code> 在 CSS 檔加入 SCSS 的位置註解，<br>
+有助於你找到這一個 CSS 是哪一行 SCSS 生成的</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://sass-lang.com/documentation/syntax#scss" target="_blank" rel="noopener">Syntax SCSS - Sass</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/sass/node-sass" target="_blank" rel="noopener">node-sass github</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a href="http://adon988.logdown.com/posts/4736822-node-sass-tutorial" target="_blank" rel="noopener">Node sass 入門 [筆記]</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a href="https://tsuifei.github.io/SASS-deployment-environment-and-fundamental/" target="_blank" rel="noopener">SASS 環境部署與基礎 - tsuifei blog</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-03-12T13:52:31.000Z" itemprop="datePublished">
+              2018-03-12
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/webpack/">webpack</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/JavaScript/">JavaScript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vuejs/">vuejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/node-sass/">node-sass</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-vuejs/vue-cli-webpack-bootstrap/">在 Vue-cli 或 Webpack 想使用 Bootstrap</a><div class="related-posts-item-abstract">¶在 Vue-cli 或 Webpack 想使用 Bootstrap
+雖然官網文件[1]有記載如何安裝，但是我在沒有很順利的情況之下，最後成功了。
+回過頭再去看文件才看</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
+這是一種很常見的網路字型變 icon 的魔法。
+有免費版和付費的專業版
+可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-17-webpack/webpack-loader-observed/">Webpack Loader 初探</a><div class="related-posts-item-abstract">¶Webpack Loader 初探
+
+為了 vue-cli 而看 webpack ，由於 webpack 看了 webpack loader。
+
+¶快速上手
+以 we</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-08-babel-cli/">Babel 第一次接觸</a><div class="related-posts-item-abstract">¶Babel 第一次接觸
+巴別塔，是一則聖經創世紀的故事。[1]
+一群只說一種語言的人在「大洪水」之後從東方來到了示拿（希伯來語：שנער‎‎）地區，並且決定在這修建一</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/02-17-iron-man-2018/summary-js-ecosystem/">給想學 JS 的前端「JS 生態系及週邊工具整理」導讀</a><div class="related-posts-item-abstract">¶給想學 JS 的前端「JS 生態系及週邊工具整理」導讀
+
+原著的系列名稱是「平時沒注意的 JavaScript - JS 生態系及週邊工具整理」因為名字太長，在此的文</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-vuejs/vue-cli2/">使用 Vue-cli 2</a><div class="related-posts-item-abstract">¶使用 Vue-cli 2
+雖然 vue-cli 出了 3 版，在此先聊聊 2 版怎麼開始，也許新手對 vue-cli 3 接受度會大增。
+vue.js 有了自己初始專</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

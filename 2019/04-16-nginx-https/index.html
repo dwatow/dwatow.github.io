@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶幫你的網址加上 https (設定 SSL)  開啟 web server 的 443 port，用來傳送 https 的 port 申請憑證  ¶nginx 開 443 設定檔路徑 &#x2F;etc&#x2F;nginx&#x2F;sites-available server &amp;#123;  listen 80 default_server;  listen [::]:80 default_server;  # SSL">
+<meta name="keywords" content="nginx,ssl,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="幫你的網址加上 https (設定 SSL)">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;04-16-nginx-https&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶幫你的網址加上 https (設定 SSL)  開啟 web server 的 443 port，用來傳送 https 的 port 申請憑證  ¶nginx 開 443 設定檔路徑 &#x2F;etc&#x2F;nginx&#x2F;sites-available server &amp;#123;  listen 80 default_server;  listen [::]:80 default_server;  # SSL">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;5OHMzKc.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;znUKmcr.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;tEO5oZ1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;3kOV8Vm.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;c49cb1Z.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;ugHvD30.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;47EHlUH.png">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;5OHMzKc.png">
+  <title>幫你的網址加上 https (設定 SSL) - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>幫你的網址加上 https (設定 SSL)</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#幫你的網址加上-https-設定-SSL"><span class="toc-text">幫你的網址加上 https (設定 SSL)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx-開-443"><span class="toc-text">nginx 開 443</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#檢查是否正確"><span class="toc-text">檢查是否正確</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#申請憑證"><span class="toc-text">申請憑證</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#操作步驟"><span class="toc-text">操作步驟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#驗證-Domain-的擁有權"><span class="toc-text">驗證 Domain 的擁有權</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#選擇驗證方式"><span class="toc-text">選擇驗證方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#取得驗證內容"><span class="toc-text">取得驗證內容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#執行驗證前的檢測"><span class="toc-text">執行驗證前的檢測</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#執行驗證"><span class="toc-text">執行驗證</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#驗證失敗可能的原因"><span class="toc-text">驗證失敗可能的原因</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取得-CRT-和-Private-key"><span class="toc-text">取得 CRT 和 Private key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#設定-CRT-和-Private-key"><span class="toc-text">設定 CRT 和 Private key[1]</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="幫你的網址加上-https-設定-SSL"><a class="header-anchor" href="#幫你的網址加上-https-設定-SSL">¶</a>幫你的網址加上 https (設定 SSL)</h1>
+<ol>
+<li>開啟 web server 的 443 port，用來傳送 https 的 port</li>
+<li>申請憑證</li>
+</ol>
+<h2 id="nginx-開-443"><a class="header-anchor" href="#nginx-開-443">¶</a>nginx 開 443</h2>
+<p>設定檔路徑 <code>/etc/nginx/sites-available</code></p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">80</span> default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">80</span> default_server;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># SSL configuration</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">listen</span> <span class="number">443</span> ssl default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl default_server;</span><br><span class="line">  <span class="comment"># ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重開 web server</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service nginx restart</span><br></pre></td></tr></table></figure>
+<h3 id="檢查是否正確"><a class="header-anchor" href="#檢查是否正確">¶</a>檢查是否正確</h3>
+<p>查看佔用 port</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo lsof -i -P -n | grep :443</span></span><br><span class="line">nginx     11361             web    8u  IPv4 4260616      0t0  TCP *:443 (LISTEN)</span><br><span class="line">nginx     11361             web    9u  IPv6 4260617      0t0  TCP *:443 (LISTEN)</span><br><span class="line">nginx     11366        www-data    8u  IPv4 4260616      0t0  TCP *:443 (LISTEN)</span><br><span class="line">nginx     11366        www-data    9u  IPv6 4260617      0t0  TCP *:443 (LISTEN)</span><br></pre></td></tr></table></figure>
+<p>重開伺服器，確認 443 port 有被佔用，就是開啟成功。</p>
+<h2 id="申請憑證"><a class="header-anchor" href="#申請憑證">¶</a>申請憑證</h2>
+<p>在此選用 <a href="https://freessl.cn/" target="_blank" rel="noopener">freeSSL.cn/freeSSL.org</a> 進行練習。</p>
+<div class="danger">
+<p>建議用於非商業網站。</p>
+</div>
+<h3 id="操作步驟"><a class="header-anchor" href="#操作步驟">¶</a>操作步驟</h3>
+<ul>
+<li>登入 FreeSSL。沒有登入不會給你證書。</li>
+<li>給定需要設定的 Domain （點擊 創建免費的 SSL 證書）<br>
+<img src="https://i.imgur.com/5OHMzKc.png" alt=""></li>
+</ul>
+<h3 id="驗證-Domain-的擁有權"><a class="header-anchor" href="#驗證-Domain-的擁有權">¶</a>驗證 Domain 的擁有權</h3>
+<h4 id="選擇驗證方式"><a class="header-anchor" href="#選擇驗證方式">¶</a>選擇驗證方式</h4>
+<p>在此選用的是檔案驗證 (fileauth)</p>
+<ol>
+<li><code>登入</code>時會幫你打好信箱</li>
+<li><code>驗證類型</code>選擇<code>文件驗證</code> (fileauth)，點擊 <code>點擊創建</code><br>
+<img src="https://i.imgur.com/znUKmcr.png" alt=""></li>
+</ol>
+<h4 id="取得驗證內容"><a class="header-anchor" href="#取得驗證內容">¶</a>取得驗證內容</h4>
+<p>SSL 服務網站會提供給你一個檔案、內容<br>
+以及它希望你放置的網站路徑</p>
+<p>意思是: 如果你可以讓這個網址底下放置這個檔案，而且要指定內容，就相信你有這個網站的所有權。</p>
+<p><img src="https://i.imgur.com/tEO5oZ1.png" alt=""></p>
+<ul>
+<li><code>文件路徑</code>   從你的 domain 進入讀取檔案的路徑。</li>
+<li><code>記錄值</code> 從你的 domain 進入讀取檔案的內容。</li>
+</ul>
+<p>依照要求，已經將檔案放置完之後 (一連串 bash 的操作)</p>
+<h4 id="執行驗證前的檢測"><a class="header-anchor" href="#執行驗證前的檢測">¶</a>執行驗證前的檢測</h4>
+<div class="danger">
+<p>先確認<code>配置完成，檢測一下</code>。<br>
+<code>點擊驗證</code> 之前要登入! <code>未登入</code>是不會通過的。</p>
+</div>
+<p>進行檢測<code>配置完成檢測一下</code> 檢測時間大約 10 秒。<br>
+完成檢測，會出現三個伺服器的驗證結果: <code>匹配</code>。</p>
+<h4 id="執行驗證"><a class="header-anchor" href="#執行驗證">¶</a>執行驗證</h4>
+<p>完成檢測之後，就可以<code>點擊驗證</code> domain 的擁有權。</p>
+<h3 id="驗證失敗可能的原因"><a class="header-anchor" href="#驗證失敗可能的原因">¶</a>驗證失敗可能的原因</h3>
+<div class="info">
+<p>若網站已存在，需注意 route 是否會干擾驗證</p>
+</div>
+<div class="danger">
+<p>因為憑證服務要透過 domain 來看看是否真的放上了 fileauth 會來訪問網站。<br>
+<img src="https://i.imgur.com/3kOV8Vm.png" alt=""><br>
+（可能的檢測結果）</p>
+</div>
+<h2 id="取得-CRT-和-Private-key"><a class="header-anchor" href="#取得-CRT-和-Private-key">¶</a>取得 CRT 和 Private key</h2>
+<p>一定要登入，才可以驗證。</p>
+<p>訂單列表下，注意<code>狀態</code>的部分，顯示<code>完成</code>（綠燈）的項目</p>
+<p><img src="https://i.imgur.com/c49cb1Z.png" alt=""></p>
+<p>找到<code>待驗證</code> (藍燈) &gt; 按 <code>驗證</code> 後</p>
+<p>傳給你一份完整的證書和私鑰。</p>
+<p><img src="https://i.imgur.com/ugHvD30.png" alt=""></p>
+<p>請用文字編輯器打開</p>
+<ol>
+<li>證書內容 會有 BEGIN CERTIFICATE</li>
+<li>公鑰內容 會有 BEGIN PRIVATE KEY<br>
+<img src="https://i.imgur.com/47EHlUH.png" alt=""><br>
+(certificate 範例)</li>
+</ol>
+<h2 id="設定-CRT-和-Private-key"><a class="header-anchor" href="#設定-CRT-和-Private-key">¶</a>設定 CRT 和 Private key<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">example.com.crt</span><br><span class="line">example.com.key</span><br></pre></td></tr></table></figure>
+<p>設定檔路徑 <code>/etc/nginx/sites-available</code></p>
+<p>設定放置目錄</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">ssl_certificate</span> /path/to/example.com.crt;</span><br><span class="line">  <span class="attribute">ssl_certificate_key</span> /path/to/example.com.key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就完成了。<br>
+使用 <code>https://</code> 協定進入你的首頁吧！</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://blog.freessl.cn/how-to-install-cert-in-nginx/" target="_blank" rel="noopener">Nginx 如何配置證書？</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2019-04-16T02:05:49.000Z" itemprop="datePublished">
+              2019-04-16
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/nginx/">nginx</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/ssl/">ssl</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/https/">https</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/04-16-one-http-page-in-https-site/">設定 Nginx 在 https 中，留下一頁 http</a><div class="related-posts-item-abstract">¶設定 Nginx 在 https 中，留下一頁 http
+
+在看之前，想問來看文章的讀者們 (厲害的開發者們) 瀏覽器是否會 catch 某一版本的設定？
+設定 We</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>

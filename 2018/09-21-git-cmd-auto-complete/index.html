@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶在 Mac OS X 用 Bash 安裝 git auto complete 在 terminal 下，我們都會想要按 tab 就出現指令的自動補完 $ git com 在這時按鍵盤的 tab $ git commit 會自動補完已知的指令，心中有一種「 terminal 你懂我」的暖心 最近有朋友安裝失敗，調查了之後發現因為最近 git 改版較快的關係。 有了一些不相容的調整。 所以安裝失敗的">
+<meta name="keywords" content="mac,git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Mac OS X 用 Bash 安裝 git auto complete">
+<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-21-git-cmd-auto-complete&#x2F;index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶在 Mac OS X 用 Bash 安裝 git auto complete 在 terminal 下，我們都會想要按 tab 就出現指令的自動補完 $ git com 在這時按鍵盤的 tab $ git commit 會自動補完已知的指令，心中有一種「 terminal 你懂我」的暖心 最近有朋友安裝失敗，調查了之後發現因為最近 git 改版較快的關係。 有了一些不相容的調整。 所以安裝失敗的">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;Y8mGl4A.png">
+<meta property="og:updated_time" content="2020-04-01T07:01:38.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.imgur.com&#x2F;Y8mGl4A.png">
+  <title>在 Mac OS X 用 Bash 安裝 git auto complete - 《Chris 技術筆記》</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <script src="/js/facebooksdk.js"></script>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>在 Mac OS X 用 Bash 安裝 git auto complete</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在-Mac-OS-X-用-Bash-安裝-git-auto-complete"><span class="toc-text">在 Mac OS X 用 Bash 安裝 git auto complete</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#問題描述"><span class="toc-text">問題描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正片開始"><span class="toc-text">正片開始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#運用-homebrew-安裝-bash-complete"><span class="toc-text">運用 homebrew 安裝 bash-complete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#手動增加-complete-腳本檔"><span class="toc-text">手動增加 complete 腳本檔</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#確認-Git-版本"><span class="toc-text">確認 Git 版本</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="在-Mac-OS-X-用-Bash-安裝-git-auto-complete"><a class="header-anchor" href="#在-Mac-OS-X-用-Bash-安裝-git-auto-complete">¶</a>在 Mac OS X 用 Bash 安裝 git auto complete</h1>
+<p>在 terminal 下，我們都會想要按 tab 就出現指令的自動補完</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git com</span></span><br></pre></td></tr></table></figure>
+<p>在這時按鍵盤的 tab</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git commit</span></span><br></pre></td></tr></table></figure>
+<p>會自動補完已知的指令，心中有一種「 terminal 你懂我」的暖心</p>
+<p>最近有朋友安裝失敗，調查了之後發現因為最近 git 改版較快的關係。<br>
+有了一些不相容的調整。</p>
+<p>所以安裝失敗的朋友，可以參考看看<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<h2 id="問題描述"><a class="header-anchor" href="#問題描述">¶</a>問題描述</h2>
+<p>若是按照目前 google 到的安裝方式，一步一步安裝好，卻出現下列問題的，也適用於這篇文章。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git com</span></span><br></pre></td></tr></table></figure>
+<p>按下 tab 之後變成</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git comUnknown option: --list-cmds=list-mainporcelain,others,nohelpers,<span class="built_in">alias</span>,list-complete,config</span></span><br><span class="line">usage: git [--version] [--help] [-C &lt;path&gt;] [-c &lt;name&gt;=&lt;value&gt;]</span><br><span class="line">  [--exec-path[=&lt;path&gt;]] [--html-path] [--man-path] [--info-path]</span><br><span class="line">  [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]</span><br><span class="line">  [--git-dir=&lt;path&gt;] [--work-tree=&lt;path&gt;] [--namespace=&lt;name&gt;]</span><br><span class="line">  &lt;command&gt; [&lt;args&gt;]</span><br></pre></td></tr></table></figure>
+<p>這也太嚇人了！怎辦？！</p>
+<div class="danger">
+<p>不用擔心，電腦還沒有弄壞!!</p>
+</div>
+<h2 id="正片開始"><a class="header-anchor" href="#正片開始">¶</a>正片開始</h2>
+<h3 id="運用-homebrew-安裝-bash-complete"><a class="header-anchor" href="#運用-homebrew-安裝-bash-complete">¶</a>運用 homebrew 安裝 bash-complete</h3>
+<p>一開始還是先用 brew 安裝</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> brew install bash-completion</span></span><br></pre></td></tr></table></figure>
+<p>然後我們來看看已安裝好的 <code>bash-completion</code> 的資訊</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> brew info bash-completion</span></span><br><span class="line">bash-completion: stable 1.3 (bottled)</span><br><span class="line">Programmable completion for Bash 3.2</span><br><span class="line">https://salsa.debian.org/debian/bash-completion</span><br><span class="line">Conflicts with:</span><br><span class="line">  bash-completion@2 (because Differing version of same formula)</span><br><span class="line">/usr/local/Cellar/bash-completion/1.3_3 (189 files, 608.6KB) *</span><br><span class="line">  Poured from bottle on 2017-09-22 at 16:40:34</span><br><span class="line">From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/bash-completion.rb</span><br><span class="line">==&gt; Caveats</span><br><span class="line">Add the following line to your ~/.bash_profile:</span><br><span class="line">  [ -f /usr/local/etc/bash_completion ] &amp;&amp; . /usr/local/etc/bash_completion</span><br><span class="line"></span><br><span class="line">Bash completion has been installed to:</span><br><span class="line">  /usr/local/etc/bash_completion.d</span><br></pre></td></tr></table></figure>
+<p>它提醒 要在 <code>~/.bash_profile</code> 檔裡面添加這一行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[ -f /usr/local/etc/bash_completion ] &amp;&amp; . /usr/local/etc/bash_completion</span><br></pre></td></tr></table></figure>
+<p>要注意版本的匹配</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash 3.x -&gt; bash-complete 1.3</span><br></pre></td></tr></table></figure>
+<h3 id="手動增加-complete-腳本檔"><a class="header-anchor" href="#手動增加-complete-腳本檔">¶</a>手動增加 complete 腳本檔</h3>
+<h3 id="確認-Git-版本"><a class="header-anchor" href="#確認-Git-版本">¶</a>確認 Git 版本</h3>
+<p>首先，先確定你的 Mac 安裝的是哪個版本的 git</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git --version</span></span><br><span class="line">git version 2.17.0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>版本要注意<br>
+目前安全的 Git 版本為 2.17.1、2.16.4、2.15.2、2.14.4 以及 2.13.7 等等，請大家盡速更新！<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+</blockquote>
+<p><strong>提外話，用 brew 安裝 git</strong><br>
+安裝完 bash 會自動指向 brew 安裝的路徑。</p>
+<div class="warning">
+<p>在此，要小心!!!</p>
+</div>
+<p>確定版本之後，要去 github 找 <a href="https://github.com/git/git/blob/master/contrib/completion/git-completion.bash" target="_blank" rel="noopener">git-completion.bash</a></p>
+<p>並且，找到與你的 git 匹配的 版本。</p>
+<p><img src="https://i.imgur.com/Y8mGl4A.png" alt=""></p>
+<p>找到之後，網址會改變。</p>
+<p>就把 git 更新到最新版，就可以</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/opt/bash-completion/etc/bash_completion.d</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> curl -L -O https://raw.github.com/git/git/master/contrib/completion/git-completion.bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> brew unlink bash-completion</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> brew link bash-completion</span></span><br></pre></td></tr></table></figure>
+<p>到此，就安裝完囉</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://apple.stackexchange.com/questions/327817/git-completion-bash-producing-error-on-macos-sierra-10-12-6/327905" target="_blank" rel="noopener">.git-completion.bash producing error on macOS Sierra 10.12.6</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://www.facebook.com/will.fans/posts/2110406082321858" target="_blank" rel="noopener">Git 再次出現嚴重漏洞</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-09-21T12:45:38.000Z" itemprop="datePublished">
+              2018-09-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/mac/">mac</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/git/">git</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-03-hexo/hexo-backup-to-branch/">Hexo 備份 md 檔</a><div class="related-posts-item-abstract">¶Hexo 備份 md 檔到另一個分支
+¶源由
+因為 hexo g -d 只會幫你上傳 public 。對於 .md 檔的備份，hexo 似乎沒有提供什麼解決方案。
+¶</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-git-ftp-first-hand/">Git 的支線 git-ftp</a><div class="related-posts-item-abstract">¶Git 的支線 git-ftp
+¶安裝[1]
+因為我已經用了 xcode 的命令工具，所以就有 git 了。
+只安裝下面這三個
+brew install curl -</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/10-24-git-server-simple-example/">極簡易的 git server</a><div class="related-posts-item-abstract">¶極簡易的 git server
+這是一篇，教你利用簡易的 Web server，開一個臨時的 git server。提供給區網內的人可以git clone。
+¶Ser</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/08-04-git-reset-parameters/">git reset <參數></a><div class="related-posts-item-abstract">¶git reset &lt;參數&gt;
+git reset &lt;參數&gt;
+
+--hard
+跳到指定的 commit, 檔案狀態: 取消所有變更
+--soft</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        accessToken: '393e05d75de84455676b582e8f9cf8b5d459f035',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="/js/ixbg/ixbg.js"></script>
+    <script src="/js/scrollTop.js"></script>
+</body>
+</html>
