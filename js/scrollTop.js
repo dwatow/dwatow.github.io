@@ -1,96 +1,41 @@
-(function () {
-    //ref: https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
-    function scrollIt(destination, duration = 200, easing = 'linear', callback) {
+(() => {
+  console.log('scrolltop');
+  
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      scrollTo(link.offsetTop, 550);
+    })
+  })
 
-        const easings = {
-            linear(t) {
-                return t;
-            },
-            easeInQuad(t) {
-                return t * t;
-            },
-            easeOutQuad(t) {
-                return t * (2 - t);
-            },
-            easeInOutQuad(t) {
-                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-            },
-            easeInCubic(t) {
-                return t * t * t;
-            },
-            easeOutCubic(t) {
-                return(--t) * t * t + 1;
-            },
-            easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-            },
-            easeInQuart(t) {
-                return t * t * t * t;
-            },
-            easeOutQuart(t) {
-                return 1 - (--t) * t * t * t;
-            },
-            easeInOutQuart(t) {
-                return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-            },
-            easeInQuint(t) {
-                return t * t * t * t * t;
-            },
-            easeOutQuint(t) {
-                return 1 + (--t) * t * t * t * t;
-            },
-            easeInOutQuint(t) {
-                return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t;
-            }
-        };
+  function scrollTo (to, duration) {
+    const element = document.documentElement;
+    var start = element.scrollTop,
+      change = to - start,
+      currentTime = 0,
+      increment = 20;
 
-        const start = window.pageYOffset;
-        const startTime = 'now' in window.performance ? performance.now() : new Date().getTime();
+    var animateScroll = function () {
+      
+      currentTime += increment;
+      var val = parseInt(Math.easeInOutQuad(currentTime, start, change, duration));
+      console.log(val.toFixed(4));
+      element.scrollTop = val;
+      if (currentTime < duration) {
+        setTimeout(animateScroll, increment);
+      }
+    };
+    animateScroll();
+  }
 
-        const documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-        const destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
-        const destinationOffsetToScroll = Math.round(documentHeight - destinationOffset < windowHeight ? documentHeight - windowHeight : destinationOffset);
-        // console.log(documentHeight - destinationOffset < windowHeight, destinationOffsetToScroll);
-
-        if('requestAnimationFrame' in window === false) {
-            window.scroll(0, destinationOffsetToScroll);
-            if(callback) {
-                callback();
-            }
-            return;
-        }
-
-        function scroll() {
-            const now = 'now' in window.performance ? performance.now() : new Date().getTime();
-            const time = Math.min(1, ((now - startTime) / duration));
-            const timeFunction = easings[easing](time);
-            window.scroll(0, Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start));
-            counter += 1;
-            if(counter < 10000 && window.pageYOffset === destinationOffsetToScroll) {
-                if(callback) {
-                    callback();
-                }
-                return;
-            }
-
-            requestAnimationFrame(scroll);
-        }
-
-        var counter = 0;
-
-        scroll();
-    }
-
-    document.querySelectorAll('.toc-link').forEach(tocItem => {
-        tocItem.addEventListener('click', function () {
-            // console.log(this.getAttribute('href'));
-            scrollIt(
-                document.querySelector(`[href='${this.getAttribute('href')}']`),
-                500,
-                'easeInOutCubic',
-                // () => console.log(`Just finished scrolling to ${window.pageYOffset}px`)
-            );
-        });
-    });
-})();
+  //t = current time
+  //b = start value
+  //c = change in value
+  //d = duration
+  Math.easeInOutQuad = function (t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) return c / 2 * t * t + b;
+    t--;
+    return -c / 2 * (t * (t - 2) - 1) + b;
+  };
+})()
