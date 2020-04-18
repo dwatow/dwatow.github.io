@@ -103,28 +103,30 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-21-vuejs/vue-component-add-filter/">https://dwatow.github.io/2018/09-21-vuejs/vue-component-add-filter/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-21-vuejs/vue-mixin-quick-guide/">https://dwatow.github.io/2018/09-21-vuejs/vue-mixin-quick-guide/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>在 Vue 中 加入 filter 的 method</h1>
+        <h1>Vue 的 mixin 快速指南</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在-Vue-中-加入-filter-的-method"><span class="toc-text">在 Vue 中 加入 filter 的 method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一種"><span class="toc-text">第一種</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二種"><span class="toc-text">第二種</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-的-mixin-快速指南"><span class="toc-text">Vue 的 mixin 快速指南</span></a></li></ol>
   </div>
 
 
-    <h1 id="在-Vue-中-加入-filter-的-method"><a class="header-anchor" href="#在-Vue-中-加入-filter-的-method">¶</a>在 Vue 中 加入 filter 的 method</h1>
-<h2 id="第一種"><a class="header-anchor" href="#第一種">¶</a>第一種</h2>
-<p>加在 component 裡</p>
-<p><strong>src/App.vue</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;p&gt;&#123;&#123; text | toUppercase | to-lowercase&#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">      data () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">          text: &apos;hello text&apos;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      filters: &#123;</span><br><span class="line">        toUppercase (value) &#123;</span><br><span class="line">          return value.toUpperCase();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="第二種"><a class="header-anchor" href="#第二種">¶</a>第二種</h2>
-<p>加在全域</p>
-<p><strong>main.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">"vue"</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">"./App.vue"</span>;</span><br><span class="line"></span><br><span class="line">Vue.filter(<span class="string">"to-lowercase"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value.toLowerCase();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">"#app"</span>,</span><br><span class="line">  render: <span class="function"><span class="params">h</span> =&gt;</span> h(App)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+    <h1 id="Vue-的-mixin-快速指南"><a class="header-anchor" href="#Vue-的-mixin-快速指南">¶</a>Vue 的 mixin 快速指南</h1>
+<p>建立 component 共用程式碼</p>
+<blockquote>
+<p>無法共用資料</p>
+</blockquote>
+<p><strong>mixin.js</strong></p>
+<p>建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> fruitMixin = &#123;</span><br><span class="line">  data() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      fruits: [<span class="string">"Apple"</span>, <span class="string">"Banna"</span>, <span class="string">"Mango"</span>, <span class="string">"Melon"</span>],</span><br><span class="line">      filterText: <span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  computed: &#123;</span><br><span class="line">    filterFruits() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.fruits.filter(<span class="function"><span class="params">element</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> element.match(<span class="keyword">this</span>.filterText);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>components/myComponent</strong></p>
+<p>在 component 加入 mixin</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fruitMixin &#125; <span class="keyword">from</span> <span class="string">"./mixin.js"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [fruitMixin]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -142,7 +144,7 @@
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/filter/">filter</a> }
+  { <a href="/tags/mixin/">mixin</a> }
   </li>
 
 
