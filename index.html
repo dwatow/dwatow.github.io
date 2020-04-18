@@ -170,10 +170,10 @@
 <p>如果你需要參數，可以建立 arrow function 當作 callback 等待被 <code>expect</code> 呼叫。<br>
 並且在執行 callback 時，會執行待測 function 就可以順利的拋出 exception 囉</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compileAndroidCode</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'you are using the wrong JDK'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test(<span class="string">'compiling android goes as expected'</span>, () =&gt; &#123;</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow();</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="built_in">Error</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// You can also use the exact error message or a regexp</span></span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="string">'you are using the wrong JDK'</span>);</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="regexp">/JDK/</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>:::dangur<br>
-我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。<br>
-我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 <code>try</code> 裡，而 <code>expect</code> 則寫在 <code>catch</code> 裡。<br>
-:::</p>
+<div class="danger">
+<p>我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。<br>
+我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 <code>try</code> 裡，而 <code>expect</code> 則寫在 <code>catch</code> 裡。</p>
+</div>
 <h2 id="JSON-Schema"><a class="header-anchor" href="#JSON-Schema">¶</a>JSON Schema</h2>
 <p>另外，如果只是要確定欄位的結構是否正確，可以試看看 JSON Schema 哦</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save-dev jest-json-schema</span><br></pre></td></tr></table></figure>

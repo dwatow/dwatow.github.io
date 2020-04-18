@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶讀 Jest Doc - 斷言庫 上週，處理了環境建置，還沒有辦法執行 jest 的朋友們，可以看看上一週的內容哦 這一週，我們要來看看如何判斷測試對錯。 ¶測試 3A 在正式介紹之前先說一下測試3A的概念。這並不是什麼評等的 AAA，而是一種測試程式的固定 pattern ，每一個測試，都應該要有的三個部份，而這三個部份都是由英文開頭的所以稱為測試 3A[1] 如果以煮菜來解釋  Arrang">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-04-18T15:51:37.454Z">
+<meta property="og:updated_time" content="2020-04-18T15:59:40.905Z">
 <meta name="twitter:card" content="summary">
   <title>讀 Jest Doc - 斷言庫 - 《Chris 技術筆記》</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
@@ -163,10 +163,10 @@
 <p>如果你需要參數，可以建立 arrow function 當作 callback 等待被 <code>expect</code> 呼叫。<br>
 並且在執行 callback 時，會執行待測 function 就可以順利的拋出 exception 囉</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compileAndroidCode</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'you are using the wrong JDK'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test(<span class="string">'compiling android goes as expected'</span>, () =&gt; &#123;</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow();</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="built_in">Error</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// You can also use the exact error message or a regexp</span></span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="string">'you are using the wrong JDK'</span>);</span><br><span class="line">  expect(<span class="function"><span class="params">()</span> =&gt;</span> compileAndroidCode(param)).toThrow(<span class="regexp">/JDK/</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>:::dangur<br>
-我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。<br>
-我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 <code>try</code> 裡，而 <code>expect</code> 則寫在 <code>catch</code> 裡。<br>
-:::</p>
+<div class="danger">
+<p>我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。<br>
+我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 <code>try</code> 裡，而 <code>expect</code> 則寫在 <code>catch</code> 裡。</p>
+</div>
 <h2 id="JSON-Schema"><a class="header-anchor" href="#JSON-Schema">¶</a>JSON Schema</h2>
 <p>另外，如果只是要確定欄位的結構是否正確，可以試看看 JSON Schema 哦</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install --save-dev jest-json-schema</span><br></pre></td></tr></table></figure>
