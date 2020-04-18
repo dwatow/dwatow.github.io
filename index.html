@@ -112,15 +112,18 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#又換了一次的-scroll-top"><span class="toc-text">又換了一次的 scroll top</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#又換了一次的-scroll-top"><span class="toc-text">又換了一次的 scroll top</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#修改"><span class="toc-text">修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原始碼"><span class="toc-text">原始碼</span></a></li></ol></li></ol>
   </div>
 
 
     <h1 id="又換了一次的-scroll-top"><a class="header-anchor" href="#又換了一次的-scroll-top">¶</a>又換了一次的 scroll top</h1>
-<p>這一次，把之前的原生 scroll top 換掉了。<br>
+<p>在 blog 中，我選的佈景主題較陽春，但也較好改，要什麼功能都自己加上來。<br>
+這個功能是希望使用者在游標移到右上角時，出現的目錄，點擊連結可以將文章移到指定段落<br>
+而這一次，把之前的原生 scroll top 換掉了。<br>
 因為不想只是為了這個功能引入 jQuery 套件，所以想說用原生語法。</p>
 <p>這次的出處在這: <a href="https://gist.github.com/andjosh/6764939" target="_blank" rel="noopener">https://gist.github.com/andjosh/6764939</a><br>
 其實不錯，寫的 style 很漂亮。</p>
+<h2 id="修改"><a class="header-anchor" href="#修改">¶</a>修改</h2>
 <p>有一些地方，我做了修改。</p>
 <ol>
 <li>因為我不是 always 都要到 top ，所以改了 <code>to</code> 的值，由每一個點擊標題決定。</li>
@@ -129,6 +132,7 @@
 另外<a href="https://gist.github.com/felipenmoura/650e7e1292c1e7638bcf6c9f9aeb9dd5" target="_blank" rel="noopener">這一篇</a> 使用的是 <code>element.getBoundingClientRect().top</code> 找到最後要停留的位置。</li>
 <li>最外面使用一個 IIFE 包起來，避免全域污染。</li>
 </ol>
+<h2 id="原始碼"><a class="header-anchor" href="#原始碼">¶</a>原始碼</h2>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'scrolltop'</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">document</span>.querySelectorAll(<span class="string">'.toc-link'</span>).forEach(<span class="function"><span class="params">link</span> =&gt;</span> &#123;</span><br><span class="line">    link.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">      e.preventDefault();</span><br><span class="line">      <span class="keyword">const</span> header = <span class="built_in">document</span>.querySelector(<span class="built_in">decodeURIComponent</span>(link.hash));</span><br><span class="line">      scrollTo(header.offsetTop, <span class="number">550</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">scrollTo</span> (<span class="params">to, duration</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> element = <span class="built_in">document</span>.documentElement;</span><br><span class="line">    <span class="keyword">var</span> start = element.scrollTop,</span><br><span class="line">      change = to - start,</span><br><span class="line">      currentTime = <span class="number">0</span>,</span><br><span class="line">      increment = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> animateScroll = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      </span><br><span class="line">      currentTime += increment;</span><br><span class="line">      <span class="keyword">var</span> val = <span class="built_in">parseInt</span>(<span class="built_in">Math</span>.easeInOutQuad(currentTime, start, change, duration));</span><br><span class="line">      <span class="built_in">console</span>.log(val.toFixed(<span class="number">4</span>));</span><br><span class="line">      element.scrollTop = val;</span><br><span class="line">      <span class="keyword">if</span> (currentTime &lt; duration) &#123;</span><br><span class="line">        setTimeout(animateScroll, increment);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    animateScroll();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//t = current time</span></span><br><span class="line">  <span class="comment">//b = start value</span></span><br><span class="line">  <span class="comment">//c = change in value</span></span><br><span class="line">  <span class="comment">//d = duration</span></span><br><span class="line">  <span class="built_in">Math</span>.easeInOutQuad = <span class="function"><span class="keyword">function</span> (<span class="params">t, b, c, d</span>) </span>&#123;</span><br><span class="line">    t /= d / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (t &lt; <span class="number">1</span>) <span class="keyword">return</span> c / <span class="number">2</span> * t * t + b;</span><br><span class="line">    t--;</span><br><span class="line">    <span class="keyword">return</span> -c / <span class="number">2</span> * (t * (t - <span class="number">2</span>) - <span class="number">1</span>) + b;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
     
     </section>
