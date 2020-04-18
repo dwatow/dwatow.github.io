@@ -234,8 +234,21 @@ project
 - `--source-comments` 在 CSS 檔加入 SCSS 的位置註解，
     有助於你找到這一個 CSS 是哪一行 SCSS 生成的
 
+## 後記: 如果我只是想安裝 Sass ？安裝哪一種？
+
+這個問題，其實不外乎就是看[官網](https://sass-lang.com/)在[Install](https://sass-lang.com/install) 裡有介紹。
+
+> If you use Node.js, you can also install Sass using npm by running
+
+```shell
+npm install -g sass
+```
+
+> However, please note that this will install the pure JavaScript implementation of Sass, which runs somewhat slower than the other options listed here. But it has the same interface, so it’ll be easy to swap in another implementation later if you need a bit more speed!
+
+因為我是 JavaScript 使用者，我想使用 npm 的 JS 版本比較適合我。
+
 <!-- prettier-ignore-start -->
 [^node-sass]: [node-sass github](https://github.com/sass/node-sass)
 [^node-sass-note]: [Node sass 入門 \[筆記\]](http://adon988.logdown.com/posts/4736822-node-sass-tutorial)
-
 <!-- prettier-ignore-end -->

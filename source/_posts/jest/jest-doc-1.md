@@ -1,5 +1,5 @@
 ---
-title: 讀 Jest Doc 學 unit testing
+title: 讀 Jest Doc - 建置測試環境
 date: 2020-04-17 11:23:21
 tags:
 - jest
@@ -8,7 +8,7 @@ categories:
 - 技術練習
 ---
 
-# 讀 Jest Doc 學 unit testing
+# 讀 Jest Doc - 建置測試環境
 
 新系列！(感覺很像 Youtube 的開場白)
 最近，其實從 3 月開始就和神 Q 超人、好想的夥伴們一起讀 Jest 文件。
