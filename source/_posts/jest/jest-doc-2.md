@@ -233,6 +233,10 @@ test('compiling android goes as expected', () => {
   expect(() => compileAndroidCode(param)).toThrow(/JDK/);
 });
 ```
+:::dangur
+我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。
+我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 `try` 裡，而 `expect` 則寫在 `catch` 裡。
+:::
 
 ## JSON Schema
 
@@ -254,3 +258,8 @@ npm install --save-dev jest-json-schema
 jest --verbose
 ```
 
+喜歡的話歡迎訂閱、按讚、分享。
+有任何問題也歡迎在下方留言討論。
+
+如果想參加聚會的話，可以私訊給我哦~
+我們下一篇見
