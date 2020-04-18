@@ -4,7 +4,8 @@
   document.querySelectorAll('.toc-link').forEach(link => {
     link.addEventListener('click', function (e) {
       e.preventDefault();
-      scrollTo(link.offsetTop, 550);
+      const header = document.querySelector(decodeURIComponent(link.hash));
+      scrollTo(header.offsetTop, 550);
     })
   })
 
