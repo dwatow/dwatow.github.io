@@ -233,7 +233,8 @@ test('compiling android goes as expected', () => {
   expect(() => compileAndroidCode(param)).toThrow(/JDK/);
 });
 ```
-:::dangur
+
+:::danger
 我自己測試時，非同步的 function 若要拋出 exception 不適合這樣做。
 我自己的做法，還是老老實實的寫一個 try-catch 將待測物寫在 `try` 裡，而 `expect` 則寫在 `catch` 裡。
 :::
