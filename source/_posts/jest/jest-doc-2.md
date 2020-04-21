@@ -7,7 +7,6 @@ tags:
 - "unit testing"
 categories:
 - 技術練習
-
 ---
 # 讀 Jest Doc - 斷言庫
 
@@ -258,6 +257,8 @@ npm install --save-dev jest-json-schema
 ```shell
 jest --verbose
 ```
+
+## 下回見
 
 喜歡的話歡迎訂閱、按讚、分享。
 有任何問題也歡迎在下方留言討論。
