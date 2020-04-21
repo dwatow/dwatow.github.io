@@ -11,9 +11,9 @@ categories:
 ---
 # 讀 Jest Doc - 非同步測試
 
-上週，我們看了各式各樣的基本的斷言庫，可以讓我們測試簡單型別(Number/String/Boolean)，測試非零值(undefined/null)，測試複雜型別(Object/Array)，甚至還可以測試是否例外的發生行為，以及測試例外錯誤(Error)
+上一回，我們看了各式各樣的基本的斷言庫，可以讓我們測試簡單型別(Number/String/Boolean)，測試非零值(undefined/null)，測試複雜型別(Object/Array)，甚至還可以測試是否例外的發生行為，以及測試例外錯誤(Error)
 
-這一週，來看看 JavaScript 的宿命對決，要怎麼測試非同步問題。
+這一回，來看看 JavaScript 的宿命對決，要怎麼測試非同步問題。
 這個就沒什麼測試觀念要帶入 ~~，就純粹的在看是不是會寫 JavaScript 而已~~。
 對非同步沒有經驗或不懂的朋友，可以先看看影片: [所以說event loop到底是什麼玩意兒？| Philip Roberts | JSConf EU](https://www.youtube.com/watch?v=8aGhZQkoFbQ) 了解一下再繼續看哦
 
