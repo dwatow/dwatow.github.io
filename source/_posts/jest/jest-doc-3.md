@@ -114,7 +114,7 @@ function fetchDataErr(callback) {
 
 **測試程式**
 
-想要弄懂 Prmose 可以先看看這一篇: [JavaScript Promise：簡介  |  Web  |  Google Developers](https://developers.google.com/web/fundamentals/primers/promises?hl=zh-tw)
+想要弄懂 Promise 可以先看看這一篇: [JavaScript Promise：簡介  |  Web  |  Google Developers](https://developers.google.com/web/fundamentals/primers/promises?hl=zh-tw)
 
 :::danger
 如果你使用 Promise 而 Promise 回傳 reject 的話，就會導致正式流程的測試失敗。

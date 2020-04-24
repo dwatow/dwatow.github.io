@@ -498,3 +498,13 @@ expect(mockFunc.mock.calls[mockFunc.mock.calls.length - 1][0]).toBe(42);
 expect(mockFunc.mock.calls).toEqual([[arg1, arg2]]);
 expect(mockFunc.getMockName()).toBe('a mock name');
 ```
+
+## 先告一段落
+
+對於 Jest 系列，其實讀書會還在進行中，預計再過一個月左右。
+會針對幾個議題做深入的討論。
+
+不過那個與測試入門就比較不相關，就再看是不是需要寫文章跟大家介紹了。
+感謝支持，如果有想看的文章類型也歡迎在底下留言哦~
+
+我們下次見
