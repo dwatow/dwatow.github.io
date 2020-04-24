@@ -53,7 +53,7 @@ ex:
 [^xunit]: [xUnit - Wikipedia](https://en.wikipedia.org/wiki/XUnit)
 [^xunit-list]: [List of unit testing frameworks - Wikipedia](https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks)
 
-![](https://i.imgur.com/mvbAwWr.png)
+{% iframe //www.slideshare.net/slideshow/embed_code/key/jOBeduguvKcWzU?startSlide=38 100% 590px %}
 [Cppunit下載、編譯、使用與困難排除, p38](https://www.slideshare.net/dwatow/cppunit-56845277#38)
 
 |xUnit|Jasmine|備註
