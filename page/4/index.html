@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
+<html amp lang="zh-cmn-Hans">
     <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
@@ -103,108 +103,37 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2019/01-02-angularjs/angularjs-lifecycle/">https://dwatow.github.io/2019/01-02-angularjs/angularjs-lifecycle/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2019/01-03-hexo/hexo-backup-to-branch/">https://dwatow.github.io/2019/01-03-hexo/hexo-backup-to-branch/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>AngularJS 1.5+ Component lifecycle</h1>
+        <h1>Hexo 備份 md 檔</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AngularJS-1-5-Component-lifecycle"><span class="toc-text">AngularJS 1.5+ Component lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#component"><span class="toc-text">component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AngularJS-Binding-of-Component"><span class="toc-text">AngularJS Binding of Component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以下用一個例子來說說，要怎麼寫-input-output"><span class="toc-text">以下用一個例子來說說，要怎麼寫 input/output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Input-of-Component"><span class="toc-text">Input of Component</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Output-of-Component"><span class="toc-text">Output of Component</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lifecycle"><span class="toc-text">Lifecycle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#實際執行"><span class="toc-text">實際執行</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hexo-備份-md-檔到另一個分支"><span class="toc-text">Hexo 備份 md 檔到另一個分支</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#源由"><span class="toc-text">源由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步驟"><span class="toc-text">步驟</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="AngularJS-1-5-Component-lifecycle"><a class="header-anchor" href="#AngularJS-1-5-Component-lifecycle">¶</a>AngularJS 1.5+ Component lifecycle</h1>
-<h2 id="component"><a class="header-anchor" href="#component">¶</a>component</h2>
-<p>在前端框架引入 virtual dom 時，意味著前端工程師有多了幾個必須要知道的觀念。而這個觀念一直延用到了今天。 (vue-cli3 出來的這一年都還適用)</p>
-<ul>
-<li>component input/output of one-way binding</li>
-<li>lifecycle</li>
-</ul>
-<h2 id="AngularJS-Binding-of-Component"><a class="header-anchor" href="#AngularJS-Binding-of-Component">¶</a>AngularJS Binding of Component</h2>
-<p>AngularJS 使用符號來表達 bindings 的方式。有 4 種方式。</p>
-<ol>
-<li><code>=</code></li>
-<li><code>&lt;</code></li>
-<li><code>@</code></li>
-<li><code>&amp;</code></li>
-</ol>
-<p>最早，有如魔法般的 two-way binding <code>=</code> 。</p>
-<p>後期較推崇的 onw-way binding 而希望取消 two-way binding。<br>
-所以出現了 <code>&lt;</code> + <code>$onChange()</code> + <code>&amp;</code> 可以做到 two-way binding 的效果。</p>
-<p>最後是傳入 <code>const string</code> 的 one-way binding <code>@</code></p>
-<h3 id="以下用一個例子來說說，要怎麼寫-input-output"><a class="header-anchor" href="#以下用一個例子來說說，要怎麼寫-input-output">¶</a>以下用一個例子來說說，要怎麼寫 input/output</h3>
-<p>在 parent 層使用 component</p>
-<p><strong>tabs.html</strong></p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>component 這樣寫</p>
-<p><strong>tabHome/index.html</strong></p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"home"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>Home component<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; vm.text &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span> <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><strong>tabHome/index.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">'angular'</span>;</span><br><span class="line"><span class="keyword">import</span> template <span class="keyword">from</span> <span class="string">'./index.html'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">controller</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular</span><br><span class="line">  .module(<span class="string">'tabHome'</span>, [])</span><br><span class="line">  .component(<span class="string">'tabHome'</span>, &#123;</span><br><span class="line">    template,</span><br><span class="line">    controller,</span><br><span class="line">    controllerAs: <span class="string">'vm'</span>,</span><br><span class="line">    bindings: &#123;</span><br><span class="line">      text: <span class="string">'&lt;'</span>,</span><br><span class="line">      myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).name;</span><br></pre></td></tr></table></figure>
-<h3 id="Input-of-Component"><a class="header-anchor" href="#Input-of-Component">¶</a>Input of Component</h3>
-<p>在 parent 層使用 component 時<br>
-直接給自訂的 attribute 並且放入參數</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">text</span>=<span class="string">"vm.text"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>component 這樣寫<br>
-使用<code>&lt;</code> one-way binding 傳入變數</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  text: <span class="string">'&lt;'</span>,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果需要「連動修改」要記得使用 <code>$onChanged()</code></p>
-<h3 id="Output-of-Component"><a class="header-anchor" href="#Output-of-Component">¶</a>Output of Component</h3>
-<p>使用 component 時，直接給自訂的 attribute<br>
-並且放入 function 執行，參數要使用 <code>{}</code> 並且在裡面寫下要被傳出來的 property。</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tab-home</span> <span class="attr">my-touch</span>=<span class="string">"vm.onTouch(&#123;text&#125;)"</span>&gt;</span><span class="tag">&lt;/<span class="name">tab-home</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>component 這樣寫</p>
-<p>指定真實事件觸發的地方，執行傳入的 function name，並且傳入 object 當 component output 的參數</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">name</span>=<span class="string">"button"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">ng-click</span>=<span class="string">"vm.myTouch(vm)"</span>&gt;</span>cliek it<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>(在此可以假想像是這樣的 object)</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">vm = &#123;</span><br><span class="line">  text: <span class="string">'Hi'</span>,  &lt;- 這是 parent 層會接收到的變數</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>用 <code>&amp;</code> binding 傳入 function</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bindings: &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  myTouch: <span class="string">'&amp;'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Lifecycle"><a class="header-anchor" href="#Lifecycle">¶</a>Lifecycle</h2>
-<p><img src="https://i.imgur.com/PXSdTNq.png" alt="AngularJS lifecycle"></p>
-<p>在此簡單的介紹一下</p>
-<p><strong><code>$onChanges(changesObj)</code></strong></p>
-<p>每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</p>
-<p><strong><code>$onInit()</code></strong></p>
-<p>完成 bindings 初始化時，用來初始化 controller data 的好地方。<br>
-在 directives 的 pre &amp; post linking 之前觸發。</p>
-<p><strong><code>$postLink()</code></strong></p>
-<p>controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></p>
-<p><strong><code>$onDestroy()</code></strong></p>
-<p>銷毀 controller 和它的 scope 時，用在釋放資源。</p>
-<p>較特別的是</p>
-<p><strong><code>$doCheck()</code></strong></p>
-<p>每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。用來當 watch <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<h3 id="實際執行"><a class="header-anchor" href="#實際執行">¶</a>實際執行</h3>
-<p>以一個 tab 轉換的練習來看看 lifecycle 是什麼時候發生的</p>
-<p><img src="https://i.imgur.com/9xkn5ZD.png" alt=""></p>
-<p>相同的練習用 Vue 和 AngularJS 做了一次。並且把 lifecycle 都印出來看，下面的圖左邊是 Vue 右邊是 AngularJS。</p>
-<p><strong>切到 Posts，清空 log 切回 Home</strong></p>
-<blockquote>
-<p>AngularJS 使用 <code>ng-if</code> 切換觸發完整 lifecycle 的做法</p>
-</blockquote>
-<p><img src="https://i.imgur.com/7m6En0B.png" alt=""> <img src="https://i.imgur.com/8dnCSKv.png" alt=""></p>
-<p><strong>keep-alive</strong></p>
-<blockquote>
-<p>AngularJS 使用 <code>ng-show</code> 切換當作是保持不滅的做法</p>
-</blockquote>
-<p><img src="https://i.imgur.com/ualJGFb.png" alt=""> <img src="https://i.imgur.com/9Iddhvo.png" alt=""></p>
-<p><strong>初始化完，切到 Posts</strong></p>
-<p>把 Archive 嵌到 Posts 裡的 lifecycle 練習</p>
-<p><img src="https://i.imgur.com/U3snr2d.png" alt=""><br>
-<img src="https://i.imgur.com/Y3eklNy.png" alt=""></p>
-<p>印出巢狀 component 的 lifecycle 狀況</p>
-<p><img src="https://i.imgur.com/nJfpTOH.png" alt="" width="200"> <img src="https://i.imgur.com/kImYRh1.png" alt="" width="200"></p>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://www.codelord.net/2016/12/20/replacing-angulars-deep-watches-with-the-%24docheck-lifecycle-hook/" target="_blank" rel="noopener">Replacing Angular’s Deep Watches with the $doCheck Lifecycle Hook - codelord.net</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+    <h1 id="Hexo-備份-md-檔到另一個分支"><a class="header-anchor" href="#Hexo-備份-md-檔到另一個分支">¶</a>Hexo 備份 md 檔到另一個分支</h1>
+<h2 id="源由"><a class="header-anchor" href="#源由">¶</a>源由</h2>
+<p>因為 <code>hexo g -d</code> 只會幫你上傳 <code>public</code> 。對於 <code>.md</code> 檔的備份，hexo 似乎沒有提供什麼解決方案。</p>
+<h2 id="步驟"><a class="header-anchor" href="#步驟">¶</a>步驟</h2>
+<p>先將 repo 加上 <code>git</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>再加上 remote</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git remote add origin git@...</span><br></pre></td></tr></table></figure>
+<p>第一次先將檔案加進 git</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git add . # git add 要少用</span><br><span class="line">git commit -m "first commit"</span><br></pre></td></tr></table></figure>
+<p>最後，要把檔案上傳，但是不能上傳 <code>master</code><br>
+在此使用 <code>source</code> 當分支名稱</p>
+<p>所以，我們要將 local 的 master 上傳到 remote 的 source</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin master:source</span><br></pre></td></tr></table></figure>
+<p>最後，就只要將這個指令，加到 <code>npm</code> 裡面</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  script: &#123;</span><br><span class="line">    backup: 'git push origin master:source'</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最後只要這樣，就可以上傳備份囉</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm run backup</span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -218,7 +147,15 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/angularjs/">angularjs</a> }
+  { <a href="/tags/npm/">npm</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/git/">git</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/hexo/">hexo</a> }
   </li>
 
 
@@ -248,7 +185,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 16.62px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 42.77px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 19.23px;">Flex</a> <a href="/tags/HTML/" style="font-size: 21.85px;">HTML</a> <a href="/tags/Inline/" style="font-size: 19.23px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.54px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 19.23px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 16.62px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 24.46px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 27.08px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/Transition/" style="font-size: 16.62px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.46px;">angularjs</a> <a href="/tags/animation/" style="font-size: 19.23px;">animation</a> <a href="/tags/api/" style="font-size: 16.62px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 16.62px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 16.62px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/callback/" style="font-size: 16.62px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 19.23px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 16.62px;">display</a> <a href="/tags/docker/" style="font-size: 19.23px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 21.85px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.46px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 16.62px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 40.15px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 16.62px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jest/" style="font-size: 29.69px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 16.62px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown%E6%B8%AC%E8%A9%A6/" style="font-size: 16.62px;">markdown測試</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 16.62px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.31px;">nodejs</a> <a href="/tags/npm/" style="font-size: 19.23px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 16.62px;">prettier</a> <a href="/tags/promise/" style="font-size: 16.62px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-testing/" style="font-size: 16.62px;">unit testing</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 16.62px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 19.23px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 45.38px;">vuejs</a> <a href="/tags/vuex/" style="font-size: 14px;">vuex</a> <a href="/tags/vuex/" style="font-size: 16.62px;">vuex'</a> <a href="/tags/web-camp/" style="font-size: 14px;">web camp</a> <a href="/tags/webpack/" style="font-size: 34.92px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 24.46px;">團隊溝通技巧</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 21.85px;">好想工作室</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 14px;">看書</a>
+    <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 16.62px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 42.77px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/Flex/" style="font-size: 19.23px;">Flex</a> <a href="/tags/HTML/" style="font-size: 21.85px;">HTML</a> <a href="/tags/Inline/" style="font-size: 19.23px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.54px;">JavaScript</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 19.23px;">RWD</a> <a href="/tags/Render-tree/" style="font-size: 16.62px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 24.46px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 27.08px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/Transition/" style="font-size: 16.62px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angularjs/" style="font-size: 24.46px;">angularjs</a> <a href="/tags/animation/" style="font-size: 19.23px;">animation</a> <a href="/tags/api/" style="font-size: 16.62px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 16.62px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 16.62px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/callback/" style="font-size: 16.62px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 19.23px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 16.62px;">display</a> <a href="/tags/docker/" style="font-size: 19.23px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 21.85px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.46px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google-fonts/" style="font-size: 14px;">google fonts</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 16.62px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 40.15px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 16.62px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jest/" style="font-size: 29.69px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 16.62px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown%E6%B8%AC%E8%A9%A6/" style="font-size: 16.62px;">markdown測試</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 16.62px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.31px;">nodejs</a> <a href="/tags/npm/" style="font-size: 19.23px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 16.62px;">prettier</a> <a href="/tags/promise/" style="font-size: 16.62px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/sequelize/" style="font-size: 14px;">sequelize</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-testing/" style="font-size: 16.62px;">unit testing</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue-cli/" style="font-size: 16.62px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 19.23px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuejs/" style="font-size: 45.38px;">vuejs</a> <a href="/tags/vuex/" style="font-size: 14px;">vuex</a> <a href="/tags/vuex/" style="font-size: 16.62px;">vuex'</a> <a href="/tags/web-camp/" style="font-size: 14px;">web camp</a> <a href="/tags/webpack/" style="font-size: 34.92px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 24.46px;">團隊溝通技巧</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 24.46px;">好想工作室</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 14px;">看書</a>
 
 
                 <footer>
