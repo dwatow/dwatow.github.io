@@ -5,6 +5,7 @@ tags:
 - npm
 - unpkg
 - codepen
+- npm-require
 categories: 
 - 工具使用
 ---
