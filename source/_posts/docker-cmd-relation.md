@@ -15,8 +15,8 @@ categories:
 
 ```graphviz
 digraph graphname {
-  "docker hub" -> Dockerfile [label="docker push"]
-  Dockerfile -> "docker hub" [label="docker pull"]
+  "docker hub" -> Dockerfile [label="docker pull"]
+  Dockerfile -> "docker hub" [label="docker push"]
 
   Dockerfile -> "show list" [label="ls"]
   image -> "show list" [label="docker images"]
