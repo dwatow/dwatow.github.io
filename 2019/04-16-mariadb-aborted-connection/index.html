@@ -17,24 +17,39 @@
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
   <meta name="description" content="¶Mariadb 的 Docker 在每次寫入會 Aborted connection ¶執行環境 node.js + express pm2 docker ¶出錯描述 送出寫入資料庫，就出現錯誤 web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫">
-<meta name="keywords" content="nodejs,docker,pm2,sequelize,express">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mariadb 的 Docker 會 Aborted connection">
-<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;04-16-mariadb-aborted-connection&#x2F;index.html">
+<meta property="og:url" content="https://dwatow.github.io/2019/04-16-mariadb-aborted-connection/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶Mariadb 的 Docker 在每次寫入會 Aborted connection ¶執行環境 node.js + express pm2 docker ¶出錯描述 送出寫入資料庫，就出現錯誤 web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-06-08T02:46:46.319Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-04-16T01:57:48.000Z">
+<meta property="article:modified_time" content="2020-06-08T02:46:46.319Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="pm2">
+<meta property="article:tag" content="sequelize">
+<meta property="article:tag" content="express">
 <meta name="twitter:card" content="summary">
   <title>Mariadb 的 Docker 會 Aborted connection - 《Chris 技術筆記》</title>
+  
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
 
 <body>
-    <script src="/js/facebooksdk.js"></script>
+    
+<script src="/js/facebooksdk.js"></script>
+
     <div class="Shell">
         <aside class='SideBar'>
     <canvas id="ixbg" width="100%" height="100%"></canvas>
@@ -107,7 +122,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mariadb-的-Docker-在每次寫入會-Aborted-connection"><span class="toc-text">Mariadb 的 Docker 在每次寫入會 Aborted connection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#執行環境"><span class="toc-text">執行環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#出錯描述"><span class="toc-text">出錯描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#錯誤訊息"><span class="toc-text">錯誤訊息:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解決方案"><span class="toc-text">解決方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#根本原因"><span class="toc-text">根本原因</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mariadb-%E7%9A%84-Docker-%E5%9C%A8%E6%AF%8F%E6%AC%A1%E5%AF%AB%E5%85%A5%E6%9C%83-Aborted-connection"><span class="toc-text">Mariadb 的 Docker 在每次寫入會 Aborted connection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C%E7%92%B0%E5%A2%83"><span class="toc-text">執行環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%8C%AF%E6%8F%8F%E8%BF%B0"><span class="toc-text">出錯描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF"><span class="toc-text">錯誤訊息:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88"><span class="toc-text">解決方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%9C%AC%E5%8E%9F%E5%9B%A0"><span class="toc-text">根本原因</span></a></li></ol></li></ol>
   </div>
 
 
@@ -118,14 +133,14 @@ pm2<br>
 docker</p>
 <h2 id="出錯描述"><a class="header-anchor" href="#出錯描述">¶</a>出錯描述</h2>
 <p>送出寫入資料庫，就出現錯誤</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | POST /api/v2/daily-report/ 200 1421.081 ms - -</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): COMMIT;</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959498872576 [Warning] Aborted connection 12 to db: <span class="string">'backend-system'</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959499175680 [Warning] Aborted connection 11 to db: <span class="string">'backend-system'</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959595984640 [Warning] Aborted connection 9 to db: <span class="string">'backend-system'</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | POST /api/v2/daily-report/ 200 1421.081 ms - -</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): COMMIT;</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959498872576 [Warning] Aborted connection 12 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959499175680 [Warning] Aborted connection 11 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959595984640 [Warning] Aborted connection 9 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br></pre></td></tr></table></figure>
 <h3 id="錯誤訊息"><a class="header-anchor" href="#錯誤訊息">¶</a>錯誤訊息:</h3>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Aborted connection 12 to db</span><br></pre></td></tr></table></figure>
 <h2 id="解決方案"><a class="header-anchor" href="#解決方案">¶</a>解決方案</h2>
 <p>在 <strong>ecosystem.config.js</strong> 加這行</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ignore_watch: [<span class="string">'node_modules'</span>, <span class="string">'db'</span>],</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ignore_watch: [<span class="string">&#x27;node_modules&#x27;</span>, <span class="string">&#x27;db&#x27;</span>],</span><br></pre></td></tr></table></figure>
 <p>整個檔案</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Application configuration section</span></span><br><span class="line"><span class="comment">   * http://pm2.keymetrics.io/docs/usage/application-declaration/</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  apps: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">"backend-system-API"</span>,</span><br><span class="line">      script: <span class="string">"bin/www"</span>,</span><br><span class="line">      max_restarts: <span class="number">1</span>,</span><br><span class="line">      autorestart: <span class="literal">false</span>,</span><br><span class="line">      watch: <span class="literal">true</span>,</span><br><span class="line">      ignore_watch: [<span class="string">"node_modules"</span>, <span class="string">"db"</span>],</span><br><span class="line">      env: &#123;</span><br><span class="line">        NODE_PATH: <span class="string">"."</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Application configuration section</span></span><br><span class="line"><span class="comment">   * http://pm2.keymetrics.io/docs/usage/application-declaration/</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  apps: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">&quot;backend-system-API&quot;</span>,</span><br><span class="line">      script: <span class="string">&quot;bin/www&quot;</span>,</span><br><span class="line">      max_restarts: <span class="number">1</span>,</span><br><span class="line">      autorestart: <span class="literal">false</span>,</span><br><span class="line">      watch: <span class="literal">true</span>,</span><br><span class="line">      ignore_watch: [<span class="string">&quot;node_modules&quot;</span>, <span class="string">&quot;db&quot;</span>],</span><br><span class="line">      env: &#123;</span><br><span class="line">        NODE_PATH: <span class="string">&quot;.&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h2 id="根本原因"><a class="header-anchor" href="#根本原因">¶</a>根本原因</h2>
 <p>db 資料夾，在 <code>INSERT</code> 時會自動更新<br>
 所以 pm2 就自動啟動了，造成出錯。</p>
@@ -178,15 +193,17 @@ docker</p>
     
         <section id="list_related_posts">
           <h2>同系列文章還有...</h2>
-          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-08-babel-cli/">Babel 第一次接觸</a><div class="related-posts-item-abstract">¶Babel 第一次接觸
-巴別塔，是一則聖經創世紀的故事。[1]
-一群只說一種語言的人在「大洪水」之後從東方來到了示拿（希伯來語：שנער‎‎）地區，並且決定在這修建一</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/04-16-docker-cmd-relation/">Docker 指令關係筆記</a><div class="related-posts-item-abstract">¶Docker 指令關係筆記
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/04-16-docker-cmd-relation/">Docker 指令關係筆記</a><div class="related-posts-item-abstract">¶Docker 指令關係筆記
 一種將 OS 弄成 App 的技術。
 將服務的執行環境完全隔離，彼此不受影響
 
 ¶docker pull
 拉下 ubuntu
-docker</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
+docker</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-26-node-with-env-first/">Node.js 使用 .env 加上環境變數</a><div class="related-posts-item-abstract">¶Node.js 使用 .env 加上環境變數
+
+這就是不要 git commit 上去的檔案!!!
+通常是拿來存放敏感的資料，例如: 帳號密碼
+這次研究是為了 e2e</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
 這是一種很常見的網路字型變 icon 的魔法。
 有免費版和付費的專業版
 可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-vuejs/vue-cli-webpack-bootstrap/">在 Vue-cli 或 Webpack 想使用 Bootstrap</a><div class="related-posts-item-abstract">¶在 Vue-cli 或 Webpack 想使用 Bootstrap
@@ -235,7 +252,11 @@ docker</div></li><li class="related-posts-item"><a class="related-posts-link" hr
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script src="/js/ixbg/ixbg.js"></script>
-    <script src="/js/scrollTop.js"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
 </body>
 </html>

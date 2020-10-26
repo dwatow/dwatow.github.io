@@ -17,24 +17,38 @@
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
   <meta name="description" content="¶Webpack 處理 Vue 專案的路徑規則整理 webpack 只處理 JavaScript 檔。 在 vue 專案 有 vue 檔，vue-loader，轉成 JavaScript 有 CSS 檔，它本身會透過 css-loader， CSS 的 @import 轉成 JavaScript JavaScript 的 require 或 import 就會呼叫 file-loader ¶vue">
-<meta name="keywords" content="webpack,vuejs,file-loader,css-loader">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Webpack 處理 Vue 專案的路徑規則整理">
-<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;09-21-webpack&#x2F;webpack-path-rule-within-vue&#x2F;index.html">
+<meta property="og:url" content="https://dwatow.github.io/2018/09-21-webpack/webpack-path-rule-within-vue/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶Webpack 處理 Vue 專案的路徑規則整理 webpack 只處理 JavaScript 檔。 在 vue 專案 有 vue 檔，vue-loader，轉成 JavaScript 有 CSS 檔，它本身會透過 css-loader， CSS 的 @import 轉成 JavaScript JavaScript 的 require 或 import 就會呼叫 file-loader ¶vue">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-06-08T02:46:46.333Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-09-21T05:56:34.000Z">
+<meta property="article:modified_time" content="2020-06-08T02:46:46.333Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="webpack">
+<meta property="article:tag" content="vuejs">
+<meta property="article:tag" content="file-loader">
+<meta property="article:tag" content="css-loader">
 <meta name="twitter:card" content="summary">
   <title>Webpack 處理 Vue 專案的路徑規則整理 - 《Chris 技術筆記》</title>
+  
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
 
 <body>
-    <script src="/js/facebooksdk.js"></script>
+    
+<script src="/js/facebooksdk.js"></script>
+
     <div class="Shell">
         <aside class='SideBar'>
     <canvas id="ixbg" width="100%" height="100%"></canvas>
@@ -107,7 +121,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Webpack-處理-Vue-專案的路徑規則整理"><span class="toc-text">Webpack 處理 Vue 專案的路徑規則整理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-loader"><span class="toc-text">vue-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSS-loader"><span class="toc-text">CSS-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-資料"><span class="toc-text">static 資料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Asset-Resolving-Rules-參考"><span class="toc-text">Asset Resolving Rules (參考)</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Webpack-%E8%99%95%E7%90%86-Vue-%E5%B0%88%E6%A1%88%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%89%87%E6%95%B4%E7%90%86"><span class="toc-text">Webpack 處理 Vue 專案的路徑規則整理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#vue-loader"><span class="toc-text">vue-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSS-loader"><span class="toc-text">CSS-loader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-%E8%B3%87%E6%96%99"><span class="toc-text">static 資料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Asset-Resolving-Rules-%E5%8F%83%E8%80%83"><span class="toc-text">Asset Resolving Rules (參考)</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
@@ -118,7 +132,7 @@
 有 CSS 檔，它本身會透過 css-loader， CSS 的 <code>@import</code> 轉成 JavaScript<br>
 JavaScript 的 <code>require</code> 或 <code>import</code> 就會呼叫 file-loader</p>
 <h2 id="vue-loader"><a class="header-anchor" href="#vue-loader">¶</a>vue-loader</h2>
-<p><a href="https://vue-loader.vuejs.org/" target="_blank" rel="noopener"><code>vue-loader</code></a></p>
+<p><a target="_blank" rel="noopener" href="https://vue-loader.vuejs.org/"><code>vue-loader</code></a></p>
 <p>vue-cli 的核心 loader</p>
 <p><strong>路徑處理</strong></p>
 <ul>
@@ -142,9 +156,9 @@ JavaScript 的 <code>require</code> 或 <code>import</code> 就會呼叫 file-lo
 <h2 id="static-資料"><a class="header-anchor" href="#static-資料">¶</a>static 資料</h2>
 <p>webpack config 設定</p>
 <p><strong>config/index.js</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">  // ...</span><br><span class="line">  build: &#123;</span><br><span class="line">    assetsPublicPath: &apos;/&apos;,</span><br><span class="line">    assetsSubDirectory: &apos;static&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  &#x2F;&#x2F; ...</span><br><span class="line">  build: &#123;</span><br><span class="line">    assetsPublicPath: &#39;&#x2F;&#39;,</span><br><span class="line">    assetsSubDirectory: &#39;static&#39;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用絕對路徑</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/static/[filename]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;static&#x2F;[filename]</span><br></pre></td></tr></table></figure>
 <h3 id="Asset-Resolving-Rules-參考"><a class="header-anchor" href="#Asset-Resolving-Rules-參考">¶</a>Asset Resolving Rules (參考)</h3>
 <ul>
 <li>相對路徑 <code>./assets/login.png</code>
@@ -262,7 +276,11 @@ vue.js 有了自己初始專</div></li><li class="related-posts-item"><a class="
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script src="/js/ixbg/ixbg.js"></script>
-    <script src="/js/scrollTop.js"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
 </body>
 </html>

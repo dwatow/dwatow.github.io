@@ -17,24 +17,37 @@
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
   <meta name="description" content="¶Node.js 使用 .env 加上環境變數  這就是不要 git commit 上去的檔案!!! 通常是拿來存放敏感的資料，例如: 帳號密碼 這次研究是為了 e2e 測試，要使用 admin 的帳號密碼!!  ¶node.js 的環境變數使用方式 官網只有說，可以在使用前，將環境變數儲存在 process.env [1] 用法下面的程式碼這樣，還可以用 delete 刪掉 123456proc">
-<meta name="keywords" content="nodejs,env,e2e">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node.js 使用 .env 加上環境變數">
-<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2019&#x2F;01-26-node-with-env-first&#x2F;index.html">
+<meta property="og:url" content="https://dwatow.github.io/2019/01-26-node-with-env-first/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶Node.js 使用 .env 加上環境變數  這就是不要 git commit 上去的檔案!!! 通常是拿來存放敏感的資料，例如: 帳號密碼 這次研究是為了 e2e 測試，要使用 admin 的帳號密碼!!  ¶node.js 的環境變數使用方式 官網只有說，可以在使用前，將環境變數儲存在 process.env [1] 用法下面的程式碼這樣，還可以用 delete 刪掉 123456proc">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-06-08T02:46:46.323Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-01-26T03:42:42.000Z">
+<meta property="article:modified_time" content="2020-06-08T02:46:46.323Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="env">
+<meta property="article:tag" content="e2e">
 <meta name="twitter:card" content="summary">
   <title>Node.js 使用 .env 加上環境變數 - 《Chris 技術筆記》</title>
+  
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
 
 <body>
-    <script src="/js/facebooksdk.js"></script>
+    
+<script src="/js/facebooksdk.js"></script>
+
     <div class="Shell">
         <aside class='SideBar'>
     <canvas id="ixbg" width="100%" height="100%"></canvas>
@@ -107,7 +120,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js-使用-env-加上環境變數"><span class="toc-text">Node.js 使用 .env 加上環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#node-js-的環境變數使用方式"><span class="toc-text">node.js 的環境變數使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-dotenv-套件"><span class="toc-text">使用 dotenv 套件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js-%E4%BD%BF%E7%94%A8-env-%E5%8A%A0%E4%B8%8A%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8"><span class="toc-text">Node.js 使用 .env 加上環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#node-js-%E7%9A%84%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">node.js 的環境變數使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-dotenv-%E5%A5%97%E4%BB%B6"><span class="toc-text">使用 dotenv 套件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
@@ -130,23 +143,23 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install dotenv --save</span><br></pre></td></tr></table></figure>
 <h3 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h3>
 <p>建立 <code>.env</code> 檔 (不要加入 git)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHRIS=chris</span><br><span class="line">DB_HOST=DB_HOST</span><br><span class="line">DB_PORT=DB_PORT</span><br><span class="line">DB_USER=DB_USER</span><br><span class="line">DB_PASS=DB_PASS</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHRIS&#x3D;chris</span><br><span class="line">DB_HOST&#x3D;DB_HOST</span><br><span class="line">DB_PORT&#x3D;DB_PORT</span><br><span class="line">DB_USER&#x3D;DB_USER</span><br><span class="line">DB_PASS&#x3D;DB_PASS</span><br></pre></td></tr></table></figure>
 <p>在程式剛啟動時，就可以載入</p>
 <p><strong>app.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'dotenv'</span>).config();</span><br><span class="line"><span class="built_in">console</span>.log(process.env.CHRIS); <span class="comment">//chris</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_HOST"</span>]); <span class="comment">//DB_HOST</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_PORT"</span>]); <span class="comment">//DB_PORT</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_USER"</span>]); <span class="comment">//DB_USER</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">"DB_PASS"</span>]); <span class="comment">//DB_PASS</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;dotenv&#x27;</span>).config();</span><br><span class="line"><span class="built_in">console</span>.log(process.env.CHRIS); <span class="comment">//chris</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_HOST&quot;</span>]); <span class="comment">//DB_HOST</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_PORT&quot;</span>]); <span class="comment">//DB_PORT</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_USER&quot;</span>]); <span class="comment">//DB_USER</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_PASS&quot;</span>]); <span class="comment">//DB_PASS</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>感謝 <a href="https://github.com/cytsunny" target="_blank" rel="noopener">cytsunny</a> 的提醒<br>
+<p>感謝 <a target="_blank" rel="noopener" href="https://github.com/cytsunny">cytsunny</a> 的提醒<br>
 確實是 <code>require('dotenv').config();</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 沒有什麼 <code>require('dotenv').load();</code></p>
 </blockquote>
 <!-- prettier-ignore-start -->
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_env" target="_blank" rel="noopener">process.env - node</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_env">process.env - node</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html" target="_blank" rel="noopener">Working with Environment Variables in Node.js</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html">Working with Environment Variables in Node.js</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a href="https://www.npmjs.com/package/dotenv" target="_blank" rel="noopener">dotenv - npm</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/dotenv">dotenv - npm</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -242,7 +255,11 @@ docker
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script src="/js/ixbg/ixbg.js"></script>
-    <script src="/js/scrollTop.js"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
 </body>
 </html>

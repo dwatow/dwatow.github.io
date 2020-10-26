@@ -17,24 +17,35 @@
   <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
   <meta name="description" content="¶實戰 Webpack 的 file-loader 和 url-loader ¶用途 Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。 後來發現一些小的 icon 檔圖 image 檔，會為了幾 KB 的大小而進行 Web API 的請求來來回回幾次很浪費時間，所以，出現了 url-loader[2] 將這些小檔案變成 base64 的格式放在前端。 ¶url-lo">
-<meta name="keywords" content="webpack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="實戰 Webpack 的 file-loader 和 url-loader">
-<meta property="og:url" content="https:&#x2F;&#x2F;dwatow.github.io&#x2F;2018&#x2F;12-29-webpack&#x2F;action-url-loader-file-loader&#x2F;index.html">
+<meta property="og:url" content="https://dwatow.github.io/2018/12-29-webpack/action-url-loader-file-loader/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
 <meta property="og:description" content="¶實戰 Webpack 的 file-loader 和 url-loader ¶用途 Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。 後來發現一些小的 icon 檔圖 image 檔，會為了幾 KB 的大小而進行 Web API 的請求來來回回幾次很浪費時間，所以，出現了 url-loader[2] 將這些小檔案變成 base64 的格式放在前端。 ¶url-lo">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-06-08T02:46:46.332Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-12-29T15:06:43.000Z">
+<meta property="article:modified_time" content="2020-06-08T02:46:46.332Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="webpack">
 <meta name="twitter:card" content="summary">
   <title>實戰 Webpack 的 file-loader 和 url-loader - 《Chris 技術筆記》</title>
+  
   <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
 
 <body>
-    <script src="/js/facebooksdk.js"></script>
+    
+<script src="/js/facebooksdk.js"></script>
+
     <div class="Shell">
         <aside class='SideBar'>
     <canvas id="ixbg" width="100%" height="100%"></canvas>
@@ -107,7 +118,7 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#實戰-Webpack-的-file-loader-和-url-loader"><span class="toc-text">實戰 Webpack 的 file-loader 和 url-loader</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用途"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#url-loader-file-loader-的關係"><span class="toc-text">url-loader &amp; file-loader 的關係</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安裝"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%A6%E6%88%B0-Webpack-%E7%9A%84-file-loader-%E5%92%8C-url-loader"><span class="toc-text">實戰 Webpack 的 file-loader 和 url-loader</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E9%80%94"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#url-loader-file-loader-%E7%9A%84%E9%97%9C%E4%BF%82"><span class="toc-text">url-loader &amp; file-loader 的關係</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></li></ol>
   </div>
 
 
@@ -125,7 +136,7 @@ url-loader 預設超過 limit 參數大小的檔案，會傳給 file-loader 處�
 <p>在 Webpack 設定，只需要設定 url-loader 即可，因為 url-loader 有一個 <code>fallback</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 參數，預設值是 <code>file-loader</code> ，所以在預設的情況下，會呼叫 file-loader，不用另外設定。</p>
 <p>在 url-loader 的 options 中，其實和 file-loader 是共用的，可以將 file-loader 的參數也設定在其中。</p>
 <p><strong>example</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.(woff|woff2|eot|ttf|otf|png|svg|jpg|gif)$/</span>,</span><br><span class="line">      use: &#123;</span><br><span class="line">        loader: <span class="string">'url-loader'</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          limit: <span class="number">1000</span>, <span class="comment">//bytes</span></span><br><span class="line">          name: <span class="string">'[hash:7].[ext]'</span>,</span><br><span class="line">          outputPath: <span class="string">'assets'</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.(woff|woff2|eot|ttf|otf|png|svg|jpg|gif)$/</span>,</span><br><span class="line">      use: &#123;</span><br><span class="line">        loader: <span class="string">&#x27;url-loader&#x27;</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          limit: <span class="number">1000</span>, <span class="comment">//bytes</span></span><br><span class="line">          name: <span class="string">&#x27;[hash:7].[ext]&#x27;</span>,</span><br><span class="line">          outputPath: <span class="string">&#x27;assets&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>file-loader 的輸入是依照程式碼裡的檔案路徑，找到相對應的檔案之後，輸出成 webpack config 指定的位置與檔名格式。</p>
 <p>url-loader 不會變檔案，所以沒有指定檔名格式的參數。</p>
@@ -133,11 +144,11 @@ url-loader 預設超過 limit 參數大小的檔案，會傳給 file-loader 處�
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a href="https://github.com/webpack-contrib/file-loader" target="_blank" rel="noopener">file-loader</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/webpack-contrib/file-loader">file-loader</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a href="https://github.com/webpack-contrib/url-loader" target="_blank" rel="noopener">url-loader</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/webpack-contrib/url-loader">url-loader</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a href="https://github.com/webpack-contrib/url-loader#fallback" target="_blank" rel="noopener">fallback - url-loader</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/webpack-contrib/url-loader#fallback">fallback - url-loader</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -169,14 +180,13 @@ url-loader 預設超過 limit 參數大小的檔案，會傳給 file-loader 處�
     
         <section id="list_related_posts">
           <h2>同系列文章還有...</h2>
-          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2018/03-25-webpack/webpack-font-awesome/">在 Webpack 使用 Font Awesome</a><div class="related-posts-item-abstract">¶在 Webpack 使用 Font Awesome
-這是一種很常見的網路字型變 icon 的魔法。
-有免費版和付費的專業版
-可以看 How to Use &gt; U</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-20-eslint-first/">ESlint 初次安裝</a><div class="related-posts-item-abstract">¶ESlint 初次安裝
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-20-eslint-first/">ESlint 初次安裝</a><div class="related-posts-item-abstract">¶ESlint 初次安裝
 之前都是靠 vue-cli 安裝。
 這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。
 ¶安裝
-在官網找到 npm 上的安</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
+在官網找到 npm 上的安</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-23-angularjs/angularjs-es6-class/">AngularJS 1.5+ Component style with es6-class</a><div class="related-posts-item-abstract">¶AngularJS 1.5+ Component style with es6-class
+
+在接手了 AngularJS 的專案到現在，一直在處理寫作風格造成除錯上</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
 
 ¶源起
 目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
@@ -222,7 +232,11 @@ vue.js 有了自己初始專</div></li><li class="related-posts-item"><a class="
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    <script src="/js/ixbg/ixbg.js"></script>
-    <script src="/js/scrollTop.js"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
 </body>
 </html>
