@@ -42,7 +42,7 @@ permalink: /404.html
   - [hexo 加上 UML 循序圖](https://dwatow.github.io/2017/06-18-hexo/uml-sequence/)
   - [hexo 加上流程圖](https://dwatow.github.io/2017/06-18-hexo/flow-chart/)
   - [測試 hackmd 支援的 markdown 寫法](https://dwatow.github.io/2017/06-18-hexo/test-hackmd/)
-- [給平面設計師的 系列](http://localhost:4000/categories/給平面設計師的/)
+- [給平面設計師的 系列](https://dwatow.github.io/categories/給平面設計師的/)
   - [給非工程人員的 Messager 引導手冊](https://dwatow.github.io/2018/01-27-for-designer/messenger-design-doc/)
   - [出尺寸稿？怎麼出？](https://dwatow.github.io/2017/06-29-for-designer/output-specifications/)
   - [出圖？怎麼出？](https://dwatow.github.io/2017/06-29-for-designer/about-web-image/)

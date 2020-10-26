@@ -1,10 +1,10 @@
 ---
 title: 給非工程人員的 Messager 引導手冊
 date: 2018-01-27 14:53:10
-tags: 
+tags:
 - chatbot
 - facebook
-categories: 
+categories:
 - 工具使用
 ---
 # 給非工程人員的 Messager Chatbot 引導手冊
@@ -24,7 +24,7 @@ categories:
 
 更多內容無法由此文件提供，但是對於初嚐 Messager Bot 的非工程人員，可以做為友善的入門管道。
 
-> 如果有興趣合作的朋友可以找我們([好想工作室](http://goodideas-studio.com/))聊聊唷
+> 如果有興趣合作的朋友可以找我們([好想工作室](https://goodideas-studio.com/))聊聊唷
 
 # Messager 平台
 
