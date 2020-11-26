@@ -1,11 +1,11 @@
 ---
 title: Docker 指令關係筆記
 date: 2019-04-16 09:52:59
-tags: 
+tags:
 - docker
-categories: 
-- 聽演講
+categories:
 - 技術心得
+- 聽演講
 ---
 
 # Docker 指令關係筆記
