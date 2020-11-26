@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html amp lang="zh-cmn-Hans">
+    <head>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <meta name="description" content="¶tags: ¶AngularJS unit testing with angularjs-jest 原文: AngularJS unit testing with angularjs-jest ¶1. Throw away the cluttered test setup boilerplate 甩掉測試初始設定的固定寫法 AngularJS 應用程式的測試，一直都存在著一些問題。甚至 Angu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AngularJS unit testing with &#96;angularjs-jest&#96;">
+<meta property="og:url" content="https://dwatow.github.io/2020/11-26-angularjs/unit-testing-jest/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶tags: ¶AngularJS unit testing with angularjs-jest 原文: AngularJS unit testing with angularjs-jest ¶1. Throw away the cluttered test setup boilerplate 甩掉測試初始設定的固定寫法 AngularJS 應用程式的測試，一直都存在著一些問題。甚至 Angu">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-11-26T03:41:00.000Z">
+<meta property="article:modified_time" content="2020-11-26T03:43:38.730Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="jest">
+<meta property="article:tag" content="angularjs">
+<meta property="article:tag" content="unit test">
+<meta name="twitter:card" content="summary">
+  <title>AngularJS unit testing with `angularjs-jest` - 《Chris 技術筆記》</title>
+  
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>AngularJS unit testing with `angularjs-jest`</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#tags"><span class="toc-text">tags:</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AngularJS-unit-testing-with-angularjs-jest"><span class="toc-text">AngularJS unit testing with angularjs-jest</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Throw-away-the-cluttered-test-setup-boilerplate-%E7%94%A9%E6%8E%89%E6%B8%AC%E8%A9%A6%E5%88%9D%E5%A7%8B%E8%A8%AD%E5%AE%9A%E7%9A%84%E5%9B%BA%E5%AE%9A%E5%AF%AB%E6%B3%95"><span class="toc-text">1. Throw away the cluttered test setup boilerplate 甩掉測試初始設定的固定寫法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Test-your-components-asynchronously-%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E6%B8%AC%E8%A9%A6%E4%BD%A0%E7%9A%84-components"><span class="toc-text">2. Test your components asynchronously 非同步的測試你的 components</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Use-snapshot-tests"><span class="toc-text">3. Use snapshot tests</span></a>
+  </div>
+
+
+    <h6 id="tags"><a class="header-anchor" href="#tags">¶</a>tags:</h6>
+<h1 id="AngularJS-unit-testing-with-angularjs-jest"><a class="header-anchor" href="#AngularJS-unit-testing-with-angularjs-jest">¶</a>AngularJS unit testing with <code>angularjs-jest</code></h1>
+<p><a target="_blank" rel="noopener" href="https://blog.softwaremill.com/angularjs-and-jest-three-steps-to-improve-your-legacy-frontend-tests-90674c0017e4">原文: AngularJS unit testing with <code>angularjs-jest</code></a></p>
+<h2 id="1-Throw-away-the-cluttered-test-setup-boilerplate-甩掉測試初始設定的固定寫法"><a class="header-anchor" href="#1-Throw-away-the-cluttered-test-setup-boilerplate-甩掉測試初始設定的固定寫法">¶</a>1. Throw away the cluttered test setup boilerplate 甩掉測試初始設定的固定寫法</h2>
+<p>AngularJS 應用程式的測試，一直都存在著一些問題。甚至 AngularJS 的官網文件提供一個 test setup，也是呼叫了很多次的 beforeEach 指定 mock 的 service/factory 變數。<br>
+通常參考一些基礎物件，像是 <code>$scope</code> 或 <code>$compile</code>。它可以做得更好，相信很多開發者都有自己初始化的方式</p>
+<p>大多類似這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">describe(<span class="string">&#x27;productSummary.component&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> scope;</span><br><span class="line">  <span class="keyword">let</span> compile;</span><br><span class="line">  <span class="keyword">let</span> summaryService;</span><br><span class="line"></span><br><span class="line">  beforeEach(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 指定要測試的 module 給 angular.mock</span></span><br><span class="line">    angular.mock.module(ProductModule);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 提供 mock 的 ProductService</span></span><br><span class="line">    angular.mock.module(<span class="function">(<span class="params">$provide</span>) =&gt;</span> &#123;</span><br><span class="line">      $provide.factory(<span class="string">&#x27;ProductService&#x27;</span>, <span class="function">(<span class="params">$q</span>) =&gt;</span> ProductServiceInstant($q));</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 初始化和存取 require 的 service/value</span></span><br><span class="line">    angular.mock.inject(<span class="function">(<span class="params">$rootScope, $compile, ProductSummaryService</span>) =&gt;</span> &#123;</span><br><span class="line">      scope = $rootScope.$new();</span><br><span class="line">      compile = $compile;</span><br><span class="line">      summaryService = ProductSummaryService;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>首先，mock 你要測試的 AngularJS module，來告訴 AngularJS 要測試到應用程式的哪一部份。<br>
+再來要 mock 用到的 service, factories, values…，它們各自還需要由 AngularJS 注入的服務，例如此例中的 <code>$q</code>。<br>
+最後，可能需要 <code>$scope</code> 和其它的 services/factories 你需要在 <code>beforEach()</code> 以外的地方使用。</p>
+<p>用了 <code>angularjs-jest</code> 可以簡化這些寫法，看下面這例子</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createTestApp &#125; <span class="keyword">from</span> <span class="string">&#x27;angularjs-jest&#x27;</span>;</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;productSummary.component&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> getTestApp = <span class="function">() =&gt;</span> createTestApp(&#123;</span><br><span class="line">    modules: [ProductModule],</span><br><span class="line">    mocks: &#123; <span class="attr">ProductService</span>: <span class="function">(<span class="params">$q</span>) =&gt;</span> ProductServiceInstant($q) &#125;,</span><br><span class="line">    access: [<span class="string">&#x27;ProductSummaryService&#x27;</span>],</span><br><span class="line">  &#125;);</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+<p>你可以用 <code>createTestApp()</code>  建立 test app 取代使用 <code>beforeEach()</code> (也取代了你初始化的變數)。呼叫 <code>createTestApp()</code> 傳遞 mock module 當作參數，取代多次呼叫 angular.mock.module 並且提供明確的 mock 屬性。只需要提供 services, factories or values 的名稱來取代初始化的全域變數。你不需要用 <code>$compile</code> 函數，因為套件有方便的方式來 <code>render</code> 一個 component</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> app = getTestApp();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存取 $scope</span></span><br><span class="line">app.$scope.title = <span class="string">&#x27;Some product&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存取 ProductSummaryService</span></span><br><span class="line">app.ProductSummaryService.createSummary(...);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Render, 替代 $compile</span></span><br><span class="line"><span class="keyword">const</span> element = app.render(<span class="string">&#x27;&lt;product-summary title=&quot;title&quot;&gt;&lt;/product-summary&gt;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="2-Test-your-components-asynchronously-非同步的測試你的-components"><a class="header-anchor" href="#2-Test-your-components-asynchronously-非同步的測試你的-components">¶</a>2. Test your components asynchronously 非同步的測試你的 components</h2>
+<p>幾週前，我還在一個圖書館工作時，實現一個很怪的測試。一個 component 它依賴多個 service 回傳的 promise 。這種測試的主要問題，要確定所有的 promise 都 resolve 的時間點，才是 component 準備就緒。為了使它更複雜，可能用了 <code>setTimeout</code> ，甚至真的推遲執行的時間。</p>
+<p>假設一個 component: <code>production-name</code> 呼叫了 service: <code>ProductService</code> 用 promise 取得 product 的資料。</p>
+<ol>
+<li>首先，畫面初始狀態沒有 product 資料時， component 要在那個 production ID呈現 <code>Unknown production</code> 。</li>
+<li>回傳 <code>Promise</code> 就可以 resolves product 資料的物件，進而可以渲染的 product name。</li>
+</ol>
+<p>你可寫個測試，確定這個 component 的初始渲染是 unknow product 並且之後會產生 product name</p>
+<p>為了可以寫這樣的測試， 介紹一下 <code>angularjs-jest</code> 的  <code>eventually</code> 功能。看看它的實際效果</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">it(<span class="string">&#x27;should render product name after a while&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> app = getTestApp();</span><br><span class="line">  app.$scope.productId = product.id;</span><br><span class="line">  <span class="keyword">const</span> element = app.render(<span class="string">`&lt;product-name product-id=&quot;productId&quot; /&gt;`</span>);</span><br><span class="line"></span><br><span class="line">  expect(element.html()).toContain(<span class="string">&#x27;Unknown product&#x27;</span>);</span><br><span class="line">  expect(element.html()).toContain(product.id);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> app.eventually(<span class="function">() =&gt;</span></span><br><span class="line">    expect(element.html()).toContain(product.name));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>The <code>eventually</code> function returns a <code>Promise</code> that resolves when the provided function eventually ends without an exception.<br>
+eventually 執行結束，會回傳一個 Promise</p>
+<p>However, when this assertion fails, the function with assertions will be called again in the next cycle of the Event Loop, and it will be preceded by <code>$scope.$digest()</code> to force AngularJS to apply changes to the component.<br>
+若測試沒過，下次的 Event loop 會再被呼叫</p>
+<p>預設的情況 eventually 函數會每隔 0 ms 呼叫，最多叫 10 次。你可以提供你自己的間隔和呼叫次數，呈現你 component 的 delay</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> app.eventually(<span class="function">() =&gt;</span></span><br><span class="line">  expect(element.html()).toContain(product.name),</span><br><span class="line">  &#123; <span class="attr">interval</span>: <span class="number">200</span>, <span class="attr">limit</span>: <span class="number">10</span> &#125;,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="3-Use-snapshot-tests"><a class="header-anchor" href="#3-Use-snapshot-tests">¶</a>3. Use snapshot tests</h2>
+<p>我覺得 snapshot testing 是 Jest 的殺手級應用。它能防止你不小心改到了你的 components。典型的 snapshot test 將會渲染 component 並且與別次 snapshot 的結果比較。第一次執行測試時會儲存 snapshot ，或者在執行測試時使用 <code>--updateSnapshot </code>參數，可以更新 snapshot 。除此之外，若 snapshot 測試 fail 會顯示在 console 上。</p>
+<p>如果要使用 snapshot 測試特定的值。你需要提供特定的 snapshot serializer。基本上，它就是一個有兩個 method 的物件， <code>test</code> 確定值是否可以給 serializer 用， <code>print</code> 實際執行序列化。</p>
+<p><code>angularjs-jest</code> 的 <code>render()</code> 的回傳值和 AngularJS 的 <code>$compile()</code> 相同。AngularJS 為了 debugging 提供的一種類似 jQuery 中大量的 html 形式的註解。但是，產生 snapshots 應該是要乾淨而簡單的，才能做到快速的視覺它比較測試結果。這就是 <code>angularjs-jest</code> 序列化程序，會重整格式成 html 移除 comments 的原因。</p>
+<p>Snapshot 測試，可以直接用 angularjs-jest 的 render 結果 (一個物件)，不用其它配置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> app = getTestApp()</span><br><span class="line"><span class="keyword">const</span> element = app.render(<span class="string">`&lt;product-quantity product-id=&quot;&#x27;prod-123&#x27;&quot; quantity=&quot;20&quot; /&gt;`</span>);</span><br><span class="line">expect(element).toMatchSnapshot();</span><br></pre></td></tr></table></figure>
+<p>但是，請記得 product-quantity component 載入 product 是非同步的，所以前面儲存的 snapshot 會無效。相反的，應該先檢查 component 是否包含要求的訊息。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> app = getTestApp();</span><br><span class="line"><span class="keyword">const</span> element = app.render(<span class="string">`&lt;product-quantity product-id=&quot;&#x27;prod-123&#x27;&quot; quantity=&quot;20&quot; /&gt;`</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> app.eventually(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  expect(element.text()).toContain(<span class="string">&#x27;20.00&#x27;</span>);</span><br><span class="line">  expect(element.text()).toContain(<span class="string">&#x27;pcs&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">expect(element).toMatchSnapshot();</span><br></pre></td></tr></table></figure>
+<p>此示例將生成以下快照：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&lt;span</span><br><span class="line">  class=&quot;value-unit-pair&quot;</span><br><span class="line">&gt;</span><br><span class="line">  &lt;span</span><br><span class="line">    class=&quot;value number ng-binding&quot;</span><br><span class="line">  &gt;</span><br><span class="line">    20.00</span><br><span class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  &lt;product-unit</span><br><span class="line">    class=&quot;unit ng-isolate-scope&quot;</span><br><span class="line">    product-id=&quot;$ctrl.productId&quot;</span><br><span class="line">  &gt;</span><br><span class="line">    &lt;unit-short-name</span><br><span class="line">      class=&quot;ng-binding ng-isolate-scope&quot;</span><br><span class="line">      unit-id=&quot;$ctrl.unitId&quot;</span><br><span class="line">    &gt;</span><br><span class="line">      pcs</span><br><span class="line">    <span class="tag">&lt;/<span class="name">unit-short-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">product-unit</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>(後面還有一段結論，就留給讀者自己看囉)</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2020-11-26T03:41:00.000Z" itemprop="datePublished">
+              2020-11-26
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/jest/">jest</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/angularjs/">angularjs</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/unit-test/">unit test</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/08-14-angularjs/angular-jest/">AngularJS + Jest 實戰</a><div class="related-posts-item-abstract">¶AngularJS + Jest 實戰
+
+實做專案: https://github.com/dwatow/AngularJS-demo/tree/jest-demo
+</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/11-26-angularjs/learn-like-vue/">learn-like-vue</a><div class="related-posts-item-abstract">¶用 vue 理解 angularJS 的 components
+¶Angular Component 邏輯
+1234567appName = &#x27;&#x27;</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/11-26-angularjs/understanding-components/">Understanding Components</a><div class="related-posts-item-abstract">¶Understanding Components
+原文: AngularJS: Developer Guide: Components
+¶CONTENTS
+
+Crea</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/11-25-angularjs/angularjs-migration-1-5/">AngularJS 遷移 controller 到 component</a><div class="related-posts-item-abstract">¶AngularJS 遷移 controller 到 component
+
+¶將 controller 改寫成 component
+這個改變，大約在 AngularJS</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-24-jest/jest-doc-5/">讀 Jest Doc - 測試替身</a><div class="related-posts-item-abstract">¶測試替身
+戲劇演員的替身, 在英文裡叫 body double 或 stunt double[1]
+待測物與相依元件[2]
+
+SUT：System Under Tes</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-21-jest/jest-doc-4/">讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋</a><div class="related-posts-item-abstract">¶讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋
+上一篇，聊了關於非同步問題。
+這一篇，我們要更了解 Jest 的生命週期 (其實就是執行順序)。
+廣義的</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2020 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
