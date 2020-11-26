@@ -1,10 +1,17 @@
 ---
-title: angularjs-migration-1.5+
+title: AngularJS 遷移 controller 到 component
 date: 2020-11-25 17:19:23
 tags:
+- angularjs
+- controller
+- component
+- webpack
 categories:
+- 技術心得
 ---
 # AngularJS 遷移 controller 到 component
+
+![](https://i.imgur.com/64fbzVm.png)
 
 ## 將 controller 改寫成 component
 
