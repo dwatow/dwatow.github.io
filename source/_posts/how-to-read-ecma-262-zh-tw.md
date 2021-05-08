@@ -2,6 +2,10 @@
 title: 翻譯 如何閱讀 ECMAScript Specification 中文版
 date: 2021-05-08 14:29:12
 tags:
+- JavaScript
+- 看書
+categories:
+- 翻譯
 ---
 # 翻譯 如何閱讀 ECMAScript Specification 中文版
 
