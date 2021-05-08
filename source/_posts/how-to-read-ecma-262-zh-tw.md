@@ -691,8 +691,6 @@ So for String(), our conclusion is that it never throws exceptions for primitive
 
 所以 `String()` 絕對不會在 primitive values 時拋出例外，但是會在 Object 時可能拋出例外，是我們的結論。
 
-[目前看到這](https://timothygu.me/es-howto/#example-string-prototype-substring)
-
 ## 2.8 Example: `typeof` operator
 
 到現在，我們只分析了 API 函數，讓我們試些不同的。
