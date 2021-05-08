@@ -145,7 +145,7 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 [^ECMA-262-2019]: [ECMAScript 2019 Language Specification.](https://ecma-international.org/ecma-262/10.0/)
 
-> Note: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
+> 注意: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
 
 [^ISO-16262-2011]: [ISO/IEC 16262:2011 - Information technology - Programming languages, their environments and system software interfaces - ECMAScript language specification.](https://www.iso.org/standard/55755.html)
 
