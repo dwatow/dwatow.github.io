@@ -115,61 +115,85 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2019/04-16-meta-viewport/">https://dwatow.github.io/2019/04-16-meta-viewport/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2019/04-16-docker-cmd-relation/">https://dwatow.github.io/2019/04-16-docker-cmd-relation/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>認識 meta viewport</h1>
+        <h1>Docker 指令關係筆記</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AA%8D%E8%AD%98-meta-viewport"><span class="toc-text">認識 meta viewport</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E5%B0%8E%E8%A7%80%E5%BF%B5"><span class="toc-text">前導觀念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#visual-viewport"><span class="toc-text">visual viewport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layout-viewport"><span class="toc-text">layout viewport</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A%E5%AD%97%E4%B8%B2"><span class="toc-text">設定字串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E6%A9%9F%E7%9B%B4%E7%BD%AE%E8%AE%8A%E6%A9%AB%E7%BD%AE%EF%BC%8C%E6%9C%83%E5%87%BA%E7%8F%BE%E7%84%A1%E6%B3%95%E9%A0%90%E6%B8%AC%E7%9A%84%E7%B8%AE%E6%94%BE%E8%A1%8C%E7%82%BA"><span class="toc-text">手機直置變橫置，會出現無法預測的縮放行為</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E6%8C%87%E4%BB%A4%E9%97%9C%E4%BF%82%E7%AD%86%E8%A8%98"><span class="toc-text">Docker 指令關係筆記</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile"><span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile-images"><span class="toc-text">Dockerfile -&gt; images</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#images-container"><span class="toc-text">images -&gt; container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#container-%E6%93%8D%E4%BD%9C"><span class="toc-text">container 操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#container-image"><span class="toc-text">container -&gt; image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E5%82%B3-docker-hub"><span class="toc-text">上傳 docker hub</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="認識-meta-viewport"><a class="header-anchor" href="#認識-meta-viewport">¶</a>認識 meta viewport</h1>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在這一段，寫了很多 <code>viewport</code> 的 <code>content</code> 設定字串。<br>
-這篇文章就是想來聊聊這些東西</p>
-<h2 id="前導觀念"><a class="header-anchor" href="#前導觀念">¶</a>前導觀念</h2>
-<p>首先，要先知道 <code>viewport</code> 有兩種</p>
-<ol>
-<li>visual viewport<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li>
-<li>layout viewport</li>
-</ol>
-<h3 id="visual-viewport"><a class="header-anchor" href="#visual-viewport">¶</a>visual viewport</h3>
-<p>Visual viewport 是一個 js 物件，就存在 window 物件之下。可以在瀏覽器的 console 中找到它的寬度</p>
-<p>用螢幕看，就等同於 <code>screen.width</code> 的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">visualViewport.width; <span class="comment">// = screen.width</span></span><br></pre></td></tr></table></figure>
-<h3 id="layout-viewport"><a class="header-anchor" href="#layout-viewport">¶</a>layout viewport</h3>
-<p>在使用模擬器看手機排版時，可以用如圖的方式看見目前的 layout viewport 大小</p>
-<p><img src="https://i.imgur.com/EB5ugA8.png" alt=""></p>
-<p>一般而言，瀏覽器會給一個預設值，而這個值，會因設備而異，而 Apple 的設備，預設值是 <code>980px</code> <a href="%E5%BE%8C%E9%9D%A2%E5%B0%B1%E7%9F%A5%E9%81%93%E6%80%8E%E9%BA%BC%E6%89%BE%E9%A0%90%E8%A8%AD%E5%80%BC">^ref1</a></p>
-<h2 id="設定字串"><a class="header-anchor" href="#設定字串">¶</a>設定字串</h2>
-<p><code>width=device-width</code></p>
-<p>用來設定 layout viewport 的寬度，改變設備提供的預設值</p>
-<p><code>initial-scale=1.0</code></p>
-<p>有個江湖上的算法<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">initial-scale &#x3D; visual viewport &#x2F; layout viewport</span><br></pre></td></tr></table></figure>
-<p>若 <code>initial-scale</code> 值沒有設定，有時也是會正常的原因是因為有設定 <code>width</code> (layout viewport)</p>
-<blockquote>
-<p><strong>設定 initial-scale 或 width</strong> 二選一<br>
-有時候會覺得這兩個變數設定其中一個就好了。</p>
-</blockquote>
-<h3 id="手機直置變橫置，會出現無法預測的縮放行為"><a class="header-anchor" href="#手機直置變橫置，會出現無法預測的縮放行為">¶</a>手機直置變橫置，會出現無法預測的縮放行為</h3>
-<p><strong>若兩個都不設定</strong><br>
-<code>scale</code> 最後的值也許會變成瀏覽器用預設值算出來的結果</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport">VisualViewport - MDN</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.zybuluo.com/gongzhen/note/170557">消除 viewport 的疑惑-移動網頁開發</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+    <h1 id="Docker-指令關係筆記"><a class="header-anchor" href="#Docker-指令關係筆記">¶</a>Docker 指令關係筆記</h1>
+<p>一種將 OS 弄成 App 的技術。<br>
+將服務的執行環境完全隔離，彼此不受影響</p>
+<div id="graphviz-0"></div>
+<h2 id="docker-pull"><a class="header-anchor" href="#docker-pull">¶</a>docker pull</h2>
+<p>拉下 ubuntu<br>
+<code>docker pull ubuntu</code></p>
+<p>指定版號<br>
+<code>docker pull ubuntu:14.04</code></p>
+<h2 id="Dockerfile"><a class="header-anchor" href="#Dockerfile">¶</a>Dockerfile</h2>
+<p>alpine 版本 專為 docker 而設<br>
+<code>node:&lt;version&gt;-alpine</code><br>
+用 <code>docker exec -it erpbackend_web_1 /bin/sh</code> 使用 bash</p>
+<h2 id="Dockerfile-images"><a class="header-anchor" href="#Dockerfile-images">¶</a>Dockerfile -&gt; images</h2>
+<h2 id="images-container"><a class="header-anchor" href="#images-container">¶</a>images -&gt; container</h2>
+<p>從本地環境的 image 建立 container<br>
+<code>docker run -idt nginx</code></p>
+<ul>
+<li><code>-d</code> 背景執行</li>
+</ul>
+<p>互動式介面 tty<br>
+<code>docker run -it ubuntu</code></p>
+<p>container 建立同時命名<br>
+<code>docker run -it --name XXX ubuntu /bin/bash</code></p>
+<h2 id="container-操作"><a class="header-anchor" href="#container-操作">¶</a>container 操作</h2>
+<p>將 container 弄活<br>
+<code>docker start &lt;container id&gt;</code></p>
+<p>將 container 弄死<br>
+<code>sudo docker stop &lt;container id&gt;</code></p>
+<p>進入正在跑的 conatiner<br>
+<code>docker attache &lt;container id&gt;</code></p>
+<p>移除 container (要先弄死 container)<br>
+<code>docker rm &lt;container id&gt;</code></p>
+<p>列出 所有活的 containers<br>
+<code>docker ps</code></p>
+<p>列出 所有的活的死的 containers<br>
+<code>docker ps -a</code></p>
+<p>列出 container 執行 log<br>
+<code>docker logs &lt;container id&gt;</code></p>
+<h2 id="container-image"><a class="header-anchor" href="#container-image">¶</a>container -&gt; image</h2>
+<p><code>docker commit -m &quot;add index.html&quot; -a &quot;curt&quot; &lt;container_id&gt; &lt;image id&gt;</code></p>
+<ul>
+<li>-a 作者</li>
+</ul>
+<h2 id="上傳-docker-hub"><a class="header-anchor" href="#上傳-docker-hub">¶</a>上傳 docker hub</h2>
+<p>要先把上傳的路徑<br>
+<code>docker tag &lt;image id&gt;</code><br>
+<code>docker tag repository &lt;帳號/reponame&gt;</code></p>
+<p>上傳去!!!<br>
+<code>docker push reponame/projectname</code></p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><textarea id="graphviz-0-code" style="display: none">digraph graphname {
+  "docker hub" -> Dockerfile [label="docker pull"]
+  Dockerfile -> "docker hub" [label="docker push"]
 
+  Dockerfile -> "show list" [label="ls"]
+  image -> "show list" [label="docker images"]
+  container -> "show list" [label="docker ps"]
+
+  Dockerfile -> remove [label="rm Dockerfile"]
+  image -> remove [label="docker rmi"]
+  container -> remove [label="docker rm"]
+
+  Dockerfile -> image [label="docker build"]
+  image -> container [label="docker run"]
+  container->image [label="docker commit"]
+}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script>
     
     </section>
     
@@ -182,11 +206,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/viewport/">viewport</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/RWD/">RWD</a> }
+  { <a href="/tags/docker/">docker</a> }
   </li>
 
 
