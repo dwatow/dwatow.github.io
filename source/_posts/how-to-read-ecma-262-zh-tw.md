@@ -23,7 +23,9 @@ The ECMAScript Language specification（也稱 JavaScript 規範，或 ECMA-262�
 > 但是這兩個的術語指的是同一個東西。
 > (ECMAScript 和 JavaScript 在歷史意義上不同，但是超過這份文件要講的範圍，有興趣[自己 Google](https://www.google.com/search?q=ecmascript+vs.+javascript))
 
-## 1.1 Why should I read the ECMAScript specification 為什麼要閱讀 ECMAScript 規範
+## 1.1 Why should I read the ECMAScript specification
+
+> 譯註: 為什麼要閱讀 ECMAScript 規範
 
 ECMAScript spec 是所有 JavaScript 實作的權威來源。無論是在你的瀏覽器[^WHATISMYBROWSER]、Node.js [^NODEJS]、太空船[^NODEJS-NASA]上或是物聯網設備 [^JOHNNY-FIVE]裡。
 所有 JavaScript 引擎開發人員都以規範為主，確保他們閃亮亮的新功能運作如同預期，就如同其它的 JavaScript 引擎一樣。
@@ -41,7 +43,7 @@ ECMAScript spec 是所有 JavaScript 實作的權威來源。無論是在你的�
 > Array.prototype.push(42)
 1
 > Array.prototype
-[42, constructor: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, find: ƒ, …]
+[42, constructor: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, find: ƒ, …]
 > Array.isArray(Array.prototype)
 true
 ```
@@ -51,7 +53,7 @@ Uncaught TypeError: Method Set.prototype.add called on incompatible receiver #<S
     at Set.add (<anonymous>)
     at <anonymous>:1:15
 > Set.prototype
-Set {constructor: ƒ, has: ƒ, add: ƒ, delete: ƒ, clear: ƒ, …}
+Set {constructor: ƒ, has: ƒ, add: ƒ, delete: ƒ, clear: ƒ, …}
 ```
 
 困惑為什麼一個方法可以用在原型，另一個方法卻不能用在原型。而且[Google 總是找不到](https://www.google.com/search?q=array+prototype+push+on+prototype)，[Stack Overflow 也幫不到你](https://stackoverflow.com/search?q=array+prototype+push+on+prototype)。
@@ -63,7 +65,7 @@ Set {constructor: ƒ, has: ƒ, add: ƒ, delete: ƒ, clear: ƒ, …}
 閱讀規範能解惑。
 
 :::info
-[譯註]: 一些精彩的 WAT 反應
+譯註: 一些精彩的 WAT 反應
 ```javascript=
 [] + []
 [] + {}
@@ -87,7 +89,9 @@ Array(16).join("wat" - 1) + "Batman!"
 
 OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非常有用的工具。 但是究竟什麼屬於 ECMAScript 規範呢？
 
-## 1.2 What belongs to the ECMAScript specification, and what does not 什麼在 ECMAScript ，什麼不是
+## 1.2 What belongs to the ECMAScript specification, and what does not
+
+> 譯註: 什麼(語法)在 ECMAScript ，什麼(語法)不是
 
 教科書的回答是「只有語言的功能才會進入 ECMAScript 規範中」，但是這有講等於沒講，如同我說「JavaScript 就是 JavaScript」。我不是在描述恆等式。
 
@@ -113,7 +117,9 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 [^ECMA-262-GLOBAL]: [tc39/proposal-global: ECMAScript Proposal, specs, and reference implementation for `global`. ](https://github.com/tc39/proposal-global)
 
 
-## 1.3 Before going any further, where is the ECMAScript specification? 進入之前，規範在哪？
+## 1.3 Before going any further, where is the ECMAScript specification?
+
+> 譯註: 進入之前，規範在哪？
 
 當你 Google "ECMAScript specification" 你會看見*很多*稱聲是合法的規範。而哪一個才是你該讀的？
 
@@ -139,11 +145,13 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 [^ECMA-262-2019]: [ECMAScript 2019 Language Specification.](https://ecma-international.org/ecma-262/10.0/)
 
-> Note: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 – 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
+> Note: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
 
-[^ISO-16262-2011]: [ISO/IEC 16262:2011 - Information technology – Programming languages, their environments and system software interfaces – ECMAScript language specification.](https://www.iso.org/standard/55755.html)
+[^ISO-16262-2011]: [ISO/IEC 16262:2011 - Information technology - Programming languages, their environments and system software interfaces - ECMAScript language specification.](https://www.iso.org/standard/55755.html)
 
-## 1.4 Navigating the spec 導讀規範
+## 1.4 Navigating the spec
+
+> 譯註: 導讀規範
 
 ECMAScript specification 講了很多事。縱使寫作時已經盡所能的分成邏輯區塊，它仍然是很**龐大**的內容。
 
@@ -192,13 +200,17 @@ Runtime semantics**
 > 有些人翻譯成 "在什麼時候(無論你想要確認什麼)這個問題被評估了?"
 > evaluated 其實也許是 eval() 的意思，直翻是評估，是編譯 JS 的一個步驟，執行前必定會做的事，在此翻譯成「運作」較為口語化。
 
-# 2 Runtime semantics 執行時期語意
+# 2 Runtime semantics
+
+> 譯註: Runtime semantics 執行時期語意
 
 規範大部份的內容，都是此語言的執行時期語意與 APIs，讓人感到疑惑的通常也都在這部份。
 
 一般來說，閱讀這些段落是很利落直白的。但是該規範使用許多的縮寫，對於剛起步的人 (至少對我來說) 是非常棘手的。我試著解釋其中的一些 conventions，並且利用它搞清楚一些事情是如何運作的。
 
-## 2.1 Algorithm steps 演用法步驟
+## 2.1 Algorithm steps
+
+> 譯註: Algorithm steps 演用法步驟
 
 ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼 (pseudocode)，而是更加精確的表示形式。
 
@@ -208,7 +220,7 @@ ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼
 > 1. Let a be **1**.
 > 2. Let b be a+a.
 > 3. If b is **2**, then
->    1. Hooray! Arithmetics isn’t broken.
+>    1. Hooray! Arithmetics isn't broken.
 > 4. Else
 >    1. Boo!
 > :::
@@ -216,7 +228,9 @@ ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼
 
 > 深入閱讀: [§5.2 Algorithm Conventions](https://tc39.github.io/ecma262/#sec-algorithm-conventions)
 
-## 2.2 Abstract operations 抽象運算
+## 2.2 Abstract operations
+
+> 譯註: Abstract operations 抽象運算
 
 你有時會在規範中看見像是函數的東西，[`Boolean()`](https://tc39.github.io/ecma262/#sec-boolean-constructor-boolean-value) 函數的第一步是:
 
@@ -243,13 +257,13 @@ When `Boolean` is called with argument value, the following steps are taken:
 
 > 譯註: 要看的話就是接下來的三個小節。
 
-### 2.3.1 A field of a Record 一個 Record 的一個 field
+### 2.3.1 A field of a Record
 
+> 譯註: 一個 Record 的一個 field
 > 譯註: 物件屬性, pair
 > 譯註: 像是 public 的 object property. ex: `O.field`
 
 ECMAScript spec 使用術語 **Record** 表示有固定的 key 組合成的 key-value 對照關係 (有點像是 C 語言的 structure)。Record 的每一對 key-value 會稱為 ***field***，因為 Record 只出現在規範，並不在 JavaScript 程式中，所以使用 [[Notation]] 意思是指一個  Record 的 fields。
-
 
 > 譯註: [[Notation]] = field in Record = key-value pair
 
@@ -273,13 +287,12 @@ ECMAScript spec 使用術語 **Record** 表示有固定的 key 組合成的 key-
 
 ### 2.3.2 An internal slot of a JavaScript Object
 
-(JS 物件的內部插槽(開口))
-
+> 譯註: JS 物件的內部插槽(開口)
 > 譯註: 「插槽」翻成「開口」也滿合乎意思的
 > 譯註: 物件方法
 > 譯註: 像是 private 的 object property. ex: `O.[[Notion]]`
 
-JavaScript Objects 還有規定所謂的 internal slots (內部開口) 用來保存資料。和 Record fields 一樣，internal slots 也不能透過觀察 JavaScript 來發現它們，但是也許會從某些專用工具中曝露出來，像是 Google Chrome’s DevTools。因此 [[Notation]] 也是 internal slots 的意思。
+JavaScript Objects 還有規定所謂的 internal slots (內部開口) 用來保存資料。和 Record fields 一樣，internal slots 也不能透過觀察 JavaScript 來發現它們，但是也許會從某些專用工具中曝露出來，像是 Google Chrome's DevTools。因此 [[Notation]] 也是 internal slots 的意思。
 
 internal slots 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es-howto/#javascript-objects) 有介紹。現在不必在意它能做什麼用，但請注意以下範例。
 
@@ -348,11 +361,11 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 > :::warning
 > 呼叫一個可能會 throw 的 abstract operation 無縮寫版本的步驟如下:
 > 1. Let *resultCompletionRecord* be AbstractOp().
-> > 註: *resultCompletionRecord* 是一個 Completion Record.
+> > 注意: *resultCompletionRecord* 是一個 Completion Record.
 > 2. If *resultCompletionRecord* is an abrupt completion, return *resultCompletionRecord*.
-> > 註: 若是 abrupt completion 直接回傳 *resultCompletionRecord* 。換句話說，倚在 AbstractOp 錯誤被轉拋，就停止繼續執行
+> > 注意: 若是 abrupt completion 直接回傳 *resultCompletionRecord* 。換句話說，倚在 AbstractOp 錯誤被轉拋，就停止繼續執行
 > 3. Let *result* be *resultCompletionRecord*.[[Value]].
-> > 註: 確保取得 normal completion 之後，我們可以 unwrap Completion Record 取得我們預計獲得的實際結果
+> > 注意: 確保取得 normal completion 之後，我們可以 unwrap Completion Record 取得我們預計獲得的實際結果
 > 4. *result* is the result we need. We can now do more things with it.
 > :::
 >
@@ -373,9 +386,9 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 > 呼叫一個可能會 throw 的 abstract operation 用 ***`ReturnIfAbrupt`*** 縮寫版本的步驟如下:
 > >
 > 1. Let *result* be AbstractOp().
-> > 註: 在此，就像上述例子的第一步，result 是一個 Completion Record。
+> > 注意: 在此，就像上述例子的第一步，result 是一個 Completion Record。
 > 2. ReturnIfAbrupt(*result*).
-> > 註: ReturnIfAbrupt 用處理任何可能的 abrupt completions，並將 result 自動 unwrap [[Value]]。
+> > 注意: ReturnIfAbrupt 用處理任何可能的 abrupt completions，並將 result 自動 unwrap [[Value]]。
 > 3. *result* is the result we need. We can now do more things with it.
 > :::
 
@@ -387,7 +400,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 > 呼叫一個可能會 throw 的 abstract operation 用 ***question mark (?)*** 縮寫版本的步驟如下:
 >
 > 1. Let *result* be ? AbstractOp().
-> > 註: 有了這個符號我們再也不會因為 Completion Records 而讓程式死掉。這個 `?` 縮寫幫我們處理*所有的事*，結果也可以馬上拿來使用。
+> > 注意: 有了這個符號我們再也不會因為 Completion Records 而讓程式死掉。這個 `?` 縮寫幫我們處理*所有的事*，結果也可以馬上拿來使用。
 > 2. `result` 是我們要的結果。拿它來做更多的事。
 > :::
 
@@ -540,7 +553,7 @@ ECMAScript® 2022 Language Specification](https://tc39.es/ecma262/)
 > ```
 > 而 Mozilla Firefox 的 57.0 版給的訊息，少到沒什麼幫助
 > ```
-> TypeError: can’t convert undefined to object
+> TypeError: can't convert undefined to object
 > ```
 > 相同的 ChakraCore 的 1.7.5.0 版 (Microsoft Edge 的 JavaScript 引擎) 走的是 V8 的路線。
 > ```
@@ -619,7 +632,7 @@ When String is called with argument value, the following steps are taken:
 > ```javascript
 > // Spec stack trace:
 > //   OrdinaryGet step 8.
-> //   Ordinary Object’s [[Get]]() step 1.
+> //   Ordinary Object's [[Get]]() step 1.
 > //   GetV step 3.
 > //   GetMethod step 2.
 > //   ToPrimitive step 2.d.
