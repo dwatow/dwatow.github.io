@@ -21,7 +21,7 @@ The ECMAScript Language specification（也稱 JavaScript 規範，或 ECMA-262�
 
 > 注意: 在此文件內，我只會用 "ECMAScript" 代表規範本身。 "JavaScript" 代表其它的意思。
 > 但是這兩個的術語指的是同一個東西。
-> (ECMAScript 和 JavaScript 在歷史意義上不同，但是超過這份文件要講的範圍，有興趣[自己 Google](https://www.google.com/search?q=ecmascript+vs.+javascript))[color=#52E052]
+> (ECMAScript 和 JavaScript 在歷史意義上不同，但是超過這份文件要講的範圍，有興趣[自己 Google](https://www.google.com/search?q=ecmascript+vs.+javascript))
 
 ## 1.1 Why should I read the ECMAScript specification 為什麼要閱讀 ECMAScript 規範
 
@@ -139,7 +139,7 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 [^ECMA-262-2019]: [ECMAScript 2019 Language Specification.](https://ecma-international.org/ecma-262/10.0/)
 
-> Note: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 – 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)[color=#52E052]
+> Note: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 – 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
 
 [^ISO-16262-2011]: [ISO/IEC 16262:2011 - Information technology – Programming languages, their environments and system software interfaces – ECMAScript language specification.](https://www.iso.org/standard/55755.html)
 
@@ -202,7 +202,7 @@ Runtime semantics**
 
 ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼 (pseudocode)，而是更加精確的表示形式。
 
-> **EXAMPLE 1**[color=#E0CB52]
+> **EXAMPLE 1**
 > :::warning
 > 一個簡單的演算法步驟如下:
 > 1. Let a be **1**.
@@ -214,7 +214,7 @@ ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼
 > :::
 >
 
-> 深入閱讀: [§5.2 Algorithm Conventions](https://tc39.github.io/ecma262/#sec-algorithm-conventions)[color=#52E052]
+> 深入閱讀: [§5.2 Algorithm Conventions](https://tc39.github.io/ecma262/#sec-algorithm-conventions)
 
 ## 2.2 Abstract operations 抽象運算
 
@@ -229,9 +229,9 @@ When `Boolean` is called with argument value, the following steps are taken:
 
 這個 "ToBoolean" 函式，就被稱為 **abstract operations** (抽象運算): 它是抽象的，因為並不是實際曝露在 JavaScript 程式的函式。只是撰寫人員發明的一種表示法，使他們不必一次又一次撰寫相同的東西。
 
-> 注意: 現在暫時不用擔心在 ToBoolean 前的 `!`。我們將在稍後的 [§ 2.4 Completion Records; ? and !](#24-Completion-Records--and-) 討論。 [color=#52E052]
+> 注意: 現在暫時不用擔心在 ToBoolean 前的 `!`。我們將在稍後的 [§ 2.4 Completion Records; ? and !](#24-Completion-Records--and-) 討論。
 
-> 深入閱讀: [§5.2.1 Abstract Operations](https://tc39.github.io/ecma262/#sec-algorithm-conventions-abstract-operations) [color=#52E052]
+> 深入閱讀: [§5.2.1 Abstract Operations](https://tc39.github.io/ecma262/#sec-algorithm-conventions-abstract-operations)
 
 ## 2.3 What is [[This]]
 
@@ -253,7 +253,7 @@ ECMAScript spec 使用術語 **Record** 表示有固定的 key 組合成的 key-
 
 > 譯註: [[Notation]] = field in Record = key-value pair
 
-> **EXAMPLE 2**[color=#E0CB52]
+> **EXAMPLE 2**
 > 值得注意的是, [Property Descriptors (屬性描述器)](https://tc39.es/ecma262/#sec-property-descriptor-specification-type) 是擁有 [[Value]], [[Writable]], [[Get]], [[Set]], [[Enumerable]], 和 [[Configurable]] 這些 fields 的 Records。在 [IsDataDescriptor](https://tc39.es/ecma262/#sec-isdatadescriptor) abstract operation 大量使用這個符號。
 >
 > :::warning
@@ -269,7 +269,7 @@ ECMAScript spec 使用術語 **Record** 表示有固定的 key 組合成的 key-
 
 另一個 Records 的實際案例可以在本篇下一節，[§2.4 Completion Records; ? and !](#24-Completion-Records--and-) 找到。
 
-> 延伸閱讀: [§6.2.1 The List and Record Specification Types](https://tc39.es/ecma262/#sec-list-and-record-specification-type)[color=#52E052]
+> 延伸閱讀: [§6.2.1 The List and Record Specification Types](https://tc39.es/ecma262/#sec-list-and-record-specification-type)
 
 ### 2.3.2 An internal slot of a JavaScript Object
 
@@ -283,14 +283,14 @@ JavaScript Objects 還有規定所謂的 internal slots (內部開口) 用來保
 
 internal slots 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es-howto/#javascript-objects) 有介紹。現在不必在意它能做什麼用，但請注意以下範例。
 
-> **EXAMPLE 3**[color=#E0CB52]
+> **EXAMPLE 3**
 > 大多數的 JavaScript Objects 都有一個 [[Prototype]] 的 internal slot 指向該物件的繼承自哪個物件。此 internal slot 的值通常是 [`Object.getPrototypeOf()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf#) 的返回值。在 [OrdinaryGetPrototypeOf](https://tc39.es/ecma262/#sec-ordinarygetprototypeof) abstract operation 中，就只是回傳 internal slot 的值:
 > :::warning
 > 以 Object *O* 作參數，呼叫 abstract operation `OrdinaryGetPrototypeOf` 時，就會運作下列的步驟:
 > > 1. Return *O*.[[Prototype]].
 > :::
 
-> 注意: Object 的 internal slots 和 Record fields 的 fields 看起來是相同的，但是可以透過查看符號前面的部份來區分 (點`.`之前的部份), 無論它是一個 Object 或 Record。這通常從環境上下文就很明顯。[color=#52E052]
+> 注意: Object 的 internal slots 和 Record fields 的 fields 看起來是相同的，但是可以透過查看符號前面的部份來區分 (點`.`之前的部份), 無論它是一個 Object 或 Record。這通常從環境上下文就很明顯。
 
 ### 2.3.3 An internal method of a JavaScript Object
 
@@ -298,14 +298,14 @@ JavaScript Objects 還有規定所謂的 internal methods。像 internal slots �
 
 Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es-howto/#javascript-objects)有介紹。現在不必在意它能做什麼用，但請注意以下範例。
 
-> **EXAMPLE 4**[color=#E0CB52]
+> **EXAMPLE 4**
 > 所有的 JavaScript 函數都有一個 internal method [[Call]] 代表函數的「執行」功能。[Call](https://tc39.es/ecma262/#sec-call) 的 abstract operation 如下面步驟:
 >
 > > 3.Return ? *F*.[[Call]](*V*, *argumentsList*).
 >
 > 其中 *F* 是一個 JavaScript 的 function 物件。在這個例子中，*F* 的 internal method 的這個 [[Call]] 是使用本身的參數 *V* 和 *argumentsList* 執行的
 
-> 注意: [[Notation]] 的第三個意思看起來像是 function call, 這點可以與其他的區別開來。[color=#52E052]
+> 注意: [[Notation]] 的第三個意思看起來像是 function call, 這點可以與其他的區別開來。
 
 ## 2.4 Completion Records; ? and !
 
@@ -319,7 +319,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 2. 若 [[Type]] 是 `normal`, `return` 或 `throw`，那麼還會有一個 ***[[Value]]*** ("看是什麼被 return/throw 出來")
 3. 若 [[Type]] 是 `break` 或 `continue`，那麼有可能還會有 [label](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label#) 當作是接下來要執行到哪 (breaks from/continues to)的 ***[[Target]]***，當作執行語意的結果。
 
-> 注意: 表示 Records 的 fields 要使用兩個中括號。跳去看 [§2.3.1 A field of a Record](#231-A-field-of-a-Record-一個-Record-的一個-field) 初步了解一下 Records 和相關符號的定義。[color=#52E052]
+> 注意: 表示 Records 的 fields 要使用兩個中括號。跳去看 [§2.3.1 A field of a Record](#231-A-field-of-a-Record-一個-Record-的一個-field) 初步了解一下 Records 和相關符號的定義。
 
 一個 Completion Record 的 [[Type]] 是 `normal` 稱為 ***normal compliton***。每一個不同於 `normal compliton` 的 Completion Record 稱為 ***abrupt completion***。
 
@@ -336,7 +336,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 >     - [[Type]] 的值是 `break` => **abrupt completion**
 >     - [[Type]] 的值是 `continue` => **abrupt completion**
 
-> 延伸閱讀: [§6.2.3 The Completion Record Specification Type](https://tc39.github.io/ecma262/#sec-completion-record-specification-type) [color=#52E052]
+> 延伸閱讀: [§6.2.3 The Completion Record Specification Type](https://tc39.github.io/ecma262/#sec-completion-record-specification-type)
 
 ---
 
@@ -344,15 +344,15 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 
 沒有縮寫，普通的一個 abstract operation 呼叫一定會 return 一個計算結果或 throw 一個錯誤，如下所示
 
-> [color=#E0CB52]**EXAMPLE 5**
+> **EXAMPLE 5**
 > :::warning
 > 呼叫一個可能會 throw 的 abstract operation 無縮寫版本的步驟如下:
 > 1. Let *resultCompletionRecord* be AbstractOp().
-> > 註: *resultCompletionRecord* 是一個 Completion Record. [color=#52E052]
+> > 註: *resultCompletionRecord* 是一個 Completion Record.
 > 2. If *resultCompletionRecord* is an abrupt completion, return *resultCompletionRecord*.
-> > 註: 若是 abrupt completion 直接回傳 *resultCompletionRecord* 。換句話說，倚在 AbstractOp 錯誤被轉拋，就停止繼續執行 [color=#52E052]
+> > 註: 若是 abrupt completion 直接回傳 *resultCompletionRecord* 。換句話說，倚在 AbstractOp 錯誤被轉拋，就停止繼續執行
 > 3. Let *result* be *resultCompletionRecord*.[[Value]].
-> > 註: 確保取得 normal completion 之後，我們可以 unwrap Completion Record 取得我們預計獲得的實際結果 [color=#52E052]
+> > 註: 確保取得 normal completion 之後，我們可以 unwrap Completion Record 取得我們預計獲得的實際結果
 > 4. *result* is the result we need. We can now do more things with it.
 > :::
 >
@@ -368,26 +368,26 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 
 但是為了減少這些大量重複的步驟，ECMAScript spec 的編輯人員自 ES2016 開始加入一些縮寫方式，透過以下兩種寫法等效的表達相同的規範。
 
-> **EXAMPLE 6**[color=#E0CB52]
+> **EXAMPLE 6**
 > :::warning
 > 呼叫一個可能會 throw 的 abstract operation 用 ***`ReturnIfAbrupt`*** 縮寫版本的步驟如下:
 > >
 > 1. Let *result* be AbstractOp().
-> > 註: 在此，就像上述例子的第一步，result 是一個 Completion Record。[color=#52E052]
+> > 註: 在此，就像上述例子的第一步，result 是一個 Completion Record。
 > 2. ReturnIfAbrupt(*result*).
-> > 註: ReturnIfAbrupt 用處理任何可能的 abrupt completions，並將 result 自動 unwrap [[Value]]。[color=#52E052]
+> > 註: ReturnIfAbrupt 用處理任何可能的 abrupt completions，並將 result 自動 unwrap [[Value]]。
 > 3. *result* is the result we need. We can now do more things with it.
 > :::
 
 
 或者用更簡潔的問號(?)表達:
 
-> **EXAMPLE 7**[color=#E0CB52]
+> **EXAMPLE 7**
 > :::warning
 > 呼叫一個可能會 throw 的 abstract operation 用 ***question mark (?)*** 縮寫版本的步驟如下:
 >
 > 1. Let *result* be ? AbstractOp().
-> > 註: 有了這個符號我們再也不會因為 Completion Records 而讓程式死掉。這個 `?` 縮寫幫我們處理*所有的事*，結果也可以馬上拿來使用。[color=#52E052]
+> > 註: 有了這個符號我們再也不會因為 Completion Records 而讓程式死掉。這個 `?` 縮寫幫我們處理*所有的事*，結果也可以馬上拿來使用。
 > 2. `result` 是我們要的結果。拿它來做更多的事。
 > :::
 
@@ -395,19 +395,19 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 
 有時，它可以傳達更多有關規範意圖的訊息給讀者，如果我們知道一個特定的 `AbstractOp()` 呼叫將不會回傳一個 abrupt completion。這樣的情況，將使用 ***exclamation mark (!)***:
 
-> EXAMPLE 8[color=#E0CB52]
+> EXAMPLE 8
 > :::warning
 > 呼叫一個可能會 throw 的 abstract operation 用 ***exclamation mark (!)*** 縮寫版本的步驟如下:
 > A few steps that call an abstract operation that cannot ever throw with an exclamation mark (!):
 >
 > 1. Let result be ! AbstractOp().
 >
-> > [color=#52E052] 使用 `?` 表達「 一定會遇到任何錯誤」使用 `!`  表達「永遠不會遇到任何錯誤」會在 abrupt completions 中得到，而且如果我們這樣做的話，它會是 spec 的 bug。像是這個用 `?` 的例子，我們不會處理所有的 Completion Records。，結果也可以馬上拿來使用。
+> >  使用 `?` 表達「 一定會遇到任何錯誤」使用 `!`  表達「永遠不會遇到任何錯誤」會在 abrupt completions 中得到，而且如果我們這樣做的話，它會是 spec 的 bug。像是這個用 `?` 的例子，我們不會處理所有的 Completion Records。，結果也可以馬上拿來使用。
 >
 > 2. result 是我們要的結果。拿它來做更多的事。
 > :::
 
-> CAUTION [color=orange]
+> CAUTION
 > 可以承認 `!` 看起來容易和有效的 JavaScript 表達式搞混:
 >
 > > 1. Let *b* be ! `ToBoolean(value)`.
@@ -416,7 +416,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 >
 > 在此，`!` 只是指我們保證呼叫 ToBoolean 不會產生例外, 而不是對結果進行邏輯 `not` 運算!
 
-> 延伸閱讀: [§5.2.3.4 ReturnIfAbrupt Shorthands](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands)[color=#52E052]
+> 延伸閱讀: [§5.2.3.4 ReturnIfAbrupt Shorthands](https://tc39.es/ecma262/#sec-returnifabrupt-shorthands)
 
 ## 2.5 JavaScript Objects
 
@@ -436,7 +436,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 
 但是ECMAScript 規範還有定義一些特殊物件。這些物件會 override 一些預設 internal method 的實作。允許執行特殊物件，會有一些最小限度的限制，但是一般而言這些已經 overriden internal methods 可以做很多的神奇妙用，而不違反規範。
 
-> EXAMPLE 9 [color=#E0CB52]
+> EXAMPLE 9
 > `Array` 物件就是 `exotic objects` 的一種。一些特殊語意，像是 `Array` 的 `length`。`ordinary objects` 適用的工具無法用在它身上。
 >
 > 其中，設定 Array 的 length 屬性，看起來是一個可以刪除的普通屬性(但其實不能被刪除)。相反，`new Map().size` 只是一個在 `Map.prototype` 上的 `getter` 函數，沒有像 `[].length` 這種的魔法屬性。
@@ -471,7 +471,7 @@ ECMAScript 規範也允許其它的規範定義自己特有的 exotic objects。
 
 JavaScript Object 也有 ***internal solts*** 定義某些型別的值。我傾向將 internal slots 想成某種隱藏 [`Object.getOwnPropertySymobols()`](https://tc39.es/ecma262/#sec-object.getownpropertysymbols) 行為的 Symbol-named 屬性。`ordinary objects` 和 `exotic objects` 都有 `internal slots`
 
-> [color=#52E052] 在 [§ 2.3.2 An internal slot of a JavaScript Object](#232-An-internal-slot-of-a-JavaScript-Object) 裡面, 我有提過物件有一個叫 [[Prototype]] 的 internal slot。(其實，所有 ordinary objects，甚至像是 Array 的 exotic objects 都擁有這樣的東西)，但是前面也提到有一個方法叫 [[GetPrototypeOf]]，它們有什麼差別？
+>  在 [§ 2.3.2 An internal slot of a JavaScript Object](#232-An-internal-slot-of-a-JavaScript-Object) 裡面, 我有提過物件有一個叫 [[Prototype]] 的 internal slot。(其實，所有 ordinary objects，甚至像是 Array 的 exotic objects 都擁有這樣的東西)，但是前面也提到有一個方法叫 [[GetPrototypeOf]]，它們有什麼差別？
 >
 > 此處關鍵字最多: 並不是所有的物件都有 [[Prototype]] 的 internal slot ，但是所有的物件都有實作 [[GetPrototypeOf]] internal method。
 > 特別像是 Proxy 沒有自己的 [[Prototype]] ，而 [[GetPrototypeOf]] internal method 則是替代成儲存在 Proxy 物件內 [[ProxyTarget]] 的註冊(某 function) handler 或目標(某物件)的 prototype 。
@@ -532,7 +532,7 @@ ECMAScript® 2022 Language Specification](https://tc39.es/ecma262/)
 
 而且，我們有我們的答案: **這一小段程式碼拋出一個 TypeError 例外。**
 
-> [color=green] 規範只有規定拋出 Error 的型別，沒有規定要包含什麼訊息。意思是實作可能有不同的錯誤訊息，甚至是本地的錯誤訊息。
+>  規範只有規定拋出 Error 的型別，沒有規定要包含什麼訊息。意思是實作可能有不同的錯誤訊息，甚至是本地的錯誤訊息。
 >
 > 例如:  Google 的 V8 6.4 版 (內建在 Google Chrome 64) 的訊息是
 > ```
@@ -615,7 +615,7 @@ When String is called with argument value, the following steps are taken:
 
 > EXAMPLE 10
 > `String()`
-> :::spoiler **Several examples `String()` where throws**
+> **Several examples `String()` where throws**
 > ```javascript
 > // Spec stack trace:
 > //   OrdinaryGet step 8.
@@ -689,7 +689,7 @@ When String is called with argument value, the following steps are taken:
 >
 > String(Object.create(null));
 > ```
-> :::
+
 
 So for String(), our conclusion is that it never throws exceptions for primitive values, but may throw errors for Objects.
 
@@ -699,4 +699,4 @@ So for String(), our conclusion is that it never throws exceptions for primitive
 
 到現在，我們只分析了 API 函數，讓我們試些不同的。
 
-> [color=red] 待續。 <[https://github.com/TimothyGu/es-howto/issues/2](https://github.com/TimothyGu/es-howto/issues/2)>
+>  待續。 <[https://github.com/TimothyGu/es-howto/issues/2](https://github.com/TimothyGu/es-howto/issues/2)>
