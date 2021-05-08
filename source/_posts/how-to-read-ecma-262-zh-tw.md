@@ -15,7 +15,7 @@ categories:
 
 The ECMAScript Language specification（也稱 JavaScript 規範，或 ECMA-262）是學習 JavaScript 複雜運作原理的絕妙資源。 但這是一個巨大的文本，一開始可能會令人困惑和恐懼。此文件撰寫的原因，是為了讓您能夠在閱讀最佳的 JavaScript 語言參考資料時降低起步門檻。
 
-# 1 Prelude 序幕
+# 1. Prelude 序幕
 
 決定每天來點 ECMAScript spec 有助健康。也許它是一個新年的決定，或者是醫生的處方。無論如何都歡迎上船。
 
@@ -91,7 +91,8 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 ## 1.2 What belongs to the ECMAScript specification, and what does not
 
-> 譯註: 什麼(語法)在 ECMAScript ，什麼(語法)不是
+> 譯註: 哪些(語法)屬於 ECMAScript 的範疇，而哪些(語法)不是呢?
+
 
 教科書的回答是「只有語言的功能才會進入 ECMAScript 規範中」，但是這有講等於沒講，如同我說「JavaScript 就是 JavaScript」。我不是在描述恆等式。
 
@@ -100,7 +101,7 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 |內容|是不是 ES|備註
 |-|-|-|
 | 語法元素的結構規則<br> (i.e., 像是有效的 `for`..`in` 迴圈的樣子)	|✔| 句型規則: 某種語言結構規格
-| 語法元素的語意(對應的意思)<br> (i.e., `typeof null` 或 `{ a: b }` 的回傳值)	|✔| 語意: 對應某一個意思
+| 語法元素的語義(對應的意思)<br> (i.e., `typeof null` 或 `{ a: b }` 的回傳值)	|✔| 語義: 對應某一個意思
 |`import a from 'a';`	|~~❓~~ [1] ✔|The ECMAScript spec 規定了類似宣告的語法以及它們的意思，但是未規定模組加載方式 (後來有了)
 |[`Object`](https://tc39.es/ecma262/#sec-object-objects), [`Array`](https://tc39.es/ecma262/#sec-array-objects), [`Function`](https://tc39.es/ecma262/#sec-function-objects), [`Number`](https://tc39.es/ecma262/#sec-number-objects), [`Math`](https://tc39.es/ecma262/#sec-math-object), [`RegExp`](https://tc39.es/ecma262/#sec-regexp-regular-expression-objects), [`Proxy`](https://tc39.es/ecma262/#sec-proxy-objects), [`Map`](https://tc39.es/ecma262/#sec-map-objects), [`Promise`](https://tc39.es/ecma262/#sec-promise-objects), [`ArrayBuffer`](https://tc39.es/ecma262/#sec-arraybuffer-objects), [`Uint8Array`](https://tc39.es/ecma262/#sec-typedarray-objects), [`globalThis`](https://tc39.es/ecma262/#sec-globalthis), ...	|✔ | 物件型別
 |`console`, `setTimeout()`, `setInterval()`, `clearTimeout()`, `clearInterval()`	|✘|這些東西在瀏覽器和 node.js 中都可以用，但不是標準之一。在 Node.js 有規範/文件，記在[文件的 Globals 篇](https://nodejs.org/api/globals.html#globals_global_objects)可以找到。對於各家瀏覽器，[console](https://console.spec.whatwg.org/#namespacedef-console) 有 Console 的規範/文件。[^CONSOLE1][^CONSOLE2]，其它的部份由 HTML 的標準來規範 [^HTML1][^HTML2]。
@@ -119,7 +120,7 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 ## 1.3 Before going any further, where is the ECMAScript specification?
 
-> 譯註: 進入之前，規範在哪？
+> 譯註: 深入了解之前，我們該在哪查閱 ECMAScript？
 
 當你 Google "ECMAScript specification" 你會看見*很多*稱聲是合法的規範。而哪一個才是你該讀的？
 
@@ -129,7 +130,7 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 詳細的版本:
 
-目前是由 Ecma International Technical Committee 39 (ECMA 國際技術委員會 39，也稱 TC39[^TC39]) 來開發 The ECMAScript language specification，它們是一群不同背景的人所組成的。TC30 在 [tc39.es](tc39.github.io) [^ECMA-262] 維護最新規範。
+目前是由 Ecma International Technical Committee 39 (ECMA 國際技術委員會 39，也稱 TC39[^TC39]) 來開發 The ECMAScript language specification，它們是一群不同背景的人所組成的。TC39 在 [tc39.es](tc39.github.io) [^ECMA-262] 維護最新規範。
 
 [^TC39]: [TC39 - ECMAScript](https://www.ecma-international.org/memento/tc39.htm)
 
@@ -145,9 +146,11 @@ OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非�
 
 [^ECMA-262-2019]: [ECMAScript 2019 Language Specification.](https://ecma-international.org/ecma-262/10.0/)
 
-> 注意: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 16262 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
+> 注意: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 22275 [^ISO-16262-2011] 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 [198 瑞士法郎](https://www.google.com/search?q=198+swiss+francs+in+my+currency)才可以取得。 (大約 6000 新台幣)
 
-[^ISO-16262-2011]: [ISO/IEC 16262:2011 - Information technology - Programming languages, their environments and system software interfaces - ECMAScript language specification.](https://www.iso.org/standard/55755.html)
+[^ISO-22275-2018]: [ISO/IEC 16262:2011 - Information technology - Programming languages, their environments and system software interfaces - ECMAScript language specification.](https://www.iso.org/standard/55755.html)
+
+[^ISO-16262-2011]: [ISO/IEC 22275:2018 - Information technology — Programming languages, their environments, and system software interfaces — ECMAScript® Specification Suite.](https://www.iso.org/standard/73002.html)
 
 ## 1.4 Navigating the spec
 
@@ -162,9 +165,9 @@ ECMAScript specification 講了很多事。縱使寫作時已經盡所能的分�
     - 這句在規範指的是什麼 'throw a **TypeError** exception'？
 1. 語言的語法說明
     - 如何寫一個 `for`-`in` 迴圈
-1. 語言的編寫時期 (Static) 語意
+1. 語言的編寫時期 (Static) 語義
     - 在 `var` 述句中， `var` 的變數名稱如何決定
-1. 語言的執行時期 (Runtime) 語意
+1. 語言的執行時期 (Runtime) 語義
     - 如何執行 `for`-`in` 迴圈
 1. APIs
     - `String.prototype.subString()` 做了什麼？
@@ -202,9 +205,9 @@ Runtime semantics**
 
 # 2 Runtime semantics
 
-> 譯註: Runtime semantics 執行時期語意
+> 譯註: Runtime semantics 執行時期語義
 
-規範大部份的內容，都是此語言的執行時期語意與 APIs，讓人感到疑惑的通常也都在這部份。
+規範大部份的內容，都是此語言的執行時期語義與 APIs，讓人感到疑惑的通常也都在這部份。
 
 一般來說，閱讀這些段落是很利落直白的。但是該規範使用許多的縮寫，對於剛起步的人 (至少對我來說) 是非常棘手的。我試著解釋其中的一些 conventions，並且利用它搞清楚一些事情是如何運作的。
 
@@ -212,7 +215,7 @@ Runtime semantics**
 
 > 譯註: Algorithm steps 演用法步驟
 
-ECMAScript 常用演算法步驟表示執行時期的語意，它不像虛擬碼 (pseudocode)，而是更加精確的表示形式。
+ECMAScript 常用演算法步驟表示執行時期的語義，它不像虛擬碼 (pseudocode)，而是更加精確的表示形式。
 
 > **EXAMPLE 1**
 > :::warning
@@ -330,7 +333,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 
 1. ***[[Type]]*** (**`normal`**, `return`, `throw`, `break` 或 `continue`)
 2. 若 [[Type]] 是 `normal`, `return` 或 `throw`，那麼還會有一個 ***[[Value]]*** ("看是什麼被 return/throw 出來")
-3. 若 [[Type]] 是 `break` 或 `continue`，那麼有可能還會有 [label](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label#) 當作是接下來要執行到哪 (breaks from/continues to)的 ***[[Target]]***，當作執行語意的結果。
+3. 若 [[Type]] 是 `break` 或 `continue`，那麼有可能還會有 [label](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label#) 當作是接下來要執行到哪 (breaks from/continues to)的 ***[[Target]]***，當作執行語義的結果。
 
 > 注意: 表示 Records 的 fields 要使用兩個中括號。跳去看 [§2.3.1 A field of a Record](#231-A-field-of-a-Record-一個-Record-的一個-field) 初步了解一下 Records 和相關符號的定義。
 
@@ -450,7 +453,7 @@ Internal methods 的規範在 [§2.5 JavaScript Objects](https://timothygu.me/es
 但是ECMAScript 規範還有定義一些特殊物件。這些物件會 override 一些預設 internal method 的實作。允許執行特殊物件，會有一些最小限度的限制，但是一般而言這些已經 overriden internal methods 可以做很多的神奇妙用，而不違反規範。
 
 > EXAMPLE 9
-> `Array` 物件就是 `exotic objects` 的一種。一些特殊語意，像是 `Array` 的 `length`。`ordinary objects` 適用的工具無法用在它身上。
+> `Array` 物件就是 `exotic objects` 的一種。一些特殊語義，像是 `Array` 的 `length`。`ordinary objects` 適用的工具無法用在它身上。
 >
 > 其中，設定 Array 的 length 屬性，看起來是一個可以刪除的普通屬性(但其實不能被刪除)。相反，`new Map().size` 只是一個在 `Map.prototype` 上的 `getter` 函數，沒有像 `[].length` 這種的魔法屬性。
 
