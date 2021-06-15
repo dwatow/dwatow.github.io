@@ -1,12 +1,12 @@
 ---
 title: Webpack 處理 Vue 專案的路徑規則整理
 date: 2018-09-21 13:56:34
-tags: 
+tags:
 - webpack
-- vuejs
+- vue
 - "file-loader"
 - "css-loader"
-categories: 
+categories:
 - 技術心得
 ---
 

@@ -1,11 +1,11 @@
 ---
 title: Jest for Vue with Vue Router 演練
 date: 2019-11-26 14:27:36
-tags: 
+tags:
 - jest
-- vuejs
+- vue
 - vuex'
-categories: 
+categories:
 - 技術心得
 ---
 # Jest for Vue with Vue Router 演練
@@ -83,7 +83,7 @@ shallowMount(Component, {
 
 一開始，照官網寫。要慢慢的把畫面印出來，確定畫面 是照我們設想的這樣，再透過測試的手法判斷正確性
 
-依官網的 code 
+依官網的 code
 
 ```javascript=
 import { shallowMount, createLocalVue } from '@vue/test-utils'
@@ -117,7 +117,7 @@ describe('Actions.vue', () => {
     mode: 'history',
     routes,
   });
-  
+
   //測試渲染
   const wrapper = mount(App, { localVue, router });
 
@@ -131,7 +131,7 @@ describe('Actions.vue', () => {
 
 有幾點要注意。
 
-1. 要利用 `mount` 深層的渲染 Component 
+1. 要利用 `mount` 深層的渲染 Component
 1. 參考真正的 router 決定 `mode: 'history'` 的設定。
 
 ```javascript=
@@ -184,7 +184,7 @@ it('test', async () => {
 describe("App", () => {
   it("renders a child component via routing", async () => {
     const router = new VueRouter({ routes })
-    const wrapper = mount(App, { 
+    const wrapper = mount(App, {
       localVue,
       router
     })

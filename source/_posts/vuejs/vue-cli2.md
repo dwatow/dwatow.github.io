@@ -1,11 +1,11 @@
 ---
 title: 使用 Vue-cli 2
 date: 2018-09-21 09:56:29
-tags: 
+tags:
 - vue-cli
-- vuejs
+- vue
 - webpack
-categories: 
+categories:
 - 工具使用
 ---
 

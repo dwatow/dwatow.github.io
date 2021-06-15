@@ -1,11 +1,11 @@
 ---
 title: 初次使用 Docsify
 date: 2018-07-28 17:10:50
-tags: 
+tags:
 - docsify
 - markdown
-- vuejs
-categories: 
+- vue
+categories:
 - 工具使用
 ---
 

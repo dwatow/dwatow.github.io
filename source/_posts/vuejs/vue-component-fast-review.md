@@ -1,10 +1,10 @@
 ---
 title: Vue 的 Component 相關的導讀
 date: 2018-04-20 20:27:01
-tags: 
-- vuejs
+tags:
+- vue
 - JavaScript
-categories: 
+categories:
 - 技術心得
 ---
 

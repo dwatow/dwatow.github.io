@@ -1,13 +1,13 @@
 ---
 title: node-sass 初探
 date: 2018-03-12 21:52:31
-tags: 
+tags:
 - nodejs
 - webpack
-- vuejs
+- vue
 - "node-sass"
 - JavaScript
-categories: 
+categories:
 - 工具使用
 ---
 
@@ -102,7 +102,7 @@ npm ERR! code ELIFECYCLE
 npm ERR! errno 1
 npm ERR! node-sass-demo@1.0.0 build-css: `node-sass`
 npm ERR! Exit status 1
-npm ERR! 
+npm ERR!
 npm ERR! Failed at the node-sass-demo@1.0.0 build-css script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 

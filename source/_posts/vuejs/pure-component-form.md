@@ -1,18 +1,18 @@
 ---
 title: Vue Component 技巧 - 共用 Form
 date: 2019-07-03 23:18:37
-tags: 
-- vuejs
+tags:
+- vue
 - vuex
 - 'pure component'
-categories: 
+categories:
 - 技術心得
 ---
 
 # Vue Component 技巧 - 共用 Form
 
 :::warning
-本文會大量使用 Component 一詞，但是它會有兩個意思，在此先進行名詞定義: 
+本文會大量使用 Component 一詞，但是它會有兩個意思，在此先進行名詞定義:
 - Vue component，指的是 Vue 框架的一種[寫法](https://vuejs.org/v2/guide/components.html)。
 - Component，指的是 pure component，一種輸出永遠只和輸入有關，Component 本身並沒有存任何狀態(資料)，如果設計上需要，要能跨 Page 共用。
 :::
@@ -55,16 +55,16 @@ categories:
     <el-row :gutter="20">
       <el-col>
         <el-form-item label="角色">
-          <el-select disabled 
+          <el-select disabled
             v-model="roleName" placeholder="請選擇">
             <el-option v-for="item in rolesOptions"
-            :key="item.name" 
-            :label="item.name" 
+            :key="item.name"
+            :label="item.name"
             :value="item.name">
             </el-option>
           </el-select>
         </el-form-item>
-      </el-col>    
+      </el-col>
       <el-col :xs="24" :sm="12">
         <el-form-item label="登入帳號">
           <el-input v-model="account" disabled>
@@ -153,11 +153,11 @@ export default {
     <el-row :gutter="20">
       <el-col>
         <el-form-item label="角色">
-          <el-select 
+          <el-select
             v-model="roleName" placeholder="請選擇">
             <el-option v-for="item in rolesOptions"
-              :key="item.name" 
-              :label="item.name" 
+              :key="item.name"
+              :label="item.name"
               :value="item.name">
             </el-option>
           </el-select>
@@ -273,7 +273,7 @@ Form 很常見，用來
 
 ## 開始合併
 
-先建立一個新的 Vue component 在此叫做 `MemberForm.vue` 
+先建立一個新的 Vue component 在此叫做 `MemberForm.vue`
 先預先把這個 component 放到原本的 Page 上面
 
 **example: 新增帳號的頁面**
@@ -284,7 +284,7 @@ Form 很常見，用來
 ```xml
 <template>
   <h1>帳號設定</h1>
-  <member-form 
+  <member-form
     :member="$store.getters.currentUser" />
 </template>
 ```
@@ -310,13 +310,13 @@ Form 很常見，用來
     <el-row :gutter="20">
       <el-col>
         <el-form-item label="角色">
-          <el-select 
+          <el-select
             :value="member.roleName"
             @input="$emit('onChangeRoleName', $event)"
             placeholder="請選擇">
             <el-option v-for="item in rolesOptions"
-              :key="item.name" 
-              :label="item.name" 
+              :key="item.name"
+              :label="item.name"
               :value="item.name">
             </el-option>
           </el-select>
@@ -324,7 +324,7 @@ Form 很常見，用來
       </el-col>
       <el-col :xs="24" :sm="12">
         <el-form-item label="登入帳號">
-          <el-input 
+          <el-input
             :value="member.account"
             @input="$emit('onChangeAccount', $event)">
           </el-input>
@@ -372,7 +372,7 @@ export default {
 ```xml
 <template>
   <h1>帳號設定</h1>
-  <member-form 
+  <member-form
     :member="$store.getters.currentUser"
     @onChangeRoleName="$store.commit('currentUserRoleName', $event)"
     @onChangeAccount="$store.commit('currentUserAccount', $event)"
@@ -441,14 +441,14 @@ vue 提供 [`vm.$listeners`](https://vuejs.org/v2/api/#vm-listeners) 讓開發 c
 
 ```xml
 <el-form-item label="角色">
-  <el-select 
+  <el-select
     :value="member.roleName"
     @input="$emit('onChangeRoleName', $event)"
     :disabled="!$listeners.onChangeRoleName"
     placeholder="請選擇">
     <el-option v-for="item in rolesOptions"
-      :key="item.name" 
-      :label="item.name" 
+      :key="item.name"
+      :label="item.name"
       :value="item.name">
     </el-option>
   </el-select>
@@ -456,7 +456,7 @@ vue 提供 [`vm.$listeners`](https://vuejs.org/v2/api/#vm-listeners) 讓開發 c
 ```
 
 ```xml
-<el-input 
+<el-input
   :value="member.account"
   @input="$emit('onChangeAccount', $event)"
   :disabled="!$listeners.onChangeAccount"
@@ -473,7 +473,7 @@ vue 提供 [`vm.$listeners`](https://vuejs.org/v2/api/#vm-listeners) 讓開發 c
 ```xml
 <template>
   <h1>帳號設定</h1>
-  <member-form 
+  <member-form
     :member="$store.getters.currentUser"
     @onChangeRoleName="$store.commit('currentUserRoleName', $event)"
     @onChangeAccount="$store.commit('currentUserAccount', $event)"
@@ -483,7 +483,7 @@ vue 提供 [`vm.$listeners`](https://vuejs.org/v2/api/#vm-listeners) 讓開發 c
 
 **編輯帳號**
 
-只能修改會改變 RoleName 
+只能修改會改變 RoleName
 Account 唯讀，所以自動成為 `disabled`
 
 ```xml
@@ -512,8 +512,8 @@ Account 唯讀，所以自動成為 `disabled`
     @input="$emit('onChangeRoleName', $event)"
     placeholder="請選擇">
     <el-option v-for="item in rolesOptions"
-      :key="item.name" 
-      :label="item.name" 
+      :key="item.name"
+      :label="item.name"
       :value="item.name">
     </el-option>
   </el-select>

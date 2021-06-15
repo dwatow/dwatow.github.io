@@ -1,10 +1,10 @@
 ---
 title: 用 Vue Component Slot 實現自定義 HTML
 date: 2018-09-21 14:23:32
-tags: 
-- vuejs
+tags:
+- vue
 - "vue-slot"
-categories: 
+categories:
 - 技術心得
 ---
 

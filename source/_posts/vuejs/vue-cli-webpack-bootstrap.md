@@ -1,14 +1,14 @@
 ---
 title: 在 Vue-cli 或 Webpack 想使用 Bootstrap
 date: 2018-03-25 10:17:34
-tags: 
+tags:
 - nodejs
 - webpack
-- vuejs
+- vue
 - bootstrap
 - jquery
 - JavaScript
-categories: 
+categories:
 - 工具使用
 ---
 

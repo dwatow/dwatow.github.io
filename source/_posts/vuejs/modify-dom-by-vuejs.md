@@ -1,9 +1,9 @@
 ---
 title: 用vue修改dom
 date: 2017-09-02 20:11:15
-tags: 
-- vuejs
-categories: 
+tags:
+- vue
+categories:
 - 技術心得
 ---
 

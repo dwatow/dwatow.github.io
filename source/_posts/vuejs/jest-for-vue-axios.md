@@ -1,11 +1,11 @@
 ---
 title: Jest for Vue 發送 API 用 axios
 date: 2019-07-22 14:10:38
-tags: 
+tags:
 - jest
-- vuejs
+- vue
 - axios
-categories: 
+categories:
 - 技術心得
 ---
 # Jest for Vue 發送 API 用 axios
@@ -20,7 +20,7 @@ categories:
 
 ## 測試 GET
 
-本質上，是要測試 `axios.get('url').then(res => res.data)` 這一段裡的 `res` 值回傳內容，是不是和 API 文件裡的一致，並且是不是會到畫面正確的位置上。 
+本質上，是要測試 `axios.get('url').then(res => res.data)` 這一段裡的 `res` 值回傳內容，是不是和 API 文件裡的一致，並且是不是會到畫面正確的位置上。
 
 ### Components
 

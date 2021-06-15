@@ -1,10 +1,10 @@
 ---
 title: Vue Component 也可以用 v-model
 date: 2018-09-21 16:37:51
-tags: 
-- vuejs
+tags:
+- vue
 - "v-model"
-categories: 
+categories:
 - 技術心得
 ---
 

@@ -1,13 +1,13 @@
 ---
 title: Babel 第一次接觸
 date: 2018-03-08 14:51:40
-tags: 
+tags:
 - nodejs
 - webpack
-- vuejs
+- vue
 - babel
 - JavaScript
-categories: 
+categories:
 - 工具使用
 ---
 

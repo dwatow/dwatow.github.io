@@ -5,7 +5,7 @@ tags:
 - axios
 - monent
 - "vue-masonry"
-- vuejs
+- vue
 categories:
 - 技術練習
 ---

@@ -1,10 +1,10 @@
 ---
 title: Vue router 的 router-view 使用技巧
 date: 2018-09-21 13:31:07
-tags: 
-- vuejs
+tags:
+- vue
 - "vue-router"
-categories: 
+categories:
 - 工具使用
 ---
 

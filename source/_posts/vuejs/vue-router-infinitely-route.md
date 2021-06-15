@@ -1,10 +1,10 @@
 ---
 title: vue-router 遇到無窮循環 route
 date: 2018-09-21 20:56:32
-tags: 
+tags:
 - "vue-router"
-- vuejs
-categories: 
+- vue
+categories:
 - 技術心得
 ---
 

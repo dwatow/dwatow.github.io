@@ -1,10 +1,10 @@
 ---
 title: iView Table 裡放 Dropdown
 date: 2018-05-20 17:12:07
-tags: 
-- vuejs
+tags:
+- vue
 - iview
-categories: 
+categories:
 - 技術心得
 ---
 

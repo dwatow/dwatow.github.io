@@ -1,11 +1,11 @@
 ---
 title: Jest for Vue with Vuex 演練
 date: 2019-07-03 23:29:07
-tags: 
+tags:
 - jest
-- vuejs
+- vue
 - vuex'
-categories: 
+categories:
 - 技術心得
 ---
 # Jest for Vue with Vuex 演練
