@@ -20,6 +20,13 @@ categories:
 
 ### 前端的第三方登入
 
+<style>
+  #sequence-0 {
+    width: 100%;
+    overflow: scroll;
+  }
+</style>
+
 ```sequence
 participant Web App\nClient as client
 participant Web App\nServer as server
