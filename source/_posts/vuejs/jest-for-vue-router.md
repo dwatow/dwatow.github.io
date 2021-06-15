@@ -1,14 +1,14 @@
 ---
-title: Jest for Vue with Vue Router 演練
+title: Jest for Vue with Vue Router 演練
 date: 2019-11-26 14:27:36
 tags:
 - jest
 - vue
-- vuex'
+- vuex
 categories:
 - 技術心得
 ---
-# Jest for Vue with Vue Router 演練
+# Jest for Vue with Vue Router 演練
 
 這次測試，要測試的是模仿使用者操作。
 隨著網址的變化，畫面也要變化到指定的 Component

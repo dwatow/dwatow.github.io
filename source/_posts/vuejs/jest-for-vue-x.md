@@ -4,7 +4,7 @@ date: 2019-07-03 23:29:07
 tags:
 - jest
 - vue
-- vuex'
+- vuex
 categories:
 - 技術心得
 ---
