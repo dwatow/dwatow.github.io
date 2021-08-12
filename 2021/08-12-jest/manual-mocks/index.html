@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶翻譯 Manual Mocks manual mock 被用在會吐出 mock data 的 stub。例如，取代存取一個遠端資源，像是網站或資料庫，你可能要建立一個允許你使用 fake data 的 manual mock。確保你的測試快速又不出錯 ¶Mocking user modules  在此舉例 user 模組要 mock 時，怎麼做  Manual mocks 只要建立子資料夾 __">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻譯 Manual Mocks">
+<meta property="og:url" content="https://dwatow.github.io/2021/08-12-jest/manual-mocks/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶翻譯 Manual Mocks manual mock 被用在會吐出 mock data 的 stub。例如，取代存取一個遠端資源，像是網站或資料庫，你可能要建立一個允許你使用 fake data 的 manual mock。確保你的測試快速又不出錯 ¶Mocking user modules  在此舉例 user 模組要 mock 時，怎麼做  Manual mocks 只要建立子資料夾 __">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-08-12T08:36:10.000Z">
+<meta property="article:modified_time" content="2021-08-12T08:53:38.817Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="jest">
+<meta name="twitter:card" content="summary">
+  <title>翻譯 Manual Mocks - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>翻譯 Manual Mocks</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-Manual-Mocks"><span class="toc-text">翻譯 Manual Mocks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mocking-user-modules"><span class="toc-text">Mocking user modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mocking-Node-modules"><span class="toc-text">Mocking Node modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Examples"><span class="toc-text">Examples</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-with-ES-module-imports"><span class="toc-text">Using with ES module imports</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mocking-methods-which-are-not-implemented-in-JSDOM"><span class="toc-text">Mocking methods which are not implemented in JSDOM</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="翻譯-Manual-Mocks"><a class="header-anchor" href="#翻譯-Manual-Mocks">¶</a>翻譯 Manual Mocks</h1>
+<p>manual mock 被用在會吐出 mock data 的 stub。例如，取代存取一個遠端資源，像是網站或資料庫，你可能要建立一個允許你使用 fake data 的 manual mock。確保你的測試快速又不出錯</p>
+<h2 id="Mocking-user-modules"><a class="header-anchor" href="#Mocking-user-modules">¶</a>Mocking user modules</h2>
+<blockquote>
+<p>在此舉例 user 模組要 mock 時，怎麼做</p>
+</blockquote>
+<p>Manual mocks 只要建立子資料夾 <code>__mocks__/</code> 在裡面建立模組(<code>moduleName.js</code>)，即可定義好 mock 模組。例如: 在 <code>models</code> 資料夾中，要 mock 叫做 <code>user</code> 的模組。建立一個檔案叫 <code>user.js</code> 並放入 <code>module/__mocks__</code> 資料夾中。注意這個 <code>__mocks__</code> 資料夾的是 case-sensitive (大小寫視為不同名字) 所以命名成 <code>__MOCKS__</code> 會失效。</p>
+<blockquote>
+<p>當我們要在測試中引入模組時, 直接寫呼叫 <code>jest.mock('./moduleName')</code> 是<strong>必要的</strong></p>
+</blockquote>
+<h2 id="Mocking-Node-modules"><a class="header-anchor" href="#Mocking-Node-modules">¶</a>Mocking Node modules</h2>
+<p>如果，你要模擬的是 node 模組 (例如: <code>lodash</code>)，mock 的 <code>__mocks__</code> 應該放在 <code>node_modules</code> 旁邊 (除非有設定 <a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/configuration#roots-arraystring">roots</a> 定位到其它，不是這個專案 root 的資料夾) 並將被<strong>自動</strong> mock</p>
+<div class="info">
+<p><strong><code>roots [array&lt;string&gt;]</code></strong></p>
+<p>Default: <code>[&quot;&lt;rootDir&gt;&quot;]</code></p>
+<p>A list of paths to directories that Jest should use to search for files in.</p>
+<p>There are times where you only want Jest to search in a single sub-directory (such as cases where you have a <code>src/</code> directory in your repo), but prevent it from accessing the rest of the repo.</p>
+<p>Note: While <code>rootDir</code> is mostly used as a token to be re-used in other configuration options, <code>roots</code> is used by the internals of Jest to locate <strong>test files and source files</strong>. This applies also when searching for manual mocks for modules from <code>node_modules</code> (<code>__mocks__</code> will need to live in one of the <code>roots</code>).</p>
+<p>Note: By default, roots has a single entry <code>&lt;rootDir&gt;</code> but there are cases where you may want to have multiple roots within one project, for example <code>roots: [&quot;&lt;rootDir&gt;/src/&quot;, &quot;&lt;rootDir&gt;/tests/&quot;]</code>.</p>
+</div>
+<blockquote></blockquote>
+<p>scoped module (含作用域的模組)可以籍由建立檔案在目錄結構來 mock，只要 scoped module 名稱相同。例如要 mock 一個叫 <code>@scope/project-name</code> 的 scoped module，就在 <code>@scope/</code> 底下新增檔案 <code>__mocks__/@scope/project-name.js</code></p>
+<blockquote>
+<p>警告: 若要模擬 node 的核心模組 (例如: fs 或 path)，請直接寫呼叫，像 <code>jest.mock('path')</code> 是<strong>必要的</strong><br>
+因為 node 核心模組預設不被 mock</p>
+</blockquote>
+<h2 id="Examples"><a class="header-anchor" href="#Examples">¶</a>Examples</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── config</span><br><span class="line">├── __mocks__</span><br><span class="line">│    └── fs.js</span><br><span class="line">├── models</span><br><span class="line">│    ├── __mocks__</span><br><span class="line">│    │    └── user.js</span><br><span class="line">│    └── user.js</span><br><span class="line">├── node_modules</span><br><span class="line">└── views</span><br></pre></td></tr></table></figure>
+<p>當存在一個 manual mock，Jest 的模組系統會使用 <code>jest.mock('moduleName')</code> 呼叫這個模組。</p>
+<p>然而，當 <code>automock</code> 設為 <code>true</code>，即使未呼叫 <code>jest.mock('moduleName')</code>， manual mock 實作將被用來取代自動產生的 mock。取消 mock ，你將需要在你的測試直接呼叫 <code>jest.unmock('moduleName')</code></p>
+<blockquote>
+<p>為了正確的 mock ，Jest 需要 <code>jest.mock('moduleName')</code> 和 require/import 語句，在同一個作用域中</p>
+</blockquote>
+<p>下面是一個瞎造的例子，提供特定資料夾中所有檔案摘要模組。在這個模組裡有使用(內建的) fs 模組。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// FileSummarizer.js</span></span><br><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">summarizeFilesInDirectorySync</span>(<span class="params">directory</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> fs.readdirSync(directory).map(<span class="function"><span class="params">fileName</span> =&gt;</span> (&#123;</span><br><span class="line">    directory,</span><br><span class="line">    fileName,</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">exports</span>.summarizeFilesInDirectorySync = summarizeFilesInDirectorySync;</span><br></pre></td></tr></table></figure>
+<p>由於我們希望測試避免真實的磁碟存取 (因為它很慢又脆弱)，因此我們透過自動 mock 建立一個 fs 的 manual mock。我們的 manual mock 將實現一個可以建立我們的測試的特製版 API 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// __mocks__/fs.js</span></span><br><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fs = jest.genMockFromModule(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// This is a custom function that our tests can use during setup to specify</span></span><br><span class="line"><span class="comment">// what the files on the &quot;mock&quot; filesystem should look like when any of the</span></span><br><span class="line"><span class="comment">// `fs` APIs are used.</span></span><br><span class="line"><span class="keyword">let</span> mockFiles = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__setMockFiles</span>(<span class="params">newMockFiles</span>) </span>&#123;</span><br><span class="line">  mockFiles = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> file <span class="keyword">in</span> newMockFiles) &#123;</span><br><span class="line">    <span class="keyword">const</span> dir = path.dirname(file);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!mockFiles[dir]) &#123;</span><br><span class="line">      mockFiles[dir] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    mockFiles[dir].push(path.basename(file));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// A custom version of `readdirSync` that reads from the special mocked out</span></span><br><span class="line"><span class="comment">// file list set via __setMockFiles</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readdirSync</span>(<span class="params">directoryPath</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> mockFiles[directoryPath] || [];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fs.__setMockFiles = __setMockFiles;</span><br><span class="line">fs.readdirSync = readdirSync;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = fs;</span><br></pre></td></tr></table></figure>
+<p>現在，我們要寫測試。但注意，我們需要對我們要模擬的 node 核心模組直接呼叫 <code>jest.mock()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// __tests__/FileSummarizer-test.js</span></span><br><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line">jest.mock(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;listFilesInDirectorySync&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> MOCK_FILE_INFO = &#123;</span><br><span class="line">    <span class="string">&#x27;/path/to/file1.js&#x27;</span>: <span class="string">&#x27;console.log(&quot;file1 contents&quot;);&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;/path/to/file2.txt&#x27;</span>: <span class="string">&#x27;file2 contents&#x27;</span>,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  beforeEach(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Set up some mocked out file info before each test</span></span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>).__setMockFiles(MOCK_FILE_INFO);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  test(<span class="string">&#x27;includes all files in the directory in the summary&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> FileSummarizer = <span class="built_in">require</span>(<span class="string">&#x27;../FileSummarizer&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> fileSummary = FileSummarizer.summarizeFilesInDirectorySync(</span><br><span class="line">      <span class="string">&#x27;/path/to&#x27;</span>,</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    expect(fileSummary.length).toBe(<span class="number">2</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在這的 mock 使用 <a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/jest-object#jestgenmockfrommodulemodulename"><code>jest.genMockFromModule</code></a> 來自動產生 mock，覆寫預設的行為。推薦使用這種做法，但是不強迫。若你根本不想自動 mock 模組的全部功能，你可以從你的 mock file 中匯出你寫的函數。一個不利於全面 manual mocks 的原因是它是手動的，意思是你已手動更新它們在它們改版時。因此，最好在滿足需求之餘，使用自動 mock。</p>
+<p>為了確保同步 manual mock 和真正的實作，在 manual mock 中使用 <a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/jest-object#jestrequireactualmodulename"><code>jest.requireActual(moduleName)</code></a> 在你的 manual mock 中，並修正 mock 掉的功能。</p>
+<p>此例的程式碼，可在 <a target="_blank" rel="noopener" href="https://github.com/facebook/jest/tree/master/examples/manual-mocks"><code>examples/manual-mocks</code></a> 中找到。</p>
+<h2 id="Using-with-ES-module-imports"><a class="header-anchor" href="#Using-with-ES-module-imports">¶</a>Using with ES module imports</h2>
+<p>若你使用 ES 的語法模組引用，通常會把 import 寫在測試文件的最上面。但是通常你要叫 Jest 使用 mock 前使用它。因此 Jest 將自動的宣告 (hoist) <code>jest.mock</code> 在模組的最上面 (導入之前)。</p>
+<p>欲知詳情，參考這個 <a target="_blank" rel="noopener" href="https://github.com/kentcdodds/how-jest-mocking-works">repo</a></p>
+<h2 id="Mocking-methods-which-are-not-implemented-in-JSDOM"><a class="header-anchor" href="#Mocking-methods-which-are-not-implemented-in-JSDOM">¶</a>Mocking methods which are not implemented in JSDOM</h2>
+<p>js-dom 中未實現的方法</p>
+<blockquote>
+<p>要在 jest.config.js 改 testEnvironment: “jsdom” (它是 default)<br>
+<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/jsdom">https://www.npmjs.com/package/jsdom</a></p>
+</blockquote>
+<p>如果某些代碼使用尚未實現JSDOM（Jest使用的DOM實現）的方法，則測試起來並不容易。 這是例如 window.matchMedia（）的情況。 Jest 返回TypeError：window.matchMedia不是一個函數，不能正確執行測試。</p>
+<p>在這種情況下，在測試文件中模擬matchMedia應該可以解決此問題：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(<span class="built_in">window</span>, <span class="string">&#x27;matchMedia&#x27;</span>, &#123;</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: jest.fn().mockImplementation(<span class="function"><span class="params">query</span> =&gt;</span> (&#123;</span><br><span class="line">    matches: <span class="literal">false</span>,</span><br><span class="line">    media: query,</span><br><span class="line">    onchange: <span class="literal">null</span>,</span><br><span class="line">    addListener: jest.fn(), <span class="comment">// deprecated</span></span><br><span class="line">    removeListener: jest.fn(), <span class="comment">// deprecated</span></span><br><span class="line">    addEventListener: jest.fn(),</span><br><span class="line">    removeEventListener: jest.fn(),</span><br><span class="line">    dispatchEvent: jest.fn(),</span><br><span class="line">  &#125;)),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>若 <code>window.matchMedia()</code> 被用在一個 function (或 method) 它能在測試中正常運作。<br>
+若 <code>window.matchMedia()</code> 被直接執行在這個測試檔案，Jest 會回報一樣的錯誤。<br>
+在這個案例，解決方式是移動 manual mock 到獨立檔案中，並且在測試檔案引用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./matchMedia.mock&#x27;</span>; <span class="comment">// Must be imported before the tested file</span></span><br><span class="line"><span class="keyword">import</span> &#123;myMethod&#125; <span class="keyword">from</span> <span class="string">&#x27;./file-to-test&#x27;</span>;</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;myMethod()&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// Test the method here...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-08-12T08:36:10.000Z" itemprop="datePublished">
+              2021-08-12
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/jest/">jest</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2020/11-26-angularjs/unit-testing-jest/">翻譯 使用 angularjs-jest 套件做 AngularJS 單元測試</a><div class="related-posts-item-abstract">¶翻譯 使用 angularjs-jest 套件做 AngularJS 單元測試
+原文: AngularJS unit testing with angularjs-j</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-24-jest/jest-doc-5/">讀 Jest Doc - 測試替身</a><div class="related-posts-item-abstract">¶測試替身
+戲劇演員的替身, 在英文裡叫 body double 或 stunt double[1]
+待測物與相依元件[2]
+
+SUT：System Under Tes</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-21-jest/jest-doc-4/">讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋</a><div class="related-posts-item-abstract">¶讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋
+上一篇，聊了關於非同步問題。
+這一篇，我們要更了解 Jest 的生命週期 (其實就是執行順序)。
+廣義的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-20-jest/jest-doc-3/">讀 Jest Doc - 非同步測試</a><div class="related-posts-item-abstract">¶讀 Jest Doc - 非同步測試
+上一回，我們看了各式各樣的基本的斷言庫，可以讓我們測試簡單型別(Number/String/Boolean)，測試非零值(und</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-18-jest/jest-doc-2/">讀 Jest Doc - 斷言庫</a><div class="related-posts-item-abstract">¶讀 Jest Doc - 斷言庫
+上一回，處理了環境建置，還沒有辦法執行 jest 的朋友們，可以看看上一週的內容哦
+這一回，我們要來看看如何判斷測試對錯。
+¶測試 </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2020/04-17-jest/jest-doc-1/">讀 Jest Doc - 建置測試環境</a><div class="related-posts-item-abstract">¶讀 Jest Doc - 建置測試環境
+新系列！(感覺很像 Youtuber)
+最近，其實從 3 月開始就和神 Q 超人、好想的夥伴們一起讀 Jest 文件。
+也歡迎</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2021 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
