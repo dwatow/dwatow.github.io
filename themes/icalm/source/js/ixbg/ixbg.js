@@ -43,7 +43,7 @@
   };
 
   //initial position in canvas
-  const totalDusts = screen.width / 60; // for RWD
+  const totalDusts = screen.height / 20; // for RWD
   console.log(totalDusts);
 
   const dusts = Array(Math.floor(totalDusts)).fill(0).map(() => ({
