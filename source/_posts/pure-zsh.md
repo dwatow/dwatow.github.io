@@ -1,8 +1,9 @@
 ---
 title: zsh 真正簡單設定 (無 iTern2, 無 oh-my-zsh)
 date: 2020-06-17 09:39:25
-tags: 
+tags:
 - zsh
+- shell
 categories:
 - macOS
 ---
@@ -115,14 +116,14 @@ setopt PROMPT_SUBST
 再把
 
 ```shell
-PROMPT='%F{2}%m%f:%F{30}%~%f 
+PROMPT='%F{2}%m%f:%F{30}%~%f
 %F{184}%n%f $ '
 ```
 
 加上 ` ${vcs_info_msg_0_} `
 
 ```shell
-PROMPT='%F{2}%m%f:%F{30}%~%f ${vcs_info_msg_0_} 
+PROMPT='%F{2}%m%f:%F{30}%~%f ${vcs_info_msg_0_}
 %F{184}%n%f $ '
 ```
 

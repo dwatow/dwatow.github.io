@@ -3,7 +3,7 @@ title: Vue router 的 router-view 使用技巧
 date: 2018-09-21 13:31:07
 tags:
 - vue
-- "vue-router"
+- vue-router
 categories:
 - 工具使用
 ---

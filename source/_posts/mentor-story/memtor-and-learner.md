@@ -1,12 +1,12 @@
 ---
 title: Mentor × Camp × 學員
 date: 2020-04-01 11:43:32
-tags: 
+tags:
 - 好想工作室
 - mentor
-- "web camp"
-categories: 
-- "關於 mentor 這件事"
+- web camp
+categories:
+- 關於 mentor 這件事
 ---
 
 # Mentor × Camp × 學員
@@ -27,7 +27,7 @@ Google: `程式 mentor` 、 `工程師 mentor`
 - [如何在 Startup 圈找到改變你一生的 Mentor？｜ALPHA Camp Blog](https://tw.alphacamp.co/blog/2014-10-13-startup-mentor)
 
 除此之外，我還是想聊聊，我自己的想法
-今天要來介紹: 
+今天要來介紹:
 
 - 介紹我成為好想工作室的 Mentor 的小故事
 - Mentor 與學員之間的責任區分

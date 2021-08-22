@@ -6,8 +6,8 @@ tags:
 - HTML
 - CSS
 - display
-- "Render tree"
-categories: 
+- Render tree
+categories:
 - 讀技術書
 ---
 # 給前端的「來做個網路瀏覽器吧！」導讀

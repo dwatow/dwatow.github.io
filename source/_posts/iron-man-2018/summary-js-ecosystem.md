@@ -7,7 +7,7 @@ tags:
 - nodejs
 - vue
 - webpack
-- "vue-cli"
+- vue-cli
 categories:
 - 讀技術書
 ---

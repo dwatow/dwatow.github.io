@@ -1,10 +1,10 @@
 ---
 title: Sequelize 資料寫入
 date: 2018-09-24 21:56:27
-tags: 
-- Sequelize
+tags:
+- sequelize
 - CRUD
-categories: 
+categories:
 - 技術心得
 ---
 

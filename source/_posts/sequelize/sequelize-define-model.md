@@ -1,10 +1,9 @@
 ---
 title: Sequelize 的 define model
 date: 2018-09-24 12:12:03
-tags: 
-- Sequelize
-- define
-categories: 
+tags:
+- sequelize
+categories:
 - 技術心得
 ---
 # Sequelize 的 define model
@@ -62,7 +61,7 @@ var Foo = sequelize.define('foo', {
     // 允許 NULL: false
     allowNull: false,
     // 在 MySQL and PG 可以指定各別欄位的 comment
-    comment: "I'm a comment!",  
+    comment: "I'm a comment!",
     // 獨一無二欄位 (unique)
     unique: true,// 此欄位是 unique, 複合式 unique, 要看下面的例子
   },

@@ -1,11 +1,12 @@
 ---
 title: 技術人力資源招募
 date: 2020-01-01 17:33:55
-tags: 
+tags:
 - 好想工作室
 - 招募
-categories: 
-- "關於 mentor 這件事"
+- web camp
+categories:
+- 關於 mentor 這件事
 ---
 
 ![](https://i.imgur.com/hDXSkR8.jpg)
@@ -77,7 +78,7 @@ categories:
 
 ...還有很多不同的類型。
 
-但是狀況好的學員，卻有著相同的共通點 
+但是狀況好的學員，卻有著相同的共通點
 
 - 能夠好好的「自學」
 - 獨自走過學習過程

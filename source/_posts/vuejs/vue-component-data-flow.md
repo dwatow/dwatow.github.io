@@ -4,7 +4,7 @@ date: 2018-04-05 22:23:04
 tags:
 - vue
 - JavaScript
-- "vue-loader"
+- vue-loader
 categories:
 - 技術心得
 ---

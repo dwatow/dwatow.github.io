@@ -1,10 +1,9 @@
 ---
 title: 在 Mac OS X 用 Bash 安裝 git auto complete
 date: 2018-09-21 20:45:38
-tags: 
-- mac
+tags:
 - git
-categories: 
+categories:
 - macOS
 ---
 

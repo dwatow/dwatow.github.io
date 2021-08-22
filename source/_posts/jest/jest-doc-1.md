@@ -3,7 +3,7 @@ title: 讀 Jest Doc - 建置測試環境
 date: 2020-04-17 11:23:21
 tags:
 - jest
-- "unit testing"
+- unit testing
 categories:
 - 技術練習
 ---
@@ -96,7 +96,7 @@ console.log(sum(1, 2));
 執行
 
 ```shell
-chris$ node ./2020-03-12/app.js 
+chris$ node ./2020-03-12/app.js
 3
 ```
 

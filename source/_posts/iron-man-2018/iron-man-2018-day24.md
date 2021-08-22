@@ -1,13 +1,13 @@
 ---
 title: 前端新手村 都市傳說之隱藏元素的手法
 date: 2018-01-03 07:38:38
-tags: 
+tags:
 - 2018鐵人賽
 - display
 - visibility
 - opacity
-- "Render tree"
-categories: 
+- Render tree
+categories:
 - 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻

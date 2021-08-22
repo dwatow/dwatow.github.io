@@ -4,7 +4,7 @@ date: 2019-07-03 23:18:37
 tags:
 - vue
 - vuex
-- 'pure component'
+- pure component
 categories:
 - 技術心得
 ---

@@ -4,7 +4,7 @@ date: 2021-02-01 15:42:38
 tags:
 - 好想工作室
 categories:
-- "關於 mentor 這件事"
+- 關於 mentor 這件事
 ---
 
 # 好想工作室 Web Camp 第 10 梯招生

@@ -1,10 +1,10 @@
 ---
 title: git reset <參數>
 date: 2017-08-04 10:22:10
-tags: 
+tags:
 - git
-- "git reset"
-categories: 
+- git reset
+categories:
 - 技術心得
 ---
 

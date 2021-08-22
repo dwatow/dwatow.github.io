@@ -1,10 +1,10 @@
 ---
 title: 換Hexo的markdown渲染器
 date: 2017-06-12 16:44:36
-tags: 
+tags:
 - hexo
-- "markdown-it"
-categories: 
+- markdown-it
+categories:
 - hexo改裝
 ---
 

@@ -2,10 +2,11 @@
 title: MOPCON 2020 會後感想
 date: 2020-10-25 21:19:54
 tags:
-- "MOPCON"
-- "完美 camp 進化論"
+- MOPCON
+- 完美 camp 進化論
+- web camp
 categories:
-- "關於 mentor 這件事"
+- 關於 mentor 這件事
 ---
 
 # MOPCON 2020 會後感想

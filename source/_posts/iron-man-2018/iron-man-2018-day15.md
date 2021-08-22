@@ -1,11 +1,11 @@
 ---
 title: 前端新手村 偽元素
 date: 2017-12-25 13:26:48
-tags: 
+tags:
 - 2018鐵人賽
 - Selector
-- "Pseudo-elements"
-categories: 
+- Pseudo-elements
+categories:
 - 前端新手村
 ---
 > 「當你迷惘的時候，就回到原點想一想」-中華一番 蘭飛鴻

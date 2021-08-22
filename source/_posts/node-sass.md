@@ -5,13 +5,18 @@ tags:
 - nodejs
 - webpack
 - vue
-- "node-sass"
+- node-sass
 - JavaScript
 categories:
 - 工具使用
 ---
 
 # node-sass 初探
+
+:::danger
+# 此方法不推薦!!
+# 請直接用 `npm install sass` 安裝 dart sass
+:::
 
 除了 ruby sass 和 compass ，還有其它的方案可以處理 `SCSS -> CSS`。
 

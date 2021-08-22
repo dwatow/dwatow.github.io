@@ -4,15 +4,25 @@ date: 2018-10-07 13:51:23
 tags:
 - axios
 - monent
-- "vue-masonry"
+- vue-masonry
 - vue
 categories:
 - 技術練習
 ---
 
 <style>
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .book {
   padding: 10px 15px;
+  animation: fade-in 1s;
 }
 
 .book:hover {
@@ -79,6 +89,7 @@ input:invalid {
     display: block;
   }
 }
+
 </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js" charset="utf-8"></script>
@@ -109,7 +120,7 @@ input:invalid {
     <div class="latestUpdateDate">最新更新日期: {{updateDate}}</div>
     {{ message }}
     <div class="totalBooks">{{'有' + books.length + '本'}}</div>
-    <div >
+    <div>
       <masonry
         :cols="{default: 4, 720: 2}"
         :gutter="0"

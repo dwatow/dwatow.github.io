@@ -3,7 +3,7 @@ title: Vue Component 也可以用 v-model
 date: 2018-09-21 16:37:51
 tags:
 - vue
-- "v-model"
+- v-model
 categories:
 - 技術心得
 ---

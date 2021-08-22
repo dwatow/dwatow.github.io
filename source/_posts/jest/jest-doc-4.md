@@ -17,7 +17,7 @@ categories:
 廣義的來說，也可以說是測試 3A[^3A] 的 Arrange
 
 > 如果以煮菜來解釋
-> 
+>
 > 1. Arrange: 準備材料
 > 1. Act: 煮東西
 > 1. Assert: 試吃，看看結果如何？
@@ -30,7 +30,7 @@ categories:
 
 之後許許多多的單元測試框架，也由不同的語言重新實作，並且命名也有一個慣例[^xunit-list]，而這種重新實作 JUnit 的框架，統稱為 xUnit[^xunit]，不過**不代表這麼命名的框架為該語言的主流測試框架**。
 
-ex: 
+ex:
 
 - Bash: ShUnit, shUnit2
 - C語言: CUnit
@@ -203,7 +203,7 @@ describe('Scoped / Nested block', () => {
 Jest 在執行 `test` 區段之前，會先把 `describe` 執行完。
 
 一個 `describe` 執行完，就先把目前搜集的所有 `test` 跑完。
-這些 `test` 執行完，再執行接下來會遇到的 `describe` 
+這些 `test` 執行完，再執行接下來會遇到的 `describe`
 
 ```javascript
 describe('outer', () => {

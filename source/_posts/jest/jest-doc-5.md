@@ -6,7 +6,7 @@ tags:
 - mock
 - stub
 - spy
-- "test double"
+- test double
 categories:
 - 技術練習
 ---
@@ -50,9 +50,9 @@ No Implement > Dummies > Stubs > Spies > Facke > Real Implement
 **jest.spyOn()**
 
 > SUT 一直享受著假資料帶來的美好，當過程中動用到 DOC 邏輯等或修改回傳值時。上線時卻會有「什麼！這傢伙怎麼會回傳這種東西？測試明明就沒有錯！」之類的慘劇發生。
-> 
+>
 > 但是 jest.spyOn() 不同，它會去重現 DOC 的邏輯，即使在任何時候修改了它的任何內容都一樣，SUT 在測試時便會發現 DOC 已經和之前測試時有所不同，不論是邏輯、回傳值等等，這時候捕獲了真實資料的測試結果才會有效。
-> 
+>
 > 那 jest.mock() 整個那麼假，可以用在哪裡？用在模擬無法重現邏輯、或者根本不會去變動的第三方套件時。
 > -- 神Q超人
 
@@ -63,7 +63,7 @@ No Implement > Dummies > Stubs > Spies > Facke > Real Implement
 
 這些問題，也許可以用[探討單元測試和整合測試的涵蓋範圍](https://ithelp.ithome.com.tw/articles/10229734)來解答
 
-重點: 
+重點:
 
 1. 單元測試有兩派: 孤立型（Solitary）or 社交型（Sociable）
 2. 如果你是 BDD 或 TDD 的實踐者，那麼你的單元測試就可能是跨多個類別的 社交型單元測試，因為測試的對象是 一個行為，而非一個類別。
@@ -139,7 +139,7 @@ console.log(myMock.mock.instances.constructor.name, "\n", JSON.stringify(myMock.
 
 ```shell
   console.log 2020-04-16/mock.test.js:11
-    Array 
+    Array
      [{},{"name":"b"}]
 ```
 mock 物件的內容，用在斷言下面幾種情況
@@ -157,20 +157,20 @@ test('mock object of mock function as call mockFunction', () => {
 
   // someMockFunction.假物件屬性.呼叫.次數
   expect(someMockFunction.mock.calls.length).toBe(1);
-  
+
   // someMockFunction.假物件屬性.呼叫[第幾次][第幾個參數]
   expect(someMockFunction.mock.calls[0][0]).toBe('first arg');
   expect(someMockFunction.mock.calls[0][1]).toBe('second arg');
-  
+
   // someMockFunction.假物件屬性.回傳值[第幾次]
   expect(someMockFunction.mock.results[0].value).toBe('return value');
 });
-  
+
 test('mock object of mock function as new mockFunction', () => {
   const someMockFunction = jest.fn();
   const a = new someMockFunction();
   a.name = 'test';
-  const b = new someMockFunction();  
+  const b = new someMockFunction();
 
   // someMockFunction.假物件屬性.用 new 呼叫.次數
   expect(someMockFunction.mock.instances.length).toBe(2);
@@ -188,7 +188,7 @@ test('mock object of mock function as new mockFunction', () => {
 ```javascript
 test('return Value of mock function', () => {
   const myMock = jest.fn();
-  
+
   // console.log(myMock());
   // > undefined
   expect(myMock()).toBeUndefined();
@@ -281,7 +281,7 @@ test('should fetch users', () => {
   });
 
   return Users.all().then(data => expect(data).toEqual(users));
-  
+
 });
 ```
 
@@ -291,7 +291,7 @@ test('should fetch users', () => {
 mockResolvedValue: 直接定回傳 promise
 mockImplementation: 實作 function 內容
 jest.fn(): 實作 function 內容
-> 
+>
 > 注意: `jest.fn(implementation)` 是 `jest.fn().mockImplementation(implementation)` 的縮寫.[^mockImplementation]
 
 [^mockImplementation]: [mockFn.mockImplementation(fn)](https://jestjs.io/docs/en/mock-function-api#mockfnmockimplementationfn)
@@ -340,14 +340,14 @@ test('mock empty module', () => {
 
 ```shell
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
-All files          |     100 |      100 |      0 |     100 |                   
- emptyImplement.js |     100 |      100 |       0 |     100 |                   
+All files          |     100 |      100 |      0 |     100 |
+ emptyImplement.js |     100 |      100 |       0 |     100 |
  ------------------|---------|----------|---------|---------|-------------------
 ```
 
-當你需要「假物件實作免洗筷」時，可以使用 `mockImplementationOnce` 
+當你需要「假物件實作免洗筷」時，可以使用 `mockImplementationOnce`
 
 ```javascript
 const myMockFn = jest
@@ -418,9 +418,9 @@ test('mock name', () => {
     .fn()
     .mockReturnValue('default')
     .mockImplementation(scalar => 42 + scalar);
-  
+
   expect(myMockFn.getMockName()).toMatch("jest.fn()");
-  
+
   myMockFn.mockName('add42');
   expect(myMockFn.getMockName()).toMatch("add42");
 });

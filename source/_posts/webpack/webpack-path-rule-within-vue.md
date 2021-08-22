@@ -4,8 +4,8 @@ date: 2018-09-21 13:56:34
 tags:
 - webpack
 - vue
-- "file-loader"
-- "css-loader"
+- file-loader
+- css-loader
 categories:
 - 技術心得
 ---

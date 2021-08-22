@@ -5,8 +5,8 @@ tags:
 - nodejs
 - webpack
 - vue
-- "fontawesome"
-- "JavaScript"
+- fontawesome
+- JavaScript
 categories:
 - 工具使用
 ---

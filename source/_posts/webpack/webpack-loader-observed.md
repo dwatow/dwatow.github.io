@@ -5,8 +5,8 @@ tags:
 - nodejs
 - webpack
 - vue
-- "webpack loader"
-- "JavaScript"
+- webpack loader
+- JavaScript
 categories:
 - 工具使用
 ---

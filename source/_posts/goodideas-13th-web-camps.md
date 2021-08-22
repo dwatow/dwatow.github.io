@@ -1,10 +1,10 @@
 ---
 title: 好想工作室第 13 梯 Web Camp 招生
 date: 2019-06-28 18:13:16
-tags: 
+tags:
 - 好想工作室
-categories: 
-- "關於 mentor 這件事"
+categories:
+- 關於 mentor 這件事
 ---
 
 # 好想工作室第 13 梯 Web Camp 招生
