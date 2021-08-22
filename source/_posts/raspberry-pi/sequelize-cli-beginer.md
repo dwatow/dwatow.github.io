@@ -8,7 +8,7 @@ tags:
 categories:
 - 技術練習
 ---
-# Raspberry Pi 4 的後端修鍊 - sequelize-cli
+# Raspberry Pi 4 的後端修鍊: sequelize-cli
 
 ## 安裝
 
@@ -91,14 +91,6 @@ sequelize [command]
 | sequelize init:models     | 初始化 models                |
 | sequelize init:seeders    | 初始化 seeders               |
 
-**產生各種腳本**
-
-| 指令                         | 作用                                | 參數                     |
-| ---------------------------- | ----------------------------------- | ------------------------ |
-| sequelize migration:generate | 產生 new migration file      | [別名: migration:create] |
-| sequelize model:generate     | 產生 model and its migration | [別名: model:create]     |
-| sequelize seed:generate      | 產生 new seed file           | [別名: seed:create]      |
-
 **資料庫 建立/刪除**
 
 使用時注意權限是否可以更動資料庫
@@ -108,26 +100,32 @@ sequelize [command]
 | sequelize db:create | 從指定的 config 檔新增 database |
 | sequelize db:drop   | 從指定的 config 檔刪除 database |
 
+**產生各種腳本**
+
+| 指令                         | 作用                          | 參數                      |
+| ---------------------------- | ---------------------------- | ------------------------ |
+| sequelize migration:generate | 產生 new migration 檔         | [別名: migration:create] |
+| sequelize model:generate     | 產生 model 和它的 migration 檔 | [別名: model:create]     |
+| sequelize seed:generate      | 產生 new seed 檔              | [別名: seed:create]      |
+
 **資料表結構維護**
 
-| 指令                                       | 作用                                      |
+| 指令                                       | 作用                                       |
 | ------------------------------------------ | ----------------------------------------- |
-| sequelize db:migrate                       | 執行未跑過的 migrations                   |
-| sequelize db:migrate:undo                  | 恢復一次 migration                        |
-| sequelize db:migrate:undo:all              | 恢復所有跑過的 migrations                 |
+| sequelize db:migrate                       | 執行未跑過的 migrations                     |
+| sequelize db:migrate:undo                  | 恢復一次 migration                         |
+| sequelize db:migrate:undo:all              | 恢復所有跑過的 migrations                   |
 | sequelize db:migrate:schema:timestamps:add | Update migration table to have timestamps |
 | sequelize db:migrate:status                | List the status of all migrations         |
 
 **前置資料維護**
 
-| 指令                       | 作用                 |
+| 指令                       | 作用                  |
 | -------------------------- | -------------------- |
-| sequelize db:seed          | 執行指定的 seeder    |
-| sequelize db:seed:all      | 執行每一個 seeder    |
-| sequelize db:seed:undo     | 從 database 刪除資料 |
-| sequelize db:seed:undo:all | 從 database 刪除資料 |
-
-
+| sequelize db:seed          | 執行指定的 seeder     |
+| sequelize db:seed:all      | 執行每一個 seeder     |
+| sequelize db:seed:undo     | 從 database 刪除資料  |
+| sequelize db:seed:undo:all | 從 database 刪除資料  |
 
 
 ## 初始化 sequelize 的基本環境
@@ -252,10 +250,173 @@ db:create 要使用權限較高的帳號執行。
 在此設定在 `development` 的 config 中。
 :::
 
-## 用 ORM 創造資料表
 
-建立 Model 來對應已存在的資料表。
+## 用 ORM 創造 Migration 步驟
 
+Migration 像是資料庫的演進過程，每一步都記錄下來的話，有助於未來再建立一次初始系統。
+也有助於自動化資料表建置、修改或系統的初始資料建置。
+
+但是 migration 畢竟一開始算是「一個動作」我們就以這個角度切入看看 sequelize-cli 幫我們打造了什麼工具又可以做到什麼吧！
+
+一開始我們創一個 Migration 檔來執行或恢復。
+
+```bash
+$ npx sequelize-cli migration:generate --name create-empty-file
+
+Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]
+
+migrations folder at "/home/pi/code/express-demo/migrations" already exists.
+New migration was created at /home/pi/code/express-demo/migrations/20210820152155-create-empty-file.js .
+```
+
+可以產生一個 migration 檔。
+
+**migrations/20210820152155-create-empty-file.js**
+
+```javascript=
+'use strict';
+
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    /*
+      Add altering commands here.
+      Return a promise to correctly handle asynchronicity.
+    */
+
+    // Example:
+    return queryInterface.createTable('users', { id: Sequelize.INTEGER });
+  },
+
+  down: (queryInterface, Sequelize) => {
+    /*
+      Add reverting commands here.
+      Return a promise to correctly handle asynchronicity.
+    */
+
+    // Example:
+    return queryInterface.dropTable('users');
+  }
+};
+```
+
+配合上面的 Example (source code 產生的)
+
+- `queryInterface`: 用來修改 Database
+- `Sequelize`: 用來記可以用的資料型別 (ex: STRING, INTEGER)
+- function up, down: 回傳 promise
+
+### 執行 migration
+
+執行到底
+
+```bash
+sequelize-cli db:migrate
+```
+
+恢復到底
+
+```bash
+sequelize db:migrate:undo:all
+```
+
+### 此也可以加上 transaction
+
+透過 `queryInterface.sequelize.transaction(done => {})` 可以在 callback 裡面執行 一次 transaction 的所有行為。並且在每個行為的最後一個參數加上 `, { transaction: done }`
+
+```javascript=
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.sequelize.transaction(transaction => {
+      return queryInterface.createTable('users', {
+        id: Sequelize.INTEGER
+      }, { transaction });
+    });
+  },
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.sequelize.transaction(transaction => {
+      return queryInterface.dropTable('users', { transaction });
+    });
+  }
+};
+```
+
+### 此也可以含有 forang key
+
+```javascript=
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('Person', {
+      name: Sequelize.DataTypes.STRING,
+      isBetaMember: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+      },
+      userId: {
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'users',
+            schema: 'schema'
+          },
+          key: 'id'
+        },
+        allowNull: false
+      },
+    });
+  },
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('Person');
+  }
+}
+```
+
+改寫成 async/await
+
+```javascript=
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.addColumn(
+        'Person',
+        'petName',
+        {
+          type: Sequelize.DataTypes.STRING,
+        },
+        { transaction }
+      );
+      await queryInterface.addIndex(
+        'Person',
+        'petName',
+        {
+          fields: 'petName',
+          unique: true,
+          transaction,
+        }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
+  },
+  async down(queryInterface, Sequelize) {
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+      await queryInterface.removeColumn('Person', 'petName', { transaction });
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
+    }
+  }
+};
+```
+
+### 一併創造資料表
+
+可以在建立 migration 的同時，也產生好對應 Model 檔案。
 
 ```shell
 $ sequelize model:generate --name authors --attributes author_id:number,name_last:string,name_first:string,country:string
@@ -354,7 +515,7 @@ Time: 0.759s
 
 ## 用 ORM 創造資料
 
-預先填入資料
+為了在 migration 可以預先填入資料
 
 ```shell
 $ npx sequelize-cli seed:generate --name base-authors
@@ -459,136 +620,3 @@ $ npx sequelize-cli db:seed:undo --seed seeders/20210501134052-base-authors.js
 ```shell
 $ npx sequelize-cli db:seed:undo:all
 ```
-
-## Migration 檔的結構
-
-```javascript=
-'use strict';
-
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
-  },
-
-  down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
-  }
-};
-```
-
-- `queryInterface`: 用來修改 Database
-- `Sequelize`: 用來記可以用的資料型別 (ex: STRING, INTEGER)
-- function up, down: 回傳 promise
-
-看一個有 transaction 的例子
-
-```javascript=
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.sequelize.transaction(done => {
-      return Promise.all([
-        queryInterface.addColumn('Person', 'petName', {
-          type: Sequelize.DataTypes.STRING
-        }, { transaction: done }),
-        queryInterface.addColumn('Person', 'favoriteColor', {
-          type: Sequelize.DataTypes.STRING,
-        }, { transaction: done })
-      ]);
-    });
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.sequelize.transaction(done => {
-      return Promise.all([
-        queryInterface.removeColumn('Person', 'petName', { transaction: done }),
-        queryInterface.removeColumn('Person', 'favoriteColor', { transaction: done })
-      ]);
-    });
-  }
-};
-```
-一個含有 forang key 的例子
-
-```javascript=
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Person', {
-      name: Sequelize.DataTypes.STRING,
-      isBetaMember: {
-        type: Sequelize.DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
-      },
-      userId: {
-        type: Sequelize.DataTypes.INTEGER,
-        references: {
-          model: {
-            tableName: 'users',
-            schema: 'schema'
-          },
-          key: 'id'
-        },
-        allowNull: false
-      },
-    });
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Person');
-  }
-}
-```
-
-改寫成 async/await
-
-```javascript=
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    const transaction = await queryInterface.sequelize.transaction();
-    try {
-      await queryInterface.addColumn(
-        'Person',
-        'petName',
-        {
-          type: Sequelize.DataTypes.STRING,
-        },
-        { transaction }
-      );
-      await queryInterface.addIndex(
-        'Person',
-        'petName',
-        {
-          fields: 'petName',
-          unique: true,
-          transaction,
-        }
-      );
-      await transaction.commit();
-    } catch (err) {
-      await transaction.rollback();
-      throw err;
-    }
-  },
-  async down(queryInterface, Sequelize) {
-    const transaction = await queryInterface.sequelize.transaction();
-    try {
-      await queryInterface.removeColumn('Person', 'petName', { transaction });
-      await transaction.commit();
-    } catch (err) {
-      await transaction.rollback();
-      throw err;
-    }
-  }
-};
-```
-
