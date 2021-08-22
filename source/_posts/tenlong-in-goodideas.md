@@ -112,8 +112,8 @@ input:invalid {
 <div id="app">
   <div id="books">
     <div>
-      <label for="filterName"><b>書名</b></label>
-      <input type="text" id="filterByName" v-model="filterName"><br />
+      <label for="filterByKeyword"><b>關鍵字</b></label>
+      <input type="text" id="filterByKeyword" v-model="filterKeyword"><br />
       <label for="filterDiscount">至少打幾折</label>
       <input type="number" id="filterByDiscount" max="100" min="0" step="1" v-model.number="filterDiscount"><br />
     </div>
@@ -167,12 +167,12 @@ var app = new Vue({
     message: 'Loading...',
     updateDate: null,
     books: [],
-    filterName: '',
+    filterKeyword: '',
     filterDiscount: 100,
     totalShowBooks: 10,
   },
   watch: {
-    filterName() {
+    filterKeyword() {
       this.totalShowBooks = 10;
     }
   },
@@ -249,7 +249,7 @@ var app = new Vue({
     showBooks () {
       return !this.books ? [] : this.books
         .filter(item => item.discount <= this.filterDiscount)
-        .filter(item => item.name.toLowerCase().includes(this.filterName.toLowerCase()))
+        .filter(item => JSON.stringify(item).toLowerCase().includes(this.filterKeyword.toLowerCase())) // 關鍵字
         .slice(0, this.totalShowBooks);
     }
   }
