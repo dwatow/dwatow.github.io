@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Ubuntu 手動加上 swap 在雲端主機要加上 swap，webpack 執行編譯才不會當機 ¶動機 前端佈署在伺服器上，要在伺服器上編譯 雲端主機沒有 swap 會在 webpack 編譯時，出現記憶體不足，造成當機的問題。 所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。 ¶查看記憶體 通常 Swap 會設置為實體記憶體的兩倍[1]，所以要先看一下目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 手動加上 swap">
+<meta property="og:url" content="https://dwatow.github.io/2021/08-22-manual-swap-memory/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Ubuntu 手動加上 swap 在雲端主機要加上 swap，webpack 執行編譯才不會當機 ¶動機 前端佈署在伺服器上，要在伺服器上編譯 雲端主機沒有 swap 會在 webpack 編譯時，出現記憶體不足，造成當機的問題。 所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。 ¶查看記憶體 通常 Swap 會設置為實體記憶體的兩倍[1]，所以要先看一下目">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-08-22T04:44:49.000Z">
+<meta property="article:modified_time" content="2021-08-22T05:03:01.731Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="webpack">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="swap">
+<meta name="twitter:card" content="summary">
+  <title>Ubuntu 手動加上 swap - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Ubuntu 手動加上 swap</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ubuntu-%E6%89%8B%E5%8B%95%E5%8A%A0%E4%B8%8A-swap"><span class="toc-text">Ubuntu 手動加上 swap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8B%95%E6%A9%9F"><span class="toc-text">動機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A8%98%E6%86%B6%E9%AB%94"><span class="toc-text">查看記憶體</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A"><span class="toc-text">設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%96%8B%E6%A9%9F%E5%95%9F%E7%94%A8"><span class="toc-text">開機啟用</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Ubuntu-手動加上-swap"><a class="header-anchor" href="#Ubuntu-手動加上-swap">¶</a>Ubuntu 手動加上 swap</h1>
+<p>在雲端主機要加上 swap，webpack 執行編譯才不會當機</p>
+<h2 id="動機"><a class="header-anchor" href="#動機">¶</a>動機</h2>
+<p>前端佈署在伺服器上，要在伺服器上編譯</p>
+<p>雲端主機沒有 swap 會在 webpack 編譯時，出現記憶體不足，造成當機的問題。<br>
+所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。</p>
+<h2 id="查看記憶體"><a class="header-anchor" href="#查看記憶體">¶</a>查看記憶體</h2>
+<p>通常 Swap 會設置為實體記憶體的兩倍<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，所以要先看一下目前記憶體有多大。<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:        3999756      328648     3139664       43328      531444     3502496</span><br><span class="line">Swap:        102396           0      102396</span><br></pre></td></tr></table></figure>
+<p>total 3999756 就是總共使用幾 K。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           3906         310        3076          42         519        3430</span><br><span class="line">Swap:            99           0          99</span><br></pre></td></tr></table></figure>
+<p>可以改用 mega 為單位，</p>
+<h2 id="設定"><a class="header-anchor" href="#設定">¶</a>設定</h2>
+<p>設定 swap<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo fallocate -l 1G /swapfile</span><br><span class="line">sudo chmod 600 /swapfile</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
+<h2 id="開機啟用"><a class="header-anchor" href="#開機啟用">¶</a>開機啟用</h2>
+<p>開機掛載 swap</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
+<p>開啟檔案，到最後加入此行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#</span><span class="bash"> 開機掛載 swap</span></span><br><span class="line">/swapfile   none swap    sw 0 0</span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.gtwang.org/tips/how-big-should-your-page-file-or-swap/">系統的分頁檔（Page File）或交換空間（Swap Partition）應該設定為多大比較好？</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.longwin.com.tw/2013/05/linux-ram-memory-info-2013/">查看 Linux 的記憶體多大</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.astralweb.com.tw/how-to-manually-add-swap-to-ubuntu/">Ubuntu如何手動新增虛擬記憶體(swap)</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-08-22T04:44:49.000Z" itemprop="datePublished">
+              2021-08-22
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/webpack/">webpack</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/linux/">linux</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/swap/">swap</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2020/11-25-angularjs/angularjs-migration-1-5/">AngularJS 遷移 controller 到 component</a><div class="related-posts-item-abstract">¶AngularJS 遷移 controller 到 component
+
+¶將 controller 改寫成 component
+這個改變，大約在 AngularJS</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-20-eslint-first/">ESlint 初次安裝</a><div class="related-posts-item-abstract">¶ESlint 初次安裝
+之前都是靠 vue-cli 安裝。
+這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。
+¶安裝
+在官網找到 npm 上的安</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-29-webpack/action-url-loader-file-loader/">實戰 Webpack 的 file-loader 和 url-loader</a><div class="related-posts-item-abstract">¶實戰 Webpack 的 file-loader 和 url-loader
+¶用途
+Webpack 在處理檔案時，可以使用 file-loader[1] 進行處理。
+</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-23-angularjs/angularjs-es6-class/">AngularJS 1.5+ Component style with es6-class</a><div class="related-posts-item-abstract">¶AngularJS 1.5+ Component style with es6-class
+
+在接手了 AngularJS 的專案到現在，一直在處理寫作風格造成除錯上</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/12-06-angularjs/angularjs-with-webpack/">AngularJS + Gulp → Webpack</a><div class="related-posts-item-abstract">¶AngularJS + Gulp → Webpack
+
+¶源起
+目前有許多的舊專案，由於當年很潮人做了很潮的決定，使用了當時唯一首選 AngularJS。
+也許種種原</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/09-21-webpack/webpack-path-rule-within-vue/">Webpack 處理 Vue 專案的路徑規則整理</a><div class="related-posts-item-abstract">¶Webpack 處理 Vue 專案的路徑規則整理
+webpack 只處理 JavaScript 檔。
+在 vue 專案
+有 vue 檔，vue-loader，轉成 J</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2021 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

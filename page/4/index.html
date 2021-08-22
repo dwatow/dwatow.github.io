@@ -116,168 +116,226 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2019/04-16-one-http-page-in-https-site/">https://dwatow.github.io/2019/04-16-one-http-page-in-https-site/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2019/05-22-file-api/">https://dwatow.github.io/2019/05-22-file-api/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>設定 Nginx 在 https 中，留下一頁 http</h1>
+        <h1>前端的 File API</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-Nginx-%E5%9C%A8-https-%E4%B8%AD%EF%BC%8C%E7%95%99%E4%B8%8B%E4%B8%80%E9%A0%81-http"><span class="toc-text">設定 Nginx 在 https 中，留下一頁 http</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%BE%8C%E7%9A%84%E8%A7%A3%E6%B3%95%E5%A6%82%E4%B8%8B%E3%80%82"><span class="toc-text">最後的解法如下。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E8%A6%8F%E8%A1%A8%E7%A4%BA%E5%BC%8F"><span class="toc-text">正規表示式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A%E6%AA%94%E7%9A%84%E9%97%9C%E9%8D%B5%E5%AD%97"><span class="toc-text">設定檔的關鍵字[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#listen"><span class="toc-text">listen</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#location"><span class="toc-text">location[1:1]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#try-files"><span class="toc-text">try-files</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E7%9A%84-File-API"><span class="toc-text">前端的 File API</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E5%9C%96"><span class="toc-text">地圖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%9E-FileList-%E5%8F%96%E5%BE%97-File"><span class="toc-text">從 FileList 取得 File</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%9E-File-%E4%B8%8B%E8%BC%89"><span class="toc-text">從 File 下載</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-to-Image"><span class="toc-text">File to Image</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Image-to-Canvas"><span class="toc-text">Image to Canvas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Canvas-as-Base64"><span class="toc-text">Canvas as Base64</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-to-Base64"><span class="toc-text">File to Base64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-to-text"><span class="toc-text">File to text</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-to-binary"><span class="toc-text">File to binary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%BE%8C"><span class="toc-text">最後</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="設定-Nginx-在-https-中，留下一頁-http"><a class="header-anchor" href="#設定-Nginx-在-https-中，留下一頁-http">¶</a>設定 Nginx 在 https 中，留下一頁 http</h1>
-<div class="info">
-<p>在看之前，想問來看文章的讀者們 (厲害的開發者們) 瀏覽器是否會 catch 某一版本的設定？<br>
-設定 Web Server 時，修改並不會即時反映，需要每一次都開新的無痕才可以驗證正確的結果。</p>
-</div>
-<p>這個問題，有兩個地方要注意</p>
+    <style media="screen">
+  img {
+    width: 200px;
+    height: auto;
+  }
+  button {
+    display: block;
+  }
+
+  [id^=graphviz] {
+    width: 100%;
+    overflow: auto;
+  }
+</style>
+<h1 id="前端的-File-API"><a class="header-anchor" href="#前端的-File-API">¶</a>前端的 File API</h1>
+<p>這一次會將一些與檔案讀寫相關的 JavaScript 與 HTML 一起聊一聊。<br>
+而這次會用上的 HTML 都有一個共同的特性，那就是「它們本身代表內容」，但 <code>&lt;textarea&gt;</code> 除外</p>
+<p><strong>「HTML tag 本身代表內容」的特殊之處</strong></p>
+<p>無法使用偽元素。</p>
+<p>因為偽元素是用來修飾容器中的內容的頭尾，若 HTML tag 本身就是內容，就沒有「內容的頭尾」這件事。自然也就不會有偽元素。<br>
+所以這些 HTML tag 都會自我結尾。</p>
+<p><strong>前端 File API</strong></p>
+<p>有幾個要先知道的<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<ul>
+<li>File &amp; Blob: File 是一個有名字的 Blob</li>
+<li>FileList: 以 File 為元素的 List，但它並不是 Array</li>
+<li>FileReader: 用來讀取 File 的內容
+<ul>
+<li>分成同步和非同步，2 種方式</li>
+<li>可將檔案轉成四種資料
 <ol>
-<li>Web Server</li>
-<li>前端 router</li>
+<li>文字</li>
+<li>二進制陣列 (建議)</li>
+<li>二進制字串 (不建議)</li>
+<li>Data URL (blob url)</li>
 </ol>
-<div class="warning">
-<p>這個 Web Server 的設定，在有前端 router 時，要注意。<br>
-如果沒有重新整理的 route 都算是前端 route 的執行結果，與 web server 無關。</p>
-</div>
-<h2 id="最後的解法如下。"><a class="header-anchor" href="#最後的解法如下。">¶</a>最後的解法如下。</h2>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span> <span class="number">80</span> default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">80</span> default_server;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">root</span> /front_end/index/path;</span><br><span class="line">  <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 特定路徑之下，執行 http</span></span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^(/target/path)(.[^/]+)$</span> &#123;</span><br><span class="line">    <span class="attribute">try_files</span> /index.html =<span class="number">404</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 不符合特定路徑，通通導回 https</span></span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^(?!/target/path)(.*)$</span> &#123;</span><br><span class="line">    <span class="attribute">rewrite</span><span class="regexp"> ^(/.*)$</span> https://<span class="variable">$host</span>/<span class="variable">$1</span> <span class="literal">permanent</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="comment"># SSL configuration</span></span><br><span class="line">  <span class="attribute">listen</span> <span class="number">443</span> ssl default_server;</span><br><span class="line">  <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl default_server;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 憑證與金鑰的路徑</span></span><br><span class="line">  <span class="attribute">ssl_certificate</span> /nginx_path/ssl.crt;</span><br><span class="line">  <span class="attribute">ssl_certificate_key</span> /nginx_path/ssl.key;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Add index.php to the list if you are using PHP</span></span><br><span class="line">  <span class="attribute">root</span> /front_end/index/path;</span><br><span class="line">  <span class="attribute">index</span> index.html index.htm index.nginx-debian.html;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">server_name</span> _;</span><br><span class="line">  <span class="attribute">location</span> <span class="regexp">~ ^.*$</span> &#123;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html =<span class="number">404</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中最重要的有兩個地方。</p>
-<ul>
-<li>正規表示式 使用<a target="_blank" rel="noopener" href="https://regex101.com/">工具</a> 驗證寫出來的正規表示式。</li>
-<li>讀懂 nginx 的設定</li>
-</ul>
-<h2 id="正規表示式"><a class="header-anchor" href="#正規表示式">¶</a>正規表示式</h2>
-<p>設定檔幾個 regex</p>
-<p>基本</p>
-<table>
-<thead>
-<tr>
-<th>語法</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>^</code></td>
-<td>開頭處</td>
-</tr>
-<tr>
-<td><code>$</code></td>
-<td>結尾處</td>
-</tr>
-<tr>
-<td><code>.</code></td>
-<td>非斷行的任意字元</td>
-</tr>
-<tr>
-<td><code>/</code></td>
-<td>只是反斜線 (正規表示式為<code>\/</code> nginx 無需跳脫字元)</td>
-</tr>
-</tbody>
-</table>
-<p>邏輯</p>
-<table>
-<thead>
-<tr>
-<th>語法</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>^</code></td>
-<td>邏輯 not</td>
-</tr>
-<tr>
-<td><code>?!</code></td>
-<td>負向預查</td>
-</tr>
-</tbody>
-</table>
-<p>次數</p>
-<table>
-<thead>
-<tr>
-<th>語法</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>+</code></td>
-<td>匹配前面的子運算式一次或多次。</td>
-</tr>
-<tr>
-<td><code>*</code></td>
-<td>匹配前面的子運算式零次或多次。</td>
-</tr>
-</tbody>
-</table>
-<p>參考: <a target="_blank" rel="noopener" href="http://ccckmit.wikidot.com/regularexpression">正規表示式 Regular Expression</a></p>
-<ol>
-<li><code>^(/target/path)(.[^/]+)$</code><br>
-開頭是 <code>/target/path</code> 且要接「任意字元，任意長度，但不能包含<code>/</code>(階層) 」，就成立</li>
-<li><code>^(?!/target/path)(.+)$</code><br>
-開頭 條件不符合 <code>/target/path</code> 時，且要接「任意字元」，就成立</li>
-<li><code>^.*$</code><br>
-「任意字元」，就成立</li>
-</ol>
-<h2 id="設定檔的關鍵字"><a class="header-anchor" href="#設定檔的關鍵字">¶</a>設定檔的關鍵字<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
-<p>參考: <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location">Module ngx_http_core_module - nginx</a></p>
-<ul>
-<li>server
-<ul>
-<li>listen 指定監聽 socket (TCP) port</li>
-<li>root</li>
-<li>index</li>
-<li>location
-<ul>
-<li>return</li>
-<li>try_files</li>
-<li>rewrite</li>
-</ul>
 </li>
 </ul>
 </li>
+<li>URL: 用來將 File 使用在其它的 Web 環境中 (包含 DOM tree)</li>
 </ul>
-<h3 id="listen"><a class="header-anchor" href="#listen">¶</a>listen</h3>
-<p>能用在 server 內</p>
-<p>指定 IP:port</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span> <span class="number">192.168.1.1:80</span>;</span><br></pre></td></tr></table></figure>
-<p>指定 port (該主機的任意 IP)</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span> <span class="number">80</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="location"><a class="header-anchor" href="#location">¶</a>location<sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup></h3>
-<p>能用在 server 或 location 內<br>
-所有的 location 都會組成一棵樹</p>
-<p>語法:</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">location [ = | ~ | ~* | ^~ ] uri &#123; ... &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>=</code> URI 當字串匹配</li>
-<li><code>^~</code> URI 當字串，字串字首比對</li>
-<li><code>~</code> URI 當正規表示式匹配，區分大小寫</li>
-<li><code>~*</code> URI 當正規表示式匹配，不區分大小寫</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="http://seanlook.com/2015/05/17/nginx-location-rewrite/">nginx 配置 location 總結及 rewrite 規則寫法</a></p>
-<h3 id="try-files"><a class="header-anchor" href="#try-files">¶</a>try-files</h3>
-<p>能用在 server 或 location 內</p>
-<p>依次判斷檔案是否存在，並且回傳，都不存在則由 fallback 處理</p>
-<p>語法:<br>
-一種連續 if 判斷的指令</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">try_files</span> file1 [file2 file3 file4 ... fileN] fallback;</span><br></pre></td></tr></table></figure>
-<p>example</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /error.html =<span class="number">404</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="地圖"><a class="header-anchor" href="#地圖">¶</a>地圖</h2>
+<p>(圖有點大，左右可滑動)</p>
+<div id="graphviz-0"></div>
+<h2 id="從-FileList-取得-File"><a class="header-anchor" href="#從-FileList-取得-File">¶</a>從 FileList 取得 File</h2>
+<p>
+<form method="post" action="upload" name="myForm" enctype="multipart/form-data">
+<input type="file" name="myUploadFile" />
+</form>
+</p>
+<p>宣告一個讓瀏覽器讀取檔案的「通道」而 DOM tree 上的 <code>&lt;input type=&quot;file&quot; /&gt;</code> 其實是一個「檔案列表」的管理控制項</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;upload&quot;</span> <span class="attr">name</span>=<span class="string">&quot;myForm&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;myUploadFile&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>&lt;form&gt;</code> 使用 <code>name</code> 屬性，像是宣告一樣的直接在 <code>document</code> 裡產生 property</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inputFile = <span class="built_in">document</span>.myForm.myUploadFile; <span class="comment">// &lt;input type=&quot;file&quot; name=&quot;myUploadFile&quot; /&gt;</span></span><br><span class="line">inputFile.files; <span class="comment">// File List</span></span><br><span class="line">inputFile.files.item(<span class="number">0</span>); <span class="comment">// File of File List</span></span><br></pre></td></tr></table></figure>
+<h3 id="從-File-下載"><a class="header-anchor" href="#從-File-下載">¶</a>從 File 下載</h3>
+<p>
+<a id="downloadFileAnchor" href="##">download File</a>
+<button id="downloadFileButton" type="button" name="button">download File</button>
+</p>
+<p>利用 <code>&lt;a href=&quot;&quot; /&gt;</code> 將檔案轉成 blob url 放到 <code>href</code> 並且點擊，就可以完成下載 blob 檔案的功能。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;downloadFileButton&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">name</span>=<span class="string">&quot;button&quot;</span>&gt;</span>download File<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> downloadFileButton = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#downloadFileButton&quot;</span>);</span><br><span class="line">downloadFileButton.addEventListener(<span class="string">&quot;click&quot;</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> anchor = <span class="built_in">document</span>.createElement(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  anchor.href = uploadFile.getBlobUrl();</span><br><span class="line">  <span class="comment">// anchor.target = &#x27;_blank&#x27;;  // Chrome 測試，非必要</span></span><br><span class="line">  anchor.download = <span class="string">&quot;new_&quot;</span> + uploadFile.filename();</span><br><span class="line">  anchor.click();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>取得檔案的 blob url</li>
+<li>設定 <code>&lt;a href=&quot;&quot; /&gt;</code> 的 <code>href</code> 設定成 blob url</li>
+<li>觸發 click 事件。 (如果已使用 a 的 click 進行這一連串的動作，就不用再觸發一次 click)</li>
+</ol>
+<h2 id="File-to-Image"><a class="header-anchor" href="#File-to-Image">¶</a>File to Image</h2>
+<p>
+<button id="showImgButton" type="button" name="button">File to image</button>
+<img id="image" src="" alt="" />
+</p>
+<p>在想要做上傳圖片的預覽時，就需要將 <code>&lt;input type=&quot;file&quot; /&gt;</code> 的內容，放到 <code>&lt;img src=&quot;&quot; /&gt;</code> 裡。<br>
+那實際上是怎麼做到的呢？</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;image&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> inputFile = <span class="built_in">document</span>.myForm.myUploadFile; <span class="comment">// 要先有 &lt;input type=file /&gt;</span></span><br><span class="line"><span class="keyword">const</span> img = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#image&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> oneFile = inputFile.files.item(<span class="number">0</span>);</span><br><span class="line">blob_url = URL.createObjectURL(oneFile);</span><br><span class="line">img.src = blob_url;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>取出 File</li>
+<li>產生 Blob url</li>
+<li>img.src = Blob url</li>
+</ol>
+<h3 id="Image-to-Canvas"><a class="header-anchor" href="#Image-to-Canvas">¶</a>Image to Canvas</h3>
+<p><button id="showCanvasButton" type="button" name="button">img to canvas</button><br>
+<canvas id="canvas" width="200" height="10" /></p>
+<p>image 到 canvas 算是 canvas 的特別之處，不算是 File API 的內容。 (不過還是放上來了)<br>
+繪製到 canvas 之後，會改變 image 的大小。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;canvas&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;10&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> img = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#image&quot;</span>); <span class="comment">// 要先有 &lt;image /&gt;</span></span><br><span class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#canvas&quot;</span>);</span><br><span class="line">(canvas.width = img.width), (canvas.height = img.height);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">&quot;2d&quot;</span>);</span><br><span class="line">ctx.drawImage(img, <span class="number">0</span>, <span class="number">0</span>, img.width, img.height); <span class="comment">// 重新繪製大小</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>取得 image object (也可以用 <code>new Imgae()</code>)</li>
+<li>將 image object 丟進 canvas 的 <code>context.drawImage()</code> 第一個參數，就顯示畫面</li>
+</ol>
+<h3 id="Canvas-as-Base64"><a class="header-anchor" href="#Canvas-as-Base64">¶</a>Canvas as Base64</h3>
+<p><button id="showBase64Button" type="button" name="button">canvas to base64</button><br>
+<textarea id="base64" name="name" rows="8" cols="80"></textarea></p>
+<p><code>canvas.toDataURL()</code> 的輸出是一個至少還有 “data:” 的 <code>DataURL</code><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <blockquote>
-<p>$uri<br>
-The value of $uri may change during request processing, e.g. when doing internal redirects, or when using index files.</p>
+<p>DataURL 依照 MIME type 判斷輸出方式<br>
+如果是文字，就會輸出文字，不然就會給 Base64<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 </blockquote>
-<hr class="footnotes-sep">
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">&quot;base64&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;8&quot;</span> <span class="attr">cols</span>=<span class="string">&quot;80&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#canvas&quot;</span>); <span class="comment">// 要先有 &lt;canvas /&gt;</span></span><br><span class="line"><span class="comment">// const ctx = canvas.getContext(&#x27;2d&#x27;);</span></span><br><span class="line"><span class="comment">// ctx.drawImage(img, 0, 0, img.width, img.height);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> base64 = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#base64&quot;</span>);</span><br><span class="line">base64.value = canvas.toDataURL(<span class="string">&quot;image/jpeg&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="File-to-Base64"><a class="header-anchor" href="#File-to-Base64">¶</a>File to Base64</h2>
+<p>上述得到 Base64 的方式是要透過 File -&gt; Blob URL -&gt; <code>&lt;img&gt;</code> -&gt; <code>&lt;canvas&gt;</code> -&gt; Base64<br>
+可以直接得到 Base64 嗎？</p>
+<h2 id="File-to-text"><a class="header-anchor" href="#File-to-text">¶</a>File to text</h2>
+<p><button id="showTextButton" type="button" name="button">File as text</button><br>
+<textarea id="text" name="name" rows="8" cols="80"></textarea></p>
+<p>直接從 File 取得「文字檔案」的內容，要使用 FileReader 物件的 readAsText 方法，並且 binding 事件，在讀取結束時，取得檔案內容 (還可以取得其它的資訊)。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;8&quot;</span> <span class="attr">cols</span>=<span class="string">&quot;80&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> text = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#text&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  text.innerText = e.target.result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> inputFile = <span class="built_in">document</span>.myForm.myUploadFile;</span><br><span class="line"><span class="keyword">const</span> oneFile = inputFile.files.item(<span class="number">0</span>);</span><br><span class="line">blobUrl = URL.createObjectURL(oneFile);</span><br><span class="line">reader.readAsText(blobUrl, <span class="string">&quot;UTF-8&quot;</span>);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>宣告 FileReader 物件</li>
+<li>設定 onload 事件，用 <code>e.target.result</code> 取得內容</li>
+<li>取得 File 物件的 Blob url</li>
+<li>將 Blob url 放進 FileReader 物件的 <code>readAsText</code> method</li>
+</ol>
+<h2 id="File-to-binary"><a class="header-anchor" href="#File-to-binary">¶</a>File to binary</h2>
+<p><button id="showBinaryStringButton" type="button" name="button">File as binaryString</button><br>
+<textarea id="binaryString" name="name" rows="8" cols="80"></textarea></p>
+<p>直接從 File 取得「圖形檔案」的內容，要使用 FileReader 物件的 readAsArrayBuffer 方法，並且 binding 事件，在讀取結束時，取得檔案內容。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">&quot;binaryString&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;8&quot;</span> <span class="attr">cols</span>=<span class="string">&quot;80&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> binaryString = <span class="built_in">document</span>.querySelector(<span class="string">&quot;#binaryString&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  binaryString.innerText = <span class="built_in">JSON</span>.stringify(</span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(e.target.result).join(<span class="string">&quot;, &quot;</span>)</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> inputFile = <span class="built_in">document</span>.myForm.myUploadFile;</span><br><span class="line"><span class="keyword">const</span> oneFile = inputFile.files.item(<span class="number">0</span>);</span><br><span class="line">blobUrl = URL.createObjectURL(oneFile);</span><br><span class="line">reader.readAsArrayBuffer(blobUrl);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>宣告 FileReader 物件</li>
+<li>設定 onload 事件，用 <code>e.target.result</code> 取得內容</li>
+<li>圖形檔案的資料是 0~255 (8 bit 的大小)，所以用 <code>new Uint8Array</code> 將內容丟進去建構。<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
+<li>取得 File 物件的 Blob url</li>
+<li>將 Blob url 放進 FileReader 物件的 <code>readAsArrayBuffer</code> method</li>
+</ol>
+<h2 id="最後"><a class="header-anchor" href="#最後">¶</a>最後</h2>
+<p>程式碼會同步在 github 更新<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+<script src="https://dwatow.github.io/web-file-api/public/uploadFile.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/text.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/image.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/canvas.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/base64.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/binaryString.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/blodurl.js" charset="utf-8"></script>
+<script src="https://dwatow.github.io/web-file-api/public/main.js" charset="utf-8"></script>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><textarea id="graphviz-0-code" style="display: none">digraph {
+
+httpUrl [label="HTTP URL" shape=box]
+xhr [label="ajax"]
+
+inputFile [label="HTML input\n(type='file')" shape=box]
+files [label="FileList" color=darkorange]
+
+reader [label="FileReader" color=darkorange]
+Text [label="Text Data" shape=box]
+dataURI [label="DataURL\n(Base64)"]
+binaryString
+TypeArray [label="Type Array\n(ArrayBuffer)"]
+
+img [label="Image"]
+file [label="File\/Blob" color=darkorange]
+
+download [label="Download File" shape=box]
+blobUrl [label="Blob URL" color=darkorange]
+
+{rank=same;blobUrl reader}
+{rank=same;download Text}
+
+httpUrl->img [label="&lt;img src=http url /&gt;"]
+httpUrl->xhr->file [label="load: callback"]
+
+inputFile->files [label="files = input.files\n"]
+files->file [label="file = files.item(0)"]
+file->blobUrl [label="URL.createObjectURL(file)"]
+file->reader [label="reader.readAsArrayBuffer(blob)\nreader.readAsText(blob, 'UTF-8')\nreader.readAsDataURL(blob)"]
+
+img->canvas [label="ctx.drawImage(img)" color=Red]
+
+dataURI->img [label="&lt;img src='dataURI'&gt;"]
+dataURI->binaryString [label="字串處理"]
+binaryString->TypeArray [label="new Uint8Array(size)\neveryChar.charCodeAt(index)"]
+
+canvas [label="HTML Canvas"]
+canvas->dataURI [label="canvas.getDataURL()" color=Red]
+canvas->TypeArray [label="ctx.getImageData().data\n( Uint8ClampedArray)" color=Red]
+
+blobUrl->img [label="&lt;img src='blob url'&gt;"]
+blobUrl->download [label="&lt;a href='blob url'\n download='file name'/&gt;"]
+
+reader->Text [label="load: callback" color=Blue]
+reader->TypeArray [label="(readAsArrayBuffer)" color=Blue]
+reader->binaryString [label="不建議" color=Blue]
+reader->dataURI [label="load: callback" color=Blue]
+
+TypeArray->file [label="new Blob([uint8array], {type})"]
+TypeArray->dataURI [label="btoa(\nString.fromCharCode.apply(null, typeArray)\n)"]
+}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script><hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>《一手掌握短小精幹的 Nginx》, p.10-3 <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/FileAPI/">File API - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL#Return_value">HTMLCanvas​Element​.toDataURL() - MDN</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">Data URLs - MDN</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Typed_arrays#%E7%B7%A9%E8%A1%9D%E8%88%87%E8%A6%96%E5%9C%96%EF%BC%9A%E5%9E%8B%E5%88%A5%E9%99%A3%E5%88%97%E7%9A%84%E6%9E%B6%E6%A7%8B">Typed_arrays</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.github.com/dwatow/web-file-api/">File API Exercise</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -294,15 +352,11 @@ The value of $uri may change during request processing, e.g. when doing internal
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/nginx/">nginx</a> }
+  { <a href="/tags/JavaScript/">JavaScript</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/https/">https</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/http/">http</a> }
+  { <a href="/tags/file-api/">file api</a> }
   </li>
 
 
@@ -332,7 +386,7 @@ The value of $uri may change during request processing, e.g. when doing internal
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 16.62px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 42.77px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 19.23px;">Flex</a> <a href="/tags/HTML/" style="font-size: 21.85px;">HTML</a> <a href="/tags/Inline/" style="font-size: 19.23px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 37.54px;">JavaScript</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/Migration/" style="font-size: 14px;">Migration</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 19.23px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 16.62px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 24.46px;">Selector</a> <a href="/tags/Sequelize/" style="font-size: 24.46px;">Sequelize</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/Transition/" style="font-size: 16.62px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 29.69px;">angularjs</a> <a href="/tags/animation/" style="font-size: 19.23px;">animation</a> <a href="/tags/api/" style="font-size: 16.62px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 16.62px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 16.62px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/callback/" style="font-size: 16.62px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 19.23px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/codepen/" style="font-size: 14px;">codepen</a> <a href="/tags/component/" style="font-size: 16.62px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/define/" style="font-size: 14px;">define</a> <a href="/tags/display/" style="font-size: 16.62px;">display</a> <a href="/tags/docker/" style="font-size: 19.23px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 21.85px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 24.46px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 16.62px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 16.62px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 40.15px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 16.62px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jest/" style="font-size: 32.31px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 16.62px;">keyframes</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mac/" style="font-size: 14px;">mac</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown%E6%B8%AC%E8%A9%A6/" style="font-size: 16.62px;">markdown測試</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 14px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 16.62px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 32.31px;">nodejs</a> <a href="/tags/npm/" style="font-size: 19.23px;">npm</a> <a href="/tags/npm-require/" style="font-size: 14px;">npm-require</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 16.62px;">prettier</a> <a href="/tags/promise/" style="font-size: 16.62px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/sequelize/" style="font-size: 19.23px;">sequelize</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 16.62px;">unit testing</a> <a href="/tags/unpkg/" style="font-size: 14px;">unpkg</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 45.38px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 16.62px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 19.23px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 19.23px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 14px;">web camp</a> <a href="/tags/webpack/" style="font-size: 34.92px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 24.46px;">團隊溝通技巧</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 27.08px;">好想工作室</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 16.62px;">看書</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a>
+    <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/CRUD/" style="font-size: 16.43px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 43.14px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 18.86px;">Flex</a> <a href="/tags/HTML/" style="font-size: 21.29px;">HTML</a> <a href="/tags/Inline/" style="font-size: 18.86px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 35.86px;">JavaScript</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 18.86px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 16.43px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/Selector/" style="font-size: 23.71px;">Selector</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/Transition/" style="font-size: 16.43px;">Transition</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 31px;">angularjs</a> <a href="/tags/animation/" style="font-size: 18.86px;">animation</a> <a href="/tags/api/" style="font-size: 16.43px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 16.43px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 16.43px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/callback/" style="font-size: 16.43px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 18.86px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 16.43px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 16.43px;">display</a> <a href="/tags/docker/" style="font-size: 18.86px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 21.29px;">facebook</a> <a href="/tags/file-api/" style="font-size: 14px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 23.71px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 16.43px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 16.43px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 40.71px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 16.43px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/jest/" style="font-size: 33.43px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 16.43px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/markdown-it/" style="font-size: 14px;">markdown-it</a> <a href="/tags/markdown%E6%B8%AC%E8%A9%A6/" style="font-size: 16.43px;">markdown測試</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.43px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 16.43px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 33.43px;">nodejs</a> <a href="/tags/npm/" style="font-size: 18.86px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/prettier/" style="font-size: 16.43px;">prettier</a> <a href="/tags/promise/" style="font-size: 16.43px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/sequelize/" style="font-size: 28.57px;">sequelize</a> <a href="/tags/shell/" style="font-size: 18.86px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 16.43px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 45.57px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 16.43px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 18.86px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 18.86px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 18.86px;">web camp</a> <a href="/tags/webpack/" style="font-size: 38.29px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 23.71px;">團隊溝通技巧</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 26.14px;">好想工作室</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 16.43px;">看書</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a>
 
 
                 <footer>
