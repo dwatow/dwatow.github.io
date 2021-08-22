@@ -1,10 +1,10 @@
 ---
 title: Sequelize 資料讀取
 date: 2018-09-24 21:53:14
-tags: 
-- Sequelize
+tags:
+- sequelize
 - CRUD
-categories: 
+categories:
 - 技術心得
 ---
 

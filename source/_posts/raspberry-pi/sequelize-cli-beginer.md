@@ -3,8 +3,8 @@ title: Raspberry Pi 4 的後端修鍊 - sequelize-cli
 date: 2021-05-15 00:07:11
 tags:
 - "Raspberry Pi 4"
-- Sequelize
-- 後端
+- sequelize
+- migration
 categories:
 - 技術練習
 ---
