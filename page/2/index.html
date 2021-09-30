@@ -116,76 +116,202 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2020/11-25-angularjs/angularjs-migration-1-5/">https://dwatow.github.io/2020/11-25-angularjs/angularjs-migration-1-5/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2020/11-26-angularjs/understanding-components/">https://dwatow.github.io/2020/11-26-angularjs/understanding-components/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>AngularJS 遷移 controller 到 component</h1>
+        <h1>翻譯 Component - AngularJS 開發指南</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AngularJS-%E9%81%B7%E7%A7%BB-controller-%E5%88%B0-component"><span class="toc-text">AngularJS 遷移 controller 到 component</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%87-controller-%E6%94%B9%E5%AF%AB%E6%88%90-component"><span class="toc-text">將 controller 改寫成 component</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E6%95%B4%E7%90%86%E5%85%83%E4%BB%B6"><span class="toc-text">先整理元件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E6%95%B4%E7%90%86%E6%B2%92%E6%9C%89%E7%9B%B8%E4%BE%9D%E6%A8%A1%E7%B5%84%E7%9A%84-code"><span class="toc-text">先整理沒有相依模組的 code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E4%BE%9D%E8%A8%AD%E5%AE%9A"><span class="toc-text">相依設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B5%90%E8%AA%9E"><span class="toc-text">結語</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-Component-AngularJS-%E9%96%8B%E7%99%BC%E6%8C%87%E5%8D%97"><span class="toc-text">翻譯 Component - AngularJS 開發指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CONTENTS"><span class="toc-text">CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-and-configuring-a-Component"><span class="toc-text">Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-between-Directive-definition-and-Component-definition"><span class="toc-text">Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Component-based-application-architecture"><span class="toc-text">Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components-as-route-templates"><span class="toc-text">Components as route templates</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="AngularJS-遷移-controller-到-component"><a class="header-anchor" href="#AngularJS-遷移-controller-到-component">¶</a>AngularJS 遷移 controller 到 component</h1>
-<p><img src="https://i.imgur.com/64fbzVm.png" alt=""></p>
-<h2 id="將-controller-改寫成-component"><a class="header-anchor" href="#將-controller-改寫成-component">¶</a>將 controller 改寫成 component</h2>
-<p>這個改變，大約在 AngularJS 1.5 版出現。<br>
-也是前端框架的大變動時代。</p>
-<p>由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML/CSS/JS 打包成一包，放在任何網站都不會跑版。</p>
-<h3 id="先整理元件"><a class="header-anchor" href="#先整理元件">¶</a>先整理元件</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./src/</span><br><span class="line">├── route/</span><br><span class="line">│   └── index.js</span><br><span class="line">├── pages/</span><br><span class="line">│   └── map/</span><br><span class="line">│       ├── map.html</span><br><span class="line">│       ├── view.html</span><br><span class="line">│       └── advanced-search.html</span><br><span class="line">└── js/</span><br><span class="line">    └── map/</span><br><span class="line">        ├── map.js</span><br><span class="line">        ├── view.js</span><br><span class="line">        └── advanced-search.js</span><br></pre></td></tr></table></figure>
-<p><strong>html</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;div ng-show&#x3D;&quot;MCtrl...&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;</span><br><span class="line">  &lt;div ng-show&#x3D;&#39;!Ctrl.showAdvencedSearch&#39; class&#x3D;&quot;&quot;&gt;</span><br><span class="line">    &lt;!--  中間略  --&gt;</span><br><span class="line">    &lt;map-view&gt;&lt;&#x2F;map-view&gt;</span><br><span class="line">    &lt;advanced-search&gt;&lt;&#x2F;advanced-search&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
-<p>在 controller 寫法中最讓人覺得麻煩的，就是 不同層的 controller 會交疊在一起，在 html 上多層次的呈現，使用者互動是跨 controller 的。但是這也增加了維護上的困難，因為其實人在理解畫面時，並不是這樣的想法，而是現代前端框架使用的 component 的概念，AngularJS 也在後來的版本跟了這個寫法，今天就是要介紹要怎麼改寫成 component 的寫法。</p>
-<p><strong>javascript</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./view&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./advanced-search&#x27;</span>;</span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> app = angular.module(<span class="string">&quot;map&quot;</span>, [<span class="string">&quot;view&quot;</span>,<span class="string">&quot;advanced-search&quot;</span>]);</span><br><span class="line">  app.controller(<span class="string">&quot;mapController&quot;</span>, mapController);</span><br><span class="line">  mapController.$inject = [<span class="string">&quot;$scope&quot;</span>, <span class="string">&quot;authService&quot;</span>];</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">mapController</span>(<span class="params">$scope, authService</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 中間略</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>AngularJS 自帶「相依模組管理」，可以在前端做相依模組的設定，但是整個專案變成 webpack 時，就必須在後端做相依模組管理，這個必須在 AngularJS + ESM(或 CommonJS) 的做法重疊的情況，又該怎麼做呢？</p>
-<p><strong>route</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> ngRoute <span class="keyword">from</span> <span class="string">&#x27;angular-route&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&#x27;route&#x27;</span>, [ngRoute])</span><br><span class="line">  .config([<span class="string">&#x27;$routeProvider&#x27;</span>, <span class="string">&#x27;$locationProvider&#x27;</span>, <span class="function">(<span class="params">$routeProvider, $locationProvider</span>) =&gt;</span> &#123;</span><br><span class="line">  $locationProvider.hashPrefix(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  <span class="comment">//登入</span></span><br><span class="line">  $routeProvider</span><br><span class="line">  <span class="comment">// 中間略</span></span><br><span class="line">  .when(<span class="string">&#x27;/map&#x27;</span>, &#123; <span class="comment">//地圖顯示頁面</span></span><br><span class="line">    template: <span class="built_in">require</span>(<span class="string">&#x27;../pages/map/map.html&#x27;</span>),</span><br><span class="line">    controller: <span class="string">&#x27;mapController as Ctrl&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 中間略</span></span><br><span class="line">  .otherwise(&#123;</span><br><span class="line">    redirectTo: <span class="string">&#x27;/&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;])</span><br></pre></td></tr></table></figure>
-<h2 id="先整理沒有相依模組的-code"><a class="header-anchor" href="#先整理沒有相依模組的-code">¶</a>先整理沒有相依模組的 code</h2>
-<p>因為我們要做成 component 所以最後會將檔案整理在一起。<br>
-<strong>一次整理一組，不要一口氣做全部。</strong> 確保每一步都是正確的</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./src/</span><br><span class="line">└── components/</span><br><span class="line">    ├── map/</span><br><span class="line">    │   ├── index.html</span><br><span class="line">    │   └── index.js</span><br><span class="line">    ├── view/</span><br><span class="line">    │   ├── index.html</span><br><span class="line">    │   └── index.js</span><br><span class="line">    └── advanced-search/</span><br><span class="line">        ├── index.html</span><br><span class="line">        └── index.js</span><br></pre></td></tr></table></figure>
-<p><strong>javascript</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> template <span class="keyword">from</span> <span class="string">&#x27;./index.html&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&quot;map&quot;</span>, [])</span><br><span class="line">  .component(<span class="string">&#x27;map&#x27;</span>, &#123;</span><br><span class="line">    template,</span><br><span class="line">    controller,</span><br><span class="line">    controllerAs: <span class="string">&#x27;Ctrl&#x27;</span>,</span><br><span class="line">    bindings: &#123;</span><br><span class="line">      isShow: <span class="string">&#x27;&lt;&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).name;</span><br><span class="line"></span><br><span class="line">controller.$inject = [<span class="string">&quot;$scope&quot;</span>, <span class="string">&quot;authService&quot;</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">controller</span>(<span class="params">$scope, authService</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 中間略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol>
-<li>html 移到相同目錄，並用 ESM 引入成 template。(webpack 要安裝 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/html-loader">html-loader</a>)</li>
-<li>controller 內容不變，只有將命名改成 controller。</li>
-<li>將 <code>angular.module</code> 後面的宣告的 <code>controller</code> 改寫成 <code>component</code></li>
-</ol>
-<ul>
-<li>module 和 component 的名稱相同 (只是保持慣例，語法允許不同)。</li>
-<li>為了和原本的 template 相容要設定 <code>controllerAs: Ctrl</code></li>
-<li>為了隔離 scope ，無法在 template 使用 MCtrl ，要將它設定成傳入的變數 <code>isShow</code></li>
-</ul>
+    <h1 id="翻譯-Component-AngularJS-開發指南"><a class="header-anchor" href="#翻譯-Component-AngularJS-開發指南">¶</a>翻譯 Component - AngularJS 開發指南</h1>
+<p><a target="_blank" rel="noopener" href="https://docs.angularjs.org/guide/component">原文: AngularJS: Developer Guide: Components</a></p>
+<h2 id="CONTENTS"><a class="header-anchor" href="#CONTENTS">¶</a>CONTENTS</h2>
 <blockquote>
-<p>注意:<br>
-<code>angular.module(&quot;map&quot;, [])</code> 中 module method 的第二個參數，在沒有相依模組的情況之下，還是要給一個空陣列。</p>
+<p>Creating and configuring a Component<br>
+Comparison between Directive definition and Component definition<br>
+Component-based application architecture<br>
+Example of a component tree<br>
+Components as route templates<br>
+Intercomponent Communication<br>
+Unit-testing Component Controllers</p>
 </blockquote>
-<p><strong>html</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;div ng-show&#x3D;&quot;Ctrl.isShow&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;</span><br><span class="line">  &lt;div ng-show&#x3D;&#39;!Ctrl.showAdvencedSearch&#39; class&#x3D;&quot;&quot;&gt;</span><br><span class="line">    &lt;!--  中間略  --&gt;</span><br><span class="line">    &lt;map-view&gt;&lt;&#x2F;map-view&gt;</span><br><span class="line">    &lt;advanced-search&gt;&lt;&#x2F;advanced-search&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
-<p>由於目前是由 controller 控製渲染，所以要把 MCtrl 改成 Ctrl，並且將 <code>MCtrl...</code> 移到正確的位置。</p>
-<p><strong>route</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> ngRoute <span class="keyword">from</span> <span class="string">&#x27;angular-route&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&#x27;route&#x27;</span>, [ngRoute])</span><br><span class="line">  .config([<span class="string">&#x27;$routeProvider&#x27;</span>, <span class="string">&#x27;$locationProvider&#x27;</span>, <span class="function">(<span class="params">$routeProvider, $locationProvider</span>) =&gt;</span> &#123;</span><br><span class="line">  $locationProvider.hashPrefix(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  <span class="comment">//登入</span></span><br><span class="line">  $routeProvider</span><br><span class="line">  <span class="comment">// 中間略</span></span><br><span class="line">  .when(<span class="string">&#x27;/map&#x27;</span>, &#123; <span class="comment">//地圖顯示頁面</span></span><br><span class="line">    template: <span class="string">`&lt;map is-show=&quot;MCtrl...&quot;&gt;&lt;/map&gt;`</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 中間略</span></span><br><span class="line">  .otherwise(&#123;</span><br><span class="line">    redirectTo: <span class="string">&#x27;/&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;]).name;</span><br></pre></td></tr></table></figure>
-<p>因為此 component 會跟著 route 變化而使用，所以使用於 route<br>
-route 會變化相對應的 html 出來，讓 AngularJS 呼叫相對應註冊好的 component。<br>
-所以，在 route 中，呼叫 template 的名稱 <code>&lt;map is-show=&quot;MCtrl...&quot;&gt;&lt;/map&gt;</code> 要和 component 定義的一樣。<br>
-而 <code>MCtrl....</code> 在這一層將它的執行結果傳給 map 的 isShow。</p>
-<h2 id="相依設定"><a class="header-anchor" href="#相依設定">¶</a>相依設定</h2>
-<p>由於上述程式碼，要引入至根元件中。</p>
+<p>在 AngularJS, Component 是一種使用簡易組態 (config) 的 directive 。適合用在 component-base 應用的結構。</p>
+<p>更容易用類似 Web Component 或新的 AngularJS style 的架構製作網站。</p>
+<p>優點</p>
+<ul>
+<li>比 directives 更容易設定組態</li>
+<li>合理的預設值 &amp; 最佳實踐</li>
+<li>最佳化 components-base 架構</li>
+<li>components 的寫法更容易升級到 Angular</li>
+</ul>
+<p>不推薦理由</p>
+<ul>
+<li>編譯和 pre-link 執行操作的 directives</li>
+<li>使用 directive 的進階定義選項 像是 priority, terminal, multi-element</li>
+<li>要透過 attribute 或 css class 觸發 directive</li>
+</ul>
+<h2 id="Creating-and-configuring-a-Component"><a class="header-anchor" href="#Creating-and-configuring-a-Component">¶</a>Creating and configuring a Component</h2>
+<p>可以用 AngularJS module (由 <code>angular.module()</code> 回傳)的 <code>.component()</code> 註冊 Components<br>
+這個 method 有兩個 arguments</p>
+<ul>
+<li>Components 的名字</li>
+<li>組態物件 (注意，不像是 <code>.directive()</code> ，這個 method 沒有 factory 功能)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;hero-detail hero&#x3D;&quot;ctrl.hero&quot;&gt;&lt;&#x2F;hero-detail&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&#x27;heroApp&#x27;</span>)</span><br><span class="line">.component(<span class="string">&#x27;heroDetail&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">`&lt;span&gt;Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span&gt;`</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    hero: <span class="string">&#x27;=&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Comparison-between-Directive-definition-and-Component-definition"><a class="header-anchor" href="#Comparison-between-Directive-definition-and-Component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
+<p>比較 Component vs Directive</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Directive</th>
+<th>Component</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bindings</td>
+<td>無</td>
+<td>有 (binds controller)</td>
+</tr>
+<tr>
+<td>controller</td>
+<td>有</td>
+<td>有 (預設 <code>function () &#123;&#125;</code>)</td>
+</tr>
+<tr>
+<td>controllerAs</td>
+<td>有 (預設 <code>false</code>)</td>
+<td>有 (預設 <code>$ctrl</code> )</td>
+</tr>
+<tr>
+<td>require</td>
+<td>無</td>
+<td>有</td>
+</tr>
+<tr>
+<td>template</td>
+<td>有</td>
+<td>有, 可相依注入</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td>有</td>
+<td>有, 可相依注入</td>
+</tr>
+<tr>
+<td>transclude</td>
+<td>有(預設<code>false</code>)</td>
+<td>有(預設<code>false</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>bindToController</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>compile function</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>link functions</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>multiElement</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>priority</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>replace</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>restrict</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>templateNamespace</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>terminal</td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="Component-based-application-architecture"><a class="header-anchor" href="#Component-based-application-architecture">¶</a>Component-based application architecture</h2>
+<p>如前所述，component helper 有助於用簡單的 component-base 架構你的應用程式。但是 component helper 在建構一個 componet 時，還額外做了哪些事？</p>
+<ul>
+<li><strong>Components 只控制自己的 View 和 Data</strong><br>
+Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一般而言，AngularJS 可以透過強化 scope 和 watches 修改整個程式裡的任何資料。這很好用，但也導致修改應用程式的資料混亂不清的問題。這也是為什麼 component 使用 isolate scope，所以操作整個 scope 的類別是不可能的。</li>
+<li><strong>Components 有明確的對外 API - 輸入和輸出</strong><br>
+然而，scope 只隔離到這裡，因為 AngularJS 使用 two-way binidng。所以如果傳入一個物件進 component 像是 <code>bindings: &#123;item: '='&#125;</code> ，並且在 component 裡修改它的 property，修改會反射到 component 外層(原本那層)。對 components 來說，只有擁有 data 才可以修改它，更易於除錯。因此， components 要遵守一些簡單的約定:
+<ul>
+<li>輸入使用 <code>&lt;</code> (one-way) 和 <code>@</code> (string) bindings。<br>
+<code>&lt;</code> 從 1.5 版出現，不同於 <code>=</code> ，在 components scope 裡綁定屬性，不被 watched ，意思是你指定新的值在 component scope ，不會更新到外面這一層。<br>
+但請注意，內外 scope 參考的是相同的物件，所以如果在 component 裡改變了物件屬性或陣列元素，外層會反射出修改結果。原則上，永遠不要修改 component scope 裡的物件或陣列內容。<br>
+傳入字串可以使用 <code>@</code> ，尤其是不會改變這個值時。</li>
+<li>用 <code>&amp;</code> bindings 實現 Output 當作 components 的 callback。<br>
+反而不是操作 Input Data，component 呼叫正確的 Output Event 改變資料。以 deletion 來說，意思是 component 不刪除 hero 自己，但是用正確的 event 傳給 owner component ，用 hero 當變數。</li>
+</ul>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;</span><br><span class="line">&lt;button ng-click&#x3D;&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;&#x2F;button&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用這個方式，外層的 component 可以決定 event 回傳值回來之後，還要做什麼。</li>
+</ul>
+  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">editable-field</span> <span class="attr">on-delete</span>=<span class="string">&quot;$ctrl.deleteHero(&#123;hero&#125;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">editable-field</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 class</span></span><br><span class="line">deleteHero (result) &#123; <span class="comment">//result =&#123; hero &#125;</span></span><br><span class="line">  <span class="built_in">this</span>.$http.delete(...).then(<span class="function">() =&gt;</span> &#123;<span class="comment">/*...*/</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>Components 有明確的 lifecycle:<br>
+每一個 component 可以實作 lifecycle hooks。這些 methods 會在 component 生命週期中的特定時間點被呼叫。下列這些 hook methods 可以實作:
+<ul>
+<li><code>$onInit()</code> 完成 bindings 初始化時。在 directives 的 pre &amp; post linking 之前。<br>
+初始化你的 controller 的好地方</li>
+<li><code>$onChanges(changesObj)</code> 每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</li>
+<li><code>$doCheck()</code> 每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。</li>
+<li><code>$onDestroy()</code> 銷毀 controller 和它的 scope 時，用在釋放資源。</li>
+<li><code>$postLink()</code> controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></li>
+</ul>
+</li>
+</ul>
+<p>透過實作這些 method 你可以參與你的 component 的生命週期。</p>
+<ul>
+<li>應用程式是樹狀的 component:<br>
+理想情況，整個應用程式應該是一個實現明確定義的輸入和輸出的組件樹，並最小化雙向綁定。可以更容易地預測數據何時發生變化以及組件的狀態。</li>
+</ul>
+<h2 id="Components-as-route-templates"><a class="header-anchor" href="#Components-as-route-templates">¶</a>Components as route templates</h2>
+<p>Components 也可以用在 route 的 <code>template</code> (以 <code>ngRoute</code> 為例)。在 component-base 的應用程式 ，每一個 view 都是一個 component:</p>
+<p>當使用 <code>$routeProvider</code> ，你可以避免一些重複的寫法 (boilerplate)，透過解析 route 相依直接傳遞給 component。從 1.5 版開始，ngRoute 自動解析 route scope 指定給 <code>$resolve</code> (你也可以用 <code>resolveAs</code> 改變它)。當使用 component ，你可以利用此功能直接傳遞 component，無需另外指定 controller。</p>
+<p>換句話說(上面如果看不懂)，指的是透過 route 的 resolve 功能，可以直接給 component binding 的變數內容。</p>
+<p><strong>home.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> home = angular.module(<span class="string">&#x27;home&#x27;</span>).component(<span class="string">&#x27;home&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">&#x27;&lt;h1&gt;Home&lt;/h1&gt;&lt;p&gt;Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p&gt;&#x27;</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    user: <span class="string">&#x27;&lt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
+<p><strong>route.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> route = angular.module(<span class="string">&#x27;route&#x27;</span>, []).config(<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>) </span>&#123;</span><br><span class="line">  $routeProvider.when(<span class="string">&#x27;/&#x27;</span>, &#123;</span><br><span class="line">    template: <span class="string">&#x27;&lt;home user=&quot;$resolve.user&quot;&gt;&lt;/home&gt;&#x27;</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>) </span>&#123; <span class="keyword">return</span> $http.get(<span class="string">&#x27;...&#x27;</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
 <p><strong>main.js</strong></p>
-<p>原本的寫法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;@/route&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./js/v2/map/map.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line">angular.module(<span class="string">&#x27;MainApp&#x27;</span>, [</span><br><span class="line">  router,</span><br><span class="line">  <span class="string">&quot;map&quot;</span></span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<p>改寫成</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;angular&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;@/route&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> map <span class="keyword">from</span> <span class="string">&#x27;./component/map&#x27;</span>;</span><br><span class="line"></span><br><span class="line">angular.module(<span class="string">&#x27;MainApp&#x27;</span>, [</span><br><span class="line">  router,</span><br><span class="line">  map</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
-<p>引用時，會引入該 component 的名稱。相容於 AngularJS 的相依設定。<br>
-記得將舊的刪除，避免相同名稱重複註冊。</p>
-<h2 id="結語"><a class="header-anchor" href="#結語">¶</a>結語</h2>
-<p>這樣的改寫可以將 AngularJS 專案，更接近於現代前端框架的邏輯，在專案的遷移任務中，可以「修改更少，每一步更穩定」<br>
-在尚未移到新專案中，也可以先看看 scope 的切割是否適合遷移到新的框架中。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> route <span class="keyword">from</span> <span class="string">&#x27;./route.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> home <span class="keyword">from</span> <span class="string">&#x27;./home.js&#x27;</span></span><br><span class="line">angular.module(<span class="string">&#x27;myMod&#x27;</span>, [route, home])</span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -199,19 +325,15 @@ route 會變化相對應的 html 出來，讓 AngularJS 呼叫相對應註冊好
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
-  </li>
-
-  <li class="meta-text">
   { <a href="/tags/angularjs/">angularjs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/controller/">controller</a> }
+  { <a href="/tags/component/">component</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/component/">component</a> }
+  { <a href="/tags/angular1/">angular1</a> }
   </li>
 
 
