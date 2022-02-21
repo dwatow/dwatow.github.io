@@ -52,7 +52,8 @@
   const dusts = Array(Math.floor(totalDusts))
     .fill(0)
     .map(() => {
-      const z = getRandom(3, 7);
+      const z = getRandom(5, 25);
+      console.log(z);
       return {
         x: Math.random() * resizeWidth,
         y: Math.random() * resizeHeight,
@@ -116,7 +117,7 @@
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.filter = `blur(${Math.abs(dust.radius - 5) * 1.5}px)`;
+      ctx.filter = `blur(${Math.abs(dust.radius / 5 - 3)}px)`;
       ctx.arc(dust.x, dust.y, dust.radius, 0, 2 * Math.PI);
       ctx.fillStyle = "#fff";
       ctx.stroke();
