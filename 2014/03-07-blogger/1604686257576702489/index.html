@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶關於物件的「&#x3D;&#x3D;」運算子與提昇UX。 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;ux.html 移植時的最後更新日期: 2015-12-23T14:16:57.611+08:00 這不是要教你怎麼覆寫運算子，讓物件的得到適當的定義。而是要教你，如何告訴使用者，哪一個沒有比對結果。示範準備程式碼#include &lt;vector&gt;#in">
+<meta property="og:type" content="article">
+<meta property="og:title" content="關於物件的「&#x3D;&#x3D;」運算子與提昇UX。">
+<meta property="og:url" content="https://dwatow.github.io/2014/03-07-blogger/1604686257576702489/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶關於物件的「&#x3D;&#x3D;」運算子與提昇UX。 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;ux.html 移植時的最後更新日期: 2015-12-23T14:16:57.611+08:00 這不是要教你怎麼覆寫運算子，讓物件的得到適當的定義。而是要教你，如何告訴使用者，哪一個沒有比對結果。示範準備程式碼#include &lt;vector&gt;#in">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-03-06T19:43:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:36.489Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta name="twitter:card" content="summary">
+  <title>關於物件的「==」運算子與提昇UX。 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>關於物件的「==」運算子與提昇UX。</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%9C%E6%96%BC%E7%89%A9%E4%BB%B6%E7%9A%84%E3%80%8C-%E3%80%8D%E9%81%8B%E7%AE%97%E5%AD%90%E8%88%87%E6%8F%90%E6%98%87UX%E3%80%82"><span class="toc-text">關於物件的「&#x3D;&#x3D;」運算子與提昇UX。</span></a></li></ol>
+  </div>
+
+
+    <h1 id="關於物件的「-」運算子與提昇UX。"><a class="header-anchor" href="#關於物件的「-」運算子與提昇UX。">¶</a>關於物件的「==」運算子與提昇UX。</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/03/ux.html">https://darkblack01.blogspot.com/2014/03/ux.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.611+08:00</p>
+<p>這不是要教你怎麼覆寫<mark>運算子，讓物件的</mark>得到適當的定義。<br />而是要教你，如何告訴使用者，哪一個沒有比對結果。<br /><br />示範準備程式碼<br /><pre class="prettyprint"><code>#include &lt;vector&gt;<br />#include &lt;iterator&gt;<br />#include &lt;iostream&gt;<br /><br />class tObj<br />&#123;<br />    int m_condition[3];<br />public:<br />    void setCondition(const int&amp; Value1, const int&amp; Value2, const int&amp; Value3)<br />    &#123;<br />        m_condition[0] = Value1;<br />        m_condition[1] = Value2;<br />        m_condition[2] = Value3;<br />    &#125;<br />    const int getCondition(int index) const<br />    &#123;<br />        return m_condition[index];<br />    &#125;<br />    bool operator==(const tObj&amp; obj) const<br />    &#123;<br />        if ( (m_condition[0] == obj.m_condition[0]) &amp;&amp; <br />             (m_condition[1] == obj.m_condition[1]) &amp;&amp; <br />             (m_condition[2] == obj.m_condition[2]) )<br />            return true;<br />        else<br />            return false;<br />    &#125;<br />&#125;;<br /><br />void InitDB(tObj* o)<br />&#123;<br />    (o+0)-&gt;setCondition(4, 6, 8);<br />    (o+1)-&gt;setCondition(2, 6, 6);<br />    (o+2)-&gt;setCondition(2, 6, 6);<br />    (o+3)-&gt;setCondition(2, 6, 8);<br />    (o+4)-&gt;setCondition(2, 4, 8);<br />    (o+5)-&gt;setCondition(2, 4, 8);<br />    (o+6)-&gt;setCondition(2, 4, 8);<br />    (o+7)-&gt;setCondition(2, 4, 8);<br />    (o+8)-&gt;setCondition(2, 4, 8);<br />    (o+9)-&gt;setCondition(2, 4, 8);<br />&#125;<br /><br />void DBtoVector(tObj* o, std::vector&lt;tObj&gt;&amp; vo)<br />&#123;<br />    for (int i = 0; i &lt; 10; ++i)<br />        vo.push_back(<em>(o+i));<br />&#125;<br /><br />void displayMatch(std::vector&lt;tObj&gt; const&amp; matchSample)<br />&#123;<br />    for (std::vector&lt;tObj&gt;::const_iterator ims  = matchSample.begin();<br />                                           ims != matchSample.end(); ++ims)<br />        std::cout &lt;&lt; ims-&gt;getCondition(0) &lt;&lt; &quot;, &quot; <br />                  &lt;&lt; ims-&gt;getCondition(1) &lt;&lt; &quot;, &quot; <br />                  &lt;&lt; ims-&gt;getCondition(2) &lt;&lt; &quot;, &quot; &lt;&lt; std::endl;<br />&#125;<br /><br />void isMatch(const tObj&amp; x, std::vector&lt;tObj&gt;&amp; vo)<br />&#123;<br />    std::vector&lt;tObj&gt; matchSample;<br />    for (std::vector&lt;tObj&gt;::iterator it = vo.begin(); it != vo.end(); <ins>it)<br />        if (*it == x)  matchSample.push_back(*it);<br />    vo.clear();<br />    vo = matchSample;<br />&#125;<br /><br />int main(int argc, char const *argv[])<br />&#123;<br />    tObj o[10];           InitDB(o);<br />    std::vector&lt;tObj&gt; vo; DBtoVector(o, vo);<br />    tObj x;               x.setCondition(2, 4, 8);  //sample<br /><br />    isMatch(x, vo);    <br />    displayMatch(vo);<br /><br />    return 0;<br />&#125;</code></pre><br />一開始，C</ins>的書都會教我們，比對資料這件事覆寫operator==()然後，用vector + iterator + for就可以找出來想要的了！。<br />但是，為了使用者！你必須告訴他，如果比對資料輸入錯誤，那麼，又該怎麼寫，才可以告訴使用者「你的第幾個值寫錯了」呢？<br /><br />第一件事，就是刪掉operator==()先。真的！<br /><br />新增這一段程式碼<br /><pre class="prettyprint"><code>const bool partsMatch(const int&amp; index, std::vector&lt;tObj&gt;&amp; vo, const tObj&amp; x)<br />&#123;<br />    std::vector&lt;tObj&gt; matchSample;<br />    for (std::vector&lt;tObj&gt;::iterator it = vo.begin(); it != vo.end(); ++it)<br />        if (it-&gt;getCondition(index) == x.getCondition(index))<br />            matchSample.push_back(<em>it);<br /><br />    vo.clear();<br />    vo = matchSample;<br />    return (matchSample.size()) ? true : false;<br />&#125;</code></pre>修改這一段程式碼，將回傳值改成字串<br /><pre class="prettyprint"><code>std::string isMatch(const tObj&amp; x, std::vector&lt;tObj&gt;&amp; vo)<br />&#123;<br />    if (!partsMatch(0, vo, x))<br />        return “條件1 無符合項目”;<br />    else if (!partsMatch(1, vo, x))<br />        return “條件2 無符合項目”;<br />    else if (!partsMatch(2, vo, x))<br />        return “條件3 無符合項目”;<br />    else<br />        return “完全符合”;<br />&#125;</code></pre>主程式修改一下<br /><pre class="prettyprint"><code>int main(int argc, char const <em>argv[])<br />&#123;<br />    tObj o[10];           InitDB(o);<br />    std::vector&lt;tObj&gt; vo; DBtoVector(o, vo);<br />    tObj x;               x.setCondition(2, 6, 1);  //sample<br /><br />    std::cout &lt;&lt; isMatch(x, vo) &lt;&lt; std::endl;<br />    displayMatch(vo);<br /><br />    return 0;<br />&#125;</code></pre>最後變成這樣(全部的程式碼)<br /><pre class="prettyprint"><code>#include &lt;vector&gt;<br />#include &lt;iterator&gt;<br />#include &lt;iostream&gt;<br />#include &lt;string&gt;<br /><br />class tObj<br />&#123;<br />    int m_condition[3];<br />public:<br />    void setCondition(const int&amp; Value1, const int&amp; Value2, const int&amp; Value3)<br />    &#123;<br />        m_condition[0] = Value1;<br />        m_condition[1] = Value2;<br />        m_condition[2] = Value3;<br />    &#125;<br />    const int getCondition(int index) const<br />    &#123;<br />        return m_condition[index];<br />    &#125;<br />&#125;;<br /><br />void InitDB(tObj</em> o)<br />&#123;<br />    (o+0)-&gt;setCondition(4, 6, 8);<br />    (o+1)-&gt;setCondition(2, 6, 6);<br />    (o+2)-&gt;setCondition(2, 6, 6);<br />    (o+3)-&gt;setCondition(2, 6, 8);<br />    (o+4)-&gt;setCondition(2, 4, 8);<br />    (o+5)-&gt;setCondition(2, 4, 8);<br />    (o+6)-&gt;setCondition(2, 4, 8);<br />    (o+7)-&gt;setCondition(2, 4, 8);<br />    (o+8)-&gt;setCondition(2, 4, 8);<br />    (o+9)-&gt;setCondition(2, 4, 8);<br />&#125;<br /><br />void DBtoVector(tObj</em> o, std::vector&lt;tObj&gt;&amp; vo)<br />&#123;<br />    for (int i = 0; i &lt; 10; ++i)<br />        vo.push_back(</em>(o+i));<br />&#125;<br /><br />void displayMatch(std::vector&lt;tObj&gt; const&amp; matchSample)<br />&#123;<br />    for (std::vector&lt;tObj&gt;::const_iterator ims  = matchSample.begin();<br />                                           ims != matchSample.end(); ++ims)<br />        std::cout &lt;&lt; ims-&gt;getCondition(0) &lt;&lt; &quot;, &quot; <br />                  &lt;&lt; ims-&gt;getCondition(1) &lt;&lt; &quot;, &quot; <br />                  &lt;&lt; ims-&gt;getCondition(2) &lt;&lt; &quot;, &quot; &lt;&lt; std::endl;<br />&#125;<br /><br />const bool partsMatch(const int&amp; index, std::vector&lt;tObj&gt;&amp; vo, const tObj&amp; x)<br />&#123;<br />    std::vector&lt;tObj&gt; matchSample;<br />    for (std::vector&lt;tObj&gt;::iterator it = vo.begin(); it != vo.end(); ++it)<br />        if (it-&gt;getCondition(index) == x.getCondition(index))<br />            matchSample.push_back(*it);<br /><br />    vo.clear();<br />    vo = matchSample;<br />    return (matchSample.size()) ? true : false;<br />&#125;<br /><br />std::string isMatch(const tObj&amp; x, std::vector&lt;tObj&gt;&amp; vo)<br />&#123;<br />    if (!partsMatch(0, vo, x))<br />        return “條件1 無符合項目”;<br />    else if (!partsMatch(1, vo, x))<br />        return “條件2 無符合項目”;<br />    else if (!partsMatch(2, vo, x))<br />        return “條件3 無符合項目”;<br />    else<br />        return “完全符合”;<br />&#125;<br /><br />int main(int argc, char const *argv[])<br />&#123;<br />    tObj o[10];           InitDB(o);<br />    std::vector&lt;tObj&gt; vo; DBtoVector(o, vo);<br />    tObj x;               x.setCondition(2, 6, 1);  //sample<br /><br />    std::cout &lt;&lt; isMatch(x, vo) &lt;&lt; std::endl;<br />    displayMatch(vo);<br /><br />    return 0;<br />&#125;</code></pre>也許不是完全美的做法，但是，還不賴。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-03-06T19:43:00.001Z" itemprop="datePublished">
+              2014-03-07
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-15-blogger/3841271280424750554/">hello world之 在windows建立dll檔</a><div class="related-posts-item-abstract">¶hello world之 在windows建立dll檔
+原文連結: https://darkblack01.blogspot.com/2015/11/hello-wo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-06-blogger/5385954146016167597/">MARCO in C++ 愈用愈好用的地方</a><div class="related-posts-item-abstract">¶MARCO in C++ 愈用愈好用的地方
+原文連結: https://darkblack01.blogspot.com/2015/11/marco-in-c.htm</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-05-blogger/6199989196808138838/">C++之static member value怎麼初始化？</a><div class="related-posts-item-abstract">¶C++之static member value怎麼初始化？
+原文連結: https://darkblack01.blogspot.com/2015/11/cstati</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-08-blogger/1858588858575390221/">Sort of C++</a><div class="related-posts-item-abstract">¶Sort of C++
+原文連結: https://darkblack01.blogspot.com/2015/05/sort-of-c.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-07-blogger/289507120593125422/">有參數的衍生類別建構子，呼叫有參數的基礎類別建構子</a><div class="related-posts-item-abstract">¶有參數的衍生類別建構子，呼叫有參數的基礎類別建構子
+原文連結: https://darkblack01.blogspot.com/2015/05/blog-post.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-02-blogger/7434920743624182886/">pimpl完全的資訊隱藏</a><div class="related-posts-item-abstract">¶pimpl完全的資訊隱藏
+原文連結: https://darkblack01.blogspot.com/2015/03/pimpl.html
+移植時的最後更新日期: </div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

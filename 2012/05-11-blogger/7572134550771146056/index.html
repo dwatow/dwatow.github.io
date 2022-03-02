@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶CFont 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;05&#x2F;cfont.html 移植時的最後更新日期: 2012-05-22T09:54:50.158+08:00 &#x2F;&#x2F;建立字型的用法CreateFont(                  m_font.CreateFont(    int nHeight,                    1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CFont">
+<meta property="og:url" content="https://dwatow.github.io/2012/05-11-blogger/7572134550771146056/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶CFont 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;05&#x2F;cfont.html 移植時的最後更新日期: 2012-05-22T09:54:50.158+08:00 &#x2F;&#x2F;建立字型的用法CreateFont(                  m_font.CreateFont(    int nHeight,                    1">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2012-05-10T17:02:00.002Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:43.989Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta name="twitter:card" content="summary">
+  <title>CFont - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>CFont</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CFont"><span class="toc-text">CFont</span></a></li></ol>
+  </div>
+
+
+    <h1 id="CFont"><a class="header-anchor" href="#CFont">¶</a>CFont</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/05/cfont.html">https://darkblack01.blogspot.com/2012/05/cfont.html</a><br>
+移植時的最後更新日期: 2012-05-22T09:54:50.158+08:00</p>
+<p><b><span style="color: #999999;">//建立字型的用法</span></b><br />CreateFont(                  m_font.CreateFont(<br /><span style="white-space: pre;">    int nHeight,                    </span>18,                    <span style="color: #999999;">//指定想要的高度（邏輯單位）的字體。</span><br /><span style="white-space: pre;">    int nWidth,                      </span>0,                     <span style="color: #999999;">//指定平均寬度（邏輯單位）中的字符的字體。</span><br /><span style="white-space: pre;">    int nEscapement,              </span>0,                     <span style="color: #999999;">//指定角度（以0.1度為單位），旋轉刻度向量與x軸的夾角。</span><br /><span style="white-space: pre;">    int nOrientation,               </span>0,                     <span style="color: #999999;">//指定角度（以0.1度為單位）之間的字符基線和X軸。</span><br /><span style="white-space: pre;">    int nWeight,                     </span>FW_REGULAR,            <span style="color: #999999;">//指定字體的粗細（以像素為單位，每簽訂1000）。</span><br /><span style="white-space: pre;">    BYTE bItalic,                    </span>FALSE,                 <span style="color: #999999;">//指定字體是否</span><span style="color: #999999;">加</span><span style="color: #999999;">斜體。</span><br /><span style="white-space: pre;">    BYTE bUnderline,              </span>FALSE,                 <span style="color: #999999;">//指定字體是否</span><span style="color: #999999;">加</span><span style="color: #999999;">下劃線。</span><br /><span style="white-space: pre;">    BYTE cStrikeOut,              </span>FALSE,                 <span style="color: #999999;">//指定字體是否加刪除線。</span><br /><span style="white-space: pre;">    BYTE nCharSet,               </span>SYMBOL_CHARSET,        <span style="color: #999999;">//指定字集（符號、西歐、BIG5之類的）</span><br /><span style="white-space: pre;">    BYTE nOutPrecision,          </span>OUT_DEFAULT_PRECIS,    <span style="color: #999999;">//指定所需的輸出精度。</span><br /><span style="white-space: pre;">    BYTE nClipPrecision,          </span>CLIP_DEFAULT_PRECIS,   <span style="color: #999999;">//指定所需的剪切精度。 剪輯精度定義了如何剪輯字符的剪輯區域以外的部分。</span><br /><span style="white-space: pre;">    BYTE nQuality,                 </span>DEFAULT_QUALITY,       <span style="color: #999999;">//指定字體的輸出質量，它定義如何精心的GDI必須嘗試匹配邏輯字體屬性的一個實際的物理字體。</span><br /><span style="white-space: pre;">    BYTE nPitchAndFamily,      </span>FIXED_PITCH,           <span style="color: #999999;">//指定的字距和群組（Family）的字體。</span><br /><span style="white-space: pre;">    LPCTSTR lpszFacename      </span>“Webdings”);           <span style="color: #999999;">//一個 CString的 或指針為空結束的字符串，指定字體名稱的字體。</span><br /><br /><a name='more'></a><br /><br /><span style="color: #999999;"><b>//幫Buttom設定字型</b></span><br />    pBtmOK-&gt;SetFont(&amp;m_font);  //╳<br />    pBtmMax-&gt;SetFont(&amp;m_font); //□<br /><br /><br /><b><span style="font-size: large;">在View使用Font要注意的流程</span></b><br /><br /><span style="color: #999999;">//宣告DC</span><br /><span style="color: #999999;">//宣告字型</span><br /><span style="color: #999999;">    //創建字型</span><br /><span style="color: #999999;">//宣告暫存現有字型指標的記憶體位址</span><br /><span style="color: #999999;">    //設定字型進入DC</span><br /><span style="color: #999999;">    //定義暫存字型指標的記憶體位址</span><br /><span style="color: #999999;">//顯示字</span><br /><span style="color: #999999;">//恢復設定暫存字型進入DC</span><br /><span style="color: #999999;">//清除字型設定</span><br /><br />BOOL bFont = FALSE;<br />CFont aFont;<br />CFont * p01dFont;<br />UINT nTxtSz(16);<br />CSize TextSize(nTxtSz, nTxtSz);<br /><br />bFont = aFont.CreateFont(<a target="_blank" rel="noopener" href="http://TextSize.cx">TextSize.cx</a>, 0, 0, 0, FW_NORMAL, 0, 0, 0, 0, 0, 0, 0, DEFAULT_PITCH|FF_MODERN, “Verdana”);<br />if(bFont)<br />{<br /><span style="white-space: pre;">    </span>p01dFont = pDC-&gt;SelectObject(&amp;aFont);  //設定新的時，會把目前的（舊的）給回傳出來<br /><span style="white-space: pre;">    </span>aFont.DeleteObject();                 //砍掉剛設定的（新的）字型<br />}<br />pDC-&gt;TextOut(ptO.x + <a target="_blank" rel="noopener" href="http://szSpace.cx">szSpace.cx</a> + cellwidth, ptO.y + <a target="_blank" rel="noopener" href="http://szSpace.cy">szSpace.cy</a>, “10040406-A0C1BB2800004”);<br />if (bFont)<br />{<br /><span style="white-space: pre;">    </span>pDC-&gt;SelectObject(p01dFont); //設定回原本的（舊的），回傳剛用過的<br /><span style="white-space: pre;">    </span>bFont = FALSE;<br />}<br /><br /><b><span style="font-size: large;">LOGFONT</span></b><br /><span style="color: #999999;">typedef struct tagLOGFONT {</span><br /><span style="color: #999999;">    LONG lfHeight;                     </span><br /><span style="color: #999999;">    LONG lfWidth;</span><br /><span style="color: #999999;">    LONG lfEscapement;</span><br /><span style="color: #999999;">    LONG lfOrientation;</span><br /><span style="color: #999999;">    LONG lfWeight;</span><br /><span style="color: #999999;">    BYTE lfItalic;</span><br /><span style="color: #999999;">    BYTE lfUnderline;</span><br /><span style="color: #999999;">    BYTE lfStrikeOut;</span><br /><span style="color: #999999;">    BYTE lfCharSet;</span><br /><span style="color: #999999;">    BYTE lfOutPrecision;</span><br /><span style="color: #999999;">    BYTE lfClipPrecision;</span><br /><span style="color: #999999;">    BYTE lfQuality;</span><br /><span style="color: #999999;">    BYTE lfPitchAndFamily;</span><br /><span style="color: #999999;">    TCHAR lfFaceName[LF_FACESIZE];</span><br /><span style="color: #999999;">} LOGFONT, <em>PLOGFONT;</span><br /><br /><span style="font-size: large;"><b>example code:</b></span><br /><br /><span style="color: #999999;">void CExoView::OnDraw(CDC</em> pDC)</span><br /><span style="color: #999999;">{</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>CFont font;</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LOGFONT LogFont;</span><br /><span style="color: #999999;"><br /></span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LogFont.lfStrikeOut = 0;</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LogFont.lfUnderline = 0;</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LogFont.lfHeight = 42;</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LogFont.lfEscapement = 0;</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>LogFont.lfItalic = TRUE;</span><br /><span style="color: #999999;"><br /></span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>font.CreateFontIndirect(&amp;LogFont);</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>CFont *pFont = pDC-&gt;SelectObject(&amp;font);</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>pDC-&gt;TextOut(20, 18, “James Kolowski”, 14);</span><br /><span style="color: #999999;"><br /></span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>pDC-&gt;SelectObject(pFont);</span><br /><span style="color: #999999;"><span class="Apple-tab-span" style="white-space: pre;"> </span>font.DeleteObject();</span><br /><span style="color: #999999;">}</span><br />參考：<a target="_blank" rel="noopener" href="http://www.ucancode.net/faq/CreateFont.htm">http://www.ucancode.net/faq/CreateFont.htm</a><br /><br /></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2012-05-10T17:02:00.002Z" itemprop="datePublished">
+              2012-05-11
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/06-04-blogger/6291301506449055890/">不知道怎麼跑出來的Executable for debug session Dialog</a><div class="related-posts-item-abstract">¶不知道怎麼跑出來的Executable for debug session Dialog
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-29-blogger/859847402283061114/">用MFC的手操作「真．Excel」</a><div class="related-posts-item-abstract">¶用MFC的手操作「真．Excel」
+原文連結: https://darkblack01.blogspot.com/2013/05/mfcexcel.html
+移植時的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-25-blogger/4411410962580455823/">CString中找關鍵字的技巧</a><div class="related-posts-item-abstract">¶CString中找關鍵字的技巧
+原文連結: https://darkblack01.blogspot.com/2013/04/mfc.html
+移植時的最後更新日期:</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-26-blogger/4414593751492371160/">Circle::Animation();的做法</a><div class="related-posts-item-abstract">¶Circle::Animation();的做法
+原文連結: https://darkblack01.blogspot.com/2013/02/circleanimat</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-21-blogger/3027518806235511842/">那一年滴掉的bug//物件的值莫名奇妙被改掉</a><div class="related-posts-item-abstract">¶那一年滴掉的bug//物件的值莫名奇妙被改掉
+原文連結: https://darkblack01.blogspot.com/2013/02/blog-post_21.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-25-blogger/3428760854992959398/">檔案處理API</a><div class="related-posts-item-abstract">¶檔案處理API
+原文連結: https://darkblack01.blogspot.com/2012/09/api.html
+移植時的最後更新日期: 2012-09</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

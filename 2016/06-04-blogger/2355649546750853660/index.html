@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Django View 小筆記 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;06&#x2F;django-view.html 移植時的最後更新日期: 2016-06-04T13:52:59.294+08:00 這個做法是把loading放在template，弱化了url, view的code.算是把重心放到前端上的技巧。在此使用的Model如下Modelclas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django View 小筆記">
+<meta property="og:url" content="https://dwatow.github.io/2016/06-04-blogger/2355649546750853660/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Django View 小筆記 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;06&#x2F;django-view.html 移植時的最後更新日期: 2016-06-04T13:52:59.294+08:00 這個做法是把loading放在template，弱化了url, view的code.算是把重心放到前端上的技巧。在此使用的Model如下Modelclas">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2016-06-03T21:50:00.003Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:37.391Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Django">
+<meta name="twitter:card" content="summary">
+  <title>Django View 小筆記 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Django View 小筆記</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Django-View-%E5%B0%8F%E7%AD%86%E8%A8%98"><span class="toc-text">Django View 小筆記</span></a></li></ol>
+  </div>
+
+
+    <h1 id="Django-View-小筆記"><a class="header-anchor" href="#Django-View-小筆記">¶</a>Django View 小筆記</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/06/django-view.html">https://darkblack01.blogspot.com/2016/06/django-view.html</a><br>
+移植時的最後更新日期: 2016-06-04T13:52:59.294+08:00</p>
+<p><br />這個做法是把loading放在template，弱化了url, view的code.<br />算是把重心放到前端上的技巧。<br /><br />在此使用的Model如下<br />Model<br /><pre class="prettyprint"><code class="language-python">class TestObj(models.Model):<br />    name = models.CharField(max_length=10)<br />    create_datetime = models.DateTimeField()<br /><br />    def <strong>str</strong>(self):<br />        return “%s, %s” % (<a target="_blank" rel="noopener" href="http://self.name">self.name</a>, self.create_datetime.date())<br /></code></pre><br /><br />Url<br />url有一個變數稱為pk, pk是primay key的縮寫, 在此要填的是主key的值。<br /><pre class="prettyprint"><code class="language-python">from django.conf.urls import url<br />from . import views<br /><br /><br />urlpatterns = [<br /> #…<br />    #test View<br />    url(r’^test/(?P<pk>[0-9]+)/$’, views.TestObjView.as_view(), name=‘test’),<br />]<br /></code></pre><br />View<br /><br />view有兩種，一個是取model物件的DetailView，一個是取QuerySet的ListView<br /><br />ListView<br />template_name 預設值為&lt;app name&gt;/&lt;template name&gt;_list.html<br /><pre class="prettyprint"><code class="language-python"># -<em>- coding: utf-8 -</em>-<br />from . import models<br />from django.views import generic<br /><br />class TestObjView(generic.ListView):<br />    model = models.TestObj<br /> #template_name = ‘testobj.html’ #可自行手動指定<br /></code></pre><br />DetailView<br />template_name 預設值為&lt;app name&gt;/&lt;template name&gt;_detail.html<br />另一個是ListView, 顯示QuerySet的結果。<br />預設Query完的變數名稱: &lt;model name&gt;_list<br /><pre class="prettyprint"><code class="language-python"># -<em>- coding: utf-8 -</em>-<br />class TestObjView(generic.ListView):<br />    model = models.TestObj<br /> #template_name = ‘testobj.html’ #可自行手動指定<br /></code></pre><br />TEMPLATE<br />依你設定的View來決定template的命名。<br /><br />必須要先接list裡的物件出來<br />在此示範使用預設檔名 testobj_list.html<br /><pre class="prettyprint"><code class="language-html">&#123;% for testobj in testobj_list %&#125;<br /> &#123;&#123;testobj.name&#125;&#125;<br />&#123;% empty %&#125;<br />無資訊<br/><br />&#123;% endfor %&#125;<br /></code></pre><br />直接取屬性出來顯示<br />在此示範使用預設檔名 testobj_detail.html<br /><pre class="prettyprint"><code class="language-html">&#123;&#123;testobj.name&#125;&#125;<br /></code></pre></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2016-06-03T21:50:00.003Z" itemprop="datePublished">
+              2016-06-04
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Django/">Django</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2016/03-10-blogger/435034175224202115/">Django之Model的CRUD操作</a><div class="related-posts-item-abstract">¶Django之Model的CRUD操作
+原文連結: https://darkblack01.blogspot.com/2016/03/djangomodelcrud.</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

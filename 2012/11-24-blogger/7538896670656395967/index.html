@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶重構CH1&#x2F;&#x2F;未重構原始碼 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;11&#x2F;blog-post_24.html 移植時的最後更新日期: 2012-11-24T20:25:06.094+08:00 重構是什麼？《重構》的第一章表演了一段「什麼是重構？」在這，把程式碼弄成C++，同義的表演抄一次。程式規格：影片出租店用的程式計算每一位顧客的消費金額並列印">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重構CH1&#x2F;&#x2F;未重構原始碼">
+<meta property="og:url" content="https://dwatow.github.io/2012/11-24-blogger/7538896670656395967/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶重構CH1&#x2F;&#x2F;未重構原始碼 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;11&#x2F;blog-post_24.html 移植時的最後更新日期: 2012-11-24T20:25:06.094+08:00 重構是什麼？《重構》的第一章表演了一段「什麼是重構？」在這，把程式碼弄成C++，同義的表演抄一次。程式規格：影片出租店用的程式計算每一位顧客的消費金額並列印">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2012-11-24T00:43:00.002Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:43.973Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="重構">
+<meta name="twitter:card" content="summary">
+  <title>重構CH1//未重構原始碼 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>重構CH1//未重構原始碼</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E6%A7%8BCH1-%E6%9C%AA%E9%87%8D%E6%A7%8B%E5%8E%9F%E5%A7%8B%E7%A2%BC"><span class="toc-text">重構CH1&#x2F;&#x2F;未重構原始碼</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">原本的程式碼</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="重構CH1-未重構原始碼"><a class="header-anchor" href="#重構CH1-未重構原始碼">¶</a>重構CH1//未重構原始碼</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/11/blog-post_24.html">https://darkblack01.blogspot.com/2012/11/blog-post_24.html</a><br>
+移植時的最後更新日期: 2012-11-24T20:25:06.094+08:00</p>
+<p>重構是什麼？<br /><div>《重構》的第一章表演了一段「什麼是重構？」</div><div>在這，把程式碼弄成C++，同義的表演<strike>抄</strike>一次。</div><div><br /></div><div><b>程式規格：</b></div><div><br /><ul><li>影片出租店用的程式<br />計算每一位顧客的消費金額並列印報表（statment）</li><li><b>操作者告訴程式</b>    顧客租了哪些影片？<br />    租期多長？<br />程式便計算出費用</li><li><b>影片分為三類</b>普通片、兒童片、新片</li><li>除了計算費用，還要<b>為常客計算點數</b>依照「是否為新片」而所有不同</li></ul></div><div><br /><h2><span style="font-size: large;">原本的程式碼<a name='more'></a></span></h2>第一個類別<br /><pre class="prettyprint"><code>#include&lt;string&gt;<br /><br />class Movie<br />&#123;<br />        std::string _title;   //名稱<br />        int _priceCode;       //價格（代號）<br />    public:<br />        static int CHILDERNS = 2;<br />        static int REGULAR = 0;<br />        static int NEW_RELEASE = 1;<br /><br />        Moive(String title, int priceCode);<br />        int  getPriceCode();<br />        void setPriceCode(int arg);<br />        String getTitle();<br />&#125;;<br /><br />inline Movie::Moive(String title, int priceCode)<br />&#123;<br />    _title = title;<br />    _priceCode = priceCode;<br />&#125;<br /><br />inline int Movie::getPriceCode()<br />&#123;<br />    return  _priceCode;<br />&#125;<br /><br />inline String Movie::getTitle()<br />&#123;<br />    return _title;<br />&#125;<br /><br />inline void Movie::setPriceCode()<br />&#123;<br />    _priceCode = arg;<br />&#125;</code></pre></div><br /><br />第二個類別<br /><pre class="prettyprint"><code>#include &quot;CMovie.h&quot;<br /><br />class Rental<br />&#123;<br />    Movie _movie;     //影片<br />    int _dayRented;   //租期<br /><br />    public:<br />        Rental(Movie movie, int dayRented);<br />        int getDaysRented();<br />        Movie getMovie();<br />&#125;;<br /><br />inline Rental::Rental(Movie movie, int dayRented)<br />&#123;<br />    _movie = movie;<br />    _dayRented = daysRented;<br />&#125;<br /><br />inline int Rental::getDaysRented()<br />&#123;<br />    return _dayRented;<br />&#125;<br /><br />inline Movie Rental::getMovie()<br />&#123;<br />    return _movie;<br />&#125;<br /><br /></code></pre><br /><br />第三個類別<br /><pre class="prettyprint"><code>#include &lt;string&gt;<br />#include &lt;vector&gt;<br />#include &quot;CRental.h&quot;<br /><br />class Customer<br />&#123;<br />    std::string _name;      //姓名<br />    std::vector<rental> _rentals;   //租借<br /><br />    public:<br />        Customer(std::string name);<br />        void addRental(Rental arg);<br />        std::string getName();<br />        //接續下一頁<br />        std::string statement();<br />&#125;;<br /><br />inline Customer::Customer(std::string name)<br />&#123;<br />    _name = name;<br />&#125;<br /><br />inline void Customer::addRental(Rental arg)<br />&#123;<br />    _rentals.push_back(arg);<br />&#125;<br /><br />inline std::string Customer::getName()<br />&#123;<br />    return _name;<br />&#125;<br /><br />inline std::string Customer::statement()<br />&#123;<br />    double totalAmount = 0;       //消費總金額<br />    int frequentReterPoints = 0;  //常客積點<br />    std::vector<rental>::const_iterator rentals = _rentals.begin();<br />    std::string result = &quot;Rental Record for &quot; + getName() + “\n”;<br /><br />    while(retals.hasMoreElements())<br />    &#123;<br />        double thisAmount = 0;<br />        Rental each = (Rental)rentals.next();  //取得一筆租借記錄<br /><br />        //determine amounts for each line<br />        switch(each.getMovie().getPriceCode())  //取得影片出租價格<br />        &#123;<br />        case Movie.REGULAR:<br />            thisAmount += 2;<br />            if (each.getDayRented() &gt; 2)<br />                thisAmount += (each.getDayRented()-2)*1.5;<br />            break;<br /><br />        case Movie.NEW_RELEASE:<br />            thisAmount += each.getDayRented()*3;<br />            break;<br /><br />        case Movie.CHILDRENS:<br />            thisAmount += 1.5;<br />            if (each.getDayRented() &gt; 3)<br />                thisAmount += (each.getDayRented()-3)*1.5;<br />            break;<br />        &#125;<br /><br />        //add frequent renter points(累加 常客積點)<br />        frequentReterPoints++;<br /><br />        //add bonus for a two day new release rental<br />        if ((each.getMovie().getPriceCode() == Movie.NEW.RELEASE) &amp;&amp; each.getDayRented() &gt; 1))<br />            frequentReterPoints++;<br /><br />        //show figures for this rental (顯示這筆租借資料）<br />        result += “\t” + each.getMovie().getTitle() + “\t” + std::string.valueOf(thisAmount) + “\n”;<br />        totalAmount += thisAmount;<br />    &#125;<br /><br />    //add footer lines（結尾列印）<br />    result += &quot;Amount owed is &quot; + std::string.valueOf(totalAmount) + “\n”;<br />    rental += “You earned &quot; + std::string.valueOf(frequentReterPoints) + &quot; frequent renter points”;<br /><br />    return result;<br />&#125;</rental></rental></code></pre><br /><br /><b>理性：</b><br />差的系統→很難找到修改點→很難修改<br />程式設計師很容易犯錯→引入bug<br /><br /><b>感性：</b><br />不好看，不美的程式<br /><br /><b>評價：</b><br />設計得不好，不符合物件導向的精神<br />Quick and dirty（快速而隨性）<br />Customer::statement()做的事，應該是由其它class完成的<br /><br /><b>接下來</b><br />使用者希望對系統做一些修改<br />希望以html的格式列印報表，直接在網頁上顯示，符合潮流<br /><br />困難點<br />根本不可能reuse目前statement()的任何行為<br />唯一能做的就是做一個htmlStatement()，copy-past statement()的內容再修改<br />若再修改，不就？？<br /><br /><b>接下來</b><br />使用者希望改變影片分類規則，但是還沒決定怎麼改<br />設想的方案中，都會影響顧客消費和常客積點的計算方式。<br /><br /><br />所以，我們需要開始重構（待續…）</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2012-11-24T00:43:00.002Z" itemprop="datePublished">
+              2012-11-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/%E9%87%8D%E6%A7%8B/">重構</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2012/12-01-blogger/2759435326445359589/">重構CH1//重構第二步</a><div class="related-posts-item-abstract">¶重構CH1//重構第二步
+原文連結: https://darkblack01.blogspot.com/2012/12/ch1.html
+移植時的最後更新日期: 20</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/11-24-blogger/2977687592875690046/">重構CH1//重構第一步</a><div class="related-posts-item-abstract">¶重構CH1//重構第一步
+原文連結: https://darkblack01.blogspot.com/2012/11/ch1.html
+移植時的最後更新日期: 20</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

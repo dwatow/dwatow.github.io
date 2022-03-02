@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Git的簡單統計 用指令 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;08&#x2F;git.html 移植時的最後更新日期: 2014-08-28T13:50:39.308+08:00 之前有介紹使用GitStats的工具來統計Git的log。它會像Github一樣給你這個專案從頭到目前的各式各樣統計結果。非常的好玩，而且不管是安裝還是使用上也相當簡單。不過！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git的簡單統計 用指令">
+<meta property="og:url" content="https://dwatow.github.io/2014/08-28-blogger/4448653085723728368/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Git的簡單統計 用指令 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;08&#x2F;git.html 移植時的最後更新日期: 2014-08-28T13:50:39.308+08:00 之前有介紹使用GitStats的工具來統計Git的log。它會像Github一樣給你這個專案從頭到目前的各式各樣統計結果。非常的好玩，而且不管是安裝還是使用上也相當簡單。不過！">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-08-27T21:48:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:40.334Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+  <title>Git的簡單統計 用指令 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Git的簡單統計 用指令</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E7%9A%84%E7%B0%A1%E5%96%AE%E7%B5%B1%E8%A8%88-%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-text">Git的簡單統計 用指令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第一招</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">顯示的結果如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">在Bash下指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">參數說明</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">限制時間區間</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第二招[2]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">顯示的結果如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">在Bash下指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">參數說明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第三招[2]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">顯示結果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">在Bash下指令(超長的)</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Git的簡單統計-用指令"><a class="header-anchor" href="#Git的簡單統計-用指令">¶</a>Git的簡單統計 用指令</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/08/git.html">https://darkblack01.blogspot.com/2014/08/git.html</a><br>
+移植時的最後更新日期: 2014-08-28T13:50:39.308+08:00</p>
+<p>之前有介紹使用GitStats的工具來統計Git的log。<br />它會像Github一樣給你這個專案從頭到目前的各式各樣統計結果。<br />非常的好玩，而且不管是安裝還是使用上也相當簡單。<br /><br />不過！它只不支援Windows。<br /><br />那Windows的使用者怎辦？我也想統計呀？！<br />難道一定要上傳Github?(誤)<br />搞一個Linux的VM?(誤)<br />把Git弄得更熟練!!!<br /><br />「Git很神，一定有這功能的！」<br /><br />就這樣找呀找。<br />終於找到一些有趣的來玩。<br /><br /><h2><span style="font-size: x-large;">第一招</span></h2>顯示每一次commit的日期、作者(這個可以自訂[1])<br />檔案修改、增加的行數、去除掉的行數<br /><h3><span style="font-size: large;">顯示的結果如下</span></h3><pre class="prettyprint"><code class="language-bash">Mon Aug 18 16:48:42 2014 +0800 Ken<br />1 file changed, 2 insertions(+), 2 deletions(-)<br /><br />Mon Aug 18 16:12:16 2014 +0800 Ken<br />4 files changed, 57 insertions(+), 39 deletions(-)<br /><br />Thu Aug 14 16:51:22 2014 +0800 Ken<br />1 file changed, 7 insertions(+), 5 deletions(-)<br /><br />Thu Aug 14 14:35:53 2014 +0800 Ken<br />1 file changed, 7 insertions(+), 5 deletions(-)<br />…</code></pre><h3><span style="font-size: large;">在Bash下指令</span></h3><pre class="prettyprint"><code class="language-bash">git log --shortstat --pretty=format:&quot;%cd %an&quot; --author=ken --since=“2014-05-06&quot;</code></pre><br /><h3><span style="font-size: large;">參數說明</span></h3>–shortstat     簡短的統計內容<br />–pretty=format:”%cd %an&quot;     每個commit的標題指定格式(在此指定: 日期、作者)<br />–author=ken    過濾作者字串<br /><br />–author    列出作者名稱符合指定字串的更新。<br />–committer     列出提交者名稱符合指定字串的更新。<br /><br /><h4><b>限制時間區間</b></h4>–since=“2014-05-06&quot;<br />從2014/05/06開始找<br /><br />-(n)    僅顯示最後 n 個更新<br />–since, --after      列出特定日期後的更新。<br />–until, --before     列出特定日期前的更新。<br /><br /><h2><span style="font-size: x-large;">第二招[2]</span></h2>統計commit的數目<br /><h3><span style="font-size: large;">顯示的結果如下</span></h3><pre class="prettyprint"><code class="language-bash">   356  chris<br />   317  YuKai<br />   113  Ken Tseng<br />    70  Kimi Lu<br />    37  vul3yo6<br />    29  Ken</code></pre><h3><span style="font-size: large;">在Bash下指令</span></h3><pre class="prettyprint"><code class="language-bash">git shortlog --numbered --summary</code></pre><br /><h3><span style="font-size: large;">參數說明</span></h3>–numbered  依commit數目排序(原本預設是依作者字母順序排列)<br />–summary  不顯示commit的標題文字，只顯示統計數字<br /><br /><h2><span style="font-size: x-large;">第三招[2]</span></h2>顯示這個專案所有時間統計下來的<br />作者、修改檔案數、增加行數、刪除行數、增加行數-刪除行數<br /><h3><span style="font-size: large;">顯示結果</span></h3><pre class="prettyprint"><code class="language-bash">chris,:  9497 fils, (+)1513667 (-)473535 = 104013<br />chris,vul3yo6,:  5 fils, (+)28 (-)28 = 0<br />chris,yukai,:  20 fils, (+)426 (-)454 = -28<br />vul3yo6,:  989 fils, (+)184025 (-)15499 = 168526<br />vul3yo6,yukai,:  25 fils, (+)936 (-)460 = 476<br />yukai,:  4859 fils, (+)689366 (-)338120 = 351246<br />yukai,chris,:  76 fils, (+)5127 (-)825 = 4302<br />yukai,vul3yo6,:  22 fils, (+)315 (-)44 = 271<br />yukai,zc1145,:  12 fils, (+)45 (-)39 = 6<br />zc1145,:  453 fils, (+)27439 (-)6025 = 21414<br />zc1145,yukai,:  38 fils, (+)866 (-)264 = 602<br />zc1145,yukai,vul3yo6,: 7 fils, (+)749 (-)71 = 678</code></pre><h3><span style="font-size: large;">在Bash下指令(超長的)</span></h3><pre class="prettyprint"><code class="language-bash">git log --shortstat --pretty=”%cE&quot; | sed ‘s/(.<em>)@.</em>/\1/’ | grep -v “^$” | awk ‘BEGIN &#123; line=&quot;&quot;; &#125; !/^ / &#123; if (line==&quot;&quot; || !match(line, $0)) &#123;line = $0 “,” line &#125;&#125; /^ / &#123; print line &quot; # &quot; 0; line=""&#125;' | sort | sed -E 's/# //;s/ files? changed,//;s/([0-9]+) ([0-9]+ deletion)/\1 0 insertions\(+\), \2/;s/\(\+\)/(+), 0 deletions(-)/;s/insertions?(+), //;s/ deletions?(-)//’ | awk 'BEGIN  &#123;name=&quot;&quot;; files=0; insertions=0; deletions=0;&#125;  &#123;if ($1 != name &amp;&amp; name != “”)  &#123; print name “:  &quot; files &quot; fils, (+)” insertions &quot; (-)&quot; deletions &quot; = &quot; insertions-deletions ; files=0; insertions=0; deletions=0; name=$1; &#125;  name=$1; files+=$2; insertions+=$3; deletions+=$4&#125; END &#123;print name “: &quot; files &quot; fils, (+)” insertions &quot; (-)&quot; deletions &quot; = &quot; insertions-deletions ;&#125;'</code></pre><br />參考資料：<br />[1] <a href="http://git-scm.com/book/zh-tw/Git-%E5%9F%BA%E7%A4%8E-%E6%AA%A2%E8%A6%96%E6%8F%90%E4%BA%A4%E7%9A%84%E6%AD%B7%E5%8F%B2%E8%A8%98%E9%8C%84" target="_blank">2.3 Git 基礎 - 檢視提交的歷史記錄</a><br />[2] <a href="http://blog.eisneim.com/articles/2014-8-16-git-analize-caulculate-contribution.html" target="_blank">统计本地Git仓库中不同贡献者的代码行数的一些方法</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-08-27T21:48:00.000Z" itemprop="datePublished">
+              2014-08-28
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Git/">Git</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-26-blogger/4437604259725696547/">git hook 壞掉了！</a><div class="related-posts-item-abstract">¶git hook 壞掉了！
+原文連結: https://darkblack01.blogspot.com/2015/05/git-hook.html
+移植時的最後更新</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/04-23-blogger/2334492157788549557/">Git hook 快速指南</a><div class="related-posts-item-abstract">¶Git hook 快速指南
+原文連結: https://darkblack01.blogspot.com/2015/04/githoook-1.html
+移植時的最後</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-25-blogger/8461773562884725786/">刪除git的分支</a><div class="related-posts-item-abstract">¶刪除git的分支
+原文連結: https://darkblack01.blogspot.com/2015/03/git.html
+移植時的最後更新日期: 2015-0</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-20-blogger/4280441097831628219/">Git之...雙bare同步</a><div class="related-posts-item-abstract">¶Git之…雙bare同步
+原文連結: https://darkblack01.blogspot.com/2015/03/gitbare.html
+移植時的最後更新日期</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/11-21-blogger/4032810580751331530/">Gitolite 一個人 很多key 怎麼辦？</a><div class="related-posts-item-abstract">¶Gitolite 一個人 很多key 怎麼辦？
+原文連結: https://darkblack01.blogspot.com/2014/11/gitolite-key</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-30-blogger/3109900856932310486/">搜尋log 某個檔案的某一行內容的修改是....哪一次的commit</a><div class="related-posts-item-abstract">¶搜尋log 某個檔案的某一行內容的修改是…哪一次的commit
+原文連結: https://darkblack01.blogspot.com/2014/07/log-</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

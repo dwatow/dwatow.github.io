@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶重新包裝CFileDialog 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;cfiledialog.html 移植時的最後更新日期: 2014-03-03T17:03:50.490+08:00 通常，我們呼叫FileDialog，要嘛就是選取多檔，要嘛就是選取一檔。這個限制設計，是需要的，不然可能會造成選檔結果的錯誤。為了簡化整個過程，在此重新包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重新包裝CFileDialog">
+<meta property="og:url" content="https://dwatow.github.io/2014/03-03-blogger/8060682532722443989/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶重新包裝CFileDialog 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;cfiledialog.html 移植時的最後更新日期: 2014-03-03T17:03:50.490+08:00 通常，我們呼叫FileDialog，要嘛就是選取多檔，要嘛就是選取一檔。這個限制設計，是需要的，不然可能會造成選檔結果的錯誤。為了簡化整個過程，在此重新包">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-03-03T01:02:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:44.595Z">
+<meta property="article:author" content="Chris">
+<meta name="twitter:card" content="summary">
+  <title>重新包裝CFileDialog - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>重新包裝CFileDialog</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%8C%85%E8%A3%9DCFileDialog"><span class="toc-text">重新包裝CFileDialog</span></a></li></ol>
+  </div>
+
+
+    <h1 id="重新包裝CFileDialog"><a class="header-anchor" href="#重新包裝CFileDialog">¶</a>重新包裝CFileDialog</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/03/cfiledialog.html">https://darkblack01.blogspot.com/2014/03/cfiledialog.html</a><br>
+移植時的最後更新日期: 2014-03-03T17:03:50.490+08:00</p>
+<p>通常，我們呼叫FileDialog，要嘛就是選取多檔，要嘛就是選取一檔。這個限制設計，是需要的，不然可能會造成選檔結果的錯誤。<br /><br />為了簡化整個過程，在此重新包裝了整個類別的細部。<br />來看程式碼吧！<br /><br />選取單一檔案的CFileDialogSingle<br /><br /><pre class="prettyprint"><code>#ifndef CFILEDLGSINGLE_H<br />#define CFILEDLGSINGLE_H<br /><br />enum FDlgType&#123;SAVEAS = 0, OPEN = 1&#125;;<br />#include &lt;vector&gt;<br /><br />class CFileDlgSingle<br />&#123;<br />    CFileDialog* m_pFileDlg;<br />    FDlgType m_isOpen;<br />    std::vector&lt;CString&gt; m_filters;<br />    CString getFilters();<br /><br />public:<br />    CFileDlgSingle(FDlgType isOpen);<br />    ~CFileDlgSingle();<br />    //CFileDlgSingle()<br /><br />    void AddFileFilter(CString descript, CString exName);<br /><br />    int DoModal();<br />    int Show()&#123; return DoModal(); &#125;<br /><br />    CString GetFileExt() const<br />    &#123; return m_pFileDlg-&gt;GetFileExt(); &#125;<br /><br />    CString GetFileName() const<br />    &#123; return m_pFileDlg-&gt;GetFileName(); &#125;<br /><br />    CString GetFileTitle() const<br />    &#123; return m_pFileDlg-&gt;GetFileTitle(); &#125;<br /><br />    CString GetFolderPath() const<br />    &#123; return m_pFileDlg-&gt;GetFolderPath(); &#125;<br /><br />    CString GetPathName() const<br />    &#123; return m_pFileDlg-&gt;GetPathName(); &#125;<br />&#125;;<br /><br /><br />#endif<br /></code></pre><pre class="prettyprint"><code>#include “stdafx.h”<br />#include “FileDlgSingle.h”<br />#include &lt;iterator&gt;<br /><br />CFileDlgSingle::CFileDlgSingle(FDlgType isOpen) :m_isOpen(isOpen)&#123; &#125;<br />CFileDlgSingle::~CFileDlgSingle()&#123; delete m_pFileDlg; &#125;<br /><br />CString CFileDlgSingle::getFilters()<br />&#123;<br />    CString totalFilters;<br />    for (std::vector&lt;CString&gt;::iterator it = m_filters.begin(); it != m_filters.end(); ++it)<br />    &#123;<br />        totalFilters += <em>it + “|”;<br />    &#125;<br />    return totalFilters + “|”;<br />&#125;<br /><br />void CFileDlgSingle::AddFileFilter(CString descript, CString exName)<br />&#123;<br />    CString oneFilter;<br />    oneFilter = descript + &quot;(</em>.&quot; + exName + “)|<em>.&quot; + exName;<br />    m_filters.push_back(oneFilter);<br />&#125;<br /><br />int CFileDlgSingle::DoModal()<br />&#123;<br />    m_pFileDlg = new CFileDialog(m_isOpen, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, getFilters(), NULL);<br />    return m_pFileDlg-&gt;DoModal();<br />&#125;</code></pre>選取多個檔案的CFileDialogMulti<br /><pre class="prettyprint"><code>#ifndef CFILEDLGSINGLE_H<br />#define CFILEDLGSINGLE_H<br /><br />enum FDlgType&#123;SAVEAS = 0, OPEN = 1&#125;;<br />#include &lt;vector&gt;<br /><br />class CFileDlgMulti<br />&#123;<br />    CFileDialog</em> m_pFileDlg;<br />    FDlgType m_isOpen;<br />    std::vector&lt;CString&gt; m_filters;<br />    CString getFilters();<br /><br />    CString m_szFileNameBuffer;<br />public:<br />    CFileDlgMulti(FDlgType isOpen);<br />    ~CFileDlgMulti();<br />    //CFileDlgSingle()<br /><br />    void AddFileFilter(CString descript, CString exName);<br /><br />    int DoModal();<br />    int Show()&#123; return DoModal(); &#125;<br /><br />    CString GetFileExt() const<br />    &#123; return m_pFileDlg-&gt;GetFileExt(); &#125;<br /><br />    CString GetFileName() const<br />    &#123; return m_pFileDlg-&gt;GetFileName(); &#125;<br /><br />    CString GetFileTitle() const<br />    &#123; return m_pFileDlg-&gt;GetFileTitle(); &#125;<br /><br />    CString GetFolderPath() const<br />    &#123; return m_pFileDlg-&gt;GetFolderPath(); &#125;<br /><br />    CString GetPathName() const<br />    &#123; return m_pFileDlg-&gt;GetPathName(); &#125;<br /><br />    const int GetSelFileList(std::vector&lt;CString&gt;&amp; vstrFilePath);<br />    void SetSelMultiFileTotal(const int&amp; FileMaxBuffer);<br />&#125;;<br /><br />#endif<br /></code></pre><pre class="prettyprint"><code>#include “stdafx.h”<br />#include “FileDlgMulti.h”<br />#include &lt;iterator&gt;<br /><br />CFileDlgMulti::CFileDlgMulti(FDlgType isOpen) :m_isOpen(isOpen)&#123; &#125;<br />CFileDlgMulti::~CFileDlgMulti()&#123; delete m_pFileDlg; &#125;<br /><br />CString CFileDlgMulti::getFilters()<br />&#123;<br />    CString totalFilters;<br />    for (std::vector&lt;CString&gt;::iterator it = m_filters.begin(); it != m_filters.end(); ++it)<br />    &#123;<br />        totalFilters += <em>it + “|”;<br />    &#125;<br />    return totalFilters + “|”;<br />&#125;<br /><br />void CFileDlgMulti::AddFileFilter(CString descript, CString exName)<br />&#123;<br />    CString oneFilter;<br />    oneFilter = descript + &quot;(</em>.” + exName + “)|<em>.&quot; + exName;<br />    m_filters.push_back(oneFilter);<br />&#125;<br /><br />int CFileDlgMulti::DoModal()<br />&#123;<br />    m_pFileDlg = new CFileDialog(m_isOpen, NULL, NULL, OFN_ALLOWMULTISELECT | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, getFilters(), NULL);<br />    return m_pFileDlg-&gt;DoModal();<br />&#125;<br /><br />const int CFileDlgMulti::GetSelFileList(std::vector&gt;CString&gt;&amp; vstrFilePath)<br />&#123;<br />    // 取得第一個檔案名稱的位置 若沒有的話傳回NULL<br />    POSITION pos = m_pFileDlg-&gt;GetStartPosition();<br />    if (pos) vstrFilePath.clear();<br />    while(pos != NULL)<br />        vstrFilePath.push_back(m_pFileDlg-&gt;GetNextPathName(pos));// 透過位置來取得檔案名稱 檔案名稱包含完整路徑<br />    return (int)vstrFilePath.size();<br />&#125;<br /><br />void CFileDlgMulti::SetSelMultiFileTotal(const int&amp; FileMaxBuffer)<br />&#123;<br />    const int BufferSize = (FileMaxBuffer * (MAX_PATH + 1)) + 1;<br />    m_pFileDlg-&gt;m_ofn.nMaxFile = BufferSize;<br />    m_pFileDlg-&gt;m_ofn.lpstrFile = m_szFileNameBuffer.GetBuffer(BufferSize);<br />    m_szFileNameBuffer.ReleaseBuffer();<br />    m_pFileDlg-&gt;m_ofn.lpstrFile[0] = NULL;<br />&#125;</code></pre>這兩組程式碼其實可以提取共同的部份做為抽象類別。<br />有空再來試試吧！^^<br />最重要的就是，使用端的程式碼會有多簡單。 <pre class="prettyprint"><code>CFileDlgSingle dlgFile(OPEN);<br />dlgFile.AddFileFilter(“純文字檔”, “txt”);<br />dlgFile.AddFileFilter(“All File”, &quot;</em>”);<br />dlgFile.Show();<br /><br />m_staticText.SetWindowText(dlgFile.GetPathName());</code></pre></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-03-03T01:02:00.000Z" itemprop="datePublished">
+              2014-03-03
+            </time>
+            </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <p class="related-posts-none">No related post.</p>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

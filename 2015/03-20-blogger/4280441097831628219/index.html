@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Git之…雙bare同步 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;03&#x2F;gitbare.html 移植時的最後更新日期: 2015-03-20T10:48:25.570+08:00 有時候因為操作習慣或備份，會架設兩個git bare，並且希望彼此同步。雖然git本身並不是用一個git sync做到和所有的repo同步。但是git有一個叫hook的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git之...雙bare同步">
+<meta property="og:url" content="https://dwatow.github.io/2015/03-20-blogger/4280441097831628219/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Git之…雙bare同步 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;03&#x2F;gitbare.html 移植時的最後更新日期: 2015-03-20T10:48:25.570+08:00 有時候因為操作習慣或備份，會架設兩個git bare，並且希望彼此同步。雖然git本身並不是用一個git sync做到和所有的repo同步。但是git有一個叫hook的">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2015-03-19T18:27:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:39.973Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+  <title>Git之...雙bare同步 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Git之...雙bare同步</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E4%B9%8B%E2%80%A6%E9%9B%99bare%E5%90%8C%E6%AD%A5"><span class="toc-text">Git之…雙bare同步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">建立Bare</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">安裝Hook</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">建立clone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">同步衝突</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">Hook內容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">post-receive </span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">pre-receive </span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">參考資料 </span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Git之…雙bare同步"><a class="header-anchor" href="#Git之…雙bare同步">¶</a>Git之…雙bare同步</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/03/gitbare.html">https://darkblack01.blogspot.com/2015/03/gitbare.html</a><br>
+移植時的最後更新日期: 2015-03-20T10:48:25.570+08:00</p>
+<p>有時候因為操作習慣或備份，會架設兩個git bare，並且希望彼此同步。<br /><br />雖然git本身並不是用一個git sync做到和所有的repo同步。<br />但是git有一個叫hook的客製化事件觸發(Pro Git中文版翻譯成掛鉤)<br /><br />可以在指定的時機，執行指定的動作。<br />這麼一來可以擴充git很多功能，我想也是因為這樣，git才能和很多open source的工具整合得很好的原因。<br /><br />現在就來看看，如何做到同步bare<br /><br /><h2><span style="font-size: x-large;">建立Bare</span></h2>首先，我們要兩個bare<br /><br />Main  用git init --bare 建立<br />Mirror  用git clone --mirror --bare &lt;Main Path&gt;建立<br /><br />讓Mirror成為Main的鏡像，這麼做的原因有兩個，也是我們要放hook的內容<br />在Mirror執行git push，即可讓Main有Mirror。<br />在Mirror執行git fetch，即可讓Mirror有Main。<br />(不過，彼此會互蓋，要小心)<br /><br /><h2><span style="font-size: x-large;">安裝Hook</span></h2>Git的Server hook有兩個事件可以使用，pre-receive和post-receive<br />在此，<span style="color: red;">必須安裝在Mirror</span>，client執行 git push時，會先執行<br /><ol><li>pre-receive</li><li>將你push的內容放到bare裡</li><li>執行post-receive</li></ol><br />如果在1.的時候，先git fetch，和Main同步，在3. 的時候git push讓Main和Mirror一樣。<br />那麼兩邊就可以同步了！<br /><br /><h2><span style="font-size: x-large;">建立clone</span></h2>Client建議clone Mirror這一邊，操作比較順暢。<br />如果萬一有人cline了Main，然後提交了，是不是會造成衝突呢？<br />這是一定的！就像是兩個人對同一個bare做push一樣。<br /><br /><h2><span style="font-size: x-large;">同步衝突</span></h2>這時，同步機制會卡在pre-receive做完fetch時，無法將你要push上來的東西放好，造成衝突，所以push失敗，這時你要執行git pull將同步好的下載下來，解決衝突，再重新push，即可解決。<br /><br /><h2><span style="font-size: x-large;">Hook內容</span></h2>最後的問題是hook的shell腳本怎麼寫？<br />sample的內容好複雜呀！？<br />我就在此獻醜一下，看看是不是有更好的做法(一定的有的啦)<br /><h3><span style="font-size: large;">post-receive </span></h3><pre class="prettyprint"><code class="language-sh">#!/bin/sh<br />git push<br /><br />exit 0</code></pre><h3><span style="font-size: large;">pre-receive </span></h3><pre class="prettyprint"><code class="language-sh">#!/bin/sh<br />git fetch</code></pre><br /><h2><span style="font-size: x-large;">參考資料 </span></h2><a href="http://git-scm.com/book/zh-tw/v1/Git-%E5%AE%A2%E8%A3%BD%E5%8C%96-Git-Hooks" target="_blank">[1] 7.3 Git 客製化 - Git Hooks</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2015-03-19T18:27:00.001Z" itemprop="datePublished">
+              2015-03-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Git/">Git</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-26-blogger/4437604259725696547/">git hook 壞掉了！</a><div class="related-posts-item-abstract">¶git hook 壞掉了！
+原文連結: https://darkblack01.blogspot.com/2015/05/git-hook.html
+移植時的最後更新</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/04-23-blogger/2334492157788549557/">Git hook 快速指南</a><div class="related-posts-item-abstract">¶Git hook 快速指南
+原文連結: https://darkblack01.blogspot.com/2015/04/githoook-1.html
+移植時的最後</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-25-blogger/8461773562884725786/">刪除git的分支</a><div class="related-posts-item-abstract">¶刪除git的分支
+原文連結: https://darkblack01.blogspot.com/2015/03/git.html
+移植時的最後更新日期: 2015-0</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/11-21-blogger/4032810580751331530/">Gitolite 一個人 很多key 怎麼辦？</a><div class="related-posts-item-abstract">¶Gitolite 一個人 很多key 怎麼辦？
+原文連結: https://darkblack01.blogspot.com/2014/11/gitolite-key</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-28-blogger/4448653085723728368/">Git的簡單統計 用指令</a><div class="related-posts-item-abstract">¶Git的簡單統計 用指令
+原文連結: https://darkblack01.blogspot.com/2014/08/git.html
+移植時的最後更新日期: 20</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-30-blogger/3109900856932310486/">搜尋log 某個檔案的某一行內容的修改是....哪一次的commit</a><div class="related-posts-item-abstract">¶搜尋log 某個檔案的某一行內容的修改是…哪一次的commit
+原文連結: https://darkblack01.blogspot.com/2014/07/log-</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

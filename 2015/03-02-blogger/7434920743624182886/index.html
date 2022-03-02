@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶pimpl完全的資訊隱藏 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;03&#x2F;pimpl.html 移植時的最後更新日期: 2015-12-23T14:16:57.729+08:00 pimpl(pointer to implementation), 指向實作的指標。  這是《API Design for C++》Ch3.1的心得整理。在此是要介紹，在C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pimpl完全的資訊隱藏">
+<meta property="og:url" content="https://dwatow.github.io/2015/03-02-blogger/7434920743624182886/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶pimpl完全的資訊隱藏 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;03&#x2F;pimpl.html 移植時的最後更新日期: 2015-12-23T14:16:57.729+08:00 pimpl(pointer to implementation), 指向實作的指標。  這是《API Design for C++》Ch3.1的心得整理。在此是要介紹，在C">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2015-03-02T07:36:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:43.757Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta name="twitter:card" content="summary">
+  <title>pimpl完全的資訊隱藏 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>pimpl完全的資訊隱藏</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#pimpl%E5%AE%8C%E5%85%A8%E7%9A%84%E8%B3%87%E8%A8%8A%E9%9A%B1%E8%97%8F"><span class="toc-text">pimpl完全的資訊隱藏</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">極致的資訊隱藏手法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">使用Smart Pointer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">pImpl的優點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">pImpl的缺點</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">參考資料: </span></a></li></ol></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="pimpl完全的資訊隱藏"><a class="header-anchor" href="#pimpl完全的資訊隱藏">¶</a>pimpl完全的資訊隱藏</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/03/pimpl.html">https://darkblack01.blogspot.com/2015/03/pimpl.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.729+08:00</p>
+<p>pimpl(pointer to implementation), 指向實作的指標。  這是《API Design for C++》Ch3.1的心得整理。<br />在此是要介紹，在C<ins>中，如何實現「資訊隱藏狂熱」，class裡完全的將public以外的東西隱藏掉，在API設計中，這是很重要的，避免錯誤的使用，也讓設計更簡單好記。<br /><br />在此，作者也有提到Effective C</ins> #34也有提及這個技巧。<br />無獨有偶的，Code Complete 2/e中也有提到。不過在《API Design for C++》中有強調，這是C<ins>獨有的技巧，所以不算是通用的Design Pattern，不過，算是很厲害的Design Pattern for C</ins>。<br /><br />(在此，不使用書中的範例程式)<br />這個例子，是<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/2012/09/cpp.html">隱藏.cpp裡一切細節的範例程式</a>的延伸版。<br />類別要描述的是「不會透露自己的年紀的人」。<br />透過pimpl技巧，強調「不會透露自己的年紀的人，更不會跟別人透露不想提及的意圖」。<br /><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//Person.h">//Person.h</a><br />#include &lt;string&gt;<br />#include “date.h”<br />#include &quot;address.h&quot;<br /><br />class Person<br />&#123;<br />    std::string theName;<br />    Date theBirthDate;<br />    Address theAddress;<br />    int GetYears(int currYear);<br />public:<br />    Person();<br />    ~Person();<br />    Person(const std::string&amp; name,<br />           const Date&amp; birthday,<br /><br />    std::string name() const;<br />    std::string birthDate() const;<br />    std::string address() const;<br />    //…<br />&#125;;</code></pre><h2><span style="font-size: x-large;">極致的資訊隱藏手法</span></h2>我們希望它可以只露出必要的部份，所以將它改寫成這樣 <br /><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//Person.h">//Person.h</a><br />#include &lt;string&gt;<br />#include “date.h”<br />#include &quot;address.h&quot;<br /><br />class Person<br />&#123;<br />    class PersonImpl;   //如果使用上造成太多存取的限制，可以考慮將這一行改成public<br />    PersonImpl* pImpl;  //宣告一個實作類別的指標（或參考也行，就是不可以是實體）<br />public:<br />    Person();<br />    ~Person();<br />    Person(const std::string&amp; name, <br />           const Date&amp; birthday,<br />           const Address&amp; addr);<br /><br />    std::string name() const;<br />    std::string birthDate() const;<br />    std::string address() const;<br />    //…<br />&#125;;</code></pre><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//Person.cpp">//Person.cpp</a><br />#include &quot;Person.h&quot;<br /><br />class Person::PersonImpl<br />&#123;<br />public:<br />    std::string theName;<br />    Date theBirthDate;    <br />    Address theAddress;<br /><br />    int GetYears(int currYear)<br />    &#123;<br />        return currYear - BirthDate.Year();<br />    &#125;<br />&#125;;<br /><br />Person::Person(const std::string&amp; name, <br />               const Date&amp; birthday,<br />               const Address&amp; addr):<br />pImpl(new PersonImpl())<br />&#123;<br />    pImpl-&gt;theName = name;<br />    pImpl-&gt;theBirthDate = birthday;<br />    pImpl-&gt;theAddress = addr;<br />&#125;;<br /><br />Person::~Person()<br />&#123;<br />    delete pImpl;<br />    pImpl = 0;<br />&#125;<br /></code></pre>除此之外，對於類別的複製建構式與賦值運算子的override都是必須要注意的實作細節唷。<br /><br /><h2><span style="font-size: x-large;">使用Smart Pointer</span></h2>書裡還建議使用smart pointer避免使用這種方式時，pimpl實作不見了的情況。<br /><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//Person.h">//Person.h</a><br />#include &lt;personimpl&gt;<br />#include “date.h”<br />#include &quot;address.h&quot;<br /><br />class Person<br />&#123;<br />    class PersonImpl;   //如果使用上造成太多存取的限制，可以考慮將這一行改成public<br />    std::unique_ptr<personimpl> pImpl;  //使用適合的Smart Pointer<br />public:<br />    Person();<br />    ~Person();<br />    explicit Person(const std::string&amp; name, <br />           const Date&amp; birthday,<br />           const Address&amp; addr);<br /><br />    std::string name() const;<br />    std::string birthDate() const;<br />    std::string address() const;<br />    //…<br />&#125;;</personimpl></code></pre><ul><li>shared_ptr 指向相同的物件，誤刪不消失。 </li><li>scoped_ptr 保證唯一，無法複製。</li></ul><br /><h2><span style="font-size: x-large;">pImpl的優點</span></h2><ul><li>Information Hidding</li><li>降低耦合</li><li>加快編譯</li><li>…</li></ul><br /><h2><span style="font-size: x-large;">pImpl的缺點</span></h2><ul><li>增加一點點的物件大小</li><li>降低程式碼可讀性</li><li>提高維護程本(除錯時要追程式碼就困難許多了)</li><li>類別中的const函數，無法保證private的成員變數唯讀(只保證pImpl的指標不改變)</li></ul><br />而這篇就是紀錄書中，如何改寫的注意事項。<br />詳細的細節，還是去看書吧！^^這本書很棒唷！<br /><br /><h4><span style="font-size: large;">參考資料: </span></h4>[1] <a target="_blank" rel="noopener" href="http://epaper.gotop.com.tw/PDFSample/AXP015100.pdf">3.1 Pimpl慣用語 - C++ API 設計</a>  <br /><div>[2] <a target="_blank" rel="noopener" href="http://blog.csdn.net/juxua_xatu/article/details/19981081">Pimpl淺出</a><br />[3] <a href="http://ptgmedia.pearsoncmg.com/images/9780321334879/samplepages/0321334876.pdf" target="_blank">Effective C++ 3/e Item 9, 10, 27, 47</a></div></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2015-03-02T07:36:00.000Z" itemprop="datePublished">
+              2015-03-02
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-15-blogger/3841271280424750554/">hello world之 在windows建立dll檔</a><div class="related-posts-item-abstract">¶hello world之 在windows建立dll檔
+原文連結: https://darkblack01.blogspot.com/2015/11/hello-wo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-06-blogger/5385954146016167597/">MARCO in C++ 愈用愈好用的地方</a><div class="related-posts-item-abstract">¶MARCO in C++ 愈用愈好用的地方
+原文連結: https://darkblack01.blogspot.com/2015/11/marco-in-c.htm</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-05-blogger/6199989196808138838/">C++之static member value怎麼初始化？</a><div class="related-posts-item-abstract">¶C++之static member value怎麼初始化？
+原文連結: https://darkblack01.blogspot.com/2015/11/cstati</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-08-blogger/1858588858575390221/">Sort of C++</a><div class="related-posts-item-abstract">¶Sort of C++
+原文連結: https://darkblack01.blogspot.com/2015/05/sort-of-c.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-07-blogger/289507120593125422/">有參數的衍生類別建構子，呼叫有參數的基礎類別建構子</a><div class="related-posts-item-abstract">¶有參數的衍生類別建構子，呼叫有參數的基礎類別建構子
+原文連結: https://darkblack01.blogspot.com/2015/05/blog-post.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/12-25-blogger/3457483074018226184/">聖誕節快樂!!!</a><div class="related-posts-item-abstract">¶聖誕節快樂!!!
+原文連結: https://darkblack01.blogspot.com/2014/12/blog-post_26.html
+移植時的最後更新日</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

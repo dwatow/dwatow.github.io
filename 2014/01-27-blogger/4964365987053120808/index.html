@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶printf vs cout 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;01&#x2F;printf-vs-cout.html 移植時的最後更新日期: 2015-12-23T14:16:57.684+08:00 這篇文章所有的程式碼，都是使用Sublime Text 2 + minGW的g++#include &lt;iostream&gt;#include">
+<meta property="og:type" content="article">
+<meta property="og:title" content="printf vs cout">
+<meta property="og:url" content="https://dwatow.github.io/2014/01-27-blogger/4964365987053120808/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶printf vs cout 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;01&#x2F;printf-vs-cout.html 移植時的最後更新日期: 2015-12-23T14:16:57.684+08:00 這篇文章所有的程式碼，都是使用Sublime Text 2 + minGW的g++#include &lt;iostream&gt;#include">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-01-26T21:27:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:41.083Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta name="twitter:card" content="summary">
+  <title>printf vs cout - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>printf vs cout</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#printf-vs-cout"><span class="toc-text">printf vs cout</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">保留顯示空間，向右對齊 </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">空白填入的字元</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">8&#x2F;10&#x2F;16進制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">設定小數點格式輸出 </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">小數點顯示設定位數</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">科學記號格式輸出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">預設寬度 </span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">保留寬度 </span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="printf-vs-cout"><a class="header-anchor" href="#printf-vs-cout">¶</a>printf vs cout</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/01/printf-vs-cout.html">https://darkblack01.blogspot.com/2014/01/printf-vs-cout.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.684+08:00</p>
+<p>這篇文章所有的程式碼，都是使用Sublime Text 2 + minGW的g++<br /><br /><pre class="prettyprint"><code>#include &lt;iostream&gt;<br />#include &lt;iomanip&gt;<br />#include &lt;string&gt;<br />#include &lt;cstdio&gt;<br /><br />using namespace std;<br /><br />int main()<br />&#123;<br />    /<em>sample code</em>/<br />    return 0;<br />&#125;</code></pre><br /><h2><span style="font-size: x-large;">保留顯示空間，向右對齊 </span></h2><pre class="prettyprint"><code>printf(&quot;%3d&quot;, 10);</code></pre><pre class="prettyprint"><code>cout.width(3);<br />cout &lt;&lt; 10;</code></pre><pre class="prettyprint"><code>cout &lt;&lt; setw(3) &lt;&lt; 10;</code></pre><br /><h2><span style="font-size: x-large;">空白填入的字元</span></h2>(不行填入字串)<br /><pre class="prettyprint"><code>cout.width(3);<br />cout.fill(’@’);<br />cout &lt;&lt; 10;</code></pre><pre class="prettyprint"><code>cout &lt;&lt; setw(3) &lt;&lt; setfill(’@’) &lt;&lt; 10;</code></pre><br /><h2><span style="font-size: x-large;">8/10/16進制</span></h2><pre class="prettyprint"><code>printf(&quot;%d\n&quot;, 10);<br />printf(&quot;%x\n&quot;, 10);<br />printf(&quot;%o\n&quot;, 10);</code></pre><pre class="prettyprint"><code>cout &lt;&lt; dec &lt;&lt; 10 &lt;&lt; endl;<br />cout &lt;&lt; hex &lt;&lt; 10 &lt;&lt; endl;<br />cout &lt;&lt; oct &lt;&lt; 10 &lt;&lt; endl;</code></pre><h2><span style="font-size: x-large;">設定小數點格式輸出 </span></h2><pre class="prettyprint"><code>printf(&quot;%2.2f\n&quot;, pi);</code></pre><h3>小數點顯示設定位數</h3>有這一個就變成不含小數點，沒有的話就要含小數點 <br /><pre class="prettyprint"><code>cout.setf(ios::fixed, ios::floatfield);</code></pre><pre class="prettyprint"><code>cout.setf(ios::fixed, ios::floatfield);  //加了這一行precision()定義就變成小數點(不含)後數2位<br />cout.precision(2); //小數點(含)後數2位(原始定義變成無效)<br />cout.width(5);  //2+1+2 小數點前2位+小數點+小數點後2位<br />cout &lt;&lt; pi &lt;&lt; endl;</code></pre><pre class="prettyprint"><code>cout.setf(ios::fixed, ios::floatfield);  //加了這一行precision()定義就變成小數點(不含)後數2位<br />cout &lt;&lt; setw(5) &lt;&lt; setprecision(2) &lt;&lt; pi &lt;&lt; endl; //保留顯示總寬度至少5個字元，小數點(含)後2位</code></pre>恢復預設的小數點顯示設定 <br /><pre class="prettyprint"><code>cout.unsetf (ios::floatfield); </code></pre><h2><span style="font-size: x-large;">科學記號格式輸出</span></h2><h3>預設寬度 </h3><pre class="prettyprint"><code>printf(&quot;%e\n&quot;, pi);</code></pre><pre class="prettyprint"><code>cout.setf(ios::scientific, ios::floatfield);<br />cout &lt;&lt; pi &lt;&lt; endl;</code></pre><h3>保留寬度 </h3><pre class="prettyprint"><code>printf(&quot;%2.2e\n&quot;, pi);</code></pre><pre class="prettyprint"><code>cout.setf(ios::scientific, ios::floatfield);<br />cout &lt;&lt; setw(5) &lt;&lt; setprecision(2) &lt;&lt; pi &lt;&lt; endl;</code></pre><pre class="prettyprint"><code>cout.setf(ios::scientific, ios::floatfield);<br />cout.precision(2); //設定小數位數2位<br />cout.width(5);<br />cout &lt;&lt; pi &lt;&lt; endl;</code></pre><br /><br />參考資料:<br /><a href="https://www.google.com.tw/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=1&amp;amp;ved=0CCwQFjAA&amp;amp;url=http%3A%2F%2Fweb.math.isu.edu.tw%2Fhuanght%2Ffiles%2F%25E7%25AC%25AC2%25E7%25AB%25A0_%25E5%259F%25BA%25E6%259C%25AC%25E8%25BC%25B8%25E5%2587%25BA%25E8%2588%2587%25E8%25BC%25B8%25E5%2585%25A5.ppt&amp;amp;ei=PMzlUtrIHsSrkwWh7oC4CQ&amp;amp;usg=AFQjCNEHY6r9RAhI2-pRUntuRbU57qe-Mw&amp;amp;sig2=XBqe7QGhXfFNZs3I8hK4tA" target="_blank">[PPT]C/C++ch4</a><br /><a target="_blank" rel="noopener" href="http://openhome.cc/Gossip/CGossip/PrintfScanf.html">C Gossip: printf() 與 scanf()</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-01-26T21:27:00.001Z" itemprop="datePublished">
+              2014-01-27
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-15-blogger/3841271280424750554/">hello world之 在windows建立dll檔</a><div class="related-posts-item-abstract">¶hello world之 在windows建立dll檔
+原文連結: https://darkblack01.blogspot.com/2015/11/hello-wo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-06-blogger/5385954146016167597/">MARCO in C++ 愈用愈好用的地方</a><div class="related-posts-item-abstract">¶MARCO in C++ 愈用愈好用的地方
+原文連結: https://darkblack01.blogspot.com/2015/11/marco-in-c.htm</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-05-blogger/6199989196808138838/">C++之static member value怎麼初始化？</a><div class="related-posts-item-abstract">¶C++之static member value怎麼初始化？
+原文連結: https://darkblack01.blogspot.com/2015/11/cstati</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-08-blogger/1858588858575390221/">Sort of C++</a><div class="related-posts-item-abstract">¶Sort of C++
+原文連結: https://darkblack01.blogspot.com/2015/05/sort-of-c.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-07-blogger/289507120593125422/">有參數的衍生類別建構子，呼叫有參數的基礎類別建構子</a><div class="related-posts-item-abstract">¶有參數的衍生類別建構子，呼叫有參數的基礎類別建構子
+原文連結: https://darkblack01.blogspot.com/2015/05/blog-post.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-02-blogger/7434920743624182886/">pimpl完全的資訊隱藏</a><div class="related-posts-item-abstract">¶pimpl完全的資訊隱藏
+原文連結: https://darkblack01.blogspot.com/2015/03/pimpl.html
+移植時的最後更新日期: </div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

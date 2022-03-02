@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶CString中找關鍵字的技巧 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;04&#x2F;mfc.html 移植時的最後更新日期: 2015-06-08T09:17:33.507+08:00 我們常常要在字串截取一段之後，尋找想要的一邊、一段、一個字。在此，將使用MFC的CString做示範。(因為這個我最常用！XD）CString技法abcdefghijkl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CString中找關鍵字的技巧">
+<meta property="og:url" content="https://dwatow.github.io/2013/04-25-blogger/4411410962580455823/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶CString中找關鍵字的技巧 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;04&#x2F;mfc.html 移植時的最後更新日期: 2015-06-08T09:17:33.507+08:00 我們常常要在字串截取一段之後，尋找想要的一邊、一段、一個字。在此，將使用MFC的CString做示範。(因為這個我最常用！XD）CString技法abcdefghijkl">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2013-04-24T17:45:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:40.260Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta name="twitter:card" content="summary">
+  <title>CString中找關鍵字的技巧 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>CString中找關鍵字的技巧</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CString%E4%B8%AD%E6%89%BE%E9%97%9C%E9%8D%B5%E5%AD%97%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="toc-text">CString中找關鍵字的技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">CString技法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">abcdefghijklmnopqrstuvwxyz
+字串搜尋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Find()函數</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">找fg左全部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">找fg左3位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">取出特定字之間的字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">找fg右全部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">找fg右3位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Find()注意事項</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="CString中找關鍵字的技巧"><a class="header-anchor" href="#CString中找關鍵字的技巧">¶</a>CString中找關鍵字的技巧</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/04/mfc.html">https://darkblack01.blogspot.com/2013/04/mfc.html</a><br>
+移植時的最後更新日期: 2015-06-08T09:17:33.507+08:00</p>
+<p>我們常常要在字串截取一段之後，尋找想要的一邊、一段、一個字。<br />在此，將使用MFC的CString做示範。(因為這個我最常用！XD）<br /><br /><br /><h2><span style="font-size: x-large;">CString技法</span></h2><h3><span style="font-size: large;">abcdefghijklmnopqrstuvwxyz<br />字串搜尋</span></h3><a name='more'></a><br /><ul><li><h3><span style="font-size: large;">Find()函數</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString goal(“fg”);<br />int goalIndex = sample.Find(goal);</code></pre><span style="font-family: Courier New, Courier, monospace;"> abcde<span style="color: blue;">fg</span>hijk…<br />01234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">找fg左全部</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString goal(“fg”);<br />int goalIndex = sample.Find(goal);<br /><br />CString result = sample.Left(goalIndex);</code></pre><span style="font-family: Courier New, Courier, monospace;"> <span style="background-color: #ffe599;">abcde</span><span style="color: blue;">fg</span>hijk…<br />01234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">找fg左3位</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString goal(“fg”);<br />int goalIndex = sample.Find(goal);<br />const int charAmount = 3;<br />CString result = sample.Mid(goalIndex-charAmount, charAmount);</code></pre><span style="font-family: Courier New, Courier, monospace;"> ab<span style="background-color: #ffe599;">cde</span><span style="color: blue;">fg</span>hijk…<br />01234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">取出特定字之間的字</span></h3></li><pre class="prettyprint">CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString begin(“bc”), end(“fg”);<br />int beginIndex = sample.Find(begin);<br />int endIndex   = sample.Find(end);<br />CString result<br />    = sample.Mid(beginIndex+begin.GetLength(), <br />        endIndex-beginIndex-begin.GetLength()); //感謝網友jordan5441更正</pre><span style="font-family: Courier New, Courier, monospace;"> a<span style="color: blue;">bc</span><span style="background-color: #ffe599;">de</span><span style="color: blue;">fg</span>hijk…<br />0<span style="color: blue;">1</span>234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">找fg右全部</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString goal(“fg”);<br />int goalIndex = sample.Find(goal);<br /><br />CString result <br />  = sample.Right( sample.GetLength() -  goalIndex+goal.GetLength() );<br /></code></pre><span style="font-family: Courier New, Courier, monospace;"> abcde<span style="color: blue;">fg</span><span style="background-color: #ffe599;">hijk…</span><br />01234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">找fg右3位</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />const CString goal(“fg”);<br />int goalIndex = sample.Find(goal);<br />const int charAmount = 3;<br />CString result = sample.Mid(abcIndex+goalIndex.GetLength(), charAmount);</code></pre><span style="font-family: Courier New, Courier, monospace;"> abcde<span style="color: blue;">fg</span><span style="background-color: #ffe599;">hij</span>k…<br />01234<span style="color: blue;">5</span>6789…</span><br /><br /><li><h3><span style="font-size: large;">Find()注意事項</span></h3></li><pre class="prettyprint"><code>CString sample = “abcdefghijklmnopqrstuvwxyz”;<br />int errorIndex = sample.Find(“llllll”);<br />int emptyIndex = sample.Find(“”);</code></pre>errorIndex: -1<br /> emptyIndex: 0<br /><br />搜尋空字串和找不到是兩件事。<br />也就是關鍵字搜尋(假設「找某關鍵字」為true)<br />「找某關鍵字or空字串」→true<br />「找某關鍵字and找不到」→false<br /></ul></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-04-24T17:45:00.000Z" itemprop="datePublished">
+              2013-04-25
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/06-04-blogger/6291301506449055890/">不知道怎麼跑出來的Executable for debug session Dialog</a><div class="related-posts-item-abstract">¶不知道怎麼跑出來的Executable for debug session Dialog
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-29-blogger/859847402283061114/">用MFC的手操作「真．Excel」</a><div class="related-posts-item-abstract">¶用MFC的手操作「真．Excel」
+原文連結: https://darkblack01.blogspot.com/2013/05/mfcexcel.html
+移植時的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-26-blogger/4414593751492371160/">Circle::Animation();的做法</a><div class="related-posts-item-abstract">¶Circle::Animation();的做法
+原文連結: https://darkblack01.blogspot.com/2013/02/circleanimat</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-21-blogger/3027518806235511842/">那一年滴掉的bug//物件的值莫名奇妙被改掉</a><div class="related-posts-item-abstract">¶那一年滴掉的bug//物件的值莫名奇妙被改掉
+原文連結: https://darkblack01.blogspot.com/2013/02/blog-post_21.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-25-blogger/3428760854992959398/">檔案處理API</a><div class="related-posts-item-abstract">¶檔案處理API
+原文連結: https://darkblack01.blogspot.com/2012/09/api.html
+移植時的最後更新日期: 2012-09</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-07-blogger/9094713271188415152/">error C2440 誰是誰？</a><div class="related-posts-item-abstract">¶error C2440 誰是誰？
+原文連結: https://darkblack01.blogspot.com/2012/09/error-c2440.html
+移植</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Xilinx燒錄之…flash PROM燒錄 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;05&#x2F;xilinxflash-prom.html 移植時的最後更新日期: 2013-05-22T10:57:27.800+08:00 在FPGA中，做flash PROM的燒錄，也是一件常見的事，畢竟要Demo給別人看，總不能燒好了，就靠電池帶來帶去的，電源關掉的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xilinx燒錄之....flash PROM燒錄">
+<meta property="og:url" content="https://dwatow.github.io/2013/05-22-blogger/7477681271360518274/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Xilinx燒錄之…flash PROM燒錄 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;05&#x2F;xilinxflash-prom.html 移植時的最後更新日期: 2013-05-22T10:57:27.800+08:00 在FPGA中，做flash PROM的燒錄，也是一件常見的事，畢竟要Demo給別人看，總不能燒好了，就靠電池帶來帶去的，電源關掉的">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://1.bp.blogspot.com/-y069MCc5t_g/UZwgCj7AOsI/AAAAAAAAE8c/omCPNPWg9uI/s1600/selBitFile.jpg">
+<meta property="og:image" content="http://1.bp.blogspot.com/-AJ-AHG6YYuY/UZwe6ZrRxoI/AAAAAAAAE7s/o6Po7mmFy-Q/s1600/setWidth.jpg">
+<meta property="og:image" content="http://2.bp.blogspot.com/--ly7H1KIsf4/UZwiDUNeRsI/AAAAAAAAE8s/fsMZUF-8Ugo/s1600/set+MCS+file.jpg">
+<meta property="og:image" content="http://2.bp.blogspot.com/--sMUmy_QtiI/UZwioThG3HI/AAAAAAAAE80/n0XoEWq-vZQ/s1600/addOtherBit.jpg">
+<meta property="og:image" content="http://4.bp.blogspot.com/-56RS7XQlQRo/UZwjNcvSncI/AAAAAAAAE88/DsTosZEPO3w/s1600/setSPIPROM.jpg">
+<meta property="og:image" content="http://2.bp.blogspot.com/-89BMm0JLxxA/UZwnFnza_qI/AAAAAAAAE9M/O7-PpAGMaPo/s1600/Select+Attached+SPI.jpg">
+<meta property="og:image" content="http://4.bp.blogspot.com/--6HeIw2CChc/UZwpyAOwoXI/AAAAAAAAE9c/c80RqeYLfjo/s1600/set+programming+properties.jpg">
+<meta property="og:image" content="http://1.bp.blogspot.com/-2sRoT1JJdx0/UZwrMr1l3iI/AAAAAAAAE9s/xeus6gCQxPY/s1600/SUCCESS.jpg">
+<meta property="article:published_time" content="2013-05-21T18:22:00.003Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:43.854Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Xilinx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://1.bp.blogspot.com/-y069MCc5t_g/UZwgCj7AOsI/AAAAAAAAE8c/omCPNPWg9uI/s1600/selBitFile.jpg">
+  <title>Xilinx燒錄之....flash PROM燒錄 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Xilinx燒錄之....flash PROM燒錄</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Xilinx%E7%87%92%E9%8C%84%E4%B9%8B%E2%80%A6flash-PROM%E7%87%92%E9%8C%84"><span class="toc-text">Xilinx燒錄之…flash PROM燒錄</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第一步，就得先Set SPI Configuration Bus Width</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第二步，製做.mcs檔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第三步，進行Xilinx燒錄之…暫存燒錄</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第四步，要燒錄啦~</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Xilinx燒錄之…flash-PROM燒錄"><a class="header-anchor" href="#Xilinx燒錄之…flash-PROM燒錄">¶</a>Xilinx燒錄之…flash PROM燒錄</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/05/xilinxflash-prom.html">https://darkblack01.blogspot.com/2013/05/xilinxflash-prom.html</a><br>
+移植時的最後更新日期: 2013-05-22T10:57:27.800+08:00</p>
+<p>在FPGA中，做flash PROM的燒錄，也是一件常見的事，畢竟要Demo給別人看，總不能燒好了，就靠電池帶來帶去的，電源關掉的需求是一定要的。<br />在此，Xilinx的做法，是將.bit檔，包成.mcs檔，再將它放到PROM中。<br /><br /><b>在此的環境</b><br />板子：Xilinx Spartan-6 FPGA LX9 MicroBoard<br />Xilinx ISE版本：13.2<br /><br />由一篇<a target="_blank" rel="noopener" href="http://xilinx.eetrend.com/files-eetrend-xilinx/download/201109/2081-3861-u70avnetspartan-6lx9microboardconfigurationguidev13.pdf">Avnet的技術文件</a>中的副件A，可以得知.mcs檔的包裝，依板子而異，而所包進去的.bit檔。<br /><br /><a name='more'></a><br /><br /><h2><span style="font-size: large;">第一步，就得先Set SPI Configuration Bus Width</span></h2><div class="separator" style="clear: both; text-align: center;"></div><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-y069MCc5t_g/UZwgCj7AOsI/AAAAAAAAE8c/omCPNPWg9uI/s1600/selBitFile.jpg" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-y069MCc5t_g/UZwgCj7AOsI/AAAAAAAAE8c/omCPNPWg9uI/s1600/selBitFile.jpg" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">選擇Generate Programing File→Process Properties…</td></tr></tbody></table><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-AJ-AHG6YYuY/UZwe6ZrRxoI/AAAAAAAAE7s/o6Po7mmFy-Q/s1600/setWidth.jpg" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://1.bp.blogspot.com/-AJ-AHG6YYuY/UZwe6ZrRxoI/AAAAAAAAE7s/o6Po7mmFy-Q/s1600/setWidth.jpg" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">設定Configuration Opitions→Set SPI Configuration Bus Width 為 4（4的值依硬體而定）</td></tr></tbody></table>設定好之後，就重新生成.bit檔。<br /><span style="color: #cc0000;">這一步最重要的就是SPI Configuation Bus Width多大</span><br /><br /><h2><span style="font-size: large;">第二步，製做.mcs檔</span></h2>然後開啟iMPACT→Creat PROM File(PROM File Formatter)<br />也或者從iMPACT→New Project→Prepare a PROM file也是一樣。<br /><br />這裡設定要注意，存放.mcs的「容器檔」放置在哪一個路徑（它有一個預設的路徑，和專案無關）<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/--ly7H1KIsf4/UZwiDUNeRsI/AAAAAAAAE8s/fsMZUF-8Ugo/s1600/set+MCS+file.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/--ly7H1KIsf4/UZwiDUNeRsI/AAAAAAAAE8s/fsMZUF-8Ugo/s1600/set+MCS+file.jpg" /></a></div><br />按下OK。<br /><br /><br />接著會問你是不是要加載.bit檔。<br />這個問題會一直出現，因為有時燒錄不是只有燒進一個.bit檔，沒有需要的話，就只要按一次的Yes，之後按No。<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/--sMUmy_QtiI/UZwioThG3HI/AAAAAAAAE80/n0XoEWq-vZQ/s1600/addOtherBit.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/--sMUmy_QtiI/UZwioThG3HI/AAAAAAAAE80/n0XoEWq-vZQ/s1600/addOtherBit.jpg" /></a></div><br />其它的都只有一個「確定」或「OK」，就不介紹了！<br />接下來看到的畫面如下<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/-56RS7XQlQRo/UZwjNcvSncI/AAAAAAAAE88/DsTosZEPO3w/s1600/setSPIPROM.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-56RS7XQlQRo/UZwjNcvSncI/AAAAAAAAE88/DsTosZEPO3w/s1600/setSPIPROM.jpg" /></a></div><br />這個視窗介紹一下。<br />簡單版，看見這畫面按iMPACT Process(左邊中間)的分割視窗，Generate File…<br />詳細介紹版：<br />視窗中間和右邊中間兩個區塊，是PROM File Formatter: SPI Flash Single FPGA<br />有一個「有±的slider 」這個區塊，是圖形化表示，你設定的PROM裝了多少的.bit，剩下多少空間，address都寫在上面，slider是View zoom<br />右邊的部份是圖形化表示，你有幾個.bit檔要燒進PROM中，PROM的大小也標示在上面。<br />確定之後，按下Generate File…<br /><br />存放的路徑就是你剛剛設定的。<br /><br />這樣就完成了.mcs檔的生成，<span style="color: #cc0000;">這一步最重要的就是路徑要記好</span><br /><br /><br /><h2><span style="font-size: large;">第三步，進行<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/2013/05/xilinx.html">Xilinx燒錄之…暫存燒錄</a></span></h2>進行到「燒錄是不是要設定一個PROM（就可以燒進PROM裡啦），我們在這裡選No」，在這裡就要選Yes啦！<br /><br /><h2><span style="font-size: large;">第四步，要燒錄啦~</span></h2>之後，會跳出一個要你選.mcs的對話框，選好路徑和檔案按「OK」。<br />又跳出一個對話框 Select Attached SPI/BPI（在此的設定依硬體而異，並不是全部相同的設定唷）<br /><br /><ul><li>左邊選SPI PROM</li><li>右邊上面選N25Q128 1.8/3.3V</li><li>寬度選4（在此是要選擇和.bit檔相同寬度的設定）</li></ul><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-89BMm0JLxxA/UZwnFnza_qI/AAAAAAAAE9M/O7-PpAGMaPo/s1600/Select+Attached+SPI.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-89BMm0JLxxA/UZwnFnza_qI/AAAAAAAAE9M/O7-PpAGMaPo/s1600/Select+Attached+SPI.jpg" /></a></div>按下OK<br /><br />接下來設定每一組（剛剛有講，可以一次接很多個.bit檔）PROM及FPGA Device<br />在此的例子（也是我唯一的經驗）就是燒錄一組。<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/--6HeIw2CChc/UZwpyAOwoXI/AAAAAAAAE9c/c80RqeYLfjo/s1600/set+programming+properties.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/--6HeIw2CChc/UZwpyAOwoXI/AAAAAAAAE9c/c80RqeYLfjo/s1600/set+programming+properties.jpg" /></a></div>最主要的就是Device 1( Attached FLASH, N25Q128 )這裡的字因硬體而異。<br />右邊要打勾的選項，依序是<br />verify，燒錄完是否要確認內容正確性<br />Design-Spectific Erase Before Programming，燒錄前是否要抹除前設計。<br />After programming Flash…，燒錄之後…(算了，選default就好)<br />按下OK。<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-2sRoT1JJdx0/UZwrMr1l3iI/AAAAAAAAE9s/xeus6gCQxPY/s1600/SUCCESS.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-2sRoT1JJdx0/UZwrMr1l3iI/AAAAAAAAE9s/xeus6gCQxPY/s1600/SUCCESS.jpg" /></a></div>當然不是馬上SUCCESS，只是就可以看見這個畫面（沒有SUCCESS）<br />點一下FLASH→Program。（等很久）<br /><br />最後就可以看見SUCCESS了！<br /><br />如果出現問題<br />請務必檢查.mcs檔裡包的.bit檔，它的SPI BUS witdh的設定是不是和載入的時的設定一樣。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-05-21T18:22:00.003Z" itemprop="datePublished">
+              2013-05-22
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Xilinx/">Xilinx</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-24-blogger/4429351950591803094/">設計一個16bit的通用計數器</a><div class="related-posts-item-abstract">¶設計一個16bit的通用計數器
+原文連結: undefined
+移植時的最後更新日期: 2013-05-24T15:36:05.657+08:00
+使用兩個符合下列規</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-24-blogger/3994827056815555581/">通用型8bit計數器</a><div class="related-posts-item-abstract">¶通用型8bit計數器
+原文連結: https://darkblack01.blogspot.com/2013/05/8bit.html
+移植時的最後更新日期: 201</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-17-blogger/1339961799073146201/">Xilinx燒錄之....暫存燒錄</a><div class="related-posts-item-abstract">¶Xilinx燒錄之…暫存燒錄
+原文連結: https://darkblack01.blogspot.com/2013/05/xilinx.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-17-blogger/7937593703868520194/">Xilinx 13.2 Installer</a><div class="related-posts-item-abstract">¶Xilinx 13.2 Installer
+原文連結: https://darkblack01.blogspot.com/2013/05/xilinx-132-ins</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-16-blogger/8723925603308108335/">Xilinx Spartan-6 FPGA LX9 MicroBoard的Driver</a><div class="related-posts-item-abstract">¶Xilinx Spartan-6 FPGA LX9 MicroBoard的Driver
+原文連結: https://darkblack01.blogspot.com/</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

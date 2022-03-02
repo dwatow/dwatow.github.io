@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;10&#x2F;c6-game-programing-game-6-ch17.html 移植時的最後更新日期: 2015-10-18T21:29:12.526+08:00 貳部曲!!這次準備要介紹:如何測試函數的正確性如何測試拋">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲">
+<meta property="og:url" content="https://dwatow.github.io/2014/10-28-blogger/433209352242401635/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;10&#x2F;c6-game-programing-game-6-ch17.html 移植時的最後更新日期: 2015-10-18T21:29:12.526+08:00 貳部曲!!這次準備要介紹:如何測試函數的正確性如何測試拋">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-10-28T05:38:00.005Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:34.964Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="TDD">
+<meta name="twitter:card" content="summary">
+  <title>C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-7-Game-Programing-Game-6-Ch1-7-%E8%B2%B3%E9%83%A8%E6%9B%B2"><span class="toc-text">C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲</span></a></li></ol>
+  </div>
+
+
+    <h1 id="C-單元測試-7-Game-Programing-Game-6-Ch1-7-貳部曲"><a class="header-anchor" href="#C-單元測試-7-Game-Programing-Game-6-Ch1-7-貳部曲">¶</a>C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/10/c6-game-programing-game-6-ch17.html">https://darkblack01.blogspot.com/2014/10/c6-game-programing-game-6-ch17.html</a><br>
+移植時的最後更新日期: 2015-10-18T21:29:12.526+08:00</p>
+<p>貳部曲!!這次準備要介紹:<br /><ol><li>如何測試函數的正確性</li><li>如何測試拋出正確的例外處理</li></ol>假設，我們即將設計一個像這樣的類別 <br /><pre class="prettyprint"><a target="_blank" rel="noopener" href="//model.h">//model.h</a><br />typedef int model_type;<br />typedef int vertex_t;<br />typedef int tringle_t;<br />typedef int mesh_t;<br />typedef int material_t;<br />typedef int joint_t;<br /><br /><br />class model<br />{<br />public:<br /> void loadfile(const char* file_path);<br /> void render();<br /> void animate(float speed, bool loop = true);<br /> <br /> //我們利用一些實用函數來加載模型文件<br /> void parse_header_section(char* file_text);<br /> void parse_triangle_section(char* file_text);<br /> void parse_mesh_section(char* file_text);<br /> void parse_material_section(char* file_text);<br /> void parse_animation_section(char* file_text);<br /> void preare_joints();<br /> //從文件中加載紋理(支援bmp檔)<br /> void load_texture(const char* file_path);<br /> //讀取檔案資訊的函數<br /> double get_version() const<br /> { return m_version; }<br /> model_type get_type() const<br /> { return m_model_type; }<br /> const char* get_name() const<br /> { return m_name; }<br /> const char* get_author() const<br /> { return m_author; }<br /> //讀取資料函數<br /> size_t get_number_of_vertices() const<br /> { return m_number_of_vertices; }<br /> size_t get_number_of_triangles() const<br /> { return m_number_of_triangles; }<br /> size_t get_number_of_meshes() const<br /> { return m_number_of_meshes; }<br /> size_t get_number_of_materials() const<br /> { return m_number_of_materials; }<br /> size_t get_number_of_joints() const<br /> { return m_number_of_joints; }<br />private:<br /> double m_version;<br /> model_type m_model_type;<br /> char* m_name;<br /> char* m_author;<br /> unsigned short m_number_of_vertices;<br /> unsigned short m_number_of_triangles;<br /> unsigned short m_number_of_meshes;<br /> unsigned short m_number_of_materials;<br /> unsigned short m_number_of_joints;<br /><br /> vertex_t* m_vertices;<br /> tringle_t* m_triangles;<br /> mesh_t* m_meshes;<br /> material_t* m_materials;<br /> joint_t* m_joints;<br />};<br /><br /></pre>以下，將對一個parse_header_section()做單元測試。<br />它是一個public的函數，也是一般我們會做單元測試的範圍。<br />因為「在不更動public函數介面的情況之下，讓private的可讀性提昇」的情況之下重構，就可以在不變更unit test function的情況之下，知道你的程式碼有沒有改壞了。(所以，設計一個有好public function的class，是首要之事呀)<br /><br />單元測試的內容，包含了正常的測試也包含了非正常情況的測試。<br />在此，我們都會對parse_header_section()做測試，不過兩種測試都是針對「可預期情況」做測試。<br /><br />非正常條件的測試<br /><pre class="prettyprint"><code>/* 第一個測試例子是一個比較簡單的測試：<br /> 向這個函數傳遞一個非法的參數，我們就假設去傳入一個空指標。<br /> 我們預期的是，如果傳遞給函數的標記語言是非法的，那麼該函數會發出一個model_invalid_header的例外。<br /><br /> 因此，你的測試內容應該向函數parse_animation_section()傳入一個空指標，<br /> 並使用CPPUNIT_ASSERT_THROW巨集，驗證這個函數會拋出model_invalid_header例外。<br /> <em>/<br /> void TestInvlidHeaderNullValue()<br />    &#123;<br />        model my_model;<br />  CPPUNIT_ASSERT_THROW(my_model.parse_animation_section(0), model_invalid_header);<br />    &#125;</code></pre><pre class="prettyprint"><code>/</em><br /> 另一個測試是傳入一個有問題的標籤。<br /> <em>/<br /> void TestInvalidHeaderIllFormatted()<br /> &#123;<br />  model my_model;<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER”<br />   “&lt;VERSION&gt;1.1&lt;/VERSION&gt;”<br />   “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />   “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />   “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”),<br />   model_invalid_header);<br />  /</em><br />  在這標籤測試中，在第一個HEADER的後面少了一個&quot;&gt;&quot;，並且還缺少了一個結束標記&lt;/HEADER&gt;<br />  <em>/<br /> &#125;</code></pre><pre class="prettyprint"><code>/</em> 第三個測試應該去測試這個情境：<br /> 如果標記中缺少了版本標籤&quot;&lt;VERSION&gt;&quot;，或缺少了類型標籤&quot;&lt;TYPE&gt;&quot;，這個函數會有怎樣的執行結果呢？<br /><br /> 如果沒有找到這些資訊，這個函數就應該相對應的發出model_invalid_version例外和model_invalid_type例外。<br /> <em>/<br /> void TestInvalidVersionSection()<br /> &#123;<br />  model my_model;<br />  //版本標籤缺少內容<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br /><br />  //缺少版本標籤<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br />  //版本標籤出錯<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br />  /</em><br />  在這標籤測試中，在第一個HEADER的後面少了一個&quot;&gt;&quot;，並且還缺少了一個結束標記&lt;/HEADER&gt;<br />  <em>/<br /> &#125;</code></pre><pre class="prettyprint"><code>/</em><br /> 我們還應該建立另一個類似的測試，驗證type類型。<br /> <em>/<br /> void TestInvalidType()<br /> &#123;<br />  model my_model;<br />  //版本標籤缺少內容<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br /><br />  //缺少版本標籤<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br />  //版本標籤出錯<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br /> &#125;</code></pre>正常條件的測試 <br /><pre class="prettyprint"><code>/</em> 用失敗的條件去測試固然重要，但是用可以正常工作的資料去檢查函數的正確性也是很重要的。<br /> 對於條件測試，我們可以使用CPPUNIT_ASSERT巨集。<br /> 這個和C<ins>標準的assert()幾乎一模一樣。<br /><br /> 在此要叫函數parse_header_section，然後再來驗證其版本訊息和類型訊息是否正確。<br /> <em>/<br /> void TestInvalidValidHeader()<br /> &#123;<br />  model my_model;<br />  my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”);<br />   model_invalid_header);<br /><br />  CPPUNIT_ASSERT(my_model.get_version() == 1.2);<br />  CPPUNIT_ASSERT(my_model.get_type() == world_level);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_name(), “Character Select Gallery”) == 0);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_author(), “Blake Madden”) == 0);<br /><br />  //沒有包含模型的作者和模型名稱<br />  my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />   “&lt;/HEADER&gt;”);<br />   model_invalid_header);<br /><br />  CPPUNIT_ASSERT(my_model.get_version() == 1.2);<br />  CPPUNIT_ASSERT(my_model.get_type() == world_level);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_name(), “”) == 0);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_author(), “”) == 0);<br />  /</em><br />  我們傳入函數中的參數是完全合法的標記語言，然後再去確認相對應的版本、類型、名稱以及作者。<br />  我們可以知道哪些成功，至於哪些失敗，CppUnit會把它記錄在Log中。<br />  <em>/<br /> &#125;</code></pre>最後，測試治具類別裡的code像這樣<br /><pre class="prettyprint"><code>#ifndef MODEL_CLASS_H<br />#define MODEL_CLASS_H<br /><br />#include “CppunitLib.h”<br />#include &quot;model.h&quot;<br /><br />class ModelTest : public CppUnit::TestFixture<br />&#123;<br />public:<br /> /</em> 第一個測試例子是一個比較簡單的測試：<br /> 向這個函數傳遞一個非法的參數，我們就假設去傳入一個空指標。<br /> 我們預期的是，如果傳遞給函數的標記語言是非法的，那麼該函數會發出一個model_invalid_header的例外。<br /><br /> 因此，你的測試內容應該向函數parse_animation_section()傳入一個空指標，<br /> 並使用CPPUNIT_ASSERT_THROW巨集，驗證這個函數會拋出model_invalid_header例外。<br /> <em>/<br /> void TestInvlidHeaderNullValue()<br />    &#123;<br />        model my_model;<br />  CPPUNIT_ASSERT_THROW(my_model.parse_animation_section(0), model_invalid_header);<br />    &#125;<br /><br /> /</em><br /> 另一個測試是傳入一個有問題的標籤。<br /> <em>/<br /> void TestInvalidHeaderIllFormatted()<br /> &#123;<br />  model my_model;<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER”<br />   “&lt;VERSION&gt;1.1&lt;/VERSION&gt;”<br />   “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />   “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />   “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”),<br />   model_invalid_header);<br />  /</em><br />  在這標籤測試中，在第一個HEADER的後面少了一個&quot;&gt;&quot;，並且還缺少了一個結束標記&lt;/HEADER&gt;<br />  <em>/<br /> &#125;<br /><br /> /</em> 第三個測試應該去測試這個情境：<br /> 如果標記中缺少了版本標籤&quot;&lt;VERSION&gt;&quot;，或缺少了類型標籤&quot;&lt;TYPE&gt;&quot;，這個函數會有怎樣的執行結果呢？<br /><br /> 如果沒有找到這些資訊，這個函數就應該相對應的發出model_invalid_version例外和model_invalid_type例外。<br /> <em>/<br /> void TestInvalidVersionSection()<br /> &#123;<br />  model my_model;<br />  //版本標籤缺少內容<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br /><br />  //缺少版本標籤<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br />  //版本標籤出錯<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_version);<br />  /</em><br />  在這標籤測試中，在第一個HEADER的後面少了一個&quot;&gt;&quot;，並且還缺少了一個結束標記&lt;/HEADER&gt;<br />  <em>/<br /> &#125;<br /><br /> /</em><br /> 我們還應該建立另一個類似的測試，驗證type類型。<br /> <em>/<br /> void TestInvalidType()<br /> &#123;<br />  model my_model;<br />  //版本標籤缺少內容<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br /><br />  //缺少版本標籤<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br />  //版本標籤出錯<br />  CPPUNIT_ASSERT_THROW(my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”),<br />   model_invalid_type);<br /> &#125;<br /><br /> /</em> 用失敗的條件去測試固然重要，但是用可以正常工作的資料去檢查函數的正確性也是很重要的。<br /> 對於條件測試，我們可以使用CPPUNIT_ASSERT巨集。<br /> 這個和C</ins>標準的assert()幾乎一模一樣。<br /><br /> 在此要叫函數parse_header_section，然後再來驗證其版本訊息和類型訊息是否正確。<br /> <em>/<br /> void TestInvalidValidHeader()<br /> &#123;<br />  model my_model;<br />  my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />    “&lt;NAME&gt;Character Select Gallery&lt;/NAME&gt;”<br />    “&lt;AUTHOR&gt;Blake Madden&lt;/AUTHOR&gt;”<br />   “&lt;/HEADER&gt;”);<br />   model_invalid_header);<br /><br />  CPPUNIT_ASSERT(my_model.get_version() == 1.2);<br />  CPPUNIT_ASSERT(my_model.get_type() == world_level);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_name(), “Character Select Gallery”) == 0);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_author(), “Blake Madden”) == 0);<br /><br />  //沒有包含模型的作者和模型名稱<br />  my_model.parse_header_section(<br />   “&lt;HEADER&gt;”<br />    “&lt;VERSION&gt;1.2&lt;/VERSION&gt;”<br />    “&lt;TYPE&gt;WorldLevel&lt;/TYPE&gt;”<br />   “&lt;/HEADER&gt;”);<br />   model_invalid_header);<br /><br />  CPPUNIT_ASSERT(my_model.get_version() == 1.2);<br />  CPPUNIT_ASSERT(my_model.get_type() == world_level);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_name(), “”) == 0);<br />  CPPUNIT_ASSERT(strcmp(my_model.get_author(), “”) == 0);<br />  /</em><br />  我們傳入函數中的參數是完全合法的標記語言，然後再去確認相對應的版本、類型、名稱以及作者。<br />  我們可以知道哪些成功，至於哪些失敗，CppUnit會把它記錄在Log中。<br />  */<br /> &#125;<br />public:<br />    CPPUNIT_TEST_SUITE(ModelTest);<br />  CPPUNIT_TEST(TestInvlidHeaderNullValue);<br />  CPPUNIT_TEST(TestInvalidHeaderIllFormatted);<br />  CPPUNIT_TEST(TestInvalidVersionSection);<br />  CPPUNIT_TEST(TestInvalidType);<br />  CPPUNIT_TEST(TestInvalidValidHeader);<br />    CPPUNIT_TEST_SUITE_END();<br />&#125;;<br /><br />#endif</code></pre></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-10-28T05:38:00.005Z" itemprop="datePublished">
+              2014-10-28
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/TDD/">TDD</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-09-blogger/8268875242448437712/">C++單元測試(12) - fake, stub, mock object</a><div class="related-posts-item-abstract">¶C++單元測試(12) - fake, stub, mock object
+原文連結: https://darkblack01.blogspot.com/2015/1</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-10-blogger/1143174315685259687/">C++單元測試(10) - Mock、Stub蓋台的目錄設定</a><div class="related-posts-item-abstract">¶C++單元測試(10) - Mock、Stub蓋台的目錄設定
+原文連結: https://darkblack01.blogspot.com/2015/11/cppun</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/10-19-blogger/2391230648499873743/">C++單元測試(6) - Game Programing Game 6 Ch1.7 首部曲</a><div class="related-posts-item-abstract">¶C++單元測試(6) - Game Programing Game 6 Ch1.7 首部曲
+原文連結: https://darkblack01.blogspot.co</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-11-blogger/5436064464148438555/">Visual Studio 2013 的Unit Test....</a><div class="related-posts-item-abstract">¶Visual Studio 2013 的Unit Test…
+原文連結: https://darkblack01.blogspot.com/2014/07/visua</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

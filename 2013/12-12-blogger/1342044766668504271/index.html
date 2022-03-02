@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶讓sublime text 2可以使用makefile和g++ 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;sublime-text-2c-compiler.html 移植時的最後更新日期: 2014-09-27T18:38:50.352+08:00 這篇，最後就是要讓Sublime text 2可以跑c的IDE第一步，安裝MinGW相關細節，為">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讓sublime text 2可以使用makefile和g++">
+<meta property="og:url" content="https://dwatow.github.io/2013/12-12-blogger/1342044766668504271/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶讓sublime text 2可以使用makefile和g++ 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;sublime-text-2c-compiler.html 移植時的最後更新日期: 2014-09-27T18:38:50.352+08:00 這篇，最後就是要讓Sublime text 2可以跑c的IDE第一步，安裝MinGW相關細節，為">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://1.bp.blogspot.com/-fkrVYyszpbA/UqmE2zT5R8I/AAAAAAAAGPk/J3yxmOIbtLc/s1600/sublimeText2forCpp.JPG">
+<meta property="og:image" content="http://3.bp.blogspot.com/-VmN1nQCjBwY/Uq6P7aLTFqI/AAAAAAAAGQc/gyuqQHEgOF0/s1600/installMake.JPG">
+<meta property="og:image" content="http://2.bp.blogspot.com/-C1A8ruTR85I/Uq6P_jfJKqI/AAAAAAAAGQw/wgkftEuujYI/s1600/pathMake.JPG">
+<meta property="og:image" content="http://3.bp.blogspot.com/-FMwkZYPnHBU/Uq6P_l0SSkI/AAAAAAAAGQs/wbXyhoaT3Wc/s1600/setupPath.JPG">
+<meta property="og:image" content="http://1.bp.blogspot.com/-9waIGpGjanY/Uq6XlsHbkxI/AAAAAAAAGQ8/nVTH6fiZvbY/s1600/okMakefileSublimeText.JPG">
+<meta property="article:published_time" content="2013-12-12T01:49:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:36.092Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="sublime text2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://1.bp.blogspot.com/-fkrVYyszpbA/UqmE2zT5R8I/AAAAAAAAGPk/J3yxmOIbtLc/s1600/sublimeText2forCpp.JPG">
+  <title>讓sublime text 2可以使用makefile和g++ - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>讓sublime text 2可以使用makefile和g++</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%93sublime-text-2%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8makefile%E5%92%8Cg"><span class="toc-text">讓sublime text 2可以使用makefile和g++</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第一步，安裝MinGW</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第二步，使用make[2]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">接下來就是設定sublime text 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">最後一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">好了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">後記</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="讓sublime-text-2可以使用makefile和g"><a class="header-anchor" href="#讓sublime-text-2可以使用makefile和g">¶</a>讓sublime text 2可以使用makefile和g++</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/12/sublime-text-2c-compiler.html">https://darkblack01.blogspot.com/2013/12/sublime-text-2c-compiler.html</a><br>
+移植時的最後更新日期: 2014-09-27T18:38:50.352+08:00</p>
+<p>這篇，最後就是要讓Sublime text 2可以跑c<ins>的IDE<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-fkrVYyszpbA/UqmE2zT5R8I/AAAAAAAAGPk/J3yxmOIbtLc/s1600/sublimeText2forCpp.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-fkrVYyszpbA/UqmE2zT5R8I/AAAAAAAAGPk/J3yxmOIbtLc/s1600/sublimeText2forCpp.JPG" /></a></div><br /><br /><h3><span style="font-size: large;">第一步，安裝<a href="http://downloads.sourceforge.net/project/mingw/Installer/mingw-get-setup.exe?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fmingw%2Ffiles%2FInstaller%2F&amp;ts=1387192606&amp;use_mirror=ncu" target="_blank">MinGW</a></span></h3>相關細節，為了不抄人家的文章，我們就來看<a href="http://cloverhsc.blogspot.tw/2013/09/sublime-text-ccide-in-windows2-g.html" target="_blank">原始的教學</a>吧！[1]<br /><strike>   <span style="color: #cccccc; font-size: xx-small;">      結束！<br />      <br />      『什麼？這篇在寫什麼鬼東西？這不叫抄文章？？&gt;&lt;』<br />      <br />      先別罵髒話！</span></strike><br />不然，看看濃縮版。<br />到<a href="http://sourceforge.net/projects/mingw/files/Installer/" target="_blank">下載頁面</a>，下載mingw-get-setup.exe<br />安裝g</ins>，設定環境變數<span style="font-family: Courier New, Courier, monospace;">&lt;MinGw path&gt;\bin</span><br /><br /><strike><span style="color: #cccccc; font-size: xx-small;">這篇是我出現問題時的解法。</span></strike><br /><div><strike><span style="color: #cccccc; font-size: xx-small;"><br /></span></strike></div>我出現的問題是「環境變數設定好了，卻 <strike>   <span style="color: #cccccc; font-size: xx-small;">      跟狗屎一樣    </span></strike>沒有用」<br /><br /><strike>   <span style="color: #cccccc; font-size: xx-small;">      『什麼？狗屎？』<br />      「…」<br />      <br />      就是，設定好了！沒有用！<br />      (中間的故事和issue圖就先略了)<br />   </span></strike><br />解法就是…<br />環境變數中的path，用<span style="font-family: Courier New, Courier, monospace; font-size: x-large;">;</span>隔開，但是不可以包含空白！<br /><br /><strike>   <span style="color: #cccccc; font-size: xx-small;">      千千萬萬小心呀~~&gt;&lt;<br />      我貼心的為了美感，將所有的;後面都空白，導致我的visual studio也出問題了！一度刪掉自己原本建好的專案！嗚~~還好我有可愛的git<br />   </span></strike><br />到這裡，已經可以complier c<ins>的檔案了，不過限於一個.cpp檔。<br />大多數的c</ins>寫法都會將類別的宣告寫在.h檔，實作寫在.cpp檔中。<br />如果環境架設只到這一步，將只可以complier main.cpp和其它類別的.h檔，這樣的用法非常不實用！所以，我們趕快接著第二步來看看吧！^^<br /><br /><strike><br /></strike>到這裡，已經可以complier c<ins>的檔案了，不過限於一個.cpp檔。<br />大多數的c</ins>寫法都會將類別的宣告寫在.h檔，實作寫在.cpp檔中。<br />如果環境架設只到這一步，將只可以complier main.cpp和其它類別的.h檔，這樣的用法非常不實用！所以，我們趕快接著第二步來看看吧！^^<br /><br /><h3><span style="font-size: large;">第二步，使用make[2]</span></h3>確定MinGW有安裝make(在msys下)<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-VmN1nQCjBwY/Uq6P7aLTFqI/AAAAAAAAGQc/gyuqQHEgOF0/s1600/installMake.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-VmN1nQCjBwY/Uq6P7aLTFqI/AAAAAAAAGQc/gyuqQHEgOF0/s1600/installMake.JPG" /></a></div>找一下路徑<br />確定路徑是在c:\MinGW\msys\1.0\bin<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-C1A8ruTR85I/Uq6P_jfJKqI/AAAAAAAAGQw/wgkftEuujYI/s1600/pathMake.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-C1A8ruTR85I/Uq6P_jfJKqI/AAAAAAAAGQw/wgkftEuujYI/s1600/pathMake.JPG" /></a></div>設定環境變數<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-FMwkZYPnHBU/Uq6P_l0SSkI/AAAAAAAAGQs/wbXyhoaT3Wc/s1600/setupPath.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-FMwkZYPnHBU/Uq6P_l0SSkI/AAAAAAAAGQs/wbXyhoaT3Wc/s1600/setupPath.JPG" /></a></div><br /><h3><span style="font-size: large;">接下來就是設定sublime text 2</span></h3>(如同[1]新增C++ Builder一樣)<br />在Sublime Text2 「Tools」-&gt;「Build System」-&gt;「New Build System…」來自己設定Compiler 參數。<br />如下：<br /><pre class="prettyprint"><code class="language-js">&#123;<br />    “cmd”: [“make”],<br />    “file_regex”: &quot; <sup>(…[</sup>:]<em>):([0-9]+):?([0 -9]+)?:? (.</em>)<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">&quot;</mi><mo separator="true">,</mo><mo>&lt;</mo><mi>b</mi><mi>r</mi><mi mathvariant="normal">/</mi><mo>&gt;</mo><mi mathvariant="normal">&quot;</mi><mi>w</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi>i</mi><mi>n</mi><msub><mi>g</mi><mi>d</mi></msub><mi>i</mi><mi>r</mi><mi mathvariant="normal">&quot;</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">&quot;,&lt;br /&gt;    &quot;working_dir&quot;: &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">&quot;</span><span class="mpunct">,</span><span class="mrel">&lt;</span><span class="mord mathit">b</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">/</span><span class="mrel">&gt;</span><span class="mord mathrm">&quot;</span><span class="mord mathit" style="margin-right:0.02691em;">w</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">i</span><span class="mord mathit">n</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.03588em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">d</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">&quot;</span><span class="mrel">:</span><span class="mord mathrm">&quot;</span></span></span></span>&#123;file_path&#125;&quot;,<br />    “selector”: “source.c, source.c++”,<br />    “variants”:<br />     [<br />          &#123;<br />               “name”: “Run”,<br />               “cmd”: [&quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>f</mi><mi>i</mi><mi>l</mi><msub><mi>e</mi><mi>p</mi></msub><mi>a</mi><mi>t</mi><mi>h</mi></mrow><mi mathvariant="normal">/</mi></mrow><annotation encoding="application/x-tex">&#123;file_path&#125;/</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">p</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">h</span></span><span class="mord mathrm">/</span></span></span></span>&#123;file_base_name&#125;.exe&quot;]<br />          &#125;<br />     ]<br />&#125;</code></pre><br /><h3><span style="font-size: large;">最後一步</span></h3>(感謝<a href="https://plus.google.com/u/0/105883038265707928425" target="_blank">Andy Shieh</a>在這一關提醒我漏了什麼) 寫一個簡單的makefile<br />內容要有一個標籤，還有呼叫g<ins>的指令與參數。<br />檔名存成「makefile」 <br /><pre class="prettyprint"><code class="language-js">all:<br />&lt;一個tab的空白&gt;g</ins> -o main main.cpp a.cpp</code></pre><br /><h3><span style="font-size: large;">好了</span></h3>之後，我們來測試一下<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-9waIGpGjanY/Uq6XlsHbkxI/AAAAAAAAGQ8/nVTH6fiZvbY/s1600/okMakefileSublimeText.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-9waIGpGjanY/Uq6XlsHbkxI/AAAAAAAAGQ8/nVTH6fiZvbY/s1600/okMakefileSublimeText.JPG" width="800" /></a></div><br /><h3><span style="font-size: large;">後記</span></h3><br />後來重灌安裝，想要做最小安裝，把不必要的通通不要裝。<br />一個一個取消要安裝的，留下g<ins>和make之後，一執行出現了下面的錯誤訊息。<br /><blockquote class="tr_bq">無法啟動程式，因為您的電腦遺失 libgmp-10.dll。請嘗試重新安裝以修正這個問題。[3]</blockquote>或者<br /><blockquote class="tr_bq">無法啟動程式，因為您的電腦遺失 zlib1.dll。請嘗試重新安裝以修正這個問題。</blockquote> 這個問題，只要安裝mingw32-base，就可以解決囉！<br /><br />但是萬一是這個問題<br /><blockquote class="tr_bq">無法啟動程式 因為您的電腦遺失msys-1.0.dll。請嘗試重新安裝以修正這個問題。</blockquote>就是點(一個一個取消要安裝)過頭囉！重新安裝你的g</ins>吧！<br /><br /><br />參考資料:<br />[1] <a href="http://cloverhsc.blogspot.tw/2013/09/sublime-text-ccide-in-windows2-g.html" target="_blank">使用Sublime Text 來作為C/C<ins>的IDE in Windows(2) ~G</ins> Compiler</a><br />[2] <a href="http://stackoverflow.com/questions/13815493/sublime-text-build-system-that-just-make" target="_blank">Sublime Text Build System that just “make”</a><br />[3] <a href="http://jex.logdown.com/posts/167511-windows-install-gcc-compiler-mingw" target="_blank">windows 安裝 gcc 編譯器 - MinGW</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-12-12T01:49:00.001Z" itemprop="datePublished">
+              2013-12-12
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/sublime-text2/">sublime text2</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-20-blogger/7937943959488350966/">學Sublime text的....</a><div class="related-posts-item-abstract">¶學Sublime text的…
+原文連結: https://darkblack01.blogspot.com/2014/08/sublime-text.html
+移植</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-20-blogger/5042000863178855991/">按Enter，自動縮排</a><div class="related-posts-item-abstract">¶按Enter，自動縮排
+原文連結: https://darkblack01.blogspot.com/2014/08/enter.html
+移植時的最後更新日期: 2</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/06-24-blogger/6279293797331090623/">Sublime text 2之好用的摺code 功能</a><div class="related-posts-item-abstract">¶Sublime text 2之好用的摺code 功能
+原文連結: https://darkblack01.blogspot.com/2014/06/sublime-t</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/12-25-blogger/5851466659363197193/">神乎其技的....snippet</a><div class="related-posts-item-abstract">¶神乎其技的…snippet
+原文連結: https://darkblack01.blogspot.com/2013/12/snippet.html
+移植時的最後更新日</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

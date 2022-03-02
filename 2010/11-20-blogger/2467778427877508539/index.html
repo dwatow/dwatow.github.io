@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶MFC用在Excel（語法+註解篇） 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2010&#x2F;11&#x2F;mfcexcel.html 移植時的最後更新日期: 2014-03-03T15:05:55.173+08:00 初始化objApp.CreateDispatch(“Excel.Application”,&amp;e) &#x2F;&#x2F;產生一個Excel應用程式objApp.Se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MFC用在Excel（語法+註解篇）">
+<meta property="og:url" content="https://dwatow.github.io/2010/11-20-blogger/2467778427877508539/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶MFC用在Excel（語法+註解篇） 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2010&#x2F;11&#x2F;mfcexcel.html 移植時的最後更新日期: 2014-03-03T15:05:55.173+08:00 初始化objApp.CreateDispatch(“Excel.Application”,&amp;e) &#x2F;&#x2F;產生一個Excel應用程式objApp.Se">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2010-11-19T20:37:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:37.638Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta name="twitter:card" content="summary">
+  <title>MFC用在Excel（語法+註解篇） - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>MFC用在Excel（語法+註解篇）</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MFC%E7%94%A8%E5%9C%A8Excel%EF%BC%88%E8%AA%9E%E6%B3%95-%E8%A8%BB%E8%A7%A3%E7%AF%87%EF%BC%89"><span class="toc-text">MFC用在Excel（語法+註解篇）</span></a></li></ol>
+  </div>
+
+
+    <h1 id="MFC用在Excel（語法-註解篇）"><a class="header-anchor" href="#MFC用在Excel（語法-註解篇）">¶</a>MFC用在Excel（語法+註解篇）</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2010/11/mfcexcel.html">https://darkblack01.blogspot.com/2010/11/mfcexcel.html</a><br>
+移植時的最後更新日期: 2014-03-03T15:05:55.173+08:00</p>
+<p><b>初始化</b><pre class="prettyprint"><code>objApp.CreateDispatch(“Excel.Application”,&amp;e) //產生一個Excel應用程式<br />objApp.SetVisible(TRUE); //繪出Excel應用程式視窗<br />objBooks = objApp.GetWorkbooks(); //取得應用程式的活頁簿記憶體位址<br />objBook = objBooks.Add(VOptional); //開新檔案<br />objBook.AttachDispatch(objBooks.Add(_variant_t(“C:\test.xls”))); //開啟舊檔（也可以叫Dlg出來用）<br />objSheets = objBook.GetWorksheets(); //取得Books的Sheet記憶體位址<br />objSheet = objSheets.GetItem(COleVariant((short)1)); //開啟sheet1（就是點一下Sheet1翻到這一頁）<br />objSheet.SetName(“My Sheet”); //設定sheet1的名稱稱</code></pre><br /><b>設定內容</b><br /><pre class="prettyprint"><code>range = objSheet.GetRange(COleVariant(“A1”),COleVariant(“A1”)); //選取Sheet的範圍（使用Excel座標）<br />range.SetColumnWidth(_variant_t((float)1.2)); //設定欄寬（像素值）<br />range.SetItem(_variant_t((long)1),_variant_t((long)1),_variant_t(“My Auto-Excel Demo”)); //填入內容<br />range.BorderAround(_variant_t((long)1),3,1,_variant_t((long)#000000)); //外框<br />range.SetHorizontalAlignment(COleVariant((short)3)); //置中<br />range.SetMergeCells(_variant_t(true)); //合併儲存格<br />range.SetColumnWidth(_variant_t((float)30.38)); //設定欄寬<br />range.SetRowHeight(_variant_t((float)54.00)); //設定欄高<br />col = range.GetEntireColumn(); //選取某個範圍的一整排<br />col.AutoFit(); //自動調整一整排的欄寬<br />（列同理）</code></pre><br /><b>設定字型</b><br /><pre class="prettyprint"><code>font = range.GetFont(); //取得選取範圍，設定字型的記憶體位址<br />font.SetName(_variant_t(“Arial”)); //設定字型<br />font.SetSize(_variant_t((short)12)); //設定字體大小pt<br />font.SetBold(_variant_t((short)TRUE)); //粗體<br />font.SetColorIndex(_variant_t((short)5)); //字色（查表，應該還有更好的方法）</code></pre><br /><b>設定儲存格</b><br /><pre class="prettyprint"><code>cell = range.GetInterior(); //取得選取範圍，設定儲存格的記憶體位址<br />cell.SetColorIndex(_variant_t((short)5)); //設定底色（查表）</code></pre><br /><b>其它</b><br /><pre class="prettyprint"><code>char buf[200]; //暫存的字串<br />ZeroMemory(buf,sizeof(buf)); //清空記憶體<br />sprintf(buf,“A%c33”,‘A’+i-11); //用變數定義儲存格座標<br />strcpy(buf,“總計”); //定義欲輸入的字串</code></pre><br /><b>圖表</b><br /><pre class="prettyprint"><code>//畫圖<br />lpDisp = objSheet.ChartObjects(VOptional);<br />chartobjects.AttachDispatch(lpDisp); // Attach the lpDisp pointer for ChartObjects to the chartobjects object.<br />chartobject = chartobjects.Add(20, 140, 350, 250); //defines the rectangle,<br />// adds a new chart at that rectangle and assigns its object reference to a ChartObject variable named chartobject<br />xlsChart.AttachDispatch(chartobject.GetChart()); // GetChart() returns LPDISPATCH, and this attaches it to your chart object.<br />lpDisp = objSheet.GetRange(COleVariant(“B3”), COleVariant(“F6”)); // The range containing the data to be charted.<br />range.AttachDispatch(lpDisp);<br />var.vt = VT_DISPATCH;<br />// .vt is the usable member of the tagVARIANT Struct. Its value is a union of options.<br />var.pdispVal = lpDisp; // Assign IDispatch pointer of the Source range to var.<br />xlsChart.ChartWizard(<br />var, // Source.<br />COleVariant((short)11), // Gallery: 3d Column.<br />VOptional, // Format, use default.<br />COleVariant((short)1), // PlotBy: xlRows.<br />COleVariant((short)1), // CategoryLabels.<br />_variant_t(“Open,Working,Verify,Returned,Closed,Canceled”), <br />COleVariant((short)1), // SeriesLabels.<br />COleVariant((short)TRUE), // HasLegend.<br />VOptional, //COleVariant(“Use by Month”), // Title.<br />VOptional, //COleVariant(“Month”), // CategoryTitle.<br />VOptional, //COleVariant(“Usage in Thousands”), // ValueTitles.<br />VOptional // ExtraTitle.<br />);<br />xlsChart.SetChartType((long)55); //設定圖表類型（查表：圖表種類篇）<br />//調刻度<br />/<em>_Axis ax = xlsChart.Axes(_variant_t((short)2),_variant_t((short)1)); //2是縱軸, 1不清楚<br />sc = ax.GetMaximumScale();<br />if(sc &lt; 5.0)<br />&#123;<br />chart.SetAutoScaling(FALSE);<br />ax.SetMajorUnitIsAuto(FALSE);<br />ax.SetMajorUnit(1);<br />ax.SetMinorUnitIsAuto(FALSE);<br />ax.SetMinorUnit(1);<br /><a target="_blank" rel="noopener" href="//ax.SetMinorUnitScale">//ax.SetMinorUnitScale</a>(1);<br />ax.SetMaximumScale((long)(sc+1)); //最大刻度<br />&#125;</em>/</code></pre><br /><b>結尾</b><br /><pre class="prettyprint"><code>objApp.SetUserControl(TRUE);<br />range.ReleaseDispatch();chartobject.ReleaseDispatch();<br />chartobjects.ReleaseDispatch();objSheet.ReleaseDispatch();<br />objSheets.ReleaseDispatch();objBook.ReleaseDispatch();<br />objBooks.ReleaseDispatch();<br />objApp.ReleaseDispatch();</code></pre><br />參考資料：<br /><br />流浪小築 <a target="_blank" rel="noopener" href="http://www.blogger.com/blogger.g?blogID=1853319424565477074">http://www.intra.idv.tw/</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2010-11-19T20:37:00.000Z" itemprop="datePublished">
+              2010-11-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/06-04-blogger/6291301506449055890/">不知道怎麼跑出來的Executable for debug session Dialog</a><div class="related-posts-item-abstract">¶不知道怎麼跑出來的Executable for debug session Dialog
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-29-blogger/859847402283061114/">用MFC的手操作「真．Excel」</a><div class="related-posts-item-abstract">¶用MFC的手操作「真．Excel」
+原文連結: https://darkblack01.blogspot.com/2013/05/mfcexcel.html
+移植時的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-25-blogger/4411410962580455823/">CString中找關鍵字的技巧</a><div class="related-posts-item-abstract">¶CString中找關鍵字的技巧
+原文連結: https://darkblack01.blogspot.com/2013/04/mfc.html
+移植時的最後更新日期:</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-26-blogger/4414593751492371160/">Circle::Animation();的做法</a><div class="related-posts-item-abstract">¶Circle::Animation();的做法
+原文連結: https://darkblack01.blogspot.com/2013/02/circleanimat</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/02-21-blogger/3027518806235511842/">那一年滴掉的bug//物件的值莫名奇妙被改掉</a><div class="related-posts-item-abstract">¶那一年滴掉的bug//物件的值莫名奇妙被改掉
+原文連結: https://darkblack01.blogspot.com/2013/02/blog-post_21.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-25-blogger/3428760854992959398/">檔案處理API</a><div class="related-posts-item-abstract">¶檔案處理API
+原文連結: https://darkblack01.blogspot.com/2012/09/api.html
+移植時的最後更新日期: 2012-09</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

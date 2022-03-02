@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶C++單元測試(12) - fake, stub, mock object 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;12&#x2F;c12-fake-stub-mock-object.html 移植時的最後更新日期: 2015-12-09T09:10:37.297+08:00 書裡怎麼寫《C++ API 設計》，Ch 10.4.2中有介紹假物件(fake o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++單元測試(12) - fake, stub, mock object">
+<meta property="og:url" content="https://dwatow.github.io/2015/12-09-blogger/8268875242448437712/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶C++單元測試(12) - fake, stub, mock object 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;12&#x2F;c12-fake-stub-mock-object.html 移植時的最後更新日期: 2015-12-09T09:10:37.297+08:00 書裡怎麼寫《C++ API 設計》，Ch 10.4.2中有介紹假物件(fake o">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2015-12-08T17:10:00.004Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:44.861Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="TDD">
+<meta name="twitter:card" content="summary">
+  <title>C++單元測試(12) - fake, stub, mock object - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>C++單元測試(12) - fake, stub, mock object</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-12-fake-stub-mock-object"><span class="toc-text">C++單元測試(12) - fake, stub, mock object</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">書裡怎麼寫</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">假物件(fake object)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">存根物件(stub object)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">模仿物件(mock object)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">自己覺得</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="C-單元測試-12-fake-stub-mock-object"><a class="header-anchor" href="#C-單元測試-12-fake-stub-mock-object">¶</a>C++單元測試(12) - fake, stub, mock object</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/12/c12-fake-stub-mock-object.html">https://darkblack01.blogspot.com/2015/12/c12-fake-stub-mock-object.html</a><br>
+移植時的最後更新日期: 2015-12-09T09:10:37.297+08:00</p>
+<h2><span style="font-size: x-large;">書裡怎麼寫</span></h2>《C++ API 設計》，Ch 10.4.2中有介紹<br /><br /><h4>假物件(fake object)</h4>一個具有功能性行為的物件，但採用更簡單的實作以幫助測試。<br />例如：在記憶體中的檔案系統，模擬與本機磁碟上的互動<br /><br /><h4>存根物件(stub object)</h4>一個物件返迴預先準備或罐頭的回應。<br />例如：一個ReadFileAsString()存根可能只是返回一個硬編碼的字串作為檔案內容，而不是讀取磁碟上該檔案名的檔案內容<br /><br /><h4>模仿物件(mock object)</h4>被檢測的物件具有預先程式化的行為，執行一系列方法的呼叫以做驗證。<br />例如：一個模仿物件(或只是模擬)可指定GetValue()函數被呼叫時前兩次返回10，之後為20。<br />例如：它也可以驗證函式被呼叫了只有3次或至少5次，或在類別中的函式以一特定的順序被呼叫。<br /><br /><h2><span style="font-size: x-large;">自己覺得</span></h2>其實，能執行測試就足夠了。XD<br />依書裡的定義，再簡化其詮釋方式，我自己的介紹如下<br /><br /><ul><li>假物件(fake object): 簡化物件，以記憶體為存放資料的地方。</li><li>存根物件(stub object): hard code return value物件，以常數為資料。</li><li>模仿物件(mock object): 程式化行為物件，以一些邏輯決定取出資料。</li></ul><br />其實，一個物件的各種function也都可以，也都不一定是哪一種物件。不過，我自己的實作也沒有很確切的去定這是什麼物件。也許在這一點妥協，不好，但是我還沒遇到吃虧的地方，總之，先讓測試跑起來吧！
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2015-12-08T17:10:00.004Z" itemprop="datePublished">
+              2015-12-09
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/TDD/">TDD</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-10-blogger/1143174315685259687/">C++單元測試(10) - Mock、Stub蓋台的目錄設定</a><div class="related-posts-item-abstract">¶C++單元測試(10) - Mock、Stub蓋台的目錄設定
+原文連結: https://darkblack01.blogspot.com/2015/11/cppun</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/10-28-blogger/433209352242401635/">C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲</a><div class="related-posts-item-abstract">¶C++單元測試(7) - Game Programing Game 6 Ch1.7 貳部曲
+原文連結: https://darkblack01.blogspot.co</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/10-19-blogger/2391230648499873743/">C++單元測試(6) - Game Programing Game 6 Ch1.7 首部曲</a><div class="related-posts-item-abstract">¶C++單元測試(6) - Game Programing Game 6 Ch1.7 首部曲
+原文連結: https://darkblack01.blogspot.co</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-11-blogger/5436064464148438555/">Visual Studio 2013 的Unit Test....</a><div class="related-posts-item-abstract">¶Visual Studio 2013 的Unit Test…
+原文連結: https://darkblack01.blogspot.com/2014/07/visua</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

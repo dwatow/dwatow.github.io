@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶使用Gitstats統計git的log 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;07&#x2F;gitstatsgitlog.html 移植時的最後更新日期: 2014-07-30T10:12:53.726+08:00 這是一個open source的工具，好用又簡單。先來看看它的介紹[1]但是又是江湖一點訣。而且還是要Ubuntu平台，才會變好用。安裝$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Gitstats統計git的log">
+<meta property="og:url" content="https://dwatow.github.io/2014/07-30-blogger/8795477185043173495/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶使用Gitstats統計git的log 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;07&#x2F;gitstatsgitlog.html 移植時的最後更新日期: 2014-07-30T10:12:53.726+08:00 這是一個open source的工具，好用又簡單。先來看看它的介紹[1]但是又是江湖一點訣。而且還是要Ubuntu平台，才會變好用。安裝$">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-07-29T18:09:00.003Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:45.429Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+  <title>使用Gitstats統計git的log - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>使用Gitstats統計git的log</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Gitstats%E7%B5%B1%E8%A8%88git%E7%9A%84log"><span class="toc-text">使用Gitstats統計git的log</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">ex:</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="使用Gitstats統計git的log"><a class="header-anchor" href="#使用Gitstats統計git的log">¶</a>使用Gitstats統計git的log</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/07/gitstatsgitlog.html">https://darkblack01.blogspot.com/2014/07/gitstatsgitlog.html</a><br>
+移植時的最後更新日期: 2014-07-30T10:12:53.726+08:00</p>
+<p>這是一個open source的工具，好用又簡單。<br />先來看看它的<a href="http://imtx.me/archives/1587.html" target="_blank">介紹</a>[1]<br />但是又是江湖一點訣。<br /><br />而且還是要Ubuntu平台，才會變好用。<br /><br /><h2><span style="font-size: x-large;">安裝</span></h2><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">$ sudo apt-get install gitstats</span>      [2][3]<br /><br />就醬！<br /><br /><h2><span style="font-size: x-large;">使用</span></h2>灌好了之後，使用上就和下指令一樣，隨時都可以下指令，而且可以指令任意輸出和輸入的路徑。<br /><br /><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">$ gitstats </span><span style="background-color: black; color: cyan; font-family: Courier New, Courier, monospace;">&lt;repo path&gt;</span><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;"> </span><span style="background-color: black; color: lime; font-family: Courier New, Courier, monospace;">&lt;report path&gt;</span>      [3]<br />repo path就是輸入路徑，也就是你的source code with git的repo<br />report path就是輸出路徑，它的輸出是一堆網頁和圖檔，要用另一個料夾裝起來唷。<br />輸出之後，可以任意搬動，它會有index.htm，如果你有web serve就方便多了。<br /><br />下面這個例子，就是半路抓一個repo再統計分析好，全部再砍掉，這樣也可以滴。<br /><h3><span style="font-size: large;">ex:</span></h3><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">~/gitrepo$ git clone <a target="_blank" rel="noopener" href="https://xxxxx">https://xxxxx</a>                           </span><br /><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">~/gitrepo$ gitstats </span><span style="background-color: black; color: cyan; font-family: Courier New, Courier, monospace;">~/gitrepo/myproject</span><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;"> </span><span style="background-color: black; color: lime; font-family: Courier New, Courier, monospace;">~/gitreport/myproject</span><br /><br />這樣一邊是放原始碼，一邊就是放report。<br />有機會可以試試看唷！^^<br /><br />參考資料：<br />[1] <a href="http://imtx.me/archives/1587.html" target="_blank">从gitstats看Ubuntu Tweak三年之发展</a><br />[2] <a href="http://cloudaice.com/install-new-system-to-do-list/" target="_blank">重新安装系统之后要做的事情</a><br />[2] <a href="http://www.installion.co.uk/ubuntu/raring/universe/g/gitstats/cn/install.html" target="_blank">要安装 gitstats 只是按照这些说明操作</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-07-29T18:09:00.003Z" itemprop="datePublished">
+              2014-07-30
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Git/">Git</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-26-blogger/4437604259725696547/">git hook 壞掉了！</a><div class="related-posts-item-abstract">¶git hook 壞掉了！
+原文連結: https://darkblack01.blogspot.com/2015/05/git-hook.html
+移植時的最後更新</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/04-23-blogger/2334492157788549557/">Git hook 快速指南</a><div class="related-posts-item-abstract">¶Git hook 快速指南
+原文連結: https://darkblack01.blogspot.com/2015/04/githoook-1.html
+移植時的最後</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-25-blogger/8461773562884725786/">刪除git的分支</a><div class="related-posts-item-abstract">¶刪除git的分支
+原文連結: https://darkblack01.blogspot.com/2015/03/git.html
+移植時的最後更新日期: 2015-0</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/03-20-blogger/4280441097831628219/">Git之...雙bare同步</a><div class="related-posts-item-abstract">¶Git之…雙bare同步
+原文連結: https://darkblack01.blogspot.com/2015/03/gitbare.html
+移植時的最後更新日期</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/11-21-blogger/4032810580751331530/">Gitolite 一個人 很多key 怎麼辦？</a><div class="related-posts-item-abstract">¶Gitolite 一個人 很多key 怎麼辦？
+原文連結: https://darkblack01.blogspot.com/2014/11/gitolite-key</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-28-blogger/4448653085723728368/">Git的簡單統計 用指令</a><div class="related-posts-item-abstract">¶Git的簡單統計 用指令
+原文連結: https://darkblack01.blogspot.com/2014/08/git.html
+移植時的最後更新日期: 20</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

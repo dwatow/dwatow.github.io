@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Ubuntu&#x2F;&#x2F;gcc小筆記 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;05&#x2F;ubuntugcc.html 移植時的最後更新日期: 2013-05-20T09:52:17.311+08:00                 main.c  →  main.s  →  main.o   →  mainsource code  →  assembly f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu&#x2F;&#x2F;gcc小筆記">
+<meta property="og:url" content="https://dwatow.github.io/2013/05-18-blogger/4860810526694954376/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Ubuntu&#x2F;&#x2F;gcc小筆記 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;05&#x2F;ubuntugcc.html 移植時的最後更新日期: 2013-05-20T09:52:17.311+08:00                 main.c  →  main.s  →  main.o   →  mainsource code  →  assembly f">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2013-05-18T00:35:00.003Z">
+<meta property="article:modified_time" content="2022-03-02T14:10:40.941Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary">
+  <title>Ubuntu//gcc小筆記 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Ubuntu//gcc小筆記</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ubuntu-gcc%E5%B0%8F%E7%AD%86%E8%A8%98"><span class="toc-text">Ubuntu&#x2F;&#x2F;gcc小筆記</span></a></li></ol>
+  </div>
+
+
+    <h1 id="Ubuntu-gcc小筆記"><a class="header-anchor" href="#Ubuntu-gcc小筆記">¶</a>Ubuntu//gcc小筆記</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/05/ubuntugcc.html">https://darkblack01.blogspot.com/2013/05/ubuntugcc.html</a><br>
+移植時的最後更新日期: 2013-05-20T09:52:17.311+08:00</p>
+<p><span style="font-size: large;">                <span style="color: #3d85c6;">main.c</span></span><span style="font-size: large;">  →  main.s</span><span style="font-size: large;"> </span><span style="font-size: large;"> →  </span><span style="color: #38761d; font-size: large;">main.o</span><span style="font-size: large;">   →  </span><span style="color: #cc0000; font-size: large;">main</span><br /><span style="color: #3d85c6; font-size: large;">source code</span><span style="font-size: large;"> </span><span style="font-size: large;"> →  assembly file</span><span style="font-size: large;">  →  <span style="color: #38761d;">object file</span></span><span style="font-size: large;"> </span><span style="font-size: large;"> →  </span><span style="color: #cc0000; font-size: large;">binary file</span><br /><br />source code: 文字檔，就是程式碼本身<br />assembly file: 組合語言檔，組合語言程式碼<br />object file: 二進制的檔案，不可以單獨執行<br />binary file: 二進制檔案，執行檔<br /><br /><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc main.c</span><br />產生一個預設檔名(a.out)的binary檔<br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc <span style="color: blue;">-c</span> main.c</span></code><br /><span style="color: blue;">產生一個和main.c同名的main.o檔</span><br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc <span style="color: blue;">-o main</span> man.c</span></code><br /><span style="color: blue;">產生一個main的binary檔</span><br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc <span style="color: blue;">-S </span>main.c</span></code><br /><span style="color: blue;">產生一個main.s的組合語言檔</span><br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc <span style="color: blue;">-E </span>main.c</span></code><br /><span style="color: blue;">顯示預處理器加的+你自己打的程式碼，不產生任何檔案</span><br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif; font-size: large;">$ gcc <span style="color: blue;">-O</span> main.c</span></code><br /><span style="color: blue;">速度最佳化</span>，產生a.out(同gcc main.c)<br /><br /><span style="font-size: large;"><b>Sample code：</b></span><br /><pre class="prettyprint"><code class="language-c"><a target="_blank" rel="noopener" href="//hello.c">//hello.c</a><br />#include &lt;stdio .h&gt;<br /><br />void hello()<br />&#123;<br />    printf(“hello function”);<br />&#125;</code></pre><pre class="prettyprint"><code class="language-c"><a target="_blank" rel="noopener" href="//main.c">//main.c</a><br />#include &lt;stdio .h&gt;<br /><br />int main()<br />&#123;<br />    hello();    //call hello function in hello.c<br />    printf(“hello main”);<br /><br />    return 0;<br />&#125;</code></pre><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">$ gcc -c hello.c</span></code><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">$ gcc -c main.c</span></code><br />處理.c檔，產生hello.o和main.o檔（各別將兩個檔案編譯好）<br /><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">$ gcc -o main main.o hello.o</span></code><br />處理.o檔，組合main.o和hello.o檔，並產生main的binary檔<br /><br /><br /><b>加入函式庫</b><br /><code><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">$ gcc -c main.c <span style="color: blue;">-l -L/(path)</span></span></code><br />-l: 要加入lib (*.so <span style="color: #999999;">動態函式庫</span>, *.a <span style="color: #999999;">靜態函式庫</span>)<br />-L: 加入的lib路徑在哪<br /><br /><b>找#include &lt;xxx.h&gt;的路徑</b><br /><span style="font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;">$ gcc -c main.c</span><br /><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">main.c:3:20: 嚴重錯誤： **<em>.h：沒有此一檔案或目錄</span><br /><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">編譯插斷。</span><br />這種情況是你加入的</em>.h檔找不到，也就是要給予該檔的路徑<br /><span style="font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;">$ gcc -c main.c <span style="color: blue;">-I/(path)</span></span><br />-I加入include的搜尋.h檔的路徑<br /><br /><br />參考資料<br /><span style="font-family: Helvetica Neue, Arial, Helvetica, sans-serif;">[1] $man gcc</span><br />[2] <a target="_blank" rel="noopener" href="http://jyhshin.pixnet.net/blog/post/26588012-gcc-%E5%8F%83%E6%95%B8-%E5%82%99%E8%A8%BB">gcc 參數 備註</a><br />[3] <a target="_blank" rel="noopener" href="http://linux.vbird.org/linux_basic/0520source_code_and_tarball.php#simple_ex">鳥哥的 Linux 私房菜 – 使用傳統程式語言進行編譯的簡單範例</a><br />[4] <a target="_blank" rel="noopener" href="http://www.wretch.cc/blog/Geniusking/7263728">GCC常用編譯參數</a>  ←簡單易懂<br />[5] <a target="_blank" rel="noopener" href="http://bbs.mychat.to/sindex.php?t211831.html">GCC使用簡介</a><br />[6] <a target="_blank" rel="noopener" href="http://linux.vbird.org/linux_basic/0520source_code_and_tarball.php#library">鳥哥的 Linux 私房菜 – 函式庫管理</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-05-18T00:35:00.003Z" itemprop="datePublished">
+              2013-05-18
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Ubuntu/">Ubuntu</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-19-blogger/9154058756325105956/">Ubuntu//make小筆記</a><div class="related-posts-item-abstract">¶Ubuntu//make小筆記
+原文連結: https://darkblack01.blogspot.com/2013/05/ubuntumake.html
+移植時的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-13-blogger/3960544067319299071/">Ubuntu//網路芳鄰的功能(samba)</a><div class="related-posts-item-abstract">¶Ubuntu//網路芳鄰的功能(samba)
+原文連結: https://darkblack01.blogspot.com/2013/05/ubuntu_13.htm</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-10-blogger/5562116200870558955/">Ubuntu//Chrome</a><div class="related-posts-item-abstract">¶Ubuntu//Chrome
+原文連結: https://darkblack01.blogspot.com/2013/05/ubuntu-1304chrome.htm</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
