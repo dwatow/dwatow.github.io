@@ -3,8 +3,8 @@ title: 瀏覽器下載 ZIP 檔案
 date: 2022-03-02 15:07:21
 tags: 
 - zip
-- 前端
-- 下載
+- javascript
+- file api
 categories:
 - 技術練習
 ---
@@ -57,7 +57,7 @@ $ npm install jszip
 
 1. 加入檔案，在這裡它原本的 API 就提供了包含目錄的檔案路徑，非常貼心，所以就延用它原本的 API 參數重新包裝。
 2. 下載檔案，將前述準備好的檔案與目錄，打包成 zip 檔案。
-    - 其中 `for browser` 那一段是因為瀏覽器的 FileAPI 而實作的，若執行的宿主環境改變，這一段可以改寫成其它適合的程式碼
+    - 其中 `for browser` 那一段是因為瀏覽器的 [FileAPI](https://dwatow.github.io/2019/05-22-file-api/) 而實作的，若執行的宿主環境改變，這一段可以改寫成其它適合的程式碼
 
 
 ```javascript
