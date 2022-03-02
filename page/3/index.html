@@ -116,202 +116,97 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2020/11-26-angularjs/understanding-components/">https://dwatow.github.io/2020/11-26-angularjs/understanding-components/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2020/04-20-jest/jest-doc-3/">https://dwatow.github.io/2020/04-20-jest/jest-doc-3/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>翻譯 Component - AngularJS 開發指南</h1>
+        <h1>讀 Jest Doc - 非同步測試</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-Component-AngularJS-%E9%96%8B%E7%99%BC%E6%8C%87%E5%8D%97"><span class="toc-text">翻譯 Component - AngularJS 開發指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CONTENTS"><span class="toc-text">CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-and-configuring-a-Component"><span class="toc-text">Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-between-Directive-definition-and-Component-definition"><span class="toc-text">Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Component-based-application-architecture"><span class="toc-text">Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components-as-route-templates"><span class="toc-text">Components as route templates</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%80-Jest-Doc-%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%B8%AC%E8%A9%A6"><span class="toc-text">讀 Jest Doc - 非同步測試</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Testing-Asynchronous-Code"><span class="toc-text">Testing Asynchronous Code</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Callbacks"><span class="toc-text">Callbacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promises"><span class="toc-text">Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#resolves-rejects"><span class="toc-text">.resolves &#x2F; .rejects</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Async-Await"><span class="toc-text">Async&#x2F;Await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%9B%9E%E8%A6%8B"><span class="toc-text">下回見</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%95%8F%E9%A1%8C"><span class="toc-text">問題</span></a></li></ol>
   </div>
 
 
-    <h1 id="翻譯-Component-AngularJS-開發指南"><a class="header-anchor" href="#翻譯-Component-AngularJS-開發指南">¶</a>翻譯 Component - AngularJS 開發指南</h1>
-<p><a target="_blank" rel="noopener" href="https://docs.angularjs.org/guide/component">原文: AngularJS: Developer Guide: Components</a></p>
-<h2 id="CONTENTS"><a class="header-anchor" href="#CONTENTS">¶</a>CONTENTS</h2>
-<blockquote>
-<p>Creating and configuring a Component<br>
-Comparison between Directive definition and Component definition<br>
-Component-based application architecture<br>
-Example of a component tree<br>
-Components as route templates<br>
-Intercomponent Communication<br>
-Unit-testing Component Controllers</p>
-</blockquote>
-<p>在 AngularJS, Component 是一種使用簡易組態 (config) 的 directive 。適合用在 component-base 應用的結構。</p>
-<p>更容易用類似 Web Component 或新的 AngularJS style 的架構製作網站。</p>
-<p>優點</p>
+    <h1 id="讀-Jest-Doc-非同步測試"><a class="header-anchor" href="#讀-Jest-Doc-非同步測試">¶</a>讀 Jest Doc - 非同步測試</h1>
+<p>上一回，我們看了各式各樣的基本的斷言庫，可以讓我們測試簡單型別(Number/String/Boolean)，測試非零值(undefined/null)，測試複雜型別(Object/Array)，甚至還可以測試是否例外的發生行為，以及測試例外錯誤(Error)</p>
+<p>這一回，來看看 JavaScript 的宿命對決，要怎麼測試非同步問題。<br>
+這個就沒什麼測試觀念要帶入 <s>，就純粹的在看是不是會寫 JavaScript 而已</s>。<br>
+對非同步沒有經驗或不懂的朋友，可以先看看影片: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">所以說event loop到底是什麼玩意兒？| Philip Roberts | JSConf EU</a> 了解一下再繼續看哦</p>
+<h1 id="Testing-Asynchronous-Code"><a class="header-anchor" href="#Testing-Asynchronous-Code">¶</a>Testing Asynchronous Code</h1>
+<p>依照<a target="_blank" rel="noopener" href="https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29">非同步的聖經</a>的步調，來看非同步的三位一體吧！</p>
+<h2 id="Callbacks"><a class="header-anchor" href="#Callbacks">¶</a>Callbacks</h2>
+<p><strong>待測物</strong></p>
+<p>待測 function 是一個 <code>fetchData</code> 吃一個 callback 當參數。<br>
+內部實作，就讓它隔一段時間再執行 callback，模仿 API 發送成功之後，呼叫 callback 的行為。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchData</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    callback(<span class="string">&#x27;peanut butter&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>測試程式</strong></p>
+<div class="danger">
+<p>測試千萬不要這樣寫</p>
+</div>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Don&#x27;t do this!</span></span><br><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fetchData(callback); <span class="comment">// 執行 (最後一行) 就...結束了。</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>這樣寫的話， <code>fetchData</code> 因為在最後一行，所以只要它跑完就結束了。JavaScript 是非同步語言，所以這種發送 API 的事都是主執行緒結束時在處理的，但是主執行緒結束，Jest 也就結束了，沒有跑 callback 等同於沒有跑測試 QQ</p>
+<p>怎辦？ Jest 給了我們一個 <code>done</code> 的用法 (在此為了不要和上一個例子差太多，所以我改寫了 jest 官網上的範例)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function"><span class="params">done</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">    done();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fetchData(callback);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>只要你有引入 done 就一定要執行 done 不然就會失敗。<br>
+算是很好的保障機制。 <code>done()</code> 的時間點會安排在測試的最後。<br>
+如果有 try-catch 我建議放在 <code>finally</code> 的區段。</p>
+<h2 id="Promises"><a class="header-anchor" href="#Promises">¶</a>Promises</h2>
+<p><strong>待測物</strong></p>
+<p>待測 function 是一個 <code>fetchData</code> 吃一個 callback 當參數。<br>
+內部實作，除了承上的特性之外，還需要讓它回傳一個 promise 物件。</p>
 <ul>
-<li>比 directives 更容易設定組態</li>
-<li>合理的預設值 &amp; 最佳實踐</li>
-<li>最佳化 components-base 架構</li>
-<li>components 的寫法更容易升級到 Angular</li>
+<li>在成功時，在 setTimeout 裡執行 promise 的 resolve</li>
+<li>在失敗時，在 setTimeout 裡執行 promise 的 reject</li>
+<li>在例外發生時，就特別不一樣了，不能在 setTimeout 裡。<br>
+因為設計 setTimeout 是為了在 API 成功回傳之後，執行的內容<br>
+而 exception 發生的時間點，通常是在 <code>new Promise()</code> 的 callback 這一層。所以特別寫出這個待測物的細節。</li>
 </ul>
-<p>不推薦理由</p>
-<ul>
-<li>編譯和 pre-link 執行操作的 directives</li>
-<li>使用 directive 的進階定義選項 像是 priority, terminal, multi-element</li>
-<li>要透過 attribute 或 css class 觸發 directive</li>
-</ul>
-<h2 id="Creating-and-configuring-a-Component"><a class="header-anchor" href="#Creating-and-configuring-a-Component">¶</a>Creating and configuring a Component</h2>
-<p>可以用 AngularJS module (由 <code>angular.module()</code> 回傳)的 <code>.component()</code> 註冊 Components<br>
-這個 method 有兩個 arguments</p>
-<ul>
-<li>Components 的名字</li>
-<li>組態物件 (注意，不像是 <code>.directive()</code> ，這個 method 沒有 factory 功能)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;hero-detail hero&#x3D;&quot;ctrl.hero&quot;&gt;&lt;&#x2F;hero-detail&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&#x27;heroApp&#x27;</span>)</span><br><span class="line">.component(<span class="string">&#x27;heroDetail&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">`&lt;span&gt;Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span&gt;`</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    hero: <span class="string">&#x27;=&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Comparison-between-Directive-definition-and-Component-definition"><a class="header-anchor" href="#Comparison-between-Directive-definition-and-Component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
-<p>比較 Component vs Directive</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Directive</th>
-<th>Component</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bindings</td>
-<td>無</td>
-<td>有 (binds controller)</td>
-</tr>
-<tr>
-<td>controller</td>
-<td>有</td>
-<td>有 (預設 <code>function () &#123;&#125;</code>)</td>
-</tr>
-<tr>
-<td>controllerAs</td>
-<td>有 (預設 <code>false</code>)</td>
-<td>有 (預設 <code>$ctrl</code> )</td>
-</tr>
-<tr>
-<td>require</td>
-<td>無</td>
-<td>有</td>
-</tr>
-<tr>
-<td>template</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>templateUrl</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>transclude</td>
-<td>有(預設<code>false</code>)</td>
-<td>有(預設<code>false</code>)</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>bindToController</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>compile function</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>link functions</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>multiElement</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>priority</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>replace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>restrict</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>templateNamespace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>terminal</td>
-<td>Yes</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="Component-based-application-architecture"><a class="header-anchor" href="#Component-based-application-architecture">¶</a>Component-based application architecture</h2>
-<p>如前所述，component helper 有助於用簡單的 component-base 架構你的應用程式。但是 component helper 在建構一個 componet 時，還額外做了哪些事？</p>
-<ul>
-<li><strong>Components 只控制自己的 View 和 Data</strong><br>
-Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一般而言，AngularJS 可以透過強化 scope 和 watches 修改整個程式裡的任何資料。這很好用，但也導致修改應用程式的資料混亂不清的問題。這也是為什麼 component 使用 isolate scope，所以操作整個 scope 的類別是不可能的。</li>
-<li><strong>Components 有明確的對外 API - 輸入和輸出</strong><br>
-然而，scope 只隔離到這裡，因為 AngularJS 使用 two-way binidng。所以如果傳入一個物件進 component 像是 <code>bindings: &#123;item: '='&#125;</code> ，並且在 component 裡修改它的 property，修改會反射到 component 外層(原本那層)。對 components 來說，只有擁有 data 才可以修改它，更易於除錯。因此， components 要遵守一些簡單的約定:
-<ul>
-<li>輸入使用 <code>&lt;</code> (one-way) 和 <code>@</code> (string) bindings。<br>
-<code>&lt;</code> 從 1.5 版出現，不同於 <code>=</code> ，在 components scope 裡綁定屬性，不被 watched ，意思是你指定新的值在 component scope ，不會更新到外面這一層。<br>
-但請注意，內外 scope 參考的是相同的物件，所以如果在 component 裡改變了物件屬性或陣列元素，外層會反射出修改結果。原則上，永遠不要修改 component scope 裡的物件或陣列內容。<br>
-傳入字串可以使用 <code>@</code> ，尤其是不會改變這個值時。</li>
-<li>用 <code>&amp;</code> bindings 實現 Output 當作 components 的 callback。<br>
-反而不是操作 Input Data，component 呼叫正確的 Output Event 改變資料。以 deletion 來說，意思是 component 不刪除 hero 自己，但是用正確的 event 傳給 owner component ，用 hero 當變數。</li>
-</ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;</span><br><span class="line">&lt;button ng-click&#x3D;&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;&#x2F;button&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>用這個方式，外層的 component 可以決定 event 回傳值回來之後，還要做什麼。</li>
-</ul>
-  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">editable-field</span> <span class="attr">on-delete</span>=<span class="string">&quot;$ctrl.deleteHero(&#123;hero&#125;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">editable-field</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure>
-  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 class</span></span><br><span class="line">deleteHero (result) &#123; <span class="comment">//result =&#123; hero &#125;</span></span><br><span class="line">  <span class="built_in">this</span>.$http.delete(...).then(<span class="function">() =&gt;</span> &#123;<span class="comment">/*...*/</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li>Components 有明確的 lifecycle:<br>
-每一個 component 可以實作 lifecycle hooks。這些 methods 會在 component 生命週期中的特定時間點被呼叫。下列這些 hook methods 可以實作:
-<ul>
-<li><code>$onInit()</code> 完成 bindings 初始化時。在 directives 的 pre &amp; post linking 之前。<br>
-初始化你的 controller 的好地方</li>
-<li><code>$onChanges(changesObj)</code> 每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</li>
-<li><code>$doCheck()</code> 每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。</li>
-<li><code>$onDestroy()</code> 銷毀 controller 和它的 scope 時，用在釋放資源。</li>
-<li><code>$postLink()</code> controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></li>
-</ul>
-</li>
-</ul>
-<p>透過實作這些 method 你可以參與你的 component 的生命週期。</p>
-<ul>
-<li>應用程式是樹狀的 component:<br>
-理想情況，整個應用程式應該是一個實現明確定義的輸入和輸出的組件樹，並最小化雙向綁定。可以更容易地預測數據何時發生變化以及組件的狀態。</li>
-</ul>
-<h2 id="Components-as-route-templates"><a class="header-anchor" href="#Components-as-route-templates">¶</a>Components as route templates</h2>
-<p>Components 也可以用在 route 的 <code>template</code> (以 <code>ngRoute</code> 為例)。在 component-base 的應用程式 ，每一個 view 都是一個 component:</p>
-<p>當使用 <code>$routeProvider</code> ，你可以避免一些重複的寫法 (boilerplate)，透過解析 route 相依直接傳遞給 component。從 1.5 版開始，ngRoute 自動解析 route scope 指定給 <code>$resolve</code> (你也可以用 <code>resolveAs</code> 改變它)。當使用 component ，你可以利用此功能直接傳遞 component，無需另外指定 controller。</p>
-<p>換句話說(上面如果看不懂)，指的是透過 route 的 resolve 功能，可以直接給 component binding 的變數內容。</p>
-<p><strong>home.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> home = angular.module(<span class="string">&#x27;home&#x27;</span>).component(<span class="string">&#x27;home&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">&#x27;&lt;h1&gt;Home&lt;/h1&gt;&lt;p&gt;Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p&gt;&#x27;</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    user: <span class="string">&#x27;&lt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>route.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> route = angular.module(<span class="string">&#x27;route&#x27;</span>, []).config(<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>) </span>&#123;</span><br><span class="line">  $routeProvider.when(<span class="string">&#x27;/&#x27;</span>, &#123;</span><br><span class="line">    template: <span class="string">&#x27;&lt;home user=&quot;$resolve.user&quot;&gt;&lt;/home&gt;&#x27;</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>) </span>&#123; <span class="keyword">return</span> $http.get(<span class="string">&#x27;...&#x27;</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>main.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> route <span class="keyword">from</span> <span class="string">&#x27;./route.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> home <span class="keyword">from</span> <span class="string">&#x27;./home.js&#x27;</span></span><br><span class="line">angular.module(<span class="string">&#x27;myMod&#x27;</span>, [route, home])</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchData</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      resolve(<span class="string">&#x27;peanut butter&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchDataReject</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      reject(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchDataErr</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      reject(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>測試程式</strong></p>
+<p>想要弄懂 Promise 可以先看看這一篇: <a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/primers/promises?hl=zh-tw">JavaScript Promise：簡介  |  Web  |  Google Developers</a></p>
+<div class="danger">
+<p>如果你使用 Promise 而 Promise 回傳 reject 的話，就會導致正式流程的測試失敗。</p>
+</div>
+<div class="danger">
+<p>注意: 使用 promise 可以不用 done，但是要記得在該 return 時加上 return。<br>
+<code>expect</code> 寫在 <code>.then</code> 或 <code>.catch</code> 裡的 callback 時， <code>fetchData</code> 前要加 <code>return</code>。</p>
+</div>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> fetchData().then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>可靠的 <code>Promise.reject()</code></strong></p>
+<p>如果你想測試 <code>Promise.reject()</code> 可靠的執行。除了使用 <code>.catch</code> 註冊一個會執行 <code>expect</code> 的 callback 之外。最好再加一個 <code>expect.assertions(1);</code> 讓 Jest 知道你應該要執行一次 assertion。<br>
+確保它真的會跑到 assertion 而不是就這樣默默的都執行對了。不會 reject 然後又沒報錯。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the fetch fails with an error&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  expect.assertions(<span class="number">1</span>); <span class="comment">// 讓 Jest 知道你應該要執行一次 assertion。</span></span><br><span class="line">  <span class="keyword">return</span> fetchData().catch(<span class="function"><span class="params">e</span> =&gt;</span> expect(e).toMatch(<span class="string">&#x27;error&#x27;</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="resolves-rejects"><a class="header-anchor" href="#resolves-rejects">¶</a>.resolves / .rejects</h3>
+<p>Jest 斷言庫提供了 promise 的簡便寫法，這時就是 Effective Jest 的時刻了。</p>
+<div class="danger">
+<p>注意: 使用 promise 可以不用 <code>done</code> ，但是要使用 <code>.resolves</code> / <code>.rejects</code>。<br>
+使用 <code>.rejects</code> 時，可以不用 <code>expect.assertions(1);</code>。<br>
+無論使用哪一種，最後要記得，在該 <code>return</code> 時加上 <code>return。</code></p>
+</div>
+<p><strong>可靠的 <code>Promise.resolve()</code></strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter(shorthand)&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> expect(fetchData()).resolves.toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>可靠的 <code>Promise.reject()</code></strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the fetch fails with an error(shorthand)&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> expect(fetchDataReject()).rejects.toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Async-Await"><a class="header-anchor" href="#Async-Await">¶</a>Async/Await</h2>
+<p>使用 async/await 第一件事，就是要先會用 promise</p>
+<ol>
+<li>記得在要執行 await 的函數開頭，加上 async。</li>
+<li>用 try-catch 捕捉 reject 的結果。 (取代 <code>.catch</code> 的語法)</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> fetchData();</span><br><span class="line">  expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an error&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  expect.assertions(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> fetchDataErr();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    expect(e).toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Jest 斷言庫提供了 async/await 的簡便寫法，這時就是 Effective Jest 的時刻了。</p>
+<p>在 .resolves / .rejects 的同法，也可以搭配 async/await</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchData()).resolves.toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an reject error(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchDataReject()).rejects.toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an exception error(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchDataErr()).rejects.toThrow(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="下回見"><a class="header-anchor" href="#下回見">¶</a>下回見</h2>
+<p>喜歡的話歡迎訂閱、按讚、分享。<br>
+有任何問題也歡迎在下方留言討論。</p>
+<p>如果想參加聚會的話，可以私訊給我哦~<br>
+我們下一篇見</p>
+<h1 id="問題"><a class="header-anchor" href="#問題">¶</a>問題</h1>
+<p>最後一個例子，不知道為什麼照官網寫的不能成功。<br>
+=&gt; 感謝 <a target="_blank" rel="noopener" href="https://www.facebook.com/pskaokao">@高培修</a> 的解答，原來是我沒有把 reject 和 exception 的 case 弄清楚。</p>
 
     
     </section>
@@ -325,15 +220,19 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/angularjs/">angularjs</a> }
+  { <a href="/tags/jest/">jest</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/component/">component</a> }
+  { <a href="/tags/async/">async</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/angular1/">angular1</a> }
+  { <a href="/tags/promise/">promise</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/callback/">callback</a> }
   </li>
 
 

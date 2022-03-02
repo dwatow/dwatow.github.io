@@ -116,94 +116,33 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/12-23-angularjs/angularjs-es6-class/">https://dwatow.github.io/2018/12-23-angularjs/angularjs-es6-class/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-21-git-ftp-first-hand/">https://dwatow.github.io/2018/09-21-git-ftp-first-hand/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>AngularJS 1.5+ Component style with es6-class</h1>
+        <h1>Git 的支線 git-ftp</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AngularJS-1-5-Component-style-with-es6-class"><span class="toc-text">AngularJS 1.5+ Component style with es6-class</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E7%89%88%E6%9C%AC"><span class="toc-text">套件版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controller-%E2%86%92-component"><span class="toc-text">controller → component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#router"><span class="toc-text">router</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding-function"><span class="toc-text">binding function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controller-of-component-%E2%86%92-ES6-class"><span class="toc-text">controller of component → ES6 class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%9D%E6%8C%81-scope-broadcast-%E6%88%96-scope-on-%E9%81%8B%E4%BD%9C"><span class="toc-text">保持 $scope.$broadcast 或 $scope.$on 運作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E5%88%AA%E9%99%A4-myController-inject"><span class="toc-text">想要刪除 myController.$inject &#x3D; [...]</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git-%E7%9A%84%E6%94%AF%E7%B7%9A-git-ftp"><span class="toc-text">Git 的支線 git-ftp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="AngularJS-1-5-Component-style-with-es6-class"><a class="header-anchor" href="#AngularJS-1-5-Component-style-with-es6-class">¶</a>AngularJS 1.5+ Component style with es6-class</h1>
-<p><img src="https://i.imgur.com/64fbzVm.png" alt=""></p>
-<p>在接手了 AngularJS 的專案到現在，一直在處理寫作風格造成除錯上的困擾。<br>
-包含無法完全封裝的 controller + template 的組合，終於可以用 component 打成一包。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
-而且在一些預設的 (scope之類的) 限制上，也比較容易維護，並且順利的處理掉 route 上，如何使用 component 的寫法。</p>
-<p>這一篇就是要介紹，如何將你的 controller 變成 component 而且還要使用 es6 的 class 語法將它變得漂漂亮亮的。<br>
-最後還會處理 <code>$inject</code> 的相依注入總是要寫兩次的原始框架設定，也終於可以使用套件魔法處理，只要寫一次就可以了。</p>
-<h2 id="套件版本"><a class="header-anchor" href="#套件版本">¶</a>套件版本</h2>
-<ul>
-<li>webpack 4</li>
-<li>babel 7</li>
-</ul>
-<h2 id="controller-→-component"><a class="header-anchor" href="#controller-→-component">¶</a>controller → component</h2>
-<p><strong>javascript</strong></p>
-<p>原本 angularjs 自定 <code>module</code> 的寫法是直接接 <code>.controller()</code> 指定 controller (function)<br>
-換成 component 的寫法，要在 angularjs 自定 <code>module</code> 後接著 <code>.component()</code> 並且給予一個定義物件，定義 component 的 <code>template</code> 和 <code>controller</code> 之類的屬性。<br>
-建議使用 <code>controllerAs</code> 。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&quot;addReport&quot;</span>, [])</span><br><span class="line">.controller(<span class="string">&quot;myController&quot;</span>, myController);</span><br></pre></td></tr></table></figure>
-<p>→</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&quot;injectName&quot;</span>, [])</span><br><span class="line">.component(<span class="string">&quot;tagName&quot;</span>, &#123;</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    isShow: <span class="string">&#x27;&lt;&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  template,</span><br><span class="line">  controller: myController,</span><br><span class="line">  controllerAs: <span class="string">&#x27;Ctrl&#x27;</span>,</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>injectName 通常會和 tagName 同名。</p>
-</blockquote>
-<p><strong>templage</strong></p>
-<p><code>$ctrl</code> 就剩下一種了，無法直接使用外部的 ctrl ，但是可以透過 binding 將變數傳進來。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-if</span>=<span class="string">&quot;MCtrl.fun&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span> <span class="attr">style</span>=<span class="string">&quot;max-width:800px&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">ng-click</span>=<span class="string">&quot;Ctrl.goBack()&quot;</span>&gt;</span>返回列表<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">report-form</span> <span class="attr">report</span>=<span class="string">&quot;Ctrl.report&quot;</span> <span class="attr">submit</span>=<span class="string">&quot;Ctrl.submit&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">report-form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span> <span class="comment">&lt;!--container--&gt;</span></span><br></pre></td></tr></table></figure>
-<p>→</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-if</span>=<span class="string">&quot;Ctrl.isShow&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span> <span class="attr">style</span>=<span class="string">&quot;max-width:800px&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">ng-click</span>=<span class="string">&quot;Ctrl.goBack()&quot;</span>&gt;</span>返回列表<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">report-form</span> <span class="attr">report</span>=<span class="string">&quot;Ctrl.report&quot;</span> <span class="attr">submit</span>=<span class="string">&quot;Ctrl.submit&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">report-form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="router"><a class="header-anchor" href="#router">¶</a>router</h2>
-<p>在 route 的 when 裡，只要指定 template，並且填上 component 的使用方式。就包含渲染用的 template ，跑什麼 controller。</p>
-<p>不建議使用外部指定的 controller</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">route</span> (<span class="params">$routeProvider, $locationProvider</span>) </span>&#123;</span><br><span class="line">  $locationProvider.hashPrefix(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  $routeProvider</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  .when(<span class="string">&#x27;/addReport&#x27;</span>, &#123;</span><br><span class="line">    templateUrl: <span class="string">&#x27;./addReport.html&#x27;</span>,</span><br><span class="line">    controller: <span class="string">&#x27;myController&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>→</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">route</span> (<span class="params">$routeProvider, $locationProvider</span>) </span>&#123;</span><br><span class="line">  $locationProvider.hashPrefix(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  $routeProvider</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  .when(<span class="string">&#x27;/addReport&#x27;</span>, &#123;</span><br><span class="line">    template: <span class="string">`&lt;tag-name is-show=&quot;true&quot;&gt;&lt;/tag-name&gt;`</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>只要把 component 在 html 的使用形式當作 <code>template</code></p>
-<h2 id="binding-function"><a class="header-anchor" href="#binding-function">¶</a>binding function</h2>
-<p>component 要這樣設定的話</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">binding: &#123;</span><br><span class="line">  onSubmit: <span class="string">&#x27;&amp;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>template 要這樣寫</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">ng-submit</span>=<span class="string">&quot;Ctrl.onSubmit(&#123;$event: Ctrl.code&#125;)&quot;</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>使用這個 components 要這樣寫</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myController</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params"></span>) &#123;&#125;</span><br><span class="line">  <span class="function"><span class="title">sumit</span>(<span class="params">code</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// code === Ctrl.code of component</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">my-form</span> <span class="attr">on-submit</span>=<span class="string">&quot;Ctrl.submit($event)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">my-form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="controller-of-component-→-ES6-class"><a class="header-anchor" href="#controller-of-component-→-ES6-class">¶</a>controller of component → ES6 class</h2>
-<ul>
-<li>改用 <code>class</code> 要注意要先宣告，再 <code>export</code></li>
-<li>內建相依要在 <code>constructor</code> 設定給 this<br>
-不要在 <code>constructor</code> 做初始化變數的事，改到 <code>$onInit</code> 做<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&quot;injectName&quot;</span>, [])</span><br><span class="line">.component(<span class="string">&quot;tagName&quot;</span>, &#123;</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    isShow: <span class="string">&#x27;&lt;&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  template,</span><br><span class="line">  controller: myController,</span><br><span class="line">  controllerAs: <span class="string">&#x27;Ctrl&#x27;</span>,</span><br><span class="line">&#125;).name;</span><br><span class="line"></span><br><span class="line">myController.$inject = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myController</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;constructor&#x27;</span>)</span><br><span class="line">  <span class="built_in">this</span>.$onInit = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;$onInit&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>→</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myController</span></span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params">$routeParams</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;constructor&#x27;</span>)</span><br><span class="line">    <span class="built_in">this</span>.$routeParams = $routeParams</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  $onInit () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;$onInit&#x27;</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.$routeParams.parameter)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> angular.module(<span class="string">&quot;injectName&quot;</span>, [])</span><br><span class="line">.component(<span class="string">&quot;tagName&quot;</span>, &#123;</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    isShow: <span class="string">&#x27;&lt;&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  template,</span><br><span class="line">  controller: myController,</span><br><span class="line">  controllerAs: <span class="string">&#x27;Ctrl&#x27;</span>,</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<h2 id="保持-scope-broadcast-或-scope-on-運作"><a class="header-anchor" href="#保持-scope-broadcast-或-scope-on-運作">¶</a>保持 <code>$scope.$broadcast</code> 或 <code>$scope.$on</code> 運作</h2>
-<p>其實 <code>$scope</code> 是要被消滅的，但是一時之間不要修改太大的幅度的話，可以先依照下面的建議放置</p>
-<ul>
-<li><code>$scope.$on</code> 是一種事件掛載。放置在 <code>constructor ()</code> 裡即可。</li>
-<li><code>$scope.$broadcast</code> 是一種事件觸發。放置位置不要移動，改成 <code>this.$scope</code> 的方式使用。</li>
-</ul>
-<h2 id="想要刪除-myController-inject"><a class="header-anchor" href="#想要刪除-myController-inject">¶</a>想要刪除 <code>myController.$inject = [...]</code></h2>
-<p>要移除 <code>$inject</code> 語法，就要靠 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/ng-annotate">ng-annotate</a> 套件<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<p>相依注入的寫法要拿掉，可以說是費了相當大的困難，目前最好的選擇，可以說是 <a target="_blank" rel="noopener" href="https://github.com/schmod/babel-plugin-angularjs-annotate">babel-plugin-angularjs-annotate</a> 這個原生後繼者</p>
-<p>安裝</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install babel-plugin-angularjs-annotate --save-dev</span></span><br></pre></td></tr></table></figure>
-<p>在 .babelrc file 加上</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [<span class="string">&quot;@babel/preset-env&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [<span class="string">&quot;angularjs-annotate&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>並且! 修改 webpack.config.js 在 babel 的設定，取消排除 <code>node_modules</code> 雖然會造成編出來的 all.js 變肥大，不過這是另一個可以被解決的問題。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: &#123;&#125;,</span><br><span class="line">  output: &#123;&#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">      test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">      <span class="comment">//exclude: /(node_modules|vendor)/,</span></span><br><span class="line">      loader: <span class="string">&quot;babel-loader&quot;</span></span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    <h1 id="Git-的支線-git-ftp"><a class="header-anchor" href="#Git-的支線-git-ftp">¶</a>Git 的支線 git-ftp</h1>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>因為我已經用了 xcode 的命令工具，所以就有 git 了。<br>
+只安裝下面這三個</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install curl --with-libssh2</span><br><span class="line">brew install brotli</span><br><span class="line">brew install git-ftp</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
+<p>使用時要小心，記得上次使用是要將自己的檔案同步到對方那裡，所以會蓋到對方的檔案。</p>
+<p>然後就不敢用了。</p>
+<p>哈哈</p>
+<p>有機會使用的朋友，請再確認一下</p>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://amobiz.github.io/2016/04/15/angularjs-1.5-best-practices/">AngularJS 1.5 最佳實務</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.codelord.net/2017/05/20/converting-angular-controllers-to-es6-classes/">Converting Angular Controllers to ES6 Classes - codelord.net</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://docs.angularjs.org/guide/di#implicit-annotation">Implicit Annotation</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p>setup: <a target="_blank" rel="noopener" href="https://github.com/git-ftp/git-ftp/blob/master/INSTALL.md#macos">INSTALL, macOS</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -220,11 +159,11 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
+  { <a href="/tags/git/">git</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/angularjs/">angularjs</a> }
+  { <a href="/tags/git-ftp/">git-ftp</a> }
   </li>
 
 

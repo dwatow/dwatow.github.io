@@ -116,23 +116,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2014/03-05-blogger/4986725410152430887/">https://dwatow.github.io/2014/03-05-blogger/4986725410152430887/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2014/02-13-blogger/2826013902857101138/">https://dwatow.github.io/2014/02-13-blogger/2826013902857101138/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>ODBC with MFC sample code</h1>
+        <h1>vector去除重覆混合技</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ODBC-with-MFC-sample-code"><span class="toc-text">ODBC with MFC sample code</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vector%E5%8E%BB%E9%99%A4%E9%87%8D%E8%A6%86%E6%B7%B7%E5%90%88%E6%8A%80"><span class="toc-text">vector去除重覆混合技</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">去除自身重覆的元素。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">去除外來指定元素</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="ODBC-with-MFC-sample-code"><a class="header-anchor" href="#ODBC-with-MFC-sample-code">¶</a>ODBC with MFC sample code</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/03/odbc-with-mfc-sample-code.html">https://darkblack01.blogspot.com/2014/03/odbc-with-mfc-sample-code.html</a><br>
-移植時的最後更新日期: 2014-03-05T10:17:10.523+08:00</p>
-<p>不囉嗦，直接看程式  <br /><pre class="prettyprint"><code>#include &lt;afxdb.h&gt;<br /><br />//略過超多無關ODBC的程式碼<br />void CKXdbtestDlg::OnButton1() //在此寫在一個button做測試，可以用其它訊息觸發<br />&#123;<br />    //宣告資料庫初始化(指定資料庫及帳密)<br />    //打開(table, 欄位 = <em>, R/W);  ??<br /><br />    CDatabase</em> kxDB = new CDatabase();  //資料庫本體物件<br />    kxDB-&gt;OpenEx( _T(“DSN=MySQL;UID=root;PWD=root”),  //“DSN=ODBC資料來源名稱;UID=帳號;PWD=密碼”<br />                     CDatabase::openReadOnly | <br />                     CDatabase::noOdbcDialog );  //資料庫連線參數(唯讀|無對話框)<br />    <br />    CRecordset* kxRecordSet = new CRecordset(kxDB);  //代表指向資料的指標物件<br />    kxRecordSet-&gt;Open( CRecordset::snapshot,      //連線互動方式(是否即時更新??)<br />                       “SELECT * FROM traveler”,  //輸入資炓庫指令<br />                       CRecordset::none);         //不知道設定什麼的位元遮罩<br /><br />    kxRecordSet-&gt;MoveNext();  //垂直移動，往下一個欄位<br /><br />    CString str, temp;       //下一行，取得水平儲存格總數(微軟很愛用counter當total)<br />    for (short i = 0; i &lt; kxRecordSet-&gt;GetODBCFieldCount(); ++i)<br />    &#123;<br />        kxRecordSet-&gt;GetFieldValue(i, temp);  //水平移動，指定其中一個儲存格，並取出該欄位資料<br />        str += temp + &quot;  &quot;;<br />    &#125;<br />    <br />    m_strShow.SetWindowText(str);<br /><br />    kxRecordSet-&gt;Close();<br />    kxDB-&gt;Close();  //資料庫斷線<br />&#125;</code></pre>注意：此程式碼顯示在一個唯讀的controller上，所以沒有測試其寫入的部份。<br />參考資料：<br /><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/c689y99f(v=vs.80).aspx">CDatabase::OpenEx - MSDN</a><br /><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/1hkkwdf0(v=vs.80).aspx">CRecordset::Open - MSDN</a><br /><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/z9t2b0y9(v=vs.80).aspx">CRecordset::MoveNext - MSDN</a><br /><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/187cf96c(v=vs.80).aspx">CRecordset::GetODBCFieldCount - MSDN</a><br /><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/5f8k59f9(v=vs.80).aspx">CRecordset::GetFieldValue - MSDN</a><br /></p>
+    <h1 id="vector去除重覆混合技"><a class="header-anchor" href="#vector去除重覆混合技">¶</a>vector去除重覆混合技</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/02/vector.html">https://darkblack01.blogspot.com/2014/02/vector.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.647+08:00</p>
+<h2><span style="font-size: large;">去除自身重覆的元素。</span></h2><pre class="prettyprint"><code>void removeRepeatMember()<br />&#123;<br />    vector&lt;CTest&gt; member;<br /><br />    /*  member.push_back(lots of data)  */<br /><br />    std::sort(result.begin(), result.end());<br />    result.erase(std::unique(result.begin(), result.end()), result.end());<br />&#125;</code></pre><h2><span style="font-size: large;">去除外來指定元素</span></h2><pre class="prettyprint"><code>void removeMember(const CTest&amp; objTest)<br />&#123;<br />    result.erase(remove(result.begin(), result.end(), objTest), result.end());<br />&#125;</code></pre>上例的vector是裝string，如果是裝自訂的類別CTest，則需要重載運算子。<br />sort()需要重載&lt;運算子。<br />unique()需要重載==運算子。<br /><pre class="prettyprint"><code>class CTest<br />&#123;<br />public:<br />    bool operator&lt; (const CTest&amp;     oCompany ) const;<br />    bool operator==(const CTest&amp; oCompany ) const;<br />&#125;</code></pre><br />參考:<br /><a href="http://blog.csdn.net/primer_programer/article/details/4206156" rel="nofollow" target="_blank">STL—vector删除重复元素</a><br /><a target="_blank" rel="noopener" href="http://www.cplusplus.com/reference/algorithm/remove/">std::remove - c++ Reference</a>
 
     
     </section>
@@ -146,7 +146,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/">資料庫</a> }
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
   </li>
 
 
