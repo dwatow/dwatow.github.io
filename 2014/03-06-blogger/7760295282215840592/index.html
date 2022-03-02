@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶function template裡使用vector和iterator 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;function-templatevector.html 移植時的最後更新日期: 2015-12-23T14:16:57.740+08:00 一開始的程式碼是這樣void Add(std::vector&lt;double&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="function template裡使用vector和iterator">
+<meta property="og:url" content="https://dwatow.github.io/2014/03-06-blogger/7760295282215840592/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶function template裡使用vector和iterator 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;03&#x2F;function-templatevector.html 移植時的最後更新日期: 2015-12-23T14:16:57.740+08:00 一開始的程式碼是這樣void Add(std::vector&lt;double&gt;">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-03-05T19:45:00.002Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.465Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta property="article:tag" content="抱怨VC6">
+<meta name="twitter:card" content="summary">
+  <title>function template裡使用vector和iterator - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>function template裡使用vector和iterator</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#function-template%E8%A3%A1%E4%BD%BF%E7%94%A8vector%E5%92%8Citerator"><span class="toc-text">function template裡使用vector和iterator</span></a></li></ol>
+  </div>
+
+
+    <h1 id="function-template裡使用vector和iterator"><a class="header-anchor" href="#function-template裡使用vector和iterator">¶</a>function template裡使用vector和iterator</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/03/function-templatevector.html">https://darkblack01.blogspot.com/2014/03/function-templatevector.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.740+08:00</p>
+<p>一開始的程式碼是這樣<br /><pre class="prettyprint"><code>void Add(std::vector&lt;double&gt; _V)<br />&#123;<br />    for (std::vector&lt;double&gt;::iterator _I = _V.begin(); _I != _V.end(); ++_I)<br />        add(<em>_I);<br />&#125;</code></pre><pre class="prettyprint"><code>void Add(std::vector&lt;CString&gt; _V)<br />&#123;<br />    for (std::vector&lt;CString&gt;::iterator _I = _V.begin(); _I != _V.end(); ++_I)<br />        add(</em>_I);<br />&#125;</code></pre>就想使用template將它們兩個合併成一組程式碼<br /><pre class="prettyprint"><code>template&lt;class T&gt; <br />void Add(std::vector&lt;T&gt; _V)<br />&#123;<br />    for (std::vector&lt;T&gt;::iterator _I = _V.begin(); _I != _V.end(); <ins>_I)<br />        add(<em>_I);<br />&#125;</code></pre>如果你也覺得這樣的程式碼沒問題，就值得繼續往下看，因為他complier一萬年也不會過！！<br /><br /><br />在Google「function template vector」之後，終於有<a href="http://stackoverflow.com/questions/19094340/stdvector-as-a-template-function-argument" target="_blank">結果</a>了。[1]<br /><pre class="prettyprint"><code>template&lt;typename T, typename A&gt;<br />void some_func( std::vector&lt;T,A&gt; const&amp; vec ) &#123;&#125;</code></pre>但是還是不行！怎麼會這樣？！<br />這時，就讓我想起一句話<br /><br /><b><span style="font-size: large;">「M$不符合標準，因為他當自己就是標準」</span></b><br /><br />所以，我就將程式碼改成這樣(測試平台: VC6)<br /><pre class="prettyprint"><code>template&lt;class T&gt; <br />void Add(std::vector&lt;T,std::allocator&lt;T&gt; &gt; const &amp; _V)<br />&#123;<br />    for (std::vector&lt;T&gt;::iterator _I = _V.begin(); _I != _V.end(); ++_I)<br />        add(</em>_I);<br />&#125;</code></pre>就可以了！(哭哭)<br /><br />但是，標準要怎麼寫呢？<br />我就使用MiniGW + Sublime text 2來測試一下<br />果然VC6的寫法不適合，那要怎麼改呢？<br /><br />再Google「function template vector iterator」了一陣子，終於有<a href="http://stackoverflow.com/questions/5192874/question-about-vector-iterator-in-template-functions" target="_blank">結果</a>了。[2]<br /><br />改成下面這樣，就可以了！<br /><pre class="prettyprint"><code>#include &lt;vector&gt;<br />#include &lt;iterator&gt;<br />#include &lt;string&gt;<br />#include &lt;iostream&gt;<br /><br />class Display<br />&#123;<br />public:<br />    template &lt; typename T, typename A &gt;<br />    void Show( std::vector&lt;T,A&gt; const&amp; vec )<br />    &#123; <br />        typename std::vector&lt;T&gt;::const_iterator it;<br />        for (it = vec.begin(); it != vec.end(); <ins>it)<br />            std::cout &lt;&lt; *it &lt;&lt; std::endl;<br />    &#125;<br />&#125;;<br /><br />int main()<br />&#123;<br />    std::vector&lt;double&gt; vD;<br />    vD.push_back(2.4);<br />    vD.push_back(2.1);<br />    vD.push_back(2.2);<br />    vD.push_back(2.3);<br /><br />    std::vector&lt;std::string&gt; vS;<br />    vS.push_back(“這是”);<br />    vS.push_back(“這是…”);<br />    vS.push_back(“這是…”);<br />    vS.push_back(“這是…”);<br />    vS.push_back(&quot;…&quot;);<br /><br /><br />    Display A;<br />    A.Show(vD);<br /><br />    Display B;<br />    B.Show(vS);<br />&#125;</code></pre>程式執行結果<br /><pre class="prettyprint"><code>2.4<br />2.1<br />2.2<br />2.3<br />這是<br />這是…<br />這是…<br />這是…<br />…</code></pre><br />最後的最後一件事提醒，<span style="color: #cc0000;">function template的定義(不是宣告唷，是定義)請寫在.h檔[3]<strike>或者使用inline</strike></span>。<br /><br />參考資料：<br />[1] <a href="http://stackoverflow.com/questions/19094340/stdvector-as-a-template-function-argument" target="_blank">c</ins> - std::vector as a template function argument - Stack Overflow</a><br />[2] <a href="http://stackoverflow.com/questions/5192874/question-about-vector-iterator-in-template-functions" target="_blank">c</ins> - Question about vector iterator in template functions - Stack Overflow</a><br />[3] <a href="http://social.msdn.microsoft.com/Forums/vstudio/en-US/629b6804-a8b6-4cad-beb2-5272e538a9c4/fatal-error-lnk1120-2-unresolved-externals" target="_blank">fatal error LNK1120: 2 unresolved externals</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-03-05T19:45:00.002Z" itemprop="datePublished">
+              2014-03-06
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E6%8A%B1%E6%80%A8VC6/">抱怨VC6</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-15-blogger/4273478116370404050/">VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005</a><div class="related-posts-item-abstract">¶VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005
+原文連結: https://darkblack01.blogspo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/01-06-blogger/4126150895303983721/"> python call C++ API by Boost~初體驗</a><div class="related-posts-item-abstract">¶python call C++ API by Boost~初體驗
+原文連結: https://darkblack01.blogspot.com/2016/01/pyt</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-21-blogger/1210118578282171112/">Boost C++ Libraries 哈囉~World</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 哈囉~World
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-17-blogger/5963631921317463446/">VCBUILD : warning C4727: PCH 問題</a><div class="related-posts-item-abstract">¶VCBUILD : warning C4727: PCH 問題
+原文連結: https://darkblack01.blogspot.com/2015/12/vcbu</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-13-blogger/7308863454969017699/">Boost C++ Libraries 初次見面</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 初次見面
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c-lib</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

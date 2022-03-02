@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Jenkins的git log的中文出現亂碼 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;07&#x2F;jenkinsgit-log.html 移植時的最後更新日期: 2016-03-04T10:46:26.294+08:00 首先我要強調的是，git log盡量不要打中文！XD好！接下來，來介紹一下怎麼解決中文的問題。先說說有一個指令。git config">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins的git log的中文出現亂碼">
+<meta property="og:url" content="https://dwatow.github.io/2015/07-01-blogger/227237006998082641/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Jenkins的git log的中文出現亂碼 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2015&#x2F;07&#x2F;jenkinsgit-log.html 移植時的最後更新日期: 2016-03-04T10:46:26.294+08:00 首先我要強調的是，git log盡量不要打中文！XD好！接下來，來介紹一下怎麼解決中文的問題。先說說有一個指令。git config">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2015-06-30T22:01:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.356Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Jenkins">
+<meta name="twitter:card" content="summary">
+  <title>Jenkins的git log的中文出現亂碼 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Jenkins的git log的中文出現亂碼</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Jenkins%E7%9A%84git-log%E7%9A%84%E4%B8%AD%E6%96%87%E5%87%BA%E7%8F%BE%E4%BA%82%E7%A2%BC"><span class="toc-text">Jenkins的git log的中文出現亂碼</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用big5顯示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">讓Git log輸出log的編碼為big5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用UTF8顯示[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">改Jenkins用的Java字集為UTF8</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Jenkins的git-log的中文出現亂碼"><a class="header-anchor" href="#Jenkins的git-log的中文出現亂碼">¶</a>Jenkins的git log的中文出現亂碼</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/07/jenkinsgit-log.html">https://darkblack01.blogspot.com/2015/07/jenkinsgit-log.html</a><br>
+移植時的最後更新日期: 2016-03-04T10:46:26.294+08:00</p>
+<p>首先我要強調的是，git log盡量不要打中文！XD<br /><br />好！接下來，來介紹一下怎麼解決中文的問題。<br />先說說有一個指令。<br /><br /><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding &lt;編碼方式&gt;</span><br /><br />這個指令，可以設定log輸出的編碼方式是要utf-8？還是要big5？還是別的。<br /><br /><br />一開始，我想說Jenkins的網頁，都嘛utf8，所以輸出成utf8吧！<br />結果一直都亂碼，無法解決，也覺得我是不是漏設定了什麼。<br /><br />有一天，我想到了一個測試的方式。<br />看看是怎麼回事。<br /><br /><span style="background-color: black;"><span style="color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git log &gt;&gt; gitlog.txt</span></span><br /><br />將git的log輸出成檔案。再用文字編輯器去開。就可以知道它是不是我想要的編碼方式啦！<br />我使用的文字編輯器是windows提供的WordPad，它…開啟utf8，是亂碼！= =<br /><br />Oh~<br /><br />怎麼和Jenkins一樣呢？<br /><br /><h2><span style="font-size: x-large;">用big5顯示</span></h2><h3><span style="font-size: large;">讓Git log輸出log的編碼為big5</span></h3>就把輸出log的編碼改成big5<br />結果WordPad開，是正常的！= =<br /><br />所以要在Jenkins的繁體中文介面顯示正常的git log內容。請用這個設定<br /><br /><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding big5</span><br /><br /><br /><h2><span style="font-size: x-large;">用UTF8顯示[1]</span></h2><h3><span style="font-size: large;">改Jenkins用的Java字集為UTF8</span></h3>以系統管理員身分<br /><ol><li>開啟命令提示字元視窗</li><li><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">X:\SETX /M JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8</span></li><li>開啟Git Bash</li><li><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding utf8</span></li><li>重新啟動Jenkins</li></ol><br /><br />參考資料<br />[1] <a href="http://blog.miniasp.com/post/2015/12/24/Jenkins-on-Windows-03-Avoid-messy-words-in-log-messages.aspx" target="_blank">Jenkins on Windows 心得分享 (03)：有效避免記錄檔或訊息出現亂碼的方法</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2015-06-30T22:01:00.001Z" itemprop="datePublished">
+              2015-07-01
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Git/">Git</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Jenkins/">Jenkins</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-11-blogger/2365584471815234000/">C++單元測試(13) - OpenCppCoverage指令快速參考</a><div class="related-posts-item-abstract">¶C++單元測試(13) - OpenCppCoverage指令快速參考
+原文連結: https://darkblack01.blogspot.com/2015/12/</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/08-21-blogger/6992827820732276690/">Jenkins的C++ 靜態程式碼分析 Cppcheck</a><div class="related-posts-item-abstract">¶Jenkins的C++ 靜態程式碼分析 Cppcheck
+原文連結: https://darkblack01.blogspot.com/2015/08/jenkins</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-24-blogger/327055237147327187/">C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report
+原文連結: https://darkblack01.blogspot.com/2</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-18-blogger/3630312236777101438/">用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)</a><div class="related-posts-item-abstract">¶用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-26-blogger/4437604259725696547/">git hook 壞掉了！</a><div class="related-posts-item-abstract">¶git hook 壞掉了！
+原文連結: https://darkblack01.blogspot.com/2015/05/git-hook.html
+移植時的最後更新</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

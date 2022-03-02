@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶RawReader by MFC 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;01&#x2F;rawreader-by-mfc.html 移植時的最後更新日期: 2012-01-30T08:16:11.670+08:00 突然想寫個RawReader讀取*.raw檔就來用學很久的MFC寫一個，完成研究所原本想做的事吧？！用VC++6建立一個Single Docu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RawReader by MFC">
+<meta property="og:url" content="https://dwatow.github.io/2012/01-20-blogger/1913806453672161458/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶RawReader by MFC 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;01&#x2F;rawreader-by-mfc.html 移植時的最後更新日期: 2012-01-30T08:16:11.670+08:00 突然想寫個RawReader讀取*.raw檔就來用學很久的MFC寫一個，完成研究所原本想做的事吧？！用VC++6建立一個Single Docu">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://2.bp.blogspot.com/-tLV_gCL04qE/TxkjBT51iTI/AAAAAAAABzc/jWwh0wGnpnk/s320/RawRead.bmp">
+<meta property="article:published_time" content="2012-01-20T00:24:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.349Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta property="article:tag" content="設計">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://2.bp.blogspot.com/-tLV_gCL04qE/TxkjBT51iTI/AAAAAAAABzc/jWwh0wGnpnk/s320/RawRead.bmp">
+  <title>RawReader by MFC - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>RawReader by MFC</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RawReader-by-MFC"><span class="toc-text">RawReader by MFC</span></a></li></ol>
+  </div>
+
+
+    <h1 id="RawReader-by-MFC"><a class="header-anchor" href="#RawReader-by-MFC">¶</a>RawReader by MFC</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/01/rawreader-by-mfc.html">https://darkblack01.blogspot.com/2012/01/rawreader-by-mfc.html</a><br>
+移植時的最後更新日期: 2012-01-30T08:16:11.670+08:00</p>
+<div class="separator" style="clear: both; text-align: left;">突然想寫個RawReader讀取*.raw檔</div><div class="separator" style="clear: both; text-align: left;">就來用學很久的MFC寫一個，完成研究所原本想做的事吧？！</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><span style="font-family: inherit; margin-left: 1em; margin-right: 1em;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-tLV_gCL04qE/TxkjBT51iTI/AAAAAAAABzc/jWwh0wGnpnk/s1600/RawRead.bmp" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="316" src="http://2.bp.blogspot.com/-tLV_gCL04qE/TxkjBT51iTI/AAAAAAAABzc/jWwh0wGnpnk/s320/RawRead.bmp" width="320" /></a></span></div><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">用VC++6建立一個Single Document</span><br /><span style="font-family: inherit;"></span><br /><a name='more'></a><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">在</span>CRAWReaderView&nbsp;的class<span style="font-family: inherit;">中宣告</span><br /><br /><span class="Apple-tab-span" style="white-space: pre;"> </span>CStdioFile RawFile;<br /><span class="Apple-tab-span" style="white-space: pre;"> </span>unsigned char RawBuf[276][235][3];<br /><div style="font-family: inherit;"><br /></div><div style="font-family: inherit;">並且在下面的位置加入程式碼</div><br /><span style="font-family: inherit;"><br /></span><br /><br /><span style="font-family: inherit;">void CRAWReaderView::OnDraw(CDC* pDC)</span><br /><span style="font-family: inherit;">{</span><br /><span style="color: #cccccc; font-family: inherit;">&nbsp; &nbsp; CRAWReaderDoc* pDoc = GetDocument();</span><br /><span style="color: #cccccc; font-family: inherit;">&nbsp; &nbsp; ASSERT_VALID(pDoc);</span><br /><span style="color: #6aa84f; font-family: inherit;">&nbsp; &nbsp; // TODO: add draw code for native data here</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; CString FilePath;</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; FilePath.Format("276x3x235.raw");</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; if (!RawFile.Open(FilePath, CFile::modeRead | CFile::typeBinary))</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; AfxMessageBox("檔案開啟失敗");</span><br /><span style="font-family: inherit;">&nbsp; &nbsp;&nbsp;</span><br /><span style="font-family: inherit;"><span style="font-family: inherit;">&nbsp; &nbsp; for (int pY = 0; pY</span>&lt;235 ; ++pY)</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; for (int pX = 0; pX&lt;276 ; ++pX)</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; for (int k &nbsp;= 0; &nbsp;k&lt;3 &nbsp; ; ++k)</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; RawBuf[pY][pX][k] = 0;</span><br /><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">&nbsp; &nbsp; if (!RawFile.Read(RawBuf, 276*235*3))</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; AfxMessageBox("讀檔失敗");</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; RawFile.Close();</span><br /><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">&nbsp; &nbsp; for (pY = 0; pY &lt; 235 ; ++pY)</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; for (pX = 0; pX &lt; 276<span style="color: red;"> + pY * 41</span> ; ++pX)</span><br /><span style="font-family: inherit;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; pDC-&gt;SetPixelV((pX<span style="color: red;"> - pY * 41</span>), pY, RGB(RawBuf[pY][pX][0], RawBuf[pY][pX][1], RawBuf[pY][pX][2]));</span><br /><span style="font-family: inherit;">}</span><br /><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">這個程式還沒有很好，因為紅色字的部份算是不正常的部份！</span><br /><span style="font-family: inherit;">不知道code裡面有沒有什麼bug</span><br /><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;"><br /></span><br /><span style="font-family: inherit;">找到了！</span><br /><br />--<br />※ 發信站: 批踢踢實業坊(ptt.cc)<br />◆ From: 59.120.98.237<br />→ zetab:RawBuf的index超過你宣告的範圍了 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 01/20 19:08<br /><div style="font-family: inherit;"><br /></div><div style="font-family: inherit;"><span class="Apple-tab-span" style="white-space: pre;"> </span>unsigned char RawBuf[276][235][3]; </div><div style="font-family: inherit;">變成</div><div style="font-family: inherit;"><span class="Apple-tab-span" style="white-space: pre;"> </span>unsigned char RawBuf[235]<span style="font-family: inherit;">[276][3];</span></div><div style="font-family: inherit;"><span style="font-family: inherit;">就好了...</span></div><div style="font-family: inherit;"><span style="font-family: inherit;">等等來試.....</span></div>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2012-01-20T00:24:00.000Z" itemprop="datePublished">
+              2012-01-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E8%A8%AD%E8%A8%88/">設計</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2014/06-04-blogger/6291301506449055890/">不知道怎麼跑出來的Executable for debug session Dialog</a><div class="related-posts-item-abstract">¶不知道怎麼跑出來的Executable for debug session Dialog
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/03-04-blogger/58857659507176918/">清空combBox</a><div class="related-posts-item-abstract">¶清空combBox
+原文連結: https://darkblack01.blogspot.com/2014/03/combbox.html
+移植時的最後更新日期: 2</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/05-29-blogger/859847402283061114/">用MFC的手操作「真．Excel」</a><div class="related-posts-item-abstract">¶用MFC的手操作「真．Excel」
+原文連結: https://darkblack01.blogspot.com/2013/05/mfcexcel.html
+移植時的</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-26-blogger/9155494380628697561/">PathFileExists()的用法</a><div class="related-posts-item-abstract">¶PathFileExists()的用法
+原文連結: https://darkblack01.blogspot.com/2013/04/pathfileexists.h</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-25-blogger/4411410962580455823/">CString中找關鍵字的技巧</a><div class="related-posts-item-abstract">¶CString中找關鍵字的技巧
+原文連結: https://darkblack01.blogspot.com/2013/04/mfc.html
+移植時的最後更新日期:</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-17-blogger/9091447284814344439/">MFC controls//Spin</a><div class="related-posts-item-abstract">¶MFC controls//Spin
+原文連結: https://darkblack01.blogspot.com/2013/04/mfc-controlsspin.</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

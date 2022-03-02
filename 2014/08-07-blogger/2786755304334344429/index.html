@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶C單元測試(3) - 測試VS2005的C專案 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;08&#x2F;c3-vs2005c.html 移植時的最後更新日期: 2015-12-26T14:17:50.460+08:00 續前一篇取得的聖杯。接下來的困難點，卻是VS2005的專案檔設定。這一次的環境是使用Windows 8.1, VS2005 SP2CppUn">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" C++單元測試(3) - 測試VS2005的C++專案">
+<meta property="og:url" content="https://dwatow.github.io/2014/08-07-blogger/2786755304334344429/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶C單元測試(3) - 測試VS2005的C專案 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;08&#x2F;c3-vs2005c.html 移植時的最後更新日期: 2015-12-26T14:17:50.460+08:00 續前一篇取得的聖杯。接下來的困難點，卻是VS2005的專案檔設定。這一次的環境是使用Windows 8.1, VS2005 SP2CppUn">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://1.bp.blogspot.com/-18pcUQNTX_w/U-EDSQJIWwI/AAAAAAAAHY8/o90DtQb1Cjc/s1600/pathCppUnit.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-1CN_g4a68Co/U-LPSsCp2nI/AAAAAAAAHZQ/UQL1ehi3Y9k/s1600/Include_h_file.png">
+<meta property="og:image" content="http://4.bp.blogspot.com/-LVqoZtnCOR0/U-LQzSOcjYI/AAAAAAAAHZc/6QD8ZguoH6Y/s1600/add_lib_file.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-sMNdNf0_4D8/U-LRrIUR5UI/AAAAAAAAHZk/PxU98ikYHc4/s1600/Build_OK.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-KHAPf3sUdHc/U9NFkFj9d2I/AAAAAAAAHXg/AiFxad2k1eQ/s1600/wiki_references.png">
+<meta property="article:published_time" content="2014-08-06T18:25:00.002Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.368Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta property="article:tag" content="TDD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://1.bp.blogspot.com/-18pcUQNTX_w/U-EDSQJIWwI/AAAAAAAAHY8/o90DtQb1Cjc/s1600/pathCppUnit.png">
+  <title> C++單元測試(3) - 測試VS2005的C++專案 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1> C++單元測試(3) - 測試VS2005的C++專案</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-3-%E6%B8%AC%E8%A9%A6VS2005%E7%9A%84C%E5%B0%88%E6%A1%88"><span class="toc-text">C單元測試(3) - 測試VS2005的C專案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第一步 取得正確的檔案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第二步，開啟你要做單元測試的專案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第三步 貼上練習的code，Build it!!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">另外，有一個延伸閱讀。</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="C單元測試-3-測試VS2005的C專案"><a class="header-anchor" href="#C單元測試-3-測試VS2005的C專案">¶</a>C<ins>單元測試(3) - 測試VS2005的C</ins>專案</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/08/c3-vs2005c.html">https://darkblack01.blogspot.com/2014/08/c3-vs2005c.html</a><br>
+移植時的最後更新日期: 2015-12-26T14:17:50.460+08:00</p>
+<p>續<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/2014/08/c2-cppunit.html">前一篇</a>取得的聖杯。<br /><br />接下來的困難點，卻是VS2005的專案檔設定。<br /><br />這一次的環境是使用Windows 8.1, VS2005 SP2<br /><a href="http://darkblack01.blogspot.tw/2015/05/c7-vs2005.html" target="_blank">CppUnit要修改專案檔</a>。<br /><br />不過！要知道取出哪一個部份<br /><br /><h2><span style="font-size: x-large;">第一步 取得正確的檔案</span></h2>要知道我們在上一篇編譯結束後，出現的cppunit.lib 和 cppunit_dll.lib要如何正確使用。<br />除了擁有link時期需要的.lib檔之外，還要取得complier時期需要的.h檔(也就是include會用到的部份)。<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-18pcUQNTX_w/U-EDSQJIWwI/AAAAAAAAHY8/o90DtQb1Cjc/s1600/pathCppUnit.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="434" src="http://1.bp.blogspot.com/-18pcUQNTX_w/U-EDSQJIWwI/AAAAAAAAHY8/o90DtQb1Cjc/s1600/pathCppUnit.png" width="640" /></a></div><br />.lib檔位於cppunit1.13.2/lib/裡面。<br />.h檔位於cppunit1.13.2/include/裡面。(通常會編出Debug和Release兩種)<br /><br />不過，我沒有試過直接拿CppUnit的原始碼加到專案檔裡，這招應該是沒有問題的。<br />下次來試試看。<br /><br /><h2><span style="font-size: x-large;">第二步，開啟你要做單元測試的專案</span></h2>在此就是使用VS2005啦。<br />其實，難還是難在專案檔的設定，因為沒有任何書針對這部份詳細解說(入門書都簡單講一下，深入的書都不提這個區塊，MSDN…你懂的！)<br /><br />在此，我們使用的專案名稱為「xCppUnit」<br />並且把cppUnit的檔案另外放在D:\sandbox\cppunitlib (不放在上圖的目錄中)<br />分別是<br />cppunitlib\include\cppunit\extensions<br />cppunitlib\include\cppunit<br />cppunitlib\include<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-1CN_g4a68Co/U-LPSsCp2nI/AAAAAAAAHZQ/UQL1ehi3Y9k/s1600/Include_h_file.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="445" src="http://1.bp.blogspot.com/-1CN_g4a68Co/U-LPSsCp2nI/AAAAAAAAHZQ/UQL1ehi3Y9k/s1600/Include_h_file.png" width="640" /></a></div>在專案設定裡找到這個地方，並填上.h檔的路徑(記得用;隔開<strike>，設定不包含子目錄吧？</strike>)<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/-LVqoZtnCOR0/U-LQzSOcjYI/AAAAAAAAHZc/6QD8ZguoH6Y/s1600/add_lib_file.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="444" src="http://4.bp.blogspot.com/-LVqoZtnCOR0/U-LQzSOcjYI/AAAAAAAAHZc/6QD8ZguoH6Y/s1600/add_lib_file.png" width="640" /></a></div>在專案設定裡找到這個地方，並填上.lib檔的路徑(記得用;隔開)<br /><br /><h2><span style="font-size: x-large;">第三步 貼上練習的code，Build it!!</span></h2>接下來就完事了。<br />可以開始<strike>寫測試案例了</strike><a target="_blank" rel="noopener" href="http://download.51testing.com/ddimg/uploadsoft/20100414/CppUnitCookBook.pdf">貼上練習的測試案例</a>測試看看囉！[1]<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-sMNdNf0_4D8/U-LRrIUR5UI/AAAAAAAAHZk/PxU98ikYHc4/s1600/Build_OK.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="496" src="http://2.bp.blogspot.com/-sMNdNf0_4D8/U-LRrIUR5UI/AAAAAAAAHZk/PxU98ikYHc4/s1600/Build_OK.png" width="640" /></a></div>只有一個main檔。沒有加上其它的code。貼上測試案例，加上足夠的include檔案。即可編譯成功。<br /><br />這系列到目前，是我遇到網路上找不到資料的步驟，也許太簡單所以高手寫文章都直接跳過這些，對於我們這種新手要踏進來，對於太多不懂的。所以，就將自己研究的過程寫下來，並且仔細的告訴你，怎麼做，祝大家順利啦！^^。<br /><br /><h2><span style="font-size: x-large;">另外，有一個延伸閱讀。</span></h2>在<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/2014/07/cppunit.html">第一篇</a>的時候，我們找到了維基百科對CppUnit的參考資料<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-KHAPf3sUdHc/U9NFkFj9d2I/AAAAAAAAHXg/AiFxad2k1eQ/s1600/wiki_references.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="164" src="http://1.bp.blogspot.com/-KHAPf3sUdHc/U9NFkFj9d2I/AAAAAAAAHXg/AiFxad2k1eQ/s1600/wiki_references.png" width="640" /></a></div>上面有一個Further reading，這是一本教你寫遊戲的書唷！^^<br />Ch1.7有介紹CppUnit的使用方式，有興趣的人可以把它<a target="_blank" rel="noopener" href="http://pan.baidu.com/share/link?shareid=1797423902&amp;uk=3694234608">找出來</a>。[2]<br /><br /><br />參考資料：<br />[1] <a target="_blank" rel="noopener" href="http://download.51testing.com/ddimg/uploadsoft/20100414/CppUnitCookBook.pdf">CppUnit CookBook 中文版</a><br />[2] <a href="http://pan.baidu.com/share/link?shareid=1797423902&amp;uk=3694234608" target="_blank">游戏编程精粹6</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-08-06T18:25:00.002Z" itemprop="datePublished">
+              2014-08-07
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/TDD/">TDD</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-24-blogger/327055237147327187/">C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report
+原文連結: https://darkblack01.blogspot.com/2</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-15-blogger/4273478116370404050/">VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005</a><div class="related-posts-item-abstract">¶VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005
+原文連結: https://darkblack01.blogspo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-12-blogger/7191926647842005138/">C++單元測試(4) - 用VC6先試一下: 如何使用CppUnit</a><div class="related-posts-item-abstract">¶C++單元測試(4) - 用VC6先試一下: 如何使用CppUnit
+原文連結: https://darkblack01.blogspot.com/2014/08/c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-05-blogger/8167572629474808823/">C++單元測試(2) - 用VC6編譯CppUnit</a><div class="related-posts-item-abstract">¶C++單元測試(2) - 用VC6編譯CppUnit
+原文連結: https://darkblack01.blogspot.com/2014/08/c2-cppuni</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-26-blogger/1370370535599190234/">C++單元測試(1) - 下載CppUnit</a><div class="related-posts-item-abstract">¶C++單元測試(1) - 下載CppUnit
+原文連結: https://darkblack01.blogspot.com/2014/07/cppunit.html
+</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶抱怨VC6&#x2F;&#x2F;File: afx.ini Line: 122 的bug 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;04&#x2F;vc6file-afxini-line-122-bug.html 移植時的最後更新日期: 2013-04-15T14:47:56.261+08:00 這個MFC的問題，我在網路上也是找了很久，沒有解，一直到無意間解開了！再重現。以下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="抱怨VC6&#x2F;&#x2F;File: afx.ini Line: 122 的bug">
+<meta property="og:url" content="https://dwatow.github.io/2013/04-15-blogger/6799971123193354473/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶抱怨VC6&#x2F;&#x2F;File: afx.ini Line: 122 的bug 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;04&#x2F;vc6file-afxini-line-122-bug.html 移植時的最後更新日期: 2013-04-15T14:47:56.261+08:00 這個MFC的問題，我在網路上也是找了很久，沒有解，一直到無意間解開了！再重現。以下">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://2.bp.blogspot.com/-tyYpicQxZ70/UWuYb4n98VI/AAAAAAAAEsM/ydNpZz_K2q4/s640/%E6%8F%8F%E8%BF%B01.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-yklPqMFiiRE/UWuYbjDkz7I/AAAAAAAAEsI/eLp04b1nCfY/s400/%E6%8F%8F%E8%BF%B02.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-_624yNrx1Iw/UWuYctc9eDI/AAAAAAAAEss/5xSgzeDdujM/s640/%25E6%258F%258F%25E8%25BF%25B03.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-frmGBQg0ovM/UWuYcU5Z-bI/AAAAAAAAEsc/qZosBKP75iE/s640/%E6%8F%8F%E8%BF%B05.png">
+<meta property="og:image" content="http://4.bp.blogspot.com/-uOiMDwtgPO0/UWudnGygt7I/AAAAAAAAEs4/2gGw_lPcu2U/s640/%E5%95%8F%E9%A1%8C1.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-GrIPw9KMwjk/UWuYcN9AC-I/AAAAAAAAEsg/qzEge8HMjEo/s640/%25E6%258F%258F%25E8%25BF%25B04.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-D777Ze4wYEQ/UWuhZjaau3I/AAAAAAAAEtI/JB7IDNp7F9Y/s640/solution.png">
+<meta property="article:published_time" content="2013-04-14T22:47:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.449Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta property="article:tag" content="抱怨VC6">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://2.bp.blogspot.com/-tyYpicQxZ70/UWuYb4n98VI/AAAAAAAAEsM/ydNpZz_K2q4/s640/%E6%8F%8F%E8%BF%B01.png">
+  <title>抱怨VC6//File: afx.ini Line: 122 的bug - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>抱怨VC6//File: afx.ini Line: 122 的bug</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%B1%E6%80%A8VC6-File-afx-ini-Line-122-%E7%9A%84bug"><span class="toc-text">抱怨VC6&#x2F;&#x2F;File: afx.ini Line: 122 的bug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">問題描述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">收集線索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">問題真正的解法</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="抱怨VC6-File-afx-ini-Line-122-的bug"><a class="header-anchor" href="#抱怨VC6-File-afx-ini-Line-122-的bug">¶</a>抱怨VC6//File: afx.ini Line: 122 的bug</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/04/vc6file-afxini-line-122-bug.html">https://darkblack01.blogspot.com/2013/04/vc6file-afxini-line-122-bug.html</a><br>
+移植時的最後更新日期: 2013-04-15T14:47:56.261+08:00</p>
+<p>這個MFC的問題，我在網路上也是找了很久，沒有解，一直到無意間解開了！再重現。以下是以我自己的case做範例重現。<br /><br /><br />我的main project使用SDI，利用Menu打開各種的Dialog做操作，各個Dialog我都做一個sub project檔來個別開發、測試，最後在main project用#include的方式把code加入，再把dialog的interface給拉到main project，這樣就可以使用。<br /><br />但是，這樣卻引發了一個隱藏的問題。<br /><br /><a name='more'></a><br /><br /><h3><span style="font-size: large;">問題描述：</span></h3>我想要把sub project給刪除掉，並且將code整合到main project。<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-tyYpicQxZ70/UWuYb4n98VI/AAAAAAAAEsM/ydNpZz_K2q4/s1600/%E6%8F%8F%E8%BF%B01.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="154" src="http://2.bp.blogspot.com/-tyYpicQxZ70/UWuYb4n98VI/AAAAAAAAEsM/ydNpZz_K2q4/s640/%E6%8F%8F%E8%BF%B01.png" width="640" /></a></div><br />這兩個project重疊的檔案<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-yklPqMFiiRE/UWuYbjDkz7I/AAAAAAAAEsI/eLp04b1nCfY/s1600/%E6%8F%8F%E8%BF%B02.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="296" src="http://1.bp.blogspot.com/-yklPqMFiiRE/UWuYbjDkz7I/AAAAAAAAEsI/eLp04b1nCfY/s400/%E6%8F%8F%E8%BF%B02.png" width="400" /></a></div><br /><br />從這開始操作<br /><br />在main project中，加入code<br />新增dialog(命名了相同的名字)<br />複製sub project中要的dialog所有的member function<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-_624yNrx1Iw/UWuYctc9eDI/AAAAAAAAEss/5xSgzeDdujM/s1600/%25E6%258F%258F%25E8%25BF%25B03.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="420" src="http://3.bp.blogspot.com/-_624yNrx1Iw/UWuYctc9eDI/AAAAAAAAEss/5xSgzeDdujM/s640/%25E6%258F%258F%25E8%25BF%25B03.png" width="640" /></a></div><br />執行程式<br /><br /><div class="separator" style="clear: both; text-align: center;"></div>開啟這次移植的dialog，出現了這次問題的主角<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-frmGBQg0ovM/UWuYcU5Z-bI/AAAAAAAAEsc/qZosBKP75iE/s1600/%E6%8F%8F%E8%BF%B05.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="198" src="http://3.bp.blogspot.com/-frmGBQg0ovM/UWuYcU5Z-bI/AAAAAAAAEsc/qZosBKP75iE/s640/%E6%8F%8F%E8%BF%B05.png" width="640" /></a></div><br /><h3><span style="font-size: large;">收集線索</span></h3>先來看看什麼是<br />afx.ini line: 122<br /><br /><pre class="prettyprint"><code>// CString<br />_AFX_INLINE CStringData* CString::GetData() const<br />&#123; <br />    ASSERT(m_pchData != NULL); <br />    return ((CStringData*)m_pchData)-1;<br />&#125;</code></pre>CString???<br /><br />再看看dialog啟動的程式段<br /><pre class="prettyprint"><code>void CColorEyeIApp::OnFileOmdtoxls() <br />&#123;<br />    // TODO: Add your command handler code here<br />    CSelExcelDlg dlgSelExcel;<br />    dlgSelExcel.DoModal();<br />&#125;</code></pre>用debugger看看程式執行<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/-uOiMDwtgPO0/UWudnGygt7I/AAAAAAAAEs4/2gGw_lPcu2U/s1600/%E5%95%8F%E9%A1%8C1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="352" src="http://4.bp.blogspot.com/-uOiMDwtgPO0/UWudnGygt7I/AAAAAAAAEs4/2gGw_lPcu2U/s640/%E5%95%8F%E9%A1%8C1.png" width="640" /></a></div><br />到此收集到的線索及推測<br />「此bug是由button按下之後，到dialog::deconstruct()執行完畢出的問題。」<br />變成<br />「此bug是由程式deconstruct執行完畢出的問題。」<br /><br />先看看是<sub>CString()還是</sub>CSelExcelDlg()的問題？<br /><sub>CSelExcelDlg()沒有override，那找找看</sub>CString()出問題的可能性。<br /><br />看看CSelExcelDlg中，到底有沒有CString<br /><pre class="prettyprint"><code>class CSelExcelDlg : public CDialog<br />&#123;<br />    FormType   m_ft;<br />    int        m_openOmdLimit;<br />     std::vector&gt;&lt;cstring&gt; m_omdFilesList;    //   m_vOmdFilePathList;<br />//…<br /></code></pre>發現CString！！！<br /><br />這個CString member variable相關的member function都註解掉<br /><br />執行程式 <br /><ol><li>按下Cancel </li><li><sub>CSelExcelDlg&amp;nbsp;&lt;/li&gt;&lt;li&gt;&lt;strike&gt;</sub>CString </strike></li><li>當掉 </li></ol><br />還是當掉了。<br /><br />問題就是沒有被overload的~SelExcelDlg了？！<br /><br />李組長眉頭一皺，發現案情並不單純！<br /><br />怎麼可能沒override卻出了問題？<br /><br /><h3><span style="font-size: large;">問題真正的解法</span></h3>就在整理程式碼(刪掉SelXls/SelExcelDialog.h &amp; SelXls/SelExcelDialog.cpp)之後，發現#include出了問題<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-GrIPw9KMwjk/UWuYcN9AC-I/AAAAAAAAEsg/qzEge8HMjEo/s1600/%25E6%258F%258F%25E8%25BF%25B04.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="150" src="http://2.bp.blogspot.com/-GrIPw9KMwjk/UWuYcN9AC-I/AAAAAAAAEsg/qzEge8HMjEo/s640/%25E6%258F%258F%25E8%25BF%25B04.png" width="640" /></a></div><br />修正#include的檔案之後。<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-D777Ze4wYEQ/UWuhZjaau3I/AAAAAAAAEtI/JB7IDNp7F9Y/s1600/solution.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="224" src="http://2.bp.blogspot.com/-D777Ze4wYEQ/UWuhZjaau3I/AAAAAAAAEtI/JB7IDNp7F9Y/s640/solution.png" width="640" /></a></div><br /><span style="font-size: large;">再Rebuild All，就好了。</span></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-04-14T22:47:00.001Z" itemprop="datePublished">
+              2013-04-15
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E6%8A%B1%E6%80%A8VC6/">抱怨VC6</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2013/04-26-blogger/9155494380628697561/">PathFileExists()的用法</a><div class="related-posts-item-abstract">¶PathFileExists()的用法
+原文連結: https://darkblack01.blogspot.com/2013/04/pathfileexists.h</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-17-blogger/5963631921317463446/">VCBUILD : warning C4727: PCH 問題</a><div class="related-posts-item-abstract">¶VCBUILD : warning C4727: PCH 問題
+原文連結: https://darkblack01.blogspot.com/2015/12/vcbu</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/01-13-blogger/6096065848597215633/">visual studio 2005中 Properties的Events, Messages, Overrides不見了</a><div class="related-posts-item-abstract">¶visual studio 2005中 Properties的Events, Messages, Overrides不見了
+原文連結: https://darkbla</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/09-11-blogger/7294138077487661298/">多核心編譯</a><div class="related-posts-item-abstract">¶多核心編譯
+原文連結: https://darkblack01.blogspot.com/2014/09/blog-post_11.html
+移植時的最後更新日期: </div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-15-blogger/4273478116370404050/">VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005</a><div class="related-posts-item-abstract">¶VS2005 msvcprtd.lib(MSVCP80D.dll) : error LNK2005
+原文連結: https://darkblack01.blogspo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/07-17-blogger/8945492804444599747/">VS編譯兩份執行檔</a><div class="related-posts-item-abstract">¶VS編譯兩份執行檔
+原文連結: https://darkblack01.blogspot.com/2014/07/vs.html
+移植時的最後更新日期: 2014-0</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

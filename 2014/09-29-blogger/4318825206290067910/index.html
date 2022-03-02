@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶C++沉思錄&#x2F;&#x2F;第四章整理 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;09&#x2F;c.html 移植時的最後更新日期: 2015-12-23T14:17:34.167+08:00 class design checklist你需要一個建構子嗎？想一下。你的成員變數是私有的嗎？以函數當作存取成員變數的好處:1. 定義域、值域的程式化。ex: length的長">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++沉思錄&#x2F;&#x2F;第四章整理">
+<meta property="og:url" content="https://dwatow.github.io/2014/09-29-blogger/4318825206290067910/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶C++沉思錄&#x2F;&#x2F;第四章整理 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2014&#x2F;09&#x2F;c.html 移植時的最後更新日期: 2015-12-23T14:17:34.167+08:00 class design checklist你需要一個建構子嗎？想一下。你的成員變數是私有的嗎？以函數當作存取成員變數的好處:1. 定義域、值域的程式化。ex: length的長">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2014-09-29T07:12:00.001Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.401Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta property="article:tag" content="Cpp沉思錄">
+<meta name="twitter:card" content="summary">
+  <title>C++沉思錄//第四章整理 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>C++沉思錄//第四章整理</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E6%B2%89%E6%80%9D%E9%8C%84-%E7%AC%AC%E5%9B%9B%E7%AB%A0%E6%95%B4%E7%90%86"><span class="toc-text">C++沉思錄&#x2F;&#x2F;第四章整理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">class design checklist</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="C-沉思錄-第四章整理"><a class="header-anchor" href="#C-沉思錄-第四章整理">¶</a>C++沉思錄//第四章整理</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/09/c.html">https://darkblack01.blogspot.com/2014/09/c.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:17:34.167+08:00</p>
+<h3><span style="font-size: x-large;">class design checklist</span></h3><ul><li><b>你需要一個建構子嗎？</b></li></ul><div>想一下。</div><ul><li><b>你的成員變數是私有的嗎？</b></li></ul>以函數當作存取成員變數的好處:<br />1. 定義域、值域的程式化。ex: length的長度一定要大於零。<br />2. 算式表示抽象屬性。ex: vector&lt;int&gt;::length(); 元素的數量是取值時才運算出來的。<br /><ul><li><b>你的類別需要一個無參數的建構子嗎？</b></li></ul>利用無參數建構子用來定義成員變數的「預設初始化狀態」。<br /><ul><li><b>是不是每個建構子都初始化所有的成員變數呢？</b></li></ul>雖然建構子是初始化所有的成員變數，但其實在真實世界的例子中，也不是這麼一定。<br />這問題是刺激你思考是否都盡可能的初始化了。<br /><ul><li><b>類別需要解構子嗎？</b></li></ul>思考:<br />1. 這個類別要做些什麼<br />2. 是否有不會由成員函數自動釋放的動態記憶體空間<br />通常，建構子有new出什麼動態記憶體配置，解構子就要delete<br /><ul><li><b>類別需要一個虚擬解構子嗎？</b></li></ul>動態連結時，基礎類別指標是否有必要執行洐生類別的物件的解構子，為了釋放洐生類別的物件才有使用的動態記憶體空間<br /><ul><li><b>你的類別需要自己寫一個複製建構子嗎？</b></li></ul>複製該類別的物件，不相當於「複製其成員變數和基礎類別物件」，則需要複製建構子。<br />如果有動態記憶體宣告的空間，就考慮是否要複製建構子。<br /><ul><li><b>你的類別需要自己寫一個賦值運算子嗎？</b></li></ul>如果有複製建構子，大多需要建立一個。<br />注意返回值要 X&amp; X::operator=()，並且 return *this;<br /><ul><li><b>你的賦值運算子能正確的將物件賦值給物件嗎？</b></li></ul>「自我賦值常常被錯誤的應用，不只是一本C++的書弄錯了」<br />賦值總是用新的值取代舊的值，但是如果「來源物件與目標物件是同一個」，就不可以奉行「先釋放舊值，再複製新值」，會先毀掉來源物件裡的值。<br />在這，有兩個作法<br /><br />1. 判斷是不是賦值給自己，再決定是不是要delete<br /><pre class="prettyprint"><code>xString$ xString::operator=(const xString&amp; xstr)<br />&#123;<br />    if (&s != this)<br />    &#123;<br />        delete [] data;<br />        data = new char[strlen(s.data) + 1];<br />        strcpy(data, s.data);<br />    &#125;<br />    return *this;<br />&#125;</code></pre>2. 先暫存，再賦值，最後再delete <br /><pre class="prettyprint"><code>xString$ xString::operator=(const xString&amp; xstr)<br />&#123;<br /><br />    char* newdata = new char[strlen(s.data) + 1];<br />    strcpy(newdata, s.data);<br />    delete [] data;<br />    data = newdata;    <br />    return *this;<br />&#125;</code></pre><ul><li><b>你的類別需要關係運算子嗎？</b></li></ul>只要用戶想要排序你的類，你就必須要提供關係運算子。<br /><ul><li><b>刪除陣列時你記得使用delete[]嗎？</b></li></ul>會保留這種奇怪的寫法，是為了和C語言相容，同時保有效率。<br /><br /><ul><li><b>記得在複製建構子和賦值運算子的參數加上const了嗎？</b></li></ul><div>提供保證，複製物件並不會改變原物件。</div><ul><li><b>如果函數的參數是參考，它們是否該加上const？</b></li></ul><div>只有當函數想改變參數時，才會取消加上const</div><ul><li><b>記得適當的宣告成員函數成const了嗎？</b></li></ul>有設定唯讀的函數，才可以套用在STL的演算法中執行。<br /><div><br /></div>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-09-29T07:12:00.001Z" itemprop="datePublished">
+              2014-09-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/">Cpp沉思錄</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2016/01-06-blogger/4126150895303983721/"> python call C++ API by Boost~初體驗</a><div class="related-posts-item-abstract">¶python call C++ API by Boost~初體驗
+原文連結: https://darkblack01.blogspot.com/2016/01/pyt</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-21-blogger/1210118578282171112/">Boost C++ Libraries 哈囉~World</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 哈囉~World
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-13-blogger/7308863454969017699/">Boost C++ Libraries 初次見面</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 初次見面
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c-lib</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-15-blogger/3841271280424750554/">hello world之 在windows建立dll檔</a><div class="related-posts-item-abstract">¶hello world之 在windows建立dll檔
+原文連結: https://darkblack01.blogspot.com/2015/11/hello-wo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-06-blogger/5385954146016167597/">MARCO in C++ 愈用愈好用的地方</a><div class="related-posts-item-abstract">¶MARCO in C++ 愈用愈好用的地方
+原文連結: https://darkblack01.blogspot.com/2015/11/marco-in-c.htm</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

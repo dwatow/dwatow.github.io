@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶物件導向之回傳this 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;02&#x2F;this.html 移植時的最後更新日期: 2015-12-23T14:16:57.752+08:00 最近在ptt上看見討論串而且討論得還滿有結果的之前也為了這件事查半天（突然忘記怎麼用了XD）就來給自己做一個小筆記吧！在C++中this是指向自己的指標this是物件主體（引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="物件導向之回傳this">
+<meta property="og:url" content="https://dwatow.github.io/2012/02-20-blogger/9152547329346017245/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶物件導向之回傳this 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;02&#x2F;this.html 移植時的最後更新日期: 2015-12-23T14:16:57.752+08:00 最近在ptt上看見討論串而且討論得還滿有結果的之前也為了這件事查半天（突然忘記怎麼用了XD）就來給自己做一個小筆記吧！在C++中this是指向自己的指標this是物件主體（引用">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://2.bp.blogspot.com/-GcHRIeUZoSM/T0GX_-oVofI/AAAAAAAACO8/GeW8OTFd5OM/s1600/this+point.JPG">
+<meta property="article:published_time" content="2012-02-19T16:47:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.553Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="WIN32 API&#x2F;MFC">
+<meta property="article:tag" content="C_and_Cpp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://2.bp.blogspot.com/-GcHRIeUZoSM/T0GX_-oVofI/AAAAAAAACO8/GeW8OTFd5OM/s1600/this+point.JPG">
+  <title>物件導向之回傳this - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>物件導向之回傳this</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E4%B9%8B%E5%9B%9E%E5%82%B3this"><span class="toc-text">物件導向之回傳this</span></a></li></ol>
+  </div>
+
+
+    <h1 id="物件導向之回傳this"><a class="header-anchor" href="#物件導向之回傳this">¶</a>物件導向之回傳this</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/02/this.html">https://darkblack01.blogspot.com/2012/02/this.html</a><br>
+移植時的最後更新日期: 2015-12-23T14:16:57.752+08:00</p>
+<p>最近在ptt上看見討論串<br />而且討論得還滿有結果的<br /><br />之前也為了這件事查半天（突然忘記怎麼用了XD）<br />就來給自己做一個小筆記吧！<br /><br /><a name='more'></a><br /><br />在C++中<br />this是指向自己的指標<br /><em>this是物件主體<br />（引用《指標的藝術》的隱喻</em>this，就是拿鑰匙(*)打開信箱(point)，看見物件主體）<br /><br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-GcHRIeUZoSM/T0GX_-oVofI/AAAAAAAACO8/GeW8OTFd5OM/s1600/this+point.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-GcHRIeUZoSM/T0GX_-oVofI/AAAAAAAACO8/GeW8OTFd5OM/s1600/this+point.JPG" /></a></div><br /><br />class MyCls<br />{<br />    <b>MyCls </b> <span style="color: blue;">returnCopy</span>(){（Something Coding）    return <b>*this</b>};<br />    <b>MyCls&amp;</b> <span style="color: blue;">returnMyself</span>(){（Something Coding） return <b><em>this</b>};<br />    <b>MyCls</em></b> <span style="color: blue;">returnPoint</span>(){（Something Coding）   return  <b>this</b>};<br />};</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2012-02-19T16:47:00.000Z" itemprop="datePublished">
+              2012-02-20
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/WIN32-API-MFC/">WIN32 API/MFC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2012/08-31-blogger/1661767680110747797/">消失在記憶中的code</a><div class="related-posts-item-abstract">¶消失在記憶中的code
+原文連結: https://darkblack01.blogspot.com/2012/09/code.html
+移植時的最後更新日期: 20</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/05-10-blogger/3813164895474286266/">CDC活用術</a><div class="related-posts-item-abstract">¶CDC活用術
+原文連結: https://darkblack01.blogspot.com/2012/05/cdc.html
+移植時的最後更新日期: 2015-12-</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/01-06-blogger/4126150895303983721/"> python call C++ API by Boost~初體驗</a><div class="related-posts-item-abstract">¶python call C++ API by Boost~初體驗
+原文連結: https://darkblack01.blogspot.com/2016/01/pyt</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-21-blogger/1210118578282171112/">Boost C++ Libraries 哈囉~World</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 哈囉~World
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-13-blogger/7308863454969017699/">Boost C++ Libraries 初次見面</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 初次見面
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c-lib</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

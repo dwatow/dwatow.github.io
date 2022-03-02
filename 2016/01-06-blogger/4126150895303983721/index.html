@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶python call C++ API by Boost~初體驗 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;01&#x2F;python-call-c-api-by-boost.html 移植時的最後更新日期: 2016-01-06T20:59:15.518+08:00 原則上，是將c編譯成dll檔。只是這個dll檔，是要給python用的建立專案檔建立一個W">
+<meta property="og:type" content="article">
+<meta property="og:title" content=" python call C++ API by Boost~初體驗">
+<meta property="og:url" content="https://dwatow.github.io/2016/01-06-blogger/4126150895303983721/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶python call C++ API by Boost~初體驗 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;01&#x2F;python-call-c-api-by-boost.html 移植時的最後更新日期: 2016-01-06T20:59:15.518+08:00 原則上，是將c編譯成dll檔。只是這個dll檔，是要給python用的建立專案檔建立一個W">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2016-01-06T04:55:00.000Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.396Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="C_and_Cpp">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="Boost">
+<meta name="twitter:card" content="summary">
+  <title> python call C++ API by Boost~初體驗 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1> python call C++ API by Boost~初體驗</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python-call-C-API-by-Boost-%E5%88%9D%E9%AB%94%E9%A9%97"><span class="toc-text">python call C++ API by Boost~初體驗</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">建立專案檔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">原本的C</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">.h檔</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">.cpp檔</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">為C++ code 建立表皮</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">
+編譯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用python呼叫之前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">寫python</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="python-call-C-API-by-Boost-初體驗"><a class="header-anchor" href="#python-call-C-API-by-Boost-初體驗">¶</a>python call C++ API by Boost~初體驗</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/01/python-call-c-api-by-boost.html">https://darkblack01.blogspot.com/2016/01/python-call-c-api-by-boost.html</a><br>
+移植時的最後更新日期: 2016-01-06T20:59:15.518+08:00</p>
+<p>原則上，是將c<ins>編譯成dll檔。<br />只是這個dll檔，是要給python用的<br /><br /><h2><span style="font-size: x-large;">建立專案檔</span></h2>建立一個Win32 Console的dll檔專案 <br /><br /><h2><span style="font-size: x-large;">原本的C</ins>程式碼</span></h2>先來看看一個cpp原本的code<br /><h3><span style="font-size: large;">.h檔</span></h3><pre class="prettyprint"><code>#include &lt;string&gt;<br />#include &lt;map&gt;<br /><br />class Persion<br />&#123;<br />    std::string m_Name;<br />    std::string m_HomeNumber;<br />public:<br />    Persion();<br />    explicit Persion(const std::string &amp;name);<br />    virtual ~Persion();<br />    void SetName(const std::string &amp;name);<br />    std::string GetName() const;<br />    void SetHomeNumber(const std::string &amp;number);<br />    std::string GetHomeNumber() const;<br />&#125;;<br /><br />class PersionWithCell : public Persion<br />&#123;<br />    std::string m_CellNumber;<br />public:<br />    PersionWithCell();<br />    explicit PersionWithCell(const std::string &amp;name);<br />    void SetCellNumber(const std::string &amp;number);<br />    std::string GetCellNumber() const;<br />&#125;;<br /><br />class PhoneBook<br />&#123;<br />    std::map&lt;std::string, Persion*&gt; m_PhoneBook;<br />public:<br />    int GetSize() const;<br />    void AddPerson(Persion *p);<br />    void RemovePersion(const std::string &amp;name);<br />    Persion *FindPerison(const std::string &amp;name);<br />&#125;;</code></pre><h3><span style="font-size: large;">.cpp檔</span></h3><pre class="prettyprint"><code>#include “phonebook.h&quot;<br /><br />Persion::Persion():<br />m_Name(”&quot;), m_HomeNumber(&quot;&quot;)<br />&#123;&#125;<br /><br />Persion::Persion(const std::string &amp;name):<br />m_Name(name), m_HomeNumber(&quot;&quot;)<br />&#123;&#125;<br /><br />void Persion::SetName(const std::string &amp;name)<br />&#123;<br />    m_Name = name;<br />&#125;<br /><br />std::string Persion::GetName() const<br />&#123;<br />    return m_Name;<br />&#125;<br /><br />void Persion::SetHomeNumber(const std::string &amp;number)<br />&#123;<br />    m_HomeNumber = number;<br />&#125;<br /><br />std::string Persion::GetHomeNumber() const<br />&#123;<br />    return m_HomeNumber;<br />&#125;<br /><br />Persion::~Persion()<br />&#123;&#125;<br /><br />int PhoneBook::GetSize() const<br />&#123;<br />    return (int)m_PhoneBook.size();<br />&#125;<br /><br />void PhoneBook::AddPerson(Persion *p)<br />&#123;<br />    m_PhoneBook[p-&gt;GetName()] = p;<br />&#125;<br /><br />void PhoneBook::RemovePersion(const std::string &amp;name)<br />&#123;<br />    m_PhoneBook.erase(name);<br />&#125;<br /><br />Persion *PhoneBook::FindPerison(const std::string &amp;name)<br />&#123;<br />    return m_PhoneBook[name];<br />&#125;<br /><br />void PersionWithCell::SetCellNumber(const std::string &amp;number)<br />&#123;<br />    m_CellNumber = number;<br />&#125;<br /><br />std::string PersionWithCell::GetCellNumber() const<br />&#123;<br />    return m_CellNumber;<br />&#125;<br /><br />PersionWithCell::PersionWithCell():m_CellNumber(&quot;&quot;), Persion()<br />&#123;&#125;<br /><br />PersionWithCell::PersionWithCell(const std::string &amp;name):m_CellNumber(&quot;&quot;), Persion(name)<br />&#123;&#125;</code></pre><br /><h2><span style="font-size: x-large;">為C++ code 建立表皮</span></h2>再來我們為了這一個cpp程式，建立一份「皮」<br />在此可以注意的是，如果你要為屬性設定get/set，使用.add_property()，如果是只有get或只有set，就如同新增一個function一樣，用.def()<br /><pre class="prettyprint"><code>#include “phonebook.h”<br />#include &lt;boost/python.hpp&gt;<br /><br />using namespace boost::python;<br /><br />static std::string PrintPersion(const Persion &amp;p)<br />&#123;<br />    std::ostringstream stream;<br />    stream &lt;&lt; p.GetName() &lt;&lt; &quot;: &quot; &lt;&lt; p.GetHomeNumber();<br />    return stream.str();<br />&#125;<br /><br />std::ostream &amp;operator&lt;&lt;(std::ostream &amp;os, const Persion &amp;p)<br />&#123;<br />    os &lt;&lt; p.GetName() &lt;&lt; &quot;: &quot; &lt;&lt; p.GetHomeNumber();<br />    return os;<br />&#125;<br /><br />BOOST_PYTHON_MODULE(phonebook)<br />&#123;<br />    class_&lt;Persion&gt;(“Persion”, init&lt;&gt;())<br />        .def(init&lt;std::string&gt;())<br />        .add_property(“name”, &amp;Persion::GetName, &amp;Persion::SetName)<br />        .add_property(“home_number”, &amp;Persion::GetHomeNumber, &amp;Persion::SetHomeNumber)<br />        .def(“<strong>str</strong>”, &amp;PrintPersion)<br />        .def(self_ns::str(self))<br />        ;<br /><br />    class_&lt;PhoneBook&gt;(“PhoneBook”)<br />        .def(“size”, &amp;PhoneBook::GetSize)<br />        .def(“add_persion”, &amp;PhoneBook::AddPerson)<br />        .def(“remove_persion”, &amp;PhoneBook::RemovePersion)<br />        .def(“find_persion”, &amp;PhoneBook::FindPerison,<br />            return_value_policy&lt;reference_existing_object&gt;())<br />            ;<br />&#125;</code></pre><h2><span style="font-size: x-large;"><br /></span><span style="font-size: x-large;">編譯</span></h2>編譯成.dll檔！<br /><br /><h2><span style="font-size: x-large;">用python呼叫之前</span></h2><br /><ol><li>將.dll改成.pyd</li><li>將.pyd檔的檔名設定成BOOST_PYTHON_MODULE()裡定義的名字</li><li>將Boost的boost_python-vc80-mt-gd-1_60.dll copy 到和.py檔同目錄<br />(這一步如果有人知道怎麼不移動檔案，還麻煩請告訴我呢！)</li></ol><h2><span style="font-size: x-large;">寫python</span></h2><pre class="prettyprint"><code class="language-py">import debug.phonebook as phonebook<br /><br />book = phonebook.PhoneBook()<br />p = phonebook.Persion()<br /><a target="_blank" rel="noopener" href="http://p.name">p.name</a> = &quot;Chris&quot;<br />p.home_number = '(123) 456-7890’<br />book.add_persion§<br />p = phonebook.Persion(‘Mary’)<br />#<a target="_blank" rel="noopener" href="http://p.name">p.name</a> = ‘Mary’<br />p.home_number = ‘(123) 456-7890’<br />book.add_persion§<br />print(‘No. of contacts =’, book.size())<br />print(book.find_persion(‘Mary’).home_number)<br />print§<br />print(’--------’)<br />import debug.phonebook as phonebook<br />p = phonebook.Persion(‘Mary’)<br />print§<br />p.home_number = '(123) 456-7890’<br />print§<br /><br />def persion_str(self):<br />    return “Name: %s\nHome: %s” % (<a target="_blank" rel="noopener" href="http://self.name">self.name</a>, self.home_number)<br /><br />phonebook.Persion.<strong>str</strong> = persion_str<br />p = phonebook.Persion()<br /><a target="_blank" rel="noopener" href="http://p.name">p.name</a> = &quot;Chris&quot;<br />p.home_number = &quot;(123) 456-7890&quot;<br />print §<br /><br />book = phonebook.PhoneBook()<br /><br />class PyPersionWithCell(phonebook.Persion):<br />    def get_cell_number(self):<br />        return self.cell<br />    def set_cell_number(self, n):<br />        cell = n<br />    celll_number = property(get_cell_number, set_cell_number)<br /><br />p = PyPersionWithCell()<br /><a target="_blank" rel="noopener" href="http://p.name">p.name</a> = 'Martin’<br />p.home_number = '(123) 456-7890’<br />p.celll_number = '(123) 097-2134’<br />p2 = book.find_persion(‘Martin’)<br />print(p2)</code></pre><br />執行pythony就可以看見結果啦！</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2016-01-06T04:55:00.000Z" itemprop="datePublished">
+              2016-01-06
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/python/">python</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Boost/">Boost</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-21-blogger/1210118578282171112/">Boost C++ Libraries 哈囉~World</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 哈囉~World
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-13-blogger/7308863454969017699/">Boost C++ Libraries 初次見面</a><div class="related-posts-item-abstract">¶Boost C++ Libraries 初次見面
+原文連結: https://darkblack01.blogspot.com/2015/12/boost-c-lib</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/04-24-blogger/6638267193139002561/">python之找到區域變數們。</a><div class="related-posts-item-abstract">¶python之找到區域變數們。
+原文連結: https://darkblack01.blogspot.com/2016/04/python.html
+移植時的最後更新</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/04-23-blogger/6788326422459094232/">python 讀 bitmap 顯示它的值</a><div class="related-posts-item-abstract">¶python 讀 bitmap 顯示它的值
+原文連結: https://darkblack01.blogspot.com/2016/04/python-bitmap.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-15-blogger/3841271280424750554/">hello world之 在windows建立dll檔</a><div class="related-posts-item-abstract">¶hello world之 在windows建立dll檔
+原文連結: https://darkblack01.blogspot.com/2015/11/hello-wo</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

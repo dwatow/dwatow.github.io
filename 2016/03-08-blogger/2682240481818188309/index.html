@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Django模型: 注意事項(&gt;1.7版) 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;03&#x2F;django-for-19.html 移植時的最後更新日期: 2016-05-16T11:00:49.107+08:00 1. 建立模型[1]用python寫好django model的class2. 檢查資料[1]$python manage.py c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django模型: 注意事項(&gt;1.7版)">
+<meta property="og:url" content="https://dwatow.github.io/2016/03-08-blogger/2682240481818188309/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Django模型: 注意事項(&gt;1.7版) 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2016&#x2F;03&#x2F;django-for-19.html 移植時的最後更新日期: 2016-05-16T11:00:49.107+08:00 1. 建立模型[1]用python寫好django model的class2. 檢查資料[1]$python manage.py c">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2016-03-07T20:04:00.002Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.364Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Django">
+<meta name="twitter:card" content="summary">
+  <title>Django模型: 注意事項(&gt;1.7版) - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Django模型: 注意事項(&gt;1.7版)</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Django%E6%A8%A1%E5%9E%8B-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85-1-7%E7%89%88"><span class="toc-text">Django模型: 注意事項(&gt;1.7版)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">1. 建立模型[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">2. 檢查資料[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">3. 翻譯成資料庫語言[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">建立異動紀錄[1]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">4. 模型與資料庫之同步[2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">以&gt;1.7版的角度來複習一下剛剛的重點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">參考資料</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Django模型-注意事項-1-7版"><a class="header-anchor" href="#Django模型-注意事項-1-7版">¶</a>Django模型: 注意事項(&gt;1.7版)</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/03/django-for-19.html">https://darkblack01.blogspot.com/2016/03/django-for-19.html</a><br>
+移植時的最後更新日期: 2016-05-16T11:00:49.107+08:00</p>
+<h2><span style="font-size: x-large;">1. 建立模型[1]</span></h2>用python寫好django model的class<br /><br /><h2><span style="font-size: x-large;">2. 檢查資料[1]</span></h2><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$python manage.py check</span> (1.7版之後限定)<br />看到0 errors found的通知<br /><br /><h2><span style="font-size: x-large;">3. 翻譯成資料庫語言[1]</span></h2><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$python manage.py sqlmigrate &lt;app name&gt;</span><br /><br />建立migration資料檔<br />建立好資料庫模型後，我們必須針對目前的模型先建立一個migration檔<br /><br /><h3><span style="font-size: large;">建立異動紀錄[1]</span></h3><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py makemigrations &lt;app name&gt;</span><br />如果模型有任何異動，則會產生新的migration檔，並放置在APP底下的migration資料夾<br /><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py makemigrations</span><br />Django會對所有安裝好的APP做migration的檢查<br /><br /><h2><span style="font-size: x-large;">4. 模型與資料庫之同步[2]</span></h2><strike><span class="Apple-tab-span" style="white-space: pre;"> </span><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py syncdb</span></strike><br /><br /><span style="color: red;">&gt;1.7版</span>(無須第4步)<br /><br /><h2><span style="font-size: x-large;">以&gt;1.7版的角度來複習一下剛剛的重點</span></h2>參考自1.9版的官網文件<br /><span class="Apple-tab-span" style="white-space: pre;"> </span><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py makemigrations &lt;app name&gt;</span><br />告訴Djagno確認Model與上一版的異動<br /><span class="Apple-tab-span" style="white-space: pre;"> </span><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py sqlmigrate &lt;app name&gt; &lt;vertion number&gt;</span><br />依目前已確認的模型，生成SQL(非必要執行)<br /><span class="Apple-tab-span" style="white-space: pre;"> </span><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">$ python manage.py migrate</span><br />把模型變成真的Table<br /><br /><h2><span style="font-size: x-large;">參考資料</span></h2>[1]&nbsp;<a href="http://dokelung-blog.logdown.com/posts/220606-django-notes-5-model-and-database" target="_blank">Django筆記(5) - 模型與資料庫</a><br />[2]&nbsp;<a href="http://stackoverflow.com/questions/29683494/what-should-i-use-instead-of-syncdb-in-django-1-9" target="_blank">What should I use instead of syncdb in Django 1.9?</a>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2016-03-07T20:04:00.002Z" itemprop="datePublished">
+              2016-03-08
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Django/">Django</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2016/06-04-blogger/2355649546750853660/">Django View 小筆記</a><div class="related-posts-item-abstract">¶Django View 小筆記
+原文連結: https://darkblack01.blogspot.com/2016/06/django-view.html
+移植時</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/03-23-blogger/82639133277838907/">postman的get, post最簡單的發送</a><div class="related-posts-item-abstract">¶postman的get, post最簡單的發送
+原文連結: https://darkblack01.blogspot.com/2016/03/postmanget-p</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2016/03-10-blogger/435034175224202115/">Django之Model的CRUD操作</a><div class="related-posts-item-abstract">¶Django之Model的CRUD操作
+原文連結: https://darkblack01.blogspot.com/2016/03/djangomodelcrud.</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/09-15-blogger/1908663094164429229/">Django//1.7版教學+1.8版的程式遇到的困難之一</a><div class="related-posts-item-abstract">¶Django//1.7版教學+1.8版的程式遇到的困難之一
+原文連結: https://darkblack01.blogspot.com/2015/09/django</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/09-11-blogger/3064881177250220780/">python WebService//在Ubuntu安裝Django</a><div class="related-posts-item-abstract">¶python WebService//在Ubuntu安裝Django
+原文連結: https://darkblack01.blogspot.com/2015/09/p</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

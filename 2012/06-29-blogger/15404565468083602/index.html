@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶程式碼版本控制之SVN 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;06&#x2F;svn.html 移植時的最後更新日期: 2013-04-16T20:59:05.505+08:00 拜人月神話讀書會之賜，學到了像軟體工程的事「版本控制 」所謂隔行如隔山+江湖一點訣所以，沒有人點醒 是完全不會去動這一個東西，也不得其門而入版本控制維基百科的介紹摘錄維基的術語部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程式碼版本控制之SVN">
+<meta property="og:url" content="https://dwatow.github.io/2012/06-29-blogger/15404565468083602/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶程式碼版本控制之SVN 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2012&#x2F;06&#x2F;svn.html 移植時的最後更新日期: 2013-04-16T20:59:05.505+08:00 拜人月神話讀書會之賜，學到了像軟體工程的事「版本控制 」所謂隔行如隔山+江湖一點訣所以，沒有人點醒 是完全不會去動這一個東西，也不得其門而入版本控制維基百科的介紹摘錄維基的術語部">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2012-06-29T01:03:00.005Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.323Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="SVN">
+<meta property="article:tag" content="版本控制">
+<meta name="twitter:card" content="summary">
+  <title>程式碼版本控制之SVN - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>程式碼版本控制之SVN</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E4%B9%8BSVN"><span class="toc-text">程式碼版本控制之SVN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">         術語</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="程式碼版本控制之SVN"><a class="header-anchor" href="#程式碼版本控制之SVN">¶</a>程式碼版本控制之SVN</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/06/svn.html">https://darkblack01.blogspot.com/2012/06/svn.html</a><br>
+移植時的最後更新日期: 2013-04-16T20:59:05.505+08:00</p>
+<p>拜人月神話讀書會之賜，學到了像軟體工程的事「版本控制 」<br /><br />所謂隔行如隔山+江湖一點訣<br /><br />所以，沒有人點醒 是完全不會去動這一個東西，也不得其門而入<br /><br />版本控制<a href="http://zh.wikipedia.org/wiki/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6" target="_blank">維基百科的介紹</a><br /><br />摘錄維基的術語部份 <br /><div align="center"><table style="board: 1px; color: black; text-align: left; width: 90%;">  <tbody><tr><td><h3 style="background-image: none; border-bottom-style: none; font-family: sans-serif; font-size: 19px; line-height: 22px; margin: 0px 0px 0.3em; overflow: hidden; padding-bottom: 0.17em; padding-top: 0.5em; text-align: -webkit-auto;">         <span class="mw-headline" id=".E6.9C.AF.E8.AF.AD">術語</span></h3><dl style="font-family: sans-serif; font-size: 15px; line-height: 22px; margin-bottom: 0.5em; margin-top: 0.2em; text-align: -webkit-auto;"><dt style="font-weight: bold; margin-bottom: 0.1em;">基線（Baseline）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">基線是軟體文檔或源碼（或其它產出物）的一個穩定版本，它是進一步開發的基礎。<sup class="reference" id="cite_ref-0"><a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6#cite_note-0" style="background-image: none; background-position: initial initial; background-repeat: initial initial; color: #0b0080; text-decoration: none; white-space: nowrap;">[1]</a></sup></dd><dt style="font-weight: bold; margin-bottom: 0.1em;">檔案庫（Repository）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">存儲檔案的新版本還有歷史資料的地方，通常是在伺服器上。有時候也叫<b>Depot</b>（像是在<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/SVK" style="background-image: none; background-position: initial initial; background-repeat: initial initial; color: #0b0080; text-decoration: none;" title="SVK">SVK</a>、<a class="new" target="_blank" rel="noopener" href="http://zh.wikipedia.org/w/index.php?title=AccuRev&amp;action=edit&amp;redlink=1" style="background-image: none; background-position: initial initial; background-repeat: initial initial; color: #a55858; text-decoration: none;" title="AccuRev（頁面不存在）">AccuRev</a>還有<a class="new" target="_blank" rel="noopener" href="http://zh.wikipedia.org/w/index.php?title=Perforce&amp;action=edit&amp;redlink=1" style="background-image: none; background-position: initial initial; background-repeat: initial initial; color: #a55858; text-decoration: none;" title="Perforce（頁面不存在）">Perforce</a>中）</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">工作版本（Working copy）：從檔案庫中取出一個本地端（客戶端）的複製，針對一個特定的時間或是版本。所有在檔案庫中的檔案更動，都是從一個工作版本中修改而來的，這也是這名稱的由來。觀念上，這是一個<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E6%B2%99%E7%9B%92" style="background-image: none; background-position: initial initial; background-repeat: initial initial; color: #0b0080; text-decoration: none;" title="沙盒">沙盒</a>。</dt><dt style="font-weight: bold; margin-bottom: 0.1em;">提交（Commit）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">將本地端的修改送回檔案庫。（由版本控制軟體處理「跟上次更動相比，哪個檔案又被更動」的事）</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">變更（Change）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">對一份文件作的特定更動。</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">變更記錄（Change List）</dt><dt style="font-weight: bold; margin-bottom: 0.1em;">取出（Check-Out）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">從檔案庫取出檔案到本地端（客戶端）。</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">更新（Update）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">將檔案庫的修改送到本地端（與送交相反）</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">合併（Merge / Integration）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">合併各個改變。</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">版次（Revision）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">一個<b>revision</b>或<b>version</b>指的是一系列版本變遷的其中之一。</dd><dt style="font-weight: bold; margin-bottom: 0.1em;">匯入（Import）</dt><dt style="font-weight: bold; margin-bottom: 0.1em;">匯出（Export）</dt><dt style="font-weight: bold; margin-bottom: 0.1em;">衝突（Conflict）</dt><dd style="line-height: 1.5em; margin-bottom: 0.1em; margin-left: 1.6em; margin-right: 0px;">當兩方更動同一份文件會發生衝突。</dd></dl></td></tr></tbody></table></div><br />在此，介紹的東西，主要是用Google Code + TortoiseSVN<br />其實，也沒有要介紹啦！裝一裝就會了！^^<br /><br />TortoiseSVN<br /><a href="http://www.cc.ntu.edu.tw/chinese/epaper/0020/20120320_2002.html" target="_blank">教學</a><br /><a href="https://code.google.com/p/lazy-food-guide/downloads/list" target="_blank">下載</a><br /><br />整合在Windows的右鍵中，隨時都可以做版本控制<br />（右鍵真是太可怕了）<br /><br />再來就是專案的規劃了！<br />因為我還在使用<strike>古董</strike>Visual C++ 6這樣的<strike>非主流</strike>工具，所以要找到適當的教學或技巧，<strike>要靠哆啦A夢的時光機</strike>是一件不簡單的事，但是，還是讓我在<strike>使用考古技巧</strike>Google上搜尋到了一點蛛絲馬跡。<br /><br />PCMan的專案就是用這個寫的，加上它是OpenSource<br /><a href="http://pcman.openfoundry.org/" target="_blank">介紹</a><br /><a href="http://www.openfoundry.org/of/projects/744/" target="_blank">專案下載</a><br /><br />可以發現它的專案規劃還滿井然有序的。<br />每一個組件專案，就直接放在整體專案的裡面（和Debug、res…放在一起）<br />而Code就直接呼叫<br /><br />唯一的差別就是在#include 中要加路徑。<br />#include “…/abc/abc.h” <br /><br />優點 <br />1. 用起來都一樣，爽度很高。<br />2. 在更新大專案或其它有相關性的小專案時，每一個子專案中的code，也只有維持一個版本。（一個更新，全部更新）<br /><br />搭配SVN可以做<b>分支發展</b>管理。<br /><br /></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2012-06-29T01:03:00.005Z" itemprop="datePublished">
+              2012-06-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/SVN/">SVN</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2013/12-18-blogger/2469481813613370201/">再一次存到上次的commit</a><div class="related-posts-item-abstract">¶再一次存到上次的commit
+原文連結: https://darkblack01.blogspot.com/2013/12/commit.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/12-17-blogger/5863331933447513/">如何用git diff比較任意兩版本</a><div class="related-posts-item-abstract">¶如何用git diff比較任意兩版本
+原文連結: https://darkblack01.blogspot.com/2013/12/git-diff.html
+移植時</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/09-24-blogger/5114139859977505919/">DIY Git server by msysGit in windows</a><div class="related-posts-item-abstract">¶DIY Git server by msysGit in windows
+原文連結: https://darkblack01.blogspot.com/2013/09</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-12-blogger/6038365473259106171/">第一次Git就上手</a><div class="related-posts-item-abstract">¶第一次Git就上手
+原文連結: https://darkblack01.blogspot.com/2012/09/git.html
+移植時的最後更新日期: 2014-</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/07-05-blogger/3561664825004313566/">版本控制GitHub之第一個卡關</a><div class="related-posts-item-abstract">¶版本控制GitHub之第一個卡關
+原文連結: https://darkblack01.blogspot.com/2012/07/github.html
+移植時的最後更</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

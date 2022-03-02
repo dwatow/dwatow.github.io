@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶DIY Git server by msysGit in windows 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;09&#x2F;gitdiy-git-server.html 移植時的最後更新日期: 2014-04-10T11:47:16.746+08:00 在公司想架一個git server，但是公司主要的獲利不是寫程式，所以在git server的使用上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DIY Git server by msysGit in windows">
+<meta property="og:url" content="https://dwatow.github.io/2013/09-24-blogger/5114139859977505919/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶DIY Git server by msysGit in windows 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;09&#x2F;gitdiy-git-server.html 移植時的最後更新日期: 2014-04-10T11:47:16.746+08:00 在公司想架一個git server，但是公司主要的獲利不是寫程式，所以在git server的使用上">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2013-09-23T22:00:00.004Z">
+<meta property="article:modified_time" content="2022-03-02T14:48:10.420Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="版本控制">
+<meta name="twitter:card" content="summary">
+  <title>DIY Git server by msysGit in windows - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>DIY Git server by msysGit in windows</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DIY-Git-server-by-msysGit-in-windows"><span class="toc-text">DIY Git server by msysGit in windows</span></a></li></ol>
+  </div>
+
+
+    <h1 id="DIY-Git-server-by-msysGit-in-windows"><a class="header-anchor" href="#DIY-Git-server-by-msysGit-in-windows">¶</a>DIY Git server by msysGit in windows</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/09/gitdiy-git-server.html">https://darkblack01.blogspot.com/2013/09/gitdiy-git-server.html</a><br>
+移植時的最後更新日期: 2014-04-10T11:47:16.746+08:00</p>
+<p>在公司想架一個git server，但是公司主要的獲利不是寫程式，所以在git server的使用上較沒有太大的需求，基本上就只是幾個會寫程式的同事互相git就好了<br /><br />一開始什麼都不懂，看了一篇<a href="http://bone.twbbs.org.tw/blog/1487.html" target="_blank">Windows 上架設 Git 伺服器</a>[1]之後覺得，還滿簡單的嘛！<br /><br />動手吧！<br /><br />結果還是搞了兩天！= =<br />這篇文章，寫得有點簡陋，在此做一個補完。<br /><br />首先，準備兩台電腦，一台是Server(稱S)，另一台是Client(稱C)，兩台都去下載<a href="https://code.google.com/p/msysgit/downloads/list" target="_blank">msysGit</a>。<br />並且安裝好。<br /><br />寫這篇文章時，最新版是1.8.4，而只要選擇最上面的版本就可以了。<br /><ol><li>Git-1.8.4-preview20130916.exe<br />Full installer for official Git for Windows 1.8.4</li><br /><li>PortableGit-1.8.4-preview20130916.7z<br />Portable application for official Git for Windows 1.8.4</li><br /><li>msysGit-netinstall-1.8.4-preview20130916.exe<br />Net installer if you want to hack on Git</li><br /><li>msysGit-fullinstall-1.8.4-preview20130916.exe<br />Full installer (self-contained) if you want to hack on Git</li></ol><br />兩台都灌好之後。<br /><br />在S電腦上:<br /><ol><li>安裝 msysgit(已完成)</li><li>執行 GIT-bash</li><li>在 git bash 裡執行下列指令</li><li>mdkir /d/GitRepo # 建立檔案庫資料夾集散地</li><li>mkdir /d/GitRepo/testRepo</li><li>cd /d/GitRepo/testRepo</li><li>git init <span style="color: #cc0000;">–bare</span> # 建立 Git repository</li></ol>讀了一下<a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2-Git" target="_blank">4.2 服务器上的 Git - 在服务器上部署 Git</a>的官方說明文章。<br /><span style="color: #3d85c6;">引用朋友在facebook給我的留言(真是金玉良言呀)</span><br /><span style="color: #3d85c6;">「如果當 central repo 用的話，就建立成 bare repo (<code>git init --bare</code>)」</span><br /><span style="color: #3d85c6;">「這樣作比較好啦，不然一般 repo 基本上是讓你 pull 的 不是讓你 push 的」</span><br /><br /><br />利用windows的網芳功能，將S電腦的GitRepo/做成網路磁碟機(G:)<br /><br />在C電腦上:<br /><ol><li>安裝 msysgit(已完成)</li><li>執行 GIT-bash</li><li>在 git bash 裡執行下列指令</li><li>mdkir /d/GitRepo # 建立檔案庫資料夾集散地</li><li>mkdir /d/GitRepo/testRepo</li><li>cd /d/GitRepo/testRepo</li><li>git init # 建立 Git repository</li></ol>這樣一來就可以在強大的<strike>(??)</strike>IT巨壁之內建立沒有傳輸安全性可言，卻可以運作的Git server。<br /><br />最後最後，因為我還有使用中文的壞習慣。<br />所以要設定可以相容中文唷[3]<br /><br /><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">$ git config --global gui.encoding utf-8</span><br /><br /><br />有興趣的人可以在家試試唷！^^<br /><div><br /></div><div><br /></div><div><br /></div>後記<br />在git add 檔案時，不小心加入了專案檔，讓專案打開關閉都會讓檔案產生「變化」<br />那麼就要省略它們的變化<br />建一個.gitignore的文件檔，裡面直接寫你要省略的檔案<br /><br /><span style="font-family: Courier New, Courier, monospace;">.<em></span><br /><span style="font-family: Courier New, Courier, monospace;"></em>/debug/<em>.</em></span><br /><span style="font-family: Courier New, Courier, monospace;"><em>/release/</em>.<em></span><br /><span style="font-family: Courier New, Courier, monospace;"></em>.suo</span><br /><span style="font-family: Courier New, Courier, monospace;">*.ncb</span><br /><br />主要是最後兩個.suo和.ncb，是visual studio的專案檔案之一。<br />只是因為光打開就會變動，所以才省略它們的變化。<br /><br />不過因為我把它們git add了，所以必須取消這個追縱。<br />使用下面的指令取消追縱。[4]<br /><br /><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">$ git rm --cached your_filename</span><br /><br /><br /><br /><br />參考資料：<br />[1] <a href="http://bone.twbbs.org.tw/blog/1487.html" target="_blank">Windows 上架設 Git 伺服器</a><br />[2] <a href="http://git-scm.com/book/zh/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2-Git" target="_blank">4.2 服务器上的 Git - 在服务器上部署 Git</a><br />[3] <a href="http://huan-lin.blogspot.com/2011/05/install-git-server-and-apache-on.html" target="_blank">Git Server on Windows 安裝手記</a><br />[4] <a href="http://wildjcrt.pixnet.net/blog/post/28872894-gitignore-%E7%84%A1%E6%B3%95%E5%BF%BD%E7%95%A5%E6%AA%94%E6%A1%88%E7%9A%84%E8%A7%A3%E6%B3%95" target="_blank">gitignore 無法忽略檔案的解法</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2013-09-23T22:00:00.004Z" itemprop="datePublished">
+              2013-09-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Git/">Git</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2013/12-18-blogger/2469481813613370201/">再一次存到上次的commit</a><div class="related-posts-item-abstract">¶再一次存到上次的commit
+原文連結: https://darkblack01.blogspot.com/2013/12/commit.html
+移植時的最後更新日</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2013/12-17-blogger/5863331933447513/">如何用git diff比較任意兩版本</a><div class="related-posts-item-abstract">¶如何用git diff比較任意兩版本
+原文連結: https://darkblack01.blogspot.com/2013/12/git-diff.html
+移植時</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/09-12-blogger/6038365473259106171/">第一次Git就上手</a><div class="related-posts-item-abstract">¶第一次Git就上手
+原文連結: https://darkblack01.blogspot.com/2012/09/git.html
+移植時的最後更新日期: 2014-</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2012/07-05-blogger/3561664825004313566/">版本控制GitHub之第一個卡關</a><div class="related-posts-item-abstract">¶版本控制GitHub之第一個卡關
+原文連結: https://darkblack01.blogspot.com/2012/07/github.html
+移植時的最後更</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/07-01-blogger/227237006998082641/">Jenkins的git log的中文出現亂碼</a><div class="related-posts-item-abstract">¶Jenkins的git log的中文出現亂碼
+原文連結: https://darkblack01.blogspot.com/2015/07/jenkinsgit-lo</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-18-blogger/3630312236777101438/">用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)</a><div class="related-posts-item-abstract">¶用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)
+原文連結: https://darkblack01.blogspot.com</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
