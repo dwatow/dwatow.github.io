@@ -3,7 +3,7 @@ title: 瀏覽器下載 ZIP 檔案
 date: 2022-03-02 15:07:21
 tags: 
 - zip
-- javascript
+- JavaScript
 - file api
 categories:
 - 技術練習
