@@ -2,11 +2,11 @@
 title: blogger 轉成 markdown 搬家器
 date: 2022-03-02 22:30:30
 tags:
-  - markdown
-  - blogger
-  - 爬蟲
+- markdown
+- blogger
+- 爬蟲
 categories:
-  - 技術練習
+- 技術練習
 ---
 
 # blogger 轉成 markdown 搬家器。
