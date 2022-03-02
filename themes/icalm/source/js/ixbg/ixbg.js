@@ -42,7 +42,7 @@
   };
 
   //initial position in canvas
-  const totalDusts = screen.height / 15; // for RWD
+  const totalDusts = screen.height / 50; // for RWD
   console.log(totalDusts);
 
   function getRandom(min, max) {
@@ -111,15 +111,17 @@
           ctx.lineTo(dust.x, dust.y);
         }
       }
-
       ctx.lineWidth = dust.rate / 2;
       ctx.strokeStyle = "rgba(0,0,0, " + dust.rate + 0.5 + ")";
       ctx.stroke();
 
       ctx.beginPath();
+      // ctx.strokeStyle = "rgb(255,255,255)";
       ctx.filter = `blur(${Math.abs(dust.radius / 5 - 3)}px)`;
       ctx.arc(dust.x, dust.y, dust.radius, 0, 2 * Math.PI);
-      ctx.fillStyle = "#fff";
+      ctx.lineWidth = Math.abs(dust.radius / 5 - 4);
+      ctx.fillStyle = "lightgray";
+      // ctx.fill();
       ctx.stroke();
     });
     requestAnimationFrame(() => {
