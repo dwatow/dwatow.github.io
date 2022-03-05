@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶Sublime Text的選取變游標，在Atom如何做 原文連結: https:&#x2F;&#x2F;darkblack02.blogspot.com&#x2F;2017&#x2F;03&#x2F;sublime-textatom.html 移植時的最後更新日期: 2017-03-14T10:57:03.110+08:00 在使用Sublime Text時，常使用一個功能…在此暫時叫做選取變游標它是多行編輯的一個技法!!XD為了避免讀者想像和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sublime Text的選取變游標，在Atom如何做">
+<meta property="og:url" content="https://dwatow.github.io/2017/03-14-blogger/9204952927525087715/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Sublime Text的選取變游標，在Atom如何做 原文連結: https:&#x2F;&#x2F;darkblack02.blogspot.com&#x2F;2017&#x2F;03&#x2F;sublime-textatom.html 移植時的最後更新日期: 2017-03-14T10:57:03.110+08:00 在使用Sublime Text時，常使用一個功能…在此暫時叫做選取變游標它是多行編輯的一個技法!!XD為了避免讀者想像和">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-03-13T18:57:00.000Z">
+<meta property="article:modified_time" content="2022-03-05T01:25:05.237Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="sublime text2">
+<meta property="article:tag" content="Atom">
+<meta name="twitter:card" content="summary">
+  <title>Sublime Text的選取變游標，在Atom如何做 - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Sublime Text的選取變游標，在Atom如何做</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sublime-Text%E7%9A%84%E9%81%B8%E5%8F%96%E8%AE%8A%E6%B8%B8%E6%A8%99%EF%BC%8C%E5%9C%A8Atom%E5%A6%82%E4%BD%95%E5%81%9A"><span class="toc-text">Sublime Text的選取變游標，在Atom如何做</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">Sublime Text</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">操作方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">適用情況</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">Atom怎麼操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">操作方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">參考資料</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Sublime-Text的選取變游標，在Atom如何做"><a class="header-anchor" href="#Sublime-Text的選取變游標，在Atom如何做">¶</a>Sublime Text的選取變游標，在Atom如何做</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2017/03/sublime-textatom.html">https://darkblack02.blogspot.com/2017/03/sublime-textatom.html</a><br>
+移植時的最後更新日期: 2017-03-14T10:57:03.110+08:00</p>
+<p>在使用Sublime Text時，常使用一個功能…在此暫時叫做選取變游標<br />它是多行編輯的一個技法!!XD<br /><br />為了避免讀者想像和我說的不一樣，在此附上Sublime Text的操作方式<br /><br /><h2><span style="font-size: x-large;">Sublime Text</span></h2><h3><span style="font-size: large;">操作方式</span></h3><ol><li>選取多行</li><li>Ctrl+Shift+L [1]</li><li>選取的這幾行都會出現游標</li></ol><h2><span style="font-size: x-large;">適用情況</span></h2><div><ol><li>連續</li><li>多行</li><li>內容不同</li></ol></div><div>在符合以下的條件時，顯得特別好用</div><div><br /></div><h2><span style="font-size: x-large;">Atom怎麼操作</span></h2><div>跳到Atom時，其實大部份會用到的功能都順利在Atom找到，唯讀這一個神招卻一直只能用Ctrl+滑鼠點擊，但是卻無法滿足心中的爽度。(手殘就沒點好了)</div><div><br /></div><div>在此，就來介紹一下Atom版的Splitting the Selection into Lines</div><div><br /></div><h3><span style="font-size: large;">操作方式</span></h3><div><ul><li>Ctrl+Alt+上下方向鍵 [2]</li></ul></div><div>就可以讓工具幫你連續、多行、與內容無關的選取囉~</div><h2><span style="font-size: x-large;">參考資料</span></h2><div>[1] <a href="https://www.sublimetext.com/docs/3/multiple_selection_with_the_keyboard.html" target="_blank">Splitting the Selection into Lines</a></div><div>[2] <a href="http://flight-manual.atom.io/using-atom/sections/editing-and-deleting-text" target="_blank">Editing and Deleting Text, Multiple Cursors and Selections</a></div></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2017-03-13T18:57:00.000Z" itemprop="datePublished">
+              2017-03-14
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/sublime-text2/">sublime text2</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Atom/">Atom</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2017/03-23-blogger/150616033696325700/">LiveStyle裝在Atom</a><div class="related-posts-item-abstract">¶LiveStyle裝在Atom
+原文連結: https://darkblack02.blogspot.com/2017/03/livestyleatom.html
+移</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2017/03-23-blogger/1794853972695255824/">LiveReload裝在Atom</a><div class="related-posts-item-abstract">¶LiveReload裝在Atom
+原文連結: https://darkblack02.blogspot.com/2017/03/livereloadatom.html</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/08-27-blogger/66006330670111903/">Build用sublime Text，無顯示!!</a><div class="related-posts-item-abstract">¶Build用sublime Text，無顯示!!
+原文連結: https://darkblack01.blogspot.com/2015/08/buildsublim</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-20-blogger/252671289731647321/">用Sublime Text練習python</a><div class="related-posts-item-abstract">¶用Sublime Text練習python
+原文連結: https://darkblack01.blogspot.com/2015/06/sublime-textpy</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-18-blogger/3630312236777101438/">用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)</a><div class="related-posts-item-abstract">¶用Sublime Text寫git的commit 內容(也就是之後要呈現在log的文字)
+原文連結: https://darkblack01.blogspot.com</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2014/08-20-blogger/7937943959488350966/">學Sublime text的....</a><div class="related-posts-item-abstract">¶學Sublime text的…
+原文連結: https://darkblack01.blogspot.com/2014/08/sublime-text.html
+移植</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>

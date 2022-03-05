@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-106752702-1');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta itemprop="name" content="Chris">
+  <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <meta name="description" content="¶C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit 原文連結: https:&#x2F;&#x2F;darkblack02.blogspot.com&#x2F;2014&#x2F;09&#x2F;c5-vs2010-cppunit.html 移植時的最後更新日期: 2016-08-04T11:37:16.342+08:00 終於繼續了！接續上一篇，我們試著使用了VC6編譯之後，我們這次用了cppUnit官方建議VS版本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit">
+<meta property="og:url" content="https://dwatow.github.io/2014/09-28-blogger/7290614738421058295/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit 原文連結: https:&#x2F;&#x2F;darkblack02.blogspot.com&#x2F;2014&#x2F;09&#x2F;c5-vs2010-cppunit.html 移植時的最後更新日期: 2016-08-04T11:37:16.342+08:00 終於繼續了！接續上一篇，我們試著使用了VC6編譯之後，我們這次用了cppUnit官方建議VS版本">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://3.bp.blogspot.com/-SfEZ0-0odbk/VCgDnTpuyUI/AAAAAAAAHes/tPZmJyU-jFA/s1600/proj.png">
+<meta property="og:image" content="http://3.bp.blogspot.com/-hsiH7hDboyY/VCgDnWEK-nI/AAAAAAAAHek/OrVUyhCAS7A/s1600/cppunti_vs2010_include_file.png">
+<meta property="og:image" content="http://2.bp.blogspot.com/-JaLsv6LTgXA/VCgDmffE3qI/AAAAAAAAHeY/Ysjj4jjz0es/s1600/cppunit_vs2010_linkfile_path.png">
+<meta property="og:image" content="http://4.bp.blogspot.com/-s7jpR_AhlBs/VCgDmV7juBI/AAAAAAAAHeQ/msTvKFtLY4g/s1600/cppunit_vs2010_linkfile_files.png">
+<meta property="og:image" content="http://1.bp.blogspot.com/-BEcxB7Znd5c/VCgDmfTd9WI/AAAAAAAAHeU/O_4PuMfy_NM/s1600/cppunit_vs2010_run.png">
+<meta property="article:published_time" content="2014-09-28T04:58:00.000Z">
+<meta property="article:modified_time" content="2022-03-05T01:25:05.239Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="TDD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://3.bp.blogspot.com/-SfEZ0-0odbk/VCgDnTpuyUI/AAAAAAAAHes/tPZmJyU-jFA/s1600/proj.png">
+  <title>C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit - 《Chris 技術筆記》</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-5-%E5%86%8D%E7%94%A8VS2010%E5%85%88%E8%A9%A6%E4%B8%80%E4%B8%8B-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CppUnit"><span class="toc-text">C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">專案檔與檔案之間的設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">程式碼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">設定專案檔屬性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">.h檔路徑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">lib檔的路徑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">lib檔的檔案名稱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">執行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">可能會遇到的問題</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="C-單元測試-5-再用VS2010先試一下-如何使用CppUnit"><a class="header-anchor" href="#C-單元測試-5-再用VS2010先試一下-如何使用CppUnit">¶</a>C++單元測試(5) - 再用VS2010先試一下: 如何使用CppUnit</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2014/09/c5-vs2010-cppunit.html">https://darkblack02.blogspot.com/2014/09/c5-vs2010-cppunit.html</a><br>
+移植時的最後更新日期: 2016-08-04T11:37:16.342+08:00</p>
+<p>終於繼續了！<br />接續<a href="http://darkblack01.blogspot.tw/2014/08/c2-cppunit.html" target="_blank">上一篇</a>，我們試著使用了VC6編譯之後，我們這次用了cppUnit官方建議VS版本第二個 - VS2010。<br /><br />如同VC6那篇一樣，先介紹成功案例的整個專案的規劃與設定吧！<br /><h2><span style="font-size: x-large;">專案檔與檔案之間的設定</span></h2>一樣UnitTest是獨立在開發專案外的另一個專案。<br />(此專案是由空專案開始，加上.cpp和.h)<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-SfEZ0-0odbk/VCgDnTpuyUI/AAAAAAAAHes/tPZmJyU-jFA/s1600/proj.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://3.bp.blogspot.com/-SfEZ0-0odbk/VCgDnTpuyUI/AAAAAAAAHes/tPZmJyU-jFA/s1600/proj.png" /></a></div><h2><span style="font-size: x-large;">程式碼</span></h2>接下來的程式碼與<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/search/label/TDD">前一篇</a>相同，在此就不綴述。<br />(一模一樣唷！)<br /><h2><span style="font-size: x-large;">設定專案檔屬性</span></h2>最後，設定專案檔，如何使用CppUnit的檔案。<br />因為與VC6的介面大不同，而且從VS2003(有這一版嗎？)之後幾乎就是長這樣(只有些許的不同)，在此講一下，適用滿多版本的。<br /><br />在UnitTest專案檔上按右鍵→屬性<br />出現專案屬性設定頁面，在此可以點選上一層視窗的專案檔，設定值會跟著載入唷！<br />所以，看見這個頁面時請確認你的專案檔是否有點在UnitTest的專案上。<br /><h3><span style="font-size: large;">.h檔路徑</span></h3><span style="font-size: small;">先設定要#include 的.h檔路徑</span><br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a target="_blank" rel="noopener" href="http://3.bp.blogspot.com/-hsiH7hDboyY/VCgDnWEK-nI/AAAAAAAAHek/OrVUyhCAS7A/s1600/cppunti_vs2010_include_file.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://3.bp.blogspot.com/-hsiH7hDboyY/VCgDnWEK-nI/AAAAAAAAHek/OrVUyhCAS7A/s1600/cppunti_vs2010_include_file.png" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">在「其他 Include 目錄」中填上.h檔路徑</td></tr></tbody></table><h3><span style="font-size: large;">lib檔的路徑</span></h3>再設定link時期要找得到的lib檔的路徑<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a target="_blank" rel="noopener" href="http://2.bp.blogspot.com/-JaLsv6LTgXA/VCgDmffE3qI/AAAAAAAAHeY/Ysjj4jjz0es/s1600/cppunit_vs2010_linkfile_path.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://2.bp.blogspot.com/-JaLsv6LTgXA/VCgDmffE3qI/AAAAAAAAHeY/Ysjj4jjz0es/s1600/cppunit_vs2010_linkfile_path.png" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">在「其它程式庫目錄」中填入.lib的路徑</td></tr></tbody></table><h3><span style="font-size: large;">lib檔的檔案名稱</span></h3>再設定link時期要找得到的lib檔的檔案名稱<br />在此要注意，這一版的VS要用分號隔開唷！VS2005好像就是用空白隔開…<br />(不確定的話，可以靠tool設定，它會自動幫你加)<br /><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody><tr><td style="text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/-s7jpR_AhlBs/VCgDmV7juBI/AAAAAAAAHeQ/msTvKFtLY4g/s1600/cppunit_vs2010_linkfile_files.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="http://4.bp.blogspot.com/-s7jpR_AhlBs/VCgDmV7juBI/AAAAAAAAHeQ/msTvKFtLY4g/s1600/cppunit_vs2010_linkfile_files.png" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">在「其他相依性」中填入.lib檔的檔名(這個就不知道翻譯<strike>的在幹</strike>什麼<strike>吃的</strike>了)</td></tr></tbody></table><h3><span style="font-size: large;">執行</span></h3>設定UnitTest為Active Project就可以「以Unit Test為主」<br />在IDE按下編譯→執行，就可以看見Unit Test的執行結果報告了！^^<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-BEcxB7Znd5c/VCgDmfTd9WI/AAAAAAAAHeU/O_4PuMfy_NM/s1600/cppunit_vs2010_run.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-BEcxB7Znd5c/VCgDmfTd9WI/AAAAAAAAHeU/O_4PuMfy_NM/s1600/cppunit_vs2010_run.png" /></a></div><br /><br /><h2><span style="font-size: x-large;">可能會遇到的問題</span></h2>接下來，我們來聊一下一些途中可能會遇到的問題。<br />這也是為什麼這次拖這麼久才貼這一篇，是有原因的！<br /><br />如果只是灌好VS2010直接編譯，編譯出這三個項目，會…算是滿順利的了。<br />cppunit.lib<br />cppunitd.lib<br />cppunit_dll.lib<br /><br />頂多出現<b>warning C4251</b><br />不過，官方有說這個不用理它也可以。(實驗之後發現，真的可以耶！)<br /><br /><b>error LNK1123</b><br />再之後就會開始卡關，出現問題。<br /><blockquote class="tr_bq">LINK : fatal error LNK1123: 轉換成 COFF 時失敗: 檔案無效或損毀</blockquote>這個問題，查了一下<br /><a href="http://stackoverflow.com/questions/10888391/error-link-fatal-error-lnk1123-failure-during-conversion-to-coff-file-inval" target="_blank">http://stackoverflow.com/questions/10888391/error-link-fatal-error-lnk1123-failure-during-conversion-to-coff-file-inval</a><br /><br /><span style="color: #cc0000;">發現，建議灌sp1！</span><br /><strike>vs2010還有sp1唷？微軟是不是什麼都要來個sp1呀？那以後微軟的東西都不用太早買了。(本來就…)</strike><br />之後就一路順利的編譯到底！<br /><br /><br />另外，關於這個部份，竟然還有教學影片耶！有興趣的朋友，就跟著它一步一步做吧！(我還是建議升級到sp1唷)<br /><iframe allowfullscreen="" frameborder="0" height="315" src="//www.youtube.com/embed/C4k4hxAjp54" width="560"></iframe></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2014-09-28T04:58:00.000Z" itemprop="datePublished">
+              2014-09-28
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/TDD/">TDD</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-11-blogger/2365584471815234000/">C++單元測試(13) - OpenCppCoverage指令快速參考</a><div class="related-posts-item-abstract">¶C++單元測試(13) - OpenCppCoverage指令快速參考
+原文連結: https://darkblack01.blogspot.com/2015/12/</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-09-blogger/8268875242448437712/"> C++單元測試(12) - fake, stub, mock object</a><div class="related-posts-item-abstract">¶C++單元測試(12) - fake, stub, mock object
+原文連結: https://darkblack01.blogspot.com/2015/1</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/12-04-blogger/2013177189949556167/">C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(11) - OpenCppCoverage可視化單元測試的覆蓋率, Jenkins顯示Report
+原文連結: https://darkblack01</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/11-10-blogger/1143174315685259687/">C++單元測試(10) - Mock、Stub蓋台的目錄設定</a><div class="related-posts-item-abstract">¶C++單元測試(10) - Mock、Stub蓋台的目錄設定
+原文連結: https://darkblack01.blogspot.com/2015/11/cppun</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/06-24-blogger/327055237147327187/">C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</a><div class="related-posts-item-abstract">¶C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report
+原文連結: https://darkblack01.blogspot.com/2</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2015/05-27-blogger/614095191477392107/">C++單元測試(8) - 再用VS2005先試一下: 專案檔轉換失敗</a><div class="related-posts-item-abstract">¶C++單元測試(8) - 再用VS2005先試一下: 專案檔轉換失敗
+原文連結: https://darkblack01.blogspot.com/2015/05/c</div></li></ul>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
