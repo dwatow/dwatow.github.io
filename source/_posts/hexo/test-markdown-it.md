@@ -3,7 +3,7 @@ title: 測試 markdown-it 渲染器
 date: 2017-06-17 19:38:18
 tags: 
 - hexo
-- markdown測試
+- markdown
 categories: 
 - hexo改裝
 ---
