@@ -43,7 +43,7 @@
 
   //initial position in canvas
   const totalDusts = screen.height / 50; // for RWD
-  console.log(totalDusts);
+  // console.log(totalDusts);
 
   function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -53,7 +53,7 @@
     .fill(0)
     .map(() => {
       const z = getRandom(5, 25);
-      console.log(z);
+      // console.log(z);
       return {
         x: Math.random() * resizeWidth,
         y: Math.random() * resizeHeight,
@@ -63,7 +63,7 @@
         max: 20,
       };
     });
-  console.log("dusts", dusts.length);
+  // console.log("dusts", dusts.length);
 
   const ctx = canvas.getContext("2d");
 
