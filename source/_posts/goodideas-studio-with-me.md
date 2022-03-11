@@ -6,6 +6,9 @@ tags:
 categories:
 - 關於 mentor 這件事
 ---
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/h4_3es4wIWA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 > 簽書會那一天的分享，這是講稿小抄
 
 # 十年之後成為大師
