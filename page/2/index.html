@@ -134,168 +134,293 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2021/04-17-system-design/db-coupling-field/">https://dwatow.github.io/2021/04-17-system-design/db-coupling-field/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2021/05-15-raspberry-pi/sequelize-cli-beginer/">https://dwatow.github.io/2021/05-15-raspberry-pi/sequelize-cli-beginer/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>資料庫設計之共用/不共用欄位</h1>
+        <h1>Raspberry Pi 4 的後端修鍊 - sequelize-cli</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88%E4%B9%8B%E5%85%B1%E7%94%A8-%E4%B8%8D%E5%85%B1%E7%94%A8%E6%AC%84%E4%BD%8D"><span class="toc-text">資料庫設計之共用&#x2F;不共用欄位</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E9%8A%80%E6%A9%9F%E7%9A%84%E4%BA%A4%E6%98%93%E8%B3%87%E6%96%99"><span class="toc-text">收銀機的交易資料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E3%80%81%E4%BA%A4%E6%98%93%E6%98%8E%E7%B4%B0"><span class="toc-text">交易、交易明細</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%86%E5%93%81"><span class="toc-text">商品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%98%E9%8C%84%E6%AD%B7%E5%8F%B2%E7%9A%84%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88"><span class="toc-text">記錄歷史的資料庫設計</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-sequelize-cli"><span class="toc-text">Raspberry Pi 4 的後端修鍊: sequelize-cli</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-sequelize-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%92%B0%E5%A2%83"><span class="toc-text">初始化 sequelize 的基本環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A"><span class="toc-text">資料庫連線設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99%E5%BA%AB"><span class="toc-text">用 ORM 創造資料庫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0-Migration-%E6%AD%A5%E9%A9%9F"><span class="toc-text">用 ORM 創造 Migration 步驟</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C-migration"><span class="toc-text">執行 migration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A4%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%8A%A0%E4%B8%8A-transaction"><span class="toc-text">此也可以加上 transaction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A4%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%90%AB%E6%9C%89-forang-key"><span class="toc-text">此也可以含有 forang key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BD%B5%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">一併創造資料表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99"><span class="toc-text">用 ORM 創造資料</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="資料庫設計之共用-不共用欄位"><a class="header-anchor" href="#資料庫設計之共用-不共用欄位">¶</a>資料庫設計之共用/不共用欄位</h1>
-<p>資料庫正規化的原則就是將重複的欄位共用。</p>
-<p>但是這個案例就是一個，不應該共用的例子，一起來看看吧。</p>
-<h2 id="收銀機的交易資料"><a class="header-anchor" href="#收銀機的交易資料">¶</a>收銀機的交易資料</h2>
-<p>收銀機，在每一次交易時，都要打交易明細。而明細的欄位，不外乎就是這次賣出去的品項、金額、數量、收銀人員，交易時間…，資料庫的設計如下。(簡易設計，之後帶出我想討論的問題，省略與問題無關的欄位)</p>
-<p>而如果想要計算銷售的利潤，需要將成本記錄進來。</p>
-<div id="graphviz-0"></div>
-<p>每一次交易，不是只有一筆商品名稱，如果要一次產出很多筆商品，就要讓交易明細表，分成兩個部份，交易與交易明細，也就是俗稱的表頭與表身的稱呼</p>
-<h2 id="交易、交易明細"><a class="header-anchor" href="#交易、交易明細">¶</a>交易、交易明細</h2>
-<p>每一次交易只需要一筆資料的是交易時間、銷售人員。<br>
-而需要多筆的是客人買的東西相關的資料，包含商品名稱、銷售單價、銷售數量、進貨成本 (可以算利潤)。</p>
-<div id="graphviz-1"></div>
-<p>這看似更加適合記錄交易行為資料的結構，應該再加上自己需要的欄位就可以運作了才對，但是這樣的設計會在統計上造成問題。</p>
-<p>商品名稱，這個欄位看似是一個手動輸入的欄位。<br>
-也許會打成全名、簡稱、甚至打編號，又或者考慮錯誤的話，會打錯字，也許會多打空白，在輸入時造成各種的錯誤會讓統計時，將它們視為不同的品項。</p>
-<p>所以，需要將商品變成選項，用選的降低這方面的錯誤</p>
-<h2 id="商品"><a class="header-anchor" href="#商品">¶</a>商品</h2>
-<p>加入了商品資料，就要反覆的問自己「商品的這個屬性，會跟著選項走嗎？」</p>
+    <h1 id="Raspberry-Pi-4-的後端修鍊-sequelize-cli"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-sequelize-cli">¶</a>Raspberry Pi 4 的後端修鍊: sequelize-cli</h1>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p><strong>sequelize</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save sequelize mysql2</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>要使用 mariadb 要安裝 mysql2<br>
+並且把 config 的 “dialect” 設成 “mysql” (後面會講)</p>
+</blockquote>
+<p><strong>sequelize-cli</strong><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g --save sequelize-cli</span></span><br></pre></td></tr></table></figure>
+<p>安裝好，確定一下安裝成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize --version</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.21.13]</span><br><span class="line"></span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>問題: Unable to resolve sequelize package<br>
+因為 <code>sequelize-cli</code> 不會幫你安裝 <code>sequelize</code> 所以 shell 執行 <code>sequelize</code> 時會出現呼叫不到 <code>sequelize</code></p>
+</blockquote>
+<p>指令說明</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">sequelize [command]</span><br><span class="line"></span><br><span class="line">命令：</span><br><span class="line">  sequelize db:migrate                        Run pending migrations</span><br><span class="line">  sequelize db:migrate:schema:timestamps:add  Update migration table to have timestamps</span><br><span class="line">  sequelize db:migrate:status                 List the status of all migrations</span><br><span class="line">  sequelize db:migrate:undo                   Reverts a migration</span><br><span class="line">  sequelize db:migrate:undo:all               Revert all migrations ran</span><br><span class="line">  sequelize db:seed                           Run specified seeder</span><br><span class="line">  sequelize db:seed:undo                      Deletes data from the database</span><br><span class="line">  sequelize db:seed:all                       Run every seeder</span><br><span class="line">  sequelize db:seed:undo:all                  Deletes data from the database</span><br><span class="line">  sequelize db:create                         Create database specified by configuration</span><br><span class="line">  sequelize db:drop                           Drop database specified by configuration</span><br><span class="line">  sequelize init                              Initializes project</span><br><span class="line">  sequelize init:config                       Initializes configuration</span><br><span class="line">  sequelize init:migrations                   Initializes migrations</span><br><span class="line">  sequelize init:models                       Initializes models</span><br><span class="line">  sequelize init:seeders                      Initializes seeders</span><br><span class="line">  sequelize migration:generate                Generates a new migration file                                                                         [別名: migration:create]</span><br><span class="line">  sequelize model:generate                    Generates a model and its migration                                                                        [別名: model:create]</span><br><span class="line">  sequelize seed:generate                     Generates a new seed file                                                                                   [別名: seed:create]</span><br><span class="line"></span><br><span class="line">選項：</span><br><span class="line">  --help     顯示說明                                                                                                                                                  [布林]</span><br><span class="line">  --version  顯示版本</span><br></pre></td></tr></table></figure>
+<p>分成幾個部份</p>
+<p><strong>初始化</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize init</td>
+<td>初始化 project(包含下面四個)</td>
+</tr>
+<tr>
+<td>sequelize init:config</td>
+<td>初始化 configuration</td>
+</tr>
+<tr>
+<td>sequelize init:migrations</td>
+<td>初始化 migrations</td>
+</tr>
+<tr>
+<td>sequelize init:models</td>
+<td>初始化 models</td>
+</tr>
+<tr>
+<td>sequelize init:seeders</td>
+<td>初始化 seeders</td>
+</tr>
+</tbody>
+</table>
+<p><strong>資料庫 建立/刪除</strong></p>
+<p>使用時注意權限是否可以更動資料庫</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize db:create</td>
+<td>從指定的 config 檔新增 database</td>
+</tr>
+<tr>
+<td>sequelize db:drop</td>
+<td>從指定的 config 檔刪除 database</td>
+</tr>
+</tbody>
+</table>
+<p><strong>產生各種腳本</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+<th>參數</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize migration:generate</td>
+<td>產生 new migration 檔</td>
+<td>[別名: migration:create]</td>
+</tr>
+<tr>
+<td>sequelize model:generate</td>
+<td>產生 model 和它的 migration 檔</td>
+<td>[別名: model:create]</td>
+</tr>
+<tr>
+<td>sequelize seed:generate</td>
+<td>產生 new seed 檔</td>
+<td>[別名: seed:create]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>資料表結構維護</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize db:migrate</td>
+<td>執行未跑過的 migrations</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:undo</td>
+<td>恢復一次 migration</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:undo:all</td>
+<td>恢復所有跑過的 migrations</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:schema:timestamps:add</td>
+<td>Update migration table to have timestamps</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:status</td>
+<td>List the status of all migrations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>前置資料維護</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize db:seed</td>
+<td>執行指定的 seeder</td>
+</tr>
+<tr>
+<td>sequelize db:seed:all</td>
+<td>執行每一個 seeder</td>
+</tr>
+<tr>
+<td>sequelize db:seed:undo</td>
+<td>從 database 刪除資料</td>
+</tr>
+<tr>
+<td>sequelize db:seed:undo:all</td>
+<td>從 database 刪除資料</td>
+</tr>
+</tbody>
+</table>
+<h2 id="初始化-sequelize-的基本環境"><a class="header-anchor" href="#初始化-sequelize-的基本環境">¶</a>初始化 sequelize 的基本環境</h2>
+<p>sequelize 的 cli 工具，可以做到很多事情，不過大多都在處理 migration。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize init</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Created &quot;config/config.json&quot;</span><br><span class="line">Successfully created models folder at &quot;/home/pi/code/express-demo/models&quot;.</span><br><span class="line">Successfully created migrations folder at &quot;/home/pi/code/express-demo/migrations&quot;.</span><br><span class="line">Successfully created seeders folder at &quot;/home/pi/code/express-demo/seeders&quot;.</span><br></pre></td></tr></table></figure>
+<p>執行完會出現</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">project/</span><br><span class="line">├- migrations/</span><br><span class="line">├- seeders/</span><br><span class="line">├- config/</span><br><span class="line">|  ├- config.json</span><br><span class="line">└- models/</span><br><span class="line">   └- index.js</span><br></pre></td></tr></table></figure>
 <ul>
-<li>交易項目的<strong>名稱</strong>，會跟著商品選項改變嗎？會</li>
-<li>交易項目的<strong>成本</strong>，會跟著商品選項改變嗎？會</li>
-<li>交易項目的<strong>單價</strong>，會跟著商品選項改變嗎？會</li>
-<li>交易項目的<strong>數量</strong>，會跟著商品選項改變嗎？不會</li>
+<li><code>config</code>, 包含 config 檔案, 提供資料庫連線給 CLI</li>
+<li><code>models</code>, 包含專案中所有的 models</li>
+<li><code>migrations</code>, 包含所有的 migration 檔案</li>
+<li><code>seeders</code>, 包含所有的 seed 檔案</li>
 </ul>
-<p>由於數量是每一次買賣才決定的，所以不跟著商品選項改變。<br>
-所以資料表設計如下，感覺又更加完整了，不只是可以共用該共用的欄位，又可以避免商品輸入的錯誤</p>
-<div id="graphviz-2"></div>
-<p>其實做到這樣的設計，正一步步的進入另一個陷阱中。<br>
-讓我們再重新看一下這樣的設計，然後思考一個情境</p>
-<p><strong>如果今天商品的單價調整了，不管是漲還是降，那過去的交易明細內容會跟著修改嗎？</strong></p>
-<h2 id="記錄歷史的資料庫設計"><a class="header-anchor" href="#記錄歷史的資料庫設計">¶</a>記錄歷史的資料庫設計</h2>
-<p>其實，在一開始的命題就已經決定了這一個要素<strong>記錄歷史</strong>，記帳也是一種歷史記錄的建立。<br>
-而這一份歷史是無法變被變更的，尤其是它要解決的問題: 記錄交易，算帳用的</p>
-<p>那我們在設計資料表時，要記得檢查<strong>資料連動的問題是否與問題本質衝突</strong>。</p>
-<p>所以在建立交易項目時，交易的金額需要複製一份記錄下來，交易明細以此為基礎做計算。<br>
-<strong>交易的金額需要成為歷史</strong>，<strong>銷售單價</strong>×<strong>銷售數量</strong>的計算就會固定下來。</p>
-<p>那交易的商品名稱需要嗎？這就看你自己囉！如果品名修改了，歷史的名稱修改是不是被允許的呢？</p>
-<p>在此，我們就將<strong>銷售單價</strong>，加在交易項目上，也沒有將商品的<strong>銷售單價</strong>取消。</p>
-<div id="graphviz-3"></div>
-<p>在現實世界中，其實這兩者本來就有差，一個是<strong>訂價</strong>，一個是<strong>售價</strong>。<br>
-隨著資料庫正規化的過程，其實整個問題也需要再一次的重新描述，才會從一開始的<strong>售價</strong>資料，延伸出<strong>訂價</strong>資料，不會視為相同的一件事。</p>
-<p>這個問題在資料庫正規化並不會浮現，而我們會踩進這個誤區造成設計不良。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><textarea id="graphviz-0-code" style="display: none">digraph structs {
-  rankdir=RL;
-
-  node[shape=record]
-
-  sale [label="
-    資料表: 交易明細 (sale)|
-    <id>id|
-    <member_id>seller 銷售人員|
-    交易時間|
-    商品名稱|
-    進貨成本|
-    銷售單價|
-    銷售數量
-  "];
-}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script><textarea id="graphviz-1-code" style="display: none">digraph structs {
-  rankdir=RL;
-
-  node[shape=record]
-
-  sale [label="
-    資料表: 交易明細 (sale)|
-    <id>id|
-    <member_id>seller 銷售人員|
-    交易時間
-  "];
-
-
-  sale_item [label="
-    資料表: 交易項目(sale_item)|
-    <id>id|
-    <sale_id>sale_id|
-    商品名稱|
-    進貨成本|
-    銷售單價|
-    銷售數量
-  "];
-
-  sale_item:sale_id->sale:id [label="1..n"]
-}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-1-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-1").append(element)  });</script><textarea id="graphviz-2-code" style="display: none">digraph structs {
-  rankdir=RL;
-
-  node[shape=record]
-
-  commodity [label="
-    資料表: 商品(commodity)|
-    <id>id 產品編碼|
-    商品名稱|
-    進貨成本|
-    銷售單價|
-    上架狀態
-  "];
-
-
-  sale [label="
-    資料表: 交易明細 (sale)|
-    <id>id|
-    <member_id>seller 銷售人員|
-    交易時間
-  "];
-
-
-  sale_item [label="
-    資料表: 交易項目(sale_item)|
-    <id>id|
-    <sale_id>sale_id|
-    <commodity_id>commodity_id|
-    銷售數量
-  "];
-
-  sale_item:sale_id->sale:id [label="1..n"]
-  sale_item:commodity_id->commodity:id [label="1..n"]
-}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-2-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-2").append(element)  });</script><textarea id="graphviz-3-code" style="display: none">digraph structs {
-  rankdir=RL;
-
-  node[shape=record]
-
-
-  commodity [label="
-    資料表: 商品(commodity)|
-    <id>id 產品編碼|
-    商品名稱|
-    進貨成本|
-    銷售單價|
-    上架狀態
-  "];
-
-
-  sale [label="
-    資料表: 交易明細 (sale)|
-    <id>id|
-    <member_id>seller 銷售人員|
-    交易時間
-  "];
-
-
-  sale_item [label="
-    資料表: 交易項目(sale_item)|
-    <id>id|
-    <sale_id>sale_id|
-    <commodity_id>commodity_id|
-    銷售數量|
-    銷售單價
-  "];
-
-  sale_item:sale_id->sale:id [label="1..n"]
-  sale_item:commodity_id->commodity:id [label="1..n"]
-}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-3-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-3").append(element)  });</script></p>
+<p>在此出現幾個陌生的名詞</p>
+<ul>
+<li>CLI: command line interface</li>
+<li>models: MVC 的 model，用來和資料庫連動的物件定義</li>
+<li>migration: 資料庫變動記錄</li>
+<li>seed: 餵資料，通常是資料庫的系統初始資料</li>
+</ul>
+<blockquote>
+<p>ORM 工具管理資料表變化，都會使用 migration。<br>
+它就像是 git 這種版本控制工具，只是它版控的是 table schema (只有管有哪些資料表與有哪些資料表的欄位)</p>
+</blockquote>
+<h2 id="資料庫連線設定"><a class="header-anchor" href="#資料庫連線設定">¶</a>資料庫連線設定</h2>
+<p>sequelize 要連線資料庫要靠 <code>config/config.json</code> 這裡的資訊。</p>
+<p><strong>config/config.json</strong></p>
+<p>環境變數就會對應到預設 config 的 <code>development</code>, <code>test</code>, <code>production</code> 三種情境，可依需要增減。</p>
+<blockquote>
+<p>dialect: 翻譯到不同資料庫的 statement<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+</blockquote>
+<p>在此，我使用的是 mariadb，所以 “dialect” 設定成 <s>“mariadb”</s> “mysql” 才會跑。(不知道為什麼的雷點！)</p>
+<p>如果有 <code>operatorsAliases: false</code> 營運商別名，保持預設值就好。(我目前是刪掉它)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;development&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;test&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;production&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三個的使用情境，我自己會這麼使用</p>
+<p><strong>development</strong></p>
+<p>用在開發者變動(新增/刪除/修改)資料庫、資料表結構</p>
+<p><strong>production</strong></p>
+<p>用在平常的執行時使用的設定 (給 CD/CI 起動時用的)</p>
+<p><strong>test</strong></p>
+<p>還沒想到。</p>
+<h2 id="用-ORM-創造資料庫"><a class="header-anchor" href="#用-ORM-創造資料庫">¶</a>用 ORM 創造資料庫</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize db:create booklibrary</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;development&quot;.</span><br><span class="line">Database booklibrary created.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因為用 cli 所以 env 要自帶在 env 參數<br>
+預設 env 參數是 “development”</p>
+</blockquote>
+<div class="danger">
+<p>db:create 要使用權限較高的帳號執行。<br>
+在此設定在 <code>development</code> 的 config 中。</p>
+</div>
+<h2 id="用-ORM-創造-Migration-步驟"><a class="header-anchor" href="#用-ORM-創造-Migration-步驟">¶</a>用 ORM 創造 Migration 步驟</h2>
+<p>Migration 像是資料庫的演進過程，每一步都記錄下來的話，有助於未來再建立一次初始系統。<br>
+也有助於自動化資料表建置、修改或系統的初始資料建置。</p>
+<p>但是 migration 畢竟一開始算是「一個動作」我們就以這個角度切入看看 sequelize-cli 幫我們打造了什麼工具又可以做到什麼吧！</p>
+<p>一開始我們創一個 Migration 檔來執行或恢復。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npx sequelize-cli migration:generate --name create-empty-file</span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">migrations folder at <span class="string">&quot;/home/pi/code/express-demo/migrations&quot;</span> already exists.</span><br><span class="line">New migration was created at /home/pi/code/express-demo/migrations/20210820152155-create-empty-file.js .</span><br></pre></td></tr></table></figure>
+<p>可以產生一個 migration 檔。</p>
+<p><strong>migrations/20210820152155-create-empty-file.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Add altering commands here.</span></span><br><span class="line"><span class="comment">      Return a promise to correctly handle asynchronicity.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example:</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;users&#x27;</span>, &#123; <span class="attr">id</span>: Sequelize.INTEGER &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Add reverting commands here.</span></span><br><span class="line"><span class="comment">      Return a promise to correctly handle asynchronicity.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example:</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;users&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>配合上面的 Example (source code 產生的)</p>
+<ul>
+<li><code>queryInterface</code>: 用來修改 Database</li>
+<li><code>Sequelize</code>: 用來記可以用的資料型別 (ex: STRING, INTEGER)</li>
+<li>function up, down: 回傳 promise</li>
+</ul>
+<h3 id="執行-migration"><a class="header-anchor" href="#執行-migration">¶</a>執行 migration</h3>
+<p>執行到底</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sequelize-cli db:migrate</span><br></pre></td></tr></table></figure>
+<p>恢復到底</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate:undo:all</span><br></pre></td></tr></table></figure>
+<h3 id="此也可以加上-transaction"><a class="header-anchor" href="#此也可以加上-transaction">¶</a>此也可以加上 transaction</h3>
+<p>透過 <code>queryInterface.sequelize.transaction(done =&gt; &#123;&#125;)</code> 可以在 callback 裡面執行 一次 transaction 的所有行為。並且在每個行為的最後一個參數加上 <code>, &#123; transaction: done &#125;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.sequelize.transaction(<span class="function"><span class="params">transaction</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;users&#x27;</span>, &#123;</span><br><span class="line">        id: Sequelize.INTEGER</span><br><span class="line">      &#125;, &#123; transaction &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.sequelize.transaction(<span class="function"><span class="params">transaction</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;users&#x27;</span>, &#123; transaction &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="此也可以含有-forang-key"><a class="header-anchor" href="#此也可以含有-forang-key">¶</a>此也可以含有 forang key</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;Person&#x27;</span>, &#123;</span><br><span class="line">      name: Sequelize.DataTypes.STRING,</span><br><span class="line">      isBetaMember: &#123;</span><br><span class="line">        type: Sequelize.DataTypes.BOOLEAN,</span><br><span class="line">        defaultValue: <span class="literal">false</span>,</span><br><span class="line">        allowNull: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">      userId: &#123;</span><br><span class="line">        type: Sequelize.DataTypes.INTEGER,</span><br><span class="line">        references: &#123;</span><br><span class="line">          model: &#123;</span><br><span class="line">            tableName: <span class="string">&#x27;users&#x27;</span>,</span><br><span class="line">            schema: <span class="string">&#x27;schema&#x27;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          key: <span class="string">&#x27;id&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        allowNull: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;Person&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改寫成 async/await</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">up</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> transaction = <span class="keyword">await</span> queryInterface.sequelize.transaction();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> queryInterface.addColumn(</span><br><span class="line">        <span class="string">&#x27;Person&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          type: Sequelize.DataTypes.STRING,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123; transaction &#125;</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">await</span> queryInterface.addIndex(</span><br><span class="line">        <span class="string">&#x27;Person&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          fields: <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">          unique: <span class="literal">true</span>,</span><br><span class="line">          transaction,</span><br><span class="line">        &#125;</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">await</span> transaction.commit();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="keyword">await</span> transaction.rollback();</span><br><span class="line">      <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">down</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> transaction = <span class="keyword">await</span> queryInterface.sequelize.transaction();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> queryInterface.removeColumn(<span class="string">&#x27;Person&#x27;</span>, <span class="string">&#x27;petName&#x27;</span>, &#123; transaction &#125;);</span><br><span class="line">      <span class="keyword">await</span> transaction.commit();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="keyword">await</span> transaction.rollback();</span><br><span class="line">      <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="一併創造資料表"><a class="header-anchor" href="#一併創造資料表">¶</a>一併創造資料表</h3>
+<p>可以在建立 migration 的同時，也產生好對應 Model 檔案。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize model:generate --name authors --attributes author_id:number,name_last:string,name_first:string,country:string</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">New model was created at /home/pi/code/express-demo/models/authors.js .</span><br><span class="line">New migration was created at /home/pi/code/express-demo/migrations/20210501084235-authors.js .</span><br></pre></td></tr></table></figure>
+<ul>
+<li>author_id:number</li>
+<li>name_last:string</li>
+<li>name_first:string</li>
+<li>country:string</li>
+</ul>
+<p>產生 <strong>models/authors.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> authors = sequelize.define(<span class="string">&#x27;authors&#x27;</span>, &#123;</span><br><span class="line">    author_id: DataTypes.NUMBER,</span><br><span class="line">    name_last: DataTypes.STRING,</span><br><span class="line">    name_first: DataTypes.STRING,</span><br><span class="line">    country: DataTypes.STRING</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">  authors.associate = <span class="function"><span class="keyword">function</span>(<span class="params">models</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// associations can be defined here</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> authors;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>產生 <strong>migrations/20210501084235-create-authors.js</strong></p>
+<p>這裡做一點修改，我們想要讓 id 用 author_id 表示</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;authors&#x27;</span>, &#123;</span><br><span class="line">      author_id: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        autoIncrement: <span class="literal">true</span>,</span><br><span class="line">        primaryKey: <span class="literal">true</span>,</span><br><span class="line">        type: Sequelize.INTEGER</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// author_id: &#123;</span></span><br><span class="line">      <span class="comment">//   type: Sequelize.NUMBER</span></span><br><span class="line">      <span class="comment">// &#125;,</span></span><br><span class="line">      name_last: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      name_first: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      country: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      createdAt: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;,</span><br><span class="line">      updatedAt: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;authors&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">describe</span> <span class="keyword">authors</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type         | Null | Key | Default | Extra          |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| author_id  | int(11)      | NO   | PRI | &lt;null&gt;  | auto_increment |</span><br><span class="line">| name_last  | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| name_first | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| country    | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| createdAt  | datetime     | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| updatedAt  | datetime     | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">6 rows in set</span><br><span class="line">Time: 0.759s</span><br></pre></td></tr></table></figure>
+<h2 id="用-ORM-創造資料"><a class="header-anchor" href="#用-ORM-創造資料">¶</a>用 ORM 創造資料</h2>
+<p>為了在 migration 可以預先填入資料</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli seed:generate --name base-authors</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">seeders folder at &quot;/home/pi/code/express-demo/seeders&quot; already exists.</span><br><span class="line">New seed was created at /home/pi/code/express-demo/seeders/20210501134052-base-authors.js .</span><br></pre></td></tr></table></figure>
+<p><strong>seeders/20210501134052-base-authors.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      自己寫入要加上去什麼資料</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.bulkInsert(<span class="string">&#x27;authors&#x27;</span>, [&#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Kafka&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Franz&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Czech Republic&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Dostoevsky&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Fyodor&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Russian&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Chris&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Wang&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Tainan&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Mary&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Lee&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Tainan&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;], &#123;&#125;);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      同時要寫下返回的時候要刪掉什麼資料</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.bulkDelete(<span class="string">&#x27;authors&#x27;</span>, <span class="literal">null</span>, &#123;&#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize db:seed</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;development&quot;.</span><br></pre></td></tr></table></figure>
+<p>看資料是否有加進去資料庫</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">authors</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line">| author_id | name_last | name_first | country        | createdAt           | updatedAt           |</span><br><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line">| 1         | Franz     | Kafka      | Czech Republic | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 2         | Fyodor    | Dostoevsky | Russian        | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 3         | Wang      | Chris      | Tainan         | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 4         | Lee       | Mary       | Tainan         | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">4 rows in set</span><br><span class="line">Time: 0.507s</span><br></pre></td></tr></table></figure>
+<p>返回上次填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo</span></span><br></pre></td></tr></table></figure>
+<p>指定檔案返回填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo --seed seeders/20210501134052-base-authors.js</span></span><br></pre></td></tr></table></figure>
+<p>返全部填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo:all</span></span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/">Sequelize</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/sequelize/cli">sequelize/cli: The Sequelize CLI</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/v5/manual/dialects.html">Manual Dialects | Sequelize</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
     
     </section>
@@ -309,11 +434,15 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/">系統設計</a> }
+  { <a href="/tags/sequelize/">sequelize</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/">資料庫正規則</a> }
+  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/migration/">migration</a> }
   </li>
 
 
@@ -343,7 +472,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.64px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.36px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.43px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.43px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.43px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.21px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 39.5px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.36px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.21px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 21.29px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.43px;">Flex</a> <a href="/tags/Git/" style="font-size: 38.29px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.64px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.43px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.07px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.29px;">KnR2</a> <a href="/tags/MFC-controls/" style="font-size: 15.21px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.43px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.21px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.86px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.43px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 33.43px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 38.29px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.21px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.71px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 44.36px;">WIN32 API/MFC</a> <a href="/tags/Xilinx/" style="font-size: 18.86px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.71px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.43px;">animation</a> <a href="/tags/api/" style="font-size: 15.21px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.21px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.21px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.21px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 16.43px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.21px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.43px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 15.21px;">display</a> <a href="/tags/docker/" style="font-size: 16.43px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 17.64px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.21px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.86px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.21px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.21px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.21px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.21px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 24.93px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.14px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.21px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 18.86px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.21px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.21px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.14px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.43px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.21px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.21px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 24.93px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.5px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.43px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 26.14px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.21px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.14px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.21px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.43px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.43px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.43px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 28.57px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.07px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 18.86px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 17.64px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 33.43px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.86px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 43.14px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 23.71px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 22.5px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.64px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 41.93px;">小旅行</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.43px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 35.86px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.5px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 33.43px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.86px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.79px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.57px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.07px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 40.71px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.71px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.21px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.21px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.79px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.57px;">社服社與我</a> <a href="/tags/%E7%AE%A1%E7%90%86%E7%9A%84%E6%8A%80%E8%A1%93/" style="font-size: 14px;">管理的技術</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 15.21px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.64px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.64px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 33.43px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.21px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 34.64px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.07px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.86px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.86px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.43px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.64px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.21px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.57px;">音響拆裝過程</a>
+    <a href="/tags/new-framework/" style="font-size: 17.64px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.36px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.43px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.43px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.43px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.21px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 39.5px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.36px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.21px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 21.29px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.43px;">Flex</a> <a href="/tags/Git/" style="font-size: 38.29px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.64px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.43px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.07px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.29px;">KnR2</a> <a href="/tags/MFC-controls/" style="font-size: 15.21px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.43px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.21px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.86px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.43px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 33.43px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 38.29px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.21px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.71px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 44.36px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.86px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.71px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.43px;">animation</a> <a href="/tags/api/" style="font-size: 15.21px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.21px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.21px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.21px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 16.43px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.21px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.43px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 15.21px;">display</a> <a href="/tags/docker/" style="font-size: 16.43px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 17.64px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.21px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.86px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.21px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.21px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.21px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.21px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 24.93px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.14px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.21px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 18.86px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.21px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.21px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.14px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.43px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.21px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.21px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 24.93px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.5px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.43px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 26.14px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.21px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.14px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.21px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.43px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.43px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.43px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 28.57px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.07px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 18.86px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 17.64px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 33.43px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.86px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 43.14px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 23.71px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 22.5px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.64px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 41.93px;">小旅行</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.43px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 35.86px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.5px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 33.43px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.86px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.79px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.57px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.07px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 40.71px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.71px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.21px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.21px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.79px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.57px;">社服社與我</a> <a href="/tags/%E7%AE%A1%E7%90%86%E7%9A%84%E6%8A%80%E8%A1%93/" style="font-size: 14px;">管理的技術</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 15.21px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.64px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.64px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 33.43px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.21px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 34.64px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.07px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.86px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.86px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.43px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.64px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.21px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.57px;">音響拆裝過程</a>
 
 
                 <footer>
