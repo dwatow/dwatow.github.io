@@ -134,16 +134,16 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/01-04-iron-man-2018/iron-man-2018-day25/">https://dwatow.github.io/2018/01-04-iron-man-2018/iron-man-2018-day25/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/01-03-iron-man-2018/iron-man-2018-day24/">https://dwatow.github.io/2018/01-03-iron-man-2018/iron-man-2018-day24/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>前端新手村 都市傳說之body範圍</h1>
+        <h1>前端新手村 都市傳說之隱藏元素的手法</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%BD%E5%B8%82%E5%82%B3%E8%AA%AA%E4%B9%8Bbody%E7%AF%84%E5%9C%8D"><span class="toc-text">都市傳說之body範圍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B-HTML5-%E7%9A%84-body"><span class="toc-text">看 HTML5 的 body</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#background-%E7%9A%84%E7%89%B9%E6%AE%8A-element"><span class="toc-text">background 的特殊 element[2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSS2-%E5%AE%9A%E7%BE%A9%E7%9A%84-background"><span class="toc-text">CSS2 定義的 background [4]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B5%90%E8%AB%96"><span class="toc-text">結論</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%BD%E5%B8%82%E5%82%B3%E8%AA%AA%E4%B9%8B%E9%9A%B1%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%89%8B%E6%B3%95"><span class="toc-text">都市傳說之隱藏元素的手法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#visibility"><span class="toc-text">visibility [1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#diaplsy"><span class="toc-text">diaplsy [2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#opacity"><span class="toc-text">opacity [5]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E7%90%86%E4%B8%80%E4%B8%8B"><span class="toc-text">整理一下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%9E%E7%80%8F%E8%A6%BD%E5%99%A8%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E%E4%BE%86%E7%9C%8B"><span class="toc-text">從瀏覽器渲染引擎來看 [6]</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a>
   </div>
 
 
@@ -153,55 +153,101 @@
 <h2 id="前言"><a class="header-anchor" href="#前言">¶</a>前言</h2>
 <p>網頁前端新手村系列文章，宗旨並不在技術本身的教導，重點放在技術與技術之間的脈胳關係。讓零碎的網頁前端技術的關鍵字，成為比較有系統性的視野。</p>
 <p>讓一開始接觸網頁前端的新手們，有一個比較友善的系統來架構你的學習，至於技術本身的深入探討，就留給其它的高手們吧。</p>
-<h1 id="都市傳說之body範圍"><a class="header-anchor" href="#都市傳說之body範圍">¶</a>都市傳說之body範圍</h1>
-<p>這個問題，來自於幾種現象(好像在講鬼故事)</p>
-<ol>
-<li>對 <code>&lt;body&gt;</code> 設定 <code>background</code> 時</li>
-<li>對 <code>&lt;body&gt;</code> 設定 <code>position: relative</code> 再將內容的元素設定 <code>position: absolute</code> ，內容的元素再設定 <code>bottom: 0</code> 下邊緣，就會找到 <code>&lt;body&gt;</code> 的下邊緣</li>
-<li>對 <code>&lt;body&gt;</code> 設定 <code>border</code> 或 <code>outline</code> 可以框出 <code>&lt;body&gt;</code> 的四邊</li>
-</ol>
-<p>這幾種現象，讓 <code>&lt;body&gt;</code> 的大小眾說紛紜。</p>
-<h2 id="看-HTML5-的-body"><a class="header-anchor" href="#看-HTML5-的-body">¶</a>看 HTML5 的 body</h2>
-<p>從 <a target="_blank" rel="noopener" href="http://www.w3.org">www.w3.org</a> 的 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/html5/sections.html#the-body-element">HTML5, 4.3.1. The body element</a> <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>文件中，看不出 body 有針對這部份，有什麼特別解釋的地方。</p>
-<p>又找到 <a target="_blank" rel="noopener" href="http://dev.w3.org">dev.w3.org</a> 的 <a target="_blank" rel="noopener" href="https://dev.w3.org/html5/html-author/#the-body-element">HTML5</a> 裡面特別定義了實作瀏覽器時要定義的 Interface 滿有趣的，不過，還是沒有什麼特別針對渲染和範圍做定義。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">interface HTMLBodyElement : HTMLElement &#123;</span><br><span class="line">    attribute Function onbeforeunload;</span><br><span class="line">    attribute Function onerror;</span><br><span class="line">    attribute Function onhashchange;</span><br><span class="line">    attribute Function onload;</span><br><span class="line">    attribute Function onmessage;</span><br><span class="line">    attribute Function onoffline;</span><br><span class="line">    attribute Function ononline;</span><br><span class="line">    attribute Function onpopstate;</span><br><span class="line">    attribute Function onresize;</span><br><span class="line">    attribute Function onstorage;</span><br><span class="line">    attribute Function onunload;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>看 HTML 的 <code>&lt;body&gt;</code> 的定義，沒有什麼線索。</p>
-<h2 id="background-的特殊-element"><a class="header-anchor" href="#background-的特殊-element">¶</a>background 的特殊 element<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
-<p>試看看從 CSS 的 <code>background</code> 來看好了。</p>
-<blockquote>
-<p>術語<br>
-canvas: 渲染出來的格式化結構創造的空間。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup><br>
-(避免與 <code>&lt;canvas&gt;</code> 混淆，下面的內容以「畫布」來稱呼)</p>
-</blockquote>
-<p>畫布是無限維度空間。渲染出有限維度結果。</p>
-<p>所以，文件畫布渲染之後是2維無限大的表面。在 CSS2 規範中，並無元素對應到畫布，所以 CSS 套用到 root element 的 background。</p>
-<p>那我們就來看看 CSS2 的規範。</p>
-<h2 id="CSS2-定義的-background"><a class="header-anchor" href="#CSS2-定義的-background">¶</a>CSS2 定義的 background <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
-<p>可以指定一個顏色或圖片在元素的背景(渲染表面)。用 box model 解釋的話，就是 padding 和 border 的 background。margin 的 background 永遠透明。</p>
-<p>背景屬性不會繼承，但是由於 <code>background-color</code> 預設值是 <code>transparent</code> ，所以元素總是會透出容器的背景設定。</p>
-<blockquote>
-<p>術語<br>
-root element: 根元素，在 HTML 文件中指的是 <code>&lt;html&gt;</code></p>
-</blockquote>
+<h1 id="都市傳說之隱藏元素的手法"><a class="header-anchor" href="#都市傳說之隱藏元素的手法">¶</a>都市傳說之隱藏元素的手法</h1>
 <ul>
-<li>根元素背景，就是畫布背景。</li>
-<li>建議指定 <code>&lt;body&gt;</code> 元素背景，而不是 <code>&lt;html&gt;</code> 元素。</li>
-<li>根元素一直都用 <code>background-color: transparent</code> 和 <code>background-image: none</code> 來計算背景。</li>
-<li><code>&lt;body&gt;</code> 繪製背景時，要將其背景繪製到畫布上。</li>
+<li><code>visibility: hidden</code></li>
+<li><code>display: none</code></li>
+<li><code>opacity: 0</code></li>
 </ul>
-<h2 id="結論"><a class="header-anchor" href="#結論">¶</a>結論</h2>
-<p>用 <code>background</code> 來找 <code>&lt;body&gt;</code> 是不對的，<code>background</code> 本身對 <code>&lt;body&gt;</code> 的行為是一種特例。而不管是用 <code>position</code> 還是用 <code>border</code> 圈出來，都是正確的做法。</p>
+<h2 id="visibility"><a class="header-anchor" href="#visibility">¶</a>visibility <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>指的是無論有無渲染，都會佔有 layout 空間。</p>
+<ul>
+<li>visible<br>
+萬物預設值，設定此值，box 可以顯示在畫面上</li>
+<li>hidden<br>
+box 不可顯示在畫面上，完全透明，但是仍佔空間。若容器設定 <code>visibility: hidden</code> ，而元素 設定 <code>visibility: visible</code> 元素是可見的。</li>
+<li>collapse<br>
+和 <code>hidden</code> 的設定值一模一樣。此關鍵字是參考 table 的動態跨欄或跨列效果。</li>
+</ul>
+<h2 id="diaplsy"><a class="header-anchor" href="#diaplsy">¶</a>diaplsy <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<p><code>display</code> 會影響自身元素與包在元素內的子元素們，是否被生成在畫面上。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<p>預設值: <code>inline</code></p>
+<ul>
+<li>block<br>
+生成一個 block 的元素</li>
+<li>inline-block<br>
+生成一個 inline-block 的容器，容器與容器外元素之間是 inline 關係，容器與容器內元素是 block 關係。</li>
+<li>inline<br>
+生成一個 inline 的元素</li>
+<li>list-item<br>
+生成一個 block 元素，並且在開頭會有標記。</li>
+<li>none<br>
+沒有任何元素會在生成，並佔據排版空間。<br>
+容器設定 <code>display: none</code> , 元素設定 <code>display: block</code> 元素還是不會顯示。</li>
+<li>其它 <code>table</code>, <code>inline-table</code>, <code>table-row-group</code>, <code>table-column</code>, <code>table-column-group</code>, <code>table-header-group</code>, <code>table-footer-group</code>, <code>table-row</code>, <code>table-cell</code>, <code>and table-caption</code> 讓元素有 table 的表現形式。欲知詳情可以查看 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/tables.html">17 Tables</a> <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
+</ul>
+<h2 id="opacity"><a class="header-anchor" href="#opacity">¶</a>opacity <sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></h2>
+<p><code>opacity</code> 不透明度，可以被認為是最後處理的步驟，在元素被渲染在畫面上後，再將畫面區域的不透明度加上去。</p>
+<p>值: alpha 值(0~1的實數)</p>
+<p>容器設定不透明度，則容器內的元素也會有相同的不透明度。</p>
+<h2 id="整理一下"><a class="header-anchor" href="#整理一下">¶</a>整理一下</h2>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>佔據空間</th>
+<th>子元素獨立設定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display: none</code></td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>visibility: hidden</code></td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>opacity: 0</code></td>
+<td>yes</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h2 id="從瀏覽器渲染引擎來看"><a class="header-anchor" href="#從瀏覽器渲染引擎來看">¶</a>從瀏覽器渲染引擎來看 <sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></h2>
+<p>先看一下 Webkit(chrome, safari) 的流程圖<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup><br>
+<img src="https://i.imgur.com/Ex41AeZ.png" alt="webkit 的流程圖"></p>
+<p>再看一下 Gecko(firefox) 的流程圖<sup class="footnote-ref"><a href="#fn7" id="fnref7:1">[7:1]</a></sup><br>
+<img src="https://i.imgur.com/LrgHZst.png" alt="gecko 的流程圖"></p>
+<p>在 Gecko 裡的術語在 render tree 的 element 叫 frame。在 webkit 稱 render 或 render object。而每一個 element 都知道它自己的 child element</p>
+<p>webkit 瀏覽器會建立一棵叫 Rendering Tree (渲染樹)的資料結構。讓內容可以依照正確的順序繪製。每一個 element 都代表一個矩形區域，通常是符合 CSS2 的 box 規範。<br>
+在 render tree 階段，每一個 box 的形態，會受到 display 設定的影響。</p>
+<p>看看 webkit 的程式碼。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">RenderObject* <span class="title">RenderObject::createObject</span><span class="params">(Node* node, RenderStyle* style)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Document* doc = node-&gt;document();</span><br><span class="line">    RenderArena* arena = doc-&gt;renderArena();</span><br><span class="line">    ...</span><br><span class="line">    RenderObject* o = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (style-&gt;display()) &#123;</span><br><span class="line">        <span class="keyword">case</span> NONE:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderInline(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE_BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> LIST_ITEM:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderListItem(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>所以 <code>display: none</code> 不會把 DOM tree 的元素放到 render tree 上，但是 <code>visibility: hidden</code> 會放到 render tree。所以 DOM tree 和 render tree 並非完全有對應關係。</p>
+<p><img src="https://i.imgur.com/FjcIu6q.png" alt=""></p>
+<p>上圖所示，HTML 中的 head 就是設定 <code>display: none</code> 。</p>
+<p>畫面渲染結束，才會使用 <code>opacity</code> 設定畫面不透明度。</p>
 <h1 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h1>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/html5/sections.html#the-body-element">4.3.1. The body element - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/visufx.html#visibility">11.2 Visibility: the ‘visibility’ property - w3.org</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS-backgrounds-3/#special-backgrounds">3.11. Backgrounds of Special Elements - w3.org</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/tables.html#dynamic-effects">17.5.5 Dynamic row and column effects - w3.org</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/intro.html#the-canvas">2.3.1 The canvas - w3.org</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/visuren.html#display-prop">9.2.4 The ‘display’ property - w3.org</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/colors.html#background">14.2 The background - w3.org</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS22/tables.html">17 Tables - w3.org</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSS-color-3/#opacity">3.2. Transparency: the ‘opacity’ property - w3.org</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://taligarsiel.com/Projects/howbrowserswork1.htm#Render_tree_construction">Render tree construction</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10191579">深入探討瀏覽器引擎如何進行解析</a> <a href="#fnref7" class="footnote-backref">↩︎</a> <a href="#fnref7:1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -222,23 +268,19 @@ root element: 根元素，在 HTML 文件中指的是 <code>&lt;html&gt;</code><
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/HTML/">HTML</a> }
+  { <a href="/tags/display/">display</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/body/">body</a> }
+  { <a href="/tags/visibility/">visibility</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/background/">background</a> }
+  { <a href="/tags/opacity/">opacity</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/outline/">outline</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/border/">border</a> }
+  { <a href="/tags/Render-tree/">Render tree</a> }
   </li>
 
 

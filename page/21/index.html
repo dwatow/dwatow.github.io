@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2016/06-04-blogger/2355649546750853660/">https://dwatow.github.io/2016/06-04-blogger/2355649546750853660/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2016/05-04-blogger/7205828261470995510/">https://dwatow.github.io/2016/05-04-blogger/7205828261470995510/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Django View 小筆記</h1>
+        <h1>Javascript的封裝</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Django-View-%E5%B0%8F%E7%AD%86%E8%A8%98"><span class="toc-text">Django View 小筆記</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Javascript%E7%9A%84%E5%B0%81%E8%A3%9D"><span class="toc-text">Javascript的封裝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">封裝1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">宣告+定義</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">呼叫執行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">顯示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">繼承2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">宣告+定義</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">呼叫執行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">顯示</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Django-View-小筆記"><a class="header-anchor" href="#Django-View-小筆記">¶</a>Django View 小筆記</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/06/django-view.html">https://darkblack01.blogspot.com/2016/06/django-view.html</a><br>
-移植時的最後更新日期: 2016-06-04T13:52:59.294+08:00</p>
-<p><br />這個做法是把loading放在template，弱化了url, view的code.<br />算是把重心放到前端上的技巧。<br /><br />在此使用的Model如下<br />Model<br /><pre class="prettyprint"><code class="language-python">class TestObj(models.Model):<br />    name = models.CharField(max_length=10)<br />    create_datetime = models.DateTimeField()<br /><br />    def <strong>str</strong>(self):<br />        return “%s, %s” % (<a target="_blank" rel="noopener" href="http://self.name">self.name</a>, self.create_datetime.date())<br /></code></pre><br /><br />Url<br />url有一個變數稱為pk, pk是primay key的縮寫, 在此要填的是主key的值。<br /><pre class="prettyprint"><code class="language-python">from django.conf.urls import url<br />from . import views<br /><br /><br />urlpatterns = [<br /> #…<br />    #test View<br />    url(r’^test/(?P<pk>[0-9]+)/$’, views.TestObjView.as_view(), name=‘test’),<br />]<br /></code></pre><br />View<br /><br />view有兩種，一個是取model物件的DetailView，一個是取QuerySet的ListView<br /><br />ListView<br />template_name 預設值為&lt;app name&gt;/&lt;template name&gt;_list.html<br /><pre class="prettyprint"><code class="language-python"># -<em>- coding: utf-8 -</em>-<br />from . import models<br />from django.views import generic<br /><br />class TestObjView(generic.ListView):<br />    model = models.TestObj<br /> #template_name = ‘testobj.html’ #可自行手動指定<br /></code></pre><br />DetailView<br />template_name 預設值為&lt;app name&gt;/&lt;template name&gt;_detail.html<br />另一個是ListView, 顯示QuerySet的結果。<br />預設Query完的變數名稱: &lt;model name&gt;_list<br /><pre class="prettyprint"><code class="language-python"># -<em>- coding: utf-8 -</em>-<br />class TestObjView(generic.ListView):<br />    model = models.TestObj<br /> #template_name = ‘testobj.html’ #可自行手動指定<br /></code></pre><br />TEMPLATE<br />依你設定的View來決定template的命名。<br /><br />必須要先接list裡的物件出來<br />在此示範使用預設檔名 testobj_list.html<br /><pre class="prettyprint"><code class="language-html">&#123;% for testobj in testobj_list %&#125;<br /> &#123;&#123;testobj.name&#125;&#125;<br />&#123;% empty %&#125;<br />無資訊<br/><br />&#123;% endfor %&#125;<br /></code></pre><br />直接取屬性出來顯示<br />在此示範使用預設檔名 testobj_detail.html<br /><pre class="prettyprint"><code class="language-html">&#123;&#123;testobj.name&#125;&#125;<br /></code></pre></p>
+    <h1 id="Javascript的封裝"><a class="header-anchor" href="#Javascript的封裝">¶</a>Javascript的封裝</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/05/javascript_8.html">https://darkblack01.blogspot.com/2016/05/javascript_8.html</a><br>
+移植時的最後更新日期: 2016-05-04T14:39:58.316+08:00</p>
+<h2><span style="font-size: x-large;">封裝1</span></h2><h3><span style="font-size: large;">宣告+定義</span></h3><pre class="prettyprint"><code class="language-js">function Female(name, age) &#123;<br />    this.name = name;<br />    var age = age;<br />    this.sayAge = function() &#123;<br />        if (age &gt; 18) &#123;<br />            console.log(this.name + ' is 18.');<br />        &#125;<br />        else<br />        &#123;<br />            console.log(this.name + ' is ' + age + '.');<br />        &#125;<br />    &#125;;<br />&#125;;<br /><span style="font-size: large;"><br /></span></code></pre><h3><span style="font-size: large;">呼叫執行</span></h3><pre class="prettyprint"><code class="language-js">var mary = new Female('Mary', 16);<br />mary.sayAge();<br /><br />var susan = new Female('Susan', 36);<br />susan.sayAge();</code></pre><h3><span style="font-size: large;">顯示</span></h3><pre class="prettyprint"><code class="language-bsh">Mary is 16.<br />Susan is 18.</code></pre><h2><span style="font-size: x-large;">繼承2</span></h2><h3><span style="font-size: large;">宣告+定義</span></h3><pre class="prettyprint"><code class="language-js">function Female(name, age) &#123;<br />    this.name = name;<br />    var age = age;<br />    this.sayAge = function() &#123;<br />        if (age &gt; 18) &#123;<br />            console.log(this.name + ' is 18.');<br />        &#125;<br />        else<br />        &#123;<br />            //sayRealAge   is a function<br />            //sayRealAge() is a function return value<br />            console.log(this.name + ' is ' + sayRealAge() + '.');<br />        &#125;<br />    &#125;;<br />    <br />    var sayRealAge = function() &#123;<br />     return age;<br />    &#125;;<br />&#125;;</code></pre><h3><span style="font-size: large;">呼叫執行</span></h3><pre class="prettyprint"><code class="language-js">var mary = new Female('Mary', 16);<br />mary.sayAge();<br /><br />var susan = new Female('Susan', 36);<br />susan.sayAge();</code></pre><h3><span style="font-size: large;">顯示</span></h3><pre class="prettyprint"><code class="language-bsh">Mary is 16.<br />Susan is 18.</code></pre>
 
     
     </section>
@@ -164,7 +164,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/Django/">Django</a> }
+  { <a href="/tags/javascript/">javascript</a> }
   </li>
 
 

@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2015/08-21-blogger/6992827820732276690/">https://dwatow.github.io/2015/08-21-blogger/6992827820732276690/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2015/08-11-blogger/3928169065424829837/">https://dwatow.github.io/2015/08-11-blogger/3928169065424829837/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Jenkins的C++ 靜態程式碼分析 Cppcheck</h1>
+        <h1>終於公開！！論文《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Jenkins%E7%9A%84C-%E9%9D%9C%E6%85%8B%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%88%86%E6%9E%90-Cppcheck"><span class="toc-text">Jenkins的C++ 靜態程式碼分析 Cppcheck</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">Command執行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">如果現在的時間，大於21</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">當下的時間變數</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">取子字串, 0開頭, 2個字元[3]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">批次檔的關係運算子[4]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">參考資料:  </span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B5%82%E6%96%BC%E5%85%AC%E9%96%8B%EF%BC%81%EF%BC%81%E8%AB%96%E6%96%87%E3%80%8A%E6%87%89%E7%94%A8%E6%96%BC%E6%B6%B2%E6%99%B6%E9%9B%BB%E8%A6%96%E4%B8%AD%E5%8B%95%E6%85%8B%E8%83%8C%E5%85%89%E8%AA%BF%E5%85%89%E6%8A%80%E8%A1%93%E4%B9%8B%E6%BC%94%E7%AE%97%E6%B3%95%E8%88%87%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E5%AF%A6%E7%8F%BE%E3%80%8B"><span class="toc-text">終於公開！！論文《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">軟體模擬</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">硬體實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">口試</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Jenkins的C-靜態程式碼分析-Cppcheck"><a class="header-anchor" href="#Jenkins的C-靜態程式碼分析-Cppcheck">¶</a>Jenkins的C++ 靜態程式碼分析 Cppcheck</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/08/jenkinsc-cppcheck.html">https://darkblack01.blogspot.com/2015/08/jenkinsc-cppcheck.html</a><br>
-移植時的最後更新日期: 2015-12-23T14:16:57.713+08:00</p>
-<p>Jenkins加上靜態程式碼分析程式，真的是很棒的一件事。<br />所以，我也要來加！<br /><br />因為我寫的是C<ins>所以，選用了一個適合C</ins>的程式碼分析程式 - Cppcheck<br />其實還有很多工具可以使用。<br />不過因為看見<a href="http://www.dotblogs.com.tw/larrynung/archive/2011/10/29/47866.aspx" target="_blank">一篇文章</a>[1]介紹，操作起來比SourceMonitor更加簡單好用，UI介面只要按一個鍵就開始分析了！哇呼！有沒有這麼簡單？！<br />但是其實兩個程式，不太一樣啦！<br /><ul><li>Cppcheck是分析編譯器無法做到的事。</li><li>SourceMonitor是分析程式碼複雜度之類的事。</li></ul><a name='more'></a><h2><span style="font-size: x-large;">Command執行</span></h2>所以，就使用它了！但是！<br />command，有夠多東西可以調整的啦！&gt;&lt;<br /><br />不過原則上，依照<a href="https://wiki.jenkins-ci.org/display/JENKINS/Cppcheck+Plugin" target="_blank">Jenkins-plugin的介紹</a>[2]來設定，就可以了！XDD<br />有夠懶的！<br />只差在我有指定目錄裡的 *.cpp *.h, <span style="color: red;">子目錄也是手動指定</span>！<br /><br />另外，因為我負責的code有點肥大，執行一次(含4x分鐘的編譯)需要一個小時。<br />所以，就希望它可以晚上再執行<br /><br />研究一下批次檔怎麼寫IF，又要怎麼寫關係運算子，又要怎麼抓時間的數字。<br /><br /><h2><span style="font-size: x-large;">如果現在的時間，大於21</span></h2><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">IF %time:~0,2% GTR 21 (做你想做的事)</span><br /><br /><h3><span style="font-size: large;">當下的時間變數</span></h3><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">%time</span><br /><br /><h3><span style="font-size: large;">取子字串, 0開頭, 2個字元[3]</span></h3><span style="background-color: black; color: white; font-family: Courier New, Courier, monospace;">“12:21:52”:~0,2%</span><br /><br /><h3><span style="font-size: large;">批次檔的關係運算子[4]</span></h3><ul><li>EQU -等於</li><li>NEQ -不等於</li><li>LSS -小於</li><li>LEQ -小於等於</li><li>GTR -大於</li><li>GEQ -大於等於</li></ul><h2><span style="font-size: x-large;">參考資料:  </span></h2>[1] <a href="http://www.dotblogs.com.tw/larrynung/archive/2011/10/29/47866.aspx" target="_blank">[C++]使用Cppcheck靜態分析工具輔助檢查C++程式潛在問題</a><br />[2] <a href="https://wiki.jenkins-ci.org/display/JENKINS/Cppcheck+Plugin" target="_blank">Cppcheck Plugin</a><br />[3] <a href="http://blog.miniasp.com/post/2009/11/03/How-to-get-system-date-time-in-batch-file-part-III.aspx" target="_blank">如何在 Batch 檔取得系統的日期、時間欄位 (第三版)</a><br />[4] <a href="http://nobrain-place.blogspot.tw/2009/04/3.html" target="_blank">動手做批次檔3</a></p>
+    <h1 id="終於公開！！論文《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》"><a class="header-anchor" href="#終於公開！！論文《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》">¶</a>終於公開！！論文《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/08/blog-post.html">https://darkblack01.blogspot.com/2015/08/blog-post.html</a><br>
+移植時的最後更新日期: 2015-09-11T09:34:22.301+08:00</p>
+<p>公開了！五年後，終於~~<br /><br /><a href="http://ethesys.nkfust.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0728110-002548" target="_blank"> 《應用於液晶電視中動態背光調光技術之演算法與系統整合實現》 </a><br /><br />這是，電視機背光模組切割成一塊一塊之後，再分別做調光的題目。<br />術語來說，叫Local Dimming Backlight Module for LED TV<br /><br />先透過軟體驗證演法是否效果不錯。<br />再將演算法寫成硬體(FPGA)做硬體的快速雛形驗證…的一段故事。<br /><br />畢業前，不會調液晶訊號，畢業後會調了，卻沒機會再繼續做這題目了。<br /><br /><h2><span style="font-size: x-large;">軟體模擬</span></h2>各式演算法軟體模擬。<br />擬真最後呈現的樣子，模擬的目如下:<br /><br /><ul><li>包含LED光型</li><li>LED pitch</li><li>film材模擬</li><li>液晶顯示影像 (最終顯示效果)</li></ul><br /><br /><h2><span style="font-size: x-large;">硬體實作</span></h2>直接實作在40吋的液晶電視。<br />實作的演算法有三種做對照。<br /><h2><span style="font-size: x-large;">口試</span></h2>兩台電視，一台是買來的，一台是演算法實現機，做對照。<br /><br /></p>
 
     
     </section>
@@ -164,11 +164,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Jenkins/">Jenkins</a> }
+  { <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/">研究所的日子</a> }
   </li>
 
 

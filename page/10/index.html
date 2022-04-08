@@ -134,22 +134,69 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-02-find-duplication-app/">https://dwatow.github.io/2018/05-02-find-duplication-app/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-01-relayout-google-translate/">https://dwatow.github.io/2018/05-01-relayout-google-translate/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>找找是否有重複安裝的 app</h1>
+        <h1>想讓 Google 翻譯的畫面直排</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%BE%E6%89%BE%E6%98%AF%E5%90%A6%E6%9C%89%E9%87%8D%E8%A4%87%E5%AE%89%E8%A3%9D%E7%9A%84-app"><span class="toc-text">找找是否有重複安裝的 app</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%83%B3%E8%AE%93-Google-%E7%BF%BB%E8%AD%AF%E7%9A%84%E7%95%AB%E9%9D%A2%E7%9B%B4%E6%8E%92"><span class="toc-text">想讓 Google 翻譯的畫面直排</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E6%95%99%E6%80%8E%E9%BA%BC%E6%94%B9"><span class="toc-text">先教怎麼改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%86%E8%A7%A3%E9%87%8B%E4%B8%80%E4%B8%8B%E5%8E%9F%E7%90%86%E5%90%A7%EF%BC%81"><span class="toc-text">來解釋一下原理吧！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-src-c-%E5%92%8C-gt-res-c"><span class="toc-text">gt-src-c 和 gt-res-c</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gt-c"><span class="toc-text">gt-c</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="找找是否有重複安裝的-app"><a class="header-anchor" href="#找找是否有重複安裝的-app">¶</a>找找是否有重複安裝的 app</h1>
-<p>此文適合 unix like 的環境</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">which -a ruby</span><br></pre></td></tr></table></figure>
+    <h1 id="想讓-Google-翻譯的畫面直排"><a class="header-anchor" href="#想讓-Google-翻譯的畫面直排">¶</a>想讓 Google 翻譯的畫面直排</h1>
+<p>有時候，我們想要邊逛一些英文網站，一邊使用 Google 翻譯。<br>
+但是當螢幕排成橫自併排時，Google 卻不能理想的將原文與翻譯結果放在上下做對照，原本預設的排版是橫排。</p>
+<p>這個我試了很久，終於讓我找到一個最小修改的方法</p>
+<p>今天就讓我們來解析 Google 翻譯的排版，並且以最小改動的方式將排版改成直排吧！</p>
+<h2 id="先教怎麼改"><a class="header-anchor" href="#先教怎麼改">¶</a>先教怎麼改</h2>
+<ol>
+<li>
+<p>找 <code>gt-src-c</code> 和 <code>gt-res-c</code> ，位置大概是在這。</p>
+<p><img src="https://i.imgur.com/7QpRi7n.png" alt=""></p>
+<p>它有一個屬性 <code>width: 50%;</code></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#gt-src-c</span>, <span class="selector-id">#gt-res-c</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改成 <code>width: 100%</code></p>
+</li>
+<li>
+<p>找 <code>gt-c</code> ，位置大概是在這。</p>
+<p><img src="https://i.imgur.com/18byang.png" alt=""></p>
+<p>它有一個屬性 <code>min-width: 765px</code></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#gt-c</span> &#123;</span><br><span class="line">    <span class="attribute">min-width</span>: <span class="number">765px</span>;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">100%</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>將 <code>min-width: 765px</code> 取消。</p>
+</li>
+<li>
+<p>改好了<br>
+畫面就可以併排，而且可以像這樣使用<br>
+<img src="https://i.imgur.com/JgRwYBM.png" alt=""></p>
+</li>
+</ol>
+<h2 id="來解釋一下原理吧！"><a class="header-anchor" href="#來解釋一下原理吧！">¶</a>來解釋一下原理吧！</h2>
+<h3 id="gt-src-c-和-gt-res-c"><a class="header-anchor" href="#gt-src-c-和-gt-res-c">¶</a><code>gt-src-c</code> 和 <code>gt-res-c</code></h3>
+<p>這兩個元素的排版，主要是靠 <code>float</code> 一左一右</p>
+<ol>
+<li>
+<p><code>float</code> 是為了處理元素「內容可以並排」(或文繞圖)，使 <code>block</code> 重疊的情況。在此並沒有看見，因為同層的元素都是 <code>float</code> 。改變可橫排元素寬度，即可決定元素要橫排還是直排(橫排會斷行)，所以在此只要將寬度改成 <code>100%</code></p>
+</li>
+<li>
+<p>而同層的元素 <code>gt-promo-lr</code> ，出現 <code>display: inline-block</code> 與 <code>float</code> 共用的情況。<br>
+<img src="https://i.imgur.com/Zxu9cbq.png" alt=""></p>
+</li>
+</ol>
+<p>我個人覺得，這樣不是很好，因為 <code>inline-block</code> 是一種允許 <code>block</code> 之間排列用 <code>inline</code> 排版方式，算是排橫的語法重複使用。</p>
+<ol start="3">
+<li><code>float</code> 和 <code>clear</code> 搭配使用，在這並沒有看見，不過倒是在 <code>gt-text-top</code> 看見了「定訂最小高度」。</li>
+</ol>
+<p><img src="https://i.imgur.com/RCr2QCX.png" alt=""></p>
+<p>我個人也覺得這樣並不是很好，因為內容排版方式改變，其實容器就無法容納內容元素，即使使用了 <code>min-height</code> 也一樣。</p>
+<p>改成直排之後，其實 <code>gt-text-top</code> 變這樣</p>
+<p><img src="https://i.imgur.com/IeQbtd6.png" alt="" width="300"></p>
+<p>原因是元素都受 <code>float</code> 影響，早就不在 <code>block</code> 佔任何面積，所以其實 <code>gt-text-top</code> 裡早就不存在任何佔有面積的元素內容了。</p>
+<h2 id="gt-c"><a class="header-anchor" href="#gt-c">¶</a><code>gt-c</code></h2>
+<p>在此視它是一個容器，內容物的大小，大多使用百分比決定。並且在容器設定了一個 <code>min-width: 765px</code> ，找不到為什麼使用 <code>765px</code> ，但是在此 Google 要限制最小寬度，當 <code>viewport</code> 再變小，就開始出現捲軸，所以要將這個縮小的限制打破，讓它可以在縮小視窗時，還是可以顯示所有內容。</p>
 
     
     </section>
@@ -163,11 +210,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/shell/">shell</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/which/">which</a> }
+  { <a href="/tags/CSS/">CSS</a> }
   </li>
 
 

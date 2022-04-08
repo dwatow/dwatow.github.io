@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/6355411168359179107/">https://dwatow.github.io/2018/05-13-blogger/6355411168359179107/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/139440664180396965/">https://dwatow.github.io/2018/05-13-blogger/139440664180396965/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>爛 code 收集器//炫砲無用的多層架構</h1>
+        <h1>爛 code 收集器//用全域的 function 初始化</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E7%82%AB%E7%A0%B2%E7%84%A1%E7%94%A8%E7%9A%84%E5%A4%9A%E5%B1%A4%E6%9E%B6%E6%A7%8B"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;炫砲無用的多層架構</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E7%94%A8%E5%85%A8%E5%9F%9F%E7%9A%84-function-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;用全域的 function 初始化</span></a></li></ol>
   </div>
 
 
-    <h1 id="爛-code-收集器-炫砲無用的多層架構"><a class="header-anchor" href="#爛-code-收集器-炫砲無用的多層架構">¶</a>爛 code 收集器//炫砲無用的多層架構</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code_87.html">https://darkblack02.blogspot.com/2018/05/code_87.html</a><br>
-移植時的最後更新日期: 2020-02-28T10:41:21.482+08:00</p>
-<p>例如三層A, B, C   <br /><br /><pre class="prettyprint"><code class="language-cpp"><br />class A&#123;<br />public:<br />     B m_b;<br />&#125;;<br /><br />class B&#123;<br />public:<br />     C m_b;<br />&#125;;<br /><br />class C&#123;<br />&#125;;<br /></code></pre><br />結果，在真實世界的程式碼這樣使用<br /><br />把東西宣告在中間這一層的class裡面，然後在第一層宣告出來，<br />再把它當作B作的參數丟進去。(它不是本來就是B是裡面的東西嗎？)，<br />延伸到第三層還這樣操作！？(那不如全域就好了呀)  <br /><br /><pre class="prettyprint"><code class="language-cpp"><br />class A&#123;<br />     B m_b; <br />public:<br />     void DoSomething()<br />     &#123;<br />          B::One one;<br />          B::Two two;<br />         //other code…<br />          m_b.DoSomething(one, two);<br />         //other code…<br />     &#125;<br />&#125;;<br /><br />class B&#123;<br />     C m_c;<br />     struct One&#123;&#125;;<br />     struct Two&#123;&#125;;<br />public:<br />     void DoSomething(B::One one, B::Two two)<br />     &#123;<br />         //other code…<br />         m_c.DoSomething(one, two, /<em>other para</em>/);<br />         //other code…<br />     &#125;<br />&#125;;<br /><br />class C&#123;<br />public:<br />     void DoSomething(B::One one, B::Two two, /<em>other parameter</em>/)<br />     &#123;<br />         //other code…<br />     &#125;<br />&#125;;<br /></code></pre><br />無言的聲音：<br />『封裝』可以吃吧？</p>
+    <h1 id="爛-code-收集器-用全域的-function-初始化"><a class="header-anchor" href="#爛-code-收集器-用全域的-function-初始化">¶</a>爛 code 收集器//用全域的 function 初始化</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code-function.html">https://darkblack02.blogspot.com/2018/05/code-function.html</a><br>
+移植時的最後更新日期: 2020-02-28T10:41:21.290+08:00</p>
+<p>這個程式碼，為了初始化 FuBase 這個物件。<br />特別宣告 FuBaseInitailize 的 function 來初始化 FuBase。<br />還知道物件的初始化要寫在建構式，但是卻不會呼叫子物件的建構式嗎？<br /><br />在建構子中初始化member value時，使用了一個函數的回傳值。<br /><pre class="prettyprint"><code class="language-cpp"><br />B* InitialB()<br />&#123;<br />    B* rtn;  //還用這種命名，自以為帥氣的縮寫<br />    //…做了很多無關這個地方的事。<br />    rtn= new B();<br />    return rtn;<br />&#125;<br /><br />Class A<br />&#123;<br />    B *m_pB;<br />public:<br /><br />    A():m_pB(InitialB())&#123;<br />        //…<br />    &#125;<br />&#125;<br /><br /></code></pre><br />無言的聲音：<br />建構子的機制被冷落了。 建構子不用另外買！請多加利用。</p>
 
     
     </section>

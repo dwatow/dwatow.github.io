@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2012/08-13-blogger/6320459232797585673/">https://dwatow.github.io/2012/08-13-blogger/6320459232797585673/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2012/08-13-blogger/6400527286064225513/">https://dwatow.github.io/2012/08-13-blogger/6400527286064225513/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>抓現在目錄之GetModuleFileName()&amp;GetCurrentDirectory()</h1>
+        <h1>CFileDialog的m_ofn緩充區設定</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%93%E7%8F%BE%E5%9C%A8%E7%9B%AE%E9%8C%84%E4%B9%8BGetModuleFileName-GetCurrentDirectory"><span class="toc-text">抓現在目錄之GetModuleFileName()&amp;GetCurrentDirectory()</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CFileDialog%E7%9A%84m-ofn%E7%B7%A9%E5%85%85%E5%8D%80%E8%A8%AD%E5%AE%9A"><span class="toc-text">CFileDialog的m_ofn緩充區設定</span></a></li></ol>
   </div>
 
 
-    <h1 id="抓現在目錄之GetModuleFileName-GetCurrentDirectory"><a class="header-anchor" href="#抓現在目錄之GetModuleFileName-GetCurrentDirectory">¶</a>抓現在目錄之GetModuleFileName()&amp;GetCurrentDirectory()</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/08/getmodulefilename.html">https://darkblack01.blogspot.com/2012/08/getmodulefilename.html</a><br>
-移植時的最後更新日期: 2012-09-24T18:36:43.950+08:00</p>
-<p>執行檔在 D:\Software\App1\SelXls\Debug\SelXls.exe<br /><br />抓執行檔所在目錄+檔名.exe（因為是執行檔）<br /><span class="Apple-tab-span" style="white-space: pre;"> </span>GetModuleFileName(NULL, strFilePath.GetBuffer(MAX_PATH+1), MAX_PATH);  <span style="color: #999999;">//抓應用程式所在的目錄+檔名+副檔名</span><br /><span class="Apple-tab-span" style="white-space: pre;"> </span>strFilePath.ReleaseBuffer();   <span style="color: #cc0000;">//要加這一行，才可以處理該字串</span><br /><span style="color: #6fa8dc;">//      strFilePath = D:\Software\App1\SelXls\Debug\SelXls.exe</span><br />        strFilePath = strFilePath.Left(strFilePath.ReverseFind(’\’));    <span style="color: #6fa8dc;">//</span><span style="color: #6fa8dc;">= <b>D:\Software\App1\SelXls\Debug</b></span><br /><div><br /></div><div>抓目前所在目錄（會依開啓舊檔而改變）</div><div><div><span class="Apple-tab-span" style="white-space: pre;"> </span>GetCurrentDirectory(MAX_PATH, strFilePath.GetBuffer(0));  //抓目前所在的目錄（路徑）</div><div><span style="color: #6fa8dc;">                                                  //</span><span style="color: #6fa8dc;"> </span><span style="color: #6fa8dc;">     strFilePath =</span><span style="color: #6fa8dc;"> </span><span style="color: #6fa8dc;"><b>D:\Software\App1\SelXls\Debug</b></span></div></div><div><br /></div><br /></p>
+    <h1 id="CFileDialog的m-ofn緩充區設定"><a class="header-anchor" href="#CFileDialog的m-ofn緩充區設定">¶</a>CFileDialog的m_ofn緩充區設定</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/08/cfiledialogmofn.html">https://darkblack01.blogspot.com/2012/08/cfiledialogmofn.html</a><br>
+移植時的最後更新日期: 2012-08-13T13:30:17.773+08:00</p>
+<p><br />MFC的Class，不好用是用過都不喜歡的！就是有很多小地方要注意。<br />MFC的Class，好用是用過都難以忘記的！就是有很多架構都弄得好好的。<br />可以說是半成品，所以我就想把所有用過的Class的注意小細節，再包一層Class起來！（算是一個大計劃吧！也許有人做過了！）<br /><br />這一次是CFileDialog（之前對它的<a href="http://darkblack01.blogspot.tw/2012/05/cfiledialog.html" target="_blank">了解</a>，就只是認識這個函數，其它都沒有記錄下來）<br /><br />    <span style="color: #3d85c6;">CFileDlg aFileDialog (TRUE, NULL, NULL, OFN_ALLOWMULTISELECT, m_strFilter); </span><br /><br />在這樣使用時，總是會有緩充區的問題。<br />這一次設定了好久，終於弄好了！想說這個code以後要保留下來，所以要把它再包一層下來。<br /><br /><a name='more'></a><br /><br /><span style="font-size: large;"><b>Sample Code</b></span><br />void CSelExcelDlg::OnButtonFindfile()<br />{<br />    <span style="color: #999999;">// TODO: Add your control notification handler code here</span><br />    CString m_strFilter(“OrigMsrData Files (<em>.omd)|</em>.omd|Text File(<em>.txt)|</em>.txt|All Files (<em>.</em>)|<em>.</em> ||”);<span style="color: #999999;">//檔案過濾條件</span><br />    CFileDlg aFileDialog (TRUE, NULL, NULL, <span style="color: #cc0000;">OFN_ALLOWMULTISELECT</span>, m_strFilter);<br /><br />    aFileDialog.<span style="color: #cc0000;">SetMultiFileNameBuffer</span>(100);<br /><br />    int nID = aFileDialog.DoModal();<br />    if (nID == IDOK)<br />    {<br />        HDFileCouont = aFileDialog.GetSelFileList(m_lstSelFileList);       <br />    }<br /><br />    if(CommDlgExtendedError() == FNERR_BUFFERTOOSMALL)  <span style="color: #3d85c6;">//FNERR_BUFFERTOOSMALL要#include “cderr.h”</span><br />        AfxMessageBox( “Sel Excel Dialog緩衝區不夠大\n剪下畫面，並且找程式設計師解決這問題。”);<br /><br />}<br /><br /><b><span style="font-size: large;">CFileDlg .h</span></b><br />class CFileDlg : public CFileDialog<br />{<br /><span style="color: #3d85c6;">//在Class裡設定一個CString當作Buffer是避免兩種情況</span><br /><span style="color: #3d85c6;"><a target="_blank" rel="noopener" href="//xn--CFileDlg-zu1nm3upjnyz8i.SetMutiFileNameBuffer">//若宣告在CFileDlg.SetMutiFileNameBuffer</a>()裡，則設定完Buffer之後，這個字串空間就消失了。會造成緩充區不足或沒有緩充區的問題。</span><br /><span style="color: #3d85c6;">//若宣告在在Sample Code裡則就沒有OO的架構，否則，原本找到的Code（MSDN的Code）是放在 Sample Code 的。</span><br />    CString szFileNameBuffer;<br /><br />public:<br />    void <span style="color: #cc0000;">SetMultiFileNameBuffer</span>(const int);<br />};<br /><br /><b><span style="font-size: large;">CFileDlg.cpp</span></b><br />void CFileDlg::<span style="color: #cc0000;">SetMultiFileNameBuffer</span>(const int FileMaxBuffer)<br />{<br />    const int BufferSize = (FileMaxBuffer * (MAX_PATH + 1)) + 1;<br />    m_ofn.nMaxFile = BufferSize;<br />    m_ofn.lpstrFile = szFileNameBuffer.GetBuffer(BufferSize);<br />    m_ofn.lpstrFile[0] = NULL;<br />}<br /><br /></p>
 
     
     </section>
