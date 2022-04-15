@@ -1,5 +1,5 @@
 ---
-title: 神器ngrok
+title: 初探 ngrok 神器
 date: 2017-06-16 18:37:29
 tags:
 - ngork
@@ -18,7 +18,7 @@ categories:
 用 hoem brew 安裝，可以將執行檔當作全域指令使用。
 
 ```shell
-brew cask install ngrok
+brew install --cask ngrok
 ```
 
 安裝完成
