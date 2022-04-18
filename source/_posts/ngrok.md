@@ -75,3 +75,12 @@ ngrok 在做的事情是，他們在自己的公司裡有買一個域名(`ngrok.
 ```shell
 $ python3 -m http.server  
 ```
+
+## 替代方案 
+
+在 github 上發現有許多 ngrok 的替代方案^[[awesome-tunneling](https://github.com/anderspitman/awesome-tunneling)] 其中也有放在 npm 上面的專案，可以直接下指定啟動，在此舉其中一個例子
+
+```shell
+npx localtunnel --port 8000
+```
+
