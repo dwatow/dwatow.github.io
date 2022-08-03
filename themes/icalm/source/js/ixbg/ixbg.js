@@ -118,7 +118,7 @@
       ctx.beginPath();
       // ctx.strokeStyle = "rgb(255,255,255)";
 
-      if (!navigator.userAgent.indexOf('Mozilla')) {
+      if (!navigator.userAgent.includes('Mozilla')) {
         // firefox 會變慢
         ctx.filter = `blur(${Math.abs(dust.radius / 5 - 3)}px)`;
       }
