@@ -43,7 +43,7 @@
 
   //initial position in canvas
   const totalDusts = screen.height / 50; // for RWD
-  console.log(totalDusts);
+  // console.log(totalDusts);
 
   function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -117,7 +117,11 @@
 
       ctx.beginPath();
       // ctx.strokeStyle = "rgb(255,255,255)";
-      ctx.filter = `blur(${Math.abs(dust.radius / 5 - 3)}px)`;
+
+      if (!navigator.userAgent.indexOf('Mozilla')) {
+        // firefox 會變慢
+        ctx.filter = `blur(${Math.abs(dust.radius / 5 - 3)}px)`;
+      }
       ctx.arc(dust.x, dust.y, dust.radius, 0, 2 * Math.PI);
       ctx.lineWidth = Math.abs(dust.radius / 5 - 4);
       ctx.fillStyle = "lightgray";
@@ -125,11 +129,13 @@
       ctx.stroke();
     });
     requestAnimationFrame(() => {
-      setTimeout(update, 0);
+      update();
       draw();
-    });
-  }
+    }); 
+  } 
 
+  // setTimeout(() => {
+  // }, 30);
   update()
   draw();
 })();
