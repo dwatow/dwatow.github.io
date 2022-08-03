@@ -43,7 +43,7 @@
 
   //initial position in canvas
   const totalDusts = screen.height / 50; // for RWD
-  // console.log(totalDusts);
+  console.log(totalDusts);
 
   function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -125,11 +125,11 @@
       ctx.stroke();
     });
     requestAnimationFrame(() => {
-      setTimeout(update, 1);
+      setTimeout(update, 0);
       draw();
     });
   }
-  // setTimeout(update, 100);
-  setTimeout(update, 1);
+
+  update()
   draw();
 })();
