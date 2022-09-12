@@ -255,7 +255,7 @@ When `Boolean` is called with argument value, the following steps are taken:
 
 ## 2.3 What is [[This]]
 
-有時候也看見這種 ***[[Notion]]*** 的用法，像是「把 *proto* 表示成 *obj.[[Prototype]]*」。這個符號利用解讀上下文，能夠技術性地表示成幾種不同的意思，但是你要花很長的時間了解，符號代表一些無法透過觀察 JavaScript 程式了解的內部特性。
+有時候也看見這種 ***[[Notation]]]*** 的用法，像是「把 *proto* 表示成 *obj.[[Prototype]]*」。這個符號利用解讀上下文，能夠技術性地表示成幾種不同的意思，但是你要花很長的時間了解，符號代表一些無法透過觀察 JavaScript 程式了解的內部特性。
 
 精準的表示的話，這符號代表三種意義，我將會舉規範中的範例說明。
 
@@ -296,7 +296,7 @@ ECMAScript spec 使用術語 **Record** 表示有固定的 key 組合成的 key-
 > 譯註: JS 物件的內部插槽(開口)
 > 譯註: 「插槽」翻成「開口」也滿合乎意思的
 > 譯註: 物件方法
-> 譯註: 像是 private 的 object property. ex: `O.[[Notion]]`
+> 譯註: 像是 private 的 object property. ex: `O.[[Notation]]`
 
 JavaScript Objects 還有規定所謂的 internal slots (內部開口) 用來保存資料。和 Record fields 一樣，internal slots 也不能透過觀察 JavaScript 來發現它們，但是也許會從某些專用工具中曝露出來，像是 Google Chrome's DevTools。因此 [[Notation]] 也是 internal slots 的意思。
 
