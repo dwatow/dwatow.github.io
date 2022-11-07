@@ -134,50 +134,211 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2021/08-22-manual-swap-memory/">https://dwatow.github.io/2021/08-22-manual-swap-memory/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2021/09-05-bike/three-phase-generation/">https://dwatow.github.io/2021/09-05-bike/three-phase-generation/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Ubuntu 手動加上 swap</h1>
+        <h1>野狼三相發電，電路接線圖</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ubuntu-%E6%89%8B%E5%8B%95%E5%8A%A0%E4%B8%8A-swap"><span class="toc-text">Ubuntu 手動加上 swap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8B%95%E6%A9%9F"><span class="toc-text">動機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A8%98%E6%86%B6%E9%AB%94"><span class="toc-text">查看記憶體</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A"><span class="toc-text">設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%96%8B%E6%A9%9F%E5%95%9F%E7%94%A8"><span class="toc-text">開機啟用</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8E%E7%8B%BC%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB%EF%BC%8C%E9%9B%BB%E8%B7%AF%E6%8E%A5%E7%B7%9A%E5%9C%96"><span class="toc-text">野狼三相發電，電路接線圖</span></a></li></ol>
   </div>
 
 
-    <h1 id="Ubuntu-手動加上-swap"><a class="header-anchor" href="#Ubuntu-手動加上-swap">¶</a>Ubuntu 手動加上 swap</h1>
-<p>在雲端主機要加上 swap，webpack 執行編譯才不會當機</p>
-<h2 id="動機"><a class="header-anchor" href="#動機">¶</a>動機</h2>
-<p>前端佈署在伺服器上，要在伺服器上編譯</p>
-<p>雲端主機沒有 swap 會在 webpack 編譯時，出現記憶體不足，造成當機的問題。<br>
-所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。</p>
-<h2 id="查看記憶體"><a class="header-anchor" href="#查看記憶體">¶</a>查看記憶體</h2>
-<p>通常 Swap 會設置為實體記憶體的兩倍<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，所以要先看一下目前記憶體有多大。<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:        3999756      328648     3139664       43328      531444     3502496</span><br><span class="line">Swap:        102396           0      102396</span><br></pre></td></tr></table></figure>
-<p>total 3999756 就是總共使用幾 K。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           3906         310        3076          42         519        3430</span><br><span class="line">Swap:            99           0          99</span><br></pre></td></tr></table></figure>
-<p>可以改用 mega 為單位，</p>
-<h2 id="設定"><a class="header-anchor" href="#設定">¶</a>設定</h2>
-<p>設定 swap<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo fallocate -l 1G /swapfile</span><br><span class="line">sudo chmod 600 /swapfile</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
-<h2 id="開機啟用"><a class="header-anchor" href="#開機啟用">¶</a>開機啟用</h2>
-<p>開機掛載 swap</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
-<p>開啟檔案，到最後加入此行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#</span><span class="bash"> 開機掛載 swap</span></span><br><span class="line">/swapfile   none swap    sw 0 0</span><br></pre></td></tr></table></figure>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.gtwang.org/tips/how-big-should-your-page-file-or-swap/">系統的分頁檔（Page File）或交換空間（Swap Partition）應該設定為多大比較好？</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.longwin.com.tw/2013/05/linux-ram-memory-info-2013/">查看 Linux 的記憶體多大</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.astralweb.com.tw/how-to-manually-add-swap-to-ubuntu/">Ubuntu如何手動新增虛擬記憶體(swap)</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
+    <h1 id="野狼三相發電，電路接線圖"><a class="header-anchor" href="#野狼三相發電，電路接線圖">¶</a>野狼三相發電，電路接線圖</h1>
+<blockquote>
+<p>同步發到<a target="_blank" rel="noopener" href="https://forum.jorsindo.com/thread-2560404-1-1.html">小老婆</a></p>
+</blockquote>
+<p>野狼改三相發電，已經是 2016 年的事了。那時有發在自己的部落格上 <a href="/2016/07-23-blogger/4939845918620747661/">野狼~使用十萬伏特~不！是「三相發電」</a><br>
+簡單的說，當時是找網拍的賣家幫我改的，剛好是一位在台南的車友。<br>
+不過後來似乎就沒有看他在賣這一個項目了，很可惜。</p>
+<p>2017 年 2 月轉職，給自己一年的時間進行學習。正好 2017 年 10 月有車友問我三相電路怎麼改的，那一陣子我剛好忙著學習新的吃飯技術，無暇弄車子，所以當時並沒有認真的回覆車友，這件事一直放在我心中很不好意思，因為畢竟自己花時間在網路上找的資源都是來自熱心車友的資訊。為了轉職成功，我改變了我對待車子的習慣，從自己換機油到找車行幫我換 (省下的時間可以學習新工作技術) ，後來也習慣有問題找車行處理了。</p>
+<p>五年之後，今天正好又把野狼的油箱拆下來，也重新整理了電系，順便把當初被問到的問題「三相發電的線是怎麼接的」給好好的畫下來。</p>
+<p>為了整篇的完整性，還是在這裡節錄一下我自己部落格文章的重點，以及補上電路接線圖</p>
+<p>補充一點: 我的野狼是 2004 年第一代的野狼傳奇 R ，是化油狼</p>
+<p>換上去的零件</p>
+<ol>
+<li>使用 B3U 的發電磁盤，我的車是使用的是 S07，所以要改 B38料號: 31110-B38-000</li>
+<li>三相發電線圈，淘寶的 GY 車系 12 極線圈 (無圖，故略)</li>
+<li>整流器，改三相整流器 (應該是任一即可)</li>
+<li>點火訊號產生器 (因為我沒有改直流點火，所以當時就把 CDI 外掛了一顆這個東西)</li>
 </ol>
-</section>
+<p>規格</p>
+<ul>
+<li>Input: (AC/DC) 6~12v, 200~450mA</li>
+<li>Output: (DC) 80v~220v</li>
+</ul>
+<p>安裝</p>
+<ul>
+<li>黑線-電門</li>
+<li>紅黑線-CDI</li>
+<li>綠線-GND(目前接電瓶的負極)</li>
+</ul>
+<p>電路接線圖<br>
+給想改三相的化油狼</p>
+<p><img src="https://i.imgur.com/jE2J5h5.png" alt=""></p>
+<p>附上線的解釋</p>
+<table>
+<thead>
+<tr>
+<th>顏色</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>紅色</td>
+<td>電池正極至電門鎖開關前</td>
+</tr>
+<tr>
+<td>黑色</td>
+<td>電門鎖至整車電源正極</td>
+</tr>
+<tr>
+<td>黃色</td>
+<td>發電機燈光，充電電源輸出</td>
+</tr>
+<tr>
+<td>粉紅色</td>
+<td>發動機電源輸出</td>
+</tr>
+<tr>
+<td>黑/紅色</td>
+<td>點火線圈輸出</td>
+</tr>
+<tr>
+<td>黑/黃色</td>
+<td>高壓包正極線（點火器輸出引線）</td>
+</tr>
+<tr>
+<td>藍/白色</td>
+<td>觸發器引線</td>
+</tr>
+<tr>
+<td>綠/白色</td>
+<td></td>
+</tr>
+<tr>
+<td>黑/白色</td>
+<td>電門鎖熄火開關引線</td>
+</tr>
+<tr>
+<td>綠色</td>
+<td>電源負極和接地線</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://i.imgur.com/8ouAOVd.png" alt=""></p>
+<p>參考資料<br>
+電線顏色表，轉貼自<a target="_blank" rel="noopener" href="https://forum.jorsindo.com/thread-2188142-1-2.html#2">野狼電路圖 有看沒有懂…[新增問題]</a></p>
+<table>
+<thead>
+<tr>
+<th>顏色</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>紅色</td>
+<td>電池正極至電門鎖開關前</td>
+</tr>
+<tr>
+<td>粉紅色</td>
+<td>發動機電源輸出</td>
+</tr>
+<tr>
+<td>藍色</td>
+<td>前照燈遠光</td>
+</tr>
+<tr>
+<td>綠色</td>
+<td>電源負極和接地線</td>
+</tr>
+<tr>
+<td>黑色</td>
+<td>電門鎖至整車電源正極</td>
+</tr>
+<tr>
+<td>白色</td>
+<td>發電機充電輸出，前照燈近光</td>
+</tr>
+<tr>
+<td>黃色</td>
+<td>發電機燈光，充電電源輸出</td>
+</tr>
+<tr>
+<td>灰色</td>
+<td>閃光器至轉向開關</td>
+</tr>
+<tr>
+<td>橙色</td>
+<td>左前後轉向至轉向開關</td>
+</tr>
+<tr>
+<td>天藍色</td>
+<td>右前後轉向至轉向開關</td>
+</tr>
+<tr>
+<td>棕色</td>
+<td>行車燈.儀表燈</td>
+</tr>
+<tr>
+<td>棕/白色</td>
+<td>前行駛燈</td>
+</tr>
+<tr>
+<td>淺藍色</td>
+<td>喇叭至開關按鈕</td>
+</tr>
+<tr>
+<td>紅/白色</td>
+<td>經整流充電的發電機輸出引線</td>
+</tr>
+<tr>
+<td>黑/白色</td>
+<td>電門鎖熄火開關引線</td>
+</tr>
+<tr>
+<td>藍/白色</td>
+<td>觸發器引線</td>
+</tr>
+<tr>
+<td>黃/白色</td>
+<td>汽油指示表至浮子開關</td>
+</tr>
+<tr>
+<td>黑/紅色</td>
+<td>點火線圈輸出</td>
+</tr>
+<tr>
+<td>綠/紅色</td>
+<td>空擋燈至空擋開關</td>
+</tr>
+<tr>
+<td>黑/黃色</td>
+<td>高壓包正極線（點火器輸出引線）</td>
+</tr>
+<tr>
+<td>綠/黃色</td>
+<td>前後製動開關至剎車燈</td>
+</tr>
+<tr>
+<td>藍/黃色</td>
+<td>CDI觸發部分引線</td>
+</tr>
+<tr>
+<td>藍/紅色</td>
+<td>CDI觸發電源上端引線</td>
+</tr>
+<tr>
+<td>黃/紅色</td>
+<td>啟動繼電器正極引線</td>
+</tr>
+</tbody>
+</table>
 
     
     </section>
@@ -191,15 +352,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/linux/">linux</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/swap/">swap</a> }
+  { <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/">狼記事</a> }
   </li>
 
 
@@ -229,7 +382,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.78px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.22px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.52px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.52px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.52px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.26px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 40.44px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.85px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.26px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 21.56px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.52px;">Flex</a> <a href="/tags/Git/" style="font-size: 39.19px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.78px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.52px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31.63px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.3px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.56px;">KnR2</a> <a href="/tags/MFC-controls/" style="font-size: 15.26px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.52px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.26px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 19.04px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.52px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 34.15px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 39.19px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.26px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 24.07px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 44.22px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 19.04px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 24.07px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.52px;">animation</a> <a href="/tags/api/" style="font-size: 15.26px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.26px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.26px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.26px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 16.52px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.26px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.52px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 15.26px;">display</a> <a href="/tags/docker/" style="font-size: 16.52px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 17.78px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.26px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 19.04px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.26px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.26px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.89px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.26px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 25.33px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.59px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.26px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 19.04px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.26px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.26px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.59px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.52px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.26px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.26px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 25.33px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.81px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.52px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 26.59px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.26px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 42.96px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.26px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.52px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.52px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.52px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31.63px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 29.11px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.3px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.04px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 17.78px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 34.15px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31.63px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 19.04px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 42.96px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 25.33px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 22.81px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.78px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 41.7px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.52px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 36.67px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.81px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 34.15px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 36.67px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.74px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 29.11px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.3px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.96px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 24.07px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.26px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.89px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 30.37px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.48px;">社服社與我</a> <a href="/tags/%E7%AE%A1%E7%90%86%E7%9A%84%E6%8A%80%E8%A1%93/" style="font-size: 14px;">管理的技術</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 15.26px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.78px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.78px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 34.15px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.26px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 35.41px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.93px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 19.04px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 19.04px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.52px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.78px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.26px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 29.11px;">音響拆裝過程</a>
+    <a href="/tags/new-framework/" style="font-size: 17.78px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.22px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.52px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.52px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.52px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.26px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 40.44px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.85px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.26px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 21.56px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.52px;">Flex</a> <a href="/tags/Git/" style="font-size: 39.19px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.78px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.52px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31.63px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.3px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.56px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.26px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.52px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.26px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 19.04px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.52px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 34.15px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 39.19px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.26px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 24.07px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 44.22px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 19.04px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 24.07px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.52px;">animation</a> <a href="/tags/api/" style="font-size: 15.26px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.26px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.26px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.26px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.78px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.26px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.52px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/display/" style="font-size: 15.26px;">display</a> <a href="/tags/docker/" style="font-size: 16.52px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 14px;">express</a> <a href="/tags/facebook/" style="font-size: 17.78px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.26px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 19.04px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.26px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.26px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.89px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.26px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 25.33px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.59px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.26px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 19.04px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.26px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.26px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.59px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.52px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.26px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.26px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 25.33px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.81px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.52px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 26.59px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.26px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 42.96px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.26px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.52px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.52px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.52px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31.63px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 29.11px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.3px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.04px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 17.78px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 34.15px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31.63px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 19.04px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 42.96px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 25.33px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 22.81px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.78px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 41.7px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.52px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 36.67px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.81px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 34.15px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 36.67px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.74px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 29.11px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.3px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.96px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 24.07px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.26px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.89px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 30.37px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.48px;">社服社與我</a> <a href="/tags/%E7%AE%A1%E7%90%86%E7%9A%84%E6%8A%80%E8%A1%93/" style="font-size: 14px;">管理的技術</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 15.26px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.78px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.78px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 34.15px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.26px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 35.41px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.93px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 19.04px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 19.04px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.52px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.78px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.26px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 29.11px;">音響拆裝過程</a>
 
 
                 <footer>
