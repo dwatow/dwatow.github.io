@@ -72,6 +72,21 @@ input:invalid {
   color: red;
 }
 
+#my-book {
+  width: 25%;
+}
+
+#my-book img {
+  width: 80%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+#my-book .price {
+  display: block;
+}
+
 @media screen and (min-width: 720px) {
   .book {
     /* width: 25%; */
@@ -125,7 +140,7 @@ input:invalid {
         :cols="{default: 4, 720: 2}"
         :gutter="0"
       >
-        <onebook :data="onebook" v-for="onebook in showBooks" :key="onebook.isbn" @load="layoutMasonry"></onebook>
+        <onebook :data="onebook" v-for="onebook in [mybook, ...showBooks]" :key="onebook.isbn" @load="layoutMasonry"></onebook>
       </masonry>
     </div>
   </div>
@@ -194,7 +209,7 @@ var app = new Vue({
       }, new Map()).values()]
 
       this.books = only_one_list.map(book => {
-        console.log("book", book)
+        // console.log("book", book)
         const origin_price = parseInt((book.originPrice || book.sellPrice).split(",").join(""));
         const sell_price = parseInt(book.sellPrice.split(",").join(""));
 
@@ -208,9 +223,9 @@ var app = new Vue({
     })
   },
   methods: {
-    test(...e){
-      console.log(...e)
-    },
+    // test(...e){
+    //   console.log(...e)
+    // },
     debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -226,10 +241,10 @@ var app = new Vue({
       };
     },
     layoutMasonry () {
-      console.log("loading")
+      // console.log("loading")
       if (typeof this.$redrawVueMasonry === 'function') {
         setTimeout(() => {
-          console.log("this.$redrawVueMasonry()", this.$redrawVueMasonry)
+          // console.log("this.$redrawVueMasonry()", this.$redrawVueMasonry)
           this.$redrawVueMasonry("masonry-container");
         }, 20)
       }
@@ -246,8 +261,15 @@ var app = new Vue({
     }
   },
   computed: {
+    mybook () {
+      if (!this.books) return null;
+      if (this.books.length === 0) return null;
+      return this.books
+        .find(item => item.name === '從自學到成功轉職軟體工程師：自主學習讓我重拾人生的發球權（iT邦幫忙鐵人賽系列書）')
+    },
     showBooks () {
       return !this.books ? [] : this.books
+        .filter(item => item.name !== '從自學到成功轉職軟體工程師：自主學習讓我重拾人生的發球權（iT邦幫忙鐵人賽系列書）')
         .filter(item => item.discount <= this.filterDiscount)
         .filter(item => JSON.stringify(item).toLowerCase().includes(this.filterKeyword.toLowerCase())) // 關鍵字
         .slice(0, this.totalShowBooks);
