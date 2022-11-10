@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris" />
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶Proxy Pattern in JS ¶在 Design Pattern 上的實作  ¶做相同的事情 在操作屬性的讀取值時，想要做「相同」的事 在此，就先做「印出字串」 const target &#x3D; &amp;#123;  name: &amp;#x27;target&amp;#x27;,  message1: &quot;hello&quot;,  message2: &quot;everyone&quot;&amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proxy Pattern in JS">
+<meta property="og:url" content="https://dwatow.github.io/2022/11-10-pattern/proxy-in-js/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Proxy Pattern in JS ¶在 Design Pattern 上的實作  ¶做相同的事情 在操作屬性的讀取值時，想要做「相同」的事 在此，就先做「印出字串」 const target &#x3D; &amp;#123;  name: &amp;#x27;target&amp;#x27;,  message1: &quot;hello&quot;,  message2: &quot;everyone&quot;&amp;#1">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/NTSogsi.png">
+<meta property="article:published_time" content="2022-11-10T09:26:36.000Z">
+<meta property="article:modified_time" content="2022-11-10T09:47:04.061Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="proxy">
+<meta property="article:tag" content="design pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/NTSogsi.png">
+  <title>
+    Proxy Pattern in JS - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Proxy Pattern in JS</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Proxy-Pattern-in-JS"><span class="toc-text">Proxy Pattern in JS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-Design-Pattern-%E4%B8%8A%E7%9A%84%E5%AF%A6%E4%BD%9C"><span class="toc-text">在 Design Pattern 上的實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9A%E7%9B%B8%E5%90%8C%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-text">做相同的事情</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E5%9C%A8%E4%BB%A3%E7%90%86%E5%B1%A4%E5%AF%A6%E4%BD%9C-Method"><span class="toc-text">想要在代理層實作 Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E5%9C%A8%E4%BB%A3%E7%90%86%E5%B1%A4%E5%AF%A6%E4%BD%9C-Method-v2"><span class="toc-text">想要在代理層實作 Method!!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3%E8%A6%81%E5%B1%AC%E6%80%A7%E5%8F%88%E8%A6%81-Method-%E5%91%A2%EF%BC%9F"><span class="toc-text">那要屬性又要 Method 呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%85%E5%A2%83"><span class="toc-text">情境</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Proxy-Pattern-in-JS"><a class="header-anchor" href="#Proxy-Pattern-in-JS">¶</a>Proxy Pattern in JS</h1>
+<h2 id="在-Design-Pattern-上的實作"><a class="header-anchor" href="#在-Design-Pattern-上的實作">¶</a>在 Design Pattern 上的實作</h2>
+<p><img src="https://i.imgur.com/NTSogsi.png" alt=""></p>
+<h2 id="做相同的事情"><a class="header-anchor" href="#做相同的事情">¶</a>做相同的事情</h2>
+<p>在操作屬性的讀取值時，想要做「相同」的事</p>
+<p>在此，就先做「印出字串」</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">  message1: <span class="string">&quot;hello&quot;</span>,</span><br><span class="line">  message2: <span class="string">&quot;everyone&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> target[property];</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    target[property] = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyTarget = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.message1 = <span class="string">&#x27;Hi, Chris&#x27;</span>;</span><br><span class="line">proxyTarget.message1; <span class="comment">// &#x27;Hi, Chris&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>確實修改了物件 target</p>
+<h2 id="想要在代理層實作-Method"><a class="header-anchor" href="#想要在代理層實作-Method">¶</a>想要在代理層實作 Method</h2>
+<p>原本是這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">handler.openDoc();</span><br></pre></td></tr></table></figure>
+<p>但 handler 的 Method 用在 target 身上，像這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> messaget = handler.openDoc.call(target)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是，我想要這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.openDoc();</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>但是，不想要這樣製造</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">target.openDoc = handler.openDoc <span class="comment">// 不想這樣寫</span></span><br><span class="line"><span class="keyword">const</span> messaget = target.openDoc();</span><br></pre></td></tr></table></figure>
+<p>所以，用 proxy 來試看看</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`有人用了物件的 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>[property].call(target);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`有人用了物件的 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>[property].call(target, value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>使用的時候，可以成功的呼叫到 handle 的 method<br>
+而且指定的 this 也是 target</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc;</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 openDoc</span></span><br><span class="line"><span class="comment">// 打開文件 &#123;name: &#x27;target&#x27;&#125;</span></span><br><span class="line"><span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">proxy.saveDoc = <span class="number">123</span>;</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;&#125; 123</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是，我想要這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.openDoc();</span><br><span class="line">proxyTarget.saveDoc(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="想要在代理層實作-Method-v2"><a class="header-anchor" href="#想要在代理層實作-Method-v2">¶</a>想要在代理層實作 Method!!</h2>
+<p><s>不要用「代理實作屬性存取」來呼嚨！</s></p>
+<p>如果原本的函數是 <code>.saveDoc(123, 123)</code><br>
+多個參數的話，也不想要因為 Proxy 而受到限制。</p>
+<p>所以…</p>
+<p>先照著用看看？</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.saveDoc(<span class="number">123</span>, <span class="number">123</span>);</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;&#125; undefined undefined</span></span><br></pre></td></tr></table></figure>
+<div class="danger">
+<p>Uncaught TypeError: proxy.saveDoc is not a function at <code>&lt;anonymous&gt;</code>:1:7</p>
+</div>
+<p>所以？你觀察到了嗎？</p>
+<ul>
+<li>有跑到「儲存文件」</li>
+<li>噴錯「proxy.saveDoc is not a function」</li>
+</ul>
+<p>還有</p>
+<ul>
+<li>它是執行 Proxy 的 getter ！？</li>
+</ul>
+<p>再改一下實作</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`有人用了物件的 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>[property].call(target, ...value)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>跑起來！成功！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc();  <span class="comment">// 打開文件</span></span><br><span class="line">proxy.saveDoc(<span class="number">123</span>, <span class="number">5345</span>);  <span class="comment">// 儲存文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="那要屬性又要-Method-呢？"><a class="header-anchor" href="#那要屬性又要-Method-呢？">¶</a>那要屬性又要 Method 呢？</h2>
+<p>直接在實作中寫判斷！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">isLeader</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`有人用了物件的 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">if</span> (property <span class="keyword">in</span> target) &#123;</span><br><span class="line">      <span class="keyword">if</span> (target[property] <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> target[property](...value)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> target[property]; </span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>[property] <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> <span class="built_in">this</span>[property].call(target, ...value)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>[property]</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    target[property] = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>應該要可以實作出這樣的做法</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.orignalMethod()</span><br><span class="line">proxy.proxyMethod()</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc()</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 openDoc</span></span><br><span class="line"><span class="comment">// 打開文件 &#123;name: &#x27;target&#x27;, isLeader: ƒ&#125;</span></span><br><span class="line"><span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">proxy.name</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 name</span></span><br><span class="line"><span class="string">&#x27;target&#x27;</span></span><br><span class="line">proxy.name = <span class="string">&#x27;chris&#x27;</span></span><br><span class="line">用了 setter 將 name 賦值為 chris</span><br><span class="line"><span class="string">&#x27;chris&#x27;</span></span><br><span class="line">proxy.name</span><br><span class="line">有人用了物件的 getter 讀取 name</span><br><span class="line"><span class="string">&#x27;chris&#x27;</span></span><br><span class="line">proxy.isLeader()</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 isLeader</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line">proxy.saveDoc(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="comment">// 有人用了物件的 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;, isLeader: ƒ&#125; 1 2</span></span><br></pre></td></tr></table></figure>
+<h2 id="情境"><a class="header-anchor" href="#情境">¶</a>情境</h2>
+<p>就可以實作出，自動切換取得不同層的 method。<br>
+但是又不是繼承！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> res = axios.get(<span class="string">&#x27;domain.com/user&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyUser = <span class="keyword">new</span> <span class="built_in">Proxy</span>(res.data, UserHandle)</span><br><span class="line"></span><br><span class="line">proxyUser.isLeader() <span class="comment">// true ?? false</span></span><br><span class="line">proxyUser.name;</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2022-11-10T09:26:36.000Z" itemprop="datePublished">
+              2022-11-10
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/proxy/">proxy</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/design-pattern/">design pattern</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+    
+        <section id="list_related_posts">
+          <h2>同系列文章還有...</h2>
+          <p class="related-posts-none">No related post.</p>
+        </section>
+        <section>
+          <div id="gitalk-container"></div>
+        </section>
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '415f51e137fa564654af',
+        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
+        id: window.location.pathname,
+        repo: 'dwatow.github.io',
+        owner: 'dwatow',
+        admin: 'dwatow',
+        distractionFreeMode: 'true'
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</div>
+
+                <footer>
+    <div>© 2017 - 2022 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
