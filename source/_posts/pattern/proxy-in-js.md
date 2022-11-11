@@ -97,11 +97,11 @@ const handler = {
     console.log('儲存文件', this, value1, value2); //target
   },
   get(target, property, receiver) {
-    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    console.log(`用了 getter 讀取 ${property}`);
     return this[property].call(target);
   },
   set(target, property, value) {
-    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    console.log(`用了 setter 將 ${property} 賦值為 ${value}`);
     return this[property].call(target, value);
   }
 };
@@ -114,11 +114,11 @@ const proxy = new Proxy(target, handler);
 
 ```javascript
 proxy.openDoc;
-// 有人用了物件的 getter 讀取 openDoc
+// 用了 getter 讀取 openDoc
 // 打開文件 {name: 'target'}
 'open doc'
 proxy.saveDoc = 123;
-// 有人用了物件的 getter 讀取 saveDoc
+// 用了 getter 讀取 saveDoc
 // 儲存文件 {name: 'target'} 123
 ```
 
@@ -141,7 +141,7 @@ proxy.saveDoc = 123;
 
 ```javascript
 proxy.saveDoc(123, 123);
-// 有人用了物件的 getter 讀取 saveDoc
+// 用了 getter 讀取 saveDoc
 // 儲存文件 {name: 'target'} undefined undefined
 ```
 
@@ -174,7 +174,7 @@ const handler = {
     console.log('儲存文件', this, value1, value2); //target
   },
   get(target, property, receiver) {
-    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    console.log(`用了 getter 讀取 ${property}`);
     return (...value) => { 
         this[property].call(target, ...value)
     };
@@ -213,7 +213,7 @@ const handler = {
     console.log('儲存文件', this, value1, value2); //target
   },
   get(target, property, receiver) {
-    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    console.log(`用了 getter 讀取 ${property}`);
     if (property in target) {
       if (target[property] instanceof Function) {
         return (...value) => target[property](...value)
@@ -248,23 +248,23 @@ proxy.proxyMethod()
 
 ```javascript
 proxy.openDoc()
-// 有人用了物件的 getter 讀取 openDoc
+// 用了 getter 讀取 openDoc
 // 打開文件 {name: 'target', isLeader: ƒ}
 'open doc'
 proxy.name
-// 有人用了物件的 getter 讀取 name
+// 用了 getter 讀取 name
 'target'
 proxy.name = 'chris'
-用了 setter 將 name 賦值為 chris
+// 用了 setter 將 name 賦值為 chris
 'chris'
 proxy.name
-有人用了物件的 getter 讀取 name
+// 用了 getter 讀取 name
 'chris'
 proxy.isLeader()
-// 有人用了物件的 getter 讀取 isLeader
+// 用了 getter 讀取 isLeader
 true
 proxy.saveDoc(1,2)
-// 有人用了物件的 getter 讀取 saveDoc
+// 用了 getter 讀取 saveDoc
 // 儲存文件 {name: 'target', isLeader: ƒ} 1 2
 ```
 
@@ -301,7 +301,7 @@ const handler = {
     console.log('儲存檔案', this, value1, value2); //target
   },
   get(target, property, receiver) {
-    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    console.log(`用了 getter 讀取 ${property}`);
     if (property in this) {
       return this[property].bind(target); 
     } else {
