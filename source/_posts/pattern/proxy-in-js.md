@@ -268,6 +268,66 @@ proxy.saveDoc(1,2)
 // 儲存文件 {name: 'target', isLeader: ƒ} 1 2
 ```
 
+## 最後，和技術社群的伙伴們討論完的版本
+
+主要的更動在簡化了 get 的部份。因為不管是不是 function ，都是將 property 取出來回傳，是 method 就自然是 method 的執行，是 property 就自然只是存取值。
+
+並且利用了 `this[property].bind(target); ` 將 handler 與 target 同名 method 的問題也解決了。(以 `saveDoc` 為範例)
+
+1. 首先，同名會優先呼叫 handler 的 method。
+1. 如果想要呼叫 target 的 method 可以透過「handler 的 method 呼叫」
+
+
+
+```javascript
+const target = {
+  name: 'target',
+  isLeader() {
+    return true;
+  },
+  saveDoc(value1, value2) {
+    console.log('xxxx儲存檔案', this, value1, value2); //target
+  },
+};
+
+const handler = {
+  name: 'handler',
+  openDoc() {
+    console.log('打開檔案', this); //target
+    return 'open doc'
+  },
+  saveDoc(value1, value2) {
+    this.saveDoc(value1, value2);
+    console.log('儲存檔案', this, value1, value2); //target
+  },
+  get(target, property, receiver) {
+    console.log(`有人用了物件的 getter 讀取 ${property}`);
+    if (property in this) {
+      return this[property].bind(target); 
+    } else {
+      return target[property]
+    }
+  },
+  set(target, property, value) {
+    console.log(`用了 setter 將 ${property} 賦值為 ${value}`);
+    target[property] = value;
+  },
+};
+
+const proxy = new Proxy(target, handler);
+```
+
+### 快取代理？
+
+最後也有討論到快取的代理
+
+想要將變數存在 handler 裡，又可以實作快取代理的話，method 裡的 this 都指向 target 的怎辦？
+
+最後想到，只要實作在 handler 的 get/set 裡面就好了。
+
+1. this 是 handler ，屬性的儲存可以放在 handler 身上。
+2. 快取代理屬於一種共用的代理，所以放在這也合理。
+
 ## 情境
 
 就可以實作出，自動切換取得不同層的 method。
