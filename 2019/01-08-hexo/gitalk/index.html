@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://i.imgur.com/24Bepdi.png">
 <meta property="og:image" content="https://i.imgur.com/TvIAP6d.png">
 <meta property="article:published_time" content="2019-01-08T02:53:06.000Z">
-<meta property="article:modified_time" content="2020-06-08T02:46:46.302Z">
+<meta property="article:modified_time" content="2020-06-08T02:46:46.000Z">
 <meta property="article:author" content="Chris">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="gitalk">
@@ -50,7 +50,6 @@
     name="viewport"
     content="width=device-width,minimum-scale=1,initial-scale=1"
   />
-  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.core.min.js"></script> -->
   <script
     defer
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
@@ -209,7 +208,7 @@ Gitalk 的授權 token 要改成 access_token ，不使用 <code>clientID</code>
 <p><strong>themes/icalm/layout/post.ejs</strong></p>
 <p>找到 post 的渲染位置<br>
 加上渲染 comment 的引用。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">%-</span> <span class="attr">partial</span>(&#x27;<span class="attr">_partial</span>/<span class="attr">content-view</span>&#x27;, &#123; <span class="attr">post:</span> <span class="attr">page</span>, <span class="attr">isPage:</span> <span class="attr">false</span>&#125;) %&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">%-</span> <span class="attr">partial</span>(&#x27;<span class="attr">_partial</span>/<span class="attr">comment</span>&#x27;) %&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  &lt;%- partial(&#x27;_partial/content-view&#x27;, &#123; post: page, isPage: false&#125;) %&gt;</span><br><span class="line">  &lt;%- partial(&#x27;_partial/comment&#x27;) %&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>themes/icalm/layout/_partial/comment.ejs</strong></p>
 <p>可以發現我的 cdn 掛在這個位置，並不是所有頁面的 <code>head</code></p>
 <p>這一段初始化最後會渲染在 <code>#gitalk-container</code> 的位置</p>
@@ -222,7 +221,7 @@ Gitalk 的授權 token 要改成 access_token ，不使用 <code>clientID</code>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://unpkg.com/gitalk/dist/gitalk.css&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- &lt;script src=&quot;https://geektutu.github.io/hexo-theme-geektutu/js/gitalk.min.js&quot;&gt;&lt;/script&gt; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 臨時解決方案 --&gt;</span> <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://unpkg.com/gitalk/dist/gitalk.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> gitalk = <span class="keyword">new</span> Gitalk(&#123;</span></span><br><span class="line"><span class="javascript">        accessToken: <span class="string">&#x27;&lt;%= theme.gitalk.accessToken %&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">        id: <span class="built_in">window</span>.location.pathname,</span></span><br><span class="line"><span class="javascript">        repo: <span class="string">&#x27;&lt;%= theme.gitalk.repo %&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">        owner: <span class="string">&#x27;&lt;%= theme.gitalk.owner %&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">        admin: <span class="string">&#x27;&lt;%= theme.gitalk.admin %&gt;&#x27;</span>,</span></span><br><span class="line"><span class="javascript">        distractionFreeMode: <span class="string">&#x27;&lt;%= theme.gitalk.on %&gt;&#x27;</span></span></span><br><span class="line">    &#125;)</span><br><span class="line"><span class="javascript">    gitalk.render(<span class="string">&#x27;gitalk-container&#x27;</span>)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>themes/icalm/layout/_partial/content-view.ejs</strong></p>
 <p>下面加入這一段</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%</span> <span class="attr">if</span> (!<span class="attr">isPage</span>) &#123; %&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;gitalk-container&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%</span> &#125; %&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&lt;% if (!isPage) &#123; %&gt;</span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;gitalk-container&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
 <p>判斷 <code>!isPage</code> 指的 page 不是內容頁，是 <code>tag</code> 或 <code>categories</code> 的這種引導頁面，用否定指的是「要找內容頁」。</p>
 <blockquote>
 <p>在 hexo 內容頁通常叫 <code>post</code></p>
@@ -281,49 +280,13 @@ Gitalk 的授權 token 要改成 access_token ，不使用 <code>clientID</code>
             
         </section>
     
-    
-        <section id="list_related_posts">
-          <h2>同系列文章還有...</h2>
-          <ul class="related-posts"><li class="related-posts-item"><a class="related-posts-link" href="/2019/02-04-hexo/hexo-filter-viz/">Hexo 加上 Graphviz 功能</a><div class="related-posts-item-abstract">¶Hexo 加上 Graphviz 功能
-今天突然心血來潮，除夕沒事就來改改 hexo 寫寫程式吧
-一開始也是想「移植 hackmd 的功能到 hexo」下一個就是，我</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-09-hexo/sel-code-block-linenumber/">Hexo 自訂程式碼區塊的行號 (用起來像 Hackmd)</a><div class="related-posts-item-abstract">¶Hexo 自訂程式碼區塊的行號 (像 Hackmd)
-其實在 hexo 3.3.9 之後就支援這個功能。
-
-¶New Features
-
-Support sel co</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2019/01-03-hexo/hexo-backup-to-branch/">Hexo 備份 md 檔</a><div class="related-posts-item-abstract">¶Hexo 備份 md 檔到另一個分支
-¶源由
-因為 hexo g -d 只會幫你上傳 public 。對於 .md 檔的備份，hexo 似乎沒有提供什麼解決方案。
-¶</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/02-07-hexo/hexo-open-graph/">hexo 加上 Open Graph</a><div class="related-posts-item-abstract">¶hexo 加上 Open Graph
-facebook 利用 open graph [1] 定義的協定，製作爬蟲抓取要在 facebook 分享的內容。在 faceb</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-28-hexo/list-related-posts/">hexo 加上 安全網 (文章推薦)</a><div class="related-posts-item-abstract">¶hexo 加上 安全網 (文章推薦)
-關於「安全網」，是來自於《架站前一定要上的10堂課：網站企畫成功術》。
-
-對於使用者看瀏覽完網站之後，接下來要去哪？是否有引導？</div></li><li class="related-posts-item"><a class="related-posts-link" href="/2018/01-28-hexo/how-to-hexo-markdown-it-toc/">markdown-it 如何順利使用 toc 在 hexo</a><div class="related-posts-item-abstract">¶markdown-it 如何順利使用 toc 在 hexo
-這個文章標題有點難解釋。
-首先，這是解決 hexo 的問題。(就是此 blog 產生器的問題)
-但是，要改</div></li></ul>
-        </section>
-        <section>
-          <div id="gitalk-container"></div>
-        </section>
-    
 </article>
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: '415f51e137fa564654af',
-        clientSecret: 'e2912ef418f3ce73af7d465a5ab93bbf374a2228',
-        id: window.location.pathname,
-        repo: 'dwatow.github.io',
-        owner: 'dwatow',
-        admin: 'dwatow',
-        distractionFreeMode: 'true'
-    })
-    gitalk.render('gitalk-container')
-</script>
-
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
 </div>
 
                 <footer>
