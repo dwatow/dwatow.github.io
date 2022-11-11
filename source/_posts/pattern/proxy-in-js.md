@@ -34,7 +34,7 @@ const handler = {
   },
   set(target, property, value) {
     console.log(`用了 setter 將 ${property} 賦值為 ${value}`);
-    target[property] = value;
+    return target[property] = value;
   },
 };
 
@@ -230,7 +230,7 @@ const handler = {
   },
   set(target, property, value) {
     console.log(`用了 setter 將 ${property} 賦值為 ${value}`);
-    target[property] = value;
+    return target[property] = value;
   },
 };
 
@@ -310,7 +310,7 @@ const handler = {
   },
   set(target, property, value) {
     console.log(`用了 setter 將 ${property} 賦值為 ${value}`);
-    target[property] = value;
+    return target[property] = value;
   },
 };
 
