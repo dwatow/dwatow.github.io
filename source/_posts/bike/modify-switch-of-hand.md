@@ -1,12 +1,12 @@
 ---
-title: 野狼改手把開關-電路篇 (左手勁&右手頂客)
+title: 野狼改手把開關-電路篇 (左手勁 & 右手 Dink)
 date: 2022-12-01 01:11:13
 tags:
 - 狼記事
 categories:
 - 生活居家
 ---
-# 野狼改手把開關-電路篇 (左手勁&右手頂客)
+# 野狼改手把開關-電路篇 (左手勁 & 右手 Dink)
 
 ![](https://i.imgur.com/SsItIN5.jpg)
 
@@ -14,7 +14,7 @@ categories:
 
 ![](https://i.imgur.com/kxUI5Le.png)
 
-**頂客 150 右手開關** 
+**Dink 150 右手開關** 
 
 料號: 3515A-KKC3-900
 ![](https://i.imgur.com/yOmzm1Y.jpg =300x)
@@ -93,7 +93,7 @@ categories:
 
 ![](https://i.imgur.com/xbhxx0m.png)
 
-**頂客 右手**
+** Dink 右手**
 
 ![](https://i.imgur.com/r9BmxJR.png)
 
@@ -121,7 +121,7 @@ categories:
 
 ![手繪電路圖](https://i.imgur.com/DqEzTHW.jpg)
 
-再來就是將勁與頂客的線，改成滿足野狼的接頭，就可以無痛直上
+再來就是將勁與 Dink 的線，改成滿足野狼的接頭，就可以無痛直上
 
 ## Dink 右手 開關線組修改 
 
