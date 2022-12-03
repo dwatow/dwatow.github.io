@@ -53,7 +53,7 @@ categories:
 
 ![](https://i.imgur.com/LWED29Y.png =x400)
 
-**熱縮套管 φ2.5, φ3.5*
+**熱縮套管 φ2.5, φ3.5**
 
 ![](https://i.imgur.com/Fd82cma.jpg)
 
