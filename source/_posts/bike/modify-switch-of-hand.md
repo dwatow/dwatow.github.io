@@ -239,13 +239,9 @@ categories:
 
 ## 功能測試
 
-左手測試影片
-
-https://www.instagram.com/p/Clgp2zQICcq/
-
-右手測試影片
-
-https://www.instagram.com/p/Ck-cVWCu_Tq/
+- [左手測試影片: 遠近燈、方向燈 (喇叭測試沒有拍)](https://www.instagram.com/p/Clgp2zQICcq/)
+- [右手測試影片: 發動、大燈、駐車燈](https://www.instagram.com/p/Ck-cVWCu_Tq/)
+- [右手測試影片: 熄火開關](https://www.instagram.com/p/ClsFrRoqwJb/)
 
 ## 電路改裝完成
 
