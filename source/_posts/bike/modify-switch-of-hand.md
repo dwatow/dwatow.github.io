@@ -109,7 +109,7 @@ categories:
 
 ![](https://i.imgur.com/xbhxx0m.png)
 
-** Dink 右手**
+**Dink 右手**
 
 ![](https://i.imgur.com/r9BmxJR.png)
 
