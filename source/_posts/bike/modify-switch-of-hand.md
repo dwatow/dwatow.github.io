@@ -147,7 +147,7 @@ categories:
 > 下圖接線對照圖，是以正在插線的視角進行的排列。
 > (參考黃紅、棕的位置當參考點)
 
-![Dink開接線修改圖](https://i.imgur.com/jxa1mvi.jpg)
+![Dink開接線修改圖](https://i.imgur.com/ReGwqj9.jpg)
 
 ### 熄火開關
 
@@ -215,7 +215,7 @@ categories:
 
 直接將電路改成滿足野狼的即可，其中有一個地方要特別講的就是喇叭的修改。
 
-![勁開關接線修改圖](https://i.imgur.com/Z1Kr4Os.jpg =70%x)
+![勁開關接線修改圖](https://i.imgur.com/TJ3e1pn.jpg =70%x)
 
 因為該勁的左手開關超車燈與喇叭共用黑線，所以黑線的用途，是電源。
 
