@@ -2,8 +2,7 @@
 title: Raspberry Pi 4 的後端修鍊 (0) - 樹莓派入手安裝設定到 express.js Hello world
 date: 2023-06-16 18:11:17
 tags:
-- 後端
-- pi
+- Raspberry Pi 4
 - express
 categories:
 - 技術練習
