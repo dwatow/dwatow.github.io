@@ -134,695 +134,290 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2021/05-08-how-to-read-ecma-262-zh-tw/">https://dwatow.github.io/2021/05-08-how-to-read-ecma-262-zh-tw/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2021/05-15-raspberry-pi/sequelize-cli-beginer/">https://dwatow.github.io/2021/05-15-raspberry-pi/sequelize-cli-beginer/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>翻譯 如何閱讀 ECMAScript Specification 中文版</h1>
+        <h1>Raspberry Pi 4 的後端修鍊 - sequelize-cli</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-%E5%A6%82%E4%BD%95%E9%96%B1%E8%AE%80-ECMAScript-Specification-%E4%B8%AD%E6%96%87%E7%89%88"><span class="toc-text">翻譯 如何閱讀 ECMAScript Specification 中文版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Abstract"><span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Prelude-%E5%BA%8F%E5%B9%95"><span class="toc-text">1. Prelude 序幕</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Why-should-I-read-the-ECMAScript-specification"><span class="toc-text">1.1 Why should I read the ECMAScript specification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-What-belongs-to-the-ECMAScript-specification-and-what-does-not"><span class="toc-text">1.2 What belongs to the ECMAScript specification, and what does not</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Before-going-any-further-where-is-the-ECMAScript-specification"><span class="toc-text">1.3 Before going any further, where is the ECMAScript specification?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Navigating-the-spec"><span class="toc-text">1.4 Navigating the spec</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Runtime-semantics"><span class="toc-text">2 Runtime semantics</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Algorithm-steps"><span class="toc-text">2.1 Algorithm steps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Abstract-operations"><span class="toc-text">2.2 Abstract operations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-What-is-This"><span class="toc-text">2.3 What is [[This]]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-A-field-of-a-Record"><span class="toc-text">2.3.1 A field of a Record</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-An-internal-slot-of-a-JavaScript-Object"><span class="toc-text">2.3.2 An internal slot of a JavaScript Object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-An-internal-method-of-a-JavaScript-Object"><span class="toc-text">2.3.3 An internal method of a JavaScript Object</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-Completion-Records-and"><span class="toc-text">2.4 Completion Records; ? and !</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-JavaScript-Objects"><span class="toc-text">2.5 JavaScript Objects</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-Example-String-prototype-substring"><span class="toc-text">2.6 Example: String.prototype.substring()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-Example-Can-Boolean-and-String-ever-throw-exceptions"><span class="toc-text">2.7 Example: Can Boolean() and String() ever throw exceptions?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-Example-typeof-operator"><span class="toc-text">2.8 Example: typeof operator</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-sequelize-cli"><span class="toc-text">Raspberry Pi 4 的後端修鍊: sequelize-cli</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-sequelize-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%92%B0%E5%A2%83"><span class="toc-text">初始化 sequelize 的基本環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E9%80%A3%E7%B7%9A%E8%A8%AD%E5%AE%9A"><span class="toc-text">資料庫連線設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99%E5%BA%AB"><span class="toc-text">用 ORM 創造資料庫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0-Migration-%E6%AD%A5%E9%A9%9F"><span class="toc-text">用 ORM 創造 Migration 步驟</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C-migration"><span class="toc-text">執行 migration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A4%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%8A%A0%E4%B8%8A-transaction"><span class="toc-text">此也可以加上 transaction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A4%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%90%AB%E6%9C%89-forang-key"><span class="toc-text">此也可以含有 forang key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BD%B5%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">一併創造資料表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-ORM-%E5%89%B5%E9%80%A0%E8%B3%87%E6%96%99"><span class="toc-text">用 ORM 創造資料</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="翻譯-如何閱讀-ECMAScript-Specification-中文版"><a class="header-anchor" href="#翻譯-如何閱讀-ECMAScript-Specification-中文版">¶</a>翻譯 如何閱讀 ECMAScript Specification 中文版</h1>
-<p><a target="_blank" rel="noopener" href="https://timothygu.me/es-howto/#why-should-i-read-the-ecmascript-specification">How to Read the ECMAScript Specification 原文</a></p>
-<h1 id="Abstract"><a class="header-anchor" href="#Abstract">¶</a>Abstract</h1>
-<p>The ECMAScript Language specification（也稱 JavaScript 規範，或 ECMA-262）是學習 JavaScript 複雜運作原理的絕妙資源。 但這是一個巨大的文本，一開始可能會令人困惑和恐懼。此文件撰寫的原因，是為了讓您能夠在閱讀最佳的 JavaScript 語言參考資料時降低起步門檻。</p>
-<h1 id="1-Prelude-序幕"><a class="header-anchor" href="#1-Prelude-序幕">¶</a>1. Prelude 序幕</h1>
-<p>決定每天來點 ECMAScript spec 有助健康。也許它是一個新年的決定，或者是醫生的處方。無論如何都歡迎上船。</p>
+    <h1 id="Raspberry-Pi-4-的後端修鍊-sequelize-cli"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-sequelize-cli">¶</a>Raspberry Pi 4 的後端修鍊: sequelize-cli</h1>
+<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
+<p><strong>sequelize</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save sequelize mysql2</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>注意: 在此文件內，我只會用 “ECMAScript” 代表規範本身。 “JavaScript” 代表其它的意思。<br>
-但是這兩個的術語指的是同一個東西。<br>
-(ECMAScript 和 JavaScript 在歷史意義上不同，但是超過這份文件要講的範圍，有興趣<a target="_blank" rel="noopener" href="https://www.google.com/search?q=ecmascript+vs.+javascript">自己 Google</a>)</p>
+<p>要使用 mariadb 要安裝 mysql2<br>
+並且把 config 的 “dialect” 設成 “mysql” (後面會講)</p>
 </blockquote>
-<h2 id="1-1-Why-should-I-read-the-ECMAScript-specification"><a class="header-anchor" href="#1-1-Why-should-I-read-the-ECMAScript-specification">¶</a>1.1 Why should I read the ECMAScript specification</h2>
+<p><strong>sequelize-cli</strong><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g --save sequelize-cli</span></span><br></pre></td></tr></table></figure>
+<p>安裝好，確定一下安裝成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize --version</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.21.13]</span><br><span class="line"></span><br><span class="line">5.5.1</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>譯註: 為什麼要閱讀 ECMAScript 規範</p>
+<p>問題: Unable to resolve sequelize package<br>
+因為 <code>sequelize-cli</code> 不會幫你安裝 <code>sequelize</code> 所以 shell 執行 <code>sequelize</code> 時會出現呼叫不到 <code>sequelize</code></p>
 </blockquote>
-<p>ECMAScript spec 是所有 JavaScript 實作的權威來源。無論是在你的瀏覽器<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>、Node.js <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>、太空船<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>上或是物聯網設備 <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>裡。<br>
-所有 JavaScript 引擎開發人員都以規範為主，確保他們閃亮亮的新功能運作如同預期，就如同其它的 JavaScript 引擎一樣。</p>
-<p>但是我覺得此規範不只是給「JavaScript 引擎開發者」這種神話生物閱讀，實際上，我覺得對你或<strong>一般的 JavaScript 撰寫人員也很有用，只是你沒有意識到。</strong></p>
-<p>假設，你在日常的工作中發現了特別的東西</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">Array</span>.prototype.push(<span class="number">42</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line">&gt; <span class="built_in">Array</span>.prototype</span><br><span class="line">[<span class="number">42</span>, <span class="attr">constructor</span>: ƒ, <span class="attr">concat</span>: ƒ, <span class="attr">copyWithin</span>: ƒ, <span class="attr">fill</span>: ƒ, <span class="attr">find</span>: ƒ, …]</span><br><span class="line">&gt; <span class="built_in">Array</span>.isArray(<span class="built_in">Array</span>.prototype)</span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">Set</span>.prototype.add(<span class="number">42</span>)  <span class="comment">// Uncaught TypeError</span></span><br><span class="line">Uncaught TypeError: Method Set.prototype.add called on incompatible receiver #&lt;Set&gt;</span><br><span class="line">    at <span class="built_in">Set</span>.add (&lt;anonymous&gt;)</span><br><span class="line">    at &lt;anonymous&gt;:<span class="number">1</span>:<span class="number">15</span></span><br><span class="line">&gt; <span class="built_in">Set</span>.prototype</span><br><span class="line"><span class="built_in">Set</span> &#123;<span class="attr">constructor</span>: ƒ, <span class="attr">has</span>: ƒ, <span class="attr">add</span>: ƒ, <span class="attr">delete</span>: ƒ, <span class="attr">clear</span>: ƒ, …&#125;</span><br></pre></td></tr></table></figure>
-<p>困惑為什麼一個方法可以用在原型，另一個方法卻不能用在原型。而且<a target="_blank" rel="noopener" href="https://www.google.com/search?q=array+prototype+push+on+prototype">Google 總是找不到</a>，<a target="_blank" rel="noopener" href="https://stackoverflow.com/search?q=array+prototype+push+on+prototype">Stack Overflow 也幫不到你</a>。</p>
-<p>閱讀規範能解惑。</p>
-<p>或者，你可能想知道惡名昭彰的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality_operators">寬鬆相等</a> (<code>==</code>) 跑起來是什麼樣的 function。(在此<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>不嚴謹的使用 “function” 這個詞) 即使是勤奮好學的軟體工程師，在查找 MDN 所找到的收獲遠不及對你眼睛的傷害。<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
-<p>閱讀規範能解惑。</p>
-<div class="info">
-<p>譯註: 一些精彩的 WAT 反應</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[] + []</span><br><span class="line">[] + &#123;&#125;</span><br><span class="line">&#123;&#125; + []</span><br><span class="line">&#123;&#125; + &#123;&#125;</span><br><span class="line"><span class="built_in">Array</span>(<span class="number">16</span>)</span><br><span class="line"><span class="built_in">Array</span>(<span class="number">16</span>).join(<span class="string">&quot;wat&quot;</span>)</span><br><span class="line"><span class="built_in">Array</span>(<span class="number">16</span>).join(<span class="string">&quot;wat&quot;</span> + <span class="number">1</span>)</span><br><span class="line"><span class="built_in">Array</span>(<span class="number">16</span>).join(<span class="string">&quot;wat&quot;</span> - <span class="number">1</span>) + <span class="string">&quot;Batman!&quot;</span></span><br></pre></td></tr></table></figure>
-</div>
-<p>另外，對於不熟悉 JavaScript 的開發人員，我不推薦讀 spec。如果你是 JavaScript 新手，請先上網玩一輪！建立一些 web apps！找 JavaScript 的寶寶監視器應用！或任何什麼都行！<br>
-當你歷經了許多 JavaScript 的缺陷或者對 JavaScript 有經驗豐富到不用擔心，只要符合其中一個就可以考慮回到這個文件看看。</p>
-<p>OK, 現在您知道閱讀規範對您理解語言或平台的複雜性會是非常有用的工具。 但是究竟什麼屬於 ECMAScript 規範呢？</p>
-<h2 id="1-2-What-belongs-to-the-ECMAScript-specification-and-what-does-not"><a class="header-anchor" href="#1-2-What-belongs-to-the-ECMAScript-specification-and-what-does-not">¶</a>1.2 What belongs to the ECMAScript specification, and what does not</h2>
-<blockquote>
-<p>譯註: 哪些(語法)屬於 ECMAScript 的範疇，而哪些(語法)不是呢?</p>
-</blockquote>
-<p>教科書的回答是「只有語言的功能才會進入 ECMAScript 規範中」，但是這有講等於沒講，如同我說「JavaScript 就是 JavaScript」。我不是在描述恆等式。</p>
-<p>相反的，我要做一些在 JavaScript 中常見的事來告訴你，它們是不是語言功能。</p>
+<p>指令說明</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">sequelize [command]</span><br><span class="line"></span><br><span class="line">命令：</span><br><span class="line">  sequelize db:migrate                        Run pending migrations</span><br><span class="line">  sequelize db:migrate:schema:timestamps:add  Update migration table to have timestamps</span><br><span class="line">  sequelize db:migrate:status                 List the status of all migrations</span><br><span class="line">  sequelize db:migrate:undo                   Reverts a migration</span><br><span class="line">  sequelize db:migrate:undo:all               Revert all migrations ran</span><br><span class="line">  sequelize db:seed                           Run specified seeder</span><br><span class="line">  sequelize db:seed:undo                      Deletes data from the database</span><br><span class="line">  sequelize db:seed:all                       Run every seeder</span><br><span class="line">  sequelize db:seed:undo:all                  Deletes data from the database</span><br><span class="line">  sequelize db:create                         Create database specified by configuration</span><br><span class="line">  sequelize db:drop                           Drop database specified by configuration</span><br><span class="line">  sequelize init                              Initializes project</span><br><span class="line">  sequelize init:config                       Initializes configuration</span><br><span class="line">  sequelize init:migrations                   Initializes migrations</span><br><span class="line">  sequelize init:models                       Initializes models</span><br><span class="line">  sequelize init:seeders                      Initializes seeders</span><br><span class="line">  sequelize migration:generate                Generates a new migration file                                                                         [別名: migration:create]</span><br><span class="line">  sequelize model:generate                    Generates a model and its migration                                                                        [別名: model:create]</span><br><span class="line">  sequelize seed:generate                     Generates a new seed file                                                                                   [別名: seed:create]</span><br><span class="line"></span><br><span class="line">選項：</span><br><span class="line">  --help     顯示說明                                                                                                                                                  [布林]</span><br><span class="line">  --version  顯示版本</span><br></pre></td></tr></table></figure>
+<p>分成幾個部份</p>
+<p><strong>初始化</strong></p>
 <table>
 <thead>
 <tr>
-<th>內容</th>
-<th>是不是 ES</th>
-<th>備註</th>
+<th>指令</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>語法元素的結構規則<br> (i.e., 像是有效的 <code>for</code>…<code>in</code> 迴圈的樣子)</td>
-<td>✔</td>
-<td>句型規則: 某種語言結構規格</td>
+<td>sequelize init</td>
+<td>初始化 project(包含下面四個)</td>
 </tr>
 <tr>
-<td>語法元素的語義(對應的意思)<br> (i.e., <code>typeof null</code> 或 <code>&#123; a: b &#125;</code> 的回傳值)</td>
-<td>✔</td>
-<td>語義: 對應某一個意思</td>
+<td>sequelize init:config</td>
+<td>初始化 configuration</td>
 </tr>
 <tr>
-<td><code>import a from 'a';</code></td>
-<td><s>❓</s> [1] ✔</td>
-<td>The ECMAScript spec 規定了類似宣告的語法以及它們的意思，但是未規定模組加載方式 (後來有了)</td>
+<td>sequelize init:migrations</td>
+<td>初始化 migrations</td>
 </tr>
 <tr>
-<td><a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-object-objects"><code>Object</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-array-objects"><code>Array</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-function-objects"><code>Function</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-number-objects"><code>Number</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-math-object"><code>Math</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-regexp-regular-expression-objects"><code>RegExp</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-proxy-objects"><code>Proxy</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-map-objects"><code>Map</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-promise-objects"><code>Promise</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-arraybuffer-objects"><code>ArrayBuffer</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-typedarray-objects"><code>Uint8Array</code></a>, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-globalthis"><code>globalThis</code></a>, …</td>
-<td>✔</td>
-<td>物件型別</td>
+<td>sequelize init:models</td>
+<td>初始化 models</td>
 </tr>
 <tr>
-<td><code>console</code>, <code>setTimeout()</code>, <code>setInterval()</code>, <code>clearTimeout()</code>, <code>clearInterval()</code></td>
-<td>✘</td>
-<td>這些東西在瀏覽器和 node.js 中都可以用，但不是標準之一。在 Node.js 有規範/文件，記在<a target="_blank" rel="noopener" href="https://nodejs.org/api/globals.html#globals_global_objects">文件的 Globals 篇</a>可以找到。對於各家瀏覽器，<a target="_blank" rel="noopener" href="https://console.spec.whatwg.org/#namespacedef-console">console</a> 有 Console 的規範/文件。<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup><sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup>，其它的部份由 HTML 的標準來規範 <sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup><sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup>。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://nodejs.org/api/buffer.html#buffer_class_buffer">Buffer</a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/globals.html#globals_process">process</a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/globals.html#globals_global">global</a>*</td>
-<td>✘</td>
-<td>這些都是 Node.js 才有的全域變數，記在<a target="_blank" rel="noopener" href="https://nodejs.org/api/globals.html#globals_global_objects">文件的 Globals 篇</a>。 <br>* 要注意的是它不像 <code>global</code>，<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-globalthis">globalThis</a>是 ECMAScript 的一部份<sup class="footnote-ref"><a href="#fn11" id="fnref11">[11]</a></sup>，已在瀏覽器上實作。</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_module">module</a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_exports"><code>exports</code></a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_require"><code>require()</code></a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_dirname"><code>__dirname</code></a>, <a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_filename"><code>__filename</code></a></td>
-<td>✘</td>
-<td>這些都是 Node.js 才有的全域變數，記在<a target="_blank" rel="noopener" href="https://nodejs.org/api/modules.html#modules_modules">文件的 Modules: CommonJS modules 篇</a>。</td>
-</tr>
-<tr>
-<td>window, alert(), confirm(), the DOM (document, HTMLElement, addEventListener(), Worker, …)</td>
-<td>✘</td>
-<td>這些都是瀏覽器才有的東西。</td>
+<td>sequelize init:seeders</td>
+<td>初始化 seeders</td>
 </tr>
 </tbody>
 </table>
-<h2 id="1-3-Before-going-any-further-where-is-the-ECMAScript-specification"><a class="header-anchor" href="#1-3-Before-going-any-further-where-is-the-ECMAScript-specification">¶</a>1.3 Before going any further, where is the ECMAScript specification?</h2>
-<blockquote>
-<p>譯註: 深入了解之前，我們該在哪查閱 ECMAScript？</p>
-</blockquote>
-<p>當你 Google “ECMAScript specification” 你會看見<em>很多</em>稱聲是合法的規範。而哪一個才是你該讀的？</p>
-<p><strong>簡單的說，最有可能的是發佈在 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/">tc39.es/ecma262/</a> 上的這一份才是你要的。</strong><sup class="footnote-ref"><a href="#fn12" id="fnref12">[12]</a></sup></p>
-<p>詳細的版本:</p>
-<p>目前是由 Ecma International Technical Committee 39 (ECMA 國際技術委員會 39，也稱 TC39<sup class="footnote-ref"><a href="#fn13" id="fnref13">[13]</a></sup>) 來開發 The ECMAScript language specification，它們是一群不同背景的人所組成的。TC39 在 <a href="tc39.github.io">tc39.es</a> <sup class="footnote-ref"><a href="#fn12" id="fnref12:1">[12:1]</a></sup> 維護最新規範。</p>
-<p>會變複雜的原因是，每一年 TC39 會利用一點時間來對規格做快照，成為該年的 ECMAScript 語立標準及版號。例如，<em>ECMAScript®2019 Language Specification（ECMA-262, 10<sup>th</sup>）</em><sup class="footnote-ref"><a href="#fn14" id="fnref14">[14]</a></sup>（通常稱為 ES10 或 ES2019）就是把 <a href="tc30.github.io">tc39.es</a> <sup class="footnote-ref"><a href="#fn12" id="fnref12:2">[12:2]</a></sup> 上看到的規範，在 2019 年 6 月放入福馬林，密封包裝並以 Pdf 格式永久歸檔。</p>
-<p>因此，除非你希望自己的 Web application 只執行在 2018 年 6 月之後的福馬林中的瀏覽器，不然就要一直追最新的 <a target="_blank" rel="noopener" href="http://tc39.github.io">tc39.github.io</a> <sup class="footnote-ref"><a href="#fn12" id="fnref12:3">[12:3]</a></sup><br>
-但是如果你想(或必須)支援舊瀏覽器或 Node.js 版本，參考較早的規範可能所有幫助。</p>
-<blockquote>
-<p>譯註: 福馬林<br>
-其實原文用 formaldehyde (甲醛)，在此談的是封裝保存手法，所以就用福馬林借代較口語化，我想也較貼近原作的幽默。(wiki: 福馬林是甲醛含量為35%至40%的水溶液。)</p>
-</blockquote>
-<blockquote>
-<p>注意: ISO/IEC 也有發佈 ECMAScript Language Standard 在 ISO/IEC 22275 <sup class="footnote-ref"><a href="#fn15" id="fnref15">[15]</a></sup> 上面。不用擔心，因為在此發佈的內容與 ECMA International 發佈的一樣 - 唯一不同的就是要支付 <a target="_blank" rel="noopener" href="https://www.google.com/search?q=198+swiss+francs+in+my+currency">198 瑞士法郎</a>才可以取得。 (大約 6000 新台幣)</p>
-</blockquote>
-<h2 id="1-4-Navigating-the-spec"><a class="header-anchor" href="#1-4-Navigating-the-spec">¶</a>1.4 Navigating the spec</h2>
-<blockquote>
-<p>譯註: 導讀規範</p>
-</blockquote>
-<p>ECMAScript specification 講了很多事。縱使寫作時已經盡所能的分成邏輯區塊，它仍然是很<strong>龐大</strong>的內容。</p>
-<p>就我而言，我喜歡將它分成五個部份</p>
-<ol>
-<li>慣例 (Conventions) 與基本定義 (basics)
-<ul>
-<li>什麼是 Number？</li>
-<li>這句在規範指的是什麼 ‘throw a <strong>TypeError</strong> exception’？</li>
-</ul>
-</li>
-<li>語言的語法說明
-<ul>
-<li>如何寫一個 <code>for</code>-<code>in</code> 迴圈</li>
-</ul>
-</li>
-<li>語言的編寫時期 (Static) 語義
-<ul>
-<li>在 <code>var</code> 述句中， <code>var</code> 的變數名稱如何決定</li>
-</ul>
-</li>
-<li>語言的執行時期 (Runtime) 語義
-<ul>
-<li>如何執行 <code>for</code>-<code>in</code> 迴圈</li>
-</ul>
-</li>
-<li>APIs
-<ul>
-<li><code>String.prototype.subString()</code> 做了什麼？</li>
-</ul>
-</li>
-</ol>
-<p>但是這並不是規範本身的架構。它的架構中，第一個銀彈是 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-notational-conventions">§5 Notational Conventions</a> 再來是 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-ordinary-and-exotic-objects-behaviours">§9 Ordinary and Exotic Objects Behaviours</a>，與第三部份交錯在一起從 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-source-code">§10 ECMAScript Language: Source Code</a> 到 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-ecmascript-language-scripts-and-modules">§15 ECMAScript Language: Scripts and Modules</a>，像是</p>
-<blockquote>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-if-statement">§13.6 The <code>if</code> Statement</a> <strong>Grammar productions<br>
-Grammar productions</strong>
-<ul>
-<li>§13.6.1-6 <strong>Static semantics<br>
-Runtime sematics</strong></li>
-<li>§13.6.7 <strong>Static semantics<br>
-Runtime sematics</strong></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-iteration-statements">§13.7 Iteration Statements</a> <strong>Grammar productions<br>
-Grammar productions</strong>
-<ul>
-<li>§13.7.1 Shared <strong>static<br>
-runtime semantics</strong> and <strong>static<br>
-runtime semantics</strong></li>
-<li>§13.7.2 The <code>do</code>-<code>while</code> Statement
-<ul>
-<li>§13.7.2.1-5 <strong>Static semantics<br>
-Runtime semantics</strong></li>
-<li>§13.7.2.6 <strong>Static semantics<br>
-Runtime semantics</strong></li>
-</ul>
-</li>
-<li>§13.7.3 The <code>while</code> Statement
-<ul>
-<li>…</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<p>雖然 APIs 分散在 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-global-object">§18 The Global Object</a> 到 <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-reflection">§26 Reflection</a></p>
-<p>在此，我想強調的是絕對沒有人閱讀規範的方式是從頭到尾。你只要查看想找的相關章節與內容就好。試著反問自己要找的是這五個部份的哪一個部份。如果你無法確定是哪一個，請問自己一個問題「在哪個時間點運作的問題(無論你想要確認什麼)？」可能會有幫助。不用擔心，看規範會慢慢習慣的。</p>
-<blockquote>
-<p>譯註:<br>
-“at which time is this (whatever you are trying to confirm) evaluated?”<br>
-有些人翻譯成 “在什麼時候(無論你想要確認什麼)這個問題被評估了?”<br>
-evaluated 其實也許是 eval() 的意思，直翻是評估，是編譯 JS 的一個步驟，執行前必定會做的事，在此翻譯成「運作」較為口語化。</p>
-</blockquote>
-<h1 id="2-Runtime-semantics"><a class="header-anchor" href="#2-Runtime-semantics">¶</a>2 Runtime semantics</h1>
-<blockquote>
-<p>譯註: Runtime semantics 執行時期語義</p>
-</blockquote>
-<p>規範大部份的內容，都是此語言的執行時期語義與 APIs，讓人感到疑惑的通常也都在這部份。</p>
-<p>一般來說，閱讀這些段落是很利落直白的。但是該規範使用許多的縮寫，對於剛起步的人 (至少對我來說) 是非常棘手的。我試著解釋其中的一些 conventions，並且利用它搞清楚一些事情是如何運作的。</p>
-<h2 id="2-1-Algorithm-steps"><a class="header-anchor" href="#2-1-Algorithm-steps">¶</a>2.1 Algorithm steps</h2>
-<blockquote>
-<p>譯註: Algorithm steps 演用法步驟</p>
-</blockquote>
-<p>ECMAScript 常用演算法步驟表示執行時期的語義，它不像虛擬碼 (pseudocode)，而是更加精確的表示形式。</p>
-<blockquote>
-<p><strong>EXAMPLE 1</strong></p>
-<div class="warning">
-<p>一個簡單的演算法步驟如下:</p>
-<ol>
-<li>Let a be <strong>1</strong>.</li>
-<li>Let b be a+a.</li>
-<li>If b is <strong>2</strong>, then
-<ol>
-<li>Hooray! Arithmetics isn’t broken.</li>
-</ol>
-</li>
-<li>Else
-<ol>
-<li>Boo!</li>
-</ol>
-</li>
-</ol>
-</div>
-</blockquote>
-<blockquote>
-<p>深入閱讀: <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-algorithm-conventions">§5.2 Algorithm Conventions</a></p>
-</blockquote>
-<h2 id="2-2-Abstract-operations"><a class="header-anchor" href="#2-2-Abstract-operations">¶</a>2.2 Abstract operations</h2>
-<blockquote>
-<p>譯註: Abstract operations 抽象運算</p>
-</blockquote>
-<p>你有時會在規範中看見像是函數的東西，<a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-boolean-constructor-boolean-value"><code>Boolean()</code></a> 函數的第一步是:</p>
-<div class="warning">
-<p>When <code>Boolean</code> is called with argument value, the following steps are taken:</p>
-<ol>
-<li>Let b be <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a>(value).</li>
-<li>…</li>
-</ol>
-</div>
-<p>這個 “ToBoolean” 函式，就被稱為 <strong>abstract operations</strong> (抽象運算): 它是抽象的，因為並不是實際曝露在 JavaScript 程式的函式。只是撰寫人員發明的一種表示法，使他們不必一次又一次撰寫相同的東西。</p>
-<blockquote>
-<p>注意: 現在暫時不用擔心在 ToBoolean 前的 <code>!</code>。我們將在稍後的 <a href="#24-Completion-Records--and-">§ 2.4 Completion Records; ? and !</a> 討論。</p>
-</blockquote>
-<blockquote>
-<p>深入閱讀: <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-algorithm-conventions-abstract-operations">§5.2.1 Abstract Operations</a></p>
-</blockquote>
-<h2 id="2-3-What-is-This"><a class="header-anchor" href="#2-3-What-is-This">¶</a>2.3 What is [[This]]</h2>
-<p>有時候也看見這種 <em><strong>[[Notation]]]</strong></em> 的用法，像是「把 <em>proto</em> 表示成 <em>obj.[[Prototype]]</em>」。這個符號利用解讀上下文，能夠技術性地表示成幾種不同的意思，但是你要花很長的時間了解，符號代表一些無法透過觀察 JavaScript 程式了解的內部特性。</p>
-<p>精準的表示的話，這符號代表三種意義，我將會舉規範中的範例說明。</p>
-<p>不過，現在請先隨意的跳過。</p>
-<blockquote>
-<p>譯註: 要看的話就是接下來的三個小節。</p>
-</blockquote>
-<h3 id="2-3-1-A-field-of-a-Record"><a class="header-anchor" href="#2-3-1-A-field-of-a-Record">¶</a>2.3.1 A field of a Record</h3>
-<blockquote>
-<p>譯註: 一個 Record 的一個 field<br>
-譯註: 物件屬性, pair<br>
-譯註: 像是 public 的 object property. ex: <code>O.field</code></p>
-</blockquote>
-<p>ECMAScript spec 使用術語 <strong>Record</strong> 表示有固定的 key 組合成的 key-value 對照關係 (有點像是 C 語言的 structure)。Record 的每一對 key-value 會稱為 <em><strong>field</strong></em>，因為 Record 只出現在規範，並不在 JavaScript 程式中，所以使用 [[Notation]] 意思是指一個  Record 的 fields。</p>
-<blockquote>
-<p>譯註: [[Notation]] = field in Record = key-value pair</p>
-</blockquote>
-<blockquote>
-<p><strong>EXAMPLE 2</strong><br>
-值得注意的是, <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-property-descriptor-specification-type">Property Descriptors (屬性描述器)</a> 是擁有 [[Value]], [[Writable]], [[Get]], [[Set]], [[Enumerable]], 和 [[Configurable]] 這些 fields 的 Records。在 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-isdatadescriptor">IsDataDescriptor</a> abstract operation 大量使用這個符號。</p>
-<div class="warning">
-<p>當 <em>Desc</em> (<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-property-descriptor-specification-type">Property Descriptor</a>或 <strong>undeinfed</strong>) 當作參數呼叫 abstract operation  IsDataDescriptor 時，會執行下面的步驟</p>
-<ol>
-<li>If <em>Desc</em> is undefined, return <strong>false</strong>.</li>
-<li>If both <em>Desc</em>.[[Value]] and <em>Desc</em>.[[Writable]] are absent, return <strong>false</strong>.</li>
-<li>Return <strong>true</strong>.</li>
-</ol>
-</div>
-<p>譯註: 翻譯結果是參考規範 ES2021 的內容。</p>
-</blockquote>
-<p>另一個 Records 的實際案例可以在本篇下一節，<a href="#24-Completion-Records--and-">§2.4 Completion Records; ? and !</a> 找到。</p>
-<blockquote>
-<p>延伸閱讀: <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-list-and-record-specification-type">§6.2.1 The List and Record Specification Types</a></p>
-</blockquote>
-<h3 id="2-3-2-An-internal-slot-of-a-JavaScript-Object"><a class="header-anchor" href="#2-3-2-An-internal-slot-of-a-JavaScript-Object">¶</a>2.3.2 An internal slot of a JavaScript Object</h3>
-<blockquote>
-<p>譯註: JS 物件的內部插槽(開口)<br>
-譯註: 「插槽」翻成「開口」也滿合乎意思的<br>
-譯註: 物件方法<br>
-譯註: 像是 private 的 object property. ex: <code>O.[[Notation]]</code></p>
-</blockquote>
-<p>JavaScript Objects 還有規定所謂的 internal slots (內部開口) 用來保存資料。和 Record fields 一樣，internal slots 也不能透過觀察 JavaScript 來發現它們，但是也許會從某些專用工具中曝露出來，像是 Google Chrome’s DevTools。因此 [[Notation]] 也是 internal slots 的意思。</p>
-<p>internal slots 的規範在 <a target="_blank" rel="noopener" href="https://timothygu.me/es-howto/#javascript-objects">§2.5 JavaScript Objects</a> 有介紹。現在不必在意它能做什麼用，但請注意以下範例。</p>
-<blockquote>
-<p><strong>EXAMPLE 3</strong><br>
-大多數的 JavaScript Objects 都有一個 [[Prototype]] 的 internal slot 指向該物件的繼承自哪個物件。此 internal slot 的值通常是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf#"><code>Object.getPrototypeOf()</code></a> 的返回值。在 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-ordinarygetprototypeof">OrdinaryGetPrototypeOf</a> abstract operation 中，就只是回傳 internal slot 的值:</p>
-<div class="warning">
-<p>以 Object <em>O</em> 作參數，呼叫 abstract operation <code>OrdinaryGetPrototypeOf</code> 時，就會運作下列的步驟:</p>
-<blockquote>
-<ol>
-<li>Return <em>O</em>.[[Prototype]].</li>
-</ol>
-</blockquote>
-</div>
-</blockquote>
-<blockquote>
-<p>注意: Object 的 internal slots 和 Record fields 的 fields 看起來是相同的，但是可以透過查看符號前面的部份來區分 (點<code>.</code>之前的部份), 無論它是一個 Object 或 Record。這通常從環境上下文就很明顯。</p>
-</blockquote>
-<h3 id="2-3-3-An-internal-method-of-a-JavaScript-Object"><a class="header-anchor" href="#2-3-3-An-internal-method-of-a-JavaScript-Object">¶</a>2.3.3 An internal method of a JavaScript Object</h3>
-<p>JavaScript Objects 還有規定所謂的 internal methods。像 internal slots 一樣，這些 internal method 無法透過 JavaScript 直接觀察到。所以使用 [[Notation]] 也是 internal methods 的意思</p>
-<p>Internal methods 的規範在 <a target="_blank" rel="noopener" href="https://timothygu.me/es-howto/#javascript-objects">§2.5 JavaScript Objects</a>有介紹。現在不必在意它能做什麼用，但請注意以下範例。</p>
-<blockquote>
-<p><strong>EXAMPLE 4</strong><br>
-所有的 JavaScript 函數都有一個 internal method [[Call]] 代表函數的「執行」功能。<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-call">Call</a> 的 abstract operation 如下面步驟:</p>
-<blockquote>
-<p>3.Return ? <em>F</em>.[[Call]](<em>V</em>, <em>argumentsList</em>).</p>
-</blockquote>
-<p>其中 <em>F</em> 是一個 JavaScript 的 function 物件。在這個例子中，<em>F</em> 的 internal method 的這個 [[Call]] 是使用本身的參數 <em>V</em> 和 <em>argumentsList</em> 執行的</p>
-</blockquote>
-<blockquote>
-<p>注意: [[Notation]] 的第三個意思看起來像是 function call, 這點可以與其他的區別開來。</p>
-</blockquote>
-<h2 id="2-4-Completion-Records-and"><a class="header-anchor" href="#2-4-Completion-Records-and">¶</a>2.4 Completion Records; ? and !</h2>
-<blockquote>
-<p>譯註: runtime semantic 執行時期解讀的結果 =&gt; 推估的執行結果<br>
-述句完成值</p>
-</blockquote>
-<p>在 ECMAScript spec 中，每一個 runtime semantic，會顯性或隱性地產生一個報告結果的 <em><strong>Completion Record</strong></em>。Completion Record 是一個可能有三個 fields 的 Record。</p>
-<ol>
-<li><em><strong>[[Type]]</strong></em> (<strong><code>normal</code></strong>, <code>return</code>, <code>throw</code>, <code>break</code> 或 <code>continue</code>)</li>
-<li>若 [[Type]] 是 <code>normal</code>, <code>return</code> 或 <code>throw</code>，那麼還會有一個 <em><strong>[[Value]]</strong></em> (“看是什麼被 return/throw 出來”)</li>
-<li>若 [[Type]] 是 <code>break</code> 或 <code>continue</code>，那麼有可能還會有 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label#">label</a> 當作是接下來要執行到哪 (breaks from/continues to)的 <em><strong>[[Target]]</strong></em>，當作執行語義的結果。</li>
-</ol>
-<blockquote>
-<p>注意: 表示 Records 的 fields 要使用兩個中括號。跳去看 <a href="#231-A-field-of-a-Record-%E4%B8%80%E5%80%8B-Record-%E7%9A%84%E4%B8%80%E5%80%8B-field">§2.3.1 A field of a Record</a> 初步了解一下 Records 和相關符號的定義。</p>
-</blockquote>
-<p>一個 Completion Record 的 [[Type]] 是 <code>normal</code> 稱為 <em><strong>normal compliton</strong></em>。每一個不同於 <code>normal compliton</code> 的 Completion Record 稱為 <em><strong>abrupt completion</strong></em>。</p>
-<p>大多數的情況下，你只有遇到 [[Type]] 是 throw 的 abrupt completeions 程式才會死掉。其它三種 abrupt completion 是看程式怎麼寫就怎麼執行。實際上，你將不會看見任何其它的 type 在內建的 function 的定義中。因為 <code>break</code>/<code>continue</code>/<code>return</code> 不會跨 function 執行。</p>
-<blockquote>
-<p>譯註: 意思是</p>
-<ol>
-<li><em><strong>[[Type]]</strong></em></li>
-<li><em><strong>[[Value]]</strong></em> 值
-<ul>
-<li>[[Type]] 的值是 <code>normal</code> =&gt; <strong>normal compliton</strong></li>
-<li>[[Type]] 的值是 <code>throw</code> =&gt; <strong>abrupt completion</strong> 程式容易死掉</li>
-<li>[[Type]] 的值是 <code>return</code> =&gt; <strong>abrupt completion</strong></li>
-</ul>
-</li>
-<li><em><strong>[[Target]]</strong></em> 去哪
-<ul>
-<li>[[Type]] 的值是 <code>break</code> =&gt; <strong>abrupt completion</strong></li>
-<li>[[Type]] 的值是 <code>continue</code> =&gt; <strong>abrupt completion</strong></li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>延伸閱讀: <a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/#sec-completion-record-specification-type">§6.2.3 The Completion Record Specification Type</a></p>
-</blockquote>
-<hr>
-<p>由於 Completion Records 的定義，JavaScript 執行像是傳遞錯誤泡泡一直遇到 <code>try</code>-<code>catch</code> 區塊的這種細節並不存在規範中。實際上錯誤 (或更確切的是 abrupt completions) 是明確處理。</p>
-<p>沒有縮寫，普通的一個 abstract operation 呼叫一定會 return 一個計算結果或 throw 一個錯誤，如下所示</p>
-<blockquote>
-<p><strong>EXAMPLE 5</strong></p>
-<div class="warning">
-<p>呼叫一個可能會 throw 的 abstract operation 無縮寫版本的步驟如下:</p>
-<ol>
-<li>Let <em>resultCompletionRecord</em> be AbstractOp().</li>
-</ol>
-<blockquote>
-<p>注意: <em>resultCompletionRecord</em> 是一個 Completion Record.</p>
-</blockquote>
-<ol start="2">
-<li>If <em>resultCompletionRecord</em> is an abrupt completion, return <em>resultCompletionRecord</em>.</li>
-</ol>
-<blockquote>
-<p>注意: 若是 abrupt completion 直接回傳 <em>resultCompletionRecord</em> 。換句話說，倚在 AbstractOp 錯誤被轉拋，就停止繼續執行</p>
-</blockquote>
-<ol start="3">
-<li>Let <em>result</em> be <em>resultCompletionRecord</em>.[[Value]].</li>
-</ol>
-<blockquote>
-<p>注意: 確保取得 normal completion 之後，我們可以 unwrap Completion Record 取得我們預計獲得的實際結果</p>
-</blockquote>
-<ol start="4">
-<li><em>result</em> is the result we need. We can now do more things with it.</li>
-</ol>
-</div>
-<p>這可能會依稀回想起你的 C 錯誤處理方式：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> result = abstractOp();  <span class="comment">// Step 1</span></span><br><span class="line"><span class="keyword">if</span> (result &lt; <span class="number">0</span>)             <span class="comment">// Step 2</span></span><br><span class="line">  <span class="keyword">return</span> result;            <span class="comment">// Step 2 (continued)</span></span><br><span class="line">                            <span class="comment">// Step 3 is unneeded</span></span><br><span class="line"><span class="comment">// func() succeeded; carrying on...  // Step 4</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>但是為了減少這些大量重複的步驟，ECMAScript spec 的編輯人員自 ES2016 開始加入一些縮寫方式，透過以下兩種寫法等效的表達相同的規範。</p>
-<blockquote>
-<p><strong>EXAMPLE 6</strong></p>
-<div class="warning">
-<p>呼叫一個可能會 throw 的 abstract operation 用 <em><strong><code>ReturnIfAbrupt</code></strong></em> 縮寫版本的步驟如下:</p>
-<blockquote></blockquote>
-<ol>
-<li>Let <em>result</em> be AbstractOp().</li>
-</ol>
-<blockquote>
-<p>注意: 在此，就像上述例子的第一步，result 是一個 Completion Record。</p>
-</blockquote>
-<ol start="2">
-<li>ReturnIfAbrupt(<em>result</em>).</li>
-</ol>
-<blockquote>
-<p>注意: ReturnIfAbrupt 用處理任何可能的 abrupt completions，並將 result 自動 unwrap [[Value]]。</p>
-</blockquote>
-<ol start="3">
-<li><em>result</em> is the result we need. We can now do more things with it.</li>
-</ol>
-</div>
-</blockquote>
-<p>或者用更簡潔的問號(?)表達:</p>
-<blockquote>
-<p><strong>EXAMPLE 7</strong></p>
-<div class="warning">
-<p>呼叫一個可能會 throw 的 abstract operation 用 <em><strong>question mark (?)</strong></em> 縮寫版本的步驟如下:</p>
-<ol>
-<li>Let <em>result</em> be ? AbstractOp().</li>
-</ol>
-<blockquote>
-<p>注意: 有了這個符號我們再也不會因為 Completion Records 而讓程式死掉。這個 <code>?</code> 縮寫幫我們處理<em>所有的事</em>，結果也可以馬上拿來使用。</p>
-</blockquote>
-<ol start="2">
-<li><code>result</code> 是我們要的結果。拿它來做更多的事。</li>
-</ol>
-</div>
-</blockquote>
-<hr>
-<p>有時，它可以傳達更多有關規範意圖的訊息給讀者，如果我們知道一個特定的 <code>AbstractOp()</code> 呼叫將不會回傳一個 abrupt completion。這樣的情況，將使用 <em><strong>exclamation mark (!)</strong></em>:</p>
-<blockquote>
-<p>EXAMPLE 8</p>
-<div class="warning">
-<p>呼叫一個可能會 throw 的 abstract operation 用 <em><strong>exclamation mark (!)</strong></em> 縮寫版本的步驟如下:<br>
-A few steps that call an abstract operation that cannot ever throw with an exclamation mark (!):</p>
-<ol>
-<li>Let result be ! AbstractOp().</li>
-</ol>
-<blockquote>
-<p>使用 <code>?</code> 表達「 一定會遇到任何錯誤」使用 <code>!</code>  表達「永遠不會遇到任何錯誤」會在 abrupt completions 中得到，而且如果我們這樣做的話，它會是 spec 的 bug。像是這個用 <code>?</code> 的例子，我們不會處理所有的 Completion Records。，結果也可以馬上拿來使用。</p>
-</blockquote>
-<ol start="2">
-<li>result 是我們要的結果。拿它來做更多的事。</li>
-</ol>
-</div>
-</blockquote>
-<blockquote>
-<p>CAUTION<br>
-可以承認 <code>!</code> 看起來容易和有效的 JavaScript 表達式搞混:</p>
-<blockquote>
-<ol>
-<li>Let <em>b</em> be ! <code>ToBoolean(value)</code>.</li>
-</ol>
-<p>— 摘錄自 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-boolean-constructor-boolean-value"><code>Boolean()</code></a>.</p>
-</blockquote>
-<p>在此，<code>!</code> 只是指我們保證呼叫 ToBoolean 不會產生例外, 而不是對結果進行邏輯 <code>not</code> 運算!</p>
-</blockquote>
-<blockquote>
-<p>延伸閱讀: <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-returnifabrupt-shorthands">§5.2.3.4 ReturnIfAbrupt Shorthands</a></p>
-</blockquote>
-<h2 id="2-5-JavaScript-Objects"><a class="header-anchor" href="#2-5-JavaScript-Objects">¶</a>2.5 JavaScript Objects</h2>
-<p>在 ECMAScript 中，每個 Object 有一組 <em><strong>internal methods</strong></em> 規範的其它部份做某些任務時會呼叫，所有 Object 的一些 internal methods。</p>
-<ul>
-<li>[[Get]], 取得 Object 上的 property (e.g. <code>obj.prop</code>)</li>
-<li>[[Set]], 設定 Object 上的 property (e.g. <code>obj.prop = 42;</code>)</li>
-<li>[[GetPrototypeOf]], 取得 Object 上 ptototype (i.e., <code>Object.getPrototypeOf(obj)</code>)</li>
-<li>[[GetOwnProperty]], 取得 Object  property 上的 Property Descriptor (i.e., <code>Object.getOwnPropertyDescriptor(obj, &quot;prop&quot;)</code>)</li>
-<li>[[Delete]], 刪除 Object 上的 property (e.g. <code>delete obj.prop</code>)</li>
-</ul>
-<p>(詳情請看 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-object-internal-methods-and-internal-slots">§6.1.7.2 Object Internal Methods and Internal Slots</a>).</p>
-<p>根據此定義，function 物件 (或只是 “function”) 是就是具有 [[Call]] 或 [[Construct]] 這兩個內部方法的物件，所以也稱之為可執行(可呼叫)物件</p>
-<p>規範將所有的 Object 分成兩個陣營: <code>ordinary object</code> (普通的物件) 和 <code>exotic object</code> (特殊的物件)。大部份你遇見的物件，都是只擁有定義在 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots">§9.1 Ordinary Object Internal Methods and Internal Slots</a> 這種預設 internal methods 的 ordinary objects .</p>
-<p>但是ECMAScript 規範還有定義一些特殊物件。這些物件會 override 一些預設 internal method 的實作。允許執行特殊物件，會有一些最小限度的限制，但是一般而言這些已經 overriden internal methods 可以做很多的神奇妙用，而不違反規範。</p>
-<blockquote>
-<p>EXAMPLE 9<br>
-<code>Array</code> 物件就是 <code>exotic objects</code> 的一種。一些特殊語義，像是 <code>Array</code> 的 <code>length</code>。<code>ordinary objects</code> 適用的工具無法用在它身上。</p>
-<p>其中，設定 Array 的 length 屬性，看起來是一個可以刪除的普通屬性(但其實不能被刪除)。相反，<code>new Map().size</code> 只是一個在 <code>Map.prototype</code> 上的 <code>getter</code> 函數，沒有像 <code>[].length</code> 這種的魔法屬性。</p>
-</blockquote>
-<blockquote>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&gt; <span class="keyword">const</span> arr = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&gt; <span class="built_in">console</span>.log(arr);</span><br><span class="line">[ <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> ]</span><br><span class="line">&gt; arr.length = <span class="number">1</span>;</span><br><span class="line">&gt; <span class="built_in">console</span>.log(arr);</span><br><span class="line">[ <span class="number">0</span> ]</span><br><span class="line">&gt; <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor([], <span class="string">&quot;length&quot;</span>));</span><br><span class="line">&#123; <span class="attr">value</span>: <span class="number">1</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">false</span> &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&gt; <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="keyword">new</span> <span class="built_in">Map</span>(), <span class="string">&quot;size&quot;</span>));</span><br><span class="line"><span class="literal">undefined</span></span><br><span class="line">&gt; <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">Map</span>.prototype, <span class="string">&quot;size&quot;</span>));</span><br><span class="line">&#123; <span class="attr">get</span>: [<span class="built_in">Function</span>: get size],</span><br><span class="line">  set: <span class="literal">undefined</span>,</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span> &#125;</span><br></pre></td></tr></table></figure>
-<p>透過 override [[DefineOwnProperty]] 這個 internal method 可以實現這個神奇的行為。(但是改不了已經定義好的魔法屬性)，詳情可參考 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-array-exotic-objects">§9.4.2 Array Exotic Objects</a></p>
-</blockquote>
-<p>ECMAScript 規範也允許其它的規範定義自己特有的 exotic objects。透過這種機制可以指定在瀏覽器上跨域 API 存取的限制 (參考 <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy">WindowProxy</a>)。JavaScript 開發者也可以透過 <code>Proxy</code> API 建立自己的 exotic objects。</p>
-<hr>
-<p>JavaScript Object 也有 <em><strong>internal solts</strong></em> 定義某些型別的值。我傾向將 internal slots 想成某種隱藏 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-object.getownpropertysymbols"><code>Object.getOwnPropertySymobols()</code></a> 行為的 Symbol-named 屬性。<code>ordinary objects</code> 和 <code>exotic objects</code> 都有 <code>internal slots</code></p>
-<blockquote>
-<p>在 <a href="#232-An-internal-slot-of-a-JavaScript-Object">§ 2.3.2 An internal slot of a JavaScript Object</a> 裡面, 我有提過物件有一個叫 [[Prototype]] 的 internal slot。(其實，所有 ordinary objects，甚至像是 Array 的 exotic objects 都擁有這樣的東西)，但是前面也提到有一個方法叫 [[GetPrototypeOf]]，它們有什麼差別？</p>
-<p>此處關鍵字最多: 並不是所有的物件都有 [[Prototype]] 的 internal slot ，但是所有的物件都有實作 [[GetPrototypeOf]] internal method。<br>
-特別像是 Proxy 沒有自己的 [[Prototype]] ，而 [[GetPrototypeOf]] internal method 則是替代成儲存在 Proxy 物件內 [[ProxyTarget]] 的註冊(某 function) handler 或目標(某物件)的 prototype 。</p>
-<p>所以，使用 Object 時，一定要用適合的 internal method 而不是直接存取 internal slot 一直都是好決定。</p>
-</blockquote>
-<hr>
-<p>另一種 Object 關係的思考方式，internal methods 和 internal slots 是透過典型的物件導向視角來看。Object 型別像是一個 interface 指定幾個必須實作的 internal methods。(ex: ordinary objects 提供預設的實作，而 exotic objects 則是可以 override 一部份或全部。) 而 internal slots 就像是物件的 instance variables - 物件的實作細節。</p>
-<p>所有的關係總結在下面這張 UML diagram (點擊放大):</p>
-<p><a target="_blank" rel="noopener" href="https://timothygu.me/es-howto/object-uml.svg"><img src="https://timothygu.me/es-howto/object-uml.svg" alt=""></a></p>
-<h2 id="2-6-Example-String-prototype-substring"><a class="header-anchor" href="#2-6-Example-String-prototype-substring">¶</a>2.6 Example: String.prototype.substring()</h2>
-<p>現在，我們已經對規範怎麼架構和撰寫有一個非常好的了解，讓我們來練習！</p>
-<p>設假現下列這樣的問題:</p>
-<blockquote>
-<p>不執行下面程式碼，這段會回傳什麼？</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">String</span>.prototype.substring.call(<span class="literal">undefined</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>這是一個棘手的問題。似乎有兩個合理的解果:</p>
-<ol>
-<li><code>String.prototype.substring()</code> 可以先將 <strong><code>undefined</code></strong> 轉成 <code>&quot;undefined&quot;</code> 並且在該字串的索引 2 和 3 處 (區間 [2, 4) ) 取出字串，<strong>回傳</strong> “de”。</li>
-<li>另一個解釋，<code>String.prototype.substring()</code> 也許只是合理的<strong>拋出錯誤</strong>，因此拒絕 <strong><code>undefined</code></strong> 作為輸入</li>
-</ol>
-<p>不幸的是，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring#">MDN</a> 也沒有提供此值不是字串時，函數的行為會如何的確切解答。</p>
-<p>規範救援！在規範 [ECMA-262]左上角的搜尋輸入 <code>substring</code> 後，我們會到達 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-string.prototype.substring">§22.1.3.23 String.prototype.substring ( start, end )</a><sup class="footnote-ref"><a href="#fn16" id="fnref16">[16]</a></sup> 記載著這個函數行為的規範。</p>
-<p>閱讀演算法之前，我們先思考一下我們已知的部份，我假設我已了解 <code>str.substring()</code> 在回傳給定字串的一部份是如何工作的。我們現在還無法確定 <strong><code>this</code></strong> 值設定成 <strong><code>undefined</code></strong> 的行為是什麼。所以，我們特別查詢演算法處理 <strong><code>this</code></strong> 值的步驟。</p>
-<p>幸運的是，<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-string.prototype.substring"><code>String.prototype.substring()</code></a> 演算法的第一步，就是要處理 this 值</p>
-<blockquote>
-<ol>
-<li>Let <em>O</em> be ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a> (<strong><code>this</code></strong> value).</li>
-</ol>
-</blockquote>
-<p>這個  <code>?</code> 簡寫隱含的告訴我們，有時候 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a>(它是個 abstract operation) 會拋出例外，不然就是正常使用。</p>
-<p>事實上，如果它拋出錯，就符合我們上述的第二個假設。符合期待的，我們查到透過點擊 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a> 連結查到的。</p>
-<p>這個叫 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a> 的 abstract operation 有點不太一樣。不像大多數的 abstract operation，它是透過查表法定義而不是演算法。</p>
-<blockquote>
+<p><strong>資料庫 建立/刪除</strong></p>
+<p>使用時注意權限是否可以更動資料庫</p>
 <table>
 <thead>
 <tr>
-<th>參數型別</th>
-<th>回傳結果</th>
+<th>指令</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Undefined</td>
-<td>拋出一個 <strong>TypeError</strong> 例外。</td>
+<td>sequelize db:create</td>
+<td>從指定的 config 檔新增 database</td>
 </tr>
 <tr>
-<td>Null</td>
-<td>拋出一個 <strong>TypeError</strong> 例外。</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
+<td>sequelize db:drop</td>
+<td>從指定的 config 檔刪除 database</td>
 </tr>
 </tbody>
 </table>
-</blockquote>
-<p>不管怎樣 - 在 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a> 的規範中，和 Undeifned (我們傳給 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-string.prototype.substring"><code>substring()</code></a> 作為 <strong>this</strong> 的型別) 對應在同一行的是回傳一個例外。並且因為在函數的定義中使用了 <code>?</code> 表示法，我們知道拋出例外給函數的 caller。Bingo!</p>
-<p>而且，我們有我們的答案: <strong>這一小段程式碼拋出一個 TypeError 例外。</strong></p>
-<blockquote>
-<p>規範只有規定拋出 Error 的型別，沒有規定要包含什麼訊息。意思是實作可能有不同的錯誤訊息，甚至是本地的錯誤訊息。</p>
-<p>例如:  Google 的 V8 6.4 版 (內建在 Google Chrome 64) 的訊息是</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TypeError: String.prototype.substring called on null or undefined</span><br></pre></td></tr></table></figure>
-<p>而 Mozilla Firefox 的 57.0 版給的訊息，少到沒什麼幫助</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TypeError: can&#39;t convert undefined to object</span><br></pre></td></tr></table></figure>
-<p>相同的 ChakraCore 的 1.7.5.0 版 (Microsoft Edge 的 JavaScript 引擎) 走的是 V8 的路線。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TypeError: String.prototype.substring: &#39;this&#39; is null or undefined</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h2 id="2-7-Example-Can-Boolean-and-String-ever-throw-exceptions"><a class="header-anchor" href="#2-7-Example-Can-Boolean-and-String-ever-throw-exceptions">¶</a>2.7 Example: Can <code>Boolean()</code> and <code>String()</code> ever throw exceptions?</h2>
-<p>當撰寫到任務關鍵程式碼時，第一重要的程式碼，往往是要寫一個例外處理。因此，要常思考「某些內建函數有拋過例外嗎？」</p>
-<p>在這個例子，我們要試著回答兩個內建函數 <code>Boolean()</code> 和 <code>String()</code> 的問題。並非將變數包裝成物件(which form boxed objects)的 <code>new Boolean()</code> 和 <code>new String()</code> - 毫無懸念，這是 <a target="_blank" rel="noopener" href="https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/types%20%26%20grammar/ch3.md#object-wrapper-gotchas">JavaScript 最容易誤用的特性</a>之一，很多 JS 的風格指南都不鼓勵這種做法<sup class="footnote-ref"><a href="#fn17" id="fnref17">[17]</a></sup>。</p>
-<p>找到規範中的 <code>Boolean()</code> 段落，我們看見短短的演算法</p>
-<div class="warning">
-<p>When Boolean is called with argument value, the following steps are taken:</p>
-<ol>
-<li>Let <em>b</em> be ! <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-toboolean">ToBoolean</a>(<em>value</em>).</li>
-<li>If NewTarget is <strong><code>undefined</code></strong>, return <em>b</em>.</li>
-<li>Let <em>O</em> be ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-ordinarycreatefromconstructor">OrdinaryCreateFromConstructor</a>(NewTarget, <strong>“%Boolean.prototype%”</strong>, « [[BooleanData]] »).</li>
-<li>Set <em>O</em>.[[BooleanData]] to <em>b</em>.</li>
-<li>Return <em>O</em>.</li>
-</ol>
-</div>
-<p>不過，它並不像是看見的這麼簡單粗暴，還包含一些呼叫 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-ordinarycreatefromconstructor">OrdinaryCreateFromConstructor</a> 時複雜的雜技。更重要的是，有一個 <code>?</code> 簡寫，代表這個函數在某些情況之下可能會拋出錯誤。讓我們仔細看看。</p>
-<p>第一步，把 <em>value</em> (函數的參數) 轉型成一個 Boolean 值。有趣的是這一步沒有 <code>?</code> 或 <code>!</code> 的簡寫，但是通常沒有 Completion Record 縮寫意思和 <code>!</code> 意思相同。所以第一步不會拋出例外</p>
-<p>第二步，檢查被稱為 New Target 的這個東西是不是 <strong>undefined</strong>。<em><strong>NewTarget</strong></em> 與 ES2015 加入的 <code>new.target</code> 描述屬性(meta property) 規範等效。允許規範區分 <code>new Boolean()</code>(New Target 是 <code>Boolean</code>) 和 <code>Boolean()</code> (New Target 是 <code>undefined</code>)呼叫。因為我們只注意到直接呼叫的 Boolean() 時灰 我們知道 NewTarget 總是 undefined，而且，演算法將總是直接回傳 b 沒有其它的處理。</p>
-<p>因為不用 <code>new</code> 呼叫 <code>Boolean()</code> 只會跑 <code>Boolean()</code> 演算法的前兩步驟，而且前兩步都不會拋出例外，我們可以得出結論，無輪 <strong><code>Booldan()</code></strong> 輸入什麼，都<strong>保證不會拋出例外</strong>。</p>
-<hr>
-<p>我們來看看 <code>String()</code></p>
-<div class="warning">
-<p>22.1.1.1 String ( value )<br>
-When String is called with argument value, the following steps are taken:</p>
-<ol>
-<li>If value is not present, let s be the empty String.</li>
-<li>Else,
-<ol>
-<li>If NewTarget is <strong>undefined</strong> and <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-ecmascript-data-types-and-values">Type</a>(<em>value</em>) is Symbol, return <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-symboldescriptivestring">SymbolDescriptiveString</a>(<em>value</em>).</li>
-<li>Let s be ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-tostring">ToString</a>(<em>value</em>).</li>
-</ol>
-</li>
-<li>If NewTarget is <strong>undefined</strong>, return <em>s</em>.</li>
-<li>Return ! <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-stringcreate">StringCreate</a>(<em>s</em>, ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-getprototypefromconstructor">GetPrototypeFromConstructor</a>(NewTarget, <code>&quot;%String.prototype%&quot;</code>)).</li>
-</ol>
-</div>
-<blockquote>
-<p>譯註:<br>
-原文寫 「4. Return ? StringCreate…」<br>
-第四步驟有 <code>?</code> 的簡寫，但 2022 的 ECMA262 改成使用 <code>!</code> 的縮寫。</p>
-</blockquote>
-<p>以 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-boolean-constructor-boolean-value"><code>Boolean()</code></a> 的經驗依此類推，我們知道 NewTarget 總是 <strong><code>undefined</code></strong> 在這個(直接呼叫)的時候，所以可以不用考慮，跳過最後一步。我們也會知道 Type 和 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-symboldescriptivestring">SymbolDescriptiveString</a> 是安全的，因為它們兩都不會處理 abrupt completeions 的情況。但是還有一個地方要注意呼叫 ToString 之前還有一個 abstract operation <code>?</code>。仔細看</p>
-<p>像是前面查的 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-requireobjectcoercible">RequireObjectCoercible</a> ，<a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-tostring">ToString</a>(<em>argument</em>) 也提到這個定義。</p>
-<blockquote>
-<p>譯註:<br>
-「也用這個表格定義。」但是這應該是提到有這個定義才對，並不是在此定義 ToString。</p>
-</blockquote>
-<blockquote>
+<p><strong>產生各種腳本</strong></p>
 <table>
 <thead>
 <tr>
-<th>參數型別</th>
-<th>回傳結果</th>
+<th>指令</th>
+<th>作用</th>
+<th>參數</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Undefined</td>
-<td>拋出一個 <strong>TypeError</strong> 例外。</td>
+<td>sequelize migration:generate</td>
+<td>產生 new migration 檔</td>
+<td>[別名: migration:create]</td>
 </tr>
 <tr>
-<td>Null</td>
-<td>拋出一個 <strong>TypeError</strong> 例外。</td>
+<td>sequelize model:generate</td>
+<td>產生 model 和它的 migration 檔</td>
+<td>[別名: model:create]</td>
 </tr>
 <tr>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr>
-<td>Object</td>
-<td>下面兩步 <br>1. Let primValue be ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-toprimitive">ToPrimitive</a>(<em>argument</em>, hint String). <br>2. Return ? <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-tostring">ToString</a>(<em>primValue</em>)</td>
+<td>sequelize seed:generate</td>
+<td>產生 new seed 檔</td>
+<td>[別名: seed:create]</td>
 </tr>
 </tbody>
 </table>
-</blockquote>
-<p>在 <code>String()</code> 中呼叫 <code>ToString()</code> 的時候，<em>value</em> 會是 Symbol 以外的值 (在前一步就就過濾好了)。然而，仍有兩個 <code>?</code> 在 Object 那一列，我們可以透過 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-toprimitive"><code>ToPrimitive</code></a> 的連結，並看到事實上若 <em>value</em> 是一個 Object 有多機會產生問題。</p>
+<p><strong>資料表結構維護</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize db:migrate</td>
+<td>執行未跑過的 migrations</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:undo</td>
+<td>恢復一次 migration</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:undo:all</td>
+<td>恢復所有跑過的 migrations</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:schema:timestamps:add</td>
+<td>Update migration table to have timestamps</td>
+</tr>
+<tr>
+<td>sequelize db:migrate:status</td>
+<td>List the status of all migrations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>前置資料維護</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequelize db:seed</td>
+<td>執行指定的 seeder</td>
+</tr>
+<tr>
+<td>sequelize db:seed:all</td>
+<td>執行每一個 seeder</td>
+</tr>
+<tr>
+<td>sequelize db:seed:undo</td>
+<td>從 database 刪除資料</td>
+</tr>
+<tr>
+<td>sequelize db:seed:undo:all</td>
+<td>從 database 刪除資料</td>
+</tr>
+</tbody>
+</table>
+<h2 id="初始化-sequelize-的基本環境"><a class="header-anchor" href="#初始化-sequelize-的基本環境">¶</a>初始化 sequelize 的基本環境</h2>
+<p>sequelize 的 cli 工具，可以做到很多事情，不過大多都在處理 migration。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize init</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Created &quot;config/config.json&quot;</span><br><span class="line">Successfully created models folder at &quot;/home/pi/code/express-demo/models&quot;.</span><br><span class="line">Successfully created migrations folder at &quot;/home/pi/code/express-demo/migrations&quot;.</span><br><span class="line">Successfully created seeders folder at &quot;/home/pi/code/express-demo/seeders&quot;.</span><br></pre></td></tr></table></figure>
+<p>執行完會出現</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">project/</span><br><span class="line">├- migrations/</span><br><span class="line">├- seeders/</span><br><span class="line">├- config/</span><br><span class="line">|  ├- config.json</span><br><span class="line">└- models/</span><br><span class="line">   └- index.js</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>config</code>, 包含 config 檔案, 提供資料庫連線給 CLI</li>
+<li><code>models</code>, 包含專案中所有的 models</li>
+<li><code>migrations</code>, 包含所有的 migration 檔案</li>
+<li><code>seeders</code>, 包含所有的 seed 檔案</li>
+</ul>
+<p>在此出現幾個陌生的名詞</p>
+<ul>
+<li>CLI: command line interface</li>
+<li>models: MVC 的 model，用來和資料庫連動的物件定義</li>
+<li>migration: 資料庫變動記錄</li>
+<li>seed: 餵資料，通常是資料庫的系統初始資料</li>
+</ul>
 <blockquote>
-<p>EXAMPLE 10<br>
-<code>String()</code><br>
-<strong>Several examples <code>String()</code> where throws</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   OrdinaryGet step 8.</span></span><br><span class="line"><span class="comment">//   Ordinary Object&#x27;s [[Get]]() step 1.</span></span><br><span class="line"><span class="comment">//   GetV step 3.</span></span><br><span class="line"><span class="comment">//   GetMethod step 2.</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.d.</span></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  get [<span class="built_in">Symbol</span>.toPrimitive]() &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Breaking JavaScript&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   GetMethod step 4.</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.d.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  get [<span class="built_in">Symbol</span>.toPrimitive]() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Breaking JavaScript&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.e.i.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  [<span class="built_in">Symbol</span>.toPrimitive]() &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Breaking JavaScript&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.e.iii.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  [<span class="built_in">Symbol</span>.toPrimitive]() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="string">&quot;breaking&quot;</span>: <span class="string">&quot;JavaScript&quot;</span> &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   OrdinaryToPrimitive step 5.b.i.</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.g.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  <span class="function"><span class="title">toString</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Breaking JavaScript&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   OrdinaryToPrimitive step 5.b.i.</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.g.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(&#123;</span><br><span class="line">  <span class="function"><span class="title">valueOf</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Breaking JavaScript&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Spec stack trace:</span></span><br><span class="line"><span class="comment">//   OrdinaryToPrimitive step 6.</span></span><br><span class="line"><span class="comment">//   ToPrimitive step 2.g.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>(<span class="built_in">Object</span>.create(<span class="literal">null</span>));</span><br></pre></td></tr></table></figure>
+<p>ORM 工具管理資料表變化，都會使用 migration。<br>
+它就像是 git 這種版本控制工具，只是它版控的是 table schema (只有管有哪些資料表與有哪些資料表的欄位)</p>
 </blockquote>
-<p>So for String(), our conclusion is that it never throws exceptions for primitive values, but may throw errors for Objects.</p>
-<p>所以 <code>String()</code> 絕對不會在 primitive values 時拋出例外，但是會在 Object 時可能拋出例外，是我們的結論。</p>
-<h2 id="2-8-Example-typeof-operator"><a class="header-anchor" href="#2-8-Example-typeof-operator">¶</a>2.8 Example: <code>typeof</code> operator</h2>
-<p>到現在，我們只分析了 API 函數，讓我們試些不同的。</p>
+<h2 id="資料庫連線設定"><a class="header-anchor" href="#資料庫連線設定">¶</a>資料庫連線設定</h2>
+<p>sequelize 要連線資料庫要靠 <code>config/config.json</code> 這裡的資訊。</p>
+<p><strong>config/config.json</strong></p>
+<p>環境變數就會對應到預設 config 的 <code>development</code>, <code>test</code>, <code>production</code> 三種情境，可依需要增減。</p>
 <blockquote>
-<p>待續。 &lt;<a target="_blank" rel="noopener" href="https://github.com/TimothyGu/es-howto/issues/2">https://github.com/TimothyGu/es-howto/issues/2</a>&gt;</p>
+<p>dialect: 翻譯到不同資料庫的 statement<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 </blockquote>
+<p>在此，我使用的是 mariadb，所以 “dialect” 設定成 <s>“mariadb”</s> “mysql” 才會跑。(不知道為什麼的雷點！)</p>
+<p>如果有 <code>operatorsAliases: false</code> 營運商別名，保持預設值就好。(我目前是刪掉它)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;development&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;root&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;test&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;production&quot;: &#123;</span><br><span class="line">    &quot;username&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;rasp&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;booklibrary&quot;,</span><br><span class="line">    &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">    &quot;dialect&quot;: &quot;mysql&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三個的使用情境，我自己會這麼使用</p>
+<p><strong>development</strong></p>
+<p>用在開發者變動(新增/刪除/修改)資料庫、資料表結構</p>
+<p><strong>production</strong></p>
+<p>用在平常的執行時使用的設定 (給 CD/CI 起動時用的)</p>
+<p><strong>test</strong></p>
+<p>還沒想到。</p>
+<h2 id="用-ORM-創造資料庫"><a class="header-anchor" href="#用-ORM-創造資料庫">¶</a>用 ORM 創造資料庫</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize db:create booklibrary</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;development&quot;.</span><br><span class="line">Database booklibrary created.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因為用 cli 所以 env 要自帶在 env 參數<br>
+預設 env 參數是 “development”</p>
+</blockquote>
+<div class="danger">
+<p>db:create 要使用權限較高的帳號執行。<br>
+在此設定在 <code>development</code> 的 config 中。</p>
+</div>
+<h2 id="用-ORM-創造-Migration-步驟"><a class="header-anchor" href="#用-ORM-創造-Migration-步驟">¶</a>用 ORM 創造 Migration 步驟</h2>
+<p>Migration 像是資料庫的演進過程，每一步都記錄下來的話，有助於未來再建立一次初始系統。<br>
+也有助於自動化資料表建置、修改或系統的初始資料建置。</p>
+<p>但是 migration 畢竟一開始算是「一個動作」我們就以這個角度切入看看 sequelize-cli 幫我們打造了什麼工具又可以做到什麼吧！</p>
+<p>一開始我們創一個 Migration 檔來執行或恢復。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npx sequelize-cli migration:generate --name create-empty-file</span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">migrations folder at <span class="string">&quot;/home/pi/code/express-demo/migrations&quot;</span> already exists.</span><br><span class="line">New migration was created at /home/pi/code/express-demo/migrations/20210820152155-create-empty-file.js .</span><br></pre></td></tr></table></figure>
+<p>可以產生一個 migration 檔。</p>
+<p><strong>migrations/20210820152155-create-empty-file.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Add altering commands here.</span></span><br><span class="line"><span class="comment">      Return a promise to correctly handle asynchronicity.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example:</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;users&#x27;</span>, &#123; <span class="attr">id</span>: Sequelize.INTEGER &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Add reverting commands here.</span></span><br><span class="line"><span class="comment">      Return a promise to correctly handle asynchronicity.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Example:</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;users&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>配合上面的 Example (source code 產生的)</p>
+<ul>
+<li><code>queryInterface</code>: 用來修改 Database</li>
+<li><code>Sequelize</code>: 用來記可以用的資料型別 (ex: STRING, INTEGER)</li>
+<li>function up, down: 回傳 promise</li>
+</ul>
+<h3 id="執行-migration"><a class="header-anchor" href="#執行-migration">¶</a>執行 migration</h3>
+<p>執行到底</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sequelize-cli db:migrate</span><br></pre></td></tr></table></figure>
+<p>恢復到底</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate:undo:all</span><br></pre></td></tr></table></figure>
+<h3 id="此也可以加上-transaction"><a class="header-anchor" href="#此也可以加上-transaction">¶</a>此也可以加上 transaction</h3>
+<p>透過 <code>queryInterface.sequelize.transaction(done =&gt; &#123;&#125;)</code> 可以在 callback 裡面執行 一次 transaction 的所有行為。並且在每個行為的最後一個參數加上 <code>, &#123; transaction: done &#125;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.sequelize.transaction(<span class="function"><span class="params">transaction</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;users&#x27;</span>, &#123;</span><br><span class="line">        id: Sequelize.INTEGER</span><br><span class="line">      &#125;, &#123; transaction &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.sequelize.transaction(<span class="function"><span class="params">transaction</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;users&#x27;</span>, &#123; transaction &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="此也可以含有-forang-key"><a class="header-anchor" href="#此也可以含有-forang-key">¶</a>此也可以含有 forang key</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;Person&#x27;</span>, &#123;</span><br><span class="line">      name: Sequelize.DataTypes.STRING,</span><br><span class="line">      isBetaMember: &#123;</span><br><span class="line">        type: Sequelize.DataTypes.BOOLEAN,</span><br><span class="line">        defaultValue: <span class="literal">false</span>,</span><br><span class="line">        allowNull: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">      userId: &#123;</span><br><span class="line">        type: Sequelize.DataTypes.INTEGER,</span><br><span class="line">        references: &#123;</span><br><span class="line">          model: &#123;</span><br><span class="line">            tableName: <span class="string">&#x27;users&#x27;</span>,</span><br><span class="line">            schema: <span class="string">&#x27;schema&#x27;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          key: <span class="string">&#x27;id&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        allowNull: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;Person&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改寫成 async/await</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">up</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> transaction = <span class="keyword">await</span> queryInterface.sequelize.transaction();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> queryInterface.addColumn(</span><br><span class="line">        <span class="string">&#x27;Person&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          type: Sequelize.DataTypes.STRING,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123; transaction &#125;</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">await</span> queryInterface.addIndex(</span><br><span class="line">        <span class="string">&#x27;Person&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">        &#123;</span><br><span class="line">          fields: <span class="string">&#x27;petName&#x27;</span>,</span><br><span class="line">          unique: <span class="literal">true</span>,</span><br><span class="line">          transaction,</span><br><span class="line">        &#125;</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">await</span> transaction.commit();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="keyword">await</span> transaction.rollback();</span><br><span class="line">      <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">down</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> transaction = <span class="keyword">await</span> queryInterface.sequelize.transaction();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">await</span> queryInterface.removeColumn(<span class="string">&#x27;Person&#x27;</span>, <span class="string">&#x27;petName&#x27;</span>, &#123; transaction &#125;);</span><br><span class="line">      <span class="keyword">await</span> transaction.commit();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="keyword">await</span> transaction.rollback();</span><br><span class="line">      <span class="keyword">throw</span> err;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="一併創造資料表"><a class="header-anchor" href="#一併創造資料表">¶</a>一併創造資料表</h3>
+<p>可以在建立 migration 的同時，也產生好對應 Model 檔案。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize model:generate --name authors --attributes author_id:number,name_last:string,name_first:string,country:string</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">New model was created at /home/pi/code/express-demo/models/authors.js .</span><br><span class="line">New migration was created at /home/pi/code/express-demo/migrations/20210501084235-authors.js .</span><br></pre></td></tr></table></figure>
+<ul>
+<li>author_id:number</li>
+<li>name_last:string</li>
+<li>name_first:string</li>
+<li>country:string</li>
+</ul>
+<p>產生 <strong>models/authors.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> authors = sequelize.define(<span class="string">&#x27;authors&#x27;</span>, &#123;</span><br><span class="line">    author_id: DataTypes.NUMBER,</span><br><span class="line">    name_last: DataTypes.STRING,</span><br><span class="line">    name_first: DataTypes.STRING,</span><br><span class="line">    country: DataTypes.STRING</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">  authors.associate = <span class="function"><span class="keyword">function</span>(<span class="params">models</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// associations can be defined here</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> authors;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>產生 <strong>migrations/20210501084235-create-authors.js</strong></p>
+<p>這裡做一點修改，我們想要讓 id 用 author_id 表示</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.createTable(<span class="string">&#x27;authors&#x27;</span>, &#123;</span><br><span class="line">      author_id: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        autoIncrement: <span class="literal">true</span>,</span><br><span class="line">        primaryKey: <span class="literal">true</span>,</span><br><span class="line">        type: Sequelize.INTEGER</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// author_id: &#123;</span></span><br><span class="line">      <span class="comment">//   type: Sequelize.NUMBER</span></span><br><span class="line">      <span class="comment">// &#125;,</span></span><br><span class="line">      name_last: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      name_first: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      country: &#123;</span><br><span class="line">        type: Sequelize.STRING</span><br><span class="line">      &#125;,</span><br><span class="line">      createdAt: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;,</span><br><span class="line">      updatedAt: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> queryInterface.dropTable(<span class="string">&#x27;authors&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">describe</span> <span class="keyword">authors</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type         | Null | Key | Default | Extra          |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| author_id  | int(11)      | NO   | PRI | &lt;null&gt;  | auto_increment |</span><br><span class="line">| name_last  | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| name_first | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| country    | varchar(255) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| createdAt  | datetime     | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| updatedAt  | datetime     | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">6 rows in set</span><br><span class="line">Time: 0.759s</span><br></pre></td></tr></table></figure>
+<h2 id="用-ORM-創造資料"><a class="header-anchor" href="#用-ORM-創造資料">¶</a>用 ORM 創造資料</h2>
+<p>為了在 migration 可以預先填入資料</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli seed:generate --name base-authors</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">seeders folder at &quot;/home/pi/code/express-demo/seeders&quot; already exists.</span><br><span class="line">New seed was created at /home/pi/code/express-demo/seeders/20210501134052-base-authors.js .</span><br></pre></td></tr></table></figure>
+<p><strong>seeders/20210501134052-base-authors.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      自己寫入要加上去什麼資料</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.bulkInsert(<span class="string">&#x27;authors&#x27;</span>, [&#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Kafka&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Franz&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Czech Republic&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Dostoevsky&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Fyodor&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Russian&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Chris&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Wang&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Tainan&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      name_first: <span class="string">&#x27;Mary&#x27;</span>,</span><br><span class="line">      name_last: <span class="string">&#x27;Lee&#x27;</span>,</span><br><span class="line">      country: <span class="string">&#x27;Tainan&#x27;</span>,</span><br><span class="line">      createdAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">      updatedAt: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">    &#125;], &#123;&#125;);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      同時要寫下返回的時候要刪掉什麼資料</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="keyword">return</span> queryInterface.bulkDelete(<span class="string">&#x27;authors&#x27;</span>, <span class="literal">null</span>, &#123;&#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize db:seed</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 12.18.0, CLI: 5.5.1, ORM: 5.22.4]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;development&quot;.</span><br></pre></td></tr></table></figure>
+<p>看資料是否有加進去資料庫</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">authors</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line">| author_id | name_last | name_first | country        | createdAt           | updatedAt           |</span><br><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line">| 1         | Franz     | Kafka      | Czech Republic | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 2         | Fyodor    | Dostoevsky | Russian        | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 3         | Wang      | Chris      | Tainan         | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">| 4         | Lee       | Mary       | Tainan         | 2021-05-01 13:36:31 | 2021-05-01 13:36:31 |</span><br><span class="line">+-----------+-----------+------------+----------------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">4 rows in set</span><br><span class="line">Time: 0.507s</span><br></pre></td></tr></table></figure>
+<p>返回上次填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo</span></span><br></pre></td></tr></table></figure>
+<p>指定檔案返回填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo --seed seeders/20210501134052-base-authors.js</span></span><br></pre></td></tr></table></figure>
+<p>返全部填入資料的動作</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize-cli db:seed:undo:all</span></span><br></pre></td></tr></table></figure>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.whatsmybrowser.org/">What browser am I using?</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/">Sequelize</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://nodejs.org/">Node.js</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/sequelize/cli">sequelize/cli: The Sequelize CLI</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://foundation.nodejs.org/wp-content/uploads/sites/50/2017/09/Node_CaseStudy_Nasa_FNL.pdf">Node.js Helps NASA Keep Astronauts Safe and Data Accessible.</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://johnny-five.io/">Johnny-Five: The JavaScript Robotics &amp; IoT Platform.</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.destroyallsoftware.com/talks/wat">A lightning talk by Gary Bernhardt from CodeMash 2012</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn6" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/">Mozilla Developer Network</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn7" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://console.spec.whatwg.org/">Dominic Farolino; Terin Stock; Robert Kowalski. - Console Standard</a>. <a href="#fnref7" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn8" class="footnote-item"><p>(Living Standard)<a target="_blank" rel="noopener" href="https://console.spec.whatwg.org/">https://console.spec.whatwg.org/</a> <a href="#fnref8" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn9" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/">Anne van Kesteren; et al. HTML Standard</a>. <a href="#fnref9" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn10" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/">Living Standard.</a> <a href="#fnref10" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn11" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-global">tc39/proposal-global: ECMAScript Proposal, specs, and reference implementation for <code>global</code>. </a> <a href="#fnref11" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn12" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://tc39.github.io/ecma262/">ECMAScript Language Specification.</a> <a href="#fnref12" class="footnote-backref">↩︎</a> <a href="#fnref12:1" class="footnote-backref">↩︎</a> <a href="#fnref12:2" class="footnote-backref">↩︎</a> <a href="#fnref12:3" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn13" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.ecma-international.org/memento/tc39.htm">TC39 - ECMAScript</a> <a href="#fnref13" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn14" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://ecma-international.org/ecma-262/10.0/">ECMAScript 2019 Language Specification.</a> <a href="#fnref14" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn15" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.iso.org/standard/73002.html">ISO/IEC 22275:2018 - Information technology — Programming languages, their environments, and system software interfaces — ECMAScript® Specification Suite.</a> <a href="#fnref15" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn16" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://tc39.es/ecma262/">Draft ECMA-262 / April 6, 2021<br>
-ECMAScript® 2022 Language Specification</a> <a href="#fnref16" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn17" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/getify/You-Dont-Know-JS">Kyle Simpson. You Don’t Know JS (book series)</a> <a href="#fnref17" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/v5/manual/dialects.html">Manual Dialects | Sequelize</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -838,23 +433,15 @@ ECMAScript® 2022 Language Specification</a> <a href="#fnref16" class="footnote-
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/JavaScript/">JavaScript</a> }
+  { <a href="/tags/sequelize/">sequelize</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/TC39/">TC39</a> }
+  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/ECMAScript/">ECMAScript</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/ECMA-262/">ECMA-262</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/%E7%9C%8B%E6%9B%B8/">看書</a> }
+  { <a href="/tags/migration/">migration</a> }
   </li>
 
 
@@ -884,7 +471,7 @@ ECMAScript® 2022 Language Specification</a> <a href="#fnref16" class="footnote-
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.52px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.34px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.34px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.34px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.17px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 38.62px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.9px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.17px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.86px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.34px;">Flex</a> <a href="/tags/Git/" style="font-size: 36.28px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.52px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.34px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 30.41px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.86px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.03px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.17px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.34px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 14px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.17px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.69px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.34px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 29.24px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 37.45px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.17px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.38px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 43.31px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.69px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.38px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.34px;">animation</a> <a href="/tags/api/" style="font-size: 15.17px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.17px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.17px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.17px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.52px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.17px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.34px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/display/" style="font-size: 15.17px;">display</a> <a href="/tags/docker/" style="font-size: 16.34px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 15.17px;">express</a> <a href="/tags/facebook/" style="font-size: 17.52px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.17px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.69px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.17px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.17px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 31.59px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.17px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 23.38px;">javascript</a> <a href="/tags/jest/" style="font-size: 25.72px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.17px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/markdown/" style="font-size: 18.69px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.17px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.17px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 25.72px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.34px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pi/" style="font-size: 14px;">pi</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.17px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.17px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 23.38px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.21px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.34px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 24.55px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.17px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 42.14px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.17px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.34px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.34px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.34px;">web camp</a> <a href="/tags/webpack/" style="font-size: 30.41px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 25.72px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.86px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 17.52px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.17px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 32.76px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 30.41px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.69px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 40.97px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 24.55px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 21.03px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.52px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 39.79px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E7%AB%AF/" style="font-size: 14px;">後端</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.34px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 32.76px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.21px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 32.76px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.1px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.83px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.07px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.86px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.14px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.38px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.17px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 31.59px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.24px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.66px;">社服社與我</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.52px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.52px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 32.76px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.17px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 33.93px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 36.28px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.69px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.69px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.34px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.52px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.17px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.07px;">音響拆裝過程</a>
+    <a href="/tags/new-framework/" style="font-size: 17.52px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.48px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.34px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.34px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.34px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.17px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 38.62px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.9px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.17px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.86px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.34px;">Flex</a> <a href="/tags/Git/" style="font-size: 36.28px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.52px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.34px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 30.41px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.86px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.03px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.17px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.34px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 15.17px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.17px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.69px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.34px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 29.24px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 37.45px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.17px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.38px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 43.31px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.69px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.38px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.34px;">animation</a> <a href="/tags/api/" style="font-size: 15.17px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.17px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.17px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.17px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.52px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 15.17px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/css/" style="font-size: 16.34px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 14px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/display/" style="font-size: 15.17px;">display</a> <a href="/tags/docker/" style="font-size: 16.34px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 15.17px;">express</a> <a href="/tags/facebook/" style="font-size: 17.52px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.17px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 14px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.69px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.17px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.17px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 31.59px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.17px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 23.38px;">javascript</a> <a href="/tags/jest/" style="font-size: 25.72px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.17px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mariadb/" style="font-size: 14px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.69px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 15.17px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.17px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 25.72px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.34px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pi/" style="font-size: 14px;">pi</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.17px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.17px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 23.38px;">python</a> <a href="/tags/sequelize/" style="font-size: 22.21px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.34px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 24.55px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.17px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 42.14px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.17px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.34px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.34px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.34px;">web camp</a> <a href="/tags/webpack/" style="font-size: 30.41px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 25.72px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.86px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 17.52px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.17px;">再讀一本書</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 32.76px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 30.41px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.69px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 40.97px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 24.55px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 21.03px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.52px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 39.79px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E7%AB%AF/" style="font-size: 14px;">後端</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.34px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 32.76px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.21px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 32.76px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.1px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.83px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.07px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.86px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.14px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.38px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.17px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 31.59px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.24px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.66px;">社服社與我</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.52px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.52px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 32.76px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.17px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 33.93px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 36.28px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.69px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.69px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.34px;">重構</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.52px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.17px;">電子DIY</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.07px;">音響拆裝過程</a>
 
 
                 <footer>
