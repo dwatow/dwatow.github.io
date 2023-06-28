@@ -1,14 +1,14 @@
 ---
-title: Raspberry Pi 4 的後端修鍊 (2): Database Initial
+title: Raspberry Pi 4 的後端修鍊 (1) - Mariadb Initial
 date: 2023-06-28 17:25:50
 tags:
-- `後端`
-- `pi`
-- `Database`
+- Raspberry Pi 4
+- database
+- mariadb
 categories:
 - 技術練習
 ---
-# Raspberry Pi 4 的後端修鍊 (2): Database Initial
+# Raspberry Pi 4 的後端修鍊 (1) - Mariadb Initial
 
 > ## 樹莓派換 wifi 遇到的問題
 > 
