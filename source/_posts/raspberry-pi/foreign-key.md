@@ -359,3 +359,7 @@ SHOW TABLES;
 8 rows in set
 Time: 0.026s
 ```
+
+實際跑一下 TablePlus 的外掛，畫出來是這樣
+
+[![](https://hackmd.io/_uploads/SkDco-Wj2.png)](https://hackmd.io/_uploads/SkDco-Wj2.png)
