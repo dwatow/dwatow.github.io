@@ -23,26 +23,42 @@ digraph hierarchy {
 
   node[shape=record]
 
-  user [label="
-    資料表: 使用者|
+  author [label="
+    資料表: 作者|
     <id>id |
-    name |
-    type (作者\|讀者)
+    name|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "];
 
-  reader [label="
-    資料表: 讀者資料|
+  author:creator_id->user:id [label="1..n"]
+
+  user [label="
+    資料表: 使用者|
     <id>id|
-    <user_id>user_id|
+    password|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
+  "]
+
+  user:creator_id->user:id [label="1..n"]
+
+  reader [label="
+    資料表: 讀者|
+    <id>id|
     password|
     slack_id|
     facebook_id|
     phone|
-    email
+    email|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "]
-      
-      
-  reader:user_id->user:id [label="1..1"]
+
+  reader:creator_id->user:id [label="1..n"]
       
   book [label="
     資料表: 書籍|
@@ -52,11 +68,15 @@ digraph hierarchy {
     <author_id>author_id |
     <publisher_id>publisher_id |
     year_pub |
-    description
+    description|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "];
       
-  book:author_id->user:id [label="1..n"]
+  book:author_id->author:id [label="1..n"]
   book:publisher_id->publisher:id [label="1..n"]
+  book:creator_id->user:id [label="1..n"]
       
   abook [label="
     資料表: 一本書|
@@ -64,22 +84,23 @@ digraph hierarchy {
     <book_id>book_id|
     storage 儲位|
     owner|
+    <creator_id>creator_id|
+    created_at|
     inventory_date 盤點日期
   "]
 
   abook:book_id->book:id
+  abook:creator_id->user:id [label="1..n"]
 
   publisher [label="
     資料表: 出版社|
     <id>序號|
     name|
-    <boss_id>boss_id|
     <creator_id>creator_id|
     created_at|
     updated_at
   "];
       
-  publisher:boss_id->user:id [label="1..n"]
   publisher:creator_id->user:id [label="1..n"]
 
   
@@ -102,11 +123,15 @@ digraph hierarchy {
     <user_id>reader_id|
     <abook_id>abook_id|
     start_at|
-    end_at
+    end_at|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "]
 
-  borrowing:user_id->user:id [label="1..n"]
+  borrowing:user_id->reader:id [label="1..n"]
   borrowing:abook_id->abook:id [label="1..n"]
+  borrowing:creator_id->user:id [label="1..n"]
 }
 ```
 
@@ -193,7 +218,8 @@ Time: 0.009s
 ```
 
 ### 離開 mycli 的環境
-換帳號
+
+**換帳號**
 
 ```sql
 MariaDB root@(none):(none)> exit
@@ -229,15 +255,16 @@ MariaDB admin@localhost:good_ideas_lib>
 CREATE TABLE user (
   id CHAR PRIMARY KEY,
   name CHAR,
-  type CHAR
+  password CHAR,
+  created_at DATETIME,
+  updated_at DATETIME
 )
 ```
 
 ```shell
 Query OK, 0 rows affected
-Time: 0.019s
+Time: 0.018s
 ```
-
 
 ## 看資料表[^describe]
 
@@ -248,13 +275,15 @@ DESCRIBE `user`
 ```
 
 ```shell
-+-------+---------+------+-----+---------+-------+
-| Field | Type    | Null | Key | Default | Extra |
-+-------+---------+------+-----+---------+-------+
-| id    | char(1) | NO   | PRI | <null>  |       |
-| name  | char(1) | YES  |     | <null>  |       |
-| type  | char(1) | YES  |     | <null>  |       |
-+-------+---------+------+-----+---------+-------+
++------------+----------+------+-----+---------+-------+
+| Field      | Type     | Null | Key | Default | Extra |
++------------+----------+------+-----+---------+-------+
+| id         | char(1)  | NO   | PRI | <null>  |       |
+| name       | char(1)  | YES  |     | <null>  |       |
+| password   | char(1)  | YES  |     | <null>  |       |
+| created_at | datetime | YES  |     | <null>  |       |
+| updated_at | datetime | YES  |     | <null>  |       |
++------------+----------+------+-----+---------+-------+
 
 3 rows in set
 Time: 0.067s
@@ -277,13 +306,14 @@ You're about to run a destructive command.
 Do you want to proceed? (y/n): y
 Your call!
 Query OK, 0 rows affected
-Time: 0.014s
+Time: 0.013s
 ```
 
 ### 重新再新增資料表
 
 - `id` 
-  - 資料型別用 `CHAR(10)`，在此用來記錄身份證字號，共十碼，英文開頭。
+  - 資料型別用 `INT`，因為 user 指的是系統後台使用者，並不是讀者。
+    - 如果要記錄身份證字號，可以用 `CHAR(10)`，共十碼，英文開頭。
     - 如果是流水號，可以選用 `INT`
     - 如果想要用唯一碼並不想要流水號，可以用 `UUID`
   - 如果想要自動生成 可以用 `AUTO_INCREMENT` 讓它在新增資料時，不給初值也會有值。
@@ -291,15 +321,17 @@ Time: 0.014s
 - `name` 
   - 字串改用 `VARCHAR` (utf-8)，`VARCHAR(50)` 是將資料宣告成可變動字串
   - 宣告的數字是最大長度。
-- `type` 因為 `(author|reader)` 是長度固定為 6 的字串，
-  - 設定成 `CHAR(6)` 固定字串長度 6。
-
+- `password` 因為想要使用 hash 取 128 位數。
+  - 設定成 `CHAR(128)` 固定字串長度 128。
+- `created_at`、`updated_at` 都使用 `DATETIME` 記錄日期時間
 
 ```sql
 CREATE TABLE user (
-  id CHAR(10) NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(50) NOT NULL,
-  type CHAR(6) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 ```
@@ -309,16 +341,18 @@ DESCRIBE `user`
 ```
 
 ```shell
-+-------+-------------+------+-----+---------+-------+
-| Field | Type        | Null | Key | Default | Extra |
-+-------+-------------+------+-----+---------+-------+
-| id    | char(10)    | NO   | PRI | <null>  |       |
-| name  | varchar(50) | NO   |     | <null>  |       |
-| type  | char(6)     | NO   |     | <null>  |       |
-+-------+-------------+------+-----+---------+-------+
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | int(11)     | NO   | PRI | <null>  | auto_increment |
+| name       | varchar(50) | NO   |     | <null>  |                |
+| password   | char(128)   | NO   |     | <null>  |                |
+| created_at | datetime    | YES  |     | <null>  |                |
+| updated_at | datetime    | YES  |     | <null>  |                |
++------------+-------------+------+-----+---------+----------------+
 
-3 rows in set
-Time: 0.017s
+5 rows in set
+Time: 0.043s
 ```
 
 ### SQL 小重點
