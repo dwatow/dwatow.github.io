@@ -180,7 +180,7 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> good_ideas_lib.* <span class="keyword">TO</span> <span class="string">&#x27;admin&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.009s</span><br></pre></td></tr></table></figure>
 <h3 id="離開-mycli-的環境"><a class="header-anchor" href="#離開-mycli-的環境">¶</a>離開 mycli 的環境</h3>
-<p>換帳號</p>
+<p><strong>換帳號</strong></p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB root@(none):(none)&gt; exit</span><br><span class="line">Goodbye!</span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mycli -u admin -h localhost -p pi good_ideas_lib</span></span><br><span class="line">Connecting to socket /var/run/mysqld/mysqld.sock, owned by user mysql</span><br><span class="line">MariaDB 10.5.19</span><br><span class="line">mycli 1.26.1</span><br><span class="line">Home: http://mycli.net</span><br><span class="line">Bug tracker: https://github.com/dbcli/mycli/issues</span><br><span class="line">Thanks to the contributor - Huachao Mao</span><br></pre></td></tr></table></figure>
 <p>進入之後會出現</p>
@@ -188,22 +188,23 @@
 <p>成功！</p>
 <h2 id="新增資料表"><a class="header-anchor" href="#新增資料表">¶</a>新增資料表<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
 <p>新增資料表時，使用的命名都用「單數」的名詞 (ex: book, user)</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span> PRIMARY <span class="keyword">KEY</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">CHAR</span>,</span><br><span class="line">  <span class="keyword">type</span> <span class="built_in">CHAR</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.019s</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span> PRIMARY <span class="keyword">KEY</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">CHAR</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">CHAR</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.018s</span><br></pre></td></tr></table></figure>
 <h2 id="看資料表"><a class="header-anchor" href="#看資料表">¶</a>看資料表<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> <span class="string">`user`</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+-------+---------+------+-----+---------+-------+</span><br><span class="line">| Field | Type    | Null | Key | Default | Extra |</span><br><span class="line">+-------+---------+------+-----+---------+-------+</span><br><span class="line">| id    | char(1) | NO   | PRI | &lt;null&gt;  |       |</span><br><span class="line">| name  | char(1) | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| type  | char(1) | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">+-------+---------+------+-----+---------+-------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.067s</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line">| Field      | Type     | Null | Key | Default | Extra |</span><br><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line">| id         | char(1)  | NO   | PRI | &lt;null&gt;  |       |</span><br><span class="line">| name       | char(1)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| password   | char(1)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| created_at | datetime | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| updated_at | datetime | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.067s</span><br></pre></td></tr></table></figure>
 <p>在建構 TABLE 時，id, name, type 的資料型別都只是使用 <code>CHAR</code> 宣告，系統就直接只給 <code>CHAR(1)</code>。這並不符合需求，來學一下如何刪除資料表之後，再重建一次吧！</p>
 <h2 id="刪除資料表"><a class="header-anchor" href="#刪除資料表">¶</a>刪除資料表<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
 <p>刪除指令比較危險，所以會先確認是否要刪除，才會刪除</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.014s</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.013s</span><br></pre></td></tr></table></figure>
 <h3 id="重新再新增資料表"><a class="header-anchor" href="#重新再新增資料表">¶</a>重新再新增資料表</h3>
 <ul>
 <li><code>id</code>
 <ul>
-<li>資料型別用 <code>CHAR(10)</code>，在此用來記錄身份證字號，共十碼，英文開頭。
+<li>資料型別用 <code>INT</code>，因為 user 指的是系統後台使用者，並不是讀者。
 <ul>
+<li>如果要記錄身份證字號，可以用 <code>CHAR(10)</code>，共十碼，英文開頭。</li>
 <li>如果是流水號，可以選用 <code>INT</code></li>
 <li>如果想要用唯一碼並不想要流水號，可以用 <code>UUID</code></li>
 </ul>
@@ -218,15 +219,16 @@
 <li>宣告的數字是最大長度。</li>
 </ul>
 </li>
-<li><code>type</code> 因為 <code>(author|reader)</code> 是長度固定為 6 的字串，
+<li><code>password</code> 因為想要使用 hash 取 128 位數。
 <ul>
-<li>設定成 <code>CHAR(6)</code> 固定字串長度 6。</li>
+<li>設定成 <code>CHAR(128)</code> 固定字串長度 128。</li>
 </ul>
 </li>
+<li><code>created_at</code>、<code>updated_at</code> 都使用 <code>DATETIME</code> 記錄日期時間</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">type</span> <span class="built_in">CHAR</span>(<span class="number">6</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">CHAR</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> <span class="string">`user`</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field | Type        | Null | Key | Default | Extra |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| id    | char(10)    | NO   | PRI | &lt;null&gt;  |       |</span><br><span class="line">| name  | varchar(50) | NO   |     | &lt;null&gt;  |       |</span><br><span class="line">| type  | char(6)     | NO   |     | &lt;null&gt;  |       |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.017s</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type        | Null | Key | Default | Extra          |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| id         | int(11)     | NO   | PRI | &lt;null&gt;  | auto_increment |</span><br><span class="line">| name       | varchar(50) | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| password   | char(128)   | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| created_at | datetime    | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| updated_at | datetime    | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">5 rows in set</span><br><span class="line">Time: 0.043s</span><br></pre></td></tr></table></figure>
 <h3 id="SQL-小重點"><a class="header-anchor" href="#SQL-小重點">¶</a>SQL 小重點</h3>
 <ul>
 <li>SQL 的語法: <code>;</code> 結尾</li>
@@ -248,26 +250,42 @@
 
   node[shape=record]
 
-  user [label="
-    資料表: 使用者|
+  author [label="
+    資料表: 作者|
     <id>id |
-    name |
-    type (作者\|讀者)
+    name|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "];
 
-  reader [label="
-    資料表: 讀者資料|
+  author:creator_id->user:id [label="1..n"]
+
+  user [label="
+    資料表: 使用者|
     <id>id|
-    <user_id>user_id|
+    password|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
+  "]
+
+  user:creator_id->user:id [label="1..n"]
+
+  reader [label="
+    資料表: 讀者|
+    <id>id|
     password|
     slack_id|
     facebook_id|
     phone|
-    email
+    email|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "]
-      
-      
-  reader:user_id->user:id [label="1..1"]
+
+  reader:creator_id->user:id [label="1..n"]
       
   book [label="
     資料表: 書籍|
@@ -277,11 +295,15 @@
     <author_id>author_id |
     <publisher_id>publisher_id |
     year_pub |
-    description
+    description|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "];
       
-  book:author_id->user:id [label="1..n"]
+  book:author_id->author:id [label="1..n"]
   book:publisher_id->publisher:id [label="1..n"]
+  book:creator_id->user:id [label="1..n"]
       
   abook [label="
     資料表: 一本書|
@@ -289,22 +311,23 @@
     <book_id>book_id|
     storage 儲位|
     owner|
+    <creator_id>creator_id|
+    created_at|
     inventory_date 盤點日期
   "]
 
   abook:book_id->book:id
+  abook:creator_id->user:id [label="1..n"]
 
   publisher [label="
     資料表: 出版社|
     <id>序號|
     name|
-    <boss_id>boss_id|
     <creator_id>creator_id|
     created_at|
     updated_at
   "];
       
-  publisher:boss_id->user:id [label="1..n"]
   publisher:creator_id->user:id [label="1..n"]
 
   
@@ -327,11 +350,15 @@
     <user_id>reader_id|
     <abook_id>abook_id|
     start_at|
-    end_at
+    end_at|
+    <creator_id>creator_id|
+    created_at|
+    updated_at
   "]
 
-  borrowing:user_id->user:id [label="1..n"]
+  borrowing:user_id->reader:id [label="1..n"]
   borrowing:abook_id->abook:id [label="1..n"]
+  borrowing:creator_id->user:id [label="1..n"]
 }</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script><hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
