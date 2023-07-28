@@ -8,6 +8,8 @@ tags:
 categories:
 - 技術練習
 ---
+# Raspberry Pi 4 的後端修鍊 (2) - 建立資料表
+
 ## 選用 MariaDB
 
 MariaDB 是一種資料庫系統，也是一個資料庫是一個伺服器，可以使用。MariaDB 一開始開發出來和 MySQL 相容，依相容性來考量選擇它。
