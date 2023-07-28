@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris" />
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2023/07-28-raspberry-pi/foreign-key/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶Raspberry Pi 4 的後端修鍊 (3) - foreign key ¶增加一個有 foreign key 的資料表[1] 關聯式資料庫，的「關聯」之處，在於 foreign key 的關係。 有些開發者不喜歡 foreign key ，直接鍵一個欄位記錄別的 TABLE 的 key 值，但只有他自己知道，其它的人不知道，看資料庫也看不出來。 我自己比較喜歡用 foreign key 所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry Pi 4 的後端修鍊 (3) - foreign key">
+<meta property="og:url" content="https://dwatow.github.io/2023/07-28-raspberry-pi/foreign-key/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Raspberry Pi 4 的後端修鍊 (3) - foreign key ¶增加一個有 foreign key 的資料表[1] 關聯式資料庫，的「關聯」之處，在於 foreign key 的關係。 有些開發者不喜歡 foreign key ，直接鍵一個欄位記錄別的 TABLE 的 key 值，但只有他自己知道，其它的人不知道，看資料庫也看不出來。 我自己比較喜歡用 foreign key 所">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-07-28T09:27:09.000Z">
+<meta property="article:modified_time" content="2023-07-28T09:27:58.515Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="Raspberry Pi 4">
+<meta property="article:tag" content="database">
+<meta property="article:tag" content="mariadb">
+<meta name="twitter:card" content="summary">
+  <title>
+    Raspberry Pi 4 的後端修鍊 (3) - foreign key - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Raspberry Pi 4 的後端修鍊 (3) - foreign key</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-3-foreign-key"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (3) - foreign key</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E4%B8%80%E5%80%8B%E6%9C%89-foreign-key-%E7%9A%84%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">增加一個有 foreign key 的資料表[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E8%AE%80%E8%80%85%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「讀者」資料表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B6%93%E9%81%8E%E5%AF%A6%E6%B8%AC"><span class="toc-text">經過實測</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ON-DELECT-%E5%92%8C-ON-UPDATE-%E7%9A%84%E5%9B%9B%E7%A8%AE%E6%A8%A1%E5%BC%8F"><span class="toc-text">ON DELECT 和 ON UPDATE 的四種模式[2][3]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B6%93%E9%81%8E%E5%AF%A6%E6%B8%AC-v2"><span class="toc-text">經過實測</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E5%87%BA%E7%89%88%E7%A4%BE%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「出版社」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E4%BD%9C%E8%80%85%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「作者」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E6%9B%B8%E7%B1%8D%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「書籍」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E5%AF%A6%E9%AB%94%E6%9B%B8%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「實體書」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E6%9B%B8%E8%A9%95%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「書評」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E5%80%9F%E6%9B%B8%E5%96%AE%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「借書單」資料表</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Raspberry-Pi-4-的後端修鍊-3-foreign-key"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-3-foreign-key">¶</a>Raspberry Pi 4 的後端修鍊 (3) - foreign key</h1>
+<h2 id="增加一個有-foreign-key-的資料表"><a class="header-anchor" href="#增加一個有-foreign-key-的資料表">¶</a>增加一個有 foreign key 的資料表<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>關聯式資料庫，的「關聯」之處，在於 foreign key 的關係。<br>
+有些開發者不喜歡 foreign key ，直接鍵一個欄位記錄別的 TABLE 的 key 值，但只有他自己知道，其它的人不知道，看資料庫也看不出來。</p>
+<p>我自己比較喜歡用 foreign key 所以在此特別介紹一下如何用 foreign key 。</p>
+<p>以<a href="https://dwatow.github.io/2023/07-27-raspberry-pi/create-table/#%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88">圖書館資料庫</a>為例。</p>
+<p>除了 user 之外的表，照理來說都會有 foreign key</p>
+<h2 id="「讀者」資料表"><a class="header-anchor" href="#「讀者」資料表">¶</a>「讀者」資料表</h2>
+<p>使用者與讀者之間的關係是「一對一」</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> reader (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">VARCHAR</span>(<span class="number">128</span>),</span><br><span class="line">  slack_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  line_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  phone <span class="built_in">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">  email <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>id</code> 想要記錄讀者的身份證字號，可以用身份證就可以借書了。</li>
+<li><code>password</code> 和 user 一樣,</li>
+<li><code>creator_id</code> 是 <code>FOREIGN KEY</code> 參考 <code>user.id</code></li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> reader;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type         | Null | Key | Default | Extra          |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line">| id         | char(10)      | NO   | PRI | &lt;null&gt;  | auto_increment |</span><br><span class="line">| password   | varchar(128) | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| slack_id   | varchar(50)  | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| line_id    | varchar(50)  | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| phone      | char(10)     | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| email      | varchar(50)  | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| creator_id | int(11)      | NO   | MUL | &lt;null&gt;  |                |</span><br><span class="line">+------------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">8 rows in set</span><br><span class="line">Time: 0.046s</span><br></pre></td></tr></table></figure>
+<p>透過最簡單的語法 <code>FOREIGN KEY (creator_id) REFERENCES user (id)</code> 定義了一個 FOREIGN KEY。</p>
+<p>在此有兩個預設值需要注意</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">ON <span class="keyword">DELETE</span></span><br><span class="line"><span class="keyword">ON</span> <span class="keyword">UPDATE</span></span><br></pre></td></tr></table></figure>
+<p>這兩個的預設值各別是如何？</p>
+<h3 id="經過實測"><a class="header-anchor" href="#經過實測">¶</a>經過實測</h3>
+<p>先刪除 reader 沒問題<br>
+但如先刪除 user，會出現錯誤訊息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Query 1 ERROR: </span><br><span class="line">Cannot delete or update a parent row: </span><br><span class="line">  a foreign key constraint fails (</span><br><span class="line">    &#96;good_ideas_lib&#96;.&#96;reader&#96;, </span><br><span class="line">    CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;)</span><br><span class="line">      REFERENCES &#96;user&#96; (&#96;id&#96;)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>修改 reader 的 creator_id 不會出現問題<br>
+但修改的 key 沒有存在的話，就會出錯誤訊息。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Query 1 ERROR: </span><br><span class="line">Cannot add or update a child row: </span><br><span class="line">  a foreign key constraint fails (</span><br><span class="line">    &#96;good_ideas_lib&#96;.&#96;reader&#96;, </span><br><span class="line">    CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;) </span><br><span class="line">      REFERENCES &#96;user&#96; (&#96;id&#96;)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>修改 user 的 id，會出現錯誤訊息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Query 1 ERROR: </span><br><span class="line">Cannot delete or update a parent row: </span><br><span class="line">  a foreign key constraint fails (</span><br><span class="line">    &#96;good_ideas_lib&#96;.&#96;reader&#96;, </span><br><span class="line">    CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;) </span><br><span class="line">      REFERENCES &#96;user&#96; (&#96;id&#96;)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<h2 id="ON-DELECT-和-ON-UPDATE-的四種模式"><a class="header-anchor" href="#ON-DELECT-和-ON-UPDATE-的四種模式">¶</a>ON DELECT 和 ON UPDATE 的四種模式<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
+<ul>
+<li><strong>RESTRICT</strong>（約束）：預設模式。當在父表刪除資料時，會比對子表是否有對應的資料，如果有則不允許刪除。</li>
+<li><strong>CASCADE</strong>（級聯）：當在父表刪除資料時，會對比子表是否有對應的資料，如果有則會一起刪除。</li>
+<li><strong>SET NULL</strong>：當在父表刪除資料時，會對比子表是否有對應的資料，如果有則設置子表的外鍵欄位為 NULL，子表資料不會被刪除。（欄位需允許 NULL）</li>
+<li><strong>NO ACTION</strong>：與 RESTRICT 相同。</li>
+</ul>
+<blockquote>
+<p>看來預設都是 RESTRICT</p>
+</blockquote>
+<p>如果想要正確的更新與刪除，在設定 foreign key 的同時，需要好好的思考資料關聯間的基本關係。</p>
+<p>以此為例，只需要思考「因為 user 刪除，reader 資料的建立者不能留空白，也不能無法參考，所以要限制無法刪除；如果 user 更新了 id ，那麼 reader 的 creator_id 也需要一起更新」</p>
+<p>而且不用考慮刪除/更新 reader 的 creator_id 的情況，因為這種情況應該是自由的，想怎麼做都行，不受約束。</p>
+<p>設定如下，再試一次</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> reader (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">VARCHAR</span>(<span class="number">128</span>),</span><br><span class="line">  slack_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  line_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  phone <span class="built_in">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">  email <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DESC reader;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+--------------+------+-----+---------+-------+</span><br><span class="line">| Field      | Type         | Null | Key | Default | Extra |</span><br><span class="line">+------------+--------------+------+-----+---------+-------+</span><br><span class="line">| id         | char(10)     | NO   | PRI | &lt;null&gt;  |       |</span><br><span class="line">| password   | varchar(128) | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| slack_id   | varchar(50)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| line_id    | varchar(50)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| phone      | char(10)     | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| email      | varchar(50)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| created_at | datetime     | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| updated_at | datetime     | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| creator_id | int(11)      | NO   | MUL | &lt;null&gt;  |       |</span><br><span class="line">+------------+--------------+------+-----+---------+-------+</span><br><span class="line"></span><br><span class="line">9 rows in set</span><br><span class="line">Time: 0.039s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="經過實測-v2"><a class="header-anchor" href="#經過實測-v2">¶</a>經過實測</h3>
+<p>確實修改 user 的 id 之後，reader 的 creator_id 會自動修改。</p>
+<h2 id="「出版社」資料表"><a class="header-anchor" href="#「出版社」資料表">¶</a>「出版社」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> publisher (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<p>這段 SQL，新增了一個 publisher 的資料表<br>
+此資料表有 5 個欄位</p>
+<ol>
+<li>id: 出版社的 id
+<ul>
+<li>只要流水號，自動生成，必填(不可是 NULL)，唯一碼 PRIMARY KEY</li>
+</ul>
+</li>
+<li>name: 出版社名字，字串可變長度 50
+<ul>
+<li>變動字元 (50)，必填</li>
+</ul>
+</li>
+<li>creator_id: 使用者 id
+<ul>
+<li>使用者修改，建立者隨使用者變動而變動</li>
+<li>使用者刪除，不可在有出版社資料時，使用者被刪除。</li>
+</ul>
+</li>
+<li>created_at: 新增日期時間</li>
+<li>updated_at: 更新日期時間</li>
+</ol>
+<p>增加了兩個與資料表同名的檔案 <code>publisher.frm</code>, <code>publisher.ibd</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">:/var/lib/mysql/good_ideas_lib# ls</span><br><span class="line">db.opt	publisher.frm  publisher.ibd  user.frm	user.ibd</span><br></pre></td></tr></table></figure>
+<h2 id="「作者」資料表"><a class="header-anchor" href="#「作者」資料表">¶</a>「作者」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> author (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="「書籍」資料表"><a class="header-anchor" href="#「書籍」資料表">¶</a>「書籍」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> book (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> AUTO_INCREMENT <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  title <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  isbn <span class="built_in">VARCHAR</span>(<span class="number">13</span>),</span><br><span class="line">  author_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (author_id) <span class="keyword">REFERENCES</span> author (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  publisher_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (publisher_id) <span class="keyword">REFERENCES</span> publisher (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  year_public <span class="keyword">YEAR</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  description <span class="built_in">TEXT</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="「實體書」資料表"><a class="header-anchor" href="#「實體書」資料表">¶</a>「實體書」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> abook (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> AUTO_INCREMENT <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  book_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (book_id) <span class="keyword">REFERENCES</span> book (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  <span class="keyword">storage</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  owner_id <span class="built_in">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (owner_id) <span class="keyword">REFERENCES</span> reader (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="「書評」資料表"><a class="header-anchor" href="#「書評」資料表">¶</a>「書評」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> thought (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> AUTO_INCREMENT <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  book_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (book_id) <span class="keyword">REFERENCES</span> book (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  note <span class="built_in">TEXT</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="「借書單」資料表"><a class="header-anchor" href="#「借書單」資料表">¶</a>「借書單」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> borrowing (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> AUTO_INCREMENT <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  reader_id <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (reader_id) <span class="keyword">REFERENCES</span> reader (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  abook_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (abook_id) <span class="keyword">REFERENCES</span> abook (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span>,</span><br><span class="line">  start_at DATETIME,</span><br><span class="line">  end_at DATETIME,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">DELETE</span> RESTRICT</span><br><span class="line">    <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="keyword">CASCADE</span></span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<p>以上！<br>
+照著貼，就可以建立出一個資料庫囉！</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">TABLES</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+--------------------------+</span><br><span class="line">| Tables_in_good_ideas_lib |</span><br><span class="line">+--------------------------+</span><br><span class="line">| abook                    |</span><br><span class="line">| author                   |</span><br><span class="line">| book                     |</span><br><span class="line">| borrowing                |</span><br><span class="line">| publisher                |</span><br><span class="line">| reader                   |</span><br><span class="line">| thought                  |</span><br><span class="line">| user                     |</span><br><span class="line">+--------------------------+</span><br><span class="line"></span><br><span class="line">8 rows in set</span><br><span class="line">Time: 0.026s</span><br></pre></td></tr></table></figure><hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/foreign-keys/">Foreign Keys</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/foreign-keys/#constraints">actions - constraints</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://b-l-u-e-b-e-r-r-y.github.io/post/ForeignKey/">以 MySQL 為例解釋外鍵（Foreign Key） - 一顆藍莓</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2023-07-28T09:27:09.000Z" itemprop="datePublished">
+              2023-07-28
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/database/">database</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/mariadb/">mariadb</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2023 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
