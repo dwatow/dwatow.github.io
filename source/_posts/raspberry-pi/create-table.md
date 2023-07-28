@@ -50,7 +50,7 @@ digraph hierarchy {
     <id>id|
     password|
     slack_id|
-    facebook_id|
+    line_id|
     phone|
     email|
     <creator_id>creator_id|
