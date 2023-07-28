@@ -83,7 +83,7 @@ digraph hierarchy {
     <id>id|
     <book_id>book_id|
     storage 儲位|
-    owner|
+    owner_id|
     <creator_id>creator_id|
     created_at|
     inventory_date 盤點日期
@@ -91,6 +91,7 @@ digraph hierarchy {
 
   abook:book_id->book:id
   abook:creator_id->user:id [label="1..n"]
+  abook:owner_id->reader:id [label="1..n"]
 
   publisher [label="
     資料表: 出版社|
