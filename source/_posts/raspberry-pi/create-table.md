@@ -69,7 +69,7 @@ digraph hierarchy {
     isbn |
     <author_id>author_id |
     <publisher_id>publisher_id |
-    year_pub |
+    date_public |
     description|
     <creator_id>creator_id|
     created_at|

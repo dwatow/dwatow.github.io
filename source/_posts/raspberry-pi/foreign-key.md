@@ -254,7 +254,7 @@ CREATE TABLE book (
   FOREIGN KEY (publisher_id) REFERENCES publisher (id)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
-  year_public YEAR NOT NULL,
+  date_public DATE NOT NULL,
   description TEXT,
   PRIMARY KEY (id),
   created_at DATETIME,
