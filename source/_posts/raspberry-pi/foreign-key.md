@@ -363,3 +363,15 @@ Time: 0.026s
 實際跑一下 TablePlus 的外掛，畫出來是這樣
 
 [![](https://hackmd.io/_uploads/SkDco-Wj2.png)](https://hackmd.io/_uploads/SkDco-Wj2.png)
+
+## 建立 migration
+
+手動的將所有的資料表都建立好了。
+但如果想要重新再建一個，好像又要重新做一次語法。
+所以就想到如果可以像 node 一樣執行 .js 檔，那不就好了嗎？
+
+還真讓我找到[^source]語法執行，真的就好了。
+
+[^source]: [command line - How to run SQL script in MySQL? - Stack Overflow](https://stackoverflow.com/questions/8940230/how-to-run-sql-script-in-mysql)
+
+再分檔案與日期 即可建立了一個有 migration 概念的機制。
