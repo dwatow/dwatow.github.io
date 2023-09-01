@@ -2,7 +2,7 @@
 title: Raspberry Pi 4 的後端修鍊 (5) - ORM
 date: 2023-08-02 15:40:26
 tags:
-- Raspberry Pi 4
+- orm
 - sequelize
 - mariadb
 categories:

@@ -2,9 +2,9 @@
 title: Raspberry Pi 4 的後端修鍊 (3) - foreign key
 date: 2023-07-28 17:27:09
 tags:
-- Raspberry Pi 4
 - database
 - mariadb
+- foreign key
 categories:
 - 技術練習
 ---

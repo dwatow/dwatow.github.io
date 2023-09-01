@@ -2,7 +2,7 @@
 title: Raspberry Pi 4 的後端修鍊 (6) - Migration
 date: 2023-08-21 13:09:29
 tags:
-- Raspberry Pi 4
+- orm
 - sequelize
 - migration
 categories:

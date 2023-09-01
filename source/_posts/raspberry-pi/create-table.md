@@ -2,7 +2,6 @@
 title: Raspberry Pi 4 的後端修鍊 (2) - 建立資料表
 date: 2023-07-27 20:29:55
 tags:
-- Raspberry Pi 4
 - database
 - mariadb
 categories:
