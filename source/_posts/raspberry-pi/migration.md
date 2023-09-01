@@ -565,7 +565,8 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('user', {
-    // 預設以外的欄位 (預設欄位 id, created_at, updated_at)
+    // 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
+    // 如果有自定義的 method, v6 是定義成欄位 getter/setter 與 虛擬欄位的 getter/setter
   }, {
     sequelize,
     // 設定
@@ -597,7 +598,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   user.init({
-    // 預設以外的欄位 (預設欄位 id, created_at, updated_at
+    // 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
   }, {
     sequelize,
     // 設定
@@ -638,35 +639,30 @@ user.id; // 1
 
 ```javascript
 const { Sequelize, DataTypes } = require('sequelize');
-require('./models/user')(sequelize, DataTypes);
 
 async function main() {
+  const development = {
+    "username": "admin",
+    "password": "pi",
+    "database": "good_ideas_lib_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+  // Option 3: Passing parameters separately (other dialects)
+  const sequelize = new Sequelize(development.database, development.username, development.password, development);
+  require('./models/user')(sequelize, DataTypes);
   try {
-    const development = {
-      "username": "admin",
-      "password": "pi",
-      "database": "good_ideas_lib_dev",
-      "host": "127.0.0.1",
-      "dialect": "mysql"
-    }
-    // Option 3: Passing parameters separately (other dialects)
-    const sequelize = new Sequelize(development.database, development.username, development.password, development);
-    
-
     await sequelize.authenticate();
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
-    
 
   try {
-    // 對資料的操作練習，可以寫在這俚
+    // 練習貼在這
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.log(error.message);
   }
-
-    
 }
 main()
 ```
@@ -674,7 +670,6 @@ main()
 ```shell
 $ node main.js 
 Executing (default): SELECT 1+1 AS result
-User 1
 Connection has been established successfully.
 ```
 
@@ -699,7 +694,6 @@ async function main() {
 $ node main.js 
 Executing (default): SELECT 1+1 AS result
 Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?);
-User 1
 Connection has been established successfully.
 ```
 
@@ -707,11 +701,83 @@ Connection has been established successfully.
 
 ```sql
 INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?);
-User 1
 ```
+
+### log 的內容出現 `?` 
+
+[^sequelize-log-not-content]: [使用egg-sequelize的问题，sql语句中的问号 #4079](https://github.com/eggjs/egg/issues/4079)
+
+在 main.js 裡的 config 要加上 `logQueryParameters:true` 的設定。
+
+config 加完之後，刪除新增好的資料，再執行一次 `main.js`。
+
+```shell
+$ node main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?); 1, "chris", "chris", "2023-09-01 03:28:36", "2023-09-01 03:28:36"
+Connection has been established successfully.
+```
+
+看起來是把新增的資料加在原本的 SQL 後面。
 
 ### method
 
+如果要自己加上 method 有兩種做法。
+
+**models/user.js**
+
+`sequelize.define`
+
+```javascript
+'use strict';
+const {
+  Model
+} = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('user', {
+    getSomething: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return 'getSomething method: ' + this.name;
+      },
+    }
+  }, {
+    sequelize,
+    // 設定
+  });
+};
+```
+
+ES6 class
+
+```javascript
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class user extends Model {
+    getSomething() {
+      return 'getSomething method: ' + this.name
+    }
+    static associate(models) {
+      return 'associate'
+    }
+  }
+  user.init({
+    // 欄位
+  });
+  return user;
+};
+```
+
+> 棄用: `getterMethods` and `setterMethods`
+> DANGER
+> This feature has been removed in Sequelize 7. 
+> You should consider using either VIRTUAL attributes or native class getter & setters instead.
+
+**main.js**
 
 ```javascript
 async function main() {
@@ -726,9 +792,16 @@ async function main() {
 ```shell
 $ node main.js 
 Executing (default): SELECT 1+1 AS result
-newUser something is 1
-User associate at static
+newUser getSomething method: chris
+User associate
 Connection has been established successfully.
+```
+
+可以看見，如實的印出了 method 裡的字串，也透過 method 的 this 取得了實例的資料。
+
+```
+newUser getSomething method: chris
+User associate
 ```
 
 ## model 的欄位驗證
@@ -736,64 +809,22 @@ Connection has been established successfully.
 ### name 過長
 
 ```javascript
-    await sequelize.authenticate();
-
     const name = Array(51).fill('A').join('');
-    const password = Array(128).fill('A').join('');
-
-    try {
-      const newUser = await sequelize.models.user.create({ name, password })
-
-      console.log('Connection has been established successfully.');
-    } catch (error) {
-      console.log(error.message);
-    }
+    const password = Array(129).fill('A').join('');
+    await sequelize.models.user.create({ name, password })
 ```
 
 ```shell
-$ node  main.js 
+$ node main.js 
 Executing (default): SELECT 1+1 AS result
-Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?);
+Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?); "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "2023-09-01 03:45:09", "2023-09-01 03:45:09"
 Data too long for column 'name' at row 1
 ```
 
 會出現精準的錯誤訊息
+但是會出現第一個錯誤訊息，不會一次吐全部
 
-```
-Data too long for column 'name' at row 1
-```
-
-### name 過長
-
-```javascript
-    await sequelize.authenticate();
-
-    const name = Array(51).fill('A').join('');
-    const password = Array(128).fill('A').join('');
-
-    try {
-      const newUser = await sequelize.models.user.create({ name, password })
-
-      console.log('Connection has been established successfully.');
-    } catch (error) {
-      console.log(error.message);
-    }
-```
-
-```shell
-$ node  main.js 
-Executing (default): SELECT 1+1 AS result
-Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?);
-Data too long for column 'password' at row 1
-```
-
-會出現精準的錯誤訊息
-
-```
-Data too long for column 'password' at row 1
-```
-
-### 不建議使用的指令
+## 不建議使用的指令
 
 ```javascript
 User.sync() // 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。
