@@ -21,8 +21,7 @@ categories:
 
 ## 命名
 
-資料表 複數
-Model 單數
+都用單數。
 
 ### example: 2023/08/01-新增 USER 資料表
 
@@ -117,39 +116,7 @@ module.exports = {
 };
 ```
 
-並且直接生成 Model (麻豆)
-
-**專案/models/user.js**
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  User.init({
-    id: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    password: DataTypes.STRING,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
-  return User;
-};
-```
+並且直接生成 Model (麻豆)...關於 Model 的一切，我們下一篇再處理，目前先不管它
 
 等等...
 好像哪裡怪怪的。
@@ -232,34 +199,7 @@ module.exports = {
 
 **專案/models/user.js**
 
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  user.init({
-    name: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'user',
-    underscored: true,
-    freezeTableName: true, // 請手動加入這一行
-  });
-  return user;
-};
-```
+(略)
 
 ### 產生資料表
 
@@ -438,38 +378,6 @@ module.exports = {
   }
 };
 ```
-
-接著修改 **models/user.js** 的 DataType
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  user.init({
-    name: DataTypes.STRING(50),
-    password: DataTypes.CHAR(128)
-  }, {
-    sequelize,
-    modelName: 'user',
-    underscored: true,
-    freezeTableName: true, // 請手動加入這一行
-  });
-  return user;
-};
-```
-
 生成
 
 ```shell
@@ -525,10 +433,7 @@ CREATE TABLE user (
 ) ENGINE = InnoDB;
 ```
 
-這樣就大功告成了。
-接下來，就來看看這些產生資料表的 JS 做了什麼。
-
-> 想不到這些型別的微調需要搞這麼久。
+先看看 migration 生成什麼 JS ？？
 
 ## migrations 結構
 
@@ -548,281 +453,25 @@ module.exports = {
 };
 ```
 
-## models 結構
+執行時是用 `sequelize-cli` 進行，並不是直接用執行 `node`
 
-這一個部份，就是在 JS 裡取得 TABLE 資料的部份，型別定義我目前猜測是為了要檢查是否有格式錯誤的第一道欄位驗證判斷。在進 SQL 之前就可以先判斷的一個地方 (吧？)
-
-除了生成的 ES6 class 可以使用，還有另一個比較舊的寫法 `sequelize.define` 也可以使用。
-`sequelize.define` 與 `user.init` 在內部是相同的。
-
-sequelize.define 寫法
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-
-module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('user', {
-    // 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
-    // 如果有自定義的 method, v6 是定義成欄位 getter/setter 與 虛擬欄位的 getter/setter
-  }, {
-    sequelize,
-    // 設定
-  });
-};
-```
-
-ES6 class 寫法
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-
-module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
-    // 在此不要放置任何與資料相關的欄位定義，會覆蓋掉可存取資料的同名 getter/setter
-    
-    // 放置了自訂義的 method
-    // 用在 object user 上的 method
-    getSomething() {
-      return 'something is ' + this.id;
-    }
-    
-    // 用在 class user 上的 method
-    static associate(models) {
-      return 'associate at static';
-    }
-  }
-  user.init({
-    // 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
-  }, {
-    sequelize,
-    // 設定
-  });
-  return user;  // 之後可以在 sequelize.models.user 取得這個 Model
-};
-```
-## 使用 Model
-
-> 在這裡看官網文件會有一點搞不懂，Model 都宣告了，但是要怎麼讓它在 `sequelize.models.user` 出現。
-
-官網上的文件這樣宣告 `const user = new User({ id: 1 });` 
-就直接拿來用？！(神奇！)
-
-```javascript
-// Valid
-class User extends Model {
-  otherPublicField;
-}
-
-User.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  }
-}, { sequelize });
-
-const user = new User({ id: 1 });
-user.id; // 1
-```
-
-但實際上，我使用 sequelize-cli 生成的 code 無法直接這麼用。
-
-我另外寫了一個 main.js 來實現官網說的情況
-
-**main.js**
-
-```javascript
-const { Sequelize, DataTypes } = require('sequelize');
-
-async function main() {
-  const development = {
-    "username": "admin",
-    "password": "pi",
-    "database": "good_ideas_lib_dev",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-  // Option 3: Passing parameters separately (other dialects)
-  const sequelize = new Sequelize(development.database, development.username, development.password, development);
-  require('./models/user')(sequelize, DataTypes);
-  try {
-    await sequelize.authenticate();
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-
-  try {
-    // 練習貼在這
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-main()
-```
+執行前進
 
 ```shell
-$ node main.js 
-Executing (default): SELECT 1+1 AS result
-Connection has been established successfully.
+$ npx sequelize db:migrate
 ```
 
-## 簡單操作
-
-### 寫入
-
-在 newUser 被 `new` 出來之後，執行 `save()`。
-
-```javascript
-async function main() {
-  // ...
-  const newUser = new sequelize.models.user({ id: 1, name: 'chris', password: 'chris'})
-  await newUser.save();
-  // ...
-}
-```
-
-可以看見執行的過程中，會印出執行過程
+執行後退
 
 ```shell
-$ node main.js 
-Executing (default): SELECT 1+1 AS result
-Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?);
-Connection has been established successfully.
+$ npx sequelize db:migrate:undo
 ```
 
-其中這一段是 SQL
-
-```sql
-INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?);
-```
-
-### log 的內容出現 `?` 
-
-[^sequelize-log-not-content]: [使用egg-sequelize的问题，sql语句中的问号 #4079](https://github.com/eggjs/egg/issues/4079)
-
-在 main.js 裡的 config 要加上 `logQueryParameters:true` 的設定。
-
-config 加完之後，刪除新增好的資料，再執行一次 `main.js`。
+其它 sequelize-cli 的細節，用指令查比較多資料也比較符合當下使用的版本
 
 ```shell
-$ node main.js 
-Executing (default): SELECT 1+1 AS result
-Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?); 1, "chris", "chris", "2023-09-01 03:28:36", "2023-09-01 03:28:36"
-Connection has been established successfully.
+npx sequelize --help
 ```
-
-看起來是把新增的資料加在原本的 SQL 後面。
-
-### method
-
-如果要自己加上 method 有兩種做法。
-
-**models/user.js**
-
-`sequelize.define`
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-
-module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('user', {
-    getSomething: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return 'getSomething method: ' + this.name;
-      },
-    }
-  }, {
-    sequelize,
-    // 設定
-  });
-};
-```
-
-ES6 class
-
-```javascript
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
-    getSomething() {
-      return 'getSomething method: ' + this.name
-    }
-    static associate(models) {
-      return 'associate'
-    }
-  }
-  user.init({
-    // 欄位
-  });
-  return user;
-};
-```
-
-> 棄用: `getterMethods` and `setterMethods`
-> DANGER
-> This feature has been removed in Sequelize 7. 
-> You should consider using either VIRTUAL attributes or native class getter & setters instead.
-
-**main.js**
-
-```javascript
-async function main() {
-  // ...
-  const newUser = new sequelize.models.user({ id: 1, name: 'chris', password: 'chris'})
-  console.log('newUser', newUser.getSomething());
-  console.log('User', sequelize.models.user.associate());
-  // ...
-}
-```
-
-```shell
-$ node main.js 
-Executing (default): SELECT 1+1 AS result
-newUser getSomething method: chris
-User associate
-Connection has been established successfully.
-```
-
-可以看見，如實的印出了 method 裡的字串，也透過 method 的 this 取得了實例的資料。
-
-```
-newUser getSomething method: chris
-User associate
-```
-
-## model 的欄位驗證
-
-### name 過長
-
-```javascript
-    const name = Array(51).fill('A').join('');
-    const password = Array(129).fill('A').join('');
-    await sequelize.models.user.create({ name, password })
-```
-
-```shell
-$ node main.js 
-Executing (default): SELECT 1+1 AS result
-Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?); "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "2023-09-01 03:45:09", "2023-09-01 03:45:09"
-Data too long for column 'name' at row 1
-```
-
-會出現精準的錯誤訊息
-但是會出現第一個錯誤訊息，不會一次吐全部
 
 ## 不建議使用的指令
 
