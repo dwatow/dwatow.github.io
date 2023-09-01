@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris" />
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2023/08-21-raspberry-pi/model-1/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶Raspberry Pi 4 的後端修鍊 (7) - Model 建立資料表，會同時產生 migration 與 model 兩個檔案。 在生成 Table 的 SQL 正確之前，先不要管 Model 一直到生成 Table 的 SQL 正確為止。 正確生成 Table (資料表)之後，Model 的任務就是要正確的操作資料，並且將資料的操作邏輯收納到 Model 上面。 接續上一篇的篇章，只是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry Pi 4 的後端修鍊 (7) - Model">
+<meta property="og:url" content="https://dwatow.github.io/2023/08-21-raspberry-pi/model-1/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Raspberry Pi 4 的後端修鍊 (7) - Model 建立資料表，會同時產生 migration 與 model 兩個檔案。 在生成 Table 的 SQL 正確之前，先不要管 Model 一直到生成 Table 的 SQL 正確為止。 正確生成 Table (資料表)之後，Model 的任務就是要正確的操作資料，並且將資料的操作邏輯收納到 Model 上面。 接續上一篇的篇章，只是">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-08-21T05:09:29.000Z">
+<meta property="article:modified_time" content="2023-09-01T05:25:39.721Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="sequelize">
+<meta property="article:tag" content="Raspberry Pi 4">
+<meta property="article:tag" content="model">
+<meta name="twitter:card" content="summary">
+  <title>
+    Raspberry Pi 4 的後端修鍊 (7) - Model - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Raspberry Pi 4 的後端修鍊 (7) - Model</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-7-Model"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (7) - Model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">建立資料表[1][2]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A2%E7%94%9F%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">產生資料表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#models-%E7%B5%90%E6%A7%8B"><span class="toc-text">models 結構</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Model"><span class="toc-text">使用 Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B0%A1%E5%96%AE%E6%93%8D%E4%BD%9C"><span class="toc-text">簡單操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%AB%E5%85%A5"><span class="toc-text">寫入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#log-%E7%9A%84%E5%85%A7%E5%AE%B9%E5%87%BA%E7%8F%BE"><span class="toc-text">log 的內容出現 ?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#method"><span class="toc-text">method</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-%E7%9A%84%E6%AC%84%E4%BD%8D%E9%A9%97%E8%AD%89"><span class="toc-text">model 的欄位驗證</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#name-%E9%81%8E%E9%95%B7"><span class="toc-text">name 過長</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%BB%BA%E8%AD%B0%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-text">不建議使用的指令</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Raspberry-Pi-4-的後端修鍊-7-Model"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-7-Model">¶</a>Raspberry Pi 4 的後端修鍊 (7) - Model</h1>
+<p>建立資料表，會同時產生 migration 與 model 兩個檔案。<br>
+在生成 Table 的 SQL 正確之前，先不要管 Model 一直到生成 Table 的 SQL 正確為止。<br>
+正確生成 Table (資料表)之後，Model 的任務就是要正確的操作資料，並且將資料的操作邏輯收納到 Model 上面。</p>
+<p>接續上一篇的篇章，只是這一次把注意力放在 Model 上面</p>
+<h2 id="建立資料表"><a class="header-anchor" href="#建立資料表">¶</a>建立資料表<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]</span><br><span class="line"></span><br><span class="line">New model was created at /home/admin/case/lib-backend/models/user.js .</span><br><span class="line">New migration was created at /home/admin/case/lib-backend/migrations/20230803111707-create-user.js .</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>--name</code> 定義資料表名稱，建議使用小寫。</li>
+<li><code>--underscored</code> 欄位名稱都用<code>小寫</code>+<code>底線</code> 命名</li>
+<li><code>--force</code> 命名強制相同，不要有單複數 (在此都用單數)</li>
+</ul>
+<blockquote>
+<p>在此要注意一下，產生的 model 是不是也是和我這次練習的 v6 版本一樣對於 <code>force</code> 沒有反應</p>
+</blockquote>
+<p>sequelize 會產生下面原始碼</p>
+<p><strong>專案/migrations/20230803090103-create-user.js</strong></p>
+<p>(migrations 有提到修正方式，在此略過)</p>
+<p><strong>專案/models/user.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Helper method for defining associations.</span></span><br><span class="line"><span class="comment">     * This method is not a part of Sequelize lifecycle.</span></span><br><span class="line"><span class="comment">     * The `models/index` file will call this method automatically.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">associate</span>(<span class="params">models</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// define association here</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  user.init(&#123;</span><br><span class="line">    name: DataTypes.STRING,</span><br><span class="line">    password: DataTypes.STRING</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    modelName: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">    underscored: <span class="literal">true</span>,</span><br><span class="line">    freezeTableName: <span class="literal">true</span>, <span class="comment">// 請手動加入這一行</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> user;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="產生資料表"><a class="header-anchor" href="#產生資料表">¶</a>產生資料表</h3>
+<p>到目前，還沒有生成任何資料表，讓我們來執行一下 migrate 到最新進度</p>
+<p>如果我們想要執行 migration 的時候，看得到 log 出現 SQL 語法。就必須在 config 的部份加上 <code>&quot;logging&quot;: true</code> <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;development&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;password&quot;</span>: <span class="string">&quot;pi&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;good_ideas_lib_dev&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;dialect&quot;</span>: <span class="string">&quot;mysql&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;logging&quot;</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加好之後，執行 migrate 就可以看見 SQL 印在 shell 囉</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string</span></span><br></pre></td></tr></table></figure>
+<p>取得 model 的程式碼時。<br>
+別忘了需要手動修改一下資料型別。<br>
+修改 <strong>models/user.js</strong> 的 DataType</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">  user.init(&#123;</span><br><span class="line">    name: DataTypes.STRING(<span class="number">50</span>),</span><br><span class="line">    password: DataTypes.CHAR(<span class="number">128</span>)</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    modelName: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">    underscored: <span class="literal">true</span>,</span><br><span class="line">    freezeTableName: <span class="literal">true</span>, <span class="comment">// 請手動加入這一行</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> user;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>變動字串長度要修改，直接加(<code>Sequelize.STRING(長度)</code>)<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
+<li>想要長度 128 的固定字串，要改成 <code>Sequelize.CHAR(128)</code></li>
+</ul>
+<p>這樣就大功告成了。</p>
+<blockquote>
+<p>想不到這些型別的微調需要搞這麼久。</p>
+</blockquote>
+<h2 id="models-結構"><a class="header-anchor" href="#models-結構">¶</a>models 結構</h2>
+<p>這一個部份，就是在 JS 裡取得 TABLE 資料的部份，型別定義我目前猜測是為了要檢查是否有格式錯誤的第一道欄位驗證判斷。在進 SQL 之前就可以先判斷的一個地方 (吧？)</p>
+<p>除了生成的 ES6 class 可以使用，還有另一個比較舊的寫法 <code>sequelize.define</code> 也可以使用。<br>
+<code>sequelize.define</code> 與 <code>user.init</code> 在內部是相同的。</p>
+<p>sequelize.define 寫法</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> sequelize.define(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">    <span class="comment">// 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)</span></span><br><span class="line">    <span class="comment">// 如果有自定義的 method, v6 是定義成欄位 getter/setter 與 虛擬欄位的 getter/setter</span></span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    <span class="comment">// 設定</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>ES6 class 寫法</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 在此不要放置任何與資料相關的欄位定義，會覆蓋掉可存取資料的同名 getter/setter</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 放置了自訂義的 method</span></span><br><span class="line">    <span class="comment">// 用在 object user 上的 method</span></span><br><span class="line">    <span class="function"><span class="title">getSomething</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&#x27;something is &#x27;</span> + <span class="built_in">this</span>.id;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 用在 class user 上的 method</span></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">associate</span>(<span class="params">models</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&#x27;associate at static&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  user.init(&#123;</span><br><span class="line">    <span class="comment">// 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)</span></span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    <span class="comment">// 設定</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> user;  <span class="comment">// 之後可以在 sequelize.models.user 取得這個 Model</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="使用-Model"><a class="header-anchor" href="#使用-Model">¶</a>使用 Model</h2>
+<blockquote>
+<p>在這裡看官網文件會有一點搞不懂，Model 都宣告了，但是要怎麼讓它在 <code>sequelize.models.user</code> 出現。</p>
+</blockquote>
+<p>官網上的文件這樣宣告 <code>const user = new User(&#123; id: 1 &#125;);</code><br>
+就直接拿來用？！(神奇！)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Valid</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">  otherPublicField;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">User.init(&#123;</span><br><span class="line">  id: &#123;</span><br><span class="line">    type: DataTypes.INTEGER,</span><br><span class="line">    autoIncrement: <span class="literal">true</span>,</span><br><span class="line">    primaryKey: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123; sequelize &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> user = <span class="keyword">new</span> User(&#123; <span class="attr">id</span>: <span class="number">1</span> &#125;);</span><br><span class="line">user.id; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>但實際上，我使用 sequelize-cli 生成的 code 無法直接這麼用。</p>
+<p>我另外寫了一個 main.js 來實現官網說的情況</p>
+<p><strong>main.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Sequelize, DataTypes &#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> development = &#123;</span><br><span class="line">    <span class="string">&quot;username&quot;</span>: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">    <span class="string">&quot;password&quot;</span>: <span class="string">&quot;pi&quot;</span>,</span><br><span class="line">    <span class="string">&quot;database&quot;</span>: <span class="string">&quot;good_ideas_lib_dev&quot;</span>,</span><br><span class="line">    <span class="string">&quot;host&quot;</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;dialect&quot;</span>: <span class="string">&quot;mysql&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Option 3: Passing parameters separately (other dialects)</span></span><br><span class="line">  <span class="keyword">const</span> sequelize = <span class="keyword">new</span> Sequelize(development.database, development.username, development.password, development);</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&#x27;./models/user&#x27;</span>)(sequelize, DataTypes);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> sequelize.authenticate();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">&#x27;Unable to connect to the database:&#x27;</span>, error);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 練習貼在這</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Connection has been established successfully.&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error.message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<h2 id="簡單操作"><a class="header-anchor" href="#簡單操作">¶</a>簡單操作</h2>
+<h3 id="寫入"><a class="header-anchor" href="#寫入">¶</a>寫入</h3>
+<p>在 newUser 被 <code>new</code> 出來之後，執行 <code>save()</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">const</span> newUser = <span class="keyword">new</span> sequelize.models.user(&#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;chris&#x27;</span>, <span class="attr">password</span>: <span class="string">&#x27;chris&#x27;</span>&#125;)</span><br><span class="line">  <span class="keyword">await</span> newUser.save();</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看見執行的過程中，會印出執行過程</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?);</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<p>其中這一段是 SQL</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> (<span class="string">`id`</span>,<span class="string">`name`</span>,<span class="string">`password`</span>,<span class="string">`created_at`</span>,<span class="string">`updated_at`</span>) <span class="keyword">VALUES</span> (?,?,?,?,?);</span><br></pre></td></tr></table></figure>
+<h3 id="log-的內容出現"><a class="header-anchor" href="#log-的內容出現">¶</a>log 的內容出現 <code>?</code></h3>
+<p>在 main.js 裡的 config 要加上 <code>logQueryParameters:true</code> 的設定。</p>
+<blockquote>
+<p>如果是一般的執行情境，要改 config 裡的 json 檔案比較一致。只是在此的語法練習都是在 main.js 進行 sequelize 的初始化，所以才直接改 main.js 裡的 config 物件。</p>
+</blockquote>
+<p>config 加完之後，刪除新增好的資料，再執行一次 <code>main.js</code>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?); 1, &quot;chris&quot;, &quot;chris&quot;, &quot;2023-09-01 03:28:36&quot;, &quot;2023-09-01 03:28:36&quot;</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<p>看起來是把新增的資料加在原本的 SQL 後面。</p>
+<h3 id="method"><a class="header-anchor" href="#method">¶</a>method</h3>
+<p>如果要自己加上 method 有兩種做法。</p>
+<p><strong>models/user.js</strong></p>
+<p><code>sequelize.define</code></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> sequelize.define(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">    getSomething: &#123;</span><br><span class="line">      type: DataTypes.VIRTUAL,</span><br><span class="line">      <span class="function"><span class="title">get</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;getSomething method: &#x27;</span> + <span class="built_in">this</span>.name;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    <span class="comment">// 設定</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>ES6 class</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">getSomething</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&#x27;getSomething method: &#x27;</span> + <span class="built_in">this</span>.name</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">associate</span>(<span class="params">models</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&#x27;associate&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  user.init(&#123;</span><br><span class="line">    <span class="comment">// 欄位</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> user;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>棄用: <code>getterMethods</code> and <code>setterMethods</code><br>
+DANGER<br>
+This feature has been removed in Sequelize 7.<br>
+You should consider using either VIRTUAL attributes or native class getter &amp; setters instead.</p>
+</blockquote>
+<p><strong>main.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">const</span> newUser = <span class="keyword">new</span> sequelize.models.user(&#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;chris&#x27;</span>, <span class="attr">password</span>: <span class="string">&#x27;chris&#x27;</span>&#125;)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;newUser&#x27;</span>, newUser.getSomething());</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;User&#x27;</span>, sequelize.models.user.associate());</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">newUser getSomething method: chris</span><br><span class="line">User associate</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<p>可以看見，如實的印出了 method 裡的字串，也透過 method 的 this 取得了實例的資料。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">newUser getSomething method: chris</span><br><span class="line">User associate</span><br></pre></td></tr></table></figure>
+<h2 id="model-的欄位驗證"><a class="header-anchor" href="#model-的欄位驗證">¶</a>model 的欄位驗證</h2>
+<h3 id="name-過長"><a class="header-anchor" href="#name-過長">¶</a>name 過長</h3>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="built_in">Array</span>(<span class="number">51</span>).fill(<span class="string">&#x27;A&#x27;</span>).join(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> password = <span class="built_in">Array</span>(<span class="number">129</span>).fill(<span class="string">&#x27;A&#x27;</span>).join(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"><span class="keyword">await</span> sequelize.models.user.create(&#123; name, password &#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?); &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, &quot;2023-09-01 03:45:09&quot;, &quot;2023-09-01 03:45:09&quot;</span><br><span class="line">Data too long for column &#x27;name&#x27; at row 1</span><br></pre></td></tr></table></figure>
+<p>會出現精準的錯誤訊息<br>
+但是會出現第一個錯誤訊息，不會一次吐全部</p>
+<h2 id="不建議使用的指令"><a class="header-anchor" href="#不建議使用的指令">¶</a>不建議使用的指令</h2>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">User.sync() <span class="comment">// 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。</span></span><br><span class="line">User.drop() <span class="comment">// 刪除資料表</span></span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-model-and-migration">Creating the first Model (and Migration)</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/docs/v6/core-concepts/model-basics/#data-types">Data Types, Model Basics | Sequelize</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/49370372">Logging Sequelize Migrations</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.org/docs/v6/core-concepts/model-basics/#strings">Model Basics | Sequelize, Data Types, String</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2023-08-21T05:09:29.000Z" itemprop="datePublished">
+              2023-08-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/sequelize/">sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/model/">model</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2023 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
