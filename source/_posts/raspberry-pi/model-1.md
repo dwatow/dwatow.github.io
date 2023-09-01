@@ -415,11 +415,3 @@ Data too long for column 'name' at row 1
 
 會出現精準的錯誤訊息
 但是會出現第一個錯誤訊息，不會一次吐全部
-
-## 不建議使用的指令
-
-```javascript
-User.sync() // 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。
-User.drop() // 刪除資料表
-```
-
