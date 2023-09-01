@@ -1,6 +1,6 @@
 ---
 title: Raspberry Pi 4 的後端修鍊 (7) - Model
-date: 2023-08-21 13:09:29
+date: 2023-09-01 13:09:29
 tags:
 - Raspberry Pi 4
 - sequelize
