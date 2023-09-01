@@ -261,7 +261,279 @@ module.exports = (sequelize, DataTypes) => {
 };
 ```
 
+### 產生資料表
+
+到目前，還沒有生成任何資料表，讓我們來執行一下 migrate 到最新進度
+
+如果我們想要執行 migration 的時候，看得到 log 出現 SQL 語法。就必須在 config 的部份加上 `"logging": true` [^log]
+
+[^log]: [Logging Sequelize Migrations](https://stackoverflow.com/a/49370372)
+
+```json
+{
+  // ...
+  "development": {
+    "username": "admin",
+    "password": "pi",
+    "database": "good_ideas_lib_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": true
+  },
+  // ...
+}
+```
+
+加好之後，執行 migrate 就可以看見 SQL 印在 shell 囉
+
+```shell
+$ npx sequelize-cli db:migrate
+
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
+
+Loaded configuration file "config/config.json".
+Using environment "development".
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'good_ideas_lib_dev';
+Executing (default): SHOW FULL COLUMNS FROM `SequelizeMeta`;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+== 20230824085150-create-user: migrating =======
+Executing (default): CREATE TABLE IF NOT EXISTS `user` (`id` INTEGER NOT NULL auto_increment , `name` VARCHAR(255), `password` VARCHAR(255), `created_at` DATETIME NOT NULL, `updated_at` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): INSERT INTO `SequelizeMeta` (`name`) VALUES (?);
+== 20230824085150-create-user: migrated (0.039s)
+```
+
+其中與新增資料表有關的部份
+
+```sql
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` INTEGER NOT NULL auto_increment , 
+  `name` VARCHAR(255), 
+  `password` VARCHAR(255), 
+  `created_at` DATETIME NOT NULL, 
+  `updated_at` DATETIME NOT NULL, 
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+```
+
+比對一下，一開始我們想要的 SQL ，會發現幾個有趣的事
+
+```sql
+CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
+  PRIMARY KEY (id)
+) ENGINE = InnoDB;
+```
+
+- sequelize 宣告的 `INTEGER` 不是縮寫(手寫可以寫縮寫 `INT`)
+- sequelize 宣告的 `name: DataTypes.STRING` 對應的資料是 `VARCHAR(255)`
+- sequelize 宣告的欄位預設是 `NOT NULL`
+- sequelize 宣告的 created_at 與 updated_at 都沒有 `NOT NULL`
+
+### 倒退 migraion
+
+```shell
+$ npx sequelize-cli db:migrate:undo
+
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
+
+Loaded configuration file "config/config.json".
+Using environment "development".
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'good_ideas_lib_dev';
+Executing (default): SHOW FULL COLUMNS FROM `SequelizeMeta`;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+== 20230824085150-create-user: reverting =======
+Executing (default): DROP TABLE IF EXISTS `users`;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): DELETE FROM `SequelizeMeta` WHERE `name` = '20230824085150-create-user.js'
+== 20230824085150-create-user: reverted (0.027s)
+```
+
+倒退的語法，倒是滿符合內心期望的，哈哈。
+
+```sql
+Executing (default): DROP TABLE IF EXISTS `users`;
+```
+
+## 依想要的欄位設定再產生資料表
+
+所以使用 cli
+
+```shell
+$ npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string
+```
+
+取得 migration 的程式碼時。
+需要手動修改一下。
+
+migration 的 code 才是真正產生資料表結構的程式碼，所以要修改 **migrations/20230901021924-create-user.js** 底下的
+
+- 變動字串長度要修改，直接加(`Sequelize.STRING(長度)`)[^Data-Types-String]
+- 想要長度 128 的固定字串，要改成 `Sequelize.CHAR(128)`
+- 欄位必填，直接加 `allowNull: false`
+
+> 新增與修改日期，進行到此的時候，覺得它應該要必填，所以留著。
+
+[^Data-Types-String]: [Model Basics | Sequelize, Data Types, String](https://sequelize.org/docs/v6/core-concepts/model-basics/#strings)
+
+```javascript
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('user', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING(50)
+      },
+      password: {
+        allowNull: false,
+        type: Sequelize.CHAR(128)
+      },
+      created_at: {
+        allowNull: false, // 現在覺得它應該要必填，所以留著
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false, // 現在覺得它應該要必填，所以留著
+        type: Sequelize.DATE
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('users');
+  }
+};
+```
+
+接著修改 **models/user.js** 的 DataType
+
+```javascript
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class user extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+  user.init({
+    name: DataTypes.STRING(50),
+    password: DataTypes.CHAR(128)
+  }, {
+    sequelize,
+    modelName: 'user',
+    underscored: true,
+    freezeTableName: true, // 請手動加入這一行
+  });
+  return user;
+};
+```
+
+生成
+
+```shell
+$ npx sequelize db:migrate
+
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
+
+Loaded configuration file "config/config.json".
+Using environment "development".
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'good_ideas_lib_dev';
+Executing (default): SHOW FULL COLUMNS FROM `SequelizeMeta`;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+== 20230901021924-create-user: migrating =======
+Executing (default): CREATE TABLE IF NOT EXISTS `user` (`id` INTEGER NOT NULL auto_increment , `name` VARCHAR(50) NOT NULL, `password` CHAR(128) NOT NULL, `created_at` DATETIME NOT NULL, `updated_at` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'SequelizeMeta' AND TABLE_SCHEMA = 'good_ideas_lib_dev'
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+Executing (default): INSERT INTO `SequelizeMeta` (`name`) VALUES (?);
+== 20230901021924-create-user: migrated (0.039s)
+```
+
+其中和生成資料表有關的部份
+
+```sql
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` INTEGER NOT NULL auto_increment , 
+  `name` VARCHAR(50) NOT NULL, 
+  `password` CHAR(128) NOT NULL, 
+  `created_at` DATETIME NOT NULL, 
+  `updated_at` DATETIME NOT NULL, 
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+```
+
+這個就和一開始想要的那一段 SQL 一樣了(除了突然想要必填的日期欄位之外)
+
+```sql
+CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
+  PRIMARY KEY (id)
+) ENGINE = InnoDB;
+```
+
+這樣就大功告成了。
+接下來，就來看看這些產生資料表的 JS 做了什麼。
+
+> 想不到這些型別的微調需要搞這麼久。
+
 ## migrations 結構
+
+migrations 產生的 JS 真的會轉成 SQL 的 code。
+所以，想要讓資料表產生之後長怎樣的設定，通通在這裡調整。
 
 ```javascript
 'use strict';
@@ -278,6 +550,8 @@ module.exports = {
 
 ## models 結構
 
+這一個部份，就是在 JS 裡取得 TABLE 資料的部份，型別定義我目前猜測是為了要檢查是否有格式錯誤的第一道欄位驗證判斷。在進 SQL 之前就可以先判斷的一個地方 (吧？)
+
 除了生成的 ES6 class 可以使用，還有另一個比較舊的寫法 `sequelize.define` 也可以使用。
 `sequelize.define` 與 `user.init` 在內部是相同的。
 
@@ -291,13 +565,10 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('user', {
-    name: DataTypes.STRING,
-    password: DataTypes.STRING
+    // 預設以外的欄位 (預設欄位 id, created_at, updated_at)
   }, {
     sequelize,
-    modelName: 'user',
-    underscored: true,
-    // freezeTableName: true, // 請手動加入這一行
+    // 設定
   });
 };
 ```
@@ -326,27 +597,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   user.init({
-    name: DataTypes.STRING,
-    password: DataTypes.STRING
+    // 預設以外的欄位 (預設欄位 id, created_at, updated_at
   }, {
     sequelize,
-    modelName: 'user',
-    underscored: true,
-    // freezeTableName: true, // 請手動加入這一行
+    // 設定
   });
   return user;  // 之後可以在 sequelize.models.user 取得這個 Model
 };
 ```
-
-到目前，還沒有生成任何資料表，讓我們來執行一下
-
-```shell
-$ npx sequelize-cli db:migrate
-```
-
-就可以透過 TablePlus 這種資料庫管理工具看見新增一個資料表囉
-(當然透過 mycli ，再輸入 `SHOW TABLES;` 也可以看見唷)
-
 ## 使用 Model
 
 > 在這裡看官網文件會有一點搞不懂，Model 都宣告了，但是要怎麼讓它在 `sequelize.models.user` 出現。
@@ -380,35 +638,35 @@ user.id; // 1
 
 ```javascript
 const { Sequelize, DataTypes } = require('sequelize');
+require('./models/user')(sequelize, DataTypes);
 
-// const db = require('./models')
-// const { sequelize } = db;
-
-const development = {
-  "username": "admin",
-  "password": "pi",
-  "database": "good_ideas_lib_dev",
-  "host": "127.0.0.1",
-  "dialect": "mysql"
-}
-
-// 連結資料庫
-const sequelize = new Sequelize(development.database, development.username, development.password, development);
-
-// 宣告 Model
-const user = require('./models/user')
-user(sequelize, DataTypes);
-
-// 主程式
-function main() {
+async function main() {
   try {
+    const development = {
+      "username": "admin",
+      "password": "pi",
+      "database": "good_ideas_lib_dev",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    }
+    // Option 3: Passing parameters separately (other dialects)
+    const sequelize = new Sequelize(development.database, development.username, development.password, development);
+    
+
     await sequelize.authenticate();
-    const newUser = new sequelize.models.user({ id: 1 });
-    console.log('User', newUser.id);
-    console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
+    
+
+  try {
+    // 對資料的操作練習，可以寫在這俚
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.log(error.message);
+  }
+
+    
 }
 main()
 ```
@@ -419,9 +677,6 @@ Executing (default): SELECT 1+1 AS result
 User 1
 Connection has been established successfully.
 ```
-
-> **重要**
-> 到目前為止，資料庫都還沒有增加資料，程式碼裡的 newUser 也只是還在記憶體裡的一筆資料而已。尚未寫入資料庫。
 
 ## 簡單操作
 
@@ -474,6 +729,68 @@ Executing (default): SELECT 1+1 AS result
 newUser something is 1
 User associate at static
 Connection has been established successfully.
+```
+
+## model 的欄位驗證
+
+### name 過長
+
+```javascript
+    await sequelize.authenticate();
+
+    const name = Array(51).fill('A').join('');
+    const password = Array(128).fill('A').join('');
+
+    try {
+      const newUser = await sequelize.models.user.create({ name, password })
+
+      console.log('Connection has been established successfully.');
+    } catch (error) {
+      console.log(error.message);
+    }
+```
+
+```shell
+$ node  main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?);
+Data too long for column 'name' at row 1
+```
+
+會出現精準的錯誤訊息
+
+```
+Data too long for column 'name' at row 1
+```
+
+### name 過長
+
+```javascript
+    await sequelize.authenticate();
+
+    const name = Array(51).fill('A').join('');
+    const password = Array(128).fill('A').join('');
+
+    try {
+      const newUser = await sequelize.models.user.create({ name, password })
+
+      console.log('Connection has been established successfully.');
+    } catch (error) {
+      console.log(error.message);
+    }
+```
+
+```shell
+$ node  main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (DEFAULT,?,?,?,?);
+Data too long for column 'password' at row 1
+```
+
+會出現精準的錯誤訊息
+
+```
+Data too long for column 'password' at row 1
 ```
 
 ### 不建議使用的指令
