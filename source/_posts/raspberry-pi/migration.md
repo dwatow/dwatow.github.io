@@ -192,7 +192,8 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+  //await queryInterface.dropTable('users');  // 手動修正取消這一行
+    await queryInterface.dropTable('user'); // 請手動修正成這樣
   }
 };
 ```
@@ -319,7 +320,7 @@ Executing (default): DELETE FROM `SequelizeMeta` WHERE `name` = '20230824085150-
 倒退的語法，倒是滿符合內心期望的，哈哈。
 
 ```sql
-Executing (default): DROP TABLE IF EXISTS `users`;
+Executing (default): DROP TABLE IF EXISTS `user`;
 ```
 
 ## 依想要的欄位設定再產生資料表
@@ -374,7 +375,7 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('user');
   }
 };
 ```
@@ -474,6 +475,9 @@ npx sequelize --help
 ```
 
 ## 不建議使用的指令
+
+這是用 Model 改變 table schema 的做法。
+建議還是使用 migration 一步一步改。
 
 ```javascript
 User.sync() // 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。
