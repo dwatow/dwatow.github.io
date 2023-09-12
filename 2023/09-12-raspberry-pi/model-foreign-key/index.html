@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris" />
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2023/09-12-raspberry-pi/model-foreign-key/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶Raspberry Pi 4 的後端修鍊 (7) - migration 要 foreign key ¶「讀者」資料表 CREATE TABLE reader (  id CHAR(10) NOT NULL,  password VARCHAR(128),  slack_id VARCHAR(50),  line_id VARCHAR(50),  phone CHAR(10),  email V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry Pi 4 的後端修鍊 (8) - migration 要 foreign key">
+<meta property="og:url" content="https://dwatow.github.io/2023/09-12-raspberry-pi/model-foreign-key/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶Raspberry Pi 4 的後端修鍊 (7) - migration 要 foreign key ¶「讀者」資料表 CREATE TABLE reader (  id CHAR(10) NOT NULL,  password VARCHAR(128),  slack_id VARCHAR(50),  line_id VARCHAR(50),  phone CHAR(10),  email V">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-09-12T15:53:33.000Z">
+<meta property="article:modified_time" content="2023-09-12T15:55:08.854Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="sequelize">
+<meta property="article:tag" content="foreign key">
+<meta property="article:tag" content="model">
+<meta property="article:tag" content="orm">
+<meta name="twitter:card" content="summary">
+  <title>
+    Raspberry Pi 4 的後端修鍊 (8) - migration 要 foreign key - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Raspberry Pi 4 的後端修鍊 (8) - migration 要 foreign key</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-7-migration-%E8%A6%81-foreign-key"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (7) - migration 要 foreign key</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E8%AE%80%E8%80%85%E3%80%8D%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">「讀者」資料表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="toc-text">想要知道的問題</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C-migrate"><span class="toc-text">執行 migrate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C%E5%BE%8C%E6%89%8D%E7%9F%A5%E9%81%93%E9%8C%AF"><span class="toc-text">執行後才知道錯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%83%E5%BE%97"><span class="toc-text">心得</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9A%E6%9C%AA%E5%81%9A%E7%9A%84"><span class="toc-text">尚未做的</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="Raspberry-Pi-4-的後端修鍊-7-migration-要-foreign-key"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-7-migration-要-foreign-key">¶</a>Raspberry Pi 4 的後端修鍊 (7) - migration 要 foreign key</h1>
+<h2 id="「讀者」資料表"><a class="header-anchor" href="#「讀者」資料表">¶</a>「讀者」資料表</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> reader (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">VARCHAR</span>(<span class="number">128</span>),</span><br><span class="line">  slack_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  line_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  phone <span class="built_in">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">  email <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<p>在加入之前，我想先增加 npm script 的區段，將常用的指令加上去</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  &quot;new:table&quot;: &quot;npx sequelize model:generate --underscored --force&quot;,</span><br><span class="line">  &quot;migrate&quot;: &quot;npx sequelize db:migrate&quot;,</span><br><span class="line">  &quot;migrate:undo&quot;: &quot;npx sequelize db:migrate:undo&quot;,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>接著輸入指令，訊息會印出原本的指令長怎樣。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm run new:table -- --name reader --attributes password:string,slack_id:string,line_id:string,phone:string,email:string,creator:<span class="built_in">integer</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> lib-backend@1.0.0 new:table</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> npx sequelize model:generate --underscored --force --name reader --attributes password:string,slack_id:string,line_id:string,phone:string,email:string,creator:<span class="built_in">integer</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]</span><br><span class="line"></span><br><span class="line">New model was created at /home/admin/case/lib-backend/models/reader.js .</span><br><span class="line">New migration was created at /home/admin/case/lib-backend/migrations/20230912142904-create-reader.js .</span><br></pre></td></tr></table></figure>
+<p><strong>migrations/20230912142904-create-reader.js</strong></p>
+<ul>
+<li>修改表格名稱，readers -&gt; reader (讓它與真正生成的表格名稱相同)</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="comment">/** <span class="doctag">@type <span class="type">&#123;import(&#x27;sequelize-cli&#x27;).Migration&#125;</span> </span>*/</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">up</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> queryInterface.createTable(<span class="string">&#x27;reader&#x27;</span>, &#123;</span><br><span class="line">      id: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        autoIncrement: <span class="literal">false</span>, <span class="comment">// 不自動跳號</span></span><br><span class="line">        primaryKey: <span class="literal">true</span>,</span><br><span class="line">        type: Sequelize.CHAR(<span class="number">10</span>)  <span class="comment">// 身份證字號</span></span><br><span class="line">      &#125;,</span><br><span class="line">      password: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">128</span>),</span><br><span class="line">        defaultValue: <span class="string">&#x27;000&#x27;</span>, <span class="comment">// 加入預設值</span></span><br><span class="line">      &#125;,</span><br><span class="line">      slack_id: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">50</span>)</span><br><span class="line">      &#125;,</span><br><span class="line">      line_id: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">50</span>)</span><br><span class="line">      &#125;,</span><br><span class="line">      phone: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.CHAR(<span class="number">10</span>)</span><br><span class="line">      &#125;,</span><br><span class="line">      email: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.STRING(<span class="number">50</span>)</span><br><span class="line">      &#125;,</span><br><span class="line">      creator_id: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.INTEGER,</span><br><span class="line">        <span class="comment">// foreign key 的設定</span></span><br><span class="line">        references: &#123;</span><br><span class="line">          model: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">          key: <span class="string">&#x27;id&#x27;</span></span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      created_at: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;,</span><br><span class="line">      updated_at: &#123;</span><br><span class="line">        allowNull: <span class="literal">false</span>,</span><br><span class="line">        type: Sequelize.DATE</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">async</span> <span class="function"><span class="title">down</span>(<span class="params">queryInterface, Sequelize</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> queryInterface.dropTable(<span class="string">&#x27;reader&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>models/reader.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">reader</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Helper method for defining associations.</span></span><br><span class="line"><span class="comment">     * This method is not a part of Sequelize lifecycle.</span></span><br><span class="line"><span class="comment">     * The `models/index` file will call this method automatically.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">associate</span>(<span class="params">models</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// define association here</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  reader.init(&#123;</span><br><span class="line">    id: DataTypes.CHAR(<span class="number">10</span>),</span><br><span class="line">    password: DataTypes.STRING,</span><br><span class="line">    slack_id: DataTypes.STRING,</span><br><span class="line">    line_id: DataTypes.STRING,</span><br><span class="line">    phone: DataTypes.STRING,</span><br><span class="line">    email: DataTypes.STRING,</span><br><span class="line">    creator_id: &#123;</span><br><span class="line">      DataTypes: DataTypes.INTEGER,</span><br><span class="line">      references: &#123;</span><br><span class="line">        <span class="comment">// This is a reference to another model</span></span><br><span class="line">        model: user,  </span><br><span class="line">        <span class="comment">// This is the column name of the referenced model</span></span><br><span class="line">        key: <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    modelName: <span class="string">&#x27;reader&#x27;</span>,</span><br><span class="line">    underscored: <span class="literal">true</span>,</span><br><span class="line">    freezeTableName: <span class="literal">true</span>, <span class="comment">// 請手動加入這一行</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> reader;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="想要知道的問題"><a class="header-anchor" href="#想要知道的問題">¶</a>想要知道的問題</h2>
+<ul>
+<li>預設值 DefaultValue 應該加在哪？migration？model？都加？</li>
+<li>foreign key 的設定 怎麼加？</li>
+</ul>
+<h2 id="執行-migrate"><a class="header-anchor" href="#執行-migrate">¶</a>執行 migrate</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm run migrate</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> lib-backend@1.0.0 migrate</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> npx sequelize db:migrate</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;development&quot;.</span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = &#x27;BASE TABLE&#x27; AND TABLE_SCHEMA = &#x27;good_ideas_lib_dev&#x27;;</span><br><span class="line">Executing (default): SHOW FULL COLUMNS FROM `SequelizeMeta`;</span><br><span class="line">Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = &#x27;BASE TABLE&#x27; AND TABLE_NAME = &#x27;SequelizeMeta&#x27; AND TABLE_SCHEMA = &#x27;good_ideas_lib_dev&#x27;</span><br><span class="line">Executing (default): SHOW INDEX FROM `SequelizeMeta`</span><br><span class="line">Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;</span><br><span class="line">Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = &#x27;BASE TABLE&#x27; AND TABLE_NAME = &#x27;SequelizeMeta&#x27; AND TABLE_SCHEMA = &#x27;good_ideas_lib_dev&#x27;</span><br><span class="line">Executing (default): SHOW INDEX FROM `SequelizeMeta`</span><br><span class="line">Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;</span><br><span class="line">Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = &#x27;BASE TABLE&#x27; AND TABLE_NAME = &#x27;SequelizeMeta&#x27; AND TABLE_SCHEMA = &#x27;good_ideas_lib_dev&#x27;</span><br><span class="line">Executing (default): SHOW INDEX FROM `SequelizeMeta`</span><br><span class="line">Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;</span><br><span class="line">== 20230912142904-create-reader: migrating =======</span><br><span class="line">Executing (default): CREATE TABLE IF NOT EXISTS `reader` (`id` CHAR(10) NOT NULL , `password` VARCHAR(128) DEFAULT &#x27;000&#x27;, `slack_id` VARCHAR(50), `line_id` VARCHAR(50), `phone` CHAR(10) NOT NULL, `email` VARCHAR(50) NOT NULL, `creator_id` INTEGER NOT NULL, `created_at` DATETIME NOT NULL, `updated_at` DATETIME NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`)) ENGINE=InnoDB;</span><br><span class="line">Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = &#x27;BASE TABLE&#x27; AND TABLE_NAME = &#x27;SequelizeMeta&#x27; AND TABLE_SCHEMA = &#x27;good_ideas_lib_dev&#x27;</span><br><span class="line">Executing (default): SHOW INDEX FROM `SequelizeMeta`</span><br><span class="line">Executing (default): INSERT INTO `SequelizeMeta` (`name`) VALUES (?); &quot;20230912142904-create-reader.js&quot;</span><br><span class="line">== 20230912142904-create-reader: migrated (0.060s)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="string">`reader`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> , </span><br><span class="line">  <span class="string">`password`</span> <span class="built_in">VARCHAR</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;000&#x27;</span>, </span><br><span class="line">  <span class="string">`slack_id`</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>), </span><br><span class="line">  <span class="string">`line_id`</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>), </span><br><span class="line">  <span class="string">`phone`</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`email`</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`creator_id`</span> <span class="built_in">INTEGER</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`created_at`</span> DATETIME <span class="keyword">NOT</span> <span class="literal">NULL</span>, </span><br><span class="line">  <span class="string">`updated_at`</span> DATETIME <span class="keyword">NOT</span> <span class="literal">NULL</span>, </span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>), </span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (<span class="string">`creator_id`</span>) <span class="keyword">REFERENCES</span> <span class="string">`user`</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<p>比對一下原本想要的 SQL，除了後來覺得需要加的部份，其餘果然和原本想的一模一樣。讚！</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> reader (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">VARCHAR</span>(<span class="number">128</span>),</span><br><span class="line">  slack_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  line_id <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  phone <span class="built_in">CHAR</span>(<span class="number">10</span>),</span><br><span class="line">  email <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>),</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  creator_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (creator_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="執行後才知道錯"><a class="header-anchor" href="#執行後才知道錯">¶</a>執行後才知道錯</h2>
+<p>寫了一個程式使用 model</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Sequelize, DataTypes &#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> development = &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Option 3: Passing parameters separately (other dialects)</span></span><br><span class="line">  <span class="keyword">const</span> sequelize = <span class="keyword">new</span> Sequelize(...);</span><br><span class="line">                                  </span><br><span class="line">  <span class="comment">// 引用參考 (不用管順序)</span></span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&#x27;./models/reader&#x27;</span>)(sequelize, DataTypes);</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&#x27;./models/user&#x27;</span>)(sequelize, DataTypes);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> sequelize.authenticate();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">&#x27;Unable to connect to the database:&#x27;</span>, error);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> chris = <span class="keyword">await</span> sequelize.models.user.create(&#123; <span class="attr">name</span>: <span class="string">&#x27;chris&#x27;</span>, <span class="attr">password</span>: <span class="string">&#x27;chris&#x27;</span> &#125;);</span><br><span class="line">    <span class="keyword">await</span> sequelize.models.reader.create(&#123;</span><br><span class="line">      name: <span class="string">&#x27;mary&#x27;</span>,</span><br><span class="line">      phone: <span class="string">&#x27;0987654321&#x27;</span>,</span><br><span class="line">      email: <span class="string">&#x27;mary@gmail.com&#x27;</span>,</span><br><span class="line">      creator_id: chris.id,</span><br><span class="line">      created_at: <span class="built_in">Date</span>.now(),</span><br><span class="line">      updated_at: <span class="built_in">Date</span>.now(),</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Connection has been established successfully.&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error.message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>執行之後，各種錯誤，再重新修改 model 的表示方式。</p>
+<p><strong>models/user.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">  user.init(&#123;</span><br><span class="line">    <span class="comment">// 加上 id 的定義，要給別人 reference 成 foreign key 用的</span></span><br><span class="line">    id: &#123;</span><br><span class="line">      type: DataTypes.INTEGER, <span class="comment">// 型別要正確</span></span><br><span class="line">      primaryKey: <span class="literal">true</span>  <span class="comment">// 要設定 primaryKey: true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    name: DataTypes.STRING(<span class="number">50</span>),</span><br><span class="line">    password: DataTypes.CHAR(<span class="number">128</span>)</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> user;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>models/reader.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  Model</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user = <span class="built_in">require</span>(<span class="string">&#x27;./user&#x27;</span>); <span class="comment">// 為了 foreign keys</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">sequelize, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">reader</span> <span class="keyword">extends</span> <span class="title">Model</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Helper method for defining associations.</span></span><br><span class="line"><span class="comment">     * This method is not a part of Sequelize lifecycle.</span></span><br><span class="line"><span class="comment">     * The `models/index` file will call this method automatically.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="title">associate</span>(<span class="params">models</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// define association here</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  reader.init(&#123;</span><br><span class="line">    <span class="comment">// 加上 id 的定義，要給別人 reference 成 foreign key 用的</span></span><br><span class="line">    id: &#123;</span><br><span class="line">      type: DataTypes.CHAR(<span class="number">10</span>), <span class="comment">// 型別要正確</span></span><br><span class="line">      primaryKey: <span class="literal">true</span> <span class="comment">// 要設定 primaryKey: true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    password: DataTypes.STRING,</span><br><span class="line">    slack_id: DataTypes.STRING,</span><br><span class="line">    line_id: DataTypes.STRING,</span><br><span class="line">    phone: DataTypes.STRING,</span><br><span class="line">    email: DataTypes.STRING,</span><br><span class="line">    creator_id: &#123;</span><br><span class="line">      type: DataTypes.INTEGER,</span><br><span class="line">      <span class="comment">// foreign keys 的設定</span></span><br><span class="line">      references: &#123;</span><br><span class="line">        <span class="comment">// This is a reference to another model</span></span><br><span class="line">        model: user,  </span><br><span class="line">        <span class="comment">// This is the column name of the referenced model</span></span><br><span class="line">        key: <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    sequelize,</span><br><span class="line">    modelName: <span class="string">&#x27;reader&#x27;</span>,</span><br><span class="line">    underscored: <span class="literal">true</span>,</span><br><span class="line">    freezeTableName: <span class="literal">true</span>, <span class="comment">// 請手動加入這一行</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> reader;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>設定之後，執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?); null, &quot;chris&quot;, &quot;chris&quot;, &quot;2023-09-12 15:29:09&quot;, &quot;2023-09-12 15:29:09&quot;</span><br><span class="line">Executing (default): INSERT INTO `reader` (`id`,`phone`,`email`,`creator_id`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?); null, &quot;0987654321&quot;, &quot;mary@gmail.com&quot;, null, &quot;2023-09-12 15:29:09&quot;, &quot;2023-09-12 15:29:09&quot;</span><br><span class="line">Column &#x27;id&#x27; cannot be null</span><br></pre></td></tr></table></figure>
+<p>修改一下 <strong>main.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">await</span> sequelize.models.user.create(&#123; <span class="attr">name</span>: <span class="string">&#x27;chris&#x27;</span>, <span class="attr">password</span>: <span class="string">&#x27;chris&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 要將 user 的資料從資料庫再撈一次，才會是包含所有在資料庫裡的內容。而不是只有在 JS 出現的而已。</span></span><br><span class="line"><span class="keyword">const</span> chris = <span class="keyword">await</span> sequelize.models.user.findOne(&#123;</span><br><span class="line">  where: &#123; <span class="attr">name</span>: <span class="string">&#x27;chris&#x27;</span> &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mary = <span class="keyword">await</span> sequelize.models.reader.create(&#123;</span><br><span class="line">  id: <span class="string">&#x27;E123456789&#x27;</span>,</span><br><span class="line">  name: <span class="string">&#x27;mary&#x27;</span>,</span><br><span class="line">  phone: <span class="string">&#x27;0987654321&#x27;</span>,</span><br><span class="line">  email: <span class="string">&#x27;mary@gmail.com&#x27;</span>,</span><br><span class="line">  creator_id: chris.id,</span><br><span class="line">  created_at: <span class="built_in">Date</span>.now(),</span><br><span class="line">  updated_at: <span class="built_in">Date</span>.now(),</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;mary.password&#x27;</span>, mary.password)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span> </span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Executing (default): INSERT INTO `user` (`id`,`name`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?); null, &quot;chris&quot;, &quot;chris&quot;, &quot;2023-09-12 15:41:46&quot;, &quot;2023-09-12 15:41:46&quot;</span><br><span class="line">Executing (default): SELECT `id`, `name`, `password`, `created_at` AS `createdAt`, `updated_at` AS `updatedAt` FROM `user` AS `user` WHERE `user`.`name` = &#x27;chris&#x27; LIMIT 1;</span><br><span class="line">Executing (default): INSERT INTO `reader` (`id`,`phone`,`email`,`creator_id`,`created_at`,`updated_at`) VALUES (?,?,?,?,?,?); &quot;E123456789&quot;, &quot;0987654321&quot;, &quot;mary@gmail.com&quot;, 18, &quot;2023-09-12 15:41:46&quot;, &quot;2023-09-12 15:41:46&quot;</span><br><span class="line">mary.password undefined</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<p>可以發現 mary.password 是 <code>undefined</code> 也是相同的道理。</p>
+<p>改一下 Model 的 password，加上 DefaultValue ，其實也是一樣的結果。</p>
+<h2 id="心得"><a class="header-anchor" href="#心得">¶</a>心得</h2>
+<p>Model 主要還是 JS 餵進去的資料為新增時回傳的物件。<br>
+並不會依照資料庫 (或 Model) 的預設值而自動幫你加上去，id 也是<br>
+除非在新增完之後，再從資料庫撈一次，該在資料表上的內容就會出現在 JS 物件中了。</p>
+<p>而 sequelize 在 Model 上可以設定 DefaultValue 的設定，是為了搭配 <code>.sync()</code> 吧？從 Model 新增 Table 的方式。</p>
+<h2 id="尚未做的"><a class="header-anchor" href="#尚未做的">¶</a>尚未做的</h2>
+<p>未設定 Model 之間的關聯性</p>
+<p>所以 <code>console.log(mary.toJSON())</code> 印出來的 mary 會是這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  id: <span class="string">&#x27;E123456789&#x27;</span>,</span><br><span class="line">  phone: <span class="string">&#x27;0987654321&#x27;</span>,</span><br><span class="line">  email: <span class="string">&#x27;mary@gmail.com&#x27;</span>,</span><br><span class="line">  creator_id: <span class="number">19</span>,</span><br><span class="line">  updatedAt: <span class="number">2023</span>-<span class="number">09</span>-12T15:<span class="number">48</span>:<span class="number">58.</span>828Z,</span><br><span class="line">  createdAt: <span class="number">2023</span>-<span class="number">09</span>-12T15:<span class="number">48</span>:<span class="number">58.</span>828Z</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2023-09-12T15:53:33.000Z" itemprop="datePublished">
+              2023-09-12
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/sequelize/">sequelize</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/foreign-key/">foreign key</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/model/">model</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/orm/">orm</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2023 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
