@@ -9,7 +9,7 @@ tags:
 categories:
 - 技術練習
 ---
-# Raspberry Pi 4 的後端修鍊 (7) - migration 要 foreign key
+# Raspberry Pi 4 的後端修鍊 (8) - migration 要 foreign key
 
 ## 「讀者」資料表
 
