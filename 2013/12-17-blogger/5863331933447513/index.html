@@ -28,15 +28,15 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶如何用git diff比較任意兩版本 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;git-diff.html 移植時的最後更新日期: 2016-06-29T15:02:01.794+08:00 這篇，我們要利用下列指令完成版本差異比較而且，看得出這兩個版本有哪些檔案有差異。difftag1, 與 tag2 所有檔案的差異[1][2]git dif">
+  <meta name="description" content="¶如何用git diff比較任意兩版本 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;git-diff.html 移植時的最後更新日期: 2016-06-29T15:02:01.794+08:00 這篇，我們要利用下列指令完成版本差異比較 而且，看得出這兩個版本有哪些檔案有差異。 ¶diff tag1, 與 tag2 所有檔案的差異[1][2] gi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何用git diff比較任意兩版本">
 <meta property="og:url" content="https://dwatow.github.io/2013/12-17-blogger/5863331933447513/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶如何用git diff比較任意兩版本 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;git-diff.html 移植時的最後更新日期: 2016-06-29T15:02:01.794+08:00 這篇，我們要利用下列指令完成版本差異比較而且，看得出這兩個版本有哪些檔案有差異。difftag1, 與 tag2 所有檔案的差異[1][2]git dif">
+<meta property="og:description" content="¶如何用git diff比較任意兩版本 原文連結: https:&#x2F;&#x2F;darkblack01.blogspot.com&#x2F;2013&#x2F;12&#x2F;git-diff.html 移植時的最後更新日期: 2016-06-29T15:02:01.794+08:00 這篇，我們要利用下列指令完成版本差異比較 而且，看得出這兩個版本有哪些檔案有差異。 ¶diff tag1, 與 tag2 所有檔案的差異[1][2] gi">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2013-12-16T19:07:00.002Z">
-<meta property="article:modified_time" content="2022-03-05T00:42:54.129Z">
+<meta property="article:modified_time" content="2023-09-14T12:19:34.864Z">
 <meta property="article:author" content="Chris">
 <meta property="article:tag" content="Git">
 <meta property="article:tag" content="版本控制">
@@ -138,14 +138,41 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8git-diff%E6%AF%94%E8%BC%83%E4%BB%BB%E6%84%8F%E5%85%A9%E7%89%88%E6%9C%AC"><span class="toc-text">如何用git diff比較任意兩版本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">diff</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">tag1, 與 tag2 所有檔案的差異[1][2]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">tag1, 與 tag2 的指定檔案 file1, file2 的差異[1][2]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">看「差異程度列表」時使用–stat[1]</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">tag</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">設定commit的hash碼(很長的那一串亂碼)為tag[1]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">刪除掉某一個tag [1][2]</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">參考資料：</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8git-diff%E6%AF%94%E8%BC%83%E4%BB%BB%E6%84%8F%E5%85%A9%E7%89%88%E6%9C%AC"><span class="toc-text">如何用git diff比較任意兩版本</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#diff"><span class="toc-text">diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stat"><span class="toc-text">stat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tag"><span class="toc-text">tag</span></a></li></ol></li></ol>
   </div>
 
 
     <h1 id="如何用git-diff比較任意兩版本"><a class="header-anchor" href="#如何用git-diff比較任意兩版本">¶</a>如何用git diff比較任意兩版本</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/12/git-diff.html">https://darkblack01.blogspot.com/2013/12/git-diff.html</a><br>
 移植時的最後更新日期: 2016-06-29T15:02:01.794+08:00</p>
-<p>這篇，我們要利用下列指令完成版本差異比較<br />而且，看得出這兩個版本有哪些檔案有差異。<br /><br /><h3><span style="font-size: x-large;">diff</span></h3><h4>tag1, 與 tag2 所有檔案的差異[1][2]</h4><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git diff tag1 tag2</span><br /><br /><h4>tag1, 與 tag2 的指定檔案 file1, file2 的差異[1][2]</h4><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git diff tag1:file1 tag2:file2</span><br />要辦到指定版本(或檔案)就是要再學一個tag指令<br />file1, file2前有需要的話要加上路徑，路徑無須用’/'開頭，直接用資料夾名稱即可。<br /><br /><h4>看「差異程度列表」時使用<b>–stat</b>[1]</h4>列出檔案列表與修改次數，不顯示詳細修改內容<br /><span style="background-color: black; color: white;">git diff </span><span style="background-color: black; color: red;">–stat</span><br /><br /><h3><span style="font-size: x-large;">tag</span></h3><h4>設定commit的hash碼(很長的那一串亂碼)為tag[1]</h4><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git tag &lt;tag name&gt; &lt;hash前5碼&gt;</span><br /><br /><h4>刪除掉某一個tag [1][2]</h4><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git tag -d &lt;tag name&gt;</span><br />tab name 也可以使用中文唷<a href="%E6%B2%92%E8%A9%A6%E9%81%8E%E5%B0%B1%E6%98%AF%E4%BA%86">1</a><br /><br /><h2><span style="font-size: x-large;">參考資料：</span></h2>[1] <a href="http://blog.longwin.com.tw/2009/05/git-learn-initial-command-2009/" target="_blank">Git 初學筆記 - 指令操作教學</a><br />[2] <a href="http://zx-1986.blogspot.tw/2010/08/git-manual.html" target="_blank">Git 使用手冊</a></p>
+<p>這篇，我們要利用下列指令完成版本差異比較<br>
+而且，看得出這兩個版本有哪些檔案有差異。</p>
+<h2 id="diff"><a class="header-anchor" href="#diff">¶</a>diff</h2>
+<p><strong>tag1, 與 tag2 所有檔案的差異</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git diff tag1 tag2</span><br></pre></td></tr></table></figure>
+<p><strong>tag1, 與 tag2 的指定檔案 file1, file2 的差異</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git diff tag1:file1 tag2:file2</span><br></pre></td></tr></table></figure>
+<p>要辦到指定版本(或檔案)就是要再學一個tag指令<br>
+file1, file2前有需要的話要加上路徑，路徑無須用’/'開頭，直接用資料夾名稱即可。</p>
+<h2 id="stat"><a class="header-anchor" href="#stat">¶</a>stat</h2>
+<p><strong>看「差異程度列表」時使用–stat</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1:2">[1:2]</a></sup></p>
+<p>列出檔案列表與修改次數，不顯示詳細修改內容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git diff --stat</span><br></pre></td></tr></table></figure>
+<h2 id="tag"><a class="header-anchor" href="#tag">¶</a>tag</h2>
+<p><strong>設定commit的hash碼(很長的那一串亂碼)為tag</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1:3">[1:3]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag &lt;tag name&gt; &lt;hash前5碼&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>刪除掉某一個tag</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1:4">[1:4]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2:2">[2:2]</a></sup></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git tag -d &lt;tag name&gt; </span><br></pre></td></tr></table></figure>
+<p>tab name 也可以使用中文唷<a href="%E6%B2%92%E8%A9%A6%E9%81%8E%E5%B0%B1%E6%98%AF%E4%BA%86">^git1</a></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.longwin.com.tw/2009/05/git-learn-initial-command-2009/">Git 初學筆記 - 指令操作教學 - Tsung’s Blog</a> <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a> <a href="#fnref1:2" class="footnote-backref">↩︎</a> <a href="#fnref1:3" class="footnote-backref">↩︎</a> <a href="#fnref1:4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://zx-1986.blogspot.com/2010/08/git-manual.html">張旭: Git 使用手冊</a> <a href="#fnref2" class="footnote-backref">↩︎</a> <a href="#fnref2:1" class="footnote-backref">↩︎</a> <a href="#fnref2:2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
     
     </section>
