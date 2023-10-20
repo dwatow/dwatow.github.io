@@ -1,4 +1,4 @@
-(function () {
+const ixbg = (function () {
   //initial canvas
   const canvas = document.querySelector("#ixbg");
   const sidebar = document.querySelector(".SideBar");
@@ -128,14 +128,27 @@
       // ctx.fill();
       ctx.stroke();
     });
-    requestAnimationFrame(() => {
-      update();
-      draw();
-    }); 
+    if (runAnimation) {
+      requestAnimationFrame(() => {
+        update();
+        draw();
+      }); 
+    }
   } 
 
   // setTimeout(() => {
   // }, 30);
+  let runAnimation = true;
   update()
   draw();
+  return {
+    start: () => {
+      runAnimation = true;
+      update()
+      draw();
+    },
+    stop: () => {
+      runAnimation = false;
+    }
+  }
 })();
