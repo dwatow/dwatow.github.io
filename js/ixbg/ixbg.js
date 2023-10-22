@@ -130,7 +130,7 @@ const ixbg = (function () {
     });
     if (runAnimation) {
       requestAnimationFrame(() => {
-        update();
+        setTimeout(update)
         draw();
       }); 
     }
@@ -139,12 +139,12 @@ const ixbg = (function () {
   // setTimeout(() => {
   // }, 30);
   let runAnimation = true;
-  update()
+  setTimeout(update)
   draw();
   return {
     start: () => {
       runAnimation = true;
-      update()
+      setTimeout(update)
       draw();
     },
     stop: () => {
