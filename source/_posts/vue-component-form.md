@@ -31,7 +31,7 @@ categories:
 {
   "name": "從自學到成功轉職軟體工程師",
   "isbn": "6263330120",
-  "publish_date": "2022-01-24",
+  "publish_date": "2022-01-24",s
   "publish_house": "博碩文化",
   "pages": 264,
   "set_price": 520,
@@ -41,7 +41,7 @@ categories:
 
 用原生的 form 表示，畫面就如同這樣。
 
-![](https://hackmd.io/_uploads/Hk1jHmzf6.png)
+![](https://i.imgur.com/Dy4rudZ.png)
 
 那如果我們要用 vue 來寫要怎麼做呢？
 
