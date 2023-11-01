@@ -65,7 +65,7 @@ export default {
   computed: {
     isActive () {
       return {
-        active: this.status == this.currStatus
+        active: this.status === this.currStatus
       }
     }
   },
@@ -77,8 +77,6 @@ export default {
 ## 結論
 
 用 vue 和 jQuery 思維不同。
-程式的「本質性問題」不變。不可消除的複雜度 `this.status == this.currStatu` 依然存在，幸運的是，還是可以用 vue 優雅的實現抽換 class。
+程式的「本質性問題」不變。不可消除的複雜度 `this.status === this.currStatu` 依然存在，幸運的是，還是可以用 vue 優雅的實現抽換 class。
 
-[^toggle-class-by-computed]: [Class and Style Bindings — Vue.js
-
-, Binding HTML Classes, Object Syntax](https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax)
+[^toggle-class-by-computed]: [Class and Style Bindings — Vue.js, Binding HTML Classes, Object Syntax](https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax)
