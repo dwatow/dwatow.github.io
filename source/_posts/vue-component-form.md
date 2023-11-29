@@ -645,13 +645,13 @@ const emits = defineEmits([
 ```xml
 <BookForm
   :data="form"
-  @update:name=form = $event
-  @update:isbn=form = $event
-  @update:publish_date=form = $event
-  @update:publish_house=form = $event
-  @update:pages=form = $event
-  @update:set_price=form = $event
-  @update:author=form = $event
+  @update:name="form = $event"
+  @update:isbn="form = $event"
+  @update:publish_date="form = $event"
+  @update:publish_house="form = $event"
+  @update:pages="form = $event"
+  @update:set_price="form = $event"
+  @update:author="form = $event"
 ></BookForm>
 ```
 
