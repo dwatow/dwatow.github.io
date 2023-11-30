@@ -166,7 +166,7 @@ function onRemoveOneOfList(index) {
     @update:pages="onUpdateList(update($event))"
     @update:set_price="onUpdateList(update($event))"
     @update:author="onUpdateList(update($event))"
-  >
+  ></BookForm>
 </List>
 ```
 
