@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris" />
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2023/11-29-vue-component-list/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶用 Vue 包一個 List Component 這一篇包 Component 的前置知識，要先看一下鐵人賽的 Vue.js 進階心法 看完之後，在前端框架自訂 Component 的問題上，會類似「自定義型別」或「抽象資料型」的這種思考上。[1] 先了解到前端在處理資料時，在 Vue 官網教學上，其實學到了處理簡單型別的資料處理方式，將簡單型別透過 v-model 綁在畫面上的位置，就可以同時">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Vue 包一個 List Component">
+<meta property="og:url" content="https://dwatow.github.io/2023/11-29-vue-component-list/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶用 Vue 包一個 List Component 這一篇包 Component 的前置知識，要先看一下鐵人賽的 Vue.js 進階心法 看完之後，在前端框架自訂 Component 的問題上，會類似「自定義型別」或「抽象資料型」的這種思考上。[1] 先了解到前端在處理資料時，在 Vue 官網教學上，其實學到了處理簡單型別的資料處理方式，將簡單型別透過 v-model 綁在畫面上的位置，就可以同時">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/PUgAmkf.png">
+<meta property="article:published_time" content="2023-11-29T06:28:39.000Z">
+<meta property="article:modified_time" content="2023-11-30T09:39:38.579Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="component">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/PUgAmkf.png">
+  <title>
+    用 Vue 包一個 List Component - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+    
+<script src="/js/facebooksdk.js"></script>
+
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <section class='menu'>
+        <div>《Chris 技術筆記》</div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Lastest</li>
+            </a>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>用 Vue 包一個 List Component</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%A8-Vue-%E5%8C%85%E4%B8%80%E5%80%8B-List-Component"><span class="toc-text">用 Vue 包一個 List Component</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#List-%E7%B7%A8%E8%BC%AF-Array-%E7%9A%84%E7%95%8C%E9%9D%A2"><span class="toc-text">List &#x3D; 編輯 Array 的界面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%BF%E5%89%8D%E4%B8%80%E7%AF%87%EF%BC%8Cv-for-BookForm"><span class="toc-text">承前一篇，v-for BookForm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E8%A8%88-List-%E5%85%83%E4%BB%B6"><span class="toc-text">設計 List 元件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%BE%8C"><span class="toc-text">最後</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="用-Vue-包一個-List-Component"><a class="header-anchor" href="#用-Vue-包一個-List-Component">¶</a>用 Vue 包一個 List Component</h1>
+<p>這一篇包 Component 的前置知識，要先看一下鐵人賽的 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20107637/ironman/4510">Vue.js 進階心法</a><br>
+看完之後，在前端框架自訂 Component 的問題上，會類似「自定義型別」或「抽象資料型」的這種思考上。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p>先了解到前端在處理資料時，在 Vue 官網教學上，其實學到了處理簡單型別的資料處理方式，將簡單型別透過 <code>v-model</code> 綁在畫面上的位置，就可以同時顯示資料，也編輯資料。</p>
+<p>簡真實案例，可以說就是在處理 Object 與 Array 的問題，並不只是簡單型別而已。雖然可能可以將 Object 拆解成很多簡單型別進行各別欄位綁定來解決問題，上一篇試圖著保有物件型別的概念來處理問題。而這一篇，針對 Array 這個型別來處理。一樣希望可以保有「型別」這個概念來處理畫面。</p>
+<h2 id="List-編輯-Array-的界面"><a class="header-anchor" href="#List-編輯-Array-的界面">¶</a>List = 編輯 Array 的界面</h2>
+<p>第一個想法，就是處理 Array 的編輯問題，但是前端在處理 Array 的方式其實並沒有特定的做法，反而常見的做法是用 Table 來處理。<br>
+但是 Table 並不支援 RWD (要也只是讓它可以左右滑動)，通常也不支援可以編輯的情況 (要也可以，但是就是定義在各自的欄位，綁上複雜的編輯函數)。</p>
+<p>如何設計一個好的 List Component 就成為了這一篇文章的重點。<br>
+在讀 code 上會有更多的資訊可以讀，也希望在界面上有更多的隱喻可以了解實作。</p>
+<p>以上一篇的物件為元素組成的陣列為例，這是一個「書籍」的陣列，裡頭的元素是物件。這依然是一個「抽象資料型別」，現在拿出紙筆畫一下，如果要將它變成列表，該怎麼做呢？。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[&#123;</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;從自學到成功轉職軟體工程師&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;isbn&quot;</span>: <span class="string">&quot;6263330120&quot;</span>,</span><br><span class="line">  &quot;publish_date&quot;: &quot;2022-01-24&quot;,s</span><br><span class="line">  &quot;publish_house&quot;: &quot;博碩文化&quot;,</span><br><span class="line">  &quot;pages&quot;: 264,</span><br><span class="line">  &quot;set_price&quot;: 520,</span><br><span class="line">  &quot;author&quot;: &quot;Chris&quot;</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+<p>我想讓它成為重複出現的表單，這樣既可以編輯，也可以顯示，符合更多的可能性。<br>
+也符合真實案例的複雜程度，畫面就如同這樣。</p>
+<p><img src="https://i.imgur.com/PUgAmkf.png" alt=""></p>
+<p>那如果我們要用 vue 來寫要怎麼做呢？</p>
+<h2 id="承前一篇，v-for-BookForm"><a class="header-anchor" href="#承前一篇，v-for-BookForm">¶</a>承前一篇，v-for BookForm</h2>
+<p>List 需要的編輯行為: 新增元素、編輯元素、移除元素，顯示所有內容。在之後的設計上，會讓這些 method 跟著 List 這個 component。<br>
+在此就不管 v-model 的做法。直接使用「把 v-model 拆開」的 BookForm 接續下一步。</p>
+<p><strong>/src/views/Document.vue</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;book_list&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;books&quot;</span> <span class="attr">v-for</span>=<span class="string">&quot;(form, index) in list&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;form.isbn&quot;</span>&gt;</span></span><br><span class="line">    &lt;BookForm</span><br><span class="line">      :data=&quot;form&quot;</span><br><span class="line">      @update:name=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:isbn=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:publish_date=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:publish_house=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:pages=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:set_price=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">      @update:author=&quot;onUpdateOneOfList($event, index)&quot;</span><br><span class="line">    &gt;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">BookForm</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-left: 3.5em;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;delete&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;onRemoveOneOfList(index)&quot;</span>&gt;</span>X<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: .5em;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;create&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;onAddOneToList&quot;</span>&gt;</span>＋<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> BookForm <span class="keyword">from</span> <span class="string">&#x27;@/components/BookForm.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> list = ref([&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;從自學到成功轉職軟體工程師&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;6263330120&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2022-01-24&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;博碩文化&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">264</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">520</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;Chris&quot;</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;金魚都能懂的 CSS 必學屬性&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;9864348825&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2022-05-03&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;博碩文化&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">480</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">720</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;李建杭（Amos Li）&quot;</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;約耳再談軟體&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;6263246103&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2023-09-14&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;碁峰資訊&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">336</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">580</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;約耳&quot;</span></span><br><span class="line">  &#125;])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onAddOneToList</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  list.value = [</span><br><span class="line">    ...list.value,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;pages&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;set_price&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;author&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onUpdateOneOfList</span>(<span class="params">one, index</span>) </span>&#123;</span><br><span class="line">  list.value = [</span><br><span class="line">    ...list.value.slice(<span class="number">0</span>, index),</span><br><span class="line">    one,</span><br><span class="line">    ...list.value.slice(index + <span class="number">1</span>),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onRemoveOneOfList</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">  list.value = [</span><br><span class="line">    ...list.value.slice(<span class="number">0</span>, index),</span><br><span class="line">    ...list.value.slice(index + <span class="number">1</span>),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="設計-List-元件"><a class="header-anchor" href="#設計-List-元件">¶</a>設計 List 元件</h2>
+<p>包成 Component 之後。</p>
+<p><strong>/src/views/Document.vue</strong></p>
+<p>為了讓 List 成為 component 而且元素型別是可以抽換的，並且這個 component 本身就可以新增、刪除、修改元素。<br>
+在刪除與修改元素時，還可以把 index 給換掉。</p>
+<p><strong>template</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">List</span> <span class="attr">v-slot</span>=<span class="string">&quot;&#123; form, update &#125;&quot;</span> </span></span><br><span class="line"><span class="tag">  @<span class="attr">add</span>=<span class="string">&quot;onUpdateList&quot;</span></span></span><br><span class="line"><span class="tag">  @<span class="attr">del</span>=<span class="string">&quot;onUpdateList&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span></span><br><span class="line">  &lt;BookForm</span><br><span class="line">    :data=&quot;form&quot;</span><br><span class="line">    @update:name=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:isbn=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:publish_date=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:publish_house=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:pages=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:set_price=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">    @update:author=&quot;onUpdateList(update($event))&quot;</span><br><span class="line">  &gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">List</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>script</strong></p>
+<p>維持資料在 view 決定的角度來設計 component，讓 BookForm 成為 pure component</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> BookForm <span class="keyword">from</span> <span class="string">&#x27;@/components/BookForm.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> list = ref([&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;從自學到成功轉職軟體工程師&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;6263330120&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2022-01-24&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;博碩文化&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">264</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">520</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;Chris&quot;</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;金魚都能懂的 CSS 必學屬性&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;9864348825&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2022-05-03&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;博碩文化&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">480</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">720</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;李建杭（Amos Li）&quot;</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;約耳再談軟體&quot;</span>,</span><br><span class="line">  <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;6263246103&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;2023-09-14&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;碁峰資訊&quot;</span>,</span><br><span class="line">  <span class="string">&quot;pages&quot;</span>: <span class="number">336</span>,</span><br><span class="line">  <span class="string">&quot;set_price&quot;</span>: <span class="number">580</span>,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;約耳&quot;</span></span><br><span class="line">  &#125;])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onUpdateList</span>(<span class="params">new_list</span>) </span>&#123;</span><br><span class="line">  list.value = new_list</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>/src/component/BookForm.vue</strong></p>
+<p>把原本 BookForm 的位置換成 slot。<br>
+從 slot 傳出 form 與 修改 form 的 onUpdateOneOfList</p>
+<p><strong>template</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;book_list&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;books&quot;</span> <span class="attr">v-for</span>=<span class="string">&quot;(form, index) in list&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;form.isbn&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">slot</span> <span class="attr">:data</span>=<span class="string">&quot;form&quot;</span> <span class="attr">:update</span>=<span class="string">&quot;onUpdateOneOfList(index)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-left: 3.5em;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;delete&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;onRemoveOneOfList(index)&quot;</span>&gt;</span>X<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: .5em;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;create&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;onAddOneToList&quot;</span>&gt;</span>＋<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>script</strong></p>
+<p>把原本 method 裡改值的部份，改成吐出與 <code>props.list</code> 相同型別 (Array) 的事件。<br>
+將 onUpdateOneOfList 改成閉包，將 index 封裝在 List 裡面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> props = defineProps(&#123;</span><br><span class="line">  list: &#123;</span><br><span class="line">    type: <span class="built_in">Array</span>,</span><br><span class="line">    required: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> emits = defineEmits([</span><br><span class="line">  <span class="string">&#x27;add&#x27;</span>, <span class="string">&#x27;del&#x27;</span>, <span class="string">&#x27;update&#x27;</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onAddOneToList</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  emits(<span class="string">&#x27;add&#x27;</span>, [</span><br><span class="line">    ...props.list.value,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;isbn&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;publish_date&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;publish_house&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;pages&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;set_price&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;author&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onUpdateOneOfList</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">one</span>) </span>&#123;</span><br><span class="line">    emits(<span class="string">&#x27;update&#x27;</span>, [</span><br><span class="line">      ...props.list.value.slice(<span class="number">0</span>, index),</span><br><span class="line">      one,</span><br><span class="line">      ...props.list.value.slice(index + <span class="number">1</span>),</span><br><span class="line">    ])</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onRemoveOneOfList</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">  emits(<span class="string">&#x27;del&#x27;</span>, [</span><br><span class="line">    ...props.list.value.slice(<span class="number">0</span>, index),</span><br><span class="line">    ...props.list.value.slice(index + <span class="number">1</span>),</span><br><span class="line">  ])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>優點:</strong></p>
+<ul>
+<li>可以將 List 的行為，跟著 List 的 component，編輯與 Form 的編輯相容。</li>
+<li>符合相同型別進出(props/emits) component 。</li>
+<li>外部使用可以直接撰寫，不用由實作決定 <code>$event</code> 是什麼，直接在設計上決定它是相同型別物件 (Array)。</li>
+</ul>
+<p><strong>缺點:</strong></p>
+<ul>
+<li>沒有使用的 <code>v-model</code> 處理雙向綁定，將 v-model 拆開寫，需要注意怎麼拆。</li>
+</ul>
+<h2 id="最後"><a class="header-anchor" href="#最後">¶</a>最後</h2>
+<p>對於畫面的修改邏輯、與排版方式都可以封裝在 component 是基本的要求。<br>
+而在這個範例中，兩個版本對於物件的修改行為，都做到 component 上面了。<br>
+只是核心概念不太一樣，最後實作的方式也就不太一樣。</p>
+<p>希望可以找到屬於你自己面對前端時，最佳解決處理資料與畫面的方案。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9789864341313">《CODE COMPLETE：軟體開發實務指南, 2/e (中文版) 》, 6.1 類別的基礎：抽象資料類型（ADTs）</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2023-11-29T06:28:39.000Z" itemprop="datePublished">
+              2023-11-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vue/">vue</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/component/">component</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2023 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
