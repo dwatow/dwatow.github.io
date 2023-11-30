@@ -117,7 +117,9 @@ categories:
 **template**
 ```xml
 <div style="padding: 50px">
-  <BookForm :data="form"></BookForm>
+  <BookForm :data="form">
+    <button type="submit">submit</button>
+  </BookForm>
 </div>
 ```
 
@@ -196,7 +198,7 @@ const form = ref({
      v-model="props.data.author"/>
   </label>
   <div style="margin-top: .5em">
-    <button type="submit">submit</button>
+    <slot></slot>
   </div>
 </form>
 ```
@@ -236,7 +238,9 @@ const props = defineProps({
     :pages="form.pages"
     :set_price="form.set_price"
     :author="form.author"
-  ></BookForm>
+  >
+    <button type="submit">submit</button>
+  </BookForm>
 </div>
 ```
 
@@ -300,7 +304,7 @@ const props = defineProps({
      v-model="props.author" />
   </label>
   <div style="margin-top: .5em">
-    <button type="submit">submit</button>
+    <slot></slot>
   </div>
 </form>
 ```
@@ -439,7 +443,9 @@ const author = computed({
   v-model:pages="form.pages"
   v-model:set_price="form.set_price"
   v-model:author="form.author"
-></BookForm>
+>
+  <button type="submit">submit</button>
+</BookForm>
 ```
 
 **優點:**
@@ -606,7 +612,7 @@ const author = computed({
     />
   </label>
   <div style="margin-top: .5em">
-    <button type="submit">submit</button>
+    <slot></slot>
   </div>
 </form>
 ```
@@ -652,7 +658,9 @@ const emits = defineEmits([
   @update:pages="form = $event"
   @update:set_price="form = $event"
   @update:author="form = $event"
-></BookForm>
+>
+  <button type="submit">submit</button>
+</BookForm>
 ```
 
 **優點:**
@@ -661,7 +669,7 @@ const emits = defineEmits([
 - 一個欄位的修改，只需要寫 emits ，並且同時組合成相同的物件。
 - 外部使用可以直接撰寫，不用由實作決定 `$event` 是什麼。
 
-**缺點:**
+**缺點:******
 
 - 沒有使用的 `v-model` 處理雙向綁定，將 v-model 拆開寫，需要注意怎麼拆。
 
@@ -670,5 +678,7 @@ const emits = defineEmits([
 對於畫面的修改邏輯、與排版方式都可以封裝在 component 是基本的要求。
 而在這個範例中，兩個版本對於物件的修改行為，都做到 component 上面了。
 只是核心概念不太一樣，最後實作的方式也就不太一樣。
+
+基於排版邏輯封裝的結果，將排版方式與資料處理動作綁在同一個 component 看起來是可以增進工程師理解程式碼層次的好方法。
 
 希望可以找到屬於你自己面對前端時，最佳解決處理資料與畫面的方案。
