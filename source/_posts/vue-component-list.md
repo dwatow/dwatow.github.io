@@ -154,6 +154,7 @@ function onRemoveOneOfList(index) {
 
 ```xml
 <List v-slot="{ form, update }" 
+  :list="list"
   @add="onUpdateList"
   @del="onUpdateList"
 >
