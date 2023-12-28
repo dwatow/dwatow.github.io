@@ -161,13 +161,13 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 幾乎拆開了整條路，不過還是讓我從 CDI 這一段拆開時找到，幾乎快要拆不到的位置，找到了介接點。
 
-![](https://i.imgur.com/R7TR7un.png)
+![](https://i.imgur.com/R7TR7un.png =345x)
 
 所以是延用了車子主線路中轉速表的黃黑線，並不是暴力拉了一條 CDI 到轉速表的專線。處理的過程，要將受傷的線重新焊在一起，並且上熱縮套管，就可以恢復原本的保護力，而且整束主線路會再用絕緣膠帶捆起來，不會有單線拉扯的問題。
 
 施工影片如下
 
-<video controls src="https://i.imgur.com/tXwnhVq.mp4">
+<video controls width="345px" src="https://i.imgur.com/tXwnhVq.mp4">
 </video>
 
 接好之後，將轉速表的黃黑線，接了一條白色的延長線到 CDI 的藍白線上。
@@ -180,13 +180,13 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 發動影片 (轉速表有動起來)
 
-<video controls src="https://i.imgur.com/TzVLrU9.mp4">
+<video controls width="345px" src="https://i.imgur.com/TzVLrU9.mp4">
 </video>
 
 ## 後續的皓月三相整流器
 
 目前零件上面的是 250型的端子，而野狼上的是 6pin 的 100 型端子。
-可能會先改 110 端子，至於 pin define 就先不管它。
+可能會先改 110 端子，至於 pin de  fine 就先不管它。
 
 ![](https://i.imgur.com/SVu2G4i.png)
 
