@@ -50,7 +50,7 @@ categories:
 - list-item
 生成一個 block 元素，並且在開頭會有標記。
 - none
-沒有任何元素會在生成，並佔據排版空間。
+沒有任何元素會在生成，所以無法佔據排版空間。
 容器設定 `display: none` , 元素設定 `display: block` 元素還是不會顯示。
 - 其它 `table`, `inline-table`, `table-row-group`, `table-column`, `table-column-group`, `table-header-group`, `table-footer-group`, `table-row`, `table-cell`, `and table-caption` 讓元素有 table 的表現形式。欲知詳情可以查看 [17 Tables](https://www.w3.org/TR/CSS22/tables.html) [^4]
 
