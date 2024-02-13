@@ -244,9 +244,9 @@ categories:
 
 ## 功能測試
 
-- [左手測試影片: 遠近燈、方向燈 (喇叭測試沒有拍)](https://www.instagram.com/p/Clgp2zQICcq/)
-- [右手測試影片: 發動、大燈、駐車燈](https://www.instagram.com/p/Ck-cVWCu_Tq/)
-- [右手測試影片: 熄火開關](https://www.instagram.com/p/ClsFrRoqwJb/)
+- [左手測試影片: 遠近燈、方向燈 (喇叭測試沒有拍)](https://www.instagram.com/p/Clgp2zQICcqXHplKPeuZjJSewU8kAnYIX_MYKo0/)
+- [右手測試影片: 發動開關、大燈、駐車燈](https://www.instagram.com/p/Ck-cVWCu_TqBDHhGkxLS7QF4Id7fSiY3_vSRH40/?img_index=1)
+- [右手測試影片: 熄火開關](https://www.instagram.com/p/ClsFrRoqwJbDeDYQo8mbzHKhKd98gb2zZfxQGQ0/)
 
 ## 電路改裝完成
 
