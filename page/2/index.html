@@ -134,241 +134,104 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2023/07-27-raspberry-pi/create-table/">https://dwatow.github.io/2023/07-27-raspberry-pi/create-table/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2023/07-29-raspberry-pi/simple-crud/">https://dwatow.github.io/2023/07-29-raspberry-pi/simple-crud/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Raspberry Pi 4 的後端修鍊 (2) - 建立資料表</h1>
+        <h1>Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-2-%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (2) - 建立資料表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%B8%E7%94%A8-MariaDB"><span class="toc-text">選用 MariaDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E8%A8%AD%E8%A8%88"><span class="toc-text">資料庫設計</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%80%85%E7%99%BB%E5%85%A5"><span class="toc-text">使用者登入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%85%A5%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7%E5%95%8F%E9%A1%8C"><span class="toc-text">登入的安全性問題</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E8%B3%87%E6%96%99%E5%BA%AB"><span class="toc-text">新增資料庫</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%A2%E9%96%8B-mycli-%E7%9A%84%E7%92%B0%E5%A2%83"><span class="toc-text">離開 mycli 的環境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">新增資料表[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">看資料表[2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%AA%E9%99%A4%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">刪除資料表[3]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%86%8D%E6%96%B0%E5%A2%9E%E8%B3%87%E6%96%99%E8%A1%A8"><span class="toc-text">重新再新增資料表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-%E5%B0%8F%E9%87%8D%E9%BB%9E"><span class="toc-text">SQL 小重點</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-4-%E7%B0%A1%E5%96%AE%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%97%E7%A8%B1-CRUD-%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">俗稱 CRUD 的操作[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#INSERT"><span class="toc-text">INSERT[2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SELECT"><span class="toc-text">SELECT[3]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DELETE"><span class="toc-text">DELETE[4]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E8%A8%AD%E5%AE%9A%E8%A8%88%E6%95%B8"><span class="toc-text">重新設定計數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UPDATE"><span class="toc-text">UPDATE[5]:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%81%87%E8%B3%87%E6%96%99"><span class="toc-text">制作假資料</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Raspberry-Pi-4-的後端修鍊-2-建立資料表"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-2-建立資料表">¶</a>Raspberry Pi 4 的後端修鍊 (2) - 建立資料表</h1>
-<h2 id="選用-MariaDB"><a class="header-anchor" href="#選用-MariaDB">¶</a>選用 MariaDB</h2>
-<p>MariaDB 是一種資料庫系統，也是一個資料庫是一個伺服器，可以使用。MariaDB 一開始開發出來和 MySQL 相容，依相容性來考量選擇它。</p>
-<h2 id="資料庫設計"><a class="header-anchor" href="#資料庫設計">¶</a>資料庫設計</h2>
-<p>因為目前還只是要練習，所以先將資料庫設計給做好。<br>
-之後就以「實現這個設計」來學習需要的技術。</p>
-<div id="graphviz-0"></div>
-<h2 id="使用者登入"><a class="header-anchor" href="#使用者登入">¶</a>使用者登入</h2>
-<p>使用 mycli，用法和 <code>mysql</code>/<code>mariadb</code> 一樣</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mycli -u &lt;user&gt; -h &lt;host&gt; -p &lt;password&gt; &lt;database name&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>-u (user)</code>: 帳號</li>
-<li><code>-p (password)</code>: 密碼 (空值: 提示輸入)</li>
-<li><code>-h (host)</code>: 主機位址或IP (遠端主機必填)</li>
-<li><code>database name</code>: 指定登入就使用的資料庫(在此沒有指定)</li>
-</ul>
-<h3 id="登入的安全性問題"><a class="header-anchor" href="#登入的安全性問題">¶</a>登入的安全性問題</h3>
-<p>使用 <code>$ mycli -u &lt;user&gt;</code> 的話，會透過問答方式輸入密碼，避免密碼留在指令紀錄上，使用 history 可以查得到</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mycli -u admin</span></span><br><span class="line">Connecting to socket /var/run/mysqld/mysqld.sock, owned by user mysql</span><br><span class="line">Password: </span><br><span class="line">MariaDB 10.5.19</span><br><span class="line">mycli 1.26.1</span><br><span class="line">Home: http://mycli.net</span><br><span class="line">Bug tracker: https://github.com/dbcli/mycli/issues</span><br><span class="line">Thanks to the contributor - Roland Walker</span><br><span class="line">MariaDB admin@(none):(none)&gt;</span><br></pre></td></tr></table></figure>
-<p>使用管理者權限進入 <code>my-cli</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mycli -u root</span></span><br><span class="line">MariaDB root@(none):(none)&gt;</span><br></pre></td></tr></table></figure>
+    <h1 id="Raspberry-Pi-4-的後端修鍊-4-簡單操作資料"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-4-簡單操作資料">¶</a>Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</h1>
+<p>在此簡單的演示一下，如何操作資料的 CRUD</p>
+<h2 id="俗稱-CRUD-的操作"><a class="header-anchor" href="#俗稱-CRUD-的操作">¶</a>俗稱 CRUD 的操作<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<table>
+<thead>
+<tr>
+<th>名字</th>
+<th>英文</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增</td>
+<td>Create</td>
+<td>INSERT</td>
+</tr>
+<tr>
+<td>讀取</td>
+<td>Read</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>修改</td>
+<td>Update</td>
+<td>UPDATE</td>
+</tr>
+<tr>
+<td>刪除</td>
+<td>Delete</td>
+<td>DELETE</td>
+</tr>
+</tbody>
+</table>
+<h2 id="INSERT"><a class="header-anchor" href="#INSERT">¶</a>INSERT<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
 <blockquote>
-<p>在此尚未有資料庫要指定，所以就保持空白就好。</p>
+<p><code>INSERT INTO</code> 的 <code>INTO</code> 可以忽略，所以我就不寫了。</p>
 </blockquote>
-<h2 id="新增資料庫"><a class="header-anchor" href="#新增資料庫">¶</a>新增資料庫</h2>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB root@(none):(none)&gt; CREATE DATABASE good_ideas_lib</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Time: 0.002s</span><br></pre></td></tr></table></figure>
-<p>可以在資料來看見 good_ideas_lib 的檔案出現</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/var/lib/mysql $ ls -l</span><br><span class="line">總用量 122932</span><br><span class="line">-rw-rw---- 1 mysql mysql     24576  7月 12 16:53 aria_log.00000001</span><br><span class="line">-rw-rw---- 1 mysql mysql        52  7月  7 08:17 aria_log_control</span><br><span class="line">-rw-r--r-- 1 root  root          0  6月 28 15:57 debian-10.5.flag</span><br><span class="line">drwx------ 2 mysql mysql      4096  7月 12 16:48 good_ideas_lib</span><br><span class="line">-rw-rw---- 1 mysql mysql       972  6月 28 15:57 ib_buffer_pool</span><br><span class="line">-rw-rw---- 1 mysql mysql  12582912  6月 28 15:57 ibdata1</span><br><span class="line">-rw-rw---- 1 mysql mysql 100663296  7月  7 19:27 ib_logfile0</span><br><span class="line">-rw-rw---- 1 mysql mysql  12582912  7月  7 19:27 ibtmp1</span><br><span class="line">-rw-rw---- 1 mysql mysql         0  6月 28 15:58 multi-master.info</span><br><span class="line">drwx------ 2 mysql mysql      4096  6月 28 15:57 mysql</span><br><span class="line">-rw-r--r-- 1 root  root         15  6月 28 15:57 mysql_upgrade_info</span><br><span class="line">drwx------ 2 mysql mysql      4096  6月 28 15:57 performance_schema</span><br></pre></td></tr></table></figure>
-<p>用系統管理員可以進去看這個資料夾，新增了一個檔案 <code>db.opt</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/var/lib/mysql/good_ideas_lib<span class="comment"># ls</span></span><br><span class="line">db.opt</span><br></pre></td></tr></table></figure>
-<p>回到 mycli 指定帳號給資料庫</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> good_ideas_lib.* <span class="keyword">TO</span> <span class="string">&#x27;admin&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.009s</span><br></pre></td></tr></table></figure>
-<h3 id="離開-mycli-的環境"><a class="header-anchor" href="#離開-mycli-的環境">¶</a>離開 mycli 的環境</h3>
-<p><strong>換帳號</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB root@(none):(none)&gt; exit</span><br><span class="line">Goodbye!</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mycli -u admin -h localhost -p pi good_ideas_lib</span></span><br><span class="line">Connecting to socket /var/run/mysqld/mysqld.sock, owned by user mysql</span><br><span class="line">MariaDB 10.5.19</span><br><span class="line">mycli 1.26.1</span><br><span class="line">Home: http://mycli.net</span><br><span class="line">Bug tracker: https://github.com/dbcli/mycli/issues</span><br><span class="line">Thanks to the contributor - Huachao Mao</span><br></pre></td></tr></table></figure>
-<p>進入之後會出現</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">MariaDB admin@localhost:good_ideas_lib&gt;</span><br></pre></td></tr></table></figure>
-<p>成功！</p>
-<h2 id="新增資料表"><a class="header-anchor" href="#新增資料表">¶</a>新增資料表<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
-<p>新增資料表時，使用的命名都用「單數」的名詞 (ex: book, user)</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">CHAR</span> PRIMARY <span class="keyword">KEY</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">CHAR</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">CHAR</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.018s</span><br></pre></td></tr></table></figure>
-<h2 id="看資料表"><a class="header-anchor" href="#看資料表">¶</a>看資料表<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> <span class="string">`user`</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line">| Field      | Type     | Null | Key | Default | Extra |</span><br><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line">| id         | char(1)  | NO   | PRI | &lt;null&gt;  |       |</span><br><span class="line">| name       | char(1)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| password   | char(1)  | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| created_at | datetime | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">| updated_at | datetime | YES  |     | &lt;null&gt;  |       |</span><br><span class="line">+------------+----------+------+-----+---------+-------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.067s</span><br></pre></td></tr></table></figure>
-<p>在建構 TABLE 時，id, name, type 的資料型別都只是使用 <code>CHAR</code> 宣告，系統就直接只給 <code>CHAR(1)</code>。這並不符合需求，來學一下如何刪除資料表之後，再重建一次吧！</p>
-<h2 id="刪除資料表"><a class="header-anchor" href="#刪除資料表">¶</a>刪除資料表<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
-<p>刪除指令比較危險，所以會先確認是否要刪除，才會刪除</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">user</span> </span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">name</span>=<span class="string">&#x27;chris&#x27;</span>, </span><br><span class="line">    <span class="keyword">password</span>=<span class="string">&#x27;chris&#x27;</span>, </span><br><span class="line">    created_at=<span class="keyword">NOW</span>(), </span><br><span class="line">    updated_at=<span class="keyword">NOW</span>()</span><br></pre></td></tr></table></figure>
+<p>但是用 <code>SET</code> 只能一次新增一筆，就試看看另一種做法</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> (<span class="keyword">name</span>, <span class="keyword">password</span>, created_at, updated_at) </span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">&#x27;chris&#x27;</span>, <span class="string">&#x27;chris&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>()), </span><br><span class="line">(<span class="string">&#x27;mary&#x27;</span>, <span class="string">&#x27;mary&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>());</span><br></pre></td></tr></table></figure>
+<p>新增了這麼多次，現在資料長怎樣呢？</p>
+<h2 id="SELECT"><a class="header-anchor" href="#SELECT">¶</a>SELECT<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
+<p>想要把資料讀取出來看，可以使用 <code>SELECT</code></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| id | name  | password | created_at          | updated_at          |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| 1  | chris | chris    | 2023-07-29 13:10:13 | 2023-07-29 13:10:13 |</span><br><span class="line">| 2  | chris | chris    | 2023-07-29 13:10:17 | 2023-07-29 13:10:17 |</span><br><span class="line">| 3  | mary  | mary     | 2023-07-29 13:10:17 | 2023-07-29 13:10:17 |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.016s</span><br></pre></td></tr></table></figure>
+<p>目前的資料，出現了 3 筆，兩筆 chris，1 筆 mary 而且 id 計數到 3 了。<br>
+接下來想要把資料重新 insert 一次，但是希望從頭開始計數。</p>
+<h2 id="DELETE"><a class="header-anchor" href="#DELETE">¶</a>DELETE<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
+<p>刪除資料與刪除資料表不同，在此不要誤用了 <code>DROP</code> 就災難了呀。<br>
+要用 <code>DELETE</code></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 3 rows affected</span><br><span class="line">Time: 0.007s</span><br></pre></td></tr></table></figure>
+<p>這樣就可以刪除 user 資料表裡，所有的資料 (在此沒有加上任何的條件)<br>
+之後如果有需要，再加上 <code>WHERE</code> 語句，附上條件即可。</p>
+<h2 id="重新設定計數"><a class="header-anchor" href="#重新設定計數">¶</a>重新設定計數</h2>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> TableName AUTO_INCREMENT=設定的數值;</span><br></pre></td></tr></table></figure>
+<p>example:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> AUTO_INCREMENT=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.013s</span><br></pre></td></tr></table></figure>
-<h3 id="重新再新增資料表"><a class="header-anchor" href="#重新再新增資料表">¶</a>重新再新增資料表</h3>
-<ul>
-<li><code>id</code>
-<ul>
-<li>資料型別用 <code>INT</code>，因為 user 指的是系統後台使用者，並不是讀者。
-<ul>
-<li>如果要記錄身份證字號，可以用 <code>CHAR(10)</code>，共十碼，英文開頭。</li>
-<li>如果是流水號，可以選用 <code>INT</code></li>
-<li>如果想要用唯一碼並不想要流水號，可以用 <code>UUID</code></li>
-</ul>
-</li>
-<li>如果想要自動生成 可以用 <code>AUTO_INCREMENT</code> 讓它在新增資料時，不給初值也會有值。</li>
-<li><code>PRIMARY KEY</code> 不可以重複，資料在整個資料表是唯一值。</li>
-</ul>
-</li>
-<li><code>name</code>
-<ul>
-<li>字串改用 <code>VARCHAR</code> (utf-8)，<code>VARCHAR(50)</code> 是將資料宣告成可變動字串</li>
-<li>宣告的數字是最大長度。</li>
-</ul>
-</li>
-<li><code>password</code> 因為想要使用 hash 取 128 位數。
-<ul>
-<li>設定成 <code>CHAR(128)</code> 固定字串長度 128。</li>
-</ul>
-</li>
-<li><code>created_at</code>、<code>updated_at</code> 都使用 <code>DATETIME</code> 記錄日期時間</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">password</span> <span class="built_in">CHAR</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  created_at DATETIME,</span><br><span class="line">  updated_at DATETIME,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span> = <span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DESCRIBE</span> <span class="string">`user`</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| Field      | Type        | Null | Key | Default | Extra          |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line">| id         | int(11)     | NO   | PRI | &lt;null&gt;  | auto_increment |</span><br><span class="line">| name       | varchar(50) | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| password   | char(128)   | NO   |     | &lt;null&gt;  |                |</span><br><span class="line">| created_at | datetime    | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">| updated_at | datetime    | YES  |     | &lt;null&gt;  |                |</span><br><span class="line">+------------+-------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">5 rows in set</span><br><span class="line">Time: 0.043s</span><br></pre></td></tr></table></figure>
-<h3 id="SQL-小重點"><a class="header-anchor" href="#SQL-小重點">¶</a>SQL 小重點</h3>
-<ul>
-<li>SQL 的語法: <code>;</code> 結尾</li>
-<li>基本慣例
-<ul>
-<li>指令保留字使用大寫</li>
-<li>資料庫、資料表、欄位，都用小寫 + 底線</li>
-</ul>
-</li>
-<li>限制
-<ul>
-<li>資料庫和資料表的名稱，在 Linux 上，要區分大小寫 (因為它們是檔名)</li>
-<li>欄位名稱，不區分大小寫</li>
-</ul>
-</li>
-</ul>
-<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><textarea id="graphviz-0-code" style="display: none">digraph hierarchy {
-  rankdir=RL;
-
-  node[shape=record]
-
-  author [label="
-    資料表: 作者|
-    <id>id |
-    name|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "];
-
-  author:creator_id->user:id [label="1..n"]
-
-  user [label="
-    資料表: 使用者|
-    <id>id|
-    password|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "]
-
-  user:creator_id->user:id [label="1..n"]
-
-  reader [label="
-    資料表: 讀者|
-    <id>id|
-    password|
-    slack_id|
-    line_id|
-    phone|
-    email|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "]
-
-  reader:creator_id->user:id [label="1..n"]
-      
-  book [label="
-    資料表: 書籍|
-    <id>id|
-    title |
-    isbn |
-    <author_id>author_id |
-    <publisher_id>publisher_id |
-    date_public |
-    description|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "];
-      
-  book:author_id->author:id [label="1..n"]
-  book:publisher_id->publisher:id [label="1..n"]
-  book:creator_id->user:id [label="1..n"]
-      
-  abook [label="
-    資料表: 一本書|
-    <id>id|
-    <book_id>book_id|
-    storage 儲位|
-    <owner_id>owner_id|
-    <creator_id>creator_id|
-    created_at|
-    inventory_date 盤點日期
-  "]
-
-  abook:book_id->book:id
-  abook:creator_id->user:id [label="1..n"]
-  abook:owner_id->reader:id [label="1..n"]
-
-  publisher [label="
-    資料表: 出版社|
-    <id>序號|
-    name|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "];
-      
-  publisher:creator_id->user:id [label="1..n"]
-
-  
-  thought [label="
-    資料表: 書評|
-    <id>id|
-    <book_id>book_id|
-    note|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "]
-      
-  thought:creator_id->user:id [label="1..n"]
-  thought:book_id->book:id [label="1..n"]
-      
-  borrowing [label="
-    資料表: 借書紀錄|
-    <id>id|
-    <user_id>reader_id|
-    <abook_id>abook_id|
-    start_at|
-    end_at|
-    <creator_id>creator_id|
-    created_at|
-    updated_at
-  "]
-
-  borrowing:user_id->reader:id [label="1..n"]
-  borrowing:abook_id->abook:id [label="1..n"]
-  borrowing:creator_id->user:id [label="1..n"]
-}</textarea><script>  var viz = new Viz();  var code = document.getElementById("graphviz-0-code").value;  viz.renderSVGElement(code)  .then(function(element) {    document.getElementById("graphviz-0").append(element)  });</script><hr class="footnotes-sep">
+<p>這樣一來就可以(神不知鬼不覺的？)再重新 <code>INSERT</code>  一次囉！</p>
+<h2 id="UPDATE"><a class="header-anchor" href="#UPDATE">¶</a>UPDATE<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>:</h2>
+<p>想把 mary 的 password 改成 ‘chris’ ，該怎麼做呢？<br>
+修改資料，可以使用 <code>UPDATE</code></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">password</span>=<span class="string">&#x27;chris&#x27;</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">name</span>=<span class="string">&#x27;mary&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 1 row affected</span><br><span class="line">Time: 0.005s</span><br></pre></td></tr></table></figure>
+<p>在此使用了 <code>WHERE</code> 語句，設定「目標資料」需要符合哪些條件。<br>
+再看一次資料，現在長怎樣。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| id | name  | password | created_at          | updated_at          |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| 1  | chris | chris    | 2023-07-29 13:12:32 | 2023-07-29 13:12:32 |</span><br><span class="line">| 2  | mary  | chris    | 2023-07-29 13:12:32 | 2023-07-29 13:12:32 |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">2 rows in set</span><br><span class="line">Time: 0.015s</span><br></pre></td></tr></table></figure>
+<h2 id="制作假資料"><a class="header-anchor" href="#制作假資料">¶</a>制作假資料</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim fake_data.sql</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> book (title, isbn, author_id, publisher_id, date_public, description, created_at, updated_at, creator_id) </span><br><span class="line"><span class="keyword">VALUES</span>(</span><br><span class="line">  <span class="string">&#x27;哎呀！早知道就不會破版的 CSS 設計技巧：前端工程師防止佈局意外的必學密技&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263335172&#x27;</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="string">&#x27;2023-07-10&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;【內容簡介】&lt;br /&gt;</span></span><br><span class="line"><span class="string">  本書內容改編自第14屆iThome鐵人賽Modern Web組的冠軍系列文章《防禦性CSS-建立「防患未然」的匠人心態》。本書用淺顯易懂的程式碼及貼近生活的實際情境，來探討如何培養「防患未然」的思維。由於有些畫面佈局過於單純和簡單，因此會容易忽略其潛在的破版危險，這些令人容易忽略的潛在性危險，很有可能在你最不希望它出現的時候意外出現了，小則影響畫面上的美觀，大則影響產品在客戶眼中的專業形象，進而造成商業上的損失。&lt;br /&gt;</span></span><br><span class="line"><span class="string">  &lt;br /&gt;</span></span><br><span class="line"><span class="string">  本書將這些常見的案例分成八個主題，逐一探討每一個問題會發生的情境，以及提供解決這些問題的具體方法和技巧，希望在這些案例分析的過程當中，以容易上手的程式碼，帶領讀者慢慢培養「防患未然」的思考習慣，即使是一行簡單的CSS，也能夠充分展現專業的程式設計態度。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>),(</span><br><span class="line">  <span class="string">&#x27;約耳趣談軟體&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263245297&#x27;</span>, </span><br><span class="line">  <span class="number">2</span>, </span><br><span class="line">  <span class="number">2</span>, </span><br><span class="line">  <span class="string">&#x27;2004-08-16&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;軟體開發者、設計者、管理者，以及常與這些人打交道的其他人等(不知是有幸還是不幸)，大家三不五時總會遇到的各種有趣問題。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">榮獲2005 JOLT生產力獎&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">「Spolsky真的很懂呀！」&lt;br /&gt;</span></span><br><span class="line"><span class="string">—Thomas Duff&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">失敗的軟體專案，實在太多了！有些團隊花了太長時間去製作產品；有些團隊製作的產品根本沒人要；有些團隊甚至連產品都做不出來！軟體開發者似乎太常花力氣去重新包裝一些失敗的舊想法，或是太常提出一些沒有用的新想法。結果我們一次又一次看到的是，新浪不斷推舊浪，舊浪死在沙灘上。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">大家只聽到各種重複的口號：「我們有架構！哦不，我們有物件導向！哦不，我們既統一又敏捷！」遺憾的是，結局都一樣，寫程式的人依然很不快樂，甚至怨恨自己寫程式的每一分鐘；開發團隊依然不懂得如何打造成功的軟體。這實在太扯了！你能想像嗎？這就好像一群木匠想製作家具，卻連螺絲都沒聽過，只知道用釘子，卻又不會用鐵錘，最後只好拿著踢踏舞鞋，硬是把釘子敲進木頭中。我們真的很需要有個人，來撥開層層迷霧，讓大家看個明白。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">有人曾說過，作家的任務就是「把大家熟悉的東西變成新的東西；把新的東西變成大家熟悉的東西」。多年來，Joel Spolsky一直在www.joelonsoftware.com做的就是這件事。他不斷教育我們、娛樂我們，有時還會故意激怒我們，但他總是會讓我們去思考，我們整天坐在電腦前究竟是在幹嘛？這就是Joel on Software這個網站之所以成為全世界最受歡迎的開發網站其中的一個理由。現在，你終於可以擁有他網站裡最重要的精選文章，好好收藏這些來自Joel的獨家評論與最新洞見了。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>),(</span><br><span class="line">  <span class="string">&#x27;從自學到成功轉職軟體工程師：自主學習讓我重拾人生的發球權&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263330122&#x27;</span>, </span><br><span class="line">  <span class="number">3</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="string">&#x27;2022-01-24&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;本書內容改編自第12屆iT邦幫忙鐵人賽 Modern Web 組佳作系列文章——《完美 Camp 進化論》，以自學程式設計所需要準備的心態，及後續如何尋找教材持續進行學習和練習的內容為主，作者自身的學習經驗為輔，期望能更貼近讀者的需求與感受。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/create-table/">CREATE TABLE</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/%E5%A2%9E%E5%88%AA%E6%9F%A5%E6%94%B9">增刪查改 - 維基百科，自由的百科全書</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/describe/">DESCRIBE</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/insert/">INSERT - MariaDB Knowledge Base</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/drop-table/">DROP TABLE</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/select/">SELECT - MariaDB Knowledge Base</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/delete/">DELETE - MariaDB Knowledge Base</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/update/">UPDATE - MariaDB Knowledge Base</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -383,6 +246,10 @@
                     <li class="meta-text">
                         tags:
                         
+  <li class="meta-text">
+  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
+  </li>
+
   <li class="meta-text">
   { <a href="/tags/database/">database</a> }
   </li>
@@ -418,7 +285,7 @@
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.64px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.36px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.43px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.43px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.43px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.21px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 39.5px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.36px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.21px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 20.07px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.43px;">Flex</a> <a href="/tags/Git/" style="font-size: 37.07px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.64px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.43px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.07px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.29px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.21px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.43px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.64px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.21px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.86px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.43px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 29.79px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 38.29px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.21px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.71px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 43.14px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.86px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.71px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.43px;">animation</a> <a href="/tags/api/" style="font-size: 15.21px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.21px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.21px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.21px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.64px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 17.64px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.43px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.64px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/display/" style="font-size: 15.21px;">display</a> <a href="/tags/docker/" style="font-size: 16.43px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 15.21px;">express</a> <a href="/tags/facebook/" style="font-size: 17.64px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.21px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 16.43px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.86px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.21px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.21px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.21px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.21px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 23.71px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.14px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.21px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mariadb/" style="font-size: 18.86px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.86px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.43px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.21px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.21px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.14px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.43px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.64px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.21px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.21px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 23.71px;">python</a> <a href="/tags/sequelize/" style="font-size: 27.36px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.43px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 24.93px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.21px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 44.36px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.21px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.43px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.43px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.43px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 26.14px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.07px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 14px;">三相發電</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 17.64px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.21px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 33.43px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.86px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 41.93px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 24.93px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 21.29px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.64px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 40.71px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.43px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 33.43px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.5px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 33.43px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.86px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.79px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.57px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.07px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 43.14px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.71px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.21px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.21px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.79px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.57px;">社服社與我</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.64px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.64px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 33.43px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.21px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 34.64px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.07px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.86px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.86px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.43px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 17.64px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.64px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.21px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 16.43px;">電路</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.57px;">音響拆裝過程</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
+    <a href="/tags/new-framework/" style="font-size: 17.64px;">.new framework</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 44.36px;">2018鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.43px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.43px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.43px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.21px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 39.5px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 27.36px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.21px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 20.07px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.43px;">Flex</a> <a href="/tags/Git/" style="font-size: 37.07px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.64px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.43px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 33.43px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 20.07px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 21.29px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.21px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.43px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.64px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.21px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.86px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.43px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 29.79px;">TDD</a> <a href="/tags/TED/" style="font-size: 14px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 38.29px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.21px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.71px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 43.14px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.86px;">Xilinx</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.71px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.43px;">animation</a> <a href="/tags/api/" style="font-size: 15.21px;">api</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.21px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.21px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.21px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.64px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/component/" style="font-size: 17.64px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.43px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.64px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/display/" style="font-size: 15.21px;">display</a> <a href="/tags/docker/" style="font-size: 16.43px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/express/" style="font-size: 15.21px;">express</a> <a href="/tags/facebook/" style="font-size: 17.64px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.21px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/foreign-key/" style="font-size: 16.43px;">foreign key</a> <a href="/tags/git/" style="font-size: 18.86px;">git</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/google/" style="font-size: 15.21px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.21px;">hackmd</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 32.21px;">hexo</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.21px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 23.71px;">javascript</a> <a href="/tags/jest/" style="font-size: 26.14px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/keyframes/" style="font-size: 15.21px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/mariadb/" style="font-size: 18.86px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.86px;">markdown</a> <a href="/tags/mentor/" style="font-size: 14px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.43px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.21px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/nginx/" style="font-size: 15.21px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 26.14px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.43px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.64px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.21px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.21px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 23.71px;">python</a> <a href="/tags/sequelize/" style="font-size: 27.36px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.43px;">shell</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 24.93px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.21px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 44.36px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.21px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.43px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vuex/" style="font-size: 16.43px;">vuex</a> <a href="/tags/web-camp/" style="font-size: 16.43px;">web camp</a> <a href="/tags/webpack/" style="font-size: 31px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 26.14px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 20.07px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 14px;">三相發電</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 17.64px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/" style="font-size: 15.21px;">你所不知道的JS</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.21px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 33.43px;">和道服說話</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 31px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.86px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 41.93px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 24.93px;">好想工作室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 21.29px;">字型設定</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 14px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.64px;">家家有本難唸的經</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 40.71px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.43px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 33.43px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 22.5px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 33.43px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 35.86px;">柔道社與我</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.79px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 28.57px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 20.07px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 43.14px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.71px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.21px;">看書</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 32.21px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 29.79px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 45.57px;">社服社與我</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 17.64px;">網頁前端技術</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.64px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 33.43px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.21px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 34.64px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 37.07px;">設計師的路</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.86px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.86px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.43px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 17.64px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.64px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.21px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 16.43px;">電路</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 28.57px;">音響拆裝過程</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
 
 
                 <footer>
