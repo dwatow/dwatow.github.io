@@ -53,6 +53,9 @@ globalObject->end
 
 ## 特別的 arrow function
 
+arrow function 用 Function.prototype.bind 理解是最適合不過的了。
+arrow function 的 由宣告時 function scope 使用的 this 決定的。
+
 <div>
 ```javascript
 var obj = {
@@ -63,16 +66,40 @@ var obj = {
     fnObjBindNull: new Function('"use strict"; console.log(this)').bind(undefined)
 }
 
-obj.fn()
+console.log('global obj.fn()', obj.fn())
  // {arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ}
 
-obj.fnObj()
+console.log('global obj.fnObj()', obj.fnObj())
 // {arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ}
 
-obj.arrow()
+console.log('global obj.arrow()', obj.arrow())
 // Window {parent: Window, opener: null, top: Window, length: 0, frames: Window, …}
 
-obj.fnObjBind()
+console.log('global obj.fnObjBind()', obj.fnObjBind())
 // Window {parent: Window, opener: null, top: Window, length: 0, frames: Window, …}
+
+function AAA() {
+    // 直接執行 this 還是 global，但是如果指定成其它的，就可以改變這裡的 this ≠ global
+    var obj = {
+        arrow: () => console.log(this),
+        fn: function() { console.log(this) },
+        fnObj: new Function('console.log(this)'),
+        fnObjBind: new Function('console.log(this)').bind(this),
+        fnObjBindNull: new Function('"use strict"; console.log(this)').bind(undefined)
+    }
+    console.log('AAA obj.fn()', obj.fn())
+    {arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ, fnObjBindNull: ƒ}
+    console.log('AAA obj.fnObj()', obj.fnObj())
+    #document (https://dwatow.github.io/)
+    console.log('AAA obj.arrow()', obj.arrow())
+    #document (https://dwatow.github.io/)
+    console.log('AAA obj.fnObjBind()', obj.fnObjBind())
+    undefined
+}
+
+const AAAdocument = AAA.bind(document) // 改變「呼叫 function 的 function scope 的」 this 指定成 document (隨決定的)
+AAAdocument();
 ```
 </div>
+
+
