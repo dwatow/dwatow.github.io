@@ -1,5 +1,5 @@
 ---
-title: 好想工作室裡的天瓏書目 (持續更新)
+title: 好想工作室裡的天瓏書目 (暫時無書)
 date: 2018-10-07 13:51:23
 tags:
 - axios
@@ -114,7 +114,7 @@ input:invalid {
 <script src="https://unpkg.com/vue-masonry-css"></script>
 <!-- <script src="https://unpkg.com/vue-masonry-css"></script> -->
 
-# 好想工作室裡的天瓏書目 (持續更新)
+# 好想工作室裡的天瓏書目
 
 - [書單 API](https://bookshelf.goodideas-studio.com/api)
 - [許願表單](https://goo.gl/forms/9A7LYHhkJiQ6JnN33)
@@ -137,6 +137,7 @@ input:invalid {
     <div class="totalBooks">{{'有' + books.length + '本'}}</div>
     <div>
       <masonry
+        v-if="books.length > 0"
         :cols="{default: 4, 720: 2}"
         :gutter="0"
       >
