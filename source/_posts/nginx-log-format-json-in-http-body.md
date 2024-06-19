@@ -1,9 +1,11 @@
 ---
-title: nginx_log_format_json_in_http_body
+title: 在 nginx 的 log 顯示請求的 body(json 格式)
 date: 2024-06-19 17:30:13
 tags:
 categories:
 ---
+
+# 在 nginx 的 log 顯示請求的 body(json 格式)
 
 ## ssh 登入
 
