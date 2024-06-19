@@ -107,3 +107,31 @@ sudo nginx -s reload
 ```shell
 sudo tail -f /var/log/nginx/access.log
 ```
+
+# 加碼(舊版的話)
+
+[^decode_nginx_log]: [Python3解决Nginx日志的中文乱码问题](https://www.cnblogs.com/JentZhang/p/15826528.html)
+
+## Python[^decode_nginx_log]
+
+**decode.py**
+
+```python
+import json
+
+msg = """
+{\x22id\x22:1}
+"""
+
+res_obj = json.loads(msg.encode('raw_unicode_escape').decode('utf8'))
+print(json.dumps(res_obj, ensure_ascii=False))
+```
+
+執行後會印出解碼後的樣子。
+
+```shell
+python3 decode.py
+{"id":1}
+```
+
+
