@@ -134,68 +134,55 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2019/01-20-eslint-first/">https://dwatow.github.io/2019/01-20-eslint-first/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2019/01-26-node-with-env-first/">https://dwatow.github.io/2019/01-26-node-with-env-first/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>ESlint 初次安裝</h1>
+        <h1>Node.js 使用 .env 加上環境變數</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ESlint-%E5%88%9D%E6%AC%A1%E5%AE%89%E8%A3%9D"><span class="toc-text">ESlint 初次安裝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Style-%E8%A8%AD%E5%AE%9A"><span class="toc-text">Style 設定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8B%A5%E8%A6%81%E5%92%8C-prettier-%E4%BD%B5%E7%94%A8"><span class="toc-text">若要和 prettier 併用[4]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8B%A5%E8%A6%81%E5%9C%A8-webpack-%E5%92%8C-prettier-%E4%BD%B5%E7%94%A8"><span class="toc-text">若要在 webpack 和 prettier 併用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%81%E7%95%A5%E4%B8%8D-lint"><span class="toc-text">省略不 lint</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node-js-%E4%BD%BF%E7%94%A8-env-%E5%8A%A0%E4%B8%8A%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8"><span class="toc-text">Node.js 使用 .env 加上環境變數</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#node-js-%E7%9A%84%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">node.js 的環境變數使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-dotenv-%E5%A5%97%E4%BB%B6"><span class="toc-text">使用 dotenv 套件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="ESlint-初次安裝"><a class="header-anchor" href="#ESlint-初次安裝">¶</a>ESlint 初次安裝</h1>
-<p>之前都是靠 vue-cli 安裝。<br>
-這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。</p>
-<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
-<p>在官網找到 npm 上的安裝方式<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install eslint --save-dev</span><br></pre></td></tr></table></figure>
-<p>如果你要用在 webpack 可以使用 eslint-loader<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install eslint-loader --save-dev</span><br></pre></td></tr></table></figure>
-<p><strong>webpack.config.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/(node_modules)/</span>,</span><br><span class="line">        include: [resolve(<span class="string">&quot;src&quot;</span>)],</span><br><span class="line">        enforce: <span class="string">&quot;pre&quot;</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">&quot;eslint-loader&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="Style-設定"><a class="header-anchor" href="#Style-設定">¶</a>Style 設定</h2>
-<p>使用問答來進行 <code>.eslintrc.json</code> 檔的生成<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx eslint --init</span><br></pre></td></tr></table></figure>
-<p>生成的檔案內容</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;env&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;es6&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;node&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;browser&quot;</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;extends&quot;</span>: <span class="string">&quot;eslint:recommended&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;parserOptions&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;ecmaVersion&quot;</span>: <span class="number">2015</span>,</span><br><span class="line">    <span class="attr">&quot;sourceType&quot;</span>: <span class="string">&quot;module&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;rules&quot;: &#123; ... &#125; 請刪除整段</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="若要和-prettier-併用"><a class="header-anchor" href="#若要和-prettier-併用">¶</a>若要和 prettier 併用<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h3>
-<ol>
-<li>打開 <code>.eslintrc</code> 檔</li>
-<li>刪掉 rule 的區段 (或安裝 <code>eslint-config-prettier</code>)</li>
-<li>安裝 Prettier</li>
-</ol>
-<h3 id="若要在-webpack-和-prettier-併用"><a class="header-anchor" href="#若要在-webpack-和-prettier-併用">¶</a>若要在 webpack 和 prettier 併用</h3>
-<p>除了上述的事要做之外，還要</p>
-<ol>
-<li>用在 webpack 要安裝 prettier-loader</li>
-<li>設定 webpack.config.js</li>
-</ol>
-<p><strong>webpack.config.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/(node_modules)/</span>,</span><br><span class="line">        include: [resolve(<span class="string">&quot;src&quot;</span>)],</span><br><span class="line">        enforce: <span class="string">&quot;pre&quot;</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">&quot;eslint-loader&quot;</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">&quot;prettier-loader&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>這樣就可以跑完 prettier 跑 eslint 設定檔衝突也不會發生了。</p>
-<h2 id="省略不-lint"><a class="header-anchor" href="#省略不-lint">¶</a>省略不 lint</h2>
-<p>如果目前正在 debug 的地方，要加上 <code>console.log()</code>，想省略不要 lint ，可以利用 eslint 的特殊註解來標註<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
-<p>兩種基本的用法</p>
-<p><strong>單行</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;這一行沒有 eslint&quot;</span>); <span class="comment">// eslint-disable-line</span></span><br></pre></td></tr></table></figure>
-<p><strong>多行的區塊</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* eslint-disable */</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;這裡沒有 eslint&quot;</span>);</span><br><span class="line"><span class="comment">/* eslint-enable */</span></span><br></pre></td></tr></table></figure>
+    <h1 id="Node-js-使用-env-加上環境變數"><a class="header-anchor" href="#Node-js-使用-env-加上環境變數">¶</a>Node.js 使用 .env 加上環境變數</h1>
+<div class="danger">
+<p>這就是不要 git commit 上去的檔案!!!<br>
+通常是拿來存放敏感的資料，例如: 帳號密碼</p>
+<p>這次研究是為了 e2e 測試，要使用 admin 的帳號密碼!!</p>
+</div>
+<h2 id="node-js-的環境變數使用方式"><a class="header-anchor" href="#node-js-的環境變數使用方式">¶</a>node.js 的環境變數使用方式</h2>
+<p>官網只有說，可以在使用前，將環境變數儲存在 <code>process.env</code> <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
+用法下面的程式碼這樣，還可以用 delete 刪掉</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">process.env.TEST = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(process.env.test);</span><br><span class="line"><span class="comment">// =&gt; 1</span></span><br><span class="line"><span class="keyword">delete</span> process.env.TEST;</span><br><span class="line"><span class="built_in">console</span>.log(process.env.TEST);</span><br><span class="line"><span class="comment">// =&gt; undefined</span></span><br></pre></td></tr></table></figure>
+<p>所以，要有一個載入的機制。<br>
+就可以將它儲存成 <code>process.env</code> 的 object</p>
+<h2 id="使用-dotenv-套件"><a class="header-anchor" href="#使用-dotenv-套件">¶</a>使用 dotenv 套件</h2>
+<p>為了不在程式碼的各處加入新的環境變數，而想要集中在 <code>.env</code> 檔中管理它，所以有大神寫了 dotenv <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 可以在程式一開始就載入所有的環境變數。</p>
+<p>也可以避免在不同的應用程式之間，使用了共用的環境變數。(因為是用 .env 檔載入在該專案中)</p>
+<h3 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h3>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install dotenv --save</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h3>
+<p>建立 <code>.env</code> 檔 (不要加入 git)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CHRIS&#x3D;chris</span><br><span class="line">DB_HOST&#x3D;DB_HOST</span><br><span class="line">DB_PORT&#x3D;DB_PORT</span><br><span class="line">DB_USER&#x3D;DB_USER</span><br><span class="line">DB_PASS&#x3D;DB_PASS</span><br></pre></td></tr></table></figure>
+<p>在程式剛啟動時，就可以載入</p>
+<p><strong>app.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;dotenv&#x27;</span>).config();</span><br><span class="line"><span class="built_in">console</span>.log(process.env.CHRIS); <span class="comment">//chris</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_HOST&quot;</span>]); <span class="comment">//DB_HOST</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_PORT&quot;</span>]); <span class="comment">//DB_PORT</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_USER&quot;</span>]); <span class="comment">//DB_USER</span></span><br><span class="line"><span class="built_in">console</span>.log(process.env[<span class="string">&quot;DB_PASS&quot;</span>]); <span class="comment">//DB_PASS</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>感謝 <a target="_blank" rel="noopener" href="https://github.com/cytsunny">cytsunny</a> 的提醒<br>
+確實是 <code>require('dotenv').config();</code><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 沒有什麼 <code>require('dotenv').load();</code></p>
+</blockquote>
+<!-- prettier-ignore-start -->
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://eslint.org/docs/user-guide/getting-started">Getting Started with ESLint</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_env">process.env - node</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://github.com/webpack-contrib/eslint-loader">eslint-loader - github</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html">Working with Environment Variables in Node.js</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://eslint.org/docs/user-guide/getting-started#global-installation-and-usage">Global Installation and Usage</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://twitter.com/dan_abramov/status/1086215004808978434?fbclid=IwAR2fib4Nvr4Lq5Onc1VXS7rguHkoFbt-Egu0O9-I_InJ4uVu6onQgSe-5jA">You’ll thank me - Dan Abramov</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments">disabling-rules-with-inline-comments</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/dotenv">dotenv - npm</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -211,15 +198,15 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
+  { <a href="/tags/nodejs/">nodejs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/prettier/">prettier</a> }
+  { <a href="/tags/env/">env</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/eslint/">eslint</a> }
+  { <a href="/tags/e2e/">e2e</a> }
   </li>
 
 

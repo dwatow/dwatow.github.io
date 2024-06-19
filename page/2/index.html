@@ -134,107 +134,57 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2023/07-29-raspberry-pi/simple-crud/">https://dwatow.github.io/2023/07-29-raspberry-pi/simple-crud/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2023/08-02-raspberry-pi/orm-init/">https://dwatow.github.io/2023/08-02-raspberry-pi/orm-init/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</h1>
+        <h1>Raspberry Pi 4 的後端修鍊 (5) - ORM</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-4-%E7%B0%A1%E5%96%AE%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%97%E7%A8%B1-CRUD-%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">俗稱 CRUD 的操作[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#INSERT"><span class="toc-text">INSERT[2]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SELECT"><span class="toc-text">SELECT[3]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DELETE"><span class="toc-text">DELETE[4]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E8%A8%AD%E5%AE%9A%E8%A8%88%E6%95%B8"><span class="toc-text">重新設定計數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UPDATE"><span class="toc-text">UPDATE[5]:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C%E5%81%87%E8%B3%87%E6%96%99"><span class="toc-text">制作假資料</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Raspberry-Pi-4-%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BF%AE%E9%8D%8A-5-ORM"><span class="toc-text">Raspberry Pi 4 的後端修鍊 (5) - ORM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ORM"><span class="toc-text">ORM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%AD%A4%E4%BD%BF%E7%94%A8-sequelize"><span class="toc-text">在此使用 sequelize</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">安裝&amp;初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-SQL-%E8%A8%AD%E5%AE%9A%E6%96%B0%E8%B3%87%E6%96%99%E5%BA%AB%E8%88%87%E5%B8%B3%E8%99%9F"><span class="toc-text">用 SQL 設定新資料庫與帳號</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6%E9%80%A3%E7%B7%9A"><span class="toc-text">測試連線</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Raspberry-Pi-4-的後端修鍊-4-簡單操作資料"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-4-簡單操作資料">¶</a>Raspberry Pi 4 的後端修鍊 (4) - 簡單操作資料</h1>
-<p>在此簡單的演示一下，如何操作資料的 CRUD</p>
-<h2 id="俗稱-CRUD-的操作"><a class="header-anchor" href="#俗稱-CRUD-的操作">¶</a>俗稱 CRUD 的操作<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
-<table>
-<thead>
-<tr>
-<th>名字</th>
-<th>英文</th>
-<th>SQL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>新增</td>
-<td>Create</td>
-<td>INSERT</td>
-</tr>
-<tr>
-<td>讀取</td>
-<td>Read</td>
-<td>SELECT</td>
-</tr>
-<tr>
-<td>修改</td>
-<td>Update</td>
-<td>UPDATE</td>
-</tr>
-<tr>
-<td>刪除</td>
-<td>Delete</td>
-<td>DELETE</td>
-</tr>
-</tbody>
-</table>
-<h2 id="INSERT"><a class="header-anchor" href="#INSERT">¶</a>INSERT<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
+    <h1 id="Raspberry-Pi-4-的後端修鍊-5-ORM"><a class="header-anchor" href="#Raspberry-Pi-4-的後端修鍊-5-ORM">¶</a>Raspberry Pi 4 的後端修鍊 (5) - ORM</h1>
 <blockquote>
-<p><code>INSERT INTO</code> 的 <code>INTO</code> 可以忽略，所以我就不寫了。</p>
+<p>基本上就是要用 ORM 完成 <a href="https://dwatow.github.io/2023/06-28-raspberry-pi/mariadb-init/">Raspberry Pi 4 的後端修鍊 (1) - Mariadb Initial</a> 的操作</p>
 </blockquote>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">user</span> </span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">name</span>=<span class="string">&#x27;chris&#x27;</span>, </span><br><span class="line">    <span class="keyword">password</span>=<span class="string">&#x27;chris&#x27;</span>, </span><br><span class="line">    created_at=<span class="keyword">NOW</span>(), </span><br><span class="line">    updated_at=<span class="keyword">NOW</span>()</span><br></pre></td></tr></table></figure>
-<p>但是用 <code>SET</code> 只能一次新增一筆，就試看看另一種做法</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> (<span class="keyword">name</span>, <span class="keyword">password</span>, created_at, updated_at) </span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">&#x27;chris&#x27;</span>, <span class="string">&#x27;chris&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>()), </span><br><span class="line">(<span class="string">&#x27;mary&#x27;</span>, <span class="string">&#x27;mary&#x27;</span>, <span class="keyword">NOW</span>(), <span class="keyword">NOW</span>());</span><br></pre></td></tr></table></figure>
-<p>新增了這麼多次，現在資料長怎樣呢？</p>
-<h2 id="SELECT"><a class="header-anchor" href="#SELECT">¶</a>SELECT<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
-<p>想要把資料讀取出來看，可以使用 <code>SELECT</code></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| id | name  | password | created_at          | updated_at          |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| 1  | chris | chris    | 2023-07-29 13:10:13 | 2023-07-29 13:10:13 |</span><br><span class="line">| 2  | chris | chris    | 2023-07-29 13:10:17 | 2023-07-29 13:10:17 |</span><br><span class="line">| 3  | mary  | mary     | 2023-07-29 13:10:17 | 2023-07-29 13:10:17 |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">3 rows in set</span><br><span class="line">Time: 0.016s</span><br></pre></td></tr></table></figure>
-<p>目前的資料，出現了 3 筆，兩筆 chris，1 筆 mary 而且 id 計數到 3 了。<br>
-接下來想要把資料重新 insert 一次，但是希望從頭開始計數。</p>
-<h2 id="DELETE"><a class="header-anchor" href="#DELETE">¶</a>DELETE<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h2>
-<p>刪除資料與刪除資料表不同，在此不要誤用了 <code>DROP</code> 就災難了呀。<br>
-要用 <code>DELETE</code></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 3 rows affected</span><br><span class="line">Time: 0.007s</span><br></pre></td></tr></table></figure>
-<p>這樣就可以刪除 user 資料表裡，所有的資料 (在此沒有加上任何的條件)<br>
-之後如果有需要，再加上 <code>WHERE</code> 語句，附上條件即可。</p>
-<h2 id="重新設定計數"><a class="header-anchor" href="#重新設定計數">¶</a>重新設定計數</h2>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> TableName AUTO_INCREMENT=設定的數值;</span><br></pre></td></tr></table></figure>
-<p>example:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> AUTO_INCREMENT=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">You&#x27;re about to run a destructive command.</span><br><span class="line">Do you want to proceed? (y/n): y</span><br><span class="line">Your call!</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line">Time: 0.013s</span><br></pre></td></tr></table></figure>
-<p>這樣一來就可以(神不知鬼不覺的？)再重新 <code>INSERT</code>  一次囉！</p>
-<h2 id="UPDATE"><a class="header-anchor" href="#UPDATE">¶</a>UPDATE<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>:</h2>
-<p>想把 mary 的 password 改成 ‘chris’ ，該怎麼做呢？<br>
-修改資料，可以使用 <code>UPDATE</code></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">user</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">password</span>=<span class="string">&#x27;chris&#x27;</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">name</span>=<span class="string">&#x27;mary&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Query OK, 1 row affected</span><br><span class="line">Time: 0.005s</span><br></pre></td></tr></table></figure>
-<p>在此使用了 <code>WHERE</code> 語句，設定「目標資料」需要符合哪些條件。<br>
-再看一次資料，現在長怎樣。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| id | name  | password | created_at          | updated_at          |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line">| 1  | chris | chris    | 2023-07-29 13:12:32 | 2023-07-29 13:12:32 |</span><br><span class="line">| 2  | mary  | chris    | 2023-07-29 13:12:32 | 2023-07-29 13:12:32 |</span><br><span class="line">+----+-------+----------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">2 rows in set</span><br><span class="line">Time: 0.015s</span><br></pre></td></tr></table></figure>
-<h2 id="制作假資料"><a class="header-anchor" href="#制作假資料">¶</a>制作假資料</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim fake_data.sql</span><br></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> book (title, isbn, author_id, publisher_id, date_public, description, created_at, updated_at, creator_id) </span><br><span class="line"><span class="keyword">VALUES</span>(</span><br><span class="line">  <span class="string">&#x27;哎呀！早知道就不會破版的 CSS 設計技巧：前端工程師防止佈局意外的必學密技&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263335172&#x27;</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="string">&#x27;2023-07-10&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;【內容簡介】&lt;br /&gt;</span></span><br><span class="line"><span class="string">  本書內容改編自第14屆iThome鐵人賽Modern Web組的冠軍系列文章《防禦性CSS-建立「防患未然」的匠人心態》。本書用淺顯易懂的程式碼及貼近生活的實際情境，來探討如何培養「防患未然」的思維。由於有些畫面佈局過於單純和簡單，因此會容易忽略其潛在的破版危險，這些令人容易忽略的潛在性危險，很有可能在你最不希望它出現的時候意外出現了，小則影響畫面上的美觀，大則影響產品在客戶眼中的專業形象，進而造成商業上的損失。&lt;br /&gt;</span></span><br><span class="line"><span class="string">  &lt;br /&gt;</span></span><br><span class="line"><span class="string">  本書將這些常見的案例分成八個主題，逐一探討每一個問題會發生的情境，以及提供解決這些問題的具體方法和技巧，希望在這些案例分析的過程當中，以容易上手的程式碼，帶領讀者慢慢培養「防患未然」的思考習慣，即使是一行簡單的CSS，也能夠充分展現專業的程式設計態度。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>),(</span><br><span class="line">  <span class="string">&#x27;約耳趣談軟體&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263245297&#x27;</span>, </span><br><span class="line">  <span class="number">2</span>, </span><br><span class="line">  <span class="number">2</span>, </span><br><span class="line">  <span class="string">&#x27;2004-08-16&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;軟體開發者、設計者、管理者，以及常與這些人打交道的其他人等(不知是有幸還是不幸)，大家三不五時總會遇到的各種有趣問題。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">榮獲2005 JOLT生產力獎&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">「Spolsky真的很懂呀！」&lt;br /&gt;</span></span><br><span class="line"><span class="string">—Thomas Duff&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">失敗的軟體專案，實在太多了！有些團隊花了太長時間去製作產品；有些團隊製作的產品根本沒人要；有些團隊甚至連產品都做不出來！軟體開發者似乎太常花力氣去重新包裝一些失敗的舊想法，或是太常提出一些沒有用的新想法。結果我們一次又一次看到的是，新浪不斷推舊浪，舊浪死在沙灘上。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">大家只聽到各種重複的口號：「我們有架構！哦不，我們有物件導向！哦不，我們既統一又敏捷！」遺憾的是，結局都一樣，寫程式的人依然很不快樂，甚至怨恨自己寫程式的每一分鐘；開發團隊依然不懂得如何打造成功的軟體。這實在太扯了！你能想像嗎？這就好像一群木匠想製作家具，卻連螺絲都沒聽過，只知道用釘子，卻又不會用鐵錘，最後只好拿著踢踏舞鞋，硬是把釘子敲進木頭中。我們真的很需要有個人，來撥開層層迷霧，讓大家看個明白。&lt;br /&gt;</span></span><br><span class="line"><span class="string">&lt;br /&gt;</span></span><br><span class="line"><span class="string">有人曾說過，作家的任務就是「把大家熟悉的東西變成新的東西；把新的東西變成大家熟悉的東西」。多年來，Joel Spolsky一直在www.joelonsoftware.com做的就是這件事。他不斷教育我們、娛樂我們，有時還會故意激怒我們，但他總是會讓我們去思考，我們整天坐在電腦前究竟是在幹嘛？這就是Joel on Software這個網站之所以成為全世界最受歡迎的開發網站其中的一個理由。現在，你終於可以擁有他網站裡最重要的精選文章，好好收藏這些來自Joel的獨家評論與最新洞見了。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>),(</span><br><span class="line">  <span class="string">&#x27;從自學到成功轉職軟體工程師：自主學習讓我重拾人生的發球權&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;9786263330122&#x27;</span>, </span><br><span class="line">  <span class="number">3</span>, </span><br><span class="line">  <span class="number">1</span>, </span><br><span class="line">  <span class="string">&#x27;2022-01-24&#x27;</span>, </span><br><span class="line">  <span class="string">&#x27;本書內容改編自第12屆iT邦幫忙鐵人賽 Modern Web 組佳作系列文章——《完美 Camp 進化論》，以自學程式設計所需要準備的心態，及後續如何尋找教材持續進行學習和練習的內容為主，作者自身的學習經驗為輔，期望能更貼近讀者的需求與感受。&#x27;</span>, </span><br><span class="line">  <span class="keyword">NOW</span>(), </span><br><span class="line">  <span class="keyword">NOW</span>(), <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/%E5%A2%9E%E5%88%AA%E6%9F%A5%E6%94%B9">增刪查改 - 維基百科，自由的百科全書</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/insert/">INSERT - MariaDB Knowledge Base</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/select/">SELECT - MariaDB Knowledge Base</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/delete/">DELETE - MariaDB Knowledge Base</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/update/">UPDATE - MariaDB Knowledge Base</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+<h2 id="ORM"><a class="header-anchor" href="#ORM">¶</a>ORM</h2>
+<p>ORM，英文叫Object Relational Mapping， 翻譯成中文為物件關聯對映<br>
+概念上就是用物件導向的概念來理解資料操作。所以，接下來會用套件，看起來是操作 JS 的物件，但實際上是操作資料。</p>
+<p>可以理解，在 node.js 上，它是一種資料庫操作的套件。所以，接下來會直接在 node 上面跑資料庫的建立與資料操作。</p>
+<h2 id="在此使用-sequelize"><a class="header-anchor" href="#在此使用-sequelize">¶</a>在此使用 sequelize</h2>
+<p><a target="_blank" rel="noopener" href="https://sequelize.org/">官網</a> (目前 v6-stable)</p>
+<h2 id="安裝-初始化"><a class="header-anchor" href="#安裝-初始化">¶</a>安裝&amp;初始化</h2>
+<p>先看 <a href="https://dwatow.github.io/2021/05-15-raspberry-pi/sequelize-cli-beginer/">sequelize-cli</a></p>
+<p>設定 config</p>
+<p><strong>專案/config/config.json</strong></p>
+<p>最上面加一段，不 git 的</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;root&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;sa&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;password&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;database&quot;</span>: <span class="string">&quot;good_ideas_lib_dev&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;dialect&quot;</span>: <span class="string">&quot;mysql&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>設定</p>
+<ul>
+<li>username 最高管理者帳號</li>
+<li>password 最高管理者密碼</li>
+<li>database 即將要新增的新資料庫</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npx sequelize db:create --env=root</span></span><br><span class="line"></span><br><span class="line">Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]</span><br><span class="line"></span><br><span class="line">Loaded configuration file &quot;config/config.json&quot;.</span><br><span class="line">Using environment &quot;root&quot;.</span><br><span class="line">Database good_ideas_lib_dev created.</span><br></pre></td></tr></table></figure>
+<p><code>--env=root</code> 可以控制要執行哪一段設定</p>
+<h2 id="用-SQL-設定新資料庫與帳號"><a class="header-anchor" href="#用-SQL-設定新資料庫與帳號">¶</a>用 SQL 設定新資料庫與帳號</h2>
+<p>看之前的<a href="https://dwatow.github.io/2023/06-28-raspberry-pi/mariadb-init/#%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%9D%E6%AC%A1%E8%A8%AD%E5%AE%9A">文章</a></p>
+<p>裡面有介紹，如何新增帳號給資料庫，並且將賦予帳號權限給資料庫使用。<br>
+後面的 sequelize 的操作才成功。</p>
+<h2 id="測試連線"><a class="header-anchor" href="#測試連線">¶</a>測試連線</h2>
+<blockquote>
+<p>接下來的這一段與 sequelize-cli 生成的程式碼無關。</p>
+</blockquote>
+<p>直接在專案根目錄新增一個 main.js</p>
+<p><strong>專案/main.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Sequelize &#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> development = &#123;</span><br><span class="line">  <span class="comment">// 請設定，並複製一份 config/config.js 裡的 development 的設定</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Option 3: Passing parameters separately (other dialects)</span></span><br><span class="line"><span class="keyword">const</span> sequelize = <span class="keyword">new</span> Sequelize(development.database, development.username, development.password, &#123;</span><br><span class="line">  host: development.host,</span><br><span class="line">  dialect: development.dialect</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> sequelize.authenticate();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Connection has been established successfully.&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">&#x27;Unable to connect to the database:&#x27;</span>, error);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>測試</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node main.js</span></span><br><span class="line">Executing (default): SELECT 1+1 AS result</span><br><span class="line">Connection has been established successfully.</span><br></pre></td></tr></table></figure>
+<p>連線成功！</p>
 
     
     </section>
@@ -247,15 +197,15 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/Raspberry-Pi-4/">Raspberry Pi 4</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/database/">database</a> }
+  { <a href="/tags/sequelize/">sequelize</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/mariadb/">mariadb</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/orm/">orm</a> }
   </li>
 
 

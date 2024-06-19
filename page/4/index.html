@@ -134,50 +134,211 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2021/08-22-manual-swap-memory/">https://dwatow.github.io/2021/08-22-manual-swap-memory/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2021/09-05-bike/three-phase-generation/">https://dwatow.github.io/2021/09-05-bike/three-phase-generation/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Ubuntu 手動加上 swap</h1>
+        <h1>野狼三相發電，電路接線圖</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ubuntu-%E6%89%8B%E5%8B%95%E5%8A%A0%E4%B8%8A-swap"><span class="toc-text">Ubuntu 手動加上 swap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8B%95%E6%A9%9F"><span class="toc-text">動機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A8%98%E6%86%B6%E9%AB%94"><span class="toc-text">查看記憶體</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A"><span class="toc-text">設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%96%8B%E6%A9%9F%E5%95%9F%E7%94%A8"><span class="toc-text">開機啟用</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8E%E7%8B%BC%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB%EF%BC%8C%E9%9B%BB%E8%B7%AF%E6%8E%A5%E7%B7%9A%E5%9C%96"><span class="toc-text">野狼三相發電，電路接線圖</span></a></li></ol>
   </div>
 
 
-    <h1 id="Ubuntu-手動加上-swap"><a class="header-anchor" href="#Ubuntu-手動加上-swap">¶</a>Ubuntu 手動加上 swap</h1>
-<p>在雲端主機要加上 swap，webpack 執行編譯才不會當機</p>
-<h2 id="動機"><a class="header-anchor" href="#動機">¶</a>動機</h2>
-<p>前端佈署在伺服器上，要在伺服器上編譯</p>
-<p>雲端主機沒有 swap 會在 webpack 編譯時，出現記憶體不足，造成當機的問題。<br>
-所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。</p>
-<h2 id="查看記憶體"><a class="header-anchor" href="#查看記憶體">¶</a>查看記憶體</h2>
-<p>通常 Swap 會設置為實體記憶體的兩倍<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，所以要先看一下目前記憶體有多大。<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:        3999756      328648     3139664       43328      531444     3502496</span><br><span class="line">Swap:        102396           0      102396</span><br></pre></td></tr></table></figure>
-<p>total 3999756 就是總共使用幾 K。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           3906         310        3076          42         519        3430</span><br><span class="line">Swap:            99           0          99</span><br></pre></td></tr></table></figure>
-<p>可以改用 mega 為單位，</p>
-<h2 id="設定"><a class="header-anchor" href="#設定">¶</a>設定</h2>
-<p>設定 swap<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo fallocate -l 1G /swapfile</span><br><span class="line">sudo chmod 600 /swapfile</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
-<h2 id="開機啟用"><a class="header-anchor" href="#開機啟用">¶</a>開機啟用</h2>
-<p>開機掛載 swap</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;fstab</span><br></pre></td></tr></table></figure>
-<p>開啟檔案，到最後加入此行</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#</span><span class="bash"> 開機掛載 swap</span></span><br><span class="line">/swapfile   none swap    sw 0 0</span><br></pre></td></tr></table></figure>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.gtwang.org/tips/how-big-should-your-page-file-or-swap/">系統的分頁檔（Page File）或交換空間（Swap Partition）應該設定為多大比較好？</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://blog.longwin.com.tw/2013/05/linux-ram-memory-info-2013/">查看 Linux 的記憶體多大</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
-</li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.astralweb.com.tw/how-to-manually-add-swap-to-ubuntu/">Ubuntu如何手動新增虛擬記憶體(swap)</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
-</li>
+    <h1 id="野狼三相發電，電路接線圖"><a class="header-anchor" href="#野狼三相發電，電路接線圖">¶</a>野狼三相發電，電路接線圖</h1>
+<blockquote>
+<p>同步發到<a target="_blank" rel="noopener" href="https://forum.jorsindo.com/thread-2560404-1-1.html">小老婆</a></p>
+</blockquote>
+<p>野狼改三相發電，已經是 2016 年的事了。那時有發在自己的部落格上 <a href="/2016/07-23-blogger/4939845918620747661/">野狼~使用十萬伏特~不！是「三相發電」</a><br>
+簡單的說，當時是找網拍的賣家幫我改的，剛好是一位在台南的車友。<br>
+不過後來似乎就沒有看他在賣這一個項目了，很可惜。</p>
+<p>2017 年 2 月轉職，給自己一年的時間進行學習。正好 2017 年 10 月有車友問我三相電路怎麼改的，那一陣子我剛好忙著學習新的吃飯技術，無暇弄車子，所以當時並沒有認真的回覆車友，這件事一直放在我心中很不好意思，因為畢竟自己花時間在網路上找的資源都是來自熱心車友的資訊。為了轉職成功，我改變了我對待車子的習慣，從自己換機油到找車行幫我換 (省下的時間可以學習新工作技術) ，後來也習慣有問題找車行處理了。</p>
+<p>五年之後，今天正好又把野狼的油箱拆下來，也重新整理了電系，順便把當初被問到的問題「三相發電的線是怎麼接的」給好好的畫下來。</p>
+<p>為了整篇的完整性，還是在這裡節錄一下我自己部落格文章的重點，以及補上電路接線圖</p>
+<p>補充一點: 我的野狼是 2004 年第一代的野狼傳奇 R ，是化油狼</p>
+<p>換上去的零件</p>
+<ol>
+<li>使用 B3U 的發電磁盤，我的車是使用的是 S07，所以要改 B38料號: 31110-B38-000</li>
+<li>三相發電線圈，淘寶的 GY 車系 12 極線圈 (無圖，故略)</li>
+<li>整流器，改三相整流器 (應該是任一即可)</li>
+<li>點火訊號產生器 (因為我沒有改直流點火，所以當時就把 CDI 外掛了一顆這個東西)</li>
 </ol>
-</section>
+<p>規格</p>
+<ul>
+<li>Input: (AC/DC) 6~12v, 200~450mA</li>
+<li>Output: (DC) 80v~220v</li>
+</ul>
+<p>安裝</p>
+<ul>
+<li>黑線-電門</li>
+<li>紅黑線-CDI</li>
+<li>綠線-GND(目前接電瓶的負極)</li>
+</ul>
+<p>電路接線圖<br>
+給想改三相的化油狼</p>
+<p><img src="https://i.imgur.com/jE2J5h5.png" alt=""></p>
+<p>附上線的解釋</p>
+<table>
+<thead>
+<tr>
+<th>顏色</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>紅色</td>
+<td>電池正極至電門鎖開關前</td>
+</tr>
+<tr>
+<td>黑色</td>
+<td>電門鎖至整車電源正極</td>
+</tr>
+<tr>
+<td>黃色</td>
+<td>發電機燈光，充電電源輸出</td>
+</tr>
+<tr>
+<td>粉紅色</td>
+<td>發動機電源輸出</td>
+</tr>
+<tr>
+<td>黑/紅色</td>
+<td>點火線圈輸出</td>
+</tr>
+<tr>
+<td>黑/黃色</td>
+<td>高壓包正極線（點火器輸出引線）</td>
+</tr>
+<tr>
+<td>藍/白色</td>
+<td>觸發器引線</td>
+</tr>
+<tr>
+<td>綠/白色</td>
+<td></td>
+</tr>
+<tr>
+<td>黑/白色</td>
+<td>電門鎖熄火開關引線</td>
+</tr>
+<tr>
+<td>綠色</td>
+<td>電源負極和接地線</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://i.imgur.com/8ouAOVd.png" alt=""></p>
+<p>參考資料<br>
+電線顏色表，轉貼自<a target="_blank" rel="noopener" href="https://forum.jorsindo.com/thread-2188142-1-2.html#2">野狼電路圖 有看沒有懂…[新增問題]</a></p>
+<table>
+<thead>
+<tr>
+<th>顏色</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>紅色</td>
+<td>電池正極至電門鎖開關前</td>
+</tr>
+<tr>
+<td>粉紅色</td>
+<td>發動機電源輸出</td>
+</tr>
+<tr>
+<td>藍色</td>
+<td>前照燈遠光</td>
+</tr>
+<tr>
+<td>綠色</td>
+<td>電源負極和接地線</td>
+</tr>
+<tr>
+<td>黑色</td>
+<td>電門鎖至整車電源正極</td>
+</tr>
+<tr>
+<td>白色</td>
+<td>發電機充電輸出，前照燈近光</td>
+</tr>
+<tr>
+<td>黃色</td>
+<td>發電機燈光，充電電源輸出</td>
+</tr>
+<tr>
+<td>灰色</td>
+<td>閃光器至轉向開關</td>
+</tr>
+<tr>
+<td>橙色</td>
+<td>左前後轉向至轉向開關</td>
+</tr>
+<tr>
+<td>天藍色</td>
+<td>右前後轉向至轉向開關</td>
+</tr>
+<tr>
+<td>棕色</td>
+<td>行車燈.儀表燈</td>
+</tr>
+<tr>
+<td>棕/白色</td>
+<td>前行駛燈</td>
+</tr>
+<tr>
+<td>淺藍色</td>
+<td>喇叭至開關按鈕</td>
+</tr>
+<tr>
+<td>紅/白色</td>
+<td>經整流充電的發電機輸出引線</td>
+</tr>
+<tr>
+<td>黑/白色</td>
+<td>電門鎖熄火開關引線</td>
+</tr>
+<tr>
+<td>藍/白色</td>
+<td>觸發器引線</td>
+</tr>
+<tr>
+<td>黃/白色</td>
+<td>汽油指示表至浮子開關</td>
+</tr>
+<tr>
+<td>黑/紅色</td>
+<td>點火線圈輸出</td>
+</tr>
+<tr>
+<td>綠/紅色</td>
+<td>空擋燈至空擋開關</td>
+</tr>
+<tr>
+<td>黑/黃色</td>
+<td>高壓包正極線（點火器輸出引線）</td>
+</tr>
+<tr>
+<td>綠/黃色</td>
+<td>前後製動開關至剎車燈</td>
+</tr>
+<tr>
+<td>藍/黃色</td>
+<td>CDI觸發部分引線</td>
+</tr>
+<tr>
+<td>藍/紅色</td>
+<td>CDI觸發電源上端引線</td>
+</tr>
+<tr>
+<td>黃/紅色</td>
+<td>啟動繼電器正極引線</td>
+</tr>
+</tbody>
+</table>
 
     
     </section>
@@ -190,15 +351,19 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
+  { <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/">狼記事</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/linux/">linux</a> }
+  { <a href="/tags/%E9%87%8E%E7%8B%BC/">野狼</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/swap/">swap</a> }
+  { <a href="/tags/%E9%9B%BB%E8%B7%AF/">電路</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/">三相發電</a> }
   </li>
 
 

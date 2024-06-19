@@ -134,82 +134,59 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2024/03-12-what-is-this-algorithm/">https://dwatow.github.io/2024/03-12-what-is-this-algorithm/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2024/06-19-nginx-log-format-json-in-http-body/">https://dwatow.github.io/2024/06-19-nginx-log-format-json-in-http-body/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>this 決策演算法 - 什麼是 this</h1>
+        <h1>nginx_log_format_json_in_http_body</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#this-%E6%B1%BA%E7%AD%96%E6%BC%94%E7%AE%97%E6%B3%95"><span class="toc-text">this 決策演算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%88%A5%E7%9A%84-arrow-function"><span class="toc-text">特別的 arrow function</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh-%E7%99%BB%E5%85%A5"><span class="toc-text">ssh 登入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AA%A2%E6%9F%A5-nginx-%E7%89%88%E6%9C%AC"><span class="toc-text">檢查 nginx 版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%92%E6%9C%89%E8%A8%AD%E5%AE%9A"><span class="toc-text">先看一下有沒有設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B7%A8%E8%BC%AF%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="toc-text">編輯設定檔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6-nginx-%E8%A8%AD%E5%AE%9A%E6%AA%94%E6%AD%A3%E7%A2%BA%E6%80%A7"><span class="toc-text">測試 nginx 設定檔正確性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%84%A1%E7%B8%AB%E9%87%8D%E5%95%9F-nginx"><span class="toc-text">無縫重啟 nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B-log-%E7%9C%8B%E6%95%88%E6%9E%9C"><span class="toc-text">查看 log 看效果</span></a></li></ol>
   </div>
 
 
-    <h1 id="this-決策演算法"><a class="header-anchor" href="#this-決策演算法">¶</a>this 決策演算法</h1>
-<p>所有 function 中的 this 都可以透過這個流程圖決定 this 是什麼。</p>
-<div id="flowchart-0" class="flow-chart"></div>
-<p>由這個圖</p>
-<p><code>this</code> 是一種 runtime 才有的產物。</p>
-<h2 id="特別的-arrow-function"><a class="header-anchor" href="#特別的-arrow-function">¶</a>特別的 arrow function</h2>
-<p>arrow function 用 Function.prototype.bind 理解是最適合不過的了。<br>
-arrow function 的 由宣告時 function scope 使用的 this 決定的。</p>
-<div>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    arrow: <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="built_in">this</span>),</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="built_in">this</span>) &#125;,</span><br><span class="line">    fnObj: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;console.log(this)&#x27;</span>),</span><br><span class="line">    fnObjBind: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;console.log(this)&#x27;</span>).bind(<span class="built_in">this</span>),</span><br><span class="line">    fnObjBindNull: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;&quot;use strict&quot;; console.log(this)&#x27;</span>).bind(<span class="literal">undefined</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;global obj.fn()&#x27;</span>, obj.fn())</span><br><span class="line"> <span class="comment">// &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;global obj.fnObj()&#x27;</span>, obj.fnObj())</span><br><span class="line"><span class="comment">// &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;global obj.arrow()&#x27;</span>, obj.arrow())</span><br><span class="line"><span class="comment">// Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;global obj.fnObjBind()&#x27;</span>, obj.fnObjBind())</span><br><span class="line"><span class="comment">// Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AAA</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 直接執行 this 還是 global，但是如果指定成其它的，就可以改變這裡的 this ≠ global</span></span><br><span class="line">    <span class="keyword">var</span> obj = &#123;</span><br><span class="line">        arrow: <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="built_in">this</span>),</span><br><span class="line">        fn: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="built_in">this</span>) &#125;,</span><br><span class="line">        fnObj: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;console.log(this)&#x27;</span>),</span><br><span class="line">        fnObjBind: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;console.log(this)&#x27;</span>).bind(<span class="built_in">this</span>),</span><br><span class="line">        fnObjBindNull: <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&#x27;&quot;use strict&quot;; console.log(this)&#x27;</span>).bind(<span class="literal">undefined</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;AAA obj.fn()&#x27;</span>, obj.fn())</span><br><span class="line">    &#123;<span class="attr">arrow</span>: ƒ, <span class="attr">fn</span>: ƒ, <span class="attr">fnObj</span>: ƒ, <span class="attr">fnObjBind</span>: ƒ, <span class="attr">fnObjBindNull</span>: ƒ&#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;AAA obj.fnObj()&#x27;</span>, obj.fnObj())</span><br><span class="line">    #<span class="built_in">document</span> (https:<span class="comment">//dwatow.github.io/)</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;AAA obj.arrow()&#x27;</span>, obj.arrow())</span><br><span class="line">    #<span class="built_in">document</span> (https:<span class="comment">//dwatow.github.io/)</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;AAA obj.fnObjBind()&#x27;</span>, obj.fnObjBind())</span><br><span class="line">    <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> AAAdocument = AAA.bind(<span class="built_in">document</span>) <span class="comment">// 改變「呼叫 function 的 function scope 的」 this 指定成 document (隨決定的)</span></span><br><span class="line">AAAdocument();</span><br></pre></td></tr></table></figure>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">start=>start: What is "this"?
-end=>end: "this" is this
-
-newObj=>operation: 新建構物件
-argObj1=>operation: 指定的物件
-contextObject=>operation: object
-globalObject=>operation: global
-undefinedValue=>operation: undefined/null
-
-
-isNewBind=>condition: new foo()?
-isApplyOrCall=>condition: foo.call()?
-foo.apply()?
-foo.bind()?
-isObjectMethod=>condition: object.foo()?
-isStrictMode1=>condition: 有沒有
-"use strict";
-isNullOrUndefined=>condition: 是不是
-null/undefined;
-
-start->isNewBind
-isNewBind(no)->isApplyOrCall(no)->isObjectMethod(no)->isStrictMode1(no)->globalObject->end
-
-isNewBind(yes, right)->newObj->end
-isApplyOrCall(yes, right)->isNullOrUndefined
-isStrictMode1(yes, right)->undefinedValue->end
-isObjectMethod(yes, right)->contextObject->end
-
-isNullOrUndefined(yes, right)->isStrictMode1
-isNullOrUndefined(no)->argObj1->end
-contextObject->end
-globalObject->end</textarea><textarea id="flowchart-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+    <h2 id="ssh-登入"><a class="header-anchor" href="#ssh-登入">¶</a>ssh 登入</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh 帳號@主機位址</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>必要的話，要用 <code>-i</code> 來指定使用的 key</p>
+</blockquote>
+<h2 id="檢查-nginx-版本"><a class="header-anchor" href="#檢查-nginx-版本">¶</a>檢查 nginx 版本</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nginx -V</span><br></pre></td></tr></table></figure>
+<p>必須注意 <code>escape=json</code> 要 Nginx 1.11.5 之後才支援</p>
+<h2 id="先看一下有沒有設定"><a class="header-anchor" href="#先看一下有沒有設定">¶</a>先看一下有沒有設定</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">less &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</span><br></pre></td></tr></table></figure>
+<p>注意 http 段落中，有一個在設定 log 的地方，內容大約如下</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">##</span></span><br><span class="line">        <span class="comment"># Logging Settings</span></span><br><span class="line">        <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">        <span class="attribute">access_log</span> /var/log/nginx/access.log;</span><br><span class="line">        <span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="編輯設定檔"><a class="header-anchor" href="#編輯設定檔">¶</a>編輯設定檔</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</span><br></pre></td></tr></table></figure>
+<p>要設定 nginx 的 log format 請求才會出現 JOSN 的內容</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">  <span class="comment">##</span></span><br><span class="line">  <span class="comment"># Logging Settings</span></span><br><span class="line">  <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># log_format compression</span></span><br><span class="line">  <span class="comment"># &#x27;[$time_local] $remote_addr - $status &#x27;</span></span><br><span class="line">  <span class="comment"># &#x27;&quot;$request&quot; $request_body&#x27;;</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">log_format</span> json_log</span><br><span class="line">  <span class="comment"># escape=json # Nginx 1.11.5 之後才支援</span></span><br><span class="line">  <span class="string">&#x27;[$time_local] $remote_addr - $status &#x27;</span></span><br><span class="line">  <span class="string">&#x27;&quot;$request&quot; $request_body&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">access_log</span> /var/log/nginx/access.log json_log;</span><br><span class="line">  <span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>log_format json_log escape=json</code></li>
+</ol>
+<p>宣告一個 log_format 叫做 json_log 格式，escape=json 指定 json 格式處理特殊字元。</p>
+<ol start="2">
+<li><code>access_log /var/log/nginx/access.log json_log;</code></li>
+</ol>
+<p>設定 access_log 在 <code>/var/log/nginx/access.log</code> 以 json_log 格式儲存。</p>
+<h2 id="測試-nginx-設定檔正確性"><a class="header-anchor" href="#測試-nginx-設定檔正確性">¶</a>測試 nginx 設定檔正確性</h2>
+<p>確認無誤之後，再重啟，所以要先測試一下指令是否有錯誤</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -t </span><br></pre></td></tr></table></figure>
+<h2 id="無縫重啟-nginx"><a class="header-anchor" href="#無縫重啟-nginx">¶</a>無縫重啟 nginx</h2>
+<p>透過 systemctl 重啟 nginx (推薦使用)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl reload nginx</span><br></pre></td></tr></table></figure>
+<p>另一種寫法，直接重啟 nginx</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -s reload</span><br></pre></td></tr></table></figure>
+<h2 id="查看-log-看效果"><a class="header-anchor" href="#查看-log-看效果">¶</a>查看 log 看效果</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tail -f /var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
     
     </section>
     
 </article>
 
                 </li>
-                
-                    <li class="meta-text">
-                        tags:
-                        
-  <li class="meta-text">
-  { <a href="/tags/JavaScript/">JavaScript</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/">你所不知道的JS</a> }
-  </li>
-
-
-                    </li>
                 
             
         

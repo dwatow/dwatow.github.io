@@ -134,189 +134,70 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-24-sequelize/sequelize-R-of-CRUD/">https://dwatow.github.io/2018/09-24-sequelize/sequelize-R-of-CRUD/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-24-sequelize/sequelize-CUD-of-CRUD/">https://dwatow.github.io/2018/09-24-sequelize/sequelize-CUD-of-CRUD/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>Sequelize 資料讀取</h1>
+        <h1>Sequelize 資料寫入</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-%E8%B3%87%E6%96%99%E8%AE%80%E5%8F%96"><span class="toc-text">Sequelize 資料讀取</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-find"><span class="toc-text">Module.find()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-findOrCreate-options-Object"><span class="toc-text">Module.findOrCreate(options: Object)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-findAll-options-Object"><span class="toc-text">Module.findAll(options: Object)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#where-%E7%89%A9%E4%BB%B6%E7%9A%84%E6%A2%9D%E4%BB%B6"><span class="toc-text">where 物件的條件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E9%97%9C%E8%81%AF%E9%81%8E%E6%BF%BE"><span class="toc-text">用關聯過濾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%A0%81-limit-offset-%E6%8E%92%E5%BA%8F-order-%E7%BE%A4%E7%B5%84-group"><span class="toc-text">分頁 limit, offset, 排序 order, 群組 group</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-max-min-sum-count"><span class="toc-text">Module.max({}), .min({}), .sum({}), .count({})</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#max"><span class="toc-text">max</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#min"><span class="toc-text">min</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sum"><span class="toc-text">sum</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#count"><span class="toc-text">count</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Module-findAndCountAll-options-Object"><span class="toc-text">Module.findAndCountAll(options: Object)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Eager-loading-%E8%B3%87%E6%96%99%E7%9A%84%E9%97%9C%E8%81%AF%E4%B8%80%E8%B5%B7%E6%9F%A5%E5%87%BA%E4%BE%86"><span class="toc-text">Eager loading 資料的關聯一起查出來</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%A4%E9%97%9C%E8%81%AF"><span class="toc-text">多層關聯</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attributes-%E6%8C%87%E5%AE%9A%E5%9B%9E%E5%82%B3%E6%AC%84%E4%BD%8D"><span class="toc-text">attributes 指定回傳欄位</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AC%84%E4%BD%8D%E4%BD%BF%E7%94%A8%E5%88%A5%E5%90%8D"><span class="toc-text">欄位使用別名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ordering-%E6%8E%92%E5%BA%8F"><span class="toc-text">Ordering 排序</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-%E8%B3%87%E6%96%99%E5%AF%AB%E5%85%A5"><span class="toc-text">Sequelize 資料寫入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create"><span class="toc-text">Create</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Update"><span class="toc-text">Update</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Delete"><span class="toc-text">Delete</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86"><span class="toc-text">批次處理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E9%87%8F%E6%96%B0%E5%A2%9E"><span class="toc-text">大量新增</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E9%87%8F%E4%BF%AE%E6%94%B9%EF%BC%8C%E5%8A%A0-WHERE"><span class="toc-text">大量修改，加 WHERE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E9%87%8F%E5%88%AA%E9%99%A4-%EF%BC%8C%E5%8A%A0-WHERE"><span class="toc-text">大量刪除(，加 WHERE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Value-of-an-instance"><span class="toc-text">Value of an instance</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Sequelize-資料讀取"><a class="header-anchor" href="#Sequelize-資料讀取">¶</a>Sequelize 資料讀取</h1>
-<p>使用者需求 -&gt; 搜尋的功能<br>
-要盡可能的多熟悉</p>
-<h2 id="Module-find"><a class="header-anchor" href="#Module-find">¶</a>Module.find()</h2>
-<p>找一個有兩種方式，使用時要考慮資料表「尋找唯一值」的最小條件。</p>
-<ul>
-<li><code>findOne(options: Object)</code></li>
-<li><code>findById(id: String)</code></li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">model.findById(id).then(<span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//找到 model.id = id</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">model.findOne(&#123;</span><br><span class="line">  where: &#123;&#125;, <span class="comment">// where 條件</span></span><br><span class="line">  attribute: []  <span class="comment">//指定回傳欄位</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//找到 model.id = id</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="Module-findOrCreate-options-Object"><a class="header-anchor" href="#Module-findOrCreate-options-Object">¶</a>Module.findOrCreate(options: Object)</h2>
-<p>找不到就建立一個，使用時要注意 <code>allowNull:false</code> 並給予適合的預設值</p>
-<p><code>.findOrCreate()</code> = <code>.findOne()</code> || <code>.create()</code></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">User.findOrCreate(&#123;</span><br><span class="line">  where: &#123;<span class="attr">username</span>: <span class="string">&#x27;sdepold&#x27;</span>&#125;,</span><br><span class="line">  defaults: &#123;<span class="attr">job</span>: <span class="string">&#x27;Technical Lead JavaScript&#x27;</span>&#125;</span><br><span class="line">&#125;)</span><br><span class="line">.spread(<span class="function"><span class="keyword">function</span>(<span class="params">user, created</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;<span class="attr">plain</span>: <span class="literal">true</span>&#125;)) <span class="comment">// true 當作普通物件回傳</span></span><br><span class="line">  <span class="built_in">console</span>.log(created)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">/*&#123;</span></span><br><span class="line"><span class="comment">  username: &#x27;sdepold&#x27;,</span></span><br><span class="line"><span class="comment">  job: &#x27;Technical Lead JavaScript&#x27;,</span></span><br><span class="line"><span class="comment">  id: 1,</span></span><br><span class="line"><span class="comment">  createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),</span></span><br><span class="line"><span class="comment">  updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">created: true */</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="http://docs.sequelizejs.com/class/lib/model.js~Model.html"><code>public get(key: String, options: Object): Object | any</code> =&gt; <code>user.get(&#123;plain: true&#125;)</code></a> key = (虛擬)欄位名稱</p>
-<h2 id="Module-findAll-options-Object"><a class="header-anchor" href="#Module-findAll-options-Object">¶</a>Module.findAll(options: Object)</h2>
-<p>找一堆，使用時要注意條件太少時，資料是否海量 (影響效能)</p>
-<p><code>.findAll()</code> 縮寫 <code>.all()</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Project.findAll().then(<span class="function"><span class="keyword">function</span>(<span class="params">projects</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// typeof projects = []</span></span><br><span class="line">&#125;)</span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123; <span class="attr">name</span>: <span class="string">&#x27;A Project&#x27;</span> &#125; <span class="comment">// name = &#x27;...&#x27;</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">projects</span>) </span>&#123;<span class="comment">/*...*/</span>&#125;)</span><br><span class="line"></span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123; <span class="attr">id</span>: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] &#125; <span class="comment">//id = 1, 2 or 3</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">projects</span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="where-物件的條件"><a class="header-anchor" href="#where-物件的條件">¶</a>where 物件的條件</h3>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  where: &#123;<span class="comment">/*寫在這*/</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="http://sequelize.readthedocs.io/en/v3/docs/models-usage/">v3 寫法 - findAll - Search for multiple elements in the database</a><br>
-<a target="_blank" rel="noopener" href="http://docs.sequelizejs.com/manual/tutorial/models-usage.html">v4 寫法 - findAll - Search for multiple elements in the database</a></p>
-<p>邏輯包含下面這些</p>
-<ul>
-<li>attribute
-<ul>
-<li>id != 20</li>
-<li>AND (a = 5), OR (a = 5 || a = 6)</li>
-<li>id &gt; 6, id &gt;= 6</li>
-<li>id &lt; 10, id &lt;= 10</li>
-<li>BETWEEN 6 AND 10, NOT BETWEEN 11 AND 15</li>
-<li>IN [1, 2], NOT IN [1, 2]</li>
-<li>LIKE ‘%hat’, NOT LIKE ‘%hat’</li>
-</ul>
-</li>
-<li>attribute (PG only)
-<ul>
-<li>&amp;&amp; [1, 2] (PG array overlap operator)</li>
-<li>@&gt; [1, 2] (PG array contains operator)</li>
-<li>&lt;@ [1, 2] (PG array contained by operator)</li>
-<li>ILIKE ‘%hat’ (case insensitive)  (PG only)</li>
-<li>NOT ILIKE ‘%hat’  (PG only)</li>
-<li>ANY ARRAY[2, 3]::INTEGER (PG only)</li>
-</ul>
-</li>
-<li>status
-<ul>
-<li>status NOT FALSE</li>
-</ul>
-</li>
-</ul>
-<h3 id="用關聯過濾"><a class="header-anchor" href="#用關聯過濾">¶</a>用關聯過濾</h3>
-<p>找尋 3 個有 <code>Profile</code> 的 <code>User</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在 define 後加上</span></span><br><span class="line">User.hasMany(Profile, &#123;<span class="attr">foreignKey</span>: <span class="string">&#x27;owner&#x27;</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜尋時，才可以透過搜尋</span></span><br><span class="line">User.findAndCountAll(&#123;</span><br><span class="line">  include: [</span><br><span class="line">     &#123; <span class="attr">model</span>: Profile, <span class="attr">where</span>: &#123; <span class="attr">active</span>: <span class="literal">true</span> &#125;&#125;</span><br><span class="line">  ],</span><br><span class="line">  limit: <span class="number">3</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  result.rows.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(item.name)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="分頁-limit-offset-排序-order-群組-group"><a class="header-anchor" href="#分頁-limit-offset-排序-order-群組-group">¶</a>分頁 limit, offset, 排序 order, 群組 group</h3>
-<p>四個參數都要放在 options 裡使用</p>
-<ul>
-<li><code>limit</code> 每頁數</li>
-<li><code>offset</code> 略過多少筆 (limit * index)</li>
-<li><code>group</code> 群組</li>
-<li><code>order</code> 排序
-<ul>
-<li>ASC 小至大 (正序)</li>
-<li>DESC 大至小 (反序)</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  where: &#123;<span class="comment">/*...*/</span>&#125;,</span><br><span class="line">  limit: n,</span><br><span class="line">  offset: n,</span><br><span class="line">  order: <span class="string">&#x27;title DESC&#x27;</span>,</span><br><span class="line">  group: <span class="string">&#x27;field&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Module-max-min-sum-count"><a class="header-anchor" href="#Module-max-min-sum-count">¶</a>Module.max({}), .min({}), .sum({}), .count({})</h2>
-<p>四個 SQL 運算 methods 參數都是 <code>options: Object</code></p>
-<p>假設，資料表資料如下</p>
-<table>
-<thead>
-<tr>
-<th>id</th>
-<th>age</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>10</td>
-</tr>
-<tr>
-<td>2</td>
-<td>5</td>
-</tr>
-<tr>
-<td>3</td>
-<td>40</td>
-</tr>
-</tbody>
-</table>
-<h3 id="max"><a class="header-anchor" href="#max">¶</a>max</h3>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Project.max(<span class="string">&#x27;age&#x27;</span>, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    age: &#123;<span class="attr">lt</span>: <span class="number">20</span>&#125; <span class="comment">//age &lt; 20</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">max</span>) </span>&#123;<span class="comment">/*will be 10*/</span>&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="min"><a class="header-anchor" href="#min">¶</a>min</h3>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Project.min(<span class="string">&#x27;age&#x27;</span>, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    age: &#123; <span class="attr">$gt</span>: <span class="number">5</span> &#125; <span class="comment">//age &gt; 5</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">min</span>) </span>&#123;<span class="comment">/*will be 10*/</span>&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="sum"><a class="header-anchor" href="#sum">¶</a>sum</h3>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Project.sum(<span class="string">&#x27;age&#x27;</span>, &#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    age: &#123; <span class="attr">$gt</span>: <span class="number">5</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">sum</span>) </span>&#123;<span class="comment">/*will be 50*/</span>&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="count"><a class="header-anchor" href="#count">¶</a>count</h3>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Project.count(&#123;</span><br><span class="line">  where: &#123;&#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">count</span>) </span>&#123;<span class="comment">/*0*/</span>&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="Module-findAndCountAll-options-Object"><a class="header-anchor" href="#Module-findAndCountAll-options-Object">¶</a>Module.findAndCountAll(options: Object)</h2>
-<p>一堆與總數 = 分頁</p>
-<p><code>findAndCountAll</code> = <code>findAll</code> + <code>count</code></p>
-<p>options 加上這兩個 property</p>
-<ul>
-<li><code>limit</code> (每頁數)</li>
-<li><code>offset</code> (略過多少筆 limit * index)</li>
-</ul>
-<p>成功時會回傳</p>
-<ul>
-<li><code>count</code> 匹配條件的總數</li>
-<li><code>raw</code> 一個 Array 裝著符合條件的物件</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = <span class="keyword">await</span> Code.findAndCountAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    title: &#123;</span><br><span class="line">	  $like: <span class="string">&#x27;foo%&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  limit: <span class="number">2</span>,  <span class="comment">//每頁幾個</span></span><br><span class="line">  offset: <span class="number">10</span> <span class="comment">//跳過幾個 = limit * index</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">/* &#123;</span></span><br><span class="line"><span class="comment">  &quot;count&quot;: 13,</span></span><br><span class="line"><span class="comment">  &quot;rows&quot;: [&#123;</span></span><br><span class="line"><span class="comment">    &quot;id&quot;: 11,</span></span><br><span class="line"><span class="comment">    &quot;name&quot;: &quot;&quot;,</span></span><br><span class="line"><span class="comment">  &#125;, &#123;</span></span><br><span class="line"><span class="comment">    &quot;id&quot;: 12,</span></span><br><span class="line"><span class="comment">    &quot;name&quot;: &quot;</span></span><br><span class="line"><span class="comment">  &#125;]</span></span><br><span class="line"><span class="comment">&#125; */</span></span><br></pre></td></tr></table></figure>
-<h2 id="Eager-loading-資料的關聯一起查出來"><a class="header-anchor" href="#Eager-loading-資料的關聯一起查出來">¶</a>Eager loading 資料的關聯一起查出來</h2>
-<p>關聯一起查 = Eager loading<br>
-<code>Model.</code>(<code>find()</code> or <code>findAll()</code>) + <code>include</code></p>
-<p>假設資料庫 關聯長這樣</p>
-<p>Tool n–1 User 1–n Task</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> User = sequelize.define(<span class="string">&#x27;user&#x27;</span>, &#123; <span class="attr">name</span>: Sequelize.STRING &#125;)</span><br><span class="line">  , Task = sequelize.define(<span class="string">&#x27;task&#x27;</span>, &#123; <span class="attr">name</span>: Sequelize.STRING &#125;)</span><br><span class="line">  , Tool = sequelize.define(<span class="string">&#x27;tool&#x27;</span>, &#123; <span class="attr">name</span>: Sequelize.STRING &#125;)</span><br><span class="line"></span><br><span class="line">Task.belongsTo(User)</span><br><span class="line">User.hasMany(Task)</span><br><span class="line">User.hasMany(Tool, &#123; <span class="attr">as</span>: <span class="string">&#x27;Instruments&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line">sequelize.sync().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// this is where we continue ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>這樣查詢可以找出關聯內容</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Task.findAll(&#123;</span><br><span class="line">  include: [ User ]</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">tasks</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(tasks))</span><br><span class="line">  <span class="comment">// like tasks.get(&#123;plain: true&#125;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">[&#123;</span></span><br><span class="line"><span class="comment">  &quot;name&quot;: &quot;A Task&quot;,</span></span><br><span class="line"><span class="comment">  &quot;id&quot;: 1,</span></span><br><span class="line"><span class="comment">  &quot;createdAt&quot;: &quot;2013-03-20T20:31:40.000Z&quot;,</span></span><br><span class="line"><span class="comment">  &quot;updatedAt&quot;: &quot;2013-03-20T20:31:40.000Z&quot;,</span></span><br><span class="line"><span class="comment">  &quot;userId&quot;: 1,</span></span><br><span class="line"><span class="comment">  &quot;user&quot;: &#123;</span></span><br><span class="line"><span class="comment">    &quot;name&quot;: &quot;John Doe&quot;,</span></span><br><span class="line"><span class="comment">    &quot;id&quot;: 1,</span></span><br><span class="line"><span class="comment">    &quot;createdAt&quot;: &quot;2013-03-20T20:31:45.000Z&quot;,</span></span><br><span class="line"><span class="comment">    &quot;updatedAt&quot;: &quot;2013-03-20T20:31:45.000Z&quot;</span></span><br><span class="line"><span class="comment">  &#125;</span></span><br><span class="line"><span class="comment">&#125;]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<p>使用別名，別名要指定在 <code>include</code> 裡，而且回傳的結構會使用別名當欄位名稱</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  include: [&#123;</span><br><span class="line">    model: User,</span><br><span class="line">	<span class="keyword">as</span>: <span class="string">&#x27;Instruments&#x27;</span>,</span><br><span class="line">	<span class="comment">/*...*/</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>包含所有關聯</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  include: [&#123;</span><br><span class="line">    all: <span class="literal">true</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>包含所有關聯 + 包含有刪除記錄(已刪除)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  include: [&#123;</span><br><span class="line">    all: <span class="literal">true</span>,</span><br><span class="line">	paranoid: <span class="literal">true</span> <span class="comment">// query and loads the soft deleted records</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="多層關聯"><a class="header-anchor" href="#多層關聯">¶</a>多層關聯</h3>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  include: [&#123;  <span class="comment">//第一層</span></span><br><span class="line">    model: Tool, <span class="attr">as</span>: <span class="string">&#x27;Instruments&#x27;</span>,</span><br><span class="line">    include: [&#123;  <span class="comment">//第二層</span></span><br><span class="line">      model: Teacher,</span><br><span class="line">      include: [ <span class="comment">/* etc */</span>]  <span class="comment">//第三層</span></span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="attributes-指定回傳欄位"><a class="header-anchor" href="#attributes-指定回傳欄位">¶</a><code>attributes</code> 指定回傳欄位</h2>
-<p>在 options 陣列，給欄位字串，可指定回傳資料欄位</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">options: &#123;</span><br><span class="line">  attribute: [strField, ...]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="欄位使用別名"><a class="header-anchor" href="#欄位使用別名">¶</a>欄位使用別名</h3>
-<p>Query 的結果欄位，想要用 SQL 運算 (一定要再取個別名)</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ..., <span class="keyword">COUNT</span>(strField2) <span class="keyword">AS</span> renameField, ...</span><br></pre></td></tr></table></figure>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ..., strField2 <span class="keyword">AS</span> renameField, ...</span><br></pre></td></tr></table></figure>
-<ol>
-<li>
-<p>用巢狀 Array 結構取別名</p>
-<ul>
-<li>attribute Array 的元素，也要用 Array</li>
-</ul>
-</li>
-<li>
-<p>使用 aggregation function 呼叫 SQL 運算</p>
-<ul>
-<li><strong>aggregation function</strong>:  <code>sequelize.fn('COUNT', sequelize.col('strField2'))</code></li>
-</ul>
-</li>
-<li>
-<p>不使用 SQL 運算，直接用 <code>strField2</code> 字串，也可以取別名</p>
-</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">strField = sequelize.fn(<span class="string">&#x27;COUNT&#x27;</span>, sequelize.col(<span class="string">&#x27;strField2&#x27;</span>))</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">attribute: [..., [strField, renameField], ...]</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">strField = strField2</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">attribute: [..., [strField2, renameField], ...]</span><br></pre></td></tr></table></figure>
-<p>使用要用 <code>instance.get(renameField).</code><br>
-<s><code>instance.renameField</code></s><br>
-<s><code>item[renameField]</code></s></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Model.findAll(&#123;</span><br><span class="line">  attributes: [[sequelize.fn(<span class="string">&#x27;COUNT&#x27;</span>, sequelize.col(<span class="string">&#x27;hats&#x27;</span>)), <span class="string">&#x27;no_hats&#x27;</span>]]</span><br><span class="line">&#125;).then(<span class="function"><span class="params">Models</span> =&gt;</span> Models.forEach(&#123; <span class="function"><span class="params">instance</span> =&gt;</span></span><br><span class="line">  <span class="keyword">const</span> count_hats = instance.get(<span class="string">&#x27;no_hats&#x27;</span>)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
-<p>原本的欄位 + <strong>隔外欄位</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> field = [addField, renameField]</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">attribute: &#123; <span class="attr">include</span>: [field] &#125;</span><br></pre></td></tr></table></figure>
-<p>原本的欄位 - <strong>原本欄位</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> field = originalField</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">attributes: &#123; <span class="attr">exclude</span>: [field] &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Ordering-排序"><a class="header-anchor" href="#Ordering-排序">¶</a>Ordering 排序</h2>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">order: [</span><br><span class="line"></span><br><span class="line">  attribute, <span class="comment">// 小排到大 (正序)</span></span><br><span class="line">  [attribute, <span class="string">&#x27;DESC&#x27;</span>] <span class="comment">// 大排到小 (反序)</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 關聯</span></span><br><span class="line">  <span class="comment">// asModel = associated Model</span></span><br><span class="line">  [asModel, attribute, <span class="string">&#x27;DESC&#x27;</span>]</span><br><span class="line">  <span class="comment">// 關聯用別名</span></span><br><span class="line">  [&#123;<span class="attr">model</span>: asModel, <span class="attr">as</span>: renameModel&#125;, asModelAttribute, <span class="string">&#x27;DESC&#x27;</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">operations: &#123;</span><br><span class="line">  order: [</span><br><span class="line">    [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;DESC&#x27;</span>],  <span class="comment">//ORDER BY name DESC</span></span><br><span class="line">    sequelize.fn(<span class="string">&#x27;max&#x27;</span>, sequelize.col(<span class="string">&#x27;age&#x27;</span>)),   <span class="comment">//ORDER BY max(`age`)</span></span><br><span class="line">    [models.sequelize.fn(<span class="string">&#x27;max&#x27;</span>, models.sequelize.col(<span class="string">&#x27;age&#x27;</span>)), <span class="string">&#x27;DESC&#x27;</span>],   <span class="comment">//ORDER BY max(`age`) DESC</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <h1 id="Sequelize-資料寫入"><a class="header-anchor" href="#Sequelize-資料寫入">¶</a>Sequelize 資料寫入</h1>
+<h2 id="Create"><a class="header-anchor" href="#Create">¶</a>Create</h2>
+<p><code>Module.build(options: Object)</code></p>
+<p>回傳一個 instance<br>
+欄位放預設值 + 產生 instance</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// define the model</span></span><br><span class="line"><span class="keyword">var</span> Task = sequelize.define(<span class="string">&#x27;task&#x27;</span>, &#123;</span><br><span class="line">  title: Sequelize.STRING,</span><br><span class="line">  rating: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">  defaultValue: <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// now instantiate an object</span></span><br><span class="line"><span class="keyword">var</span> task = Task.build(&#123;<span class="attr">title</span>: <span class="string">&#x27;very important task&#x27;</span>&#125;)</span><br><span class="line"></span><br><span class="line">task.title  <span class="comment">// ==&gt; &#x27;very important task&#x27;</span></span><br><span class="line">task.rating <span class="comment">// ==&gt; 3 (default)</span></span><br></pre></td></tr></table></figure>
+<p><code>Instance.save(options: Object)</code></p>
+<p>回傳 Promise<br>
+儲存至 table</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// you can also build, save and access the object with chaining:</span></span><br><span class="line">Task.build(&#123; <span class="attr">title</span>: <span class="string">&#x27;foo&#x27;</span>, <span class="attr">description</span>: <span class="string">&#x27;bar&#x27;</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;)</span><br><span class="line">.save().then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>Model.create(options: Object)</code><br>
+回傳 Promise<br>
+新增一筆資料至 table</p>
+<p><code>build</code> + <code>save</code> = <code>create</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">&#x27;foo&#x27;</span>, <span class="attr">description</span>: <span class="string">&#x27;bar&#x27;</span>, <span class="attr">deadline</span>: <span class="keyword">new</span> <span class="built_in">Date</span>() &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Update"><a class="header-anchor" href="#Update">¶</a>Update</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// way 1</span></span><br><span class="line">task.title = <span class="string">&#x27;a very different title now&#x27;</span></span><br><span class="line">task.save().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// way 2</span></span><br><span class="line">task.update(&#123;</span><br><span class="line">  title: <span class="string">&#x27;a very different title now&#x27;</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Delete"><a class="header-anchor" href="#Delete">¶</a>Delete</h2>
+<p><code>Model.destroy(options: Object)</code><br>
+回傳 <code>Promise</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Task.create(&#123; <span class="attr">title</span>: <span class="string">&#x27;a task&#x27;</span> &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">task</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> task.destroy();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">deleted_object</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(deleted_object)  <span class="comment">//剛剛刪掉的資料</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>在 <code>Model.define()</code> 裡設定 <code>paranoid: true</code> 時，執行 <code>instance.destroy()</code> 則會執行「寫入刪除時間」，執行 <code>instance.destroy(&#123;force: true&#125;)</code> ，就會真的刪掉這筆資料，從資料庫蒸發</p>
+<h1 id="批次處理"><a class="header-anchor" href="#批次處理">¶</a>批次處理</h1>
+<p>一次多筆 create/update/delete</p>
+<h2 id="大量新增"><a class="header-anchor" href="#大量新增">¶</a>大量新增</h2>
+<p>create: <code>Model.bulkCreate([&#123;&#125;])</code> 回傳值不要使用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">models.member.bulkCreate([&#123; <span class="attr">name</span>: <span class="string">&#x27;John Doe&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&#x27;Chris Doe&#x27;</span>, <span class="attr">age</span>: <span class="number">22</span>&#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">&#x27;Mary Doe&#x27;</span>, <span class="attr">age</span>: <span class="number">24</span>&#125;</span><br><span class="line">]).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(result)); <span class="comment">// id: null in everyone</span></span><br><span class="line">  <span class="keyword">return</span> models.member.findAll();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="大量修改，加-WHERE"><a class="header-anchor" href="#大量修改，加-WHERE">¶</a>大量修改，加 WHERE</h2>
+<p>update: <code>Model.update(update: Object, where: Object)</code> 回傳 符合條件被修改的資料總數</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">models.member.update(</span><br><span class="line">	<span class="comment">/* set attributes&#x27; value */</span></span><br><span class="line">    &#123; <span class="attr">age</span>: <span class="number">18</span> &#125;,</span><br><span class="line">	<span class="comment">/* condition for find*/</span></span><br><span class="line">    &#123; <span class="attr">where</span>: &#123; <span class="attr">name</span>: <span class="string">&#x27;Mary Doe&#x27;</span> &#125;&#125;</span><br><span class="line">).spread(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);  <span class="comment">// result 1</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="大量刪除-，加-WHERE"><a class="header-anchor" href="#大量刪除-，加-WHERE">¶</a>大量刪除(，加 WHERE)</h2>
+<p>delete: <code>Model.destory()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">models.project.destroy(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    location: <span class="string">&#x27;Tainan&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  truncate: <span class="literal">true</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result);</span><br><span class="line">  <span class="comment">// Notice</span></span><br><span class="line">  <span class="comment">// affectedCount will be 2</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>options.truncate</strong> (optional)<br>
+Type: Boolean<br>
+default: false<br>
+description: 如果設定 true，支援 <code>TRUNCATE</code> 的 SQL 就會使用 <code>TRUNCATE</code> (快) 而不是 <code>DELETE FROM</code> (慢)<br>
+實際使用的狀況: 刪除資料表裡所有資料，忽略 where，再加入的資料 id 重數</p>
+</blockquote>
+<h2 id="Value-of-an-instance"><a class="header-anchor" href="#Value-of-an-instance">¶</a>Value of an instance</h2>
+<p>instance 的樣貌 (類似 JSON 的樣子)</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">john.get(&#123;</span><br><span class="line">  plain: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>instance.reload()</code> 值同步: table → model</p>
+<p>遞增</p>
+<p><code>instance.increment('fieldName')</code><br>
+<code>instance.increment('fieldName', &#123;by: 2&#125;)</code><br>
+<code>instance.increment(['fieldName1', 'fieldName2'])</code><br>
+<code>instance.increment(&#123;   'fieldName1': 2,   'fieldName2': 3 &#125;)</code></p>
+<p>遞減</p>
+<p><code>instance.decrement()</code> 用法同上</p>
 
     
     </section>

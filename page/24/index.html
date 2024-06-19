@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2016/04-23-blogger/6788326422459094232/">https://dwatow.github.io/2016/04-23-blogger/6788326422459094232/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2016/04-24-blogger/2209902772410333640/">https://dwatow.github.io/2016/04-24-blogger/2209902772410333640/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>python 讀 bitmap 顯示它的值</h1>
+        <h1>javascript類似windows的messagebox</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python-%E8%AE%80-bitmap-%E9%A1%AF%E7%A4%BA%E5%AE%83%E7%9A%84%E5%80%BC"><span class="toc-text">python 讀 bitmap 顯示它的值</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#javascript%E9%A1%9E%E4%BC%BCwindows%E7%9A%84messagebox"><span class="toc-text">javascript類似windows的messagebox</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">警告視窗 </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">確認視窗 </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">輸入視窗 </span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="python-讀-bitmap-顯示它的值"><a class="header-anchor" href="#python-讀-bitmap-顯示它的值">¶</a>python 讀 bitmap 顯示它的值</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/04/python-bitmap.html">https://darkblack01.blogspot.com/2016/04/python-bitmap.html</a><br>
-移植時的最後更新日期: 2016-04-23T17:24:20.275+08:00</p>
-<p>原本想寫一個smooth演算法的。<br />但是，想不到python的前置作業還滿麻煩的。(小小的不習慣)<br /><br />我準備了一張這樣的影像<br />顏色: 灰階<br />色階: 8bit/pixel (我比較喜歡叫演色性)<br />大小: 5 pixel ×5 pixel<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="https://2.bp.blogspot.com/-DiPNPfyaf6c/VxsAXbSTPpI/AAAAAAAAH-Q/03V16cU-g_4WNVjXhclKSPVJvr18NE7WQCLcB/s1600/1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="https://2.bp.blogspot.com/-DiPNPfyaf6c/VxsAXbSTPpI/AAAAAAAAH-Q/03V16cU-g_4WNVjXhclKSPVJvr18NE7WQCLcB/s1600/1.png" /></a></div><br />原本不打算使用任何的lib進行coding，但是因為手邊並無「沒有檔頭」的影像。<br />準備好的影像檔，也是.bmp格式，所以就去找了一下適合的lib來解決檔頭的問題。<br /><br />找到了一個叫PIL的lib，好像很厲害。<br />跟著<a href="http://tech.seety.org/python/python_imaging.html" target="_blank">這一份教學</a>，有小小的練習了一下，如果當初研究(研究影像處理)所是用python，不知道會是怎麼樣的情況呀(遠望)<br /><br />說遠了<br /><br />然後，這次的實作，只有將影像讀取出來，並且顯示所有的pixel值。<br /> <pre class="prettyprint"><code class="language-py">from PIL import Image<br /><br />bmp_image = Image.open( ‘sample.bmp’ )<br /><br />for i_vertical in range(bmp_image.height):<br />    line_horizon = [bmp_image.getpixel((i_horizon, i_vertical)) for i_horizon in range(bmp_image.width) ]<br />    print(*line_horizon)<br /><br />bmp_image.close()</code></pre>effective python說用這樣比較快  <pre class="prettyprint"><code class="language-py">from PIL import Image<br /><br />bmp_image = Image.open( ‘sample.bmp’ )<br /><br />line_horizon = (bmp_image.getpixel((i_horizon, i_vertical)) for i_vertical in range(bmp_image.height) for i_horizon in range(bmp_image.width))<br />for x in range(bmp_image.height):<br />   for y in range(bmp_image.width):<br />      print(next(line_horizon), ’ ‘, end = ‘’)<br />   print(’’)<br /><br />bmp_image.close()</code></pre> 執行結果:<br />(我有手動讓它對齊) <pre><br />255   0   0   0   0<br />255 255   0   0   0<br />255   0 255   0 255<br />  0 255   0 255   0<br />  0   0   0 255   0<br />255 255 255 255 255<br /></pre></p>
+    <h1 id="javascript類似windows的messagebox"><a class="header-anchor" href="#javascript類似windows的messagebox">¶</a>javascript類似windows的messagebox</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2016/04/blog-post.html">https://darkblack01.blogspot.com/2016/04/blog-post.html</a><br>
+移植時的最後更新日期: 2016-04-24T17:54:54.680+08:00</p>
+<p>javascript可以直接呼叫類似windows的messagebox的東西。<br />分成三種<br /><br /><h2>警告視窗 </h2><pre class="prettyprint"><code class="language-js">alert(‘警告視窗, 按確定, 無回傳值’);</code></pre><h2>確認視窗 </h2><pre class="prettyprint"><code class="language-js">confirm(‘確認視窗, 按確定回傳true, 按取消回傳false’);</code></pre><h2>輸入視窗 </h2><pre class="prettyprint"><code class="language-js">prompt(“輸入視窗, 回傳輸入的值”, “自動載入的預設值”);</code></pre></p>
 
     
     </section>
@@ -163,7 +163,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/python/">python</a> }
+  { <a href="/tags/javascript/">javascript</a> }
   </li>
 
 

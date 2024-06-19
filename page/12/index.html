@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/6608913944689852341/">https://dwatow.github.io/2018/05-13-blogger/6608913944689852341/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/5531774497489388758/">https://dwatow.github.io/2018/05-13-blogger/5531774497489388758/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>爛 code 收集器//命名使用無意義的贅字</h1>
+        <h1>爛 code 收集器//添加邏輯後，要整理</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E5%91%BD%E5%90%8D%E4%BD%BF%E7%94%A8%E7%84%A1%E6%84%8F%E7%BE%A9%E7%9A%84%E8%B4%85%E5%AD%97"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;命名使用無意義的贅字</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">例子1:&amp;nbsp;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">例子2</span></a></li></ol></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E6%B7%BB%E5%8A%A0%E9%82%8F%E8%BC%AF%E5%BE%8C%EF%BC%8C%E8%A6%81%E6%95%B4%E7%90%86"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;添加邏輯後，要整理</span></a></li></ol>
   </div>
 
 
-    <h1 id="爛-code-收集器-命名使用無意義的贅字"><a class="header-anchor" href="#爛-code-收集器-命名使用無意義的贅字">¶</a>爛 code 收集器//命名使用無意義的贅字</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code_13.html">https://darkblack02.blogspot.com/2018/05/code_13.html</a><br>
-移植時的最後更新日期: 2020-02-28T10:41:21.531+08:00</p>
-<h4><span style="font-size: large;">例子1:&nbsp;</span></h4>程式初始化用 g_Ini<b>Info</b> 物件<br />裝讀取 ini 的內容與一些網路功能元件<br /><br />關於「廠區」的查詢功能裡看見的命名<br />要先用 QuerySave<b>Info</b> 的視窗物件來呈現查詢回來的圖有哪些<br />選擇了叫 Select<b>Info</b><br />取出來後叫 SelectFactory<b>Info</b><br />傳送的 Message 叫 SendMsg<b>Info</b><br /><br />function命名<br />顯示 Layout 叫 LoadLayoutFromString()<br />新增 Layout 叫 NewLayoutMethod()<br /><br /><h4><span style="font-size: large;">例子2</span></h4>這是一個找出來的東西，命名成 find_info 還是不知道他找出來的是什麼，因為 info !!  <br /><pre class="prettyprint"><code class="language-cpp"><br />var find_info = EquipmentInfoDic.Values.ToList().Find(x =&gt; x.Name.Equals(change_info.ToolId));<br /></code></pre><br />其實它是設備，如果要用 info 也應該是這樣用 (硬要)<br /><pre class="prettyprint"><code class="language-cpp"><br />var found_equipment_info = EquipmentInfoDic.Values.ToList().Find(x =&gt; x.Name.Equals(change_info.ToolId));<br /></code></pre>好吧！change_info，我也看不懂它是什麼了！XD <br /><br />無言的聲音：<br />變數一直 Info Info....煩不煩？(氣噗噗)<br />哪個 function 不是 method。<br />「顯示」叫 Load 那「載入」(如果有這功能的話) 呢?
+    <h1 id="爛-code-收集器-添加邏輯後，要整理"><a class="header-anchor" href="#爛-code-收集器-添加邏輯後，要整理">¶</a>爛 code 收集器//添加邏輯後，要整理</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code_55.html">https://darkblack02.blogspot.com/2018/05/code_55.html</a><br>
+移植時的最後更新日期: 2020-02-28T10:41:21.432+08:00</p>
+<p>複雜的邏輯往往來自於不同時期的工程進行的添加。   <br />一流的工程師會寫出讓人好讀的程式碼，一樣一流的工程師接手會讀懂後，添加在適合的位置，而不是一直往巢狀式的方向加上去。<br /><pre class="prettyprint"><code class="language-cpp"><br />for( set<obj>::iterator it = ObjSet.begin(); it != ObjSet.end(); ++it )<br />&#123;<br />    Obj *target_obj = 0;<br /><br />    if( (*it)-&gt;IsSpec == false )  //如果有使用 spec<br />    &#123;<br />        target_obj = (*it);<br />    &#125;<br />    else  // 並且 spec 已經有使用了<br />    &#123;<br />        if( SpecInCurrProduct.count((*it)-&gt;getSpec) != FALSE )<br />        &#123;<br />            target_obj = (*it);<br />        &#125;<br />    &#125;<br /><br />    if( target_obj == 0 )<br />    &#123;<br />        continue;<br />    &#125;<br /><br />     //other code…<br />&#125;<br /></obj></code></pre><br />改寫成  <br /><pre class="prettyprint"><code class="language-cpp"><br />for( set<obj1>::iterator it = Obj1Set.begin(); it != Obj1Set.end(); ++it )<br />&#123;<br />    Obj1 *target_obj1 = 0;<br /><br />    if( !(*it)-&gt;IsSpec || SpecInCurrProduct.find((*it)-&gt;getSpecId) != SpecInCurrProduct.end() )<br />        target_obj1 = (*it);<br />    // else<br />    //     continue;<br />     //other code…<br />&#125;<br /></obj1></code></pre></p>
 
     
     </section>
