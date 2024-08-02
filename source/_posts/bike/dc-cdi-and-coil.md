@@ -202,5 +202,5 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 目前零件上面的是 250型的端子，而野狼上的是 6pin 的 100 型端子。
 可能會先改 110 端子，至於 pin de  fine 就先不管它。
 
-![](https://i.imgur.com/SVu2G4i.png)
+![](https://i.imgur.com/ogxWdfE.png)
 
