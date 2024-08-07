@@ -1,5 +1,5 @@
 ---
-title: 皓月高壓線圈 (coil) 、直流點火器 (DC-CDI)
+title: 皓月高壓線圈 (coil) 、直流 CDI
 date: 2023-12-29 00:49:54
 tags:
 - 狼記事
@@ -11,7 +11,7 @@ tags:
 categories:
 - 生活居家
 ---
-# 皓月高壓線圈 (coil) 、直流點火器 (DC-CDI)
+# 皓月高壓線圈 (coil) 、直流 CDI
 
 這次會改裝，其實是因為車子跑不太動了。
 
