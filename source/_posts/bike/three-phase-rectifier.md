@@ -125,7 +125,7 @@ categories:
 
 還好！可以在[福諾螺絲](https://maps.app.goo.gl/K9MPM6xXqgAuYgDF9)買到。
 
-馬上去買兩根。
+馬上去買兩根，長度至少要 30mm 的公制 M10 螺絲。
 然後就成功鎖上去了。
 
 ## 測試

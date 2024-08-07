@@ -204,3 +204,4 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 ![](https://i.imgur.com/ogxWdfE.png)
 
+[下一集](https://dwatow.github.io/2024/08-07-bike/three-phase-rectifier/)
