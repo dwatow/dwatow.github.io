@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2014/06-24-blogger/6723477457306607616/">https://dwatow.github.io/2014/06-24-blogger/6723477457306607616/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2014/07-11-blogger/5436064464148438555/">https://dwatow.github.io/2014/07-11-blogger/5436064464148438555/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>建構子的初始化Exception</h1>
+        <h1>Visual Studio 2013 的Unit Test....</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BB%BA%E6%A7%8B%E5%AD%90%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96Exception"><span class="toc-text">建構子的初始化Exception</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Visual-Studio-2013-%E7%9A%84Unit-Test%E2%80%A6"><span class="toc-text">Visual Studio 2013 的Unit Test…</span></a></li></ol>
   </div>
 
 
-    <h1 id="建構子的初始化Exception"><a class="header-anchor" href="#建構子的初始化Exception">¶</a>建構子的初始化Exception</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/06/exception.html">https://darkblack01.blogspot.com/2014/06/exception.html</a><br>
-移植時的最後更新日期: 2015-12-23T14:16:57.710+08:00</p>
-<p>開門見山，以這樣的類別為例：<br /><br /><pre class="prettyprint"><code>class foo&#123;<br />    int i;<br />    char c;<br />public:<br />    foo();  //建構子<br />&#125;;</code></pre>一般來說，我們的建構子都這樣寫 <br /><pre class="prettyprint"><code>foo::foo()<br />:i(0), c(’’)&#123;  &lt;-- 建構初始列<br />&#125;</code></pre>但是，如果想在建構子上加try-catch，難道是這樣？？ <br /><pre class="prettyprint"><code>foo::foo()<br />:i(0), c(’’)&#123;  &lt;-- 建構初始列<br />    try&#123;<br />    &#125;<br />    catch(…)&#123;<br />    &#125;<br />&#125;</code></pre>發現了嗎？<strike>那捕捉個屁呀？</strike>跟本就是把擸物放在網子外。<br />唷！不！所謂江湖一點訣！<br />在Primer C++中就有介紹，如果要捕捉到建構初始列上，初始化成員變數時的exception時，就一定要這樣寫<br /><pre class="prettyprint"><code>foo::foo()<br />try:i(0), c(’’)&#123;  &lt;-- 建構初始列<br />    <br />&#125;catch(…)<br />&#123;    &#125;</code></pre>這個名稱叫「function try block」<br /><br />看到這，會想知道解構子怎麼處理嗎？<br /><br />解構子…基本上，絕對不可以出現exception!!!</p>
+    <h1 id="Visual-Studio-2013-的Unit-Test…"><a class="header-anchor" href="#Visual-Studio-2013-的Unit-Test…">¶</a>Visual Studio 2013 的Unit Test…</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/07/visual-studio-2013-tdd.html">https://darkblack01.blogspot.com/2014/07/visual-studio-2013-tdd.html</a><br>
+移植時的最後更新日期: 2014-07-11T20:29:34.912+08:00</p>
+<p>發這一篇，就覺得自己又更上一層樓了。(其實是樓梯終於開始爬了而已…)<br /><br />先前在找「怎麼樣寫，才叫做單元測試」，就找到了 TDD，從TDD又找到了In91的「30天快速上手TDD」[1]，心想「有了這一篇+Visual Studio號稱是地球上最<strike>邪惡</strike>強大的IDE」！一定把TDD給練成~~哈哈。這種心情，就像是看見辟邪劍譜一樣。(不過，還好不是…辟邪劍譜)<br /><br />開開心心的把VS2013打開，利用雙螢幕把網頁開在另一邊。<br />30天快速上手！前兩篇都在介紹，第三篇終於看見程式碼了！<br />&lt;ol 12px=&quot;&quot; 14.039999008178711px=&quot;&quot; font-size:=&quot;&quot; line-height:=&quot;&quot;&gt;<li>在類別或方法內容中，按滑鼠右鍵，叫出選單。</li></ol>就在這一步，我發現了<strike>真的要自宮？！</strike>！！怪怪的…VS的版本不對！這篇教學是使用VS2010。那我們就上網查吧！<br /><br />查了又查。<br />不是叫<a href="http://www.dotblogs.com.tw/ouch1978/archive/2013/10/30/vs-unit-test-generator-extension.aspx" target="_blank">我灌Unit Test General</a>[2]<br />就是用Team Foundation Server…<br /><br />一直到<a href="http://msdn.microsoft.com/zh-tw/library/hh212233.aspx" target="_blank">這一篇</a>[3]…<br /><br />才真正的開始30天快速上手的第一個範例！<br /><strike>在邪惡微軟帝國下的碼農們，</strike>從這裡和VS2013一起邁向偉大的航道吧！<br /><br />OS:這是在演哪一齣的？？<br /><br /><br />參考資料：<br />[1] <a href="http://msdn.microsoft.com/zh-tw/library/dn387568.aspx" target="_blank">30天快速上手 TDD</a><br />[2] <a href="http://www.dotblogs.com.tw/ouch1978/archive/2013/10/30/vs-unit-test-generator-extension.aspx" target="_blank">[Visual Studio] 透過Unit Test Generator快速為專案加入單元測試程式碼</a><br />[3] <a href="http://msdn.microsoft.com/zh-tw/library/hh212233.aspx" target="_blank">快速入門：搭配測試總管進行以測試為導向的開發工作</a></p>
 
     
     </section>
@@ -163,7 +163,7 @@
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/C-and-Cpp/">C_and_Cpp</a> }
+  { <a href="/tags/TDD/">TDD</a> }
   </li>
 
 

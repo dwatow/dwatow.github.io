@@ -134,64 +134,99 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2022/11-07-first-liff/">https://dwatow.github.io/2022/11-07-first-liff/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2022/11-10-pattern/proxy-in-js/">https://dwatow.github.io/2022/11-10-pattern/proxy-in-js/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>初次見面 LIFF of LINE</h1>
+        <h1>Proxy Pattern in JS</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9D%E6%AC%A1%E8%A6%8B%E9%9D%A2-LIFF-of-LINE"><span class="toc-text">初次見面 LIFF of LINE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-LINE"><span class="toc-text">設定 LINE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%96%8B%E7%99%BC"><span class="toc-text">開發</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Proxy-Pattern-in-JS"><span class="toc-text">Proxy Pattern in JS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-Design-Pattern-%E4%B8%8A%E7%9A%84%E5%AF%A6%E4%BD%9C"><span class="toc-text">在 Design Pattern 上的實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9A%E7%9B%B8%E5%90%8C%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-text">做相同的事情</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E5%9C%A8%E4%BB%A3%E7%90%86%E5%B1%A4%E5%AF%A6%E4%BD%9C-Method"><span class="toc-text">想要在代理層實作 Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B3%E8%A6%81%E5%9C%A8%E4%BB%A3%E7%90%86%E5%B1%A4%E5%AF%A6%E4%BD%9C-Method-v2"><span class="toc-text">想要在代理層實作 Method!!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3%E8%A6%81%E5%B1%AC%E6%80%A7%E5%8F%88%E8%A6%81-Method-%E5%91%A2%EF%BC%9F"><span class="toc-text">那要屬性又要 Method 呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%BE%8C%EF%BC%8C%E5%92%8C%E6%8A%80%E8%A1%93%E7%A4%BE%E7%BE%A4%E7%9A%84%E4%BC%99%E4%BC%B4%E5%80%91%E8%A8%8E%E8%AB%96%E5%AE%8C%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-text">最後，和技術社群的伙伴們討論完的版本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E5%8F%96%E4%BB%A3%E7%90%86%EF%BC%9F"><span class="toc-text">快取代理？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%85%E5%A2%83"><span class="toc-text">情境</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="初次見面-LIFF-of-LINE"><a class="header-anchor" href="#初次見面-LIFF-of-LINE">¶</a>初次見面 LIFF of LINE</h1>
-<p>這是什麼？</p>
+    <h1 id="Proxy-Pattern-in-JS"><a class="header-anchor" href="#Proxy-Pattern-in-JS">¶</a>Proxy Pattern in JS</h1>
+<h2 id="在-Design-Pattern-上的實作"><a class="header-anchor" href="#在-Design-Pattern-上的實作">¶</a>在 Design Pattern 上的實作</h2>
+<p><img src="https://i.imgur.com/NTSogsi.png" alt=""></p>
+<h2 id="做相同的事情"><a class="header-anchor" href="#做相同的事情">¶</a>做相同的事情</h2>
+<p>在操作屬性的讀取值時，想要做「相同」的事</p>
+<p>在此，就先做「印出字串」</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">  message1: <span class="string">&quot;hello&quot;</span>,</span><br><span class="line">  message2: <span class="string">&quot;everyone&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> target[property];</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> target[property] = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyTarget = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.message1 = <span class="string">&#x27;Hi, Chris&#x27;</span>;</span><br><span class="line">proxyTarget.message1; <span class="comment">// &#x27;Hi, Chris&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>確實修改了物件 target</p>
+<h2 id="想要在代理層實作-Method"><a class="header-anchor" href="#想要在代理層實作-Method">¶</a>想要在代理層實作 Method</h2>
+<p>原本是這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">handler.openDoc();</span><br></pre></td></tr></table></figure>
+<p>但 handler 的 Method 用在 target 身上，像這樣</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> messaget = handler.openDoc.call(target)</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>LINE Front-end Framework (LIFF) is a platform for web apps provided by LINE.<br>
-The web apps running on this platform are called LIFF apps.</p>
+<p>但是，我想要這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.openDoc();</span><br></pre></td></tr></table></figure>
 </blockquote>
-<p>用 LINE 的 瀏覽器打開。可以在前端執行 LINE 的功能。</p>
-<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
-<p><a target="_blank" rel="noopener" href="https://github.com/line/line-liff-v2-starter/tree/master/src/vanilla">參考 repo</a></p>
-<p><strong>npm</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install @line/liff</span> </span><br></pre></td></tr></table></figure>
-<h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
+<p>但是，不想要這樣製造</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">target.openDoc = handler.openDoc <span class="comment">// 不想這樣寫</span></span><br><span class="line"><span class="keyword">const</span> messaget = target.openDoc();</span><br></pre></td></tr></table></figure>
+<p>所以，用 proxy 來試看看</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>[property].call(target);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>[property].call(target, value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>使用的時候，可以成功的呼叫到 handle 的 method<br>
+而且指定的 this 也是 target</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc;</span><br><span class="line"><span class="comment">// 用了 getter 讀取 openDoc</span></span><br><span class="line"><span class="comment">// 打開文件 &#123;name: &#x27;target&#x27;&#125;</span></span><br><span class="line"><span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">proxy.saveDoc = <span class="number">123</span>;</span><br><span class="line"><span class="comment">// 用了 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;&#125; 123</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>process.env.LIFF_ID 指的是自己申請好的 LIFF_ID 要設定在 .env 檔上面</p>
+<p>但是，我想要這樣用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxyTarget.openDoc();</span><br><span class="line">proxyTarget.saveDoc(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> liff <span class="keyword">from</span> <span class="string">&#x27;@line/liff&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&quot;DOMContentLoaded&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  liff</span><br><span class="line">    .init(&#123; <span class="attr">liffId</span>: process.env.LIFF_ID &#125;)</span><br><span class="line">    .then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;Success! you can do something with LIFF API here.&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(error)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="設定-LINE"><a class="header-anchor" href="#設定-LINE">¶</a>設定 LINE</h2>
-<p>LINE 的應用 (截圖以 MessageingAPI 為例) 上面出現一個 LIFF 的標籤</p>
-<blockquote>
-<p><img src="https://i.imgur.com/h1QYiAN.png" alt=""><br>
-[color=#00b900]</p>
-</blockquote>
-<p>要先設定 LINE Login 這個功能才會啟動。</p>
-<p>在 LINE Login 裡會出現這個</p>
-<blockquote>
-<p><img src="https://i.imgur.com/Pgo0u5V.png" alt=""><br>
-[color=#00b900]</p>
-</blockquote>
-<p>按下「ADD」填一填資料，就可以取得 LINE_ID</p>
-<blockquote>
-<p><img src="https://i.imgur.com/suXi607.png" alt=""><br>
-[color=#00b900]</p>
-</blockquote>
-<h2 id="開發"><a class="header-anchor" href="#開發">¶</a>開發</h2>
-<p>如果暫時還沒有佈署上去，可以暫時使用 ngrok 取得一個有 https 的網址當作開發用的臨時網址。</p>
-<p>初始化成功，就可以來<a target="_blank" rel="noopener" href="https://liff-playground.netlify.app/">遊樂場</a>參考要使用的功能</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">liff.isInClient()</span><br></pre></td></tr></table></figure>
-<p>判斷是不是在 LINE 裡的 LIFF browser 開啟的。這個 browser 和一般的 web view 不一樣。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">liff.getContext()</span><br></pre></td></tr></table></figure>
-<p>userId 就是用來發給 Messageing API 功能的主動通知，識別碼</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;type&quot;: &quot;external&quot;,</span><br><span class="line">    &quot;userId&quot;: &quot;Ude7ca124379d3f9cde8aee01d5fefdce&quot;,</span><br><span class="line">    &quot;liffId&quot;: &quot;1656508316-k7jNojXm&quot;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>使用 LINE 登入時，可以注意一個特性</strong></p>
-<p>每個 LINE 帳號，在一個 <code>provider</code> 會有一個固定的 <code>userID</code>。<br>
-如果是不同的 <code>provider</code> 就會有不同的 <code>userID</code>。</p>
-<p>而每個 provider 可以擁有不同的 Messageing API 服務，可以做成不同的聊天機器人，它們各自有不同的 <code>Channel ID</code>，透過不同的 <code>Channel ID</code> 就算使用者是相同的 <code>userID</code> 也可以在不同的服務發給指定的使用者。</p>
+<h2 id="想要在代理層實作-Method-v2"><a class="header-anchor" href="#想要在代理層實作-Method-v2">¶</a>想要在代理層實作 Method!!</h2>
+<p><s>不要用「代理實作屬性存取」來呼嚨！</s></p>
+<p>如果原本的函數是 <code>.saveDoc(123, 123)</code><br>
+多個參數的話，也不想要因為 Proxy 而受到限制。</p>
+<p>所以…</p>
+<p>先照著用看看？</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.saveDoc(<span class="number">123</span>, <span class="number">123</span>);</span><br><span class="line"><span class="comment">// 用了 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;&#125; undefined undefined</span></span><br></pre></td></tr></table></figure>
+<div class="danger">
+<p>Uncaught TypeError: proxy.saveDoc is not a function at <code>&lt;anonymous&gt;</code>:1:7</p>
+</div>
+<p>所以？你觀察到了嗎？</p>
+<ul>
+<li>有跑到「儲存文件」</li>
+<li>噴錯「proxy.saveDoc is not a function」</li>
+</ul>
+<p>還有</p>
+<ul>
+<li>它是執行 Proxy 的 getter ！？</li>
+</ul>
+<p>再改一下實作</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>[property].call(target, ...value)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>跑起來！成功！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc();  <span class="comment">// 打開文件</span></span><br><span class="line">proxy.saveDoc(<span class="number">123</span>, <span class="number">5345</span>);  <span class="comment">// 儲存文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="那要屬性又要-Method-呢？"><a class="header-anchor" href="#那要屬性又要-Method-呢？">¶</a>那要屬性又要 Method 呢？</h2>
+<p>直接在實作中寫判斷！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">isLeader</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開文件&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存文件&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">if</span> (property <span class="keyword">in</span> target) &#123;</span><br><span class="line">      <span class="keyword">if</span> (target[property] <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> target[property](...value)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> target[property]; </span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>[property] <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function">(<span class="params">...value</span>) =&gt;</span> <span class="built_in">this</span>[property].call(target, ...value)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>[property]</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> target[property] = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>應該要可以實作出這樣的做法</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.orignalMethod()</span><br><span class="line">proxy.proxyMethod()</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">proxy.openDoc()</span><br><span class="line"><span class="comment">// 用了 getter 讀取 openDoc</span></span><br><span class="line"><span class="comment">// 打開文件 &#123;name: &#x27;target&#x27;, isLeader: ƒ&#125;</span></span><br><span class="line"><span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">proxy.name</span><br><span class="line"><span class="comment">// 用了 getter 讀取 name</span></span><br><span class="line"><span class="string">&#x27;target&#x27;</span></span><br><span class="line">proxy.name = <span class="string">&#x27;chris&#x27;</span></span><br><span class="line"><span class="comment">// 用了 setter 將 name 賦值為 chris</span></span><br><span class="line"><span class="string">&#x27;chris&#x27;</span></span><br><span class="line">proxy.name</span><br><span class="line"><span class="comment">// 用了 getter 讀取 name</span></span><br><span class="line"><span class="string">&#x27;chris&#x27;</span></span><br><span class="line">proxy.isLeader()</span><br><span class="line"><span class="comment">// 用了 getter 讀取 isLeader</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line">proxy.saveDoc(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="comment">// 用了 getter 讀取 saveDoc</span></span><br><span class="line"><span class="comment">// 儲存文件 &#123;name: &#x27;target&#x27;, isLeader: ƒ&#125; 1 2</span></span><br></pre></td></tr></table></figure>
+<h2 id="最後，和技術社群的伙伴們討論完的版本"><a class="header-anchor" href="#最後，和技術社群的伙伴們討論完的版本">¶</a>最後，和技術社群的伙伴們討論完的版本</h2>
+<p>主要的更動在簡化了 get 的部份。因為不管是不是 function ，都是將 property 取出來回傳，是 method 就自然是 method 的執行，是 property 就自然只是存取值。</p>
+<p>並且利用了 <code>this[property].bind(target); </code> 將 handler 與 target 同名 method 的問題也解決了。(以 <code>saveDoc</code> 為範例)</p>
+<ol>
+<li>首先，同名會優先呼叫 handler 的 method。</li>
+<li>如果想要呼叫 target 的 method 可以透過「handler 的 method 呼叫」</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> target = &#123;</span><br><span class="line">  name: <span class="string">&#x27;target&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">isLeader</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;xxxx儲存檔案&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  name: <span class="string">&#x27;handler&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">openDoc</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;打開檔案&#x27;</span>, <span class="built_in">this</span>); <span class="comment">//target</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;open doc&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">saveDoc</span>(<span class="params">value1, value2</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.saveDoc(value1, value2);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;儲存檔案&#x27;</span>, <span class="built_in">this</span>, value1, value2); <span class="comment">//target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, property, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 getter 讀取 <span class="subst">$&#123;property&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">if</span> (property <span class="keyword">in</span> <span class="built_in">this</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span>[property].bind(target); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> target[property]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, property, value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`用了 setter 將 <span class="subst">$&#123;property&#125;</span> 賦值為 <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> target[property] = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<h3 id="快取代理？"><a class="header-anchor" href="#快取代理？">¶</a>快取代理？</h3>
+<p>最後也有討論到快取的代理</p>
+<p>想要將變數存在 handler 裡，又可以實作快取代理的話，method 裡的 this 都指向 target 的怎辦？</p>
+<p>最後想到，只要實作在 handler 的 get/set 裡面就好了。</p>
+<ol>
+<li>this 是 handler ，屬性的儲存可以放在 handler 身上。</li>
+<li>快取代理屬於一種共用的代理，所以放在這也合理。</li>
+</ol>
+<h2 id="情境"><a class="header-anchor" href="#情境">¶</a>情境</h2>
+<p>就可以實作出，自動切換取得不同層的 method。<br>
+但是又不是繼承！</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> res = axios.get(<span class="string">&#x27;domain.com/user&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyUser = <span class="keyword">new</span> <span class="built_in">Proxy</span>(res.data, UserHandle)</span><br><span class="line"></span><br><span class="line">proxyUser.isLeader() <span class="comment">// true ?? false</span></span><br><span class="line">proxyUser.name;</span><br></pre></td></tr></table></figure>
 
     
     </section>
@@ -204,15 +239,11 @@ The web apps running on this platform are called LIFF apps.</p>
                         tags:
                         
   <li class="meta-text">
-  { <a href="/tags/LINE/">LINE</a> }
+  { <a href="/tags/proxy/">proxy</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/LIFF/">LIFF</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/chatbot/">chatbot</a> }
+  { <a href="/tags/design-pattern/">design pattern</a> }
   </li>
 
 

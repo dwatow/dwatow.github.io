@@ -134,67 +134,110 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2024/06-19-nginx-log-format-json-in-http-body/">https://dwatow.github.io/2024/06-19-nginx-log-format-json-in-http-body/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2024/08-07-bike/three-phase-rectifier/">https://dwatow.github.io/2024/08-07-bike/three-phase-rectifier/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>在 nginx 的 log 顯示請求的 body(json 格式)</h1>
+        <h1>皓月三相整流器</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8-nginx-%E7%9A%84-log-%E9%A1%AF%E7%A4%BA%E8%AB%8B%E6%B1%82%E7%9A%84-body-json-%E6%A0%BC%E5%BC%8F"><span class="toc-text">在 nginx 的 log 顯示請求的 body(json 格式)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh-%E7%99%BB%E5%85%A5"><span class="toc-text">ssh 登入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AA%A2%E6%9F%A5-nginx-%E7%89%88%E6%9C%AC"><span class="toc-text">檢查 nginx 版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E4%B8%80%E4%B8%8B%E6%9C%89%E6%B2%92%E6%9C%89%E8%A8%AD%E5%AE%9A"><span class="toc-text">先看一下有沒有設定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B7%A8%E8%BC%AF%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="toc-text">編輯設定檔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6-nginx-%E8%A8%AD%E5%AE%9A%E6%AA%94%E6%AD%A3%E7%A2%BA%E6%80%A7"><span class="toc-text">測試 nginx 設定檔正確性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%84%A1%E7%B8%AB%E9%87%8D%E5%95%9F-nginx"><span class="toc-text">無縫重啟 nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B-log-%E7%9C%8B%E6%95%88%E6%9E%9C"><span class="toc-text">查看 log 看效果</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A0%E7%A2%BC-%E8%88%8A%E7%89%88%E7%9A%84%E8%A9%B1"><span class="toc-text">加碼(舊版的話)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python"><span class="toc-text">Python[1]</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9A%93%E6%9C%88%E4%B8%89%E7%9B%B8%E6%95%B4%E6%B5%81%E5%99%A8"><span class="toc-text">皓月三相整流器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A9%9F%E6%A7%8B%E8%A9%95%E4%BC%B0"><span class="toc-text">機構評估</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B9%E8%A3%9D"><span class="toc-text">改裝</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E8%A3%9D%E6%95%B4%E6%B5%81%E5%99%A8"><span class="toc-text">改裝整流器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E8%A3%9D%E8%BB%8A%E4%B8%8A%E7%9A%84%E8%85%B3%E4%BD%8D%E5%AE%9A%E7%BE%A9"><span class="toc-text">改裝車上的腳位定義</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%9D%E5%9B%9E%E5%8E%BB%E2%80%A6"><span class="toc-text">裝回去…</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6"><span class="toc-text">測試</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%EF%BC%81"><span class="toc-text">成功！</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="在-nginx-的-log-顯示請求的-body-json-格式"><a class="header-anchor" href="#在-nginx-的-log-顯示請求的-body-json-格式">¶</a>在 nginx 的 log 顯示請求的 body(json 格式)</h1>
-<h2 id="ssh-登入"><a class="header-anchor" href="#ssh-登入">¶</a>ssh 登入</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh 帳號@主機位址</span><br></pre></td></tr></table></figure>
+    <h1 id="皓月三相整流器"><a class="header-anchor" href="#皓月三相整流器">¶</a>皓月三相整流器</h1>
+<p>接續<a href="/2023/12-29-bike/dc-cdi-and-coil/">這一篇</a></p>
+<p>改裝性質: 早就是不可逆改裝了，因為這一個項目要先改三相發電…<br>
+要可逆，要連同電系大改回去…QQ</p>
+<details>
+    <summary>全新凱宇皓月MOSFET主動式三相整流器 (拍賣上的介紹)</summary>
 <blockquote>
-<p>必要的話，要用 <code>-i</code> 來指定使用的 key</p>
-</blockquote>
-<h2 id="檢查-nginx-版本"><a class="header-anchor" href="#檢查-nginx-版本">¶</a>檢查 nginx 版本</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nginx -V</span><br></pre></td></tr></table></figure>
-<p>必須注意 <code>escape=json</code> 要 Nginx 1.11.5 之後才支援</p>
-<h2 id="先看一下有沒有設定"><a class="header-anchor" href="#先看一下有沒有設定">¶</a>先看一下有沒有設定</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">less &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</span><br></pre></td></tr></table></figure>
-<p>注意 http 段落中，有一個在設定 log 的地方，內容大約如下</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">##</span></span><br><span class="line">        <span class="comment"># Logging Settings</span></span><br><span class="line">        <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">        <span class="attribute">access_log</span> /var/log/nginx/access.log;</span><br><span class="line">        <span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="編輯設定檔"><a class="header-anchor" href="#編輯設定檔">¶</a>編輯設定檔</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo vim &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</span><br></pre></td></tr></table></figure>
-<p>要設定 nginx 的 log format 請求才會出現 JOSN 的內容</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">  <span class="comment">##</span></span><br><span class="line">  <span class="comment"># Logging Settings</span></span><br><span class="line">  <span class="comment">##</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># log_format compression</span></span><br><span class="line">  <span class="comment"># &#x27;[$time_local] $remote_addr - $status &#x27;</span></span><br><span class="line">  <span class="comment"># &#x27;&quot;$request&quot; $request_body&#x27;;</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">log_format</span> json_log</span><br><span class="line">  <span class="comment"># escape=json # Nginx 1.11.5 之後才支援</span></span><br><span class="line">  <span class="string">&#x27;[$time_local] $remote_addr - $status &#x27;</span></span><br><span class="line">  <span class="string">&#x27;&quot;$request&quot; $request_body&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">access_log</span> /var/log/nginx/access.log json_log;</span><br><span class="line">  <span class="attribute">error_log</span> /var/log/nginx/error.log;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最新的產品，更佳的效能，可靠耐用度再提高，一如既往的合理價格供應。<br>
+簡單介紹一下全新MOSFET整流器與之前開閉路版本的差異:</p>
 <ol>
-<li><code>log_format json_log escape=json</code></li>
+<li><strong>功率更高</strong> (單相最大電流25A，三相40A)，各品牌輕檔車種皆可放心使用。</li>
+<li><strong>效率比開閉路再提高25%</strong>、溫度更低、耐用度再提高。</li>
+<li><strong>電壓更穩</strong> - 主動式MOSFET採PWM技術微調穩壓，引擎低轉的回充電流提高，引擎性能也會因此更穩定。</li>
+<li><strong>節能省油</strong>(平均5%以上)，引擎溫度降低，扭力提高(與發電機功率成正比)。使用效果明顯，怠速穩定、引擎運轉變輕快。</li>
+<li>國產輕檔車整流器常壞可參考，但須先查明沒有其他線路故障因素。</li>
+<li>輸出電壓 14.8~15.0V。</li>
 </ol>
-<p>宣告一個 log_format 叫做 json_log 格式，escape=json 指定 json 格式處理特殊字元。</p>
-<ol start="2">
-<li><code>access_log /var/log/nginx/access.log json_log;</code></li>
-</ol>
-<p>設定 access_log 在 <code>/var/log/nginx/access.log</code> 以 json_log 格式儲存。</p>
-<h2 id="測試-nginx-設定檔正確性"><a class="header-anchor" href="#測試-nginx-設定檔正確性">¶</a>測試 nginx 設定檔正確性</h2>
-<p>確認無誤之後，再重啟，所以要先測試一下指令是否有錯誤</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -t </span><br></pre></td></tr></table></figure>
-<h2 id="無縫重啟-nginx"><a class="header-anchor" href="#無縫重啟-nginx">¶</a>無縫重啟 nginx</h2>
-<p>透過 systemctl 重啟 nginx (推薦使用)</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo systemctl reload nginx</span><br></pre></td></tr></table></figure>
-<p>另一種寫法，直接重啟 nginx</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -s reload</span><br></pre></td></tr></table></figure>
-<h2 id="查看-log-看效果"><a class="header-anchor" href="#查看-log-看效果">¶</a>查看 log 看效果</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tail -f /var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
-<h1 id="加碼-舊版的話"><a class="header-anchor" href="#加碼-舊版的話">¶</a>加碼(舊版的話)</h1>
-<h2 id="Python"><a class="header-anchor" href="#Python">¶</a>Python<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
-<p><strong><a target="_blank" rel="noopener" href="http://decode.py">decode.py</a></strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">msg = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&#123;\x22id\x22:1&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">res_obj = json.loads(msg.encode(<span class="string">&#x27;raw_unicode_escape&#x27;</span>).decode(<span class="string">&#x27;utf8&#x27;</span>))</span><br><span class="line">print(json.dumps(res_obj, ensure_ascii=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-<p>執行後會印出解碼後的樣子。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 decode.py</span><br><span class="line">&#123;&quot;id&quot;:1&#125;</span><br></pre></td></tr></table></figure>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/JentZhang/p/15826528.html">Python3解决Nginx日志的中文乱码问题</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+<p><strong>適用車種</strong></p>
+<p>A博士/名流125 / 頂客Dink 150化油 / G4噴射 / G5化油噴射 / 豪邁125 / GP125噴射<br>
+Many / Going 噴射 / Racing雷霆125/150化油<br>
+Gmax150/200 / Jbubu<br>
+哈特佛電噴125/150/223車系 / 夜鷹320</p>
+<p><strong>產品說明</strong></p>
+<p>皓月前一代的開閉路式整流器，是藉由整流器的工作開關控制來節能，達到省油降溫的效果。<br>
+效果已經很好，但是MOSFET主動式整流再次全方位的提升的整流器的效能，以及可靠度。<br>
+製造工藝複雜度和材料上都比之前提高的更多，從附圖的線路結構比較圖上，就能看出明顯差異。</p>
+<p>(下面講理論，沒興趣的可以跳過)</p>
+<p>無論是傳統閉路整流，或是前一代的皓月開閉路式整流，都是以DIODE二極體為基礎的三相整流器。<br>
+有電力電子基礎的車友應該都知道，二極體的順向導通壓降大約是0.6V，而且還有導通和截止的遲滯損失。<br>
+全波整流迴路要通過兩個二極體，壓降就是1.2V，再與通過電流(A)的乘積，就是發熱損失(W)。<br>
+在瞬間最大，每一相都輸入25A的情況下，發熱損失至少高達1.2V x 25A x 3Phase = 90W<br>
+這也是為何高功率的傳統車用整流器，通常都具有很大面積的散熱片，卻仍然溫度高得燙手。</p>
+<p>最新MOSFET整流器，捨棄了傳統DIODE二極體<br>
+採用了更高速、所有功率晶體中最低導通阻抗的「功率金氧半場效電晶體」- Power MOSFET，把導通阻抗降低到驚人的「毫歐姆」等級。<br>
+再配合微電腦PWM精密控制「零點切換」技術，整流器的轉換損失得以降到最低。</p>
+<p>經過實際測試，凱宇皓月MOSFET主動整流的溫度，在電噴系統，加上開大燈，總功耗約100W，且無風的情況下。<br>
+本體溫度可以維持恆定在45攝氏度上下，從發熱量就能看出，以功率轉換裝置來說，是非常優越的效能。</p>
+<p>也許有些車友會疑問，凱宇皓月MOSFET主動整流的技術，是否會與台灣市售某品牌(8xx)的產品衝突。<br>
+其實並不會，使用功率晶體替代二極體進行高效率交直流轉換，在電力電子AC/DC轉換領域，是相當普遍的技術。<br>
+例如不斷電系統UPS，太陽能轉換器PV Inverter，或是主動式諧波改善設備 Active Power Filter等等，都能看到。<br>
+過去車用系統沒有，是因為早期這類技術，主要是應用在三相大功率設備，還沒廉價到應用在交通工具上而已。</p>
+<p><strong>維修用客戶請看這裡</strong></p>
+<p>有些老車電池回充異常，不一定是整流器故障造成。<br>
+更換整流器以前，建議先檢查一下發電機是否有欠相，或是三條黃線之間阻抗差異明顯的情形。<br>
+此外，整流器輸出到電池正端，及負端的阻抗，也要分別以三用電表的最小阻抗檔位確認，原則都必須接近無阻抗(0.01~0.05歐姆)方為正常。以及保險絲，包含保險絲座的阻抗，也要確認。<br>
+若回充線路阻抗過大時，除了回充電壓異常，也會造成整流器的過熱損壞。</p>
+</blockquote>
+</details>
+<h2 id="機構評估"><a class="header-anchor" href="#機構評估">¶</a>機構評估</h2>
+<p>之前改裝的三相整流器，是光陽沙灘車上的整流器。<br>
+對野狼的整流器支架來說，太大顆，無法兩個螺絲都鎖上。<br>
+而凱宇皓月的這一顆，似乎機構沒問題，體積也比較小。</p>
+<p><img src="https://i.imgur.com/tXltxwG.png" alt=""></p>
+<h2 id="改裝"><a class="header-anchor" href="#改裝">¶</a>改裝</h2>
+<h3 id="改裝整流器"><a class="header-anchor" href="#改裝整流器">¶</a>改裝整流器</h3>
+<p>一開始網拍買到的是一顆用 250 規格 5 pin 的針腳做的空中接頭。<br>
+我的野狼改到這裡，已經用滿 6 pin 而且是 110 規格的針腳的空中接頭。</p>
+<p>所以，要將整流器的針腳，從 250 改成 110</p>
+<p><img src="https://i.imgur.com/tj1XHzy.png" alt="整流器改針腳"></p>
+<h3 id="改裝車上的腳位定義"><a class="header-anchor" href="#改裝車上的腳位定義">¶</a>改裝車上的腳位定義</h3>
+<p>車上的是 6 pin 要搞懂這 6 pin 是什麼…</p>
+<p><strong>直流</strong></p>
+<p>其實是有重複的腳，紅黑其實都是 12v 電源，紅色是直接接電瓶，黑色是鑰匙開之後的 12v 所以接黑色為直流正極<br>
+綠色是車子電系的直流接地。</p>
+<p><strong>三相</strong></p>
+<p>粉紅色在之前就拿來當三相的其中一相線路，所以粉紅色是三相的部份<br>
+其它都是黃色的</p>
+<p><img src="https://i.imgur.com/XSlL5h9.png" alt="線路定義"></p>
+<p>圖片由上到下</p>
+<p>一開始是車上亂定義的<br>
+後來是整理好的正面與反面</p>
+<p>腳位定義好之後就是插上去，並且將車子裝回去了！</p>
+<h3 id="裝回去…"><a class="header-anchor" href="#裝回去…">¶</a>裝回去…</h3>
+<p>正想裝回去的時候遇到了最大危機！</p>
+<p><img src="https://i.imgur.com/bgfcpES.png" alt="疊疊樂"></p>
+<p>右上角的圖，就是剛要裝回去的時候，發現怎麼螺絲不夠長…</p>
+<p>天哪！螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…螺絲不夠長…</p>
+<p>還好！可以在<a target="_blank" rel="noopener" href="https://maps.app.goo.gl/K9MPM6xXqgAuYgDF9">福諾螺絲</a>買到。</p>
+<p>馬上去買兩根。<br>
+然後就成功鎖上去了。</p>
+<h2 id="測試"><a class="header-anchor" href="#測試">¶</a>測試</h2>
+<p>一切都裝好之後，先<strong>發動測試</strong>。用三用電表量一下電壓是否有隨著催油門上升。<br>
+之後<strong>試騎測試</strong>，騎了一圈並且開大燈也催油門，如果有接好，電壓就不會降，如果沒接好，因為開大燈會明顯消秏電瓶的電。</p>
+<p><img src="https://i.imgur.com/rlcXuOu.png" alt="電表圖"></p>
+<h2 id="成功！"><a class="header-anchor" href="#成功！">¶</a>成功！</h2>
+<p><img src="https://i.imgur.com/EAe1mEt.png" alt="成功"></p>
+<p>裝上了整流器，整台車的電系改裝也算是都完成了。</p>
+<ul>
+<li>三相發電、直流 CDI、點火線圈、三相整流，都是使用皓月的產品</li>
+<li>左右手開關</li>
+</ul>
 
     
     </section>

@@ -134,23 +134,23 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/5531774497489388758/">https://dwatow.github.io/2018/05-13-blogger/5531774497489388758/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/05-13-blogger/6376952387447990535/">https://dwatow.github.io/2018/05-13-blogger/6376952387447990535/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>爛 code 收集器//添加邏輯後，要整理</h1>
+        <h1>爛 code 收集器//慎選 Event、繼承、泛型</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E6%B7%BB%E5%8A%A0%E9%82%8F%E8%BC%AF%E5%BE%8C%EF%BC%8C%E8%A6%81%E6%95%B4%E7%90%86"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;添加邏輯後，要整理</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8-%E6%85%8E%E9%81%B8-Event%E3%80%81%E7%B9%BC%E6%89%BF%E3%80%81%E6%B3%9B%E5%9E%8B"><span class="toc-text">爛 code 收集器&#x2F;&#x2F;慎選 Event、繼承、泛型</span></a></li></ol>
   </div>
 
 
-    <h1 id="爛-code-收集器-添加邏輯後，要整理"><a class="header-anchor" href="#爛-code-收集器-添加邏輯後，要整理">¶</a>爛 code 收集器//添加邏輯後，要整理</h1>
-<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code_55.html">https://darkblack02.blogspot.com/2018/05/code_55.html</a><br>
-移植時的最後更新日期: 2020-02-28T10:41:21.432+08:00</p>
-<p>複雜的邏輯往往來自於不同時期的工程進行的添加。   <br />一流的工程師會寫出讓人好讀的程式碼，一樣一流的工程師接手會讀懂後，添加在適合的位置，而不是一直往巢狀式的方向加上去。<br /><pre class="prettyprint"><code class="language-cpp"><br />for( set<obj>::iterator it = ObjSet.begin(); it != ObjSet.end(); ++it )<br />&#123;<br />    Obj *target_obj = 0;<br /><br />    if( (*it)-&gt;IsSpec == false )  //如果有使用 spec<br />    &#123;<br />        target_obj = (*it);<br />    &#125;<br />    else  // 並且 spec 已經有使用了<br />    &#123;<br />        if( SpecInCurrProduct.count((*it)-&gt;getSpec) != FALSE )<br />        &#123;<br />            target_obj = (*it);<br />        &#125;<br />    &#125;<br /><br />    if( target_obj == 0 )<br />    &#123;<br />        continue;<br />    &#125;<br /><br />     //other code…<br />&#125;<br /></obj></code></pre><br />改寫成  <br /><pre class="prettyprint"><code class="language-cpp"><br />for( set<obj1>::iterator it = Obj1Set.begin(); it != Obj1Set.end(); ++it )<br />&#123;<br />    Obj1 *target_obj1 = 0;<br /><br />    if( !(*it)-&gt;IsSpec || SpecInCurrProduct.find((*it)-&gt;getSpecId) != SpecInCurrProduct.end() )<br />        target_obj1 = (*it);<br />    // else<br />    //     continue;<br />     //other code…<br />&#125;<br /></obj1></code></pre></p>
+    <h1 id="爛-code-收集器-慎選-Event、繼承、泛型"><a class="header-anchor" href="#爛-code-收集器-慎選-Event、繼承、泛型">¶</a>爛 code 收集器//慎選 Event、繼承、泛型</h1>
+<p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2018/05/code-event.html">https://darkblack02.blogspot.com/2018/05/code-event.html</a><br>
+移植時的最後更新日期: 2020-02-28T10:41:21.505+08:00</p>
+<p>剛學 OO 的朋友，會覺得繼承超棒的，可以共用成員變數。<br /><br />這其實是不好的。<br /><br />剛學事件的朋友，會覺得掛上事件超棒的，可以一個 function 到處使用，這其實也是不好的。<br />剛學泛型的朋友，會覺得泛型寫法超棒的，可以一個 function 所有物件都可以使用，這其實也是不好的。<br />這些技術存在著這些偏見式的用法，卻造成語意不正確的情況 開始產生了一些，讀起來不知所云的寫法。</p>
 
     
     </section>

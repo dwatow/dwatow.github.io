@@ -134,203 +134,93 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2020/11-26-angularjs/understanding-components/">https://dwatow.github.io/2020/11-26-angularjs/understanding-components/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2020/11-26-angularjs/learn-like-vue/">https://dwatow.github.io/2020/11-26-angularjs/learn-like-vue/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>翻譯 Component - AngularJS 開發指南</h1>
+        <h1>用 Vue 理解 AngularJS 的 components</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-Component-AngularJS-%E9%96%8B%E7%99%BC%E6%8C%87%E5%8D%97"><span class="toc-text">翻譯 Component - AngularJS 開發指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CONTENTS"><span class="toc-text">CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-and-configuring-a-Component"><span class="toc-text">Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-between-Directive-definition-and-Component-definition"><span class="toc-text">Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Component-based-application-architecture"><span class="toc-text">Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components-as-route-templates"><span class="toc-text">Components as route templates</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%A8-Vue-%E7%90%86%E8%A7%A3-AngularJS-%E7%9A%84-components"><span class="toc-text">用 Vue 理解 AngularJS 的 components</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Angular-Component-%E9%82%8F%E8%BC%AF"><span class="toc-text">Angular Component 邏輯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data"><span class="toc-text">data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watch"><span class="toc-text">watch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#computed"><span class="toc-text">computed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#methods"><span class="toc-text">methods</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Angular-Component-%E5%82%B3%E5%80%BC"><span class="toc-text">Angular Component 傳值</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#tag-name-component-%E5%90%8D%E7%A8%B1"><span class="toc-text">tag name: component 名稱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attribute"><span class="toc-text">attribute</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#event"><span class="toc-text">event</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#content"><span class="toc-text">content</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="翻譯-Component-AngularJS-開發指南"><a class="header-anchor" href="#翻譯-Component-AngularJS-開發指南">¶</a>翻譯 Component - AngularJS 開發指南</h1>
-<p><a target="_blank" rel="noopener" href="https://docs.angularjs.org/guide/component">原文: AngularJS: Developer Guide: Components</a></p>
-<h2 id="CONTENTS"><a class="header-anchor" href="#CONTENTS">¶</a>CONTENTS</h2>
-<blockquote>
-<p>Creating and configuring a Component<br>
-Comparison between Directive definition and Component definition<br>
-Component-based application architecture<br>
-Example of a component tree<br>
-Components as route templates<br>
-Intercomponent Communication<br>
-Unit-testing Component Controllers</p>
-</blockquote>
-<p>在 AngularJS, Component 是一種使用簡易組態 (config) 的 directive 。適合用在 component-base 應用的結構。</p>
-<p>更容易用類似 Web Component 或新的 AngularJS style 的架構製作網站。</p>
-<p>優點</p>
+    <h1 id="用-Vue-理解-AngularJS-的-components"><a class="header-anchor" href="#用-Vue-理解-AngularJS-的-components">¶</a>用 Vue 理解 AngularJS 的 components</h1>
+<h2 id="Angular-Component-邏輯"><a class="header-anchor" href="#Angular-Component-邏輯">¶</a>Angular Component 邏輯</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">appName = <span class="string">&#x27;&#x27;</span></span><br><span class="line">appParameters = []</span><br><span class="line">config = &#123;&#125;</span><br><span class="line">componentName = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">angular.module(appName, appParameters)</span><br><span class="line">.component(componentName, config);</span><br></pre></td></tr></table></figure>
+<h2 id="data"><a class="header-anchor" href="#data">¶</a>data</h2>
+<p>在 constructor 裡，寫 <code>this.data</code> 就可以定義自己的 data 變數名稱</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">className</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.dataValue1 = <span class="string">&quot;&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line"><span class="comment">// constoller 其實就是接 constructor</span></span><br><span class="line">  controller: className,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">angular.module(appName, appParameters)</span><br><span class="line">.component(componentName, config);</span><br></pre></td></tr></table></figure>
+<p>controller |–&gt; template 單向綁定<br>
+在 <code>template</code> 可以直接透過 <code>controllerAs</code> (預設用 <code>$ctrl</code>) 使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;span&gt;&#123;&#123;$ctrl.dataValue1&#125;&#125;&lt;&#x2F;span&gt;</span><br></pre></td></tr></table></figure>
+<p>controller &lt;–&gt; template 雙向綁定<br>
+可以使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;input type&#x3D;&quot;text&quot; ng-model&#x3D;&quot;$ctrl.dataValue1&quot;&gt;&lt;&#x2F;input&gt;</span><br><span class="line">&lt;span&gt;Name: &#123;&#123;$ctrl.dataValue1&#125;&#125;&lt;&#x2F;span&gt;</span><br></pre></td></tr></table></figure>
+<p>可以這樣理解 AngularJS 的行為</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> $ctrl = <span class="keyword">new</span> className();</span><br><span class="line">$ctrl.dataValue1; <span class="comment">// = this.dataValue1</span></span><br></pre></td></tr></table></figure>
+<h2 id="watch"><a class="header-anchor" href="#watch">¶</a>watch</h2>
+<p>視為 private method<br>
+用在 setter 裡連動更動 相關變數的 method</p>
+<p>使用 <code>$onChange</code> 的 lifecycle hook</p>
+<h2 id="computed"><a class="header-anchor" href="#computed">¶</a>computed</h2>
+<p>同於 public method<br>
+用在 getter, setter</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">className</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.dataValue1 = <span class="string">&quot;&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fullName () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.name + <span class="string">&#x27; fullName&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;span&gt;Name: &#123;&#123;$ctrl.fullName()&#125;&#125;&lt;&#x2F;span&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="methods"><a class="header-anchor" href="#methods">¶</a>methods</h2>
+<p>就是一般的 methods</p>
+<h1 id="Angular-Component-傳值"><a class="header-anchor" href="#Angular-Component-傳值">¶</a>Angular Component 傳值</h1>
+<h2 id="tag-name-component-名稱"><a class="header-anchor" href="#tag-name-component-名稱">¶</a>tag name: component 名稱</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">appName = <span class="string">&#x27;&#x27;</span></span><br><span class="line">appParameters = []</span><br><span class="line">config = &#123;&#125;</span><br><span class="line">componentName = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">angular.module(appName, appParameters)</span><br><span class="line">.component(componentName, config);</span><br></pre></td></tr></table></figure>
+<h2 id="attribute"><a class="header-anchor" href="#attribute">¶</a>attribute</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;appName attributeName&#x3D;&quot;attributeValue&quot;&gt;&lt;&#x2F;appName&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bindingWay = <span class="string">&#x27;=&#x27;</span></span><br><span class="line">config = &#123;</span><br><span class="line">  binding: &#123;</span><br><span class="line">    attributeName: bindingWay</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>bindingWay 的設定可以使用</p>
 <ul>
-<li>比 directives 更容易設定組態</li>
-<li>合理的預設值 &amp; 最佳實踐</li>
-<li>最佳化 components-base 架構</li>
-<li>components 的寫法更容易升級到 Angular</li>
+<li><code>&lt;</code> 單向資料流，attributeValue 當變數傳入</li>
+<li><code>=</code> 雙向資料流，同上</li>
+<li><code>&amp;</code> 單向資料流，attributeValue 不會變動，當 callback function (像是自訂 event)</li>
+<li><code>@</code> 單向資料流，attributeValue 不會變動，當 string</li>
 </ul>
-<p>不推薦理由</p>
+<h2 id="event"><a class="header-anchor" href="#event">¶</a>event</h2>
+<p>各種 <code>ng-</code> 的 event</p>
+<p>mouse</p>
 <ul>
-<li>編譯和 pre-link 執行操作的 directives</li>
-<li>使用 directive 的進階定義選項 像是 priority, terminal, multi-element</li>
-<li>要透過 attribute 或 css class 觸發 directive</li>
+<li><code>ng-mouseover</code> <code>ng-mouseenter</code> <code>ng-mouseleave</code> <code>ng-mousemove</code></li>
+<li><code>ng-mousedown</code> <code>ng-mouseup</code></li>
+<li><code>ng-click</code> <code>ng-dblclick</code></li>
 </ul>
-<h2 id="Creating-and-configuring-a-Component"><a class="header-anchor" href="#Creating-and-configuring-a-Component">¶</a>Creating and configuring a Component</h2>
-<p>可以用 AngularJS module (由 <code>angular.module()</code> 回傳)的 <code>.component()</code> 註冊 Components<br>
-這個 method 有兩個 arguments</p>
+<p>keyboard</p>
 <ul>
-<li>Components 的名字</li>
-<li>組態物件 (注意，不像是 <code>.directive()</code> ，這個 method 沒有 factory 功能)</li>
+<li><code>ng-keyup</code> <code>ng-keydown</code></li>
+<li><code>ng-keypress</code></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;hero-detail hero&#x3D;&quot;ctrl.hero&quot;&gt;&lt;&#x2F;hero-detail&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&#x27;heroApp&#x27;</span>)</span><br><span class="line">.component(<span class="string">&#x27;heroDetail&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">`&lt;span&gt;Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span&gt;`</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    hero: <span class="string">&#x27;=&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Comparison-between-Directive-definition-and-Component-definition"><a class="header-anchor" href="#Comparison-between-Directive-definition-and-Component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
-<p>比較 Component vs Directive</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Directive</th>
-<th>Component</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bindings</td>
-<td>無</td>
-<td>有 (binds controller)</td>
-</tr>
-<tr>
-<td>controller</td>
-<td>有</td>
-<td>有 (預設 <code>function () &#123;&#125;</code>)</td>
-</tr>
-<tr>
-<td>controllerAs</td>
-<td>有 (預設 <code>false</code>)</td>
-<td>有 (預設 <code>$ctrl</code> )</td>
-</tr>
-<tr>
-<td>require</td>
-<td>無</td>
-<td>有</td>
-</tr>
-<tr>
-<td>template</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>templateUrl</td>
-<td>有</td>
-<td>有, 可相依注入</td>
-</tr>
-<tr>
-<td>transclude</td>
-<td>有(預設<code>false</code>)</td>
-<td>有(預設<code>false</code>)</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>bindToController</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>compile function</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>link functions</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>multiElement</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>priority</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>replace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>restrict</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>templateNamespace</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>terminal</td>
-<td>Yes</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="Component-based-application-architecture"><a class="header-anchor" href="#Component-based-application-architecture">¶</a>Component-based application architecture</h2>
-<p>如前所述，component helper 有助於用簡單的 component-base 架構你的應用程式。但是 component helper 在建構一個 componet 時，還額外做了哪些事？</p>
+<p>其它</p>
 <ul>
-<li><strong>Components 只控制自己的 View 和 Data</strong><br>
-Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一般而言，AngularJS 可以透過強化 scope 和 watches 修改整個程式裡的任何資料。這很好用，但也導致修改應用程式的資料混亂不清的問題。這也是為什麼 component 使用 isolate scope，所以操作整個 scope 的類別是不可能的。</li>
-<li><strong>Components 有明確的對外 API - 輸入和輸出</strong><br>
-然而，scope 只隔離到這裡，因為 AngularJS 使用 two-way binidng。所以如果傳入一個物件進 component 像是 <code>bindings: &#123;item: '='&#125;</code> ，並且在 component 裡修改它的 property，修改會反射到 component 外層(原本那層)。對 components 來說，只有擁有 data 才可以修改它，更易於除錯。因此， components 要遵守一些簡單的約定:
-<ul>
-<li>輸入使用 <code>&lt;</code> (one-way) 和 <code>@</code> (string) bindings。<br>
-<code>&lt;</code> 從 1.5 版出現，不同於 <code>=</code> ，在 components scope 裡綁定屬性，不被 watched ，意思是你指定新的值在 component scope ，不會更新到外面這一層。<br>
-但請注意，內外 scope 參考的是相同的物件，所以如果在 component 裡改變了物件屬性或陣列元素，外層會反射出修改結果。原則上，永遠不要修改 component scope 裡的物件或陣列內容。<br>
-傳入字串可以使用 <code>@</code> ，尤其是不會改變這個值時。</li>
-<li>用 <code>&amp;</code> bindings 實現 Output 當作 components 的 callback。<br>
-反而不是操作 Input Data，component 呼叫正確的 Output Event 改變資料。以 deletion 來說，意思是 component 不刪除 hero 自己，但是用正確的 event 傳給 owner component ，用 hero 當變數。</li>
+<li><code>ng-blur</code></li>
+<li><code>ng-change</code></li>
+<li><code>ng-focus</code></li>
+<li><code>ng-copy</code></li>
+<li><code>ng-cut</code></li>
+<li><code>ng-paste</code></li>
 </ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;</span><br><span class="line">&lt;button ng-click&#x3D;&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;&#x2F;button&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>用這個方式，外層的 component 可以決定 event 回傳值回來之後，還要做什麼。</li>
-</ul>
-  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">editable-field</span> <span class="attr">on-delete</span>=<span class="string">&quot;$ctrl.deleteHero(&#123;hero&#125;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">editable-field</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure>
-  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 class</span></span><br><span class="line">deleteHero (result) &#123; <span class="comment">//result =&#123; hero &#125;</span></span><br><span class="line">  <span class="built_in">this</span>.$http.delete(...).then(<span class="function">() =&gt;</span> &#123;<span class="comment">/*...*/</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li>Components 有明確的 lifecycle:<br>
-每一個 component 可以實作 lifecycle hooks。這些 methods 會在 component 生命週期中的特定時間點被呼叫。下列這些 hook methods 可以實作:
-<ul>
-<li><code>$onInit()</code> 完成 bindings 初始化時。在 directives 的 pre &amp; post linking 之前。<br>
-初始化你的 controller 的好地方</li>
-<li><code>$onChanges(changesObj)</code> 每當 one-way binding 更新時，<code>changesObj</code> 就是改變前後的差異</li>
-<li><code>$doCheck()</code> 每個 hook 呼叫之後會呼叫它，提供檢測和處理更改的機會。</li>
-<li><code>$onDestroy()</code> 銷毀 controller 和它的 scope 時，用在釋放資源。</li>
-<li><code>$postLink()</code> controller 的元素和它的 children linked 完時。在這時可以操作 DOM ，類似 Angular 的 <code>ngAfterViewInit</code> 或 <code>ngAfterContentInit</code></li>
-</ul>
-</li>
-</ul>
-<p>透過實作這些 method 你可以參與你的 component 的生命週期。</p>
-<ul>
-<li>應用程式是樹狀的 component:<br>
-理想情況，整個應用程式應該是一個實現明確定義的輸入和輸出的組件樹，並最小化雙向綁定。可以更容易地預測數據何時發生變化以及組件的狀態。</li>
-</ul>
-<h2 id="Components-as-route-templates"><a class="header-anchor" href="#Components-as-route-templates">¶</a>Components as route templates</h2>
-<p>Components 也可以用在 route 的 <code>template</code> (以 <code>ngRoute</code> 為例)。在 component-base 的應用程式 ，每一個 view 都是一個 component:</p>
-<p>當使用 <code>$routeProvider</code> ，你可以避免一些重複的寫法 (boilerplate)，透過解析 route 相依直接傳遞給 component。從 1.5 版開始，ngRoute 自動解析 route scope 指定給 <code>$resolve</code> (你也可以用 <code>resolveAs</code> 改變它)。當使用 component ，你可以利用此功能直接傳遞 component，無需另外指定 controller。</p>
-<p>換句話說(上面如果看不懂)，指的是透過 route 的 resolve 功能，可以直接給 component binding 的變數內容。</p>
-<p><strong>home.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> home = angular.module(<span class="string">&#x27;home&#x27;</span>).component(<span class="string">&#x27;home&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">&#x27;&lt;h1&gt;Home&lt;/h1&gt;&lt;p&gt;Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p&gt;&#x27;</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    user: <span class="string">&#x27;&lt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>route.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> route = angular.module(<span class="string">&#x27;route&#x27;</span>, []).config(<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>) </span>&#123;</span><br><span class="line">  $routeProvider.when(<span class="string">&#x27;/&#x27;</span>, &#123;</span><br><span class="line">    template: <span class="string">&#x27;&lt;home user=&quot;$resolve.user&quot;&gt;&lt;/home&gt;&#x27;</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>) </span>&#123; <span class="keyword">return</span> $http.get(<span class="string">&#x27;...&#x27;</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
-<p><strong>main.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> route <span class="keyword">from</span> <span class="string">&#x27;./route.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> home <span class="keyword">from</span> <span class="string">&#x27;./home.js&#x27;</span></span><br><span class="line">angular.module(<span class="string">&#x27;myMod&#x27;</span>, [route, home])</span><br></pre></td></tr></table></figure>
-
+<p>自定義事件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    onUpdate: <span class="string">&#x27;&amp;&#x27;</span> <span class="comment">//使用 &lt;tag on-update=fu&gt;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  controller: ComponentCtrl</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ComponentCtrl</span> </span>&#123;</span><br><span class="line">  <span class="title">constructor</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.onUpdate(&#123;</span><br><span class="line">	  $event: &#123;</span><br><span class="line">	    <span class="comment">//...</span></span><br><span class="line">	  &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="content"><a class="header-anchor" href="#content">¶</a>content</h2>
+<p>要改變 component 的內容</p>
+<ol>
+<li>在 component 的 config object 上的 <code>template</code> 加入包含有 <code>ng-transclude</code> 的 <code>&lt;div ng-transclude=&quot;slot1&quot;&gt;&lt;/div&gt;</code>，決定</li>
+<li>在 component 的 config object 上加入 <code>transclude</code> ，決定傳遞的 key-value 對應，其中 key: 對內變數，value: 對外變數</li>
+<li>在使用 component 的地方，將 <code>transclude</code> 的 value 用出來。</li>
+</ol>
+<p>index.html</p>
+<p>在引用的 component 中，要加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;body ng-app&#x3D;&quot;heroApp&quot;&gt;</span><br><span class="line">  &lt;hero-detail&gt;</span><br><span class="line">    &lt;slot-body&gt;&lt;h2&gt;</span><br><span class="line">      hi I am head two</span><br><span class="line">    &lt;&#x2F;h2&gt;&lt;&#x2F;slot-body&gt;</span><br><span class="line">  &lt;&#x2F;hero-detail&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br></pre></td></tr></table></figure>
+<p>component 設定成這樣</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&#x27;heroApp&#x27;</span>, []).component(<span class="string">&#x27;heroDetail&#x27;</span>, &#123;</span><br><span class="line">  controller: myComponent,</span><br><span class="line">  transclude: &#123;</span><br><span class="line">    <span class="string">&#x27;slot1&#x27;</span>: <span class="string">&#x27;slotBody&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  template: <span class="string">`&lt;h1&gt;I am a component&lt;/h1&gt;</span></span><br><span class="line"><span class="string">               &lt;span&gt;Name: &#123;&#123;$ctrl.name&#125;&#125;&lt;/span&gt;</span></span><br><span class="line"><span class="string">               &lt;div ng-transclude=&quot;slot1&quot;&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="string">             &lt;/div&gt;`</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
     
     </section>
     
@@ -343,14 +233,6 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
                         
   <li class="meta-text">
   { <a href="/tags/angularjs/">angularjs</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/component/">component</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/angular1/">angular1</a> }
   </li>
 
 
