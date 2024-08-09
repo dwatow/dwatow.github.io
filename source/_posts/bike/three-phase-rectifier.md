@@ -82,6 +82,7 @@ categories:
 
 ![](https://i.imgur.com/tXltxwG.png)
 
+> 感謝[這個賣家](https://www.ruten.com.tw/item/show?22011343708832)量了尺寸，有需要可以跟他買唷
 
 ## 改裝
 
