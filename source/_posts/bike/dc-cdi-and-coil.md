@@ -7,7 +7,6 @@ tags:
 - 高壓線圈 coil
 - 凱宇皓月
 categories:
-- 生活居家
 - 野狼電系
 ---
 # 野狼電系(3) - 高壓線圈 (coil) 、直流 CDI
