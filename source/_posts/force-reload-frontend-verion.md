@@ -32,7 +32,7 @@ export default {
   // 登入相關的 action
   // ...
   async checkVersion({ dispatch }) {
-    const frontend_version = Cookies.get("CCVersion");
+    const frontend_version = Cookies.get("version");
     // 前端沒有版本資訊，表示是第一次登入
     // 重新登入，會取得版本資訊
     if (!frontend_version) {
@@ -46,7 +46,7 @@ export default {
 
     if (frontend_version !== backend_version) {
       // 強迫更新
-      Cookies.set("CCVersion", backend_version);
+      Cookies.set("version", backend_version);
       window.location.reload();
     }
   },
