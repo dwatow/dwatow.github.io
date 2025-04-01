@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head>
+    <head><link rel=manifest href=/manifest.json>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -17,7 +17,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta itemprop="name" content="Chris" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta
     itemprop="image"
     content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
@@ -228,7 +229,7 @@ box 不可顯示在畫面上，完全透明，但是仍佔空間。若容器設�
 <p>webkit 瀏覽器會建立一棵叫 Rendering Tree (渲染樹)的資料結構。讓內容可以依照正確的順序繪製。每一個 element 都代表一個矩形區域，通常是符合 CSS2 的 box 規範。<br>
 在 render tree 階段，每一個 box 的形態，會受到 display 設定的影響。</p>
 <p>看看 webkit 的程式碼。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">RenderObject* <span class="title">RenderObject::createObject</span><span class="params">(Node* node, RenderStyle* style)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Document* doc = node-&gt;document();</span><br><span class="line">    RenderArena* arena = doc-&gt;renderArena();</span><br><span class="line">    ...</span><br><span class="line">    RenderObject* o = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (style-&gt;display()) &#123;</span><br><span class="line">        <span class="keyword">case</span> NONE:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderInline(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE_BLOCK:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderBlock(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> LIST_ITEM:</span><br><span class="line">            o = <span class="keyword">new</span> (arena) RenderListItem(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">RenderObject* <span class="title">RenderObject::createObject</span><span class="params">(Node* node, RenderStyle* style)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Document* doc = node-&gt;<span class="built_in">document</span>();</span><br><span class="line">    RenderArena* arena = doc-&gt;<span class="built_in">renderArena</span>();</span><br><span class="line">    ...</span><br><span class="line">    RenderObject* o = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in"><span class="keyword">switch</span></span> (style-&gt;<span class="built_in">display</span>()) &#123;</span><br><span class="line">        <span class="keyword">case</span> NONE:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE:</span><br><span class="line">            o = <span class="built_in"><span class="keyword">new</span></span> (arena) <span class="built_in">RenderInline</span>(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> BLOCK:</span><br><span class="line">            o = <span class="built_in"><span class="keyword">new</span></span> (arena) <span class="built_in">RenderBlock</span>(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> INLINE_BLOCK:</span><br><span class="line">            o = <span class="built_in"><span class="keyword">new</span></span> (arena) <span class="built_in">RenderBlock</span>(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> LIST_ITEM:</span><br><span class="line">            o = <span class="built_in"><span class="keyword">new</span></span> (arena) <span class="built_in">RenderListItem</span>(node);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>所以 <code>display: none</code> 不會把 DOM tree 的元素放到 render tree 上，但是 <code>visibility: hidden</code> 會放到 render tree。所以 DOM tree 和 render tree 並非完全有對應關係。</p>
 <p><img src="https://i.imgur.com/FjcIu6q.png" alt=""></p>
 <p>上圖所示，HTML 中的 head 就是設定 <code>display: none</code> 。</p>
@@ -304,7 +305,7 @@ box 不可顯示在畫面上，完全透明，但是仍佔空間。若容器設�
 </div>
 
                 <footer>
-    <div>© 2017 - 2024 Chris </div>
+    <div>© 2017 - 2025 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -320,5 +321,15 @@ box 不可顯示在畫面上，完全透明，但是仍佔空間。若容器設�
     
 <script src="/js/scrollTop.js"></script>
 
-</body>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350420')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350436')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
 </html>

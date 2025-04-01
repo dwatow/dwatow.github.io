@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head>
+    <head><link rel=manifest href=/manifest.json>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -17,7 +17,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta itemprop="name" content="Chris" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta
     itemprop="image"
     content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
@@ -166,7 +167,7 @@
 </blockquote>
 <p>兩者答案都可以</p>
 <h3 id="2-這列程式有什麼錯誤？"><a class="header-anchor" href="#2-這列程式有什麼錯誤？">¶</a>2. 這列程式有什麼錯誤？</h3>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DoSomething</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="built_in">std</span>::<span class="built_in">list</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt;&gt;  filter;   <span class="comment">//  &lt;-- 這一列</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DoSomething</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  std::map&lt;std::string, std::list&lt;std::string&gt;&gt;  filter;   <span class="comment">//  &lt;-- 這一列</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果有注意過 <code>cout</code> 運算子的人，並且對其運算子進行覆寫，應該就會有印象 <code>&gt;&gt;</code> 是一個運算子。</p>
 <blockquote>
 <p><code>&gt;&gt;</code>，中間要空白<br>
@@ -184,13 +185,13 @@
 所以，以這種方式傳入參數，是速度快又保證不會被修改的方式。</p>
 </blockquote>
 <h3 id="4-實作捕捉建構子與解構子的exception"><a class="header-anchor" href="#4-實作捕捉建構子與解構子的exception">¶</a>4. 實作捕捉建構子與解構子的exception</h3>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    foo();  <span class="comment">//建構子</span></span><br><span class="line">    ~foo(); <span class="comment">//解構子</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">foo</span>();  <span class="comment">//建構子</span></span><br><span class="line">    ~<span class="built_in">foo</span>(); <span class="comment">//解構子</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>提示：<br>
 一般而言，建構子是這樣寫</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">foo::foo()</span><br><span class="line">:i(0), c(&#x27;&#x27;)&#123;  // &lt;-- 建構初始列: 屬性初始化</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">foo::<span class="built_in">foo</span>()</span><br><span class="line">:i(0), c(&#x27;&#x27;)&#123;  // &lt;-- 建構初始列: 屬性初始化</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>建構子的exception</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">foo::foo()</span><br><span class="line">try:i(0), c(&#x27;&#x27;)&#123;  &lt;-- 建構初始列</span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">catch</span>(...)</span><br><span class="line">&#123;    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">foo::<span class="built_in">foo</span>()</span><br><span class="line">try:i(0), c(&#x27;&#x27;)&#123;  &lt;-- 建構初始列</span><br><span class="line">    </span><br><span class="line">&#125;<span class="built_in"><span class="keyword">catch</span></span>(...)</span><br><span class="line">&#123;    &#125;</span><br></pre></td></tr></table></figure>
 <p>解構子不可以有exception！！<br>
 如果答對，可以問「為什麼」</p>
 <p>因為解構式exception</p>
@@ -213,9 +214,9 @@
 <ol start="6">
 <li>去掉重覆的元素</li>
 </ol>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; intv;</span><br><span class="line">intv.push(<span class="number">5</span>);</span><br><span class="line">intv.push(<span class="number">5</span>);</span><br><span class="line">intv.push(<span class="number">5</span>);</span><br><span class="line">intv.push(<span class="number">5</span>);</span><br><span class="line">intv.push(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::vector&lt;<span class="keyword">int</span>&gt; intv;</span><br><span class="line">intv.<span class="built_in">push</span>(<span class="number">5</span>);</span><br><span class="line">intv.<span class="built_in">push</span>(<span class="number">5</span>);</span><br><span class="line">intv.<span class="built_in">push</span>(<span class="number">5</span>);</span><br><span class="line">intv.<span class="built_in">push</span>(<span class="number">5</span>);</span><br><span class="line">intv.<span class="built_in">push</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
 <blockquote>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ints</span><span class="params">(intv.begin(), intv.end())</span></span>;</span><br><span class="line">intv.clear();</span><br><span class="line">intv.insert(ints.begin(), ints.end();</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::set&lt;<span class="keyword">int</span>&gt; <span class="title">ints</span><span class="params">(intv.begin(), intv.end())</span></span>;</span><br><span class="line">intv.<span class="built_in">clear</span>();</span><br><span class="line">intv.<span class="built_in">insert</span>(ints.<span class="built_in">begin</span>(), ints.<span class="built_in">end</span>();</span><br></pre></td></tr></table></figure>
 <p>(做法很多，換容器這種做法，這是我覺得最省事的做法)</p>
 </blockquote>
 <h3 id="7-下面這個C-程式是否有問題"><a class="header-anchor" href="#7-下面這個C-程式是否有問題">¶</a>7. 下面這個C++程式是否有問題</h3>
@@ -229,7 +230,7 @@
 <li>不一定要有 <code>return 0;</code> (後來的 complier 會幫你 <code>return 0;</code>) 但標準還是需要加上 <code>return 0;</code></li>
 </ol>
 <p>標準的寫法</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="number">3</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="number">3</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <hr class="footnotes-sep">
 <section class="footnotes">
@@ -275,7 +276,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2024 Chris </div>
+    <div>© 2017 - 2025 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -291,5 +292,15 @@
     
 <script src="/js/scrollTop.js"></script>
 
-</body>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350420')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350436')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
 </html>

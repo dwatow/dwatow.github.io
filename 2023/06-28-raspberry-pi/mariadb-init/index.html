@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head>
+    <head><link rel=manifest href=/manifest.json>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -17,7 +17,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta itemprop="name" content="Chris" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta
     itemprop="image"
     content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
@@ -36,7 +37,7 @@
 <meta property="og:description" content="¶Raspberry Pi 4 的後端修鍊 (1) - Mariadb Initial  ¶樹莓派換 wifi 遇到的問題 如果你像我一樣，樹莓派並不是固定一個地方。 會拿來拿去的移動，這樣樹莓派的 wifi 或 IP 就是常態性變動的。 也許會在 ssh 登入時遇到這個問題 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-06-28T09:25:50.000Z">
-<meta property="article:modified_time" content="2023-06-28T09:30:02.512Z">
+<meta property="article:modified_time" content="2024-01-03T04:37:24.938Z">
 <meta property="article:author" content="Chris">
 <meta property="article:tag" content="Raspberry Pi 4">
 <meta property="article:tag" content="database">
@@ -179,14 +180,14 @@
 <p>看見 <code>MariaDB</code> 就是成功了</p>
 <h3 id="新增資料庫"><a class="header-anchor" href="#新增資料庫">¶</a>新增資料庫<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></h3>
 <p>第一步，要新增資料庫，來試看看名為 testdb 的資料庫</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(none)]&gt; create database `testdb`;</span><br><span class="line">Query OK, 1 row affected (0.001 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">create</span> database `testdb`;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="type">row</span> affected (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
 <p>看見 <code>Query OK</code> 就是成功了</p>
 <h3 id="顯示所有資料庫"><a class="header-anchor" href="#顯示所有資料庫">¶</a>顯示所有資料庫</h3>
 <p>印看看，剛剛成功新增的資料庫</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(none)]&gt; show databases;</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| Database           |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| testdb             |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">show</span> databases;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> Database           <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="operator">|</span> information_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> mysql              <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> performance_schema <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> testdb             <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+</span></span><br><span class="line"><span class="number">4</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
 <p>有看見 testdb，成功！</p>
 <h3 id="新增使用者"><a class="header-anchor" href="#新增使用者">¶</a>新增使用者<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup></h3>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;rasp&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">&#x27;yourpassword&#x27;</span>;</span><br><span class="line">Query OK, 0 rows affected (0.001 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;rasp&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;yourpassword&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
 <p>看見 <code>Query OK</code> 就是成功了</p>
 <blockquote>
 <ul>
@@ -196,11 +197,11 @@
 </blockquote>
 <h3 id="查看所有使用者"><a class="header-anchor" href="#查看所有使用者">¶</a>查看所有使用者<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup></h3>
 <p>印看看，剛剛成功新增的使用者</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(none)]&gt; SELECT User,Host FROM mysql.user;</span><br><span class="line">+<span class="comment">------+-----------+</span></span><br><span class="line">| User | Host      |</span><br><span class="line">+<span class="comment">------+-----------+</span></span><br><span class="line">| rasp | localhost |</span><br><span class="line">| root | localhost |</span><br><span class="line">+<span class="comment">------+-----------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="keyword">User</span>,Host <span class="keyword">FROM</span> mysql.user;</span><br><span class="line"><span class="operator">+</span><span class="comment">------+-----------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">User</span> <span class="operator">|</span> Host      <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-----------+</span></span><br><span class="line"><span class="operator">|</span> rasp <span class="operator">|</span> localhost <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> root <span class="operator">|</span> localhost <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------+-----------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
 <p>有看見 rasp，成功！</p>
 <h3 id="賦序帳號權限"><a class="header-anchor" href="#賦序帳號權限">¶</a>賦序帳號權限<sup class="footnote-ref"><a href="#fn6" id="fnref6:1">[6:1]</a></sup></h3>
 <p>有了帳號，有了資料庫，還要給予帳號存取資料庫的權限，帳號才算是可以用的哦</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(none)]&gt; GRANT ALL PRIVILEGES ON testdb.* TO &#x27;rasp&#x27;@&#x27;localhost&#x27;;</span><br><span class="line">Query OK, 0 rows affected (0.001 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">MariaDB [(<span class="keyword">none</span>)]<span class="operator">&gt;</span> <span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> testdb.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;rasp&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.001</span> sec)</span><br></pre></td></tr></table></figure>
 <h3 id="試用看看"><a class="header-anchor" href="#試用看看">¶</a>試用看看</h3>
 <blockquote>
 <p>注意:<br>
@@ -274,7 +275,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2024 Chris </div>
+    <div>© 2017 - 2025 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -290,5 +291,15 @@
     
 <script src="/js/scrollTop.js"></script>
 
-</body>
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350420')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1743479350436')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
 </html>
