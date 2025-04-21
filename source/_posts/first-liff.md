@@ -103,4 +103,10 @@ userId 就是用來發給 Messageing API 功能的主動通知，識別碼
 每個 LINE 帳號，在一個 `provider` 會有一個固定的 `userID`。
 如果是不同的 `provider` 就會有不同的 `userID`。
 
-而每個 provider 可以擁有不同的 Messageing API 服務，可以做成不同的聊天機器人，它們各自有不同的 `Channel ID`，透過不同的 `Channel ID` 就算使用者是相同的 `userID` 也可以在不同的服務發給指定的使用者。
+而每個 provider 可以擁有不同的 Messageing API 服務，可以做成不同的聊天機器人，它們各自有不同的 `Channel ID`。
+也就是說，相同的使用者，在不同的 `Channel ID` 下，只要 provider 相同，使用者就有相同的 `userID` ，可以實現不同的 Messageing API 可以認得出相同的使用者。
+
+**Messageing API 的特性**
+
+一個 Messageing API 服務，是對應一個 LINE 的聊天機器人。
+當使用者加了一個 LINE 聊天機器人，就會觸發一次 webhook。
