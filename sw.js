@@ -27,6 +27,8 @@ var precacheUrls = [
 
   '/',
 
+  '/2025/05-24-ted-how-mindfulness-changes-the-emotional-life-of-our-brains/',
+
   '/2024/12-05-force-reload-frontend-verion/',
 
   '/2024/12-05-hash-package/',
@@ -34,8 +36,6 @@ var precacheUrls = [
   '/2024/08-07-bike/three-phase-rectifier/',
 
   '/2024/06-19-nginx-log-format-json-in-http-body/',
-
-  '/2024/03-12-what-is-this-algorithm/',
 
 ];
 toolbox.precache(precacheUrls);
