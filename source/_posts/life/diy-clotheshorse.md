@@ -21,17 +21,17 @@ categories:
 但是這個設計我有再做修改，讓料的變化性變小一點，增加擴充性。
 
 整體設計
-![](https://i.imgur.com/tj8Bvf0.jpg =350x)
+![](/images/e54a2e42-tj8Bvf0.jpg =350x)
 
 腳部的設計
-![](https://i.imgur.com/22c2ciO.png =350x)
+![](/images/e54a2e42-22c2ciO.png =350x)
 
 既然有了設計稿，我們就可以列出料號表，進行備料了
 
 ## 備料
 
 公佈一下最後實作的材料表與價格。
-![](https://i.imgur.com/5Un0UY3.png)
+![](/images/e54a2e42-5Un0UY3.png)
 
 > 管徑都是 6分管
 
@@ -68,7 +68,7 @@ Busin 卜申，補心，就是管牙轉接環。
 
 一開始的設計圖，在最底下接輪子的地方，我原本想說用 6 分轉 3 分的彎頭管，就可以接到 3 分螺牙的輪子。超帥！
 
-![](https://i.imgur.com/qM9Jb7I.png)
+![](/images/e54a2e42-qM9Jb7I.png)
 
 確實也買到了，但買到也是問題的開始！因為對工業尺寸不熟悉，以為這個 3 分 = 那個 3 分
 
@@ -76,7 +76,7 @@ Busin 卜申，補心，就是管牙轉接環。
 異徑彎管標示 3/4x3/8 就是 3 分轉 6 分，大約 160mm
 難道？這個 3 分，不是那個 3 分嗎？
 
-![](https://i.imgur.com/5fSPLX4.png =x250)![](https://i.imgur.com/tnTbjJr.png =x250)
+![](/images/e54a2e42-5fSPLX4.png =x250)![](/images/e54a2e42-tnTbjJr.png =x250)
 
 我跑去問了我以前認識的機械工程師學長，他舉了一個我聽得懂的例子跟我解釋
 
@@ -101,7 +101,7 @@ Busin 卜申，補心，就是管牙轉接環。
 其中，也有找過要使用卜申，但是我學長告訴我「這還是管牙世界裡的東西」
 
 後來發現~~偉大的~~ B&Q 有做了一個轉接片，可以將 6 分轉成 2 分螺牙 (跟據老司機單位表，2 分螺牙 = M6)
-![](https://i.imgur.com/7sf7s4g.jpg =500x)
+![](/images/e54a2e42-7sf7s4g.jpg =500x)
 
 所以，我最後就買這一組，回去找朋友攻牙 (因為我的輪子已經買了)
 
@@ -114,7 +114,7 @@ Busin 卜申，補心，就是管牙轉接環。
 1. 買零件攻牙。感謝朋友家的東泰皮帶輪行，友情贊助攻牙服務
 
 試組一下 6 分牙接輪子 (最後沒有使用這個異徑彎頭，另外買了 6 分彎頭)
-![](https://i.imgur.com/Cg0PMhB.png =400x)
+![](/images/e54a2e42-Cg0PMhB.png =400x)
 
 不然 B&Q 其實有一款輪子是 2 分牙，可以直上，輪子看起來是給鉻鉬鋼波浪層架專用，一般五金行的工業輪賣的， 3 分 (M10) 螺牙的選擇多很多。
 
@@ -134,7 +134,7 @@ Busin 卜申，補心，就是管牙轉接環。
 6 月底到 B&Q 買管材一個月之後還沒有組裝，導致無法退換貨 (不然原本 122cm 想換 152cm的管子)
 7 月 10 日 齊料點！花了接近一個月的時間，解決備料規格上的問題。
 
-![](https://i.imgur.com/jUa530b.png)
+![](/images/e54a2e42-jUa530b.png)
 
 | 零件 | 數量 |
 |-----|-----|
@@ -152,7 +152,7 @@ Busin 卜申，補心，就是管牙轉接環。
 | 122cm | 5
 | 6分管牙轉 M10 牙轉接片 | 4
 
-![](https://i.imgur.com/a0koXLQ.png =x300)![](https://i.imgur.com/Gtridaz.png =x300)![](https://i.imgur.com/95gkaqi.png =x300)
+![](/images/e54a2e42-a0koXLQ.png =x300)![](/images/e54a2e42-Gtridaz.png =x300)![](/images/e54a2e42-95gkaqi.png =x300)
 
 輪子
 
@@ -163,7 +163,7 @@ Busin 卜申，補心，就是管牙轉接環。
 
 並附上假組的樣子
 
-![](https://i.imgur.com/I8c9Ix0.jpg)
+![](/images/e54a2e42-I8c9Ix0.jpg)
 
 > 可能的問題
 接下來可預測的一個的危機，就是平牙與錐形牙的問題。XDD

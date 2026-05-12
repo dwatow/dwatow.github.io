@@ -11,7 +11,7 @@ categories:
 
 在慢畫中，總是可以這麼表現
 
-![](https://sdl-stickershop.line.naver.jp/stickershop/v1/sticker/1724/android/sticker.png)
+![](/images/07bdd88e-sticker.png)
 
 想說，最近研究了一下 HTML 的圓角，也想做看看類似的情感表達試看看。我自己是覺得還滿有 fu 的
 

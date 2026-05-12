@@ -35,7 +35,7 @@ npm install bootstrap
 這一段意思看不懂沒關係。
 來看一下 `source code` 的結構
 
-![](https://i.imgur.com/OTDtlEp.png)
+![](/images/7d594c74-OTDtlEp.png)
 
 觀察發現
 

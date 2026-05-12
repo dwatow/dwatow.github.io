@@ -39,7 +39,7 @@ categories:
 皓月的這個高壓電線大顆，和新的引擎吊架可以直上，兩個鎖點都可以鎖。
 配合直流 CDI 就也可以拿掉我之前外掛 CDI 訊號產生器的電路，感覺可以減少不必要的零件，很棒。
 
-![](https://i.imgur.com/bhb7MdT.png)
+![](/images/bb9def1a-bhb7MdT.png)
 
 買了三個零件
 
@@ -68,7 +68,7 @@ categories:
 
 仔細研究一下(閱讀一下說明書)，發現高壓線圈的負極，需要自己配線接負極到車架上，鎖點本身並沒有接到負極，但兩個鎖點是互通的。
 
-![](https://i.imgur.com/CISYa6T.png)
+![](/images/bb9def1a-CISYa6T.png)
 (不要照上圖安裝)
 
 
@@ -81,7 +81,7 @@ categories:
 
 [^三相發電接線]: [野狼三相發電，電路接線圖 - 《Chris 技術筆記》](https://dwatow.github.io/2021/09-05-bike/three-phase-generation/)
 
-![](https://i.imgur.com/W35bTof.png)
+![](/images/bb9def1a-W35bTof.png)
 
 **CDI 電源線**
 
@@ -93,7 +93,7 @@ categories:
 
 > 另一個地方要從方向燈繼電器那裡轉接，轉接線接頭一模一樣。
 
-![](https://i.imgur.com/7Arzghy.png)
+![](/images/bb9def1a-7Arzghy.png)
 
 CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它們接在一起 (只是單純的不喜歡有裸露的線在車上飄)，就將它的接頭接上子彈頭(公)
 
@@ -107,9 +107,9 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 這次只改高壓線圈、直流 CDI
 三相整流暫時先不動。
 
-![](https://i.imgur.com/8T0VdnR.png)
+![](/images/bb9def1a-8T0VdnR.png)
 
-![](https://i.imgur.com/bn1zfZY.png)
+![](/images/bb9def1a-bn1zfZY.png)
 
 如上述的接線考量，我就將元件改成需要的接頭。
 
@@ -121,7 +121,7 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 組裝高壓線圈，其實配好線，基本上直上，沒有什麼特別的
 
-![](https://i.imgur.com/BUaBzzh.png)
+![](/images/bb9def1a-BUaBzzh.png)
 
 ### 直流 CDI
 
@@ -162,7 +162,7 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 幾乎拆開了整條路，不過還是讓我從 CDI 這一段拆開時找到，幾乎快要拆不到的位置，找到了介接點。
 
-![](https://i.imgur.com/R7TR7un.png =345x)
+![](/images/bb9def1a-R7TR7un.png =345x)
 
 所以是延用了車子主線路中轉速表的黃黑線，並不是暴力拉了一條 CDI 到轉速表的專線。處理的過程，要將受傷的線重新焊在一起，並且上熱縮套管，就可以恢復原本的保護力，而且整束主線路會再用絕緣膠帶捆起來，不會有單線拉扯的問題。
 
@@ -173,7 +173,7 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 
 接好之後，將轉速表的黃黑線，接了一條白色的延長線到 CDI 的藍白線上。
 
-![](https://i.imgur.com/LNnVRHE.png)
+![](/images/bb9def1a-LNnVRHE.png)
 
 並且照原訂計畫，將 12v 的鑰匙電源 (黑色) 從腳踏煞車開關那裡轉接了過來，並且用子彈頭接起來。
 
@@ -200,6 +200,6 @@ CDI 本身有一條紅線，原本也是設計給鑰匙電源的，我就將它�
 目前零件上面的是 250型的端子，而野狼上的是 6pin 的 100 型端子。
 可能會先改 110 端子，至於 pin de  fine 就先不管它。
 
-![](https://i.imgur.com/ogxWdfE.png)
+![](/images/bb9def1a-ogxWdfE.png)
 
 [下一集](https://dwatow.github.io/2024/08-07-bike/three-phase-rectifier/)

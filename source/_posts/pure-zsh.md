@@ -20,7 +20,7 @@ categories:
 
 ## 我原本的 bash 長這樣
 
-![](https://i.imgur.com/Qy1dV5P.png)
+![](/images/de86280e-Qy1dV5P.png)
 
 那個長得像 IP 的 31-154-12-102 我也想知道為什麼叫這名字，原本它應該是主機名稱，一個我訂的名字，不知道他怎麼變這樣了。QQ
 
@@ -81,7 +81,7 @@ PROMPT='你的設定'
 
 我自己設定好，長這樣
 
-![](https://i.imgur.com/zyrZ46x.png)
+![](/images/de86280e-zyrZ46x.png)
 
 ```shell
 PROMPT='%F{2}%m%f:%F{30}%~%f %F{184}%n%f $'
@@ -91,9 +91,9 @@ PROMPT='%F{2}%m%f:%F{30}%~%f %F{184}%n%f $'
 除了上面的設定，我還想斷行怎辦？
 出乎意料的簡單，只要在設定文章上斷行，就可以了，不用任何特殊符號
 
-![](https://i.imgur.com/pAexCer.png)
+![](/images/de86280e-pAexCer.png)
 
-![](https://i.imgur.com/2OzZweZ.png)
+![](/images/de86280e-2OzZweZ.png)
 
 ## 設定 git branch[^git]
 
@@ -200,13 +200,13 @@ PROMPT='$(fill-line %F{2}%m%f:%F{30}%~%f  %*)
 %F{184}%n%f $ '
 ```
 
-![](https://i.imgur.com/tVbTmkF.png)
+![](/images/de86280e-tVbTmkF.png)
 
 ## 電源顯示
 
 再附上電源的指示，最後的版本長這樣。
 
-![](https://i.imgur.com/K0k5nGD.png)
+![](/images/de86280e-K0k5nGD.png)
 
 ## 後記
 

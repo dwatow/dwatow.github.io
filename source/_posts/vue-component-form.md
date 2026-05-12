@@ -41,7 +41,7 @@ categories:
 
 用原生的 form 表示，畫面就如同這樣。
 
-![](https://i.imgur.com/Dy4rudZ.png)
+![](/images/553062ff-Dy4rudZ.png)
 
 那如果我們要用 vue 來寫要怎麼做呢？
 

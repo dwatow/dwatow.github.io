@@ -20,7 +20,7 @@ categories:
 
 1. 找 `gt-src-c` 和 `gt-res-c` ，位置大概是在這。
 
-   ![](https://i.imgur.com/7QpRi7n.png)
+   ![](/images/d5c3ec55-7QpRi7n.png)
 
    它有一個屬性 `width: 50%;`
 
@@ -35,7 +35,7 @@ categories:
 
 1. 找 `gt-c` ，位置大概是在這。
 
-   ![](https://i.imgur.com/18byang.png)
+   ![](/images/d5c3ec55-18byang.png)
 
    它有一個屬性 `min-width: 765px`
 
@@ -51,7 +51,7 @@ categories:
 
 1. 改好了
    畫面就可以併排，而且可以像這樣使用
-   ![](https://i.imgur.com/JgRwYBM.png)
+   ![](/images/d5c3ec55-JgRwYBM.png)
 
 ## 來解釋一下原理吧！
 
@@ -62,19 +62,19 @@ categories:
 1. `float` 是為了處理元素「內容可以並排」(或文繞圖)，使 `block` 重疊的情況。在此並沒有看見，因為同層的元素都是 `float` 。改變可橫排元素寬度，即可決定元素要橫排還是直排(橫排會斷行)，所以在此只要將寬度改成 `100%`
 
 2. 而同層的元素 `gt-promo-lr` ，出現 `display: inline-block` 與 `float` 共用的情況。
-   ![](https://i.imgur.com/Zxu9cbq.png)
+   ![](/images/d5c3ec55-Zxu9cbq.png)
 
 我個人覺得，這樣不是很好，因為 `inline-block` 是一種允許 `block` 之間排列用 `inline` 排版方式，算是排橫的語法重複使用。
 
 3. `float` 和 `clear` 搭配使用，在這並沒有看見，不過倒是在 `gt-text-top` 看見了「定訂最小高度」。
 
-![](https://i.imgur.com/RCr2QCX.png)
+![](/images/d5c3ec55-RCr2QCX.png)
 
 我個人也覺得這樣並不是很好，因為內容排版方式改變，其實容器就無法容納內容元素，即使使用了 `min-height` 也一樣。
 
 改成直排之後，其實 `gt-text-top` 變這樣
 
-![](https://i.imgur.com/IeQbtd6.png =300x)
+![](/images/d5c3ec55-IeQbtd6.png =300x)
 
 原因是元素都受 `float` 影響，早就不在 `block` 佔任何面積，所以其實 `gt-text-top` 裡早就不存在任何佔有面積的元素內容了。
 

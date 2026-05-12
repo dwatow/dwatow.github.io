@@ -19,15 +19,15 @@ repo: https://github.com/evolus/pencil
 - index 點擊 button 可以連到 detail
 - detail 點擊 button 可以連到 index
 
-![](https://i.imgur.com/1rb489L.png)
+![](/images/3d4a7ad2-1rb489L.png)
 
-![](https://i.imgur.com/0eY4oBg.png)
+![](/images/3d4a7ad2-0eY4oBg.png)
 
 想要匯出
 
-![](https://i.imgur.com/peuzClT.png)
+![](/images/3d4a7ad2-peuzClT.png)
 
-![](https://i.imgur.com/d2TqXsX.png)
+![](/images/3d4a7ad2-d2TqXsX.png)
 
 
 ## 問題描述
@@ -41,7 +41,7 @@ repo: https://github.com/evolus/pencil
 
 > 在此的點擊範圍實作方式，是利用 [`HTML <map> Tag`](https://www.w3schools.com/tags/tag_map.asp) 技術
 
-![](https://i.imgur.com/rleYTX4.png)
+![](/images/3d4a7ad2-rleYTX4.png)
 
 
 匯出來的 html 
@@ -95,7 +95,7 @@ repo: https://github.com/evolus/pencil
 
 再次匯出，圖片的比例就比一開始的圖片小許多了。
 
-![](https://i.imgur.com/i8FQeRG.png)
+![](/images/3d4a7ad2-i8FQeRG.png)
 
 ```xml
 <div class="Page" id="index_page">
@@ -170,7 +170,7 @@ xslt 檔中，看起來是寫 xml 但是它的 xml 在 tab name 和 attributes �
 
 用來轉換 XML 成 HTML！(這不就是我想要的功能？繼續看看)
 
-![](https://i.imgur.com/p1xRT8N.png)
+![](/images/3d4a7ad2-p1xRT8N.png)
 
 看了一下 w3schools 的介紹，似乎不能直接把檔案文進瀏覽器，而它必須要經過一個程式轉換才可以看見結果。
 

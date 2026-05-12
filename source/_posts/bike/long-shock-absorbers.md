@@ -43,7 +43,7 @@ digraph hierarchy {
 
 讓故事從最後的反思的起點說起
 
-![](https://i.imgur.com/0uNoDOK.jpg)
+![](/images/2e8668f7-0uNoDOK.jpg)
 
 2022 年 8 月最後改了打檔桿！發現，總算是美好的時刻，打檔桿其實鎖上時會有 gap 會搖晃，如果這樣踏久了，我想起動桿(插入引擎的那隻)的牙，遲早會因為這個間距被磨平(到時又要拆引擎才可以修)，所以就跑去退貨了。
 
@@ -59,13 +59,13 @@ digraph hierarchy {
 
 因為當時有改裝中柱，[2016-7-28 09:12 有拍照貼文](/2016/07-28-bike/bike-stand/)
 
-![](https://i.imgur.com/2W2oZuN.png =x150)![](https://i.imgur.com/rZ5eZft.png =x150)![](https://i.imgur.com/z4TLUMY.png =x150)
+![](/images/2e8668f7-2W2oZuN.png =x150)![](/images/2e8668f7-rZ5eZft.png =x150)![](/images/2e8668f7-z4TLUMY.png =x150)
 
 當時還看得出來擋腿還是擋得到中柱，但是後來，擋退漸漸的就擋不到中柱的擋片。
 因為拉力變大，~~月形鐵片磨損車架加劇~~彈簧就慢慢的彈性疲乏。(後來換回來，中柱有點彈不回來了)
 
 所以 5 年之後 2021/6/23 有重新焊接了中柱的擋片
-![](https://i.imgur.com/7mdCr0Z.jpg)
+![](/images/2e8668f7-7mdCr0Z.jpg)
 
 但也因為擋片的位置不同，所以用墊片把排氣管墊出來一點，造成踩發桿要用的時候，才發現卡到排氣管。QQ
 
@@ -97,10 +97,10 @@ digraph hierarchy {
 
 就想到用[三角函數](https://forum.jorsindo.com/thread-2564705-1-1.html)算一下，適合的長度應該會是 330mm
 
-![](https://i.imgur.com/bh2Hhzh.png)
+![](/images/2e8668f7-bh2Hhzh.png)
 
 所以，後來換上 330mm 的避震，原本的中柱就夠長了。
 附上改回來的照片。(後來還有修改後土除，才像照片這樣，不然會微微磨到)
 
-![](https://i.imgur.com/AwJAmn3.png)
+![](/images/2e8668f7-AwJAmn3.png)
 

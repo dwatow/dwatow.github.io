@@ -9,7 +9,7 @@ categories:
 
 # 給平面設計師的: 網頁前端規格建議
 
-![](https://i.imgur.com/UvHo0gv.png)
+![](/images/6f7b81ab-UvHo0gv.png)
 
 這個文章不是給設計師跨前端用的。而是給設計師與前端工程師溝通用的。先說，我是以前端工程師的角度來看待這樣的情況。
 
@@ -61,7 +61,7 @@ categories:
 
 ## 給設計師的建議
 
-![](https://i.imgur.com/jmYtoLZ.png)
+![](/images/6f7b81ab-jmYtoLZ.png)
 
 設計師要標示尺寸規格時，簡單的分成幾種
 
@@ -92,7 +92,7 @@ categories:
 
 ### 回覆需要的尺寸給設計師
 
-![](https://i.imgur.com/NPoBsoT.png)
+![](/images/6f7b81ab-NPoBsoT.png)
 
 這是必然的一步。設計師不知道施工需要的尺寸是哪一段到哪一段。
 工程師要畫箭頭給設計師標示，而且要預計對方只會給你 `px` 值。

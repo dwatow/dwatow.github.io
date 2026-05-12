@@ -46,7 +46,7 @@ categories:
 電路接線圖
 給想改三相的化油狼
 
-![](https://i.imgur.com/jE2J5h5.png)
+![](/images/86d8abbf-jE2J5h5.png)
 
 附上線的解釋
 
@@ -63,7 +63,7 @@ categories:
 | 黑/白色   | 電門鎖熄火開關引線 |
 | 綠色      | 電源負極和接地線 |
 
-![](https://i.imgur.com/8ouAOVd.png)
+![](/images/86d8abbf-8ouAOVd.png)
 
 
 參考資料

@@ -39,7 +39,7 @@ visualViewport.width; // = screen.width
 
 在使用模擬器看手機排版時，可以用如圖的方式看見目前的 layout viewport 大小
 
-![](https://i.imgur.com/EB5ugA8.png)
+![](/images/e7bf2dd8-EB5ugA8.png)
 
 一般而言，瀏覽器會給一個預設值，而這個值，會因設備而異，而 Apple 的設備，預設值是 `980px` [^ref1](後面就知道怎麼找預設值)
 

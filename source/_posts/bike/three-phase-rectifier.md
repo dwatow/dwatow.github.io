@@ -79,7 +79,7 @@ categories:
 對野狼的整流器支架來說，太大顆，無法兩個螺絲都鎖上。
 而凱宇皓月的這一顆，似乎機構沒問題，體積也比較小。
 
-![](https://i.imgur.com/tXltxwG.png)
+![](/images/25f5a92e-tXltxwG.png)
 
 > 感謝[這個賣家](https://www.ruten.com.tw/item/show?22011343708832)量了尺寸，有需要可以跟他買唷
 
@@ -92,7 +92,7 @@ categories:
 
 所以，要將整流器的針腳，從 250 改成 110
 
-![整流器改針腳](https://i.imgur.com/tj1XHzy.png)
+![整流器改針腳](/images/25f5a92e-tj1XHzy.png)
 
 ### 改裝車上的腳位定義
 
@@ -108,7 +108,7 @@ categories:
 粉紅色在之前就拿來當三相的其中一相線路，所以粉紅色是三相的部份
 其它都是黃色的
 
-![線路定義](https://i.imgur.com/XSlL5h9.png)
+![線路定義](/images/25f5a92e-XSlL5h9.png)
 
 圖片由上到下
 
@@ -121,7 +121,7 @@ categories:
 
 正想裝回去的時候遇到了最大危機！
 
-![疊疊樂](https://i.imgur.com/bgfcpES.png)
+![疊疊樂](/images/25f5a92e-bgfcpES.png)
 
 右上角的圖，就是剛要裝回去的時候，發現怎麼螺絲不夠長....
 
@@ -137,11 +137,11 @@ categories:
 一切都裝好之後，先**發動測試**。用三用電表量一下電壓是否有隨著催油門上升。
 之後**試騎測試**，騎了一圈並且開大燈也催油門，如果有接好，電壓就不會降，如果沒接好，因為開大燈會明顯消秏電瓶的電。
 
-![電表圖](https://i.imgur.com/rlcXuOu.png)
+![電表圖](/images/25f5a92e-rlcXuOu.png)
 
 ## 成功！
 
-![成功](https://i.imgur.com/EAe1mEt.png)
+![成功](/images/25f5a92e-EAe1mEt.png)
 
 裝上了整流器，整台車的電系改裝也算是都完成了。
 - 三相發電、直流 CDI、點火線圈、三相整流，都是使用皓月的產品

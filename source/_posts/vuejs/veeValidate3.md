@@ -59,19 +59,19 @@ Vue.use(VeeValidate);
 
 初始，沒有錯誤訊息，但是 errors 物件原始長這樣
 
-![](https://hackmd.io/_uploads/ByVJF7OI3.png)
+![](/images/54841202-ByVJF7OI3.png)
 
 **example:**
 
 輸入不符合 email 格式的訊息
 
-![](https://hackmd.io/_uploads/r1JROmuLn.png)
+![](/images/54841202-r1JROmuLn.png)
 
 **example:**
 
 編輯過後再刪掉，會出現必填的錯誤訊息
 
-![](https://hackmd.io/_uploads/SJctu7OU2.png)
+![](/images/54841202-SJctu7OU2.png)
 
 ### 用很多個？
 
@@ -87,7 +87,7 @@ Vue.use(VeeValidate);
 </div>
 ```
 
-![](https://hackmd.io/_uploads/r1iU9muL2.png)
+![](/images/54841202-r1iU9muL2.png)
 
 兩個欄位，不同規格。`errors.itms` 會跑兩個錯誤出來。
 如果只有一個欄位不符規則，`errors.itms` 就只有一個錯誤在裡面。
@@ -131,14 +131,14 @@ Vue.use(VeeValidate);
   </ul>
 ```
 
-![](https://hackmd.io/_uploads/H1fiTmd82.png)
+![](/images/54841202-H1fiTmd82.png)
 
 
 把官網後續的例子也複雜化一下，可以發現 collect 的參數，要放的是 input 的 name 就可以取得指定欄位的所有錯誤
 
 如果在此不指定 name ，錯誤訊息就會這樣呈現
 
-![](https://hackmd.io/_uploads/HyW76mu83.png)
+![](/images/54841202-HyW76mu83.png)
 
 **error.all()**
 
@@ -157,7 +157,7 @@ Vue.use(VeeValidate);
 </ul>
 ```
 
-![](https://hackmd.io/_uploads/SyMIC7OI2.png)
+![](/images/54841202-SyMIC7OI2.png)
 
 - **errors.all("url")**: 指定 name 的 all 是抓不到任何東西的，表示這裡的參數不是 input 的 name
 - **errors.collect()**: 不指定 name 的 collect 會出現「各欄的所有錯誤」
@@ -189,7 +189,7 @@ flags 可以這樣從全域物件中叫出來
 <pre>{{ fields }}</pre>
 ```
 
-![](https://hackmd.io/_uploads/H1MN44_Ih.png)
+![](/images/54841202-H1MN44_Ih.png)
 
 ## 驗證觸發 Event
 
@@ -363,7 +363,7 @@ export default {
 };
 ```
 
-![](https://hackmd.io/_uploads/SJ2Hq0qUh.png)
+![](/images/54841202-SJ2Hq0qUh.png)
 
 
 通常，它會變成一個 `<span>`

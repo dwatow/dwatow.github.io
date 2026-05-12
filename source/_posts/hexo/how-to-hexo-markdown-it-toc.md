@@ -46,7 +46,7 @@ markdown:
 
 因為修改了 `_config.yml` 讓標題加上 `¶` 的偽元素。
 所以 toc 的文字多了前綴，如圖
-![](https://i.imgur.com/DOXMvAl.png =200x)
+![](/images/4e04436f-DOXMvAl.png =200x)
 
 所以，要修改 `module_package\hexo` 套件。
 找出 `hexo\bin\plugins\helper\toc.js` 檔案。

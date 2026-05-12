@@ -137,7 +137,7 @@ bindings: {
 
 ## Lifecycle
 
-![AngularJS lifecycle](https://i.imgur.com/PXSdTNq.png)
+![AngularJS lifecycle](/images/bdf47c60-PXSdTNq.png)
 
 
 在此簡單的介紹一下
@@ -171,7 +171,7 @@ controller 的元素和它的 children linked 完時。在這時可以操作 DOM
 
 以一個 tab 轉換的練習來看看 lifecycle 是什麼時候發生的
 
-![](https://i.imgur.com/9xkn5ZD.png)
+![](/images/bdf47c60-9xkn5ZD.png)
 
 相同的練習用 Vue 和 AngularJS 做了一次。並且把 lifecycle 都印出來看，下面的圖左邊是 Vue 右邊是 AngularJS。
 
@@ -179,21 +179,21 @@ controller 的元素和它的 children linked 完時。在這時可以操作 DOM
 
 > AngularJS 使用 `ng-if` 切換觸發完整 lifecycle 的做法
 
-![](https://i.imgur.com/7m6En0B.png) ![](https://i.imgur.com/8dnCSKv.png)
+![](/images/bdf47c60-7m6En0B.png) ![](/images/bdf47c60-8dnCSKv.png)
 
 **keep-alive**
 
 > AngularJS 使用 `ng-show` 切換當作是保持不滅的做法
 
-![](https://i.imgur.com/ualJGFb.png) ![](https://i.imgur.com/9Iddhvo.png)
+![](/images/bdf47c60-ualJGFb.png) ![](/images/bdf47c60-9Iddhvo.png)
 
 **初始化完，切到 Posts**
 
 把 Archive 嵌到 Posts 裡的 lifecycle 練習
 
-![](https://i.imgur.com/U3snr2d.png)
-![](https://i.imgur.com/Y3eklNy.png)
+![](/images/bdf47c60-U3snr2d.png)
+![](/images/bdf47c60-Y3eklNy.png)
 
 印出巢狀 component 的 lifecycle 狀況
 
-![](https://i.imgur.com/nJfpTOH.png =200x) ![](https://i.imgur.com/kImYRh1.png =200x)
+![](/images/bdf47c60-nJfpTOH.png =200x) ![](/images/bdf47c60-kImYRh1.png =200x)

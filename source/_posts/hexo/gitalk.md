@@ -66,7 +66,7 @@ Gitalk 的授權 token 要改成 access_token ，不使用 `clientID`/`clientSec
 
 成功會看見這個畫面
 
-![](https://i.imgur.com/24Bepdi.png)
+![](/images/e0ac814a-24Bepdi.png)
 :::
 
 直接去 [Github > Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
@@ -204,7 +204,7 @@ gitalk:
 
 如果你成功的話，可以在 `hexo server` 看見這樣的畫面，這樣再推上去都還來得及。
 
-![](https://i.imgur.com/TvIAP6d.png)
+![](/images/e0ac814a-TvIAP6d.png)
 
 ## 要注意的問題
 

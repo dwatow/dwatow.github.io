@@ -11,7 +11,7 @@ categories:
 
 # AngularJS + Gulp → Webpack
 
-![](https://i.imgur.com/fW5jyVi.png)
+![](/images/b9980773-fW5jyVi.png)
 
 ## 源起
 
@@ -423,7 +423,7 @@ angular.js:15536 Error: Please include the xlsx.js library
 
 要先知道， alasql 本來就有相依性於 xlsx
 
-![](https://i.imgur.com/rcskWY0.png)
+![](/images/b9980773-rcskWY0.png)
 
 **alasql 本身有個 bug**
 

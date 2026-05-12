@@ -10,7 +10,7 @@ categories:
 
 # AngularJS 1.5+ Component style with es6-class
 
-![](https://i.imgur.com/64fbzVm.png)
+![](/images/d5624259-64fbzVm.png)
 
 在接手了 AngularJS 的專案到現在，一直在處理寫作風格造成除錯上的困擾。
 包含無法完全封裝的 controller + template 的組合，終於可以用 component 打成一包。[^angularjs-component]

@@ -15,7 +15,7 @@ categories:
 答應提供給參加的朋友一個非工程師的開發手冊指引
 其實就只是將官網開發手冊上的東西，過濾掉程式碼的部份，節錄下來而已。
 
-[![](https://i.imgur.com/43N6mAK.png)](https://hpx.tw/archives/24251)
+[![](/images/0e2ea2c7-43N6mAK.png)](https://hpx.tw/archives/24251)
 
 ## 目的
 

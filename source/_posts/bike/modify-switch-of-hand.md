@@ -9,7 +9,7 @@ categories:
 ---
 # 野狼電系(2) - 改左右手把開關 (左手勁 & 右手 Dink)
 
-![](https://i.imgur.com/SsItIN5.jpg)
+![](/images/5b7fb2e1-SsItIN5.jpg)
 
 改裝原則: 
 
@@ -22,7 +22,7 @@ categories:
 
 ## 機車材料行買的東西[^小林天明的改裝]
 
-![](https://i.imgur.com/kxUI5Le.png)
+![](/images/5b7fb2e1-kxUI5Le.png)
 
 > 雖然上述的料號有錯，但是因為是機車材料行老老闆娘手寫的溫度，特別想要留在文章中。
 > 正確的料號要參考下圖
@@ -30,13 +30,13 @@ categories:
 **Dink 150 右手開關** 
 
 料號: 3515A-KKC3-900
-![](https://i.imgur.com/yOmzm1Y.jpg =300x)
+![](/images/5b7fb2e1-yOmzm1Y.jpg =300x)
 
 **勁 150 左手高手把開關**
 
 料號: 3520A-KEE4-900
 
-![](https://i.imgur.com/Pnrp8Iz.jpg =300x)
+![](/images/5b7fb2e1-Pnrp8Iz.jpg =300x)
 
 另外追加一個料 (這可能絕版了)，就是勁左手開關有一個是阻風門的功能，所以有專用的阻風門線。
 
@@ -52,11 +52,11 @@ categories:
 
 我是在網拍買的，比較便宜
 
-![](https://i.imgur.com/LWED29Y.png =x400)
+![](/images/5b7fb2e1-LWED29Y.png =x400)
 
 **熱縮套管 φ2.5, φ3.5**
 
-![](https://i.imgur.com/Fd82cma.jpg)
+![](/images/5b7fb2e1-Fd82cma.jpg)
 
 φ2.5 用起來有點擠 (再小就不行了)，也可以買 φ3.0 比較好工作
 φ3.5 用來兩條線接合時使用，需要把線拆成祼線，再用熱縮套管縮成新的皮，方便壓線時，有一段要壓在皮的位置，就壓在套好套管上
@@ -78,7 +78,7 @@ categories:
 
 較特別的是一接多的子頭型母頭，這個電子材料行較不好找，網拍找會比較容易，不然淘寶回來也行，但是運費通常都比物品貴。
 
-[![](https://i.imgur.com/3AAKYWw.jpg)](https://shopee.tw/search?keyword=%E5%AD%90%E5%BD%88%E5%9E%8B&shop=2627945)
+[![](/images/5b7fb2e1-3AAKYWw.jpg)](https://shopee.tw/search?keyword=%E5%AD%90%E5%BD%88%E5%9E%8B&shop=2627945)
 
 **110型端子**
 
@@ -90,7 +90,7 @@ categories:
 
 最後我會提供零件表
 
-![](https://i.imgur.com/Z1jrmiZ.jpg)
+![](/images/5b7fb2e1-Z1jrmiZ.jpg)
 
 
 ## 野狼左右開關短路查線
@@ -101,7 +101,7 @@ categories:
 
 先用查表的方式找到野狼的開關與電線的關係表[^小老婆的野狼電路圖]
 
-![](https://i.imgur.com/rXJ5Vg6.jpg =300x)
+![](/images/5b7fb2e1-rXJ5Vg6.jpg =300x)
 
 網路上有些前輩的改法與自己買的料件可能有點不一樣
 感謝小老婆的資料，但最終還是以三用電表查出來的為準
@@ -110,11 +110,11 @@ categories:
 
 **勁 左手**
 
-![](https://i.imgur.com/xbhxx0m.png)
+![](/images/5b7fb2e1-xbhxx0m.png)
 
 **Dink 右手**
 
-![](https://i.imgur.com/r9BmxJR.png)
+![](/images/5b7fb2e1-r9BmxJR.png)
 
 ## 野狼左右手開關的接頭
 
@@ -123,21 +123,21 @@ categories:
 這部份因為網路上的前輩修改的也不盡相同，所以我就打算自己研究。
 一開始，就是先以車上現有的資料先進行搜集。
 
-![野狼左手右接頭照片](https://i.imgur.com/1nWriTv.png)
+![野狼左手右接頭照片](/images/5b7fb2e1-1nWriTv.png)
 
 後來拆到都有辦法看懂每一條線，所以就直接在圖上寫上功能了，一開始真的是很怕接不回去
 
 再來，就將野狼的左手右手開關，接線圖先畫一份下來
 在改線時可以直接思考怎麼滿足這些接線需求
 
-![野狼左右手接頭線路](https://i.imgur.com/dckiikP.jpg)
+![野狼左右手接頭線路](/images/5b7fb2e1-dckiikP.jpg)
 
 這樣一來就可以比較理解各個顏色的訊號線順序。
 
 用網路上的彩色版電路圖[^小老婆的野狼電路圖]，將接線順序畫成電路圖 (這件事我早就想做很久了)
 原來綠色是整台車的接地。
 
-![手繪電路圖](https://i.imgur.com/nvDX6nb.jpg)
+![手繪電路圖](/images/5b7fb2e1-nvDX6nb.jpg)
 
 再來就是將勁與 Dink 的線，改成滿足野狼的接頭，就可以無痛直上。
 
@@ -148,13 +148,13 @@ categories:
 > 下圖接線對照圖，是以正在插線的視角進行的排列。
 > (參考黃紅、棕的位置當參考點)
 
-![Dink開接線修改圖](https://i.imgur.com/ReGwqj9.jpg)
+![Dink開接線修改圖](/images/5b7fb2e1-ReGwqj9.jpg)
 
 ### 熄火開關
 
 從野狼的維修手冊中，可以找到下面這張圖，是 CDI 的內部線圖示意圖
 
-![CDI電路圖](https://i.imgur.com/hF57Xtc.png)
+![CDI電路圖](/images/5b7fb2e1-hF57Xtc.png)
 
 可以發現 黑白線，是 CDI 的 enable 線
 
@@ -163,7 +163,7 @@ categories:
 
 在鎖頭開關的圖也可以印證這個線的功能。
 
-![鎖頭開關短路線路關係圖](https://i.imgur.com/UbaC92y.png =200x)
+![鎖頭開關短路線路關係圖](/images/5b7fb2e1-UbaC92y.png =200x)
 
 線接到接地時，就關閉 CDI
 
@@ -188,7 +188,7 @@ categories:
 
 比對數位電路的真值表，找到 OR gate 真值表，很像上面整理的真值表[^OR-gate-truth-table]
 
-![](https://i.imgur.com/VUmaLd3.png =x200)
+![](/images/5b7fb2e1-VUmaLd3.png =x200)
 
 
 [^OR-gate-truth-table]: [只使用NAND或NOR Gate實現邏輯函數](https://www.edntaiwan.com/20210201ta31-implementing-logic-functions-using-only-nand-or-nor-gates/)
@@ -197,7 +197,7 @@ categories:
 
 找到另一份教材有開關電路，並且它是數位邏輯的課唷[^digital-logic-circuit]
 
-![](https://i.imgur.com/XZgF3gJ.png =x200)
+![](/images/5b7fb2e1-XZgF3gJ.png =x200)
 
 [^digital-logic-circuit]: [數位邏輯實習#6](http://www.ycvs.ntpc.edu.tw/ezfiles/0/1000/img/112/201365932.pdf)
 
@@ -205,7 +205,7 @@ categories:
 
 畫一張電路圖，可能左右反過來，但是意思一樣，就是將兩個開做併聯就會有想要的效果。
 
-![](https://i.imgur.com/ccFNOxc.jpg =x300)
+![](/images/5b7fb2e1-ccFNOxc.jpg =x300)
 
 實作成轉接線如下，因為線沒有太長，所以顏色就沒有照車上的顏色了，直接看一下隔壁的線就可以看出原本的顏色，只是跳線的位置是對角，要注意。
 
@@ -220,7 +220,7 @@ categories:
 
 因為該勁的左手開關超車燈與喇叭共用黑線，所以黑線的用途，是電源。
 
-![勁開關短路線路關係圖](https://i.imgur.com/pSj0Pol.png)
+![勁開關短路線路關係圖](/images/5b7fb2e1-pSj0Pol.png)
 
 對照電路圖
 
@@ -256,7 +256,7 @@ categories:
 
 ## 電路改裝完成
 
-![](https://i.imgur.com/UybRwcG.jpg)
+![](/images/5b7fb2e1-UybRwcG.jpg)
 
 
 ## 電子零件表

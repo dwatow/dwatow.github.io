@@ -56,7 +56,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
 **render result**
 
-![](https://i.imgur.com/IUZ5m7i.png)
+![](/images/b911062a-IUZ5m7i.png)
 
 # Resource 群組
 
@@ -76,7 +76,7 @@ Resources related to questions in the API.
 
 **render result**
 
-![](https://i.imgur.com/1829jBY.png)
+![](/images/b911062a-1829jBY.png)
 
 # Resource (API 本身)
 
@@ -95,7 +95,7 @@ Resource
 
 **rendered**
 
-![](https://i.imgur.com/b1TDUJm.png)
+![](/images/b911062a-b1TDUJm.png)
 
 ## API 動作
 
@@ -113,7 +113,7 @@ Actions
 
 (藍色的部份)
 
-![](https://i.imgur.com/YOw3rmG.png)
+![](/images/b911062a-YOw3rmG.png)
 
 ## 很多個 API 動作
 
@@ -137,7 +137,7 @@ containing a question and a collection of answers in the form of choices.
 
 **render result**
 
-![](https://i.imgur.com/uJNG4sQ.png)
+![](/images/b911062a-uJNG4sQ.png)
 
 ### Response (JSON)
 
@@ -185,10 +185,10 @@ containing a question and a collection of answers in the form of choices.
 **render result**
 
 縮起來是這樣
-![](https://i.imgur.com/9KAyV9R.png)
+![](/images/b911062a-9KAyV9R.png)
 
 展開是這樣
-![](https://i.imgur.com/LA3NwH2.png)
+![](/images/b911062a-LA3NwH2.png)
 
 ### 自訂 Response 的 Headers, Body
 
@@ -217,7 +217,7 @@ containing a question and a collection of answers in the form of choices.
 
 **render result**
 
-![](https://i.imgur.com/t9KuU9V.png)
+![](/images/b911062a-t9KuU9V.png)
 
 # URI Template
 
@@ -233,7 +233,7 @@ containing a question and a collection of answers in the form of choices.
 
 **render result**
 
-![](https://i.imgur.com/Su74IhH.png)
+![](/images/b911062a-Su74IhH.png)
 
 ## URI Parameters
 
@@ -250,7 +250,7 @@ containing a question and a collection of answers in the form of choices.
 
 **render result**
 
-![](https://i.imgur.com/jrDcyEZ.png)
+![](/images/b911062a-jrDcyEZ.png)
 
 # 同場加映: Advance Tutorial
 
@@ -309,7 +309,7 @@ containing a question and a collection of answers in the form of choices.
 
 **result**
 
-![](https://i.imgur.com/EK62JtG.png)
+![](/images/b911062a-EK62JtG.png)
 
 # Attributes
 
@@ -342,7 +342,7 @@ containing a question and a collection of answers in the form of choices.
 
 **result**
 
-![](https://i.imgur.com/gBJhD2t.png)
+![](/images/b911062a-gBJhD2t.png)
 
 # Data Struct
 
@@ -377,7 +377,7 @@ containing a question and a collection of answers in the form of choices.
 
 **result**
 
-![](https://i.imgur.com/on9L1uQ.png)
+![](/images/b911062a-on9L1uQ.png)
 
 # Relaiton Types
 
@@ -505,7 +505,7 @@ Company 裡的 founder 是一個 Person
 
 測試變這樣
 
-![](https://i.imgur.com/SjNNUQ6.png)
+![](/images/b911062a-SjNNUQ6.png)
 
 # 後記
 

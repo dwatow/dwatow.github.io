@@ -102,4 +102,4 @@ npm install https://github.com/dwatow/hexo-filter-viz.git
 
 直接跑 hackmd 的語法測試，成功的話出現這樣的畫面
 
-![](https://i.imgur.com/J7RZhAc.png)
+![](/images/3d1f3d80-J7RZhAc.png)

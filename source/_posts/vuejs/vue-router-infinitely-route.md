@@ -21,7 +21,7 @@ categories:
 
 **截圖**
 
-![](https://i.imgur.com/6DRZcKB.png)
+![](/images/9e838042-6DRZcKB.png)
 
 **文字**
 

@@ -9,7 +9,7 @@ categories:
 
 # 好想工作室第 14 梯 Web Camp 招生
 
-![](https://i.imgur.com/2706gfw.png)
+![](/images/fdacd44a-2706gfw.png)
 
 ## 你在自學時，會無法「判斷解答是否為真」嗎？
 
@@ -19,7 +19,7 @@ categories:
 
 我們深信工程師自身需具備「知識正確性的判斷力」才可以在未來，面對更未知的 Web 世界。
 
-<!-- ![](https://i.imgur.com/OTX5WpW.jpg =500x) -->
+<!-- ![](/images/fdacd44a-OTX5WpW.jpg =500x) -->
 
 ## 現行台灣並不缺工程師，但「好的工程師」仍是稀缺。
 

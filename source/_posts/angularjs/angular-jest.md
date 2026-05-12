@@ -9,7 +9,7 @@ categories:
 ---
 # AngularJS + Jest 實戰
 
-![](https://i.imgur.com/toh1v1q.png)
+![](/images/35cfacb5-toh1v1q.png)
 
 實做專案: https://github.com/dwatow/AngularJS-demo/tree/jest-demo
 

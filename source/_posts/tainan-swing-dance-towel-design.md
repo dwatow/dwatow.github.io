@@ -26,11 +26,11 @@ categories:
 
 初始設計稿如下
 
-![](https://i.imgur.com/4JL8iIn.jpg)
+![](/images/32c8a3c9-4JL8iIn.jpg)
 
 以這個草稿為基礎，希望使用者在使用毛巾時，將毛巾批在肩上，毛巾兩邊的舞者可以跳雙人舞 (swing out) 如果是其它使用方式，舞者看起來是跳單人舞的有趣方式。讓毛巾的圖案配置與 swing 這個舞有一個搭配性。
 
-![](https://i.imgur.com/DG06dYk.png =400x)
+![](/images/32c8a3c9-DG06dYk.png =400x)
 
 因為尺寸是廠商決定的固定尺寸，所以放在肩上的使用方式，人物要露出多大的大小，都是可以推估的。
 
@@ -53,11 +53,11 @@ categories:
 
 取自 [Dragon Swing 2016: Strictly Lindy Finals](https://www.youtube.com/watch?v=-RdfKe39x3k)
 
-![](https://i.imgur.com/D8oyOM5.jpg)
+![](/images/32c8a3c9-D8oyOM5.jpg)
 
 可以注意到，這一對 Leader 與 Follower 在影片中並不是同一對，只是動作比較有力好看。而選擇這個幀數的樣子做素材。
 
-![](https://i.imgur.com/3lY6CZW.png)
+![](/images/32c8a3c9-3lY6CZW.png)
 
 透過手繪變成鉛筆稿，再轉成電子檔，畫貝茲曲線。
 之後要出圖時轉成 AI 檔即可。
@@ -66,7 +66,7 @@ categories:
 
 經過幾次的轉檔與調整，最終把成品做出來了。
 
-![](https://i.imgur.com/GPivdZM.png)
+![](/images/32c8a3c9-GPivdZM.png)
 
 > 設計稿的 Logo 與文字留白調整有一部份是由 [MOO TIME INN 牧時光旅宿- 民宿](https://www.facebook.com/mootimeinn/?locale=zh_TW) 的 Ray 支援。
 
@@ -85,7 +85,7 @@ categories:
 
 結果，顏色不如預先想的這樣，就想校色之後再量產，
 
-![](https://i.imgur.com/9DvLAUr.png)
+![](/images/32c8a3c9-9DvLAUr.png)
 
 
 印刷廠跟我說，他們師傅抓出來的顏色是 200U
@@ -110,23 +110,23 @@ categories:
 
 很幸運的借到之後，先對一下色差。(當時還沒有拿到打樣的毛巾)
 
-![](https://i.imgur.com/7CYzFvu.jpg)
+![](/images/32c8a3c9-7CYzFvu.jpg)
 
 找了幾個顏色
 
-![187](https://i.imgur.com/6IH2PE7.jpg =200x)![1945](https://i.imgur.com/8VtANGh.jpg =200x)
-![1955](https://i.imgur.com/Vs5HHhf.png =200x)![7426](https://i.imgur.com/7363sSX.jpg =200x)
+![187](/images/32c8a3c9-6IH2PE7.jpg =200x)![1945](/images/32c8a3c9-8VtANGh.jpg =200x)
+![1955](/images/32c8a3c9-Vs5HHhf.png =200x)![7426](/images/32c8a3c9-7363sSX.jpg =200x)
 
 最後只選了兩個顏色打樣。(打樣一次，一個費用，寄送樣品，又一個費用)
 
-![](https://i.imgur.com/KuFWuPF.jpg)
-![](https://i.imgur.com/27VAkYA.jpg)
+![](/images/32c8a3c9-KuFWuPF.jpg)
+![](/images/32c8a3c9-27VAkYA.jpg)
 
 ### 收到打樣
 
 重現與概念設計時，相同的使用者情境。
 
-![](https://i.imgur.com/J3jWZGw.jpg =300x)
+![](/images/32c8a3c9-J3jWZGw.jpg =300x)
 
 ## 感想
 

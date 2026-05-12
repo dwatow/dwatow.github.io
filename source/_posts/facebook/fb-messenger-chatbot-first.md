@@ -10,7 +10,7 @@ categories:
 ---
 # 初探Facebook Messager 聊天機器人
 基本架構圖
-![](https://i.imgur.com/g20l9NE.jpg)
+![](/images/d5bacf2b-g20l9NE.jpg)
 
 client -> FB server
 FB server hook -> bot
@@ -73,25 +73,25 @@ Forwarding[color=red]                    https://db9ba35e.ngrok.io -> localhost:
 
 
 1. 進入[開發者帳號](https://developers.facebook.com/?locale=zh_TW)之後，按右上角的「新增應用程式」
-![](https://i.imgur.com/ip2RRfK.png)
+![](/images/d5bacf2b-ip2RRfK.png)
 
 2. 選 webhooks
-![](https://i.imgur.com/w5XOZmC.png)
+![](/images/d5bacf2b-w5XOZmC.png)
 點擊開始使用
 
 3. 進入畫面之後，找到 Edit Subscription
-![](https://i.imgur.com/7nTNfQl.png)
+![](/images/d5bacf2b-7nTNfQl.png)
 下面的就勾`messages`就好，其它隨你
 
 4. 在此要填入兩個東西
-![](https://i.imgur.com/r4lIszF.png)
+![](/images/d5bacf2b-r4lIszF.png)
 
 - 回呼網址: bot 的 api 網址 (在此篇文章`http://db9ba35e.ngrok.io`)
   為了讓facebook伺服器知道要把收到的訊息，丟到哪給機器人。
 - 驗證權杖: 一個自訂的字串 (亂打就好....真的!!!)
 
 >在此，一定會出現下面的錯誤訊息
-![](https://i.imgur.com/xkKAlYf.png)
+![](/images/d5bacf2b-xkKAlYf.png)
 
 原因在於，facebook 伺服器傳過來一個 `GET` 的 request，要求回覆一個 echo 值(在此要回`1770261222`)給他，不然就報錯。
 
@@ -99,7 +99,7 @@ Forwarding[color=red]                    https://db9ba35e.ngrok.io -> localhost:
 
 從[Web Interface](http://127.0.0.1:4040)可以看到
 
-![](https://i.imgur.com/ZZFJwRM.png)
+![](/images/d5bacf2b-ZZFJwRM.png)
 
 其中 `1770261222`值藏在`hub.challenge`裡面。
 
@@ -170,22 +170,22 @@ $ node app.js
 ```
 
 這樣就可以按下「驗證並儲存」，即可完成 webhook 的設定
-![](https://i.imgur.com/r4lIszF.png)
+![](/images/d5bacf2b-r4lIszF.png)
 
 檢查一下是否有訂閱 `messages` 的 webhook。
-![](https://i.imgur.com/fRDqAnu.png)
+![](/images/d5bacf2b-fRDqAnu.png)
 
 ## 設定 Messager
 
 新增 `Messager`
-![](https://i.imgur.com/cKAg7dD.png)
+![](/images/d5bacf2b-cKAg7dD.png)
 
 
 先取得權杖 ++(真是中二的翻譯)++，它指的就是==token==
-![](https://i.imgur.com/CZ9DRL0.png)
+![](/images/d5bacf2b-CZ9DRL0.png)
 
 在同頁面滑下來一點。
-![](https://i.imgur.com/b7hFrNK.png)
+![](/images/d5bacf2b-b7hFrNK.png)
 
 按下「選擇粉絲專頁」>「訂閱」
 
@@ -198,7 +198,7 @@ $ node app.js
 送出訊息後，看看是不是可以在 Web Interface 看見你送出的訊息？
 
 > *例圖 ↓*
-> ![](https://i.imgur.com/31WMgqv.png)
+> ![](/images/d5bacf2b-31WMgqv.png)
 
 想要看得懂這個結構，可以參考[官方網站的文件](https://developers.facebook.com/docs/messenger-platform/webhook-reference/message)
 
@@ -276,7 +276,7 @@ request({
     這個網址就是 facebook messager 伺服器的位址
     是固定的 `https://graph.facebook.com/v2.6/me/messages`
 - token 在下圖的位置取得
-  ![](https://i.imgur.com/JJPRQDb.png)
+  ![](/images/d5bacf2b-JJPRQDb.png)
 - json
 
 #### **JSON**
@@ -285,7 +285,7 @@ request({
 到[Messager的開發文件>傳送 API 參考資料>要求](https://developers.facebook.com/docs/messenger-platform/send-api-reference)
 (和剛剛同一份文件的同一段中的範例...)
 
->![](https://i.imgur.com/g15sRhp.png)
+>![](/images/d5bacf2b-g15sRhp.png)
 (facebook提供的範例是使用`curl`這隻程式來送出請求，可以把curl想成postman的指令版)
 
 

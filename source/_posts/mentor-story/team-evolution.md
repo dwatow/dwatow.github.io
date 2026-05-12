@@ -11,7 +11,7 @@ categories:
 
 # MOPCON 2020 會後感想
 
-![](https://i.imgur.com/yF1z9QK.jpg)
+![](/images/272effd8-yF1z9QK.jpg)
 
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/76rcbMAaT1pJxK" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/dwatow/camp-238965526" title="完美 camp 進化論" target="_blank">完美 camp 進化論</a> </strong> from <strong><a href="https://www.slideshare.net/dwatow" target="_blank">Chris Wang</a></strong> </div>
 
@@ -32,7 +32,7 @@ categories:
 
 很難想像，我在 MOPCON 上台一週前，到處問人，我到底要講什麼。雖然我已經將相同題目的鐵人 30 寫完，但是我並不想要只是講鐵人裡的內容而已，雖然我這次的鐵人文章並沒有特別高的流量，但是我還是覺得看過鐵人文的人，還是可以來聽我分享。
 
-![](https://i.imgur.com/mvO9kZ5.jpg)
+![](/images/272effd8-mvO9kZ5.jpg)
 
 (聽完我試講的朋友們，可以去聽隔壁 Kuro 的場，很讚哦)
 
@@ -40,7 +40,7 @@ categories:
 
 ## 第八次來 MOPCON
 
-![](https://i.imgur.com/eeAVFAV.png)
+![](/images/272effd8-eeAVFAV.png)
 
 也許，這是一個驚人的記錄，連續八年，但是身為一個「資深在地」的工作者 (並不是在「地的『資深工作者』」)，我一直覺得沒有離開台南/高雄這塊土地，始終我自己感到了一份驕傲。在台南，可以歷經一段不是自己創業，卻也可以讓自己的工作有一定的水準，不管是工程技術與管理思維，我認為並不算太陳舊。
 
@@ -59,11 +59,11 @@ categories:
 最後還有遇到 Youtuber: [在地上滾的工程師Nic](https://www.youtube.com/channel/UC5TB0Pv2k1LdtGeMB6ErtJQ) 有機會來台南，帶你去改車。哦！不是，是去吃小吃。
 還有遇到好多來不及提及的人....
 
-![](https://i.imgur.com/pd71APx.jpg)
+![](/images/272effd8-pd71APx.jpg)
 
 ## MOPCON 對我而言是什麼？
 
-![](https://i.imgur.com/aRpxIF2.jpg)
+![](/images/272effd8-aRpxIF2.jpg)
 
 這次可以以講師的身份寫下這一篇心得，真的是讓我感到非常開心呀。除了感謝 Howard 總是一再的給我推坑，讓我不斷的進步與成長。也感謝 Brook 關注我的「可不可以不要寫糙 code 」讓我開始認識 MOPCON 裡的人，
 
@@ -73,6 +73,6 @@ categories:
 
 一年又一年的來參加 MOPCON 讓我發現主流的技術，新的 API 支援什麼語言，大家討論的是什麼問題，又是用什麼工具處理？一開始我就朝向測試與維運方面的議程。後來才讓我覺得，再這樣下去不行，一定要轉成主流語言，挑一個吧！App 還是 Web？ 很幸運的我選擇了 JavaScript。
 
-![](https://i.imgur.com/sz9Mwzo.jpg)
+![](/images/272effd8-sz9Mwzo.jpg)
 
 所以 MOPCON 對我來說，是一個每一年看看潮流與趨勢的地方。不管今年講題講了什麼或者講者請的好不好，都沒關係大多數都講些什麼，你自己又在這個過程聽見了什麼與自己相關或有興趣的？聽不懂的多嗎？重複性高嗎？這些問題就有助於你自己選擇要投資的技術是不是正處於主流之中，有很多人已經在解決了很多基本的問題，讓這些高手成為而讓你更可以去面對更有價值問題的助力。透過 MOPCON 讓我能夠更放心的做轉職的選擇，收獲滿滿。

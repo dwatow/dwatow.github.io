@@ -41,7 +41,7 @@ categories:
 
 秉持著這樣的信念，好想採取 **完全自學** 的學習方式，讓學員自我成長。
 
-![](https://i.imgur.com/1m7UDas.jpg)
+![](/images/1f6e4a07-1m7UDas.jpg)
 
 ## 常見問答
 
@@ -74,7 +74,7 @@ categories:
 4. 好想工作室的初衷，是希望大家能夠培養自學與解決問題的能力，並不會替你進行工作的媒合。因此，你願意為自己的選擇負責嗎？
 6. 如果學習想法和 Mentor 意見相佐時，要怎麼辦？你是否願意保持開放的心，與 Mentor 討論獲得共識並且遵守共識嗎？
 
-![](https://i.imgur.com/95JHv3U.jpg)
+![](/images/1f6e4a07-95JHv3U.jpg)
 
 <style>
 .point {

@@ -503,7 +503,7 @@ JavaScript Object 也有 ***internal solts*** 定義某些型別的值。我傾�
 
 所有的關係總結在下面這張 UML diagram (點擊放大):
 
-[![](https://timothygu.me/es-howto/object-uml.svg)](https://timothygu.me/es-howto/object-uml.svg)
+[![](/images/98831072-object-uml.svg)](https://timothygu.me/es-howto/object-uml.svg)
 
 
 ## 2.6 Example: String.prototype.substring()

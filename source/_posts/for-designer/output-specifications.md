@@ -9,7 +9,7 @@ categories:
 
 # 給平面設計師的: 出尺寸稿？怎麼出？
 
-![](https://i.imgur.com/UvHo0gv.png)
+![](/images/d8d442d5-UvHo0gv.png)
 
 > 「平面設計師不熟悉書面和螢幕 之間的關係」
 > 前端工程師說
@@ -31,7 +31,7 @@ categories:
 任何可以表示意念的都可以。
 規格可以量化、對齊，品味上的可以用文字描述。
 
-![](https://i.imgur.com/NPoBsoT.png)
+![](/images/d8d442d5-NPoBsoT.png)
 
 ## 為什麼這麼做
 

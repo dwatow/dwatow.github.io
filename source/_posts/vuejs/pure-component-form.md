@@ -243,13 +243,13 @@ export default {
 
 **template 的差異**
 
-![](https://i.imgur.com/NGoF65N.png)
+![](/images/d8a5d57b-NGoF65N.png)
 
 第 8 行和第 20 行有 `disabled` 的差異。
 
 **script 的差異**
 
-![](https://i.imgur.com/JvEgTd0.png)
+![](/images/d8a5d57b-JvEgTd0.png)
 
 只有 39 行，要呼叫的 `action` 有差而已。
 

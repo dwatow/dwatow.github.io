@@ -119,7 +119,7 @@ git version 2.17.0
 
 並且，找到與你的 git 匹配的 版本。
 
-![](https://i.imgur.com/Y8mGl4A.png)
+![](/images/736ddfef-Y8mGl4A.png)
 
 找到之後，網址會改變。
 

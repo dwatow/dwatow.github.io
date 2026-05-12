@@ -9,7 +9,7 @@ categories:
 
 # 好想工作室第 13 梯 Web Camp 招生
 
-![](https://i.imgur.com/2706gfw.png)
+![](/images/4f2978cf-2706gfw.png)
 
 我是 Chris，目前好想工作室的 Web Camp Hoster/Mentor。
 

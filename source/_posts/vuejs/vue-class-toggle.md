@@ -26,7 +26,7 @@ vue 是一個資料驅動的框架。
 (由於此案例用來講解 class 的抽換，較為無關的 code 會刪掉)
 
 有一個 filter
-![](https://i.imgur.com/OoHfII7.png)
+![](/images/845eaefc-OoHfII7.png)
 
 會將 `talks` 依時間過濾後再顯示到畫面上。
 

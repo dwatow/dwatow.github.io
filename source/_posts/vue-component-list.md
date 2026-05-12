@@ -45,7 +45,7 @@ categories:
 我想讓它成為重複出現的表單，這樣既可以編輯，也可以顯示，符合更多的可能性。
 也符合真實案例的複雜程度，畫面就如同這樣。
 
-![](https://i.imgur.com/PUgAmkf.png)
+![](/images/8a5a3aee-PUgAmkf.png)
 
 那如果我們要用 vue 來寫要怎麼做呢？
 

@@ -11,7 +11,7 @@ categories:
 
 ## 在 Design Pattern 上的實作 
 
-![](https://i.imgur.com/NTSogsi.png)
+![](/images/f9166351-NTSogsi.png)
 
 ## 做相同的事情
 

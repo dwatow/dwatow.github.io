@@ -51,19 +51,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 LINE 的應用 (截圖以 MessageingAPI 為例) 上面出現一個 LIFF 的標籤
 
-> ![](https://i.imgur.com/h1QYiAN.png)
+> ![](/images/897d1723-h1QYiAN.png)
 > [color=#00b900]
 
 要先設定 LINE Login 這個功能才會啟動。
 
 在 LINE Login 裡會出現這個
 
-> ![](https://i.imgur.com/Pgo0u5V.png)
+> ![](/images/897d1723-Pgo0u5V.png)
 > [color=#00b900]
 
 按下「ADD」填一填資料，就可以取得 LINE_ID
 
-> ![](https://i.imgur.com/suXi607.png)
+> ![](/images/897d1723-suXi607.png)
 > [color=#00b900]
 
 ## 開發

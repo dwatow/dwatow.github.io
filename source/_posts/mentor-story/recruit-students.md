@@ -9,7 +9,7 @@ categories:
 - 關於 mentor 這件事
 ---
 
-![](https://i.imgur.com/hDXSkR8.jpg)
+![](/images/2bf5de54-hDXSkR8.jpg)
 
 # 技術人力資源招募 初始演進
 
@@ -33,7 +33,7 @@ categories:
 
 ## 第一次招生，想學就來
 
-![](https://i.imgur.com/csnJxaH.jpg)
+![](/images/2bf5de54-csnJxaH.jpg)
 
 「第一次招生是隨便面。」
 
@@ -65,7 +65,7 @@ categories:
 
 ### 自己招募，才會照顧
 
-![](https://i.imgur.com/rSCH57b.png)
+![](/images/2bf5de54-rSCH57b.png)
 
 當了 mentor 一段時間之後，開始和各式各樣自己找進來的學員們相處。
 
@@ -90,7 +90,7 @@ categories:
 
 ### 讓學員與招生面談產生關係
 
-![](https://i.imgur.com/lTXgFPG.jpg)
+![](/images/2bf5de54-lTXgFPG.jpg)
 
 第二次招生，我決定找學員們一起來面談。
 每次面談的成員是，面試者、學員、我。
@@ -114,7 +114,7 @@ categories:
 
 這一次，並不是讓所有的學員都參與面試，算是試辦，所以找來的是有興趣面談的學員。效果還不錯，不愧是《Peopleware》的建議。
 
-![](https://im1.book.com.tw/image/getImage?i=https://www.books.com.tw/img/001/065/95/0010659524.jpg&v=5492c8ca&w=348&h=348)
+![](/images/2bf5de54-getImage.webp)
 
 ### 你想要找什麼樣的學員
 
@@ -147,7 +147,7 @@ categories:
 3. 平常就會花時間在學習寫程式上面 -> 這就是自學
 4. 平常會自己挑選適合的學習資源
 
-![](https://i.imgur.com/Dh7zmax.jpg)
+![](/images/2bf5de54-Dh7zmax.jpg)
 
 這樣的人如此理想，怎麼還會來呢？
 我假設了幾個可能的原因
@@ -166,7 +166,7 @@ categories:
 
 ## 做自己的生命設計師，設計面談流程
 
-![](https://im1.book.com.tw/image/getImage?i=https://www.books.com.tw/img/001/073/31/0010733134.jpg&v=5810a1ca&w=348&h=348)
+![](/images/2bf5de54-getImage.webp)
 
 在第二次面談之前，我也看完了《做自己的生命設計師》。
 
@@ -187,7 +187,7 @@ categories:
 
 ## 「技術人力資源招募」就只是工程師如何處理問題而已。
 
-![](https://i.imgur.com/xDw2Wp3.png)
+![](/images/2bf5de54-xDw2Wp3.png)
 
 這並不是什麼高尚的思考內容，只是當面對每一個問題，儘可能的負責，並且找到相對可靠的方法來處理。工程師解決問題的過程，也就如此而已。
 

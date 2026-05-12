@@ -63,7 +63,7 @@ nginx     11366        www-data    9u  IPv6 4260617      0t0  TCP *:443 (LISTEN)
 
 - 登入 FreeSSL。沒有登入不會給你證書。
 - 給定需要設定的 Domain （點擊 創建免費的 SSL 證書）
-  ![](https://i.imgur.com/5OHMzKc.png)
+  ![](/images/8a5be350-5OHMzKc.png)
 
 ### 驗證 Domain 的擁有權
 
@@ -73,7 +73,7 @@ nginx     11366        www-data    9u  IPv6 4260617      0t0  TCP *:443 (LISTEN)
 
 1. `登入`時會幫你打好信箱
 2. `驗證類型`選擇`文件驗證` (fileauth)，點擊 `點擊創建`
-   ![](https://i.imgur.com/znUKmcr.png)
+   ![](/images/8a5be350-znUKmcr.png)
 
 #### 取得驗證內容
 
@@ -82,7 +82,7 @@ SSL 服務網站會提供給你一個檔案、內容
 
 意思是: 如果你可以讓這個網址底下放置這個檔案，而且要指定內容，就相信你有這個網站的所有權。
 
-![](https://i.imgur.com/tEO5oZ1.png)
+![](/images/8a5be350-tEO5oZ1.png)
 
 - `文件路徑`   從你的 domain 進入讀取檔案的路徑。
 - `記錄值` 從你的 domain 進入讀取檔案的內容。
@@ -111,7 +111,7 @@ SSL 服務網站會提供給你一個檔案、內容
 
 :::danger
 因為憑證服務要透過 domain 來看看是否真的放上了 fileauth 會來訪問網站。
-![](https://i.imgur.com/3kOV8Vm.png)
+![](/images/8a5be350-3kOV8Vm.png)
 （可能的檢測結果）
 :::
 
@@ -121,19 +121,19 @@ SSL 服務網站會提供給你一個檔案、內容
 
 訂單列表下，注意`狀態`的部分，顯示`完成`（綠燈）的項目
 
-![](https://i.imgur.com/c49cb1Z.png)
+![](/images/8a5be350-c49cb1Z.png)
 
 找到`待驗證` (藍燈) > 按 `驗證` 後
 
 傳給你一份完整的證書和私鑰。
 
-![](https://i.imgur.com/ugHvD30.png)
+![](/images/8a5be350-ugHvD30.png)
 
 請用文字編輯器打開
 
 1. 證書內容 會有 BEGIN CERTIFICATE
 2. 公鑰內容 會有 BEGIN PRIVATE KEY
-   ![](https://i.imgur.com/47EHlUH.png)
+   ![](/images/8a5be350-47EHlUH.png)
    (certificate 範例)
 
 ## 設定 CRT 和 Private key[^nginx-config-crt]

@@ -61,7 +61,7 @@ categories:
 只要按下這個按鈕 <i class="fa fa-camera"></i>
 或是 **拖放** 圖片到編輯器，甚至 **貼上** 圖片也可以喔！
 這會自動上傳圖片至 **[imgur](http://imgur.com)**，啥都不必煩惱了 :tada:
-![](https://i.imgur.com/9cgQVqD.png)
+![](/images/65d7fd49-9cgQVqD.png)
 
 ## 分享筆記
 如果您想分享 **可編輯的** 筆記，複製這份文件的網址就好
@@ -503,7 +503,7 @@ console.log(foo(5));
 
 
 ### 圖片
-![Minion](https://octodex.github.com/images/minion.png)
+![Minion](/images/65d7fd49-minion.png)
 ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
 如同連結一般，圖片也可以用註腳語法
 ![Alt text][id]
@@ -511,7 +511,7 @@ console.log(foo(5));
 
 [id]: https://octodex.github.com/images/dojocat.jpg  "The Dojocat"
 
-![Minion](https://octodex.github.com/images/minion.png =200x200)
+![Minion](/images/65d7fd49-minion.png =200x200)
 使用指定的大小顯示圖片
 
 ### 註腳

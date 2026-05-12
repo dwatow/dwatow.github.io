@@ -42,7 +42,7 @@ categories:
 
 畫面呈現 (下面畫面包含已回傳的 JSON)
 
-![](https://i.imgur.com/J4fbKqu.png)
+![](/images/609ee084-J4fbKqu.png)
 
 ### Json Schema
 

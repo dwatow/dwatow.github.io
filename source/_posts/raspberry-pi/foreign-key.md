@@ -362,7 +362,7 @@ Time: 0.026s
 
 實際跑一下 TablePlus 的外掛，畫出來是這樣
 
-[![image](https://github.com/goodideas-studio-training-camp/web-camp-in-node/assets/1825852/c10efb8a-8d9e-4b57-9635-61db14c9d4c5)](https://github.com/goodideas-studio-training-camp/web-camp-in-node/assets/1825852/c10efb8a-8d9e-4b57-9635-61db14c9d4c5)
+[![image](/images/4aa5233b-c10efb8a-8d9e-4b57-9635-61db14c9d4c5.png)](https://github.com/goodideas-studio-training-camp/web-camp-in-node/assets/1825852/c10efb8a-8d9e-4b57-9635-61db14c9d4c5)
 
 
 

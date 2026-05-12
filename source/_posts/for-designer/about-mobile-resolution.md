@@ -9,7 +9,7 @@ categories:
 
 # 給平面設計師的: 如何取得手機版面的設計解析度
 
-![](https://i.imgur.com/UvHo0gv.png)
+![](/images/cb2d2c06-UvHo0gv.png)
 
 在一般的情況，同一個型的手機可以得到兩種顯示規格。
 下面來介紹一下兩種規格取得的方式以及它們的差異。
@@ -20,7 +20,7 @@ categories:
 但是這樣的規格並不適合用在網頁設計，字會太小。
 
 ### 手機官網
-![](https://i.imgur.com/UddGE6H.png)
+![](/images/cb2d2c06-UddGE6H.png)
 
 ### Chrome模擬器
 1. 開啟瀏覽器
@@ -29,7 +29,7 @@ categories:
 4. [找出你要模擬的手機型號](https://developers.google.com/web/tools/chrome-devtools/device-mode/emulate-mobile-viewports)
 5. 即可在旁邊看見它的解析度
 
-![](https://i.imgur.com/PVP60Wv.png)
+![](/images/cb2d2c06-PVP60Wv.png)
 
 :::info
 官網規格 iPhone6: 1334×750

@@ -75,7 +75,7 @@ Note over client: 登入成功
 1. 我們要的功能在「憑證」裡面
 1. 在憑證裡面，建立一個「OAuth 用戶端 ID」允許第三方登入
 
-![](https://i.imgur.com/oOLBbsi.png)
+![](/images/3996e87d-oOLBbsi.png)
 
 **點擊 OAuth 用戶端 ID 之後**
 
@@ -83,12 +83,12 @@ Note over client: 登入成功
 1. 設定 URI 可以用 ngrok 先用一個臨時的來測試。(在此就用 `http://127.0.0.1:8080` 做代表)
 1. 好了就按下「建立」
 
-![](https://i.imgur.com/csG56Px.png)
+![](/images/3996e87d-csG56Px.png)
 
 1. 成功的時候，Google 就會提供用戶端 ID (clientId) 和用戶端密碼，我們只要 clientId
 1. 按下確定，就可以來實作程式囉
 
-![](https://i.imgur.com/HsSEvXa.png)
+![](/images/3996e87d-HsSEvXa.png)
 
 
 ## 實作

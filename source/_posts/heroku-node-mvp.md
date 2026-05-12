@@ -110,7 +110,7 @@ $ brew install heroku/brew/heroku
 
 這裡選 Github
 
-![](https://i.imgur.com/TRfSpJ2.png)
+![](/images/e0da375b-TRfSpJ2.png)
 
 並且指定你要傳過來的 repository 和 branch
 
@@ -126,7 +126,7 @@ heroku 提供的佈署方式很靈活，算是滿方便的。
 
 在 Web 介面 Overview 上，可看到這個東西
 
-![](https://i.imgur.com/rkbEtG0.png)
+![](/images/e0da375b-rkbEtG0.png)
 
 它就是預設的啟動指令。
 
@@ -195,7 +195,7 @@ TIMES=2
 
 上傳之後，在瀏覽器看到
 
-![](https://i.imgur.com/S4xxZj2.png)
+![](/images/e0da375b-S4xxZj2.png)
 
 就很開心了。
 
@@ -205,8 +205,8 @@ TIMES=2
 
 ### 看佈署 log
 
-![](https://i.imgur.com/nmgO4yo.png)
+![](/images/e0da375b-nmgO4yo.png)
 
 ### 看執行 log
 
-![](https://i.imgur.com/IPajyxD.png)
+![](/images/e0da375b-IPajyxD.png)

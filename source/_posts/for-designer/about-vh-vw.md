@@ -9,7 +9,7 @@ categories:
 
 # 給平面設計師的: 淺談 RWD 單位 vh, vw
 
-![](https://i.imgur.com/UvHo0gv.png)
+![](/images/3a039121-UvHo0gv.png)
 
 > 精準的給予畫面定義，收斂前端工程師猜想設計師的設計邏輯，盡可能的讓結果成為一個，而設計師也可以得到自己理想中的成品。
 
@@ -25,7 +25,7 @@ categories:
 
 ## `vw`, `vh` 定義
 
-![](https://i.imgur.com/2tXVeSy.png)
+![](/images/3a039121-2tXVeSy.png)
 ^「手機的^ ^1vw^ ^」≠「^ ^桌機的^ ^1vw^ ^」≠「^ ^筆電的^ ^1vw^ ^」^
 
 `vh`: 可視區 (viewport) 的高度 (`px`) ，除以 `100` ，等於 `1vh`

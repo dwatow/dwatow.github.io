@@ -9,7 +9,7 @@ categories:
 
 # 給平面設計師的: 出圖？怎麼出？
 
-![](https://i.imgur.com/UvHo0gv.png)
+![](/images/e50a1988-UvHo0gv.png)
 
 > 「平面設計師不熟悉書面和螢幕 之間的關係」
 > 有個前端工程師說了一句經典的話

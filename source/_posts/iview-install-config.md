@@ -93,4 +93,4 @@ export default {
 
 畫面
 
-![](https://i.imgur.com/fnrw5KI.png)
+![](/images/510c86c3-fnrw5KI.png)

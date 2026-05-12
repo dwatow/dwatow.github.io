@@ -123,7 +123,7 @@ cd create vue-unit-test-demo
 ```
 
 檔案放置的參考
-![](https://i.imgur.com/NHR0h7B.png)
+![](/images/56cfa667-NHR0h7B.png)
 
 修改 **main.js**
 
@@ -179,7 +179,7 @@ export default new Vuex.Store({
 
 ### 呈現畫面
 
-![](https://i.imgur.com/JdZIxfm.png)
+![](/images/56cfa667-JdZIxfm.png)
 
 ## 寫 Testing
 

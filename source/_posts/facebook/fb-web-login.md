@@ -108,7 +108,7 @@ FB.getLoginStatus(function(response) {
 這裡有個雷點。
 
 雖然 facebook 貼心的準備了一個程式碼產生器
-![](https://i.imgur.com/Nr2KYwb.png)
+![](/images/02496593-Nr2KYwb.png)
 
 按下「取得程式碼」，進入三步驟
 

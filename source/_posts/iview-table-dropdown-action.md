@@ -38,7 +38,7 @@ categories:
 
 ## Table 裡放 Button
 
-![](https://i.imgur.com/jw4FOcB.png)
+![](/images/04c1f96e-jw4FOcB.png)
 
 最接近這個需求的，我想就是這個範例了，先看看它
 

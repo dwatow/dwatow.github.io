@@ -72,12 +72,12 @@ shallowMount(Component, {
 **Home**
 
 `http://localhost:8080/`
-![](https://i.imgur.com/qPhm8tp.png)
+![](/images/40b4b130-qPhm8tp.png)
 
 **About**
 
 `http://localhost:8080/about`
-![](https://i.imgur.com/nJLY0BH.png)
+![](/images/40b4b130-nJLY0BH.png)
 
 ## 寫 Testing
 

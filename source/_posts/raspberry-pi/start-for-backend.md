@@ -12,7 +12,7 @@ categories:
 
 ## 樹莓派 作業系統安裝
 
-![](https://hackmd.io/_uploads/SknTpttDn.png =400x)
+![](/images/f81a681a-SknTpttDn.png =400x)
 
 這次安裝的是 Raspberry Pi OS (64-bit)
 是有桌面系統的一個版本。如果是熟練的玩家，可以使用 Lite 的版本。
@@ -194,7 +194,7 @@ Example app listening on port 3000!
 接下來看 http://樹莓派的IP:3000
 看見 `Example app listening on port 3000!` 就是成功啦！
 
-![](https://hackmd.io/_uploads/Sk3E43Yw2.png)
+![](/images/f81a681a-Sk3E43Yw2.png)
 
 
 看見 hello world 就完成第一步啦！

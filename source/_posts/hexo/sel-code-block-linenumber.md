@@ -11,7 +11,7 @@ categories:
 # Hexo 自訂程式碼區塊的行號 (像 Hackmd)
 
 其實在 [hexo 3.3.9](https://github.com/hexojs/hexo/releases/tag/3.3.9) 之後就支援這個功能。
-![](https://i.imgur.com/3II9bYZ.png)
+![](/images/e7ee8fea-3II9bYZ.png)
 
 ## New Features
 
