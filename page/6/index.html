@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -50,8 +50,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -168,35 +172,35 @@
 <li>可能要儲存 token</li>
 <li>最常見的 request 的 header</li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">'axios'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import axios from &#39;axios&#39;;
 
-<span class="token keyword">const</span> backendAPI <span class="token operator">=</span> axios<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">baseURL</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">http://127.0.0.1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
-  <span class="token literal-property property">headers</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token string-property property">'Content-Type'</span><span class="token operator">:</span> <span class="token string">'application/json'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">Accept</span><span class="token operator">:</span> <span class="token string">'application/json'</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+const backendAPI &#x3D; axios.create(&#123;
+  baseURL: &#96;http:&#x2F;&#x2F;127.0.0.1&#96;,
+  headers: &#123;
+    &#39;Content-Type&#39;: &#39;application&#x2F;json&#39;,
+    Accept: &#39;application&#x2F;json&#39;
+  &#125;
+&#125;);
 
-<span class="token keyword">let</span> token <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+let token &#x3D; null;
+</code></pre>
 <h2 id="interceptors"><a class="header-anchor" href="#interceptors">¶</a>interceptors</h2>
 <p>在此是 request 的 interceptors。<br>
 負責處理「在送出 API 之前」的事，要添加 token</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">backendAPI<span class="token punctuation">.</span>interceptors<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>
-  <span class="token parameter">config</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// Do something before request is sent</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>token<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      config<span class="token punctuation">.</span>headers<span class="token punctuation">[</span><span class="token string">'Authorization'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Bearer </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">return</span> config<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">error</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// Do something with request error</span>
-    <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="12"><code class="language-javascript">backendAPI.interceptors.request.use(
+  config &#x3D;&gt; &#123;
+    &#x2F;&#x2F; Do something before request is sent
+    if (token) &#123;
+      config.headers[&#39;Authorization&#39;] &#x3D; &#96;Bearer $&#123;token&#125;&#96;;
+    &#125;
+    return config;
+  &#125;,
+  function(error) &#123;
+    &#x2F;&#x2F; Do something with request error
+    return Promise.reject(error);
+  &#125;
+);
+</code></pre>
 <blockquote>
 <p>處理 response 的部份，會放在 <code>new Vue()</code> 的 <code>created()</code> 的 lifecycle 處理。</p>
 </blockquote>
@@ -218,83 +222,83 @@
 </ul>
 </li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> user<span class="token punctuation">,</span> password <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-      user<span class="token punctuation">,</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="26"><code class="language-javascript">export default &#123;
+  async login(&#123; user, password &#125;) &#123;
+    const res &#x3D; await backendAPI.post(&#39;&#x2F;login&#39;, &#123;
+      user,
       password
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-    token <span class="token operator">=</span> res<span class="token punctuation">.</span>data<span class="token punctuation">.</span>token
-    <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token function">formDataPOST</span><span class="token punctuation">(</span><span class="token parameter">url<span class="token punctuation">,</span> data<span class="token punctuation">,</span> config</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> form <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FormData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> key <span class="token keyword">in</span> data<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        form<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> data<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
-      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> form<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">headers</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-          <span class="token string-property property">'Content-Type'</span><span class="token operator">:</span> <span class="token string">'multipart/form-data'</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-        <span class="token operator">...</span>config
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> res<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token constant">GET</span><span class="token punctuation">(</span><span class="token parameter">url<span class="token punctuation">,</span> params</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    &#125;)
+    token &#x3D; res.data.token
+    return Promise.reject(res.data);
+  &#125;,
+  async formDataPOST(url, data, config) &#123;
+    try &#123;
+      const form &#x3D; new FormData();
+      for (let key in data) &#123;
+        form.append(key, data[key]);
+      &#125;
+      const res &#x3D; await backendAPI.post(url, form, &#123;
+        headers: &#123;
+          &#39;Content-Type&#39;: &#39;multipart&#x2F;form-data&#39;
+        &#125;,
+        ...config
+      &#125;);
+      return res.data;
+    &#125; catch (res) &#123;
+      return Promise.reject(res.data);
+    &#125;
+  &#125;,
+  async GET(url, params) &#123;
+    try &#123;
+      const res &#x3D; await backendAPI.get(url, &#123;
         params
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> res<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token constant">POST</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>arge</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token operator">...</span>arge<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> res<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token constant">PUT</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>arge</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token operator">...</span>arge<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> res<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token constant">DELETE</span><span class="token punctuation">(</span><span class="token parameter">url<span class="token punctuation">,</span> params</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+      &#125;);
+      return res.data;
+    &#125; catch (res) &#123;
+      return Promise.reject(res.data);
+    &#125;
+  &#125;,
+  async POST(...arge) &#123;
+    try &#123;
+      const res &#x3D; await backendAPI.post(...arge);
+      return res.data;
+    &#125; catch (res) &#123;
+      return Promise.reject(res.data);
+    &#125;
+  &#125;,
+  async PUT(...arge) &#123;
+    try &#123;
+      const res &#x3D; await backendAPI.put(...arge);
+      return res.data;
+    &#125; catch (res) &#123;
+      return Promise.reject(res.data);
+    &#125;
+  &#125;,
+  async DELETE(url, params) &#123;
+    try &#123;
+      const res &#x3D; await backendAPI.delete(url, &#123;
         params
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> res<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      &#125;);
+      return res.data;
+    &#125; catch (res) &#123;
+      return Promise.reject(res.data);
+    &#125;
+  &#125;
+&#125;;
+</code></pre>
 <h3 id="基本的錯誤-導流-導流"><a class="header-anchor" href="#基本的錯誤-導流-導流">¶</a>基本的錯誤(導流)導流</h3>
 <p>在此會處理 API 回覆不是 200 的錯誤，<strong>初步處理</strong>將程式流程導到處理錯誤的流程。並且回傳適合的資料層次。</p>
 <p>有些後端，會在出錯時給這種格式，不知道是不是框架預設值</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token string">""</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &quot;data&quot;: &quot;&quot;
+&#125;
+</code></pre>
 <p>有些後端，會在出錯時給另一種格式</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"detail"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-  <span class="token property">"code"</span><span class="token operator">:</span> <span class="token number">123</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &quot;detail&quot;: &quot;&quot;,
+  &quot;code&quot;: 123
+&#125;
+</code></pre>
 <p>為了適應各種後端，所以希望可以處理各種後端送過來的資料。<br>
 不過同一個後端應該會送相同的錯誤處理格式。</p>
 
@@ -361,21 +365,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

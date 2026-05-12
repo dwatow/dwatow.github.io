@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -158,25 +162,25 @@
 </ul>
 <h2 id="指令"><a class="header-anchor" href="#指令">¶</a>指令</h2>
 <p>要新增一次的 migration ，只要下這個指令，並且想好 migration message 。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ sequelize migration:create <span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>migration message<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ sequelize migration:create --name &lt;migration message&gt;</code></pre>
 <p>就會產生檔案 <code>migrations/20180703032321-&lt;migration message&gt;.js</code></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate</code></pre>
 <p>執行檔案裡的 <code>up()</code></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate:undo<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate:undo</code></pre>
 <p>執行檔案裡的 <code>down()</code></p>
 <h2 id="檔案架構"><a class="header-anchor" href="#檔案架構">¶</a>檔案架構</h2>
 <p>function <code>up</code>, <code>down</code> ，都回傳 promise</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#39;use strict&#39;;
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">up</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 要增加內容的動作</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+module.exports &#x3D; &#123;
+  up: (queryInterface, Sequelize) &#x3D;&gt; &#123;
+    &#x2F;&#x2F; 要增加內容的動作
+  &#125;,
 
-  <span class="token function-variable function">down</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 要減少內容的動作</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  down: (queryInterface, Sequelize) &#x3D;&gt; &#123;
+    &#x2F;&#x2F; 要減少內容的動作
+  &#125;
+&#125;;</code></pre>
 <p>下面來介紹一下，<code>up()</code> 和 <code>down()</code> 裡面要怎麼寫</p>
 <h2 id="資料表-資料表欄位"><a class="header-anchor" href="#資料表-資料表欄位">¶</a>資料表 &amp; 資料表欄位</h2>
 <p><a target="_blank" rel="noopener" href="http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-init">參考 attribute, options 用法</a></p>
@@ -214,29 +218,29 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <h2 id="執行-migrate-後要執行-sql"><a class="header-anchor" href="#執行-migrate-後要執行-sql">¶</a>執行 migrate 後要執行 SQL</h2>
 <p>使用 <code>queryInterface.sequelize.query(SQL 語法)</code> 的用法，可以讓 migration 完成時，也增加當時必要的 SQL 語法。</p>
 <p>雖然是 <code>query</code> 的 method ，它卻是一個可以執行 SQL 語法，改變資料庫資料的 method。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function-variable function">up</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> queryInterface<span class="token punctuation">.</span><span class="token function">method</span><span class="token punctuation">(</span>
-      <span class="token comment">//...</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      queryInterface<span class="token punctuation">.</span>sequelize<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">UPDATE table SET column=field</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">up: (queryInterface, Sequelize) &#x3D;&gt; &#123;
+  return queryInterface.method(
+      &#x2F;&#x2F;...
+    &#125;).then(() &#x3D;&gt; &#123;
+      queryInterface.sequelize.query(&#96;UPDATE table SET column&#x3D;field&#96;)
+    &#125;)
+&#125;</code></pre>
 <h2 id="資料表關聯"><a class="header-anchor" href="#資料表關聯">¶</a>資料表關聯</h2>
 <p>在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">return</span> queryInterface<span class="token punctuation">.</span><span class="token function">addColumn</span><span class="token punctuation">(</span>
-  <span class="token string">'tableName'</span><span class="token punctuation">,</span>
-  <span class="token string">'fieldName'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span><span class="token punctuation">.</span><span class="token constant">UNSIGNED</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">references</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">model</span><span class="token operator">:</span> <span class="token string">'tableName'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'fieldName'</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'SET NULL'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">onUpdate</span><span class="token operator">:</span> <span class="token string">'CASCADE'</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">return queryInterface.addColumn(
+  &#39;tableName&#39;,
+  &#39;fieldName&#39;,
+  &#123;
+    type: Sequelize.INTEGER.UNSIGNED,
+    references: &#123;
+      model: &#39;tableName&#39;,
+      key: &#39;fieldName&#39;
+    &#125;,
+    onDelete: &#39;SET NULL&#39;,
+    onUpdate: &#39;CASCADE&#39;
+    &#x2F;&#x2F;...
+  &#125;)
+&#125;,</code></pre>
 <h3 id="hook"><a class="header-anchor" href="#hook">¶</a>Hook</h3>
 <p>當呼叫 add/set 函數時，beforeUpdate/afterUpdate 也會執行<br>
 唯一可以執行 beforeDestroy/afterDestroy 的方式，就是設定 associations 屬性 onDelete: ‘cascade’<br>
@@ -259,38 +263,38 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <li>PRIMARY KEY</li>
 </ul>
 <p>UNIQUE</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'email'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'unique'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_unique_constraint_name'</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">queryInterface.addConstraint(&#39;Users&#39;, [&#39;email&#39;], &#123;
+  type: &#39;unique&#39;,
+  name: &#39;custom_unique_constraint_name&#39;
+&#125;);</code></pre>
 <p>CHECK</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'roles'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'check'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">where</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-     <span class="token literal-property property">roles</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'admin'</span><span class="token punctuation">,</span> <span class="token string">'moderator'</span><span class="token punctuation">,</span> <span class="token string">'guest'</span><span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">queryInterface.addConstraint(&#39;Users&#39;, [&#39;roles&#39;], &#123;
+  type: &#39;check&#39;,
+  where: &#123;
+     roles: [&#39;user&#39;, &#39;admin&#39;, &#39;moderator&#39;, &#39;guest&#39;]
+  &#125;
+&#125;);</code></pre>
 <p>Default - MSSQL only</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'roles'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-   <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'default'</span><span class="token punctuation">,</span>
-   <span class="token literal-property property">defaultValue</span><span class="token operator">:</span> <span class="token string">'guest'</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">queryInterface.addConstraint(&#39;Users&#39;, [&#39;roles&#39;], &#123;
+   type: &#39;default&#39;,
+   defaultValue: &#39;guest&#39;
+&#125;);</code></pre>
 <p>Primary Key</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-   <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'primary key'</span><span class="token punctuation">,</span>
-   <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_primary_constraint_name'</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">queryInterface.addConstraint(&#39;Users&#39;, [&#39;username&#39;], &#123;
+   type: &#39;primary key&#39;,
+   name: &#39;custom_primary_constraint_name&#39;
+&#125;);</code></pre>
 <p>Foreign Key</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Posts'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'foreign key'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_fkey_constraint_name'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">references</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token comment">//Required field</span>
-    <span class="token literal-property property">table</span><span class="token operator">:</span> <span class="token string">'target_table_name'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">field</span><span class="token operator">:</span> <span class="token string">'target_column_name'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'cascade'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">onUpdate</span><span class="token operator">:</span> <span class="token string">'cascade'</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">queryInterface.addConstraint(&#39;Posts&#39;, [&#39;username&#39;], &#123;
+  type: &#39;foreign key&#39;,
+  name: &#39;custom_fkey_constraint_name&#39;,
+  references: &#123; &#x2F;&#x2F;Required field
+    table: &#39;target_table_name&#39;,
+    field: &#39;target_column_name&#39;
+  &#125;,
+  onDelete: &#39;cascade&#39;,
+  onUpdate: &#39;cascade&#39;
+&#125;);</code></pre>
 
     
     </section>
@@ -340,21 +344,14 @@ module<span class="token punctuation">.</span>exports <span class="token operato
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -160,15 +164,15 @@
 <p>第一次知道這個語法，還是一個看到一個高中生的 source code，他把雲端字型用 <code>@import &quot;URI&quot;</code> 插入到 CSS 檔中，而不是常見的，使用 <code>&lt;link href=&quot;URI&quot;&gt;</code>，不然之前都只是在 SASS 的環境中使用。(初學看不懂這一段沒關係~XD)</p>
 <h2 id="語法"><a class="header-anchor" href="#語法">¶</a>語法</h2>
 <p>指定路徑檔名 和 URI同名字串 都是常見的做法。</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token string">"CSSFileName.css"</span><span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>CSSFileName.css<span class="token punctuation">)</span></span><span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"CSSFileName.css"</span><span class="token punctuation">)</span></span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-css" data-language="css"><code class="language-css">@import &quot;CSSFileName.css&quot;;
+@import url(CSSFileName.css);
+@import url(&quot;CSSFileName.css&quot;);</code></pre>
 <p>和 Media Query 一起使用，預設 <code>all</code></p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>color.css<span class="token punctuation">)</span></span> screen <span class="token keyword">and</span> <span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span>example.css<span class="token punctuation">)</span></span> screen <span class="token keyword">and</span> <span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">,</span> projection <span class="token keyword">and</span> <span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"fineprint.css"</span><span class="token punctuation">)</span></span> print<span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"bluish.css"</span><span class="token punctuation">)</span></span> projection<span class="token punctuation">,</span> tv<span class="token punctuation">;</span></span>
-<span class="token atrule"><span class="token rule">@import</span> <span class="token url"><span class="token function">url</span><span class="token punctuation">(</span><span class="token string url">"narrow.css"</span><span class="token punctuation">)</span></span> handheld <span class="token keyword">and</span> <span class="token punctuation">(</span><span class="token property">max-width</span><span class="token punctuation">:</span> 400px<span class="token punctuation">)</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-css" data-language="css"><code class="language-css">@import url(color.css) screen and (color);
+@import url(example.css) screen and (color), projection and (color);
+@import url(&quot;fineprint.css&quot;) print;
+@import url(&quot;bluish.css&quot;) projection, tv;
+@import url(&quot;narrow.css&quot;) handheld and (max-width: 400px);</code></pre>
 <h2 id="import-的行為"><a class="header-anchor" href="#import-的行為">¶</a><code>@import</code> 的行為</h2>
 <p><code>@import</code> 幫你把另一個 CSS 檔的內容抄過來這個檔。必須先宣告於該檔的其它 ruleset 之前，否則失效。</p>
 <h2 id="怎麼結構化-css"><a class="header-anchor" href="#怎麼結構化-css">¶</a>怎麼結構化 CSS</h2>
@@ -178,29 +182,29 @@
 反而不是提醒我們原本寫 CSS 時就可以這麼做。</p>
 <p>在此，我們就參考幾篇 SASS 的文章，看看他們怎麼「結構化」</p>
 <h3 id="單一頁面的-css-結構"><a class="header-anchor" href="#單一頁面的-css-結構">¶</a>單一頁面的 CSS 結構</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">stylesheets/
-<span class="token operator">|</span>
-<span class="token operator">|</span>-- modules/              <span class="token comment"># Common modules</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _all.scss         <span class="token comment"># Include to get all modules</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _utility.scss     <span class="token comment"># Module name</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _colors.scss      <span class="token comment"># Etc...</span>
-<span class="token operator">|</span>   <span class="token punctuation">..</span>.
-<span class="token operator">|</span>
-<span class="token operator">|</span>-- partials/             <span class="token comment"># Partials</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _base.sass        <span class="token comment"># imports for all mixins + global project variables</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _buttons.scss     <span class="token comment"># buttons</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _figures.scss     <span class="token comment"># figures</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _grids.scss       <span class="token comment"># grids</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _typography.scss  <span class="token comment"># typography</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _reset.scss       <span class="token comment"># reset</span>
-<span class="token operator">|</span>   <span class="token punctuation">..</span>.
-<span class="token operator">|</span>
-<span class="token operator">|</span>-- vendor/               <span class="token comment"># CSS or Sass from other projects</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _colorpicker.scss
-<span class="token operator">|</span>   <span class="token operator">|</span>-- _jquery.ui.core.scss
-<span class="token operator">|</span>   <span class="token punctuation">..</span>.
-<span class="token operator">|</span>
-`-- main.scss            <span class="token comment"># primary Sass file</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">stylesheets&#x2F;
+|
+|-- modules&#x2F;              # Common modules
+|   |-- _all.scss         # Include to get all modules
+|   |-- _utility.scss     # Module name
+|   |-- _colors.scss      # Etc...
+|   ...
+|
+|-- partials&#x2F;             # Partials
+|   |-- _base.sass        # imports for all mixins + global project variables
+|   |-- _buttons.scss     # buttons
+|   |-- _figures.scss     # figures
+|   |-- _grids.scss       # grids
+|   |-- _typography.scss  # typography
+|   |-- _reset.scss       # reset
+|   ...
+|
+|-- vendor&#x2F;               # CSS or Sass from other projects
+|   |-- _colorpicker.scss
+|   |-- _jquery.ui.core.scss
+|   ...
+|
+&#96;-- main.scss            # primary Sass file</code></pre>
 <p>我個人不參考這篇文章作者的使用方式 (將 mixin, functions, variables 放一起)，我傾向於「不管是 variables、function … 將宣告與使用，放得愈近愈好」</p>
 <p>以下是我個人的使用風格</p>
 <ol>
@@ -211,23 +215,23 @@
 <p>另外，vendor目錄，放置使用的套件 SASS 檔案。</p>
 <p><strong>離題了!!回來寫 CSS</strong></p>
 <p>CSS 有可能在 SASS 的建議架構之下應用嗎？</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">CSS/
-<span class="token operator">|</span>-- partials/           <span class="token comment"># Partials</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- reset.css       <span class="token comment"># reset setting</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- colors.scss     <span class="token comment"># colors</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- buttons.css     <span class="token comment"># buttons</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- figures.css     <span class="token comment"># figures</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- grids.css       <span class="token comment"># grids</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- typography.css  <span class="token comment"># typography</span>
-<span class="token operator">|</span>   <span class="token punctuation">..</span>.
-<span class="token operator">|</span>
-<span class="token operator">|</span>-- vendor/             <span class="token comment"># CSS from other projects</span>
-<span class="token operator">|</span>   <span class="token operator">|</span>-- animate.css
-<span class="token operator">|</span>   <span class="token punctuation">..</span>.
-<span class="token operator">|</span>
-<span class="token operator">|</span>-- index.css           <span class="token comment"># primary CSS file</span>
-<span class="token operator">|</span>-- function.css        <span class="token comment"># primary CSS file</span>
-`-- payment.css         <span class="token comment"># primary CSS file</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">CSS&#x2F;
+|-- partials&#x2F;           # Partials
+|   |-- reset.css       # reset setting
+|   |-- colors.scss     # colors
+|   |-- buttons.css     # buttons
+|   |-- figures.css     # figures
+|   |-- grids.css       # grids
+|   |-- typography.css  # typography
+|   ...
+|
+|-- vendor&#x2F;             # CSS from other projects
+|   |-- animate.css
+|   ...
+|
+|-- index.css           # primary CSS file
+|-- function.css        # primary CSS file
+&#96;-- payment.css         # primary CSS file</code></pre>
 <p>換成 CSS 就是這樣用</p>
 <ol>
 <li>primary file，充滿著 <code>@import</code> 和想要複寫其它 CSS 檔案裡的特殊 CSS 。</li>
@@ -300,21 +304,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

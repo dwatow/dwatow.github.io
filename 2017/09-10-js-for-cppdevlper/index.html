@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -53,8 +53,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -171,59 +175,59 @@
 <h2 id="typeof-型別"><a class="header-anchor" href="#typeof-型別">¶</a>typeof 型別</h2>
 <h3 id="why-typeof-null-object"><a class="header-anchor" href="#why-typeof-null-object">¶</a>why <code>typeof null === 'object'</code></h3>
 <p>用來檢查未宣告的變數</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// Uncaught ReferenceError: b is not defined</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> b <span class="token operator">!==</span> <span class="token string">"undefined"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// false</span>
-  <span class="token comment">//do something</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">&#x2F;&#x2F; Uncaught ReferenceError: b is not defined
+if (typeof b !&#x3D;&#x3D; &quot;undefined&quot;) &#123;
+  &#x2F;&#x2F; false
+  &#x2F;&#x2F;do something
+&#125;</code></pre>
 <h2 id="值"><a class="header-anchor" href="#值">¶</a>值</h2>
 <h3 id="array"><a class="header-anchor" href="#array">¶</a>Array</h3>
 <p>以文字字串存取: 不會更新.length。</p>
 <p>以數字字串存取: 數字字串當作數字型別使用。</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-a<span class="token punctuation">[</span><span class="token string">"5"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"aaaaa"</span><span class="token punctuation">;</span>
-a<span class="token punctuation">.</span>length <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">var a &#x3D; [];
+a[&quot;5&quot;] &#x3D; &quot;aaaaa&quot;;
+a.length &#x3D; 6;</code></pre>
 <h3 id="like-array"><a class="header-anchor" href="#like-array">¶</a>like-Array</h3>
 <p>轉成 Array</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> larr <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">".class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//like array</span>
-<span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>larr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//or by ES6</span>
-<span class="token keyword">var</span> arr <span class="token operator">=</span> Array<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>larr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">var larr &#x3D; document.querySelectorAll(&quot;.class&quot;); &#x2F;&#x2F;like array
+var arr &#x3D; Array.prototype.slice.call(larr);
+&#x2F;&#x2F;or by ES6
+var arr &#x3D; Array.from(larr);</code></pre>
 <h3 id="string"><a class="header-anchor" href="#string">¶</a>string</h3>
 <p>如果常常需要用<code>array</code>的思維處理<code>string</code>。<br>
 建議將該<code>string</code>，存成<code>array</code>再用<code>.join()</code>印出即可。</p>
 <p>需要使用的時機<br>
 以「反序」的需求為例，若常常這麼寫的時候:</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> str <span class="token operator">=</span> <span class="token string">"foo"</span><span class="token punctuation">;</span>
-str <span class="token operator">=</span> str
-  <span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">reveres</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">var str &#x3D; &quot;foo&quot;;
+str &#x3D; str
+  .split(&quot;&quot;)
+  .reveres()
+  .join(&quot;&quot;);</code></pre>
 <p>就可以考慮這麼寫</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token string">'foo'</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
-arr<span class="token punctuation">.</span><span class="token function">reveres</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">//代表處理很多其它的邏輯</span>
-str <span class="token operator">=</span> arr<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">var arr &#x3D; &#39;foo&#39;split(&#39;&#39;)
+arr.reveres()  &#x2F;&#x2F;代表處理很多其它的邏輯
+str &#x3D; arr.join(&#39;&#39;)</code></pre>
 <p>或參考<a target="_blank" rel="noopener" href="https://github.com/mathiasbynens/esrever">Esrever</a></p>
 <h2 id="number"><a class="header-anchor" href="#number">¶</a>number</h2>
 <p>詳閱<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/IEEE_754">IEEE 754</a></p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token number">42.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment">//Uncaught SyntaxError: Invalid or unexpected token</span>
-<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
-<span class="token number">42.</span><span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment">//很少見的用法</span>
-<span class="token number">42</span> <span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment">//除了混淆，沒有其它更好的用途</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">42.toFixed(3)  &#x2F;&#x2F;Uncaught SyntaxError: Invalid or unexpected token
+(42).toFixed(3)
+42..toFixed(3)  &#x2F;&#x2F;很少見的用法
+42 .toFixed(3)  &#x2F;&#x2F;除了混淆，沒有其它更好的用途</code></pre>
 <p>其它進制的<code>number</code>表示法<br>
 小寫前綴是個好習慣，大寫也可以，但是「除了混淆，沒有其它更好的用途」</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token number">0x2a</span><span class="token punctuation">;</span> <span class="token comment">//16進制的42</span>
-<span class="token number">0o52</span><span class="token punctuation">;</span> <span class="token comment">//8進制的42</span>
-<span class="token number">0b101010</span><span class="token punctuation">;</span> <span class="token comment">//2進制的42</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-js" data-language="js"><code class="language-js">0x2a; &#x2F;&#x2F;16進制的42
+0o52; &#x2F;&#x2F;8進制的42
+0b101010; &#x2F;&#x2F;2進制的42</code></pre>
 <h3 id="number-1"><a class="header-anchor" href="#number-1">¶</a><code>number &lt; 1</code></h3>
 <p>這是所有 IEEE 754 所有的語言都有的問題。<br>
 <code>Number.EPSILON</code>是定義誤差容許範圍</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">0.3</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token number">0.1</span> <span class="token operator">+</span> <span class="token number">0.2</span><span class="token punctuation">;</span>
+<pre class="language-js" data-language="js"><code class="language-js">var a &#x3D; 0.3;
+var b &#x3D; 0.1 + 0.2;
 
-<span class="token comment">//是否相等</span>
-a <span class="token operator">===</span> b<span class="token punctuation">;</span> <span class="token comment">// false</span>
-a <span class="token operator">-</span> b <span class="token operator">&lt;</span> Number<span class="token punctuation">.</span><span class="token constant">EPSILON</span><span class="token punctuation">;</span> <span class="token comment">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F;是否相等
+a &#x3D;&#x3D;&#x3D; b; &#x2F;&#x2F; false
+a - b &lt; Number.EPSILON; &#x2F;&#x2F; true</code></pre>
 
     
     </section>
@@ -269,21 +273,14 @@ a <span class="token operator">-</span> b <span class="token operator">&lt;</spa
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

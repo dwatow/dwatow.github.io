@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -153,12 +157,12 @@
 正確生成 Table (資料表)之後，Model 的任務就是要正確的操作資料，並且將資料的操作邏輯收納到 Model 上面。</p>
 <p>接續上一篇的篇章，只是這一次把注意力放在 Model 上面</p>
 <h2 id="建立資料表"><a class="header-anchor" href="#建立資料表">¶</a>建立資料表<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></h2>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate <span class="token parameter variable">--underscored</span> <span class="token parameter variable">--force</span> <span class="token parameter variable">--name</span> user <span class="token parameter variable">--attributes</span> name:string,password:string
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-New model was created at /home/admin/case/lib-backend/models/user.js <span class="token builtin class-name">.</span>
-New migration was created at /home/admin/case/lib-backend/migrations/20230803111707-create-user.js <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+New model was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;models&#x2F;user.js .
+New migration was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;migrations&#x2F;20230803111707-create-user.js .</code></pre>
 <ul>
 <li><code>--name</code> 定義資料表名稱，建議使用小寫。</li>
 <li><code>--underscored</code> 欄位名稱都用<code>小寫</code>+<code>底線</code> 命名</li>
@@ -171,71 +175,71 @@ New migration was created at /home/admin/case/lib-backend/migrations/20230803111
 <p><strong>專案/migrations/20230803090103-create-user.js</strong></p>
 <p>(migrations 有提到修正方式，在此略過)</p>
 <p><strong>專案/models/user.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">class</span> <span class="token class-name">user</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">/**
+&#125; &#x3D; require(&#39;sequelize&#39;);
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  class user extends Model &#123;
+    &#x2F;**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */</span>
-    <span class="token keyword">static</span> <span class="token function">associate</span><span class="token punctuation">(</span><span class="token parameter">models</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// define association here</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  user<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">name</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">STRING</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">password</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">STRING</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    sequelize<span class="token punctuation">,</span>
-    <span class="token literal-property property">modelName</span><span class="token operator">:</span> <span class="token string">'user'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">underscored</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">freezeTableName</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// 請手動加入這一行</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> user<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+     * The &#96;models&#x2F;index&#96; file will call this method automatically.
+     *&#x2F;
+    static associate(models) &#123;
+      &#x2F;&#x2F; define association here
+    &#125;
+  &#125;
+  user.init(&#123;
+    name: DataTypes.STRING,
+    password: DataTypes.STRING
+  &#125;, &#123;
+    sequelize,
+    modelName: &#39;user&#39;,
+    underscored: true,
+    freezeTableName: true, &#x2F;&#x2F; 請手動加入這一行
+  &#125;);
+  return user;
+&#125;;</code></pre>
 <h3 id="產生資料表"><a class="header-anchor" href="#產生資料表">¶</a>產生資料表</h3>
 <p>到目前，還沒有生成任何資料表，讓我們來執行一下 migrate 到最新進度</p>
 <p>如果我們想要執行 migration 的時候，看得到 log 出現 SQL 語法。就必須在 config 的部份加上 <code>&quot;logging&quot;: true</code> <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token property">"development"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
-    <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"pi"</span><span class="token punctuation">,</span>
-    <span class="token property">"database"</span><span class="token operator">:</span> <span class="token string">"good_ideas_lib_dev"</span><span class="token punctuation">,</span>
-    <span class="token property">"host"</span><span class="token operator">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
-    <span class="token property">"dialect"</span><span class="token operator">:</span> <span class="token string">"mysql"</span><span class="token punctuation">,</span>
-    <span class="token property">"logging"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &#x2F;&#x2F; ...
+  &quot;development&quot;: &#123;
+    &quot;username&quot;: &quot;admin&quot;,
+    &quot;password&quot;: &quot;pi&quot;,
+    &quot;database&quot;: &quot;good_ideas_lib_dev&quot;,
+    &quot;host&quot;: &quot;127.0.0.1&quot;,
+    &quot;dialect&quot;: &quot;mysql&quot;,
+    &quot;logging&quot;: true
+  &#125;,
+  &#x2F;&#x2F; ...
+&#125;</code></pre>
 <p>加好之後，執行 migrate 就可以看見 SQL 印在 shell 囉</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate <span class="token parameter variable">--underscored</span> <span class="token parameter variable">--force</span> <span class="token parameter variable">--name</span> user <span class="token parameter variable">--attributes</span> name:string,password:string<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string</code></pre>
 <p>取得 model 的程式碼時。<br>
 別忘了需要手動修改一下資料型別。<br>
 修改 <strong>models/user.js</strong> 的 DataType</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">class</span> <span class="token class-name">user</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// ...</span>
-  <span class="token punctuation">&#125;</span>
-  user<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">name</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">STRING</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">password</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    sequelize<span class="token punctuation">,</span>
-    <span class="token literal-property property">modelName</span><span class="token operator">:</span> <span class="token string">'user'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">underscored</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">freezeTableName</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// 請手動加入這一行</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> user<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125; &#x3D; require(&#39;sequelize&#39;);
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  class user extends Model &#123;
+    &#x2F;&#x2F; ...
+  &#125;
+  user.init(&#123;
+    name: DataTypes.STRING(50),
+    password: DataTypes.CHAR(128)
+  &#125;, &#123;
+    sequelize,
+    modelName: &#39;user&#39;,
+    underscored: true,
+    freezeTableName: true, &#x2F;&#x2F; 請手動加入這一行
+  &#125;);
+  return user;
+&#125;;</code></pre>
 <ul>
 <li>變動字串長度要修改，直接加(<code>Sequelize.STRING(長度)</code>)<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></li>
 <li>想要長度 128 的固定字串，要改成 <code>Sequelize.CHAR(128)</code></li>
@@ -249,171 +253,171 @@ module<span class="token punctuation">.</span><span class="token function-variab
 <p>除了生成的 ES6 class 可以使用，還有另一個比較舊的寫法 <code>sequelize.define</code> 也可以使用。<br>
 <code>sequelize.define</code> 與 <code>user.init</code> 在內部是相同的。</p>
 <p>sequelize.define 寫法</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#125; &#x3D; require(&#39;sequelize&#39;);
 
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> sequelize<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)</span>
-    <span class="token comment">// 如果有自定義的 method, v6 是定義成欄位 getter/setter 與 虛擬欄位的 getter/setter</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    sequelize<span class="token punctuation">,</span>
-    <span class="token comment">// 設定</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  return sequelize.define(&#39;user&#39;, &#123;
+    &#x2F;&#x2F; 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
+    &#x2F;&#x2F; 如果有自定義的 method, v6 是定義成欄位 getter&#x2F;setter 與 虛擬欄位的 getter&#x2F;setter
+  &#125;, &#123;
+    sequelize,
+    &#x2F;&#x2F; 設定
+  &#125;);
+&#125;;</code></pre>
 <p>ES6 class 寫法</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#125; &#x3D; require(&#39;sequelize&#39;);
 
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">class</span> <span class="token class-name">user</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 在此不要放置任何與資料相關的欄位定義，會覆蓋掉可存取資料的同名 getter/setter</span>
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  class user extends Model &#123;
+    &#x2F;&#x2F; 在此不要放置任何與資料相關的欄位定義，會覆蓋掉可存取資料的同名 getter&#x2F;setter
     
-    <span class="token comment">// 放置了自訂義的 method</span>
-    <span class="token comment">// 用在 object user 上的 method</span>
-    <span class="token function">getSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token string">'something is '</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>id<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    &#x2F;&#x2F; 放置了自訂義的 method
+    &#x2F;&#x2F; 用在 object user 上的 method
+    getSomething() &#123;
+      return &#39;something is &#39; + this.id;
+    &#125;
     
-    <span class="token comment">// 用在 class user 上的 method</span>
-    <span class="token keyword">static</span> <span class="token function">associate</span><span class="token punctuation">(</span><span class="token parameter">models</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token string">'associate at static'</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  user<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">// 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    sequelize<span class="token punctuation">,</span>
-    <span class="token comment">// 設定</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> user<span class="token punctuation">;</span>  <span class="token comment">// 之後可以在 sequelize.models.user 取得這個 Model</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    &#x2F;&#x2F; 用在 class user 上的 method
+    static associate(models) &#123;
+      return &#39;associate at static&#39;;
+    &#125;
+  &#125;
+  user.init(&#123;
+    &#x2F;&#x2F; 欄位 (預設不會在程式控制 id, created_at, updated_at 所以沒有在這列出)
+  &#125;, &#123;
+    sequelize,
+    &#x2F;&#x2F; 設定
+  &#125;);
+  return user;  &#x2F;&#x2F; 之後可以在 sequelize.models.user 取得這個 Model
+&#125;;</code></pre>
 <h2 id="使用-model"><a class="header-anchor" href="#使用-model">¶</a>使用 Model</h2>
 <blockquote>
 <p>在這裡看官網文件會有一點搞不懂，Model 都宣告了，但是要怎麼讓它在 <code>sequelize.models.user</code> 出現。</p>
 </blockquote>
 <p>官網上的文件這樣宣告 <code>const user = new User(&#123; id: 1 &#125;);</code><br>
 就直接拿來用？！(神奇！)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Valid</span>
-<span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">&#123;</span>
-  otherPublicField<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Valid
+class User extends Model &#123;
+  otherPublicField;
+&#125;
 
-User<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">INTEGER</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">autoIncrement</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">primaryKey</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> sequelize <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+User.init(&#123;
+  id: &#123;
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  &#125;
+&#125;, &#123; sequelize &#125;);
 
-<span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-user<span class="token punctuation">.</span>id<span class="token punctuation">;</span> <span class="token comment">// 1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const user &#x3D; new User(&#123; id: 1 &#125;);
+user.id; &#x2F;&#x2F; 1</code></pre>
 <p>但實際上，我使用 sequelize-cli 生成的 code 無法直接這麼用。</p>
 <p>我另外寫了一個 main.js 來實現官網說的情況</p>
 <p><strong>main.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">&#123;</span> Sequelize<span class="token punctuation">,</span> DataTypes <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const &#123; Sequelize, DataTypes &#125; &#x3D; require(&#39;sequelize&#39;);
 
-<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> development <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token string-property property">"username"</span><span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
-    <span class="token string-property property">"password"</span><span class="token operator">:</span> <span class="token string">"pi"</span><span class="token punctuation">,</span>
-    <span class="token string-property property">"database"</span><span class="token operator">:</span> <span class="token string">"good_ideas_lib_dev"</span><span class="token punctuation">,</span>
-    <span class="token string-property property">"host"</span><span class="token operator">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
-    <span class="token string-property property">"dialect"</span><span class="token operator">:</span> <span class="token string">"mysql"</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">// Option 3: Passing parameters separately (other dialects)</span>
-  <span class="token keyword">const</span> sequelize <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span>development<span class="token punctuation">.</span>database<span class="token punctuation">,</span> development<span class="token punctuation">.</span>username<span class="token punctuation">,</span> development<span class="token punctuation">.</span>password<span class="token punctuation">,</span> development<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./models/user'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>sequelize<span class="token punctuation">,</span> DataTypes<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> sequelize<span class="token punctuation">.</span><span class="token function">authenticate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Unable to connect to the database:'</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+async function main() &#123;
+  const development &#x3D; &#123;
+    &quot;username&quot;: &quot;admin&quot;,
+    &quot;password&quot;: &quot;pi&quot;,
+    &quot;database&quot;: &quot;good_ideas_lib_dev&quot;,
+    &quot;host&quot;: &quot;127.0.0.1&quot;,
+    &quot;dialect&quot;: &quot;mysql&quot;
+  &#125;
+  &#x2F;&#x2F; Option 3: Passing parameters separately (other dialects)
+  const sequelize &#x3D; new Sequelize(development.database, development.username, development.password, development);
+  require(&#39;.&#x2F;models&#x2F;user&#39;)(sequelize, DataTypes);
+  try &#123;
+    await sequelize.authenticate();
+  &#125; catch (error) &#123;
+    console.error(&#39;Unable to connect to the database:&#39;, error);
+  &#125;
 
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 練習貼在這</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Connection has been established successfully.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>error<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js 
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Connection has been established successfully.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+  try &#123;
+    &#x2F;&#x2F; 練習貼在這
+    console.log(&#39;Connection has been established successfully.&#39;);
+  &#125; catch (error) &#123;
+    console.log(error.message);
+  &#125;
+&#125;
+main()</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js 
+Executing (default): SELECT 1+1 AS result
+Connection has been established successfully.</code></pre>
 <h2 id="簡單操作"><a class="header-anchor" href="#簡單操作">¶</a>簡單操作</h2>
 <h3 id="寫入"><a class="header-anchor" href="#寫入">¶</a>寫入</h3>
 <p>在 newUser 被 <code>new</code> 出來之後，執行 <code>save()</code>。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token keyword">const</span> newUser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">sequelize<span class="token punctuation">.</span>models<span class="token punctuation">.</span>user</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'chris'</span><span class="token punctuation">,</span> <span class="token literal-property property">password</span><span class="token operator">:</span> <span class="token string">'chris'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token keyword">await</span> newUser<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">async function main() &#123;
+  &#x2F;&#x2F; ...
+  const newUser &#x3D; new sequelize.models.user(&#123; id: 1, name: &#39;chris&#39;, password: &#39;chris&#39;&#125;)
+  await newUser.save();
+  &#x2F;&#x2F; ...
+&#125;</code></pre>
 <p>可以看見執行的過程中，會印出執行過程</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js 
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: INSERT INTO <span class="token variable"><span class="token variable">`</span>user<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>created_at<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>updated_at<span class="token variable">`</span></span><span class="token punctuation">)</span> VALUES <span class="token punctuation">(</span>?,?,?,?,?<span class="token punctuation">)</span><span class="token punctuation">;</span>
-Connection has been established successfully.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO &#96;user&#96; (&#96;id&#96;,&#96;name&#96;,&#96;password&#96;,&#96;created_at&#96;,&#96;updated_at&#96;) VALUES (?,?,?,?,?);
+Connection has been established successfully.</code></pre>
 <p>其中這一段是 SQL</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> <span class="token identifier"><span class="token punctuation">`</span>user<span class="token punctuation">`</span></span> <span class="token punctuation">(</span><span class="token identifier"><span class="token punctuation">`</span>id<span class="token punctuation">`</span></span><span class="token punctuation">,</span><span class="token identifier"><span class="token punctuation">`</span>name<span class="token punctuation">`</span></span><span class="token punctuation">,</span><span class="token identifier"><span class="token punctuation">`</span>password<span class="token punctuation">`</span></span><span class="token punctuation">,</span><span class="token identifier"><span class="token punctuation">`</span>created_at<span class="token punctuation">`</span></span><span class="token punctuation">,</span><span class="token identifier"><span class="token punctuation">`</span>updated_at<span class="token punctuation">`</span></span><span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span>?<span class="token punctuation">,</span>?<span class="token punctuation">,</span>?<span class="token punctuation">,</span>?<span class="token punctuation">,</span>?<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">INSERT INTO &#96;user&#96; (&#96;id&#96;,&#96;name&#96;,&#96;password&#96;,&#96;created_at&#96;,&#96;updated_at&#96;) VALUES (?,?,?,?,?);</code></pre>
 <h3 id="log-的內容出現"><a class="header-anchor" href="#log-的內容出現">¶</a>log 的內容出現 <code>?</code></h3>
 <p>在 main.js 裡的 config 要加上 <code>logQueryParameters:true</code> 的設定。</p>
 <blockquote>
 <p>如果是一般的執行情境，要改 config 裡的 json 檔案比較一致。只是在此的語法練習都是在 main.js 進行 sequelize 的初始化，所以才直接改 main.js 裡的 config 物件。</p>
 </blockquote>
 <p>config 加完之後，刪除新增好的資料，再執行一次 <code>main.js</code>。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js 
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: INSERT INTO <span class="token variable"><span class="token variable">`</span>user<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>created_at<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>updated_at<span class="token variable">`</span></span><span class="token punctuation">)</span> VALUES <span class="token punctuation">(</span>?,?,?,?,?<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token number">1</span>, <span class="token string">"chris"</span>, <span class="token string">"chris"</span>, <span class="token string">"2023-09-01 03:28:36"</span>, <span class="token string">"2023-09-01 03:28:36"</span>
-Connection has been established successfully.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO &#96;user&#96; (&#96;id&#96;,&#96;name&#96;,&#96;password&#96;,&#96;created_at&#96;,&#96;updated_at&#96;) VALUES (?,?,?,?,?); 1, &quot;chris&quot;, &quot;chris&quot;, &quot;2023-09-01 03:28:36&quot;, &quot;2023-09-01 03:28:36&quot;
+Connection has been established successfully.</code></pre>
 <p>看起來是把新增的資料加在原本的 SQL 後面。</p>
 <h3 id="method"><a class="header-anchor" href="#method">¶</a>method</h3>
 <p>如果要自己加上 method 有兩種做法。</p>
 <p><strong>models/user.js</strong></p>
 <p><code>sequelize.define</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#125; &#x3D; require(&#39;sequelize&#39;);
 
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> sequelize<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">getSomething</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">type</span><span class="token operator">:</span> DataTypes<span class="token punctuation">.</span><span class="token constant">VIRTUAL</span><span class="token punctuation">,</span>
-      <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token string">'getSomething method: '</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    sequelize<span class="token punctuation">,</span>
-    <span class="token comment">// 設定</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  return sequelize.define(&#39;user&#39;, &#123;
+    getSomething: &#123;
+      type: DataTypes.VIRTUAL,
+      get() &#123;
+        return &#39;getSomething method: &#39; + this.name;
+      &#125;,
+    &#125;
+  &#125;, &#123;
+    sequelize,
+    &#x2F;&#x2F; 設定
+  &#125;);
+&#125;;</code></pre>
 <p>ES6 class</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+const &#123;
   Model
-<span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">sequelize<span class="token punctuation">,</span> DataTypes</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">class</span> <span class="token class-name">user</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">getSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token string">'getSomething method: '</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">static</span> <span class="token function">associate</span><span class="token punctuation">(</span><span class="token parameter">models</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token string">'associate'</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  user<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">// 欄位</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> user<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125; &#x3D; require(&#39;sequelize&#39;);
+module.exports &#x3D; (sequelize, DataTypes) &#x3D;&gt; &#123;
+  class user extends Model &#123;
+    getSomething() &#123;
+      return &#39;getSomething method: &#39; + this.name
+    &#125;
+    static associate(models) &#123;
+      return &#39;associate&#39;
+    &#125;
+  &#125;
+  user.init(&#123;
+    &#x2F;&#x2F; 欄位
+  &#125;);
+  return user;
+&#125;;</code></pre>
 <blockquote>
 <p>棄用: <code>getterMethods</code> and <code>setterMethods</code><br>
 DANGER<br>
@@ -421,30 +425,30 @@ This feature has been removed in Sequelize 7.<br>
 You should consider using either VIRTUAL attributes or native class getter &amp; setters instead.</p>
 </blockquote>
 <p><strong>main.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token keyword">const</span> newUser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">sequelize<span class="token punctuation">.</span>models<span class="token punctuation">.</span>user</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'chris'</span><span class="token punctuation">,</span> <span class="token literal-property property">password</span><span class="token operator">:</span> <span class="token string">'chris'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'newUser'</span><span class="token punctuation">,</span> newUser<span class="token punctuation">.</span><span class="token function">getSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'User'</span><span class="token punctuation">,</span> sequelize<span class="token punctuation">.</span>models<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">associate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js 
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">async function main() &#123;
+  &#x2F;&#x2F; ...
+  const newUser &#x3D; new sequelize.models.user(&#123; id: 1, name: &#39;chris&#39;, password: &#39;chris&#39;&#125;)
+  console.log(&#39;newUser&#39;, newUser.getSomething());
+  console.log(&#39;User&#39;, sequelize.models.user.associate());
+  &#x2F;&#x2F; ...
+&#125;</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js 
+Executing (default): SELECT 1+1 AS result
 newUser getSomething method: chris
 User associate
-Connection has been established successfully.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Connection has been established successfully.</code></pre>
 <p>可以看見，如實的印出了 method 裡的字串，也透過 method 的 this 取得了實例的資料。</p>
-<pre class="line-numbers language-none"><code class="language-none">newUser getSomething method: chris
-User associate<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">newUser getSomething method: chris
+User associate</code></pre>
 <h2 id="model-的欄位驗證"><a class="header-anchor" href="#model-的欄位驗證">¶</a>model 的欄位驗證</h2>
 <h3 id="name-過長"><a class="header-anchor" href="#name-過長">¶</a>name 過長</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">51</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token string">'A'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> password <span class="token operator">=</span> <span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">129</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token string">'A'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">await</span> sequelize<span class="token punctuation">.</span>models<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> name<span class="token punctuation">,</span> password <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js 
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: INSERT INTO <span class="token variable"><span class="token variable">`</span>user<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>created_at<span class="token variable">`</span></span>,<span class="token variable"><span class="token variable">`</span>updated_at<span class="token variable">`</span></span><span class="token punctuation">)</span> VALUES <span class="token punctuation">(</span>DEFAULT,?,?,?,?<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token string">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>, <span class="token string">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>, <span class="token string">"2023-09-01 03:45:09"</span>, <span class="token string">"2023-09-01 03:45:09"</span>
-Data too long <span class="token keyword">for</span> <span class="token function">column</span> <span class="token string">'name'</span> at row <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const name &#x3D; Array(51).fill(&#39;A&#39;).join(&#39;&#39;);
+const password &#x3D; Array(129).fill(&#39;A&#39;).join(&#39;&#39;);
+await sequelize.models.user.create(&#123; name, password &#125;)</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js 
+Executing (default): SELECT 1+1 AS result
+Executing (default): INSERT INTO &#96;user&#96; (&#96;id&#96;,&#96;name&#96;,&#96;password&#96;,&#96;created_at&#96;,&#96;updated_at&#96;) VALUES (DEFAULT,?,?,?,?); &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, &quot;2023-09-01 03:45:09&quot;, &quot;2023-09-01 03:45:09&quot;
+Data too long for column &#39;name&#39; at row 1</code></pre>
 <p>會出現精準的錯誤訊息<br>
 但是會出現第一個錯誤訊息，不會一次吐全部</p>
 <hr class="footnotes-sep">
@@ -513,21 +517,14 @@ Data too long <span class="token keyword">for</span> <span class="token function
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

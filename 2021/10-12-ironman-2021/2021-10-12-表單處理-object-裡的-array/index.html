@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="今天來看看一個常見問題。 &amp;#123;   first_name: &#39;chris&#39;,   last_name: &#39;wang&#39;,   email: &#39;chris@goodideas-studio.com&#39;,   camp: &amp;#123;     name: &#39;web camp&#39;,     member_count: 10   &amp;#125;,   skills: [&#39;javascript&#39;, &#39;htm">
+  <meta name="description" content="今天來看看一個常見問題。 &amp;#123;   first_name: &#39;chris&#39;,   last_name: &#39;wang&#39;,   email: &#39;chris@goodideas-studio.com&#39;,   camp: &amp;#123;     name: &#39;web camp&#39;,     member_count: 10   &amp;#125">
 <meta property="og:type" content="article">
 <meta property="og:title" content="表單處理 Object 裡的 Array">
 <meta property="og:url" content="https://dwatow.github.io/2021/10-12-ironman-2021/2021-10-12-%E8%A1%A8%E5%96%AE%E8%99%95%E7%90%86-object-%E8%A3%A1%E7%9A%84-array/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="今天來看看一個常見問題。 &amp;#123;   first_name: &#39;chris&#39;,   last_name: &#39;wang&#39;,   email: &#39;chris@goodideas-studio.com&#39;,   camp: &amp;#123;     name: &#39;web camp&#39;,     member_count: 10   &amp;#125;,   skills: [&#39;javascript&#39;, &#39;htm">
+<meta property="og:description" content="今天來看看一個常見問題。 &amp;#123;   first_name: &#39;chris&#39;,   last_name: &#39;wang&#39;,   email: &#39;chris@goodideas-studio.com&#39;,   camp: &amp;#123;     name: &#39;web camp&#39;,     member_count: 10   &amp;#125">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://dwatow.github.io/images/c01923ce-7dBBPtS.png">
 <meta property="og:image" content="https://dwatow.github.io/images/c01923ce-hEn7V1e.png">
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -151,70 +155,70 @@
 
 
     <p>今天來看看一個常見問題。</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  first_name<span class="token operator">:</span> 'chris'<span class="token punctuation">,</span>
-  last_name<span class="token operator">:</span> 'wang'<span class="token punctuation">,</span>
-  email<span class="token operator">:</span> 'chris@goodideas-studio.com'<span class="token punctuation">,</span>
-  camp<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    name<span class="token operator">:</span> 'web camp'<span class="token punctuation">,</span>
-    member_count<span class="token operator">:</span> <span class="token number">10</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  skills<span class="token operator">:</span> <span class="token punctuation">[</span>'javascript'<span class="token punctuation">,</span> 'html'<span class="token punctuation">,</span> 'css'<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  first_name: &#39;chris&#39;,
+  last_name: &#39;wang&#39;,
+  email: &#39;chris@goodideas-studio.com&#39;,
+  camp: &#123;
+    name: &#39;web camp&#39;,
+    member_count: 10
+  &#125;,
+  skills: [&#39;javascript&#39;, &#39;html&#39;, &#39;css&#39;]
+&#125;
+</code></pre>
 <h2 id="先做已經會的"><a class="header-anchor" href="#先做已經會的">¶</a>先做已經會的</h2>
 <p>先依昨天講的 UserForm 的 component 可以這樣寫。</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">@submit.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('submit')<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>firstName<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:disabled</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>!$listeners['update:firstName']<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.firstName<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:firstName', &#123;
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;form @submit.prevent&#x3D;&quot;$emit(&#39;submit&#39;)&quot;&gt;
+  &lt;label&gt;firstName&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;text&quot;
+      :disabled&#x3D;&quot;!$listeners[&#39;update:firstName&#39;]&quot;
+      :value&#x3D;&quot;data.firstName&quot;
+      @input&#x3D;&quot;$emit(&#39;update:firstName&#39;, &#123;
         ...data,
         firstName: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>lastName<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:disabled</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>!$listeners['update:lastName']<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.lastName<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:lastName', &#123;
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;label&gt;lastName&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;text&quot;
+      :disabled&#x3D;&quot;!$listeners[&#39;update:lastName&#39;]&quot;
+      :value&#x3D;&quot;data.lastName&quot;
+      @input&#x3D;&quot;$emit(&#39;update:lastName&#39;, &#123;
         ...data,
         lastName: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>email<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:disabled</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>!$listeners['update:email']<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.email<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:email', &#123;
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;label&gt;email&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;email&quot;
+      :disabled&#x3D;&quot;!$listeners[&#39;update:email&#39;]&quot;
+      :value&#x3D;&quot;data.email&quot;
+      @input&#x3D;&quot;$emit(&#39;update:email&#39;, &#123;
         ...data,
         email: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>CampForm</span>
-    <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.camp<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:camp', &#123;
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;CampForm
+    :data&#x3D;&quot;data.camp&quot;
+    @update:name&#x3D;&quot;$emit(&#39;update:camp&#39;, &#123;
       ...data,
       camp: $event
-    &#125;)<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>member_count</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:camp', &#123;
+    &#125;)&quot;
+    @update:member_count&#x3D;&quot;$emit(&#39;update:camp&#39;, &#123;
       ...data,
       camp: $event
-    &#125;)<span class="token punctuation">"</span></span>
-  <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>CampForm</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span>skills: &#123;&#123;data.skills&#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>送出<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    &#125;)&quot;
+  &gt;&lt;&#x2F;CampForm&gt;
+  &lt;pre&gt;skills: &#123;&#123;data.skills&#125;&#125;&lt;&#x2F;pre&gt;
+  &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;送出&quot;&gt;
+&lt;&#x2F;form&gt;
+</code></pre>
 <p>畫面</p>
 <p><img src="/images/c01923ce-7dBBPtS.png" alt=""></p>
 <p>還有一個 <code>skills</code> 怎麼辦呢？</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token comment">// ....</span>
-  skills<span class="token operator">:</span> <span class="token punctuation">[</span>'javascript'<span class="token punctuation">,</span> 'html'<span class="token punctuation">,</span> 'css'<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &#x2F;&#x2F; ....
+  skills: [&#39;javascript&#39;, &#39;html&#39;, &#39;css&#39;]
+&#125;
+</code></pre>
 <h2 id="這次是-array-要怎麼看待呢？"><a class="header-anchor" href="#這次是-array-要怎麼看待呢？">¶</a>這次是 Array 要怎麼看待呢？</h2>
 <blockquote>
 <p>除了使用 radio 這樣有 options 的選擇元件之外，如果是 tags 怎辦呢？</p>
@@ -239,60 +243,60 @@
 <blockquote>
 <p>分別就是 CRUD (create, read, update, delete)</p>
 </blockquote>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tags<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tags<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    skills: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('create', [...data, ''])<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>＋<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">:key</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>index<span class="token punctuation">"</span></span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>(tag, index) in data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-          <span class="token attr-name">:id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>`input-tag-$&#123;index&#125;`<span class="token punctuation">"</span></span>
-          <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-          <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tag<span class="token punctuation">"</span></span>
-          <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update', [
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;div class&#x3D;&quot;tags&quot;&gt;
+  &lt;div class&#x3D;&quot;tags&quot;&gt;
+    skills: &lt;button @click.prevent&#x3D;&quot;$emit(&#39;create&#39;, [...data, &#39;&#39;])&quot;&gt;＋&lt;&#x2F;button&gt;&lt;br &#x2F;&gt;
+    &lt;ul&gt;
+      &lt;li :key&#x3D;&quot;index&quot; v-for&#x3D;&quot;(tag, index) in data&quot;&gt;
+        &lt;input
+          :id&#x3D;&quot;&#96;input-tag-$&#123;index&#125;&#96;&quot;
+          type&#x3D;&quot;text&quot;
+          :value&#x3D;&quot;tag&quot;
+          @input&#x3D;&quot;$emit(&#39;update&#39;, [
             ...data.slice(0, index),
             $event.target.value,
             ...data.slice(index+1),
-          ])<span class="token punctuation">"</span></span>
-        <span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('delete', [
+          ])&quot;
+        &gt;
+        &lt;button @click.prevent&#x3D;&quot;$emit(&#39;delete&#39;, [
           ...data.slice(0, index),
           ...data.slice(index+1),
-        ])<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>－<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        ])&quot;&gt;－&lt;&#x2F;button&gt;
+      &lt;&#x2F;li&gt;
+    &lt;&#x2F;ul&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+</code></pre>
 <p>在 UserForm 這一層，要使用 Tabs 來 CRUD skills</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Tags</span>
-  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.skills<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@create</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:skills', &#123;
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;Tags
+  :data&#x3D;&quot;data.skills&quot;
+  @create&#x3D;&quot;$emit(&#39;update:skills&#39;, &#123;
     ...data,
     skills: $event
-  &#125;)<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@update</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:skills', &#123;
+  &#125;)&quot;
+  @update&#x3D;&quot;$emit(&#39;update:skills&#39;, &#123;
     ...data,
     skills: $event
-  &#125;)<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@delete</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:skills', &#123;
+  &#125;)&quot;
+  @delete&#x3D;&quot;$emit(&#39;update:skills&#39;, &#123;
     ...data,
     skills: $event
-  &#125;)<span class="token punctuation">"</span></span>
-<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Tags</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#125;)&quot;
+&gt;&lt;&#x2F;Tags&gt;
+</code></pre>
 <p>使用 UserForm<br>
 加一個 <code>@update:skills=&quot;$store.commit('user', $event)&quot;</code><br>
 表示可以更新 skills</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>UserForm</span>
-  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>first_name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>last_name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>email</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>camp</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>skills</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onSubmit<span class="token punctuation">"</span></span>
-<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>UserForm</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;UserForm
+  :data&#x3D;&quot;data&quot;
+  @update:first_name&#x3D;&quot;$store.commit(&#39;user&#39;, $event)&quot;
+  @update:last_name&#x3D;&quot;$store.commit(&#39;user&#39;, $event)&quot;
+  @update:email&#x3D;&quot;$store.commit(&#39;user&#39;, $event)&quot;
+  @update:camp&#x3D;&quot;$store.commit(&#39;user&#39;, $event)&quot;
+  @update:skills&#x3D;&quot;$store.commit(&#39;user&#39;, $event)&quot;
+  @submit&#x3D;&quot;onSubmit&quot;
+&gt;&lt;&#x2F;UserForm&gt;
+</code></pre>
 <h2 id="剛剛那個-data-slice-是什麼巫術？"><a class="header-anchor" href="#剛剛那個-data-slice-是什麼巫術？">¶</a>剛剛那個 <code>...data.slice()</code> 是什麼巫術？</h2>
 <p>對於更新資料，堅持使用 immutable 的方式更新。<br>
 並且在觸發的位置就決定如何組資料，這是最適合的。</p>
@@ -300,31 +304,31 @@
 並且將新的值 (<code>''</code>)，更新的值 (<code>$event.target.value</code>)，甚至是刪除值都可以做到</p>
 <p>下面我們把「組 Array」和「往外傳」分成兩個步驟寫出來。</p>
 <p><strong>create</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> new_data <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token operator">...</span>data<span class="token punctuation">,</span>
-  <span class="token string">''</span>
-<span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'create'</span><span class="token punctuation">,</span> new_data<span class="token punctuation">)</span>"
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">var new_data &#x3D; [
+  ...data,
+  &#39;&#39;
+]
+</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$emit(&#39;create&#39;, new_data)&quot;
+</code></pre>
 <p><strong>update</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> new_data <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token operator">...</span>data<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  new_item<span class="token punctuation">,</span> <span class="token comment">// data[index] 的位置，要修改</span>
-  <span class="token operator">...</span>data<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'update'</span><span class="token punctuation">,</span> new_data<span class="token punctuation">)</span>"
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">var new_data &#x3D; [
+  ...data.slice(0, index),
+  new_item, &#x2F;&#x2F; data[index] 的位置，要修改
+  ...data.slice(index+1),
+]
+</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$emit(&#39;update&#39;, new_data)&quot;
+</code></pre>
 <p><strong>delete</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> new_data <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token operator">...</span>data<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token comment">// data[index] 的位置，要刪掉</span>
-  <span class="token operator">...</span>data<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'delete'</span><span class="token punctuation">,</span> new_data<span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">var new_data &#x3D; [
+  ...data.slice(0, index),
+  &#x2F;&#x2F; data[index] 的位置，要刪掉
+  ...data.slice(index+1),
+]
+</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$emit(&#39;delete&#39;, new_data)
+</code></pre>
 <h2 id="為型別操作而生-才是-web-component-設計的思維"><a class="header-anchor" href="#為型別操作而生-才是-web-component-設計的思維">¶</a>為型別操作而生！才是 web component 設計的思維</h2>
 <p>將型別的的操作，延伸到 component</p>
 <p>輸入</p>
@@ -421,21 +425,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

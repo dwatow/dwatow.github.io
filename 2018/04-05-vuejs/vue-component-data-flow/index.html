@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶用 vue-loader 的 component 資料傳遞 ¶加入 component 先將 .vue 檔案 import 進來，並且宣告在 vue instance 的 component 裡面。 &lt;script&gt; import componentName from &#39;path&#x2F;component.vue&#39;;  export default &amp;#123;   &#x2F;&#x2F;...   compon">
+  <meta name="description" content="¶用 vue-loader 的 component 資料傳遞 ¶加入 component 先將 .vue 檔案 import 進來，並且宣告在 vue instance 的 component 裡面。 &lt;script&gt; import componentName from &#39;path&#x2F;component.vue&#39;;  export default &amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 vue-loader 的 component 資料傳遞">
 <meta property="og:url" content="https://dwatow.github.io/2018/04-05-vuejs/vue-component-data-flow/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶用 vue-loader 的 component 資料傳遞 ¶加入 component 先將 .vue 檔案 import 進來，並且宣告在 vue instance 的 component 裡面。 &lt;script&gt; import componentName from &#39;path&#x2F;component.vue&#39;;  export default &amp;#123;   &#x2F;&#x2F;...   compon">
+<meta property="og:description" content="¶用 vue-loader 的 component 資料傳遞 ¶加入 component 先將 .vue 檔案 import 進來，並且宣告在 vue instance 的 component 裡面。 &lt;script&gt; import componentName from &#39;path&#x2F;component.vue&#39;;  export default &amp;#123;">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-04-05T14:23:04.000Z">
 <meta property="article:modified_time" content="2021-08-22T05:08:13.000Z">
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -150,28 +154,28 @@
     <h1 id="用-vue-loader-的-component-資料傳遞"><a class="header-anchor" href="#用-vue-loader-的-component-資料傳遞">¶</a>用 vue-loader 的 component 資料傳遞</h1>
 <h2 id="加入-component"><a class="header-anchor" href="#加入-component">¶</a>加入 component</h2>
 <p>先將 <code>.vue</code> 檔案 <code>import</code> 進來，並且宣告在 vue instance 的 component 裡面。</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">import</span> componentName <span class="token keyword">from</span> <span class="token string">'path/component.vue'</span><span class="token punctuation">;</span>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;script&gt;
+import componentName from &#39;path&#x2F;component.vue&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token literal-property property">components</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    componentName<span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default &#123;
+  &#x2F;&#x2F;...
+  components: &#123;
+    componentName,
+  &#125;,
+  &#x2F;&#x2F;...
+&#125;
+&lt;&#x2F;script&gt;</code></pre>
 <p>再以 <code>import</code> 進來後宣告的名字，當作自定義的 HTML tag name ，在想顯示 component 的地方放置。</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>componentName</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>componentName</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;template&gt;
+    &lt;componentName&gt;&lt;&#x2F;componentName&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <h2 id="data-flow-parent-to-child"><a class="header-anchor" href="#data-flow-parent-to-child">¶</a>Data flow: Parent to Child</h2>
 <p>靠 component 的 <code>props</code></p>
 <p><strong>parent component</strong></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>componentName</span> <span class="token attr-name">:child-data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span>parentData</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>componentName</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;template&gt;
+    &lt;componentName :child-data&#x3D;parentData&gt;
+    &lt;&#x2F;componentName&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <blockquote>
 <p>parentData 也可以放 parentComputed 的函數名稱</p>
 </blockquote>
@@ -182,55 +186,55 @@
 JavaScript: <code>this.childProp</code><br>
 HTML: <code>&#123; &#123; childProp &#125; &#125;</code></p>
 </blockquote>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"childProp"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>&#123;&#123;childProp&#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;script&gt;
+export default &#123;
+  &#x2F;&#x2F;...
+  props: [&quot;childProp&quot;],
+  &#x2F;&#x2F;...
+&#125;
+&lt;&#x2F;script&gt;
+&lt;template&gt;
+    &lt;div&gt;&#123;&#123;childProp&#125;&#125;&lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <h2 id="data-flow-child-to-parent-like-jquery"><a class="header-anchor" href="#data-flow-child-to-parent-like-jquery">¶</a>Data flow: Child to Parent (like jQuery)</h2>
 <p>靠 component 的 <code>$emit</code></p>
 <p><strong>parent component</strong></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>componentName</span> <span class="token attr-name">@childEvent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentMethod<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>componentName</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token function">parentMethod</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-          <span class="token keyword">this</span><span class="token punctuation">.</span>parentData <span class="token operator">=</span> e
-      <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;template&gt;
+    &lt;componentName @childEvent&#x3D;&quot;parentMethod&quot;&gt;
+    &lt;&#x2F;componentName&gt;
+&lt;&#x2F;template&gt;
+&lt;script&gt;
+export default &#123;
+  &#x2F;&#x2F;...
+  method: &#123;
+      parentMethod (e) &#123;
+          this.parentData &#x3D; e
+      &#125;
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+&lt;&#x2F;script&gt;</code></pre>
 <p><strong>child component</strong></p>
 <p>在 component 要使用 <code>$emit</code></p>
 <h3 id="先回憶-在-jquery-的用法"><a class="header-anchor" href="#先回憶-在-jquery-的用法">¶</a>先回憶，在 jQuery 的用法</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"element"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span>eventName<span class="token punctuation">,</span> eventCallback<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$(&quot;element&quot;).on(eventName, eventCallback);</code></pre>
 <p>再看看，在 vue 這樣使用<br>
 將真實的事件定義成一個 <code>$emit</code>。</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit(childEvent, childMethod())<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token function">childMethod</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-          <span class="token keyword">return</span> <span class="token string">'e'</span><span class="token punctuation">;</span> <span class="token comment">// partne method 的參數</span>
-      <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;template&gt;
+    &lt;div @click&#x3D;&quot;$emit(childEvent, childMethod())&quot;&gt;
+    &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
+&lt;script&gt;
+export default &#123;
+  &#x2F;&#x2F;...
+  method: &#123;
+      childMethod () &#123;
+          return &#39;e&#39;; &#x2F;&#x2F; partne method 的參數
+      &#125;
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+&lt;&#x2F;script&gt;</code></pre>
 <div class="danger">
 <p>到此 <code>$emit</code> 的用法，和 jQuery 滿像的…<br>
 而事實上，卻不是這麼一回事。</p>
@@ -238,17 +242,17 @@ HTML: <code>&#123; &#123; childProp &#125; &#125;</code></p>
 <h2 id="data-flow-child-to-parent-vue-way"><a class="header-anchor" href="#data-flow-child-to-parent-vue-way">¶</a>Data flow: Child to Parent (Vue way)</h2>
 <p><strong>parent component</strong></p>
 <p><code>$event</code> 就是 callback function 的參數。在 parent 層可以直接引用。</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>componentName</span> <span class="token attr-name">@childEvent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData = $event<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>componentName</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;template&gt;
+    &lt;componentName @childEvent&#x3D;&quot;parentData &#x3D; $event&quot;&gt;
+    &lt;&#x2F;componentName&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <p><strong>child component</strong></p>
 <p><code>$emit</code> 回傳的東西，其實是 eventCallback 的參數，如果要在 <code>$emit</code> 第二個參數使用 function 一定要 return 值。</p>
-<pre class="line-numbers language-HTML" data-language="HTML"><code class="language-HTML">&lt;template&gt;
+<pre class="language-HTML" data-language="HTML"><code class="language-HTML">&lt;template&gt;
     &lt;div @click&#x3D;&quot;$emit(childEvent, &#39;e&#39;)&quot;&gt;
        &lt;!-- e &#x3D;&gt; partne method 的參數 --&gt;
     &lt;&#x2F;div&gt;
-&lt;&#x2F;template&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;template&gt;</code></pre>
 
     
     </section>
@@ -302,21 +306,14 @@ HTML: <code>&#123; &#123; childProp &#125; &#125;</code></p>
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

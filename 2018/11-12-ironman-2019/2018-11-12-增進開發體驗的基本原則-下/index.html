@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -59,8 +59,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -204,37 +208,37 @@
 <p>利用語言細節的特性，強迫使用者不犯錯的美妙設計。<br>
 容錯性高的 JavaScript 就比較少這種強迫的限制了。</p>
 <p>在 C++ 就很多限制的設計，其中有一個「純虛擬類別」，可以視為 Java 的「Interface」，它沒有自己的實作，但是繼承它的，就必須擁有這個 interface 的實作。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Sharp</span> <span class="token punctuation">&#123;</span>
-<span class="token keyword">protected</span><span class="token operator">:</span>
-  <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">Draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class Sharp &#123;
+protected:
+  virtual void Draw() const &#x3D; 0;
+&#125;
 
-<span class="token keyword">class</span> <span class="token class-name">Circle</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Sharp</span></span> <span class="token punctuation">&#123;</span> <span class="token comment">// Circle 繼承 Sharp = Circle is a Sharp</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-  <span class="token comment">// 一定要實作 Draw </span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class Circle : public Sharp &#123; &#x2F;&#x2F; Circle 繼承 Sharp &#x3D; Circle is a Sharp
+public:
+  &#x2F;&#x2F; 一定要實作 Draw 
+&#125;
+</code></pre>
 <p>這種限制，還變成了一個 Design Pattern[1] 的特性</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Creator</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-<span class="token keyword">protected</span><span class="token operator">:</span>
-    <span class="token keyword">virtual</span> Product <span class="token operator">*</span><span class="token function">DoCreateProduct</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class Creator&#123;
+    &#x2F;&#x2F;...
+protected:
+    virtual Product *DoCreateProduct(void)&#x3D;0;
+&#125;;
 
-<span class="token keyword">class</span> <span class="token class-name">CreatorA</span><span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Creator</span></span><span class="token punctuation">&#123;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-    <span class="token keyword">inline</span> Product <span class="token operator">*</span><span class="token function">DoCreateProduct</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token keyword">override</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> ProductA<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+class CreatorA: public Creator&#123;
+public:
+    inline Product *DoCreateProduct(void) override &#123;
+        return new ProductA;
+    &#125;
+&#125;;
 
-<span class="token keyword">class</span> <span class="token class-name">CreatorB</span><span class="token operator">:</span> <span class="token base-clause"><span class="token keyword">public</span> <span class="token class-name">Creator</span></span><span class="token punctuation">&#123;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-    <span class="token keyword">inline</span> Product <span class="token operator">*</span><span class="token function">DoCreateProduct</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token keyword">override</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> ProductB<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class CreatorB: public Creator&#123;
+public:
+    inline Product *DoCreateProduct(void) override &#123;
+        return new ProductB;
+    &#125;
+&#125;;
+</code></pre>
 <p>在 Python 中，就強迫使用者一定要有優美的縮排。<br>
 而且不可以混用縮排符號，讓寫 Python 的人一開始就養成寫好 code 的習慣。</p>
 <h2 id="回饋"><a class="header-anchor" href="#回饋">¶</a>回饋</h2>
@@ -336,21 +340,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

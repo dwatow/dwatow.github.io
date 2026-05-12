@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -50,8 +50,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -161,73 +165,73 @@
 <p><strong>Actions.vue</strong></p>
 <p>增加了一個 button 讓最後得到的 JSON 放在 Vuex 裡。<br>
 再透過 getters 放在 <code>&lt;pre&gt;</code> 裡。</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text-align-center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;template&gt;
+  &lt;div class&#x3D;&quot;text-align-center&quot;&gt;
     ...
-    &lt;button id="getJson" @click="$store.dispatch('fetchCoscup')">Get COSCUP</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token plain-text">
-    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> $store<span class="token punctuation">.</span>getters<span class="token punctuation">.</span>json <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span><span class="token plain-text">
+    &lt;button id&#x3D;&quot;getJson&quot; @click&#x3D;&quot;$store.dispatch(&#39;fetchCoscup&#39;)&quot;&gt;Get COSCUP&lt;&#x2F;button&gt;
+    &lt;pre&gt;&#123;&#123; $store.getters.json &#125;&#125;&lt;&#x2F;pre&gt;
     ...
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <p>畫面呈現 (下面畫面包含已回傳的 JSON)</p>
 <p><img src="/images/609ee084-J4fbKqu.png" alt=""></p>
 <h3 id="json-schema"><a class="header-anchor" href="#json-schema">¶</a>Json Schema</h3>
 <p>利用 Json Schema<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 比對 JSON 結果</p>
 <p>記得安裝</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> --save-dev jest-json-schema<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save-dev jest-json-schema</code></pre>
 <p><strong>json-schema.js</strong></p>
 <p><code>jest-json-schema</code> 套件要先初始化。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> matchers <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'jest-json-schema'</span><span class="token punctuation">;</span>
-expect<span class="token punctuation">.</span><span class="token function">extend</span><span class="token punctuation">(</span>matchers<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import &#123; matchers &#125; from &#39;jest-json-schema&#39;;
+expect.extend(matchers);</code></pre>
 <p>測試就可以這樣寫</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">expect</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatchSchema</span><span class="token punctuation">(</span>schema<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">expect(json).toMatchSchema(schema);</code></pre>
 <h3 id="unit-test"><a class="header-anchor" href="#unit-test">¶</a>unit test</h3>
 <p><strong>axios-test.spec.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> shallowMount<span class="token punctuation">,</span> createLocalVue <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"@vue/test-utils"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> store <span class="token keyword">from</span> <span class="token string">"@/store"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Actions <span class="token keyword">from</span> <span class="token string">"@/views/Actions.vue"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">"../json-schema"</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import &#123; shallowMount, createLocalVue &#125; from &quot;@vue&#x2F;test-utils&quot;;
+import store from &quot;@&#x2F;store&quot;;
+import Actions from &quot;@&#x2F;views&#x2F;Actions.vue&quot;;
+import &quot;..&#x2F;json-schema&quot;;
 
-<span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">"axios"</span><span class="token punctuation">;</span>
-jest<span class="token punctuation">.</span><span class="token function">mock</span><span class="token punctuation">(</span><span class="token string">'axios'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-
-<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'API get json'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> localVue <span class="token operator">=</span> <span class="token function">createLocalVue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> wrapper <span class="token operator">=</span> <span class="token function">shallowMount</span><span class="token punctuation">(</span>Actions<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> store<span class="token punctuation">,</span> localVue <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+import axios from &quot;axios&quot;;
+jest.mock(&#39;axios&#39;);
 
 
-  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'should get coscup data'</span><span class="token punctuation">,</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 這次要假裝回來的 JSON</span>
-    axios<span class="token punctuation">.</span>get<span class="token punctuation">.</span><span class="token function">mockResolvedValue</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token string-property property">"en"</span><span class="token operator">:</span> <span class="token string">"&lt;ul>&lt;li>&lt;a href=\"http://registrano.com/events/coscup2011-regist\">Register&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/en/about/\">About Us&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/en/program/\">Program&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/en/venue/\">Venue&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"http://blog.coscup.org/\">Blog&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/en/sponsors/\">Sponsors&lt;/a>&lt;/li>\n&lt;/ul>"</span><span class="token punctuation">,</span>
-        <span class="token string-property property">"zh-tw"</span><span class="token operator">:</span> <span class="token string">"&lt;ul>&lt;li>&lt;a href=\"http://registrano.com/events/coscup2011-regist\">報名&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-tw/about/\">活動簡介&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-tw/program/\">議程&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-tw/venue/\">地點&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"http://blog.coscup.org/\">部落格&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-tw/sponsors/\">贊助單位&lt;/a>&lt;/li>\n&lt;/ul>"</span><span class="token punctuation">,</span>
-        <span class="token string-property property">"zh-cn"</span><span class="token operator">:</span> <span class="token string">"&lt;ul>&lt;li>&lt;a href=\"http://registrano.com/events/coscup2011-regist\">报名&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-cn/about/\">活动&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-cn/program/\">议程&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-cn/venue/\">地点&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"http://blog.coscup.org/\">博客&lt;/a>&lt;/li>\n&lt;li>&lt;a href=\"/2011/zh-cn/sponsors/\">赞助单位&lt;/a>&lt;/li>\n&lt;/ul>"</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+describe(&#39;API get json&#39;, () &#x3D;&gt; &#123;
+  const localVue &#x3D; createLocalVue();
+  const wrapper &#x3D; shallowMount(Actions, &#123; store, localVue &#125;);
 
-    <span class="token comment">// 操作畫面</span>
-    wrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"#getJson"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">trigger</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    wrapper<span class="token punctuation">.</span>vm<span class="token punctuation">.</span><span class="token function">$nextTick</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">const</span> html <span class="token operator">=</span> wrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"pre"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">const</span> json <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>html<span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-      <span class="token comment">// 測試</span>
-      <span class="token keyword">const</span> schema <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">properties</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-          <span class="token string-property property">"en"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-          <span class="token string-property property">"zh-tw"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-          <span class="token string-property property">"zh-cn"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span> <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'en'</span><span class="token punctuation">,</span> <span class="token string">'zh-tw'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span>
-      <span class="token function">expect</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatchSchema</span><span class="token punctuation">(</span>schema<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">await</span> <span class="token function">expect</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  it(&#39;should get coscup data&#39;, done &#x3D;&gt; &#123;
+    &#x2F;&#x2F; 這次要假裝回來的 JSON
+    axios.get.mockResolvedValue(&#123;
+      data: &#123;
+        &quot;en&quot;: &quot;&lt;ul&gt;&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;registrano.com&#x2F;events&#x2F;coscup2011-regist\&quot;&gt;Register&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;en&#x2F;about&#x2F;\&quot;&gt;About Us&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;en&#x2F;program&#x2F;\&quot;&gt;Program&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;en&#x2F;venue&#x2F;\&quot;&gt;Venue&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;blog.coscup.org&#x2F;\&quot;&gt;Blog&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;en&#x2F;sponsors&#x2F;\&quot;&gt;Sponsors&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;&#x2F;ul&gt;&quot;,
+        &quot;zh-tw&quot;: &quot;&lt;ul&gt;&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;registrano.com&#x2F;events&#x2F;coscup2011-regist\&quot;&gt;報名&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-tw&#x2F;about&#x2F;\&quot;&gt;活動簡介&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-tw&#x2F;program&#x2F;\&quot;&gt;議程&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-tw&#x2F;venue&#x2F;\&quot;&gt;地點&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;blog.coscup.org&#x2F;\&quot;&gt;部落格&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-tw&#x2F;sponsors&#x2F;\&quot;&gt;贊助單位&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;&#x2F;ul&gt;&quot;,
+        &quot;zh-cn&quot;: &quot;&lt;ul&gt;&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;registrano.com&#x2F;events&#x2F;coscup2011-regist\&quot;&gt;报名&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-cn&#x2F;about&#x2F;\&quot;&gt;活动&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-cn&#x2F;program&#x2F;\&quot;&gt;议程&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-cn&#x2F;venue&#x2F;\&quot;&gt;地点&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;http:&#x2F;&#x2F;blog.coscup.org&#x2F;\&quot;&gt;博客&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;li&gt;&lt;a href&#x3D;\&quot;&#x2F;2011&#x2F;zh-cn&#x2F;sponsors&#x2F;\&quot;&gt;赞助单位&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;\n&lt;&#x2F;ul&gt;&quot;
+      &#125;
+    &#125;);
+
+    &#x2F;&#x2F; 操作畫面
+    wrapper.find(&quot;#getJson&quot;).trigger(&quot;click&quot;);
+    wrapper.vm.$nextTick(async () &#x3D;&gt; &#123;
+      const html &#x3D; wrapper.find(&quot;pre&quot;);
+      const json &#x3D; JSON.parse(html.text());
+
+      &#x2F;&#x2F; 測試
+      const schema &#x3D; &#123;
+        properties: &#123;
+          &quot;en&quot;: &#123; type: &#39;string&#39; &#125;,
+          &quot;zh-tw&quot;: &#123; type: &#39;string&#39; &#125;,
+          &quot;zh-cn&quot;: &#123; type: &#39;string&#39; &#125;
+        &#125;,
+        required: [&#39;en&#39;, &#39;zh-tw&#39;],
+      &#125;
+      expect(json).toMatchSchema(schema);
+      await expect(Object.keys(json).length).toBe(3);
+      done()
+    &#125;)
+  &#125;);
+&#125;);</code></pre>
 <p>因為畫面需要再等一次渲染結束，才可以抓畫面的值。<br>
 所以要把測試寫在 <code>$nextTick</code> 裡面。<br>
 並且用非同步的方式 <code>async-await</code> + <code>done()</code></p>
@@ -237,12 +241,12 @@ jest<span class="token punctuation">.</span><span class="token function">mock</s
 <p><strong>Actions.vue</strong></p>
 <p>增加了一個 button 讓最後得到的 JSON 放在 Vuex 裡。<br>
 再透過 getters 放在 <code>&lt;pre&gt;</code> 裡。</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text-align-center<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;template&gt;
+  &lt;div class&#x3D;&quot;text-align-center&quot;&gt;
     ...
-    &lt;button id="postJson" @click="$store.dispatch('createData', &#123; hello: 'world' &#125;)">Create Data</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    &lt;button id&#x3D;&quot;postJson&quot; @click&#x3D;&quot;$store.dispatch(&#39;createData&#39;, &#123; hello: &#39;world&#39; &#125;)&quot;&gt;Create Data&lt;&#x2F;button&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;</code></pre>
 <p>其中，直接從畫面觸發 Vuex 的 Actions ， payload 用 <code>&#123; hello: 'world' &#125;</code> 。<br>
 而這個 payload 會直接放進 <code>axios.post</code> 的 data 中</p>
 <h3 id="unit-test-v2"><a class="header-anchor" href="#unit-test-v2">¶</a>unit test</h3>
@@ -253,27 +257,27 @@ jest<span class="token punctuation">.</span><span class="token function">mock</s
 <p><code>mockImplementation</code> 可自訂函數內容。</p>
 </blockquote>
 <p><strong>axios-test.spec.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'API post json'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> localVue <span class="token operator">=</span> <span class="token function">createLocalVue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> wrapper <span class="token operator">=</span> <span class="token function">shallowMount</span><span class="token punctuation">(</span>Actions<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> store<span class="token punctuation">,</span> localVue <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> mockAxios <span class="token operator">=</span> axios<span class="token punctuation">.</span>post<span class="token punctuation">.</span><span class="token function">mockResolvedValue</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'chris'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// const mockAxios = axios.post.mockImplementation((url, payload) => Promise.resolve(payload));</span>
-  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'should post data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    wrapper<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"#postJson"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">trigger</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">describe(&#39;API post json&#39;, () &#x3D;&gt; &#123;
+  const localVue &#x3D; createLocalVue();
+  const wrapper &#x3D; shallowMount(Actions, &#123; store, localVue &#125;);
+  const mockAxios &#x3D; axios.post.mockResolvedValue(&#123; name: &#39;chris&#39; &#125;);
+  &#x2F;&#x2F; const mockAxios &#x3D; axios.post.mockImplementation((url, payload) &#x3D;&gt; Promise.resolve(payload));
+  it(&#39;should post data&#39;, () &#x3D;&gt; &#123;
+    wrapper.find(&quot;#postJson&quot;).trigger(&quot;click&quot;);
 
-    <span class="token keyword">const</span> uri <span class="token operator">=</span> mockAxios<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token function">expect</span><span class="token punctuation">(</span>uri<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'https://www.w3schools.com/js/demo_post2.asp'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    const uri &#x3D; mockAxios.mock.calls[0][0];
+    expect(uri).toBe(&#39;https:&#x2F;&#x2F;www.w3schools.com&#x2F;js&#x2F;demo_post2.asp&#39;);
 
-    <span class="token keyword">const</span> json <span class="token operator">=</span> mockAxios<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token keyword">const</span> schema <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">properties</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token string-property property">"hello"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'hello'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token function">expect</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatchSchema</span><span class="token punctuation">(</span>schema<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    const json &#x3D; mockAxios.mock.calls[0][1];
+    const schema &#x3D; &#123;
+      properties: &#123;
+        &quot;hello&quot;: &#123; type: &#39;string&#39; &#125;,
+      &#125;,
+      required: [&#39;hello&#39;],
+    &#125;
+    expect(json).toMatchSchema(schema);
+  &#125;);
+&#125;);</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -349,21 +353,14 @@ jest<span class="token punctuation">.</span><span class="token function">mock</s
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

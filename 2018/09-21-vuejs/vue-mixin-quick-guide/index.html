@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js export const fruitMixin &#x3D; &amp;#123;   data() &amp;#123;     return &amp;#123;       fruits: [&quot;Apple&quot;, &quot;Banna&quot;,">
+  <meta name="description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js export const fruitMixin &#x3D; &amp;#123;   data() &amp;#123;     return &amp;#123;       fruits: [&quot;Apple&amp;q">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vue 的 mixin 快速指南">
 <meta property="og:url" content="https://dwatow.github.io/2018/09-21-vuejs/vue-mixin-quick-guide/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js export const fruitMixin &#x3D; &amp;#123;   data() &amp;#123;     return &amp;#123;       fruits: [&quot;Apple&quot;, &quot;Banna&quot;,">
+<meta property="og:description" content="¶Vue 的 mixin 快速指南 建立 component 共用程式碼  無法共用資料  mixin.js 建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js export const fruitMixin &#x3D; &amp;#123;   data() &amp;#123;     return &amp;#123;       fruits: [&quot;Apple&amp;q">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-09-21T12:17:15.000Z">
 <meta property="article:modified_time" content="2021-06-15T08:39:46.000Z">
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -153,28 +157,28 @@
 </blockquote>
 <p><strong>mixin.js</strong></p>
 <p>建立要 mixin 的 .js 檔，並且在裡面直接放入 component 的共用 js</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">const</span> fruitMixin <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">fruits</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"Apple"</span><span class="token punctuation">,</span> <span class="token string">"Banna"</span><span class="token punctuation">,</span> <span class="token string">"Mango"</span><span class="token punctuation">,</span> <span class="token string">"Melon"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">filterText</span><span class="token operator">:</span> <span class="token string">""</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">computed</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">filterFruits</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fruits<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">element</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> element<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>filterText<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export const fruitMixin &#x3D; &#123;
+  data() &#123;
+    return &#123;
+      fruits: [&quot;Apple&quot;, &quot;Banna&quot;, &quot;Mango&quot;, &quot;Melon&quot;],
+      filterText: &quot;&quot;
+    &#125;;
+  &#125;,
+  computed: &#123;
+    filterFruits() &#123;
+      return this.fruits.filter(element &#x3D;&gt; &#123;
+        return element.match(this.filterText);
+      &#125;);
+    &#125;
+  &#125;
+&#125;;</code></pre>
 <p><strong>components/myComponent</strong></p>
 <p>在 component 加入 mixin</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> fruitMixin <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"./mixin.js"</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import &#123; fruitMixin &#125; from &quot;.&#x2F;mixin.js&quot;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">mixins</span><span class="token operator">:</span> <span class="token punctuation">[</span>fruitMixin<span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default &#123;
+  mixins: [fruitMixin]
+&#125;;</code></pre>
 
     
     </section>
@@ -224,21 +228,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

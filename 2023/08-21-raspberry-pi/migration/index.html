@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -40,8 +40,8 @@
 <meta property="article:modified_time" content="2023-09-12T15:52:33.749Z">
 <meta property="article:author" content="Chris">
 <meta property="article:tag" content="sequelize">
-<meta property="article:tag" content="migration">
 <meta property="article:tag" content="orm">
+<meta property="article:tag" content="migration">
 <meta name="twitter:card" content="summary">
   <title>
     Raspberry Pi 4 的後端修鍊 (6) - Migration - 《Chris 技術筆記》
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -159,87 +163,87 @@
 <p>這個歷程，用 SQL 執行就會寫成<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <p><strong>前進</strong></p>
 <p>新增資料表，並定義資料表欄位</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
-  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  password <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
+  PRIMARY KEY (id)
+) ENGINE &#x3D; InnoDB;</code></pre>
 <p><strong>後退</strong></p>
 <p>刪除資料表</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> <span class="token keyword">user</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">DROP TABLE user;</code></pre>
 <p>用 Sequelize 該怎麼做呢？</p>
 <h2 id="建立資料表"><a class="header-anchor" href="#建立資料表">¶</a>建立資料表<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate <span class="token parameter variable">--name</span> User <span class="token parameter variable">--attributes</span> id:integer,name:string,password:string,created_at:date,updated_at:date
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate --name User --attributes id:integer,name:string,password:string,created_at:date,updated_at:date
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-New model was created at /home/admin/case/lib-backend/models/user.js <span class="token builtin class-name">.</span>
-New migration was created at /home/admin/case/lib-backend/migrations/20230802083644-create-user.js <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+New model was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;models&#x2F;user.js .
+New migration was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;migrations&#x2F;20230802083644-create-user.js .</code></pre>
 <p>會生成</p>
 <p><strong>專案/migrations/20230802083644-create-user.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token comment">/** @type &#123;import('sequelize-cli').Migration&#125; */</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">up</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">createTable</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">autoIncrement</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">primaryKey</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">password</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">created_at</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">updated_at</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">createdAt</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">updatedAt</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token function">down</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">dropTable</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+&#x2F;** @type &#123;import(&#39;sequelize-cli&#39;).Migration&#125; *&#x2F;
+module.exports &#x3D; &#123;
+  async up(queryInterface, Sequelize) &#123;
+    await queryInterface.createTable(&#39;Users&#39;, &#123;
+      id: &#123;
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      &#125;,
+      id: &#123;
+        type: Sequelize.INTEGER
+      &#125;,
+      name: &#123;
+        type: Sequelize.STRING
+      &#125;,
+      password: &#123;
+        type: Sequelize.STRING
+      &#125;,
+      created_at: &#123;
+        type: Sequelize.DATE
+      &#125;,
+      updated_at: &#123;
+        type: Sequelize.DATE
+      &#125;,
+      createdAt: &#123;
+        allowNull: false,
+        type: Sequelize.DATE
+      &#125;,
+      updatedAt: &#123;
+        allowNull: false,
+        type: Sequelize.DATE
+      &#125;
+    &#125;);
+  &#125;,
+  async down(queryInterface, Sequelize) &#123;
+    await queryInterface.dropTable(&#39;Users&#39;);
+  &#125;
+&#125;;</code></pre>
 <p>並且直接生成 Model (麻豆)…關於 Model 的一切，我們下一篇再處理，目前先不管它</p>
 <p>等等…<br>
 好像哪裡怪怪的。</p>
 <p>sequelize 生成每一個資料表，會自動送三個欄位 <code>id</code>, <code>createdAt</code>, <code>updatedAt</code> 和我們自己定義的那一組重複了。</p>
 <h3 id="先取消剛剛的步驟"><a class="header-anchor" href="#先取消剛剛的步驟">¶</a>先取消剛剛的步驟</h3>
 <p>要重新建立，必須要先刪除</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate:undo
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate:undo
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-Loaded configuration <span class="token function">file</span> <span class="token string">"config/config.json"</span><span class="token builtin class-name">.</span>
-Using environment <span class="token string">"development"</span><span class="token builtin class-name">.</span>
-No executed migrations found.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Loaded configuration file &quot;config&#x2F;config.json&quot;.
+Using environment &quot;development&quot;.
+No executed migrations found.</code></pre>
 <h3 id="再一次建立資料表"><a class="header-anchor" href="#再一次建立資料表">¶</a>再一次建立資料表</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate <span class="token parameter variable">--underscored</span> <span class="token parameter variable">--force</span> <span class="token parameter variable">--name</span> user <span class="token parameter variable">--attributes</span> name:string,password:string
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-New model was created at /home/admin/case/lib-backend/models/user.js <span class="token builtin class-name">.</span>
-New migration was created at /home/admin/case/lib-backend/migrations/20230803111707-create-user.js <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+New model was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;models&#x2F;user.js .
+New migration was created at &#x2F;home&#x2F;admin&#x2F;case&#x2F;lib-backend&#x2F;migrations&#x2F;20230803111707-create-user.js .</code></pre>
 <ul>
 <li><code>--name</code> 定義資料表名稱，建議使用小寫。</li>
 <li><code>--underscored</code> 欄位名稱都用<code>小寫</code>+<code>底線</code> 命名</li>
@@ -252,99 +256,99 @@ New migration was created at /home/admin/case/lib-backend/migrations/20230803111
 sequelize 出現 bug <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup><br>
 在此請手動修正</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token comment">/** @type &#123;import('sequelize-cli').Migration&#125; */</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">up</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-<span class="token comment">//await queryInterface.createTable('users', &#123;  // 手動修正取消這一行</span>
-  <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">createTable</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 請手動修正成這樣</span>
-      <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">autoIncrement</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">primaryKey</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">password</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">createdAt</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">updatedAt</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token function">down</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//await queryInterface.dropTable('users');  // 手動修正取消這一行</span>
-    <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">dropTable</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 請手動修正成這樣</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+&#x2F;** @type &#123;import(&#39;sequelize-cli&#39;).Migration&#125; *&#x2F;
+module.exports &#x3D; &#123;
+  async up(queryInterface, Sequelize) &#123;
+&#x2F;&#x2F;await queryInterface.createTable(&#39;users&#39;, &#123;  &#x2F;&#x2F; 手動修正取消這一行
+  await queryInterface.createTable(&#39;user&#39;, &#123; &#x2F;&#x2F; 請手動修正成這樣
+      id: &#123;
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      &#125;,
+      name: &#123;
+        type: Sequelize.STRING
+      &#125;,
+      password: &#123;
+        type: Sequelize.STRING
+      &#125;,
+      createdAt: &#123;
+        allowNull: false,
+        type: Sequelize.DATE
+      &#125;,
+      updatedAt: &#123;
+        allowNull: false,
+        type: Sequelize.DATE
+      &#125;
+    &#125;);
+  &#125;,
+  async down(queryInterface, Sequelize) &#123;
+  &#x2F;&#x2F;await queryInterface.dropTable(&#39;users&#39;);  &#x2F;&#x2F; 手動修正取消這一行
+    await queryInterface.dropTable(&#39;user&#39;); &#x2F;&#x2F; 請手動修正成這樣
+  &#125;
+&#125;;</code></pre>
 <p><strong>專案/models/user.js</strong></p>
 <p>(略)</p>
 <h3 id="產生資料表"><a class="header-anchor" href="#產生資料表">¶</a>產生資料表</h3>
 <p>到目前，還沒有生成任何資料表，讓我們來執行一下 migrate 到最新進度</p>
 <p>如果我們想要執行 migration 的時候，看得到 log 出現 SQL 語法。就必須在 config 的部份加上 <code>&quot;logging&quot;: true</code> <sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token property">"development"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
-    <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"pi"</span><span class="token punctuation">,</span>
-    <span class="token property">"database"</span><span class="token operator">:</span> <span class="token string">"good_ideas_lib_dev"</span><span class="token punctuation">,</span>
-    <span class="token property">"host"</span><span class="token operator">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
-    <span class="token property">"dialect"</span><span class="token operator">:</span> <span class="token string">"mysql"</span><span class="token punctuation">,</span>
-    <span class="token property">"logging"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &#x2F;&#x2F; ...
+  &quot;development&quot;: &#123;
+    &quot;username&quot;: &quot;admin&quot;,
+    &quot;password&quot;: &quot;pi&quot;,
+    &quot;database&quot;: &quot;good_ideas_lib_dev&quot;,
+    &quot;host&quot;: &quot;127.0.0.1&quot;,
+    &quot;dialect&quot;: &quot;mysql&quot;,
+    &quot;logging&quot;: true
+  &#125;,
+  &#x2F;&#x2F; ...
+&#125;</code></pre>
 <p>加好之後，執行 migrate 就可以看見 SQL 印在 shell 囉</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize-cli db:migrate
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize-cli db:migrate
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-Loaded configuration <span class="token function">file</span> <span class="token string">"config/config.json"</span><span class="token builtin class-name">.</span>
-Using environment <span class="token string">"development"</span><span class="token builtin class-name">.</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW FULL <span class="token environment constant">COLUMNS</span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-<span class="token operator">==</span> <span class="token number">20230824085150</span>-create-user: migrating <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: CREATE TABLE IF NOT EXISTS <span class="token variable"><span class="token variable">`</span>user<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span> INTEGER NOT NULL auto_increment , <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> VARCHAR<span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span>, <span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span> VARCHAR<span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span>, <span class="token variable"><span class="token variable">`</span>created_at<span class="token variable">`</span></span> DATETIME NOT NULL, <span class="token variable"><span class="token variable">`</span>updated_at<span class="token variable">`</span></span> DATETIME NOT NULL, PRIMARY KEY <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span><span class="token punctuation">))</span> <span class="token assign-left variable">ENGINE</span><span class="token operator">=</span>InnoDB<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: INSERT INTO <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span><span class="token punctuation">)</span> VALUES <span class="token punctuation">(</span>?<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">==</span> <span class="token number">20230824085150</span>-create-user: migrated <span class="token punctuation">(</span><span class="token number">0</span>.039s<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Loaded configuration file &quot;config&#x2F;config.json&quot;.
+Using environment &quot;development&quot;.
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;;
+Executing (default): SHOW FULL COLUMNS FROM &#96;SequelizeMeta&#96;;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+&#x3D;&#x3D; 20230824085150-create-user: migrating &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Executing (default): CREATE TABLE IF NOT EXISTS &#96;user&#96; (&#96;id&#96; INTEGER NOT NULL auto_increment , &#96;name&#96; VARCHAR(255), &#96;password&#96; VARCHAR(255), &#96;created_at&#96; DATETIME NOT NULL, &#96;updated_at&#96; DATETIME NOT NULL, PRIMARY KEY (&#96;id&#96;)) ENGINE&#x3D;InnoDB;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): INSERT INTO &#96;SequelizeMeta&#96; (&#96;name&#96;) VALUES (?);
+&#x3D;&#x3D; 20230824085150-create-user: migrated (0.039s)</code></pre>
 <p>其中與新增資料表有關的部份</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token identifier"><span class="token punctuation">`</span>user<span class="token punctuation">`</span></span> <span class="token punctuation">(</span>
-  <span class="token identifier"><span class="token punctuation">`</span>id<span class="token punctuation">`</span></span> <span class="token keyword">INTEGER</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">auto_increment</span> <span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>name<span class="token punctuation">`</span></span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>password<span class="token punctuation">`</span></span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>created_at<span class="token punctuation">`</span></span> <span class="token keyword">DATETIME</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>updated_at<span class="token punctuation">`</span></span> <span class="token keyword">DATETIME</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token identifier"><span class="token punctuation">`</span>id<span class="token punctuation">`</span></span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE IF NOT EXISTS &#96;user&#96; (
+  &#96;id&#96; INTEGER NOT NULL auto_increment , 
+  &#96;name&#96; VARCHAR(255), 
+  &#96;password&#96; VARCHAR(255), 
+  &#96;created_at&#96; DATETIME NOT NULL, 
+  &#96;updated_at&#96; DATETIME NOT NULL, 
+  PRIMARY KEY (&#96;id&#96;)
+) ENGINE&#x3D;InnoDB;</code></pre>
 <p>比對一下，一開始我們想要的 SQL ，會發現幾個有趣的事</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
-  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  password <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
+  PRIMARY KEY (id)
+) ENGINE &#x3D; InnoDB;</code></pre>
 <ul>
 <li>sequelize 宣告的 <code>INTEGER</code> 不是縮寫(手寫可以寫縮寫 <code>INT</code>)</li>
 <li>sequelize 宣告的 <code>name: DataTypes.STRING</code> 對應的資料是 <code>VARCHAR(255)</code></li>
@@ -352,38 +356,38 @@ Executing <span class="token punctuation">(</span>default<span class="token punc
 <li>sequelize 宣告的 created_at 與 updated_at 都沒有 <code>NOT NULL</code></li>
 </ul>
 <h3 id="倒退-migraion"><a class="header-anchor" href="#倒退-migraion">¶</a>倒退 migraion</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize-cli db:migrate:undo
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize-cli db:migrate:undo
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-Loaded configuration <span class="token function">file</span> <span class="token string">"config/config.json"</span><span class="token builtin class-name">.</span>
-Using environment <span class="token string">"development"</span><span class="token builtin class-name">.</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW FULL <span class="token environment constant">COLUMNS</span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-<span class="token operator">==</span> <span class="token number">20230824085150</span>-create-user: reverting <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: DROP TABLE IF EXISTS <span class="token variable"><span class="token variable">`</span><span class="token function">users</span><span class="token variable">`</span></span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: DELETE FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> WHERE <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> <span class="token operator">=</span> <span class="token string">'20230824085150-create-user.js'</span>
-<span class="token operator">==</span> <span class="token number">20230824085150</span>-create-user: reverted <span class="token punctuation">(</span><span class="token number">0</span>.027s<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Loaded configuration file &quot;config&#x2F;config.json&quot;.
+Using environment &quot;development&quot;.
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;;
+Executing (default): SHOW FULL COLUMNS FROM &#96;SequelizeMeta&#96;;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+&#x3D;&#x3D; 20230824085150-create-user: reverting &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Executing (default): DROP TABLE IF EXISTS &#96;users&#96;;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): DELETE FROM &#96;SequelizeMeta&#96; WHERE &#96;name&#96; &#x3D; &#39;20230824085150-create-user.js&#39;
+&#x3D;&#x3D; 20230824085150-create-user: reverted (0.027s)</code></pre>
 <p>倒退的語法，倒是滿符合內心期望的，哈哈。</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">Executing <span class="token punctuation">(</span><span class="token keyword">default</span><span class="token punctuation">)</span>: <span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> <span class="token identifier"><span class="token punctuation">`</span>user<span class="token punctuation">`</span></span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">Executing (default): DROP TABLE IF EXISTS &#96;user&#96;;</code></pre>
 <h2 id="依想要的欄位設定再產生資料表"><a class="header-anchor" href="#依想要的欄位設定再產生資料表">¶</a>依想要的欄位設定再產生資料表</h2>
 <p>所以使用 cli</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate <span class="token parameter variable">--underscored</span> <span class="token parameter variable">--force</span> <span class="token parameter variable">--name</span> user <span class="token parameter variable">--attributes</span> name:string,password:string<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize model:generate --underscored --force --name user --attributes name:string,password:string</code></pre>
 <p>取得 migration 的程式碼時。<br>
 需要手動修改一下。</p>
 <p>migration 的 code 才是真正產生資料表結構的程式碼，所以要修改 <strong>migrations/20230901021924-create-user.js</strong> 底下的</p>
@@ -395,108 +399,108 @@ Executing <span class="token punctuation">(</span>default<span class="token punc
 <blockquote>
 <p>新增與修改日期，進行到此的時候，覺得它應該要必填，所以留著。</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token comment">/** @type &#123;import('sequelize-cli').Migration&#125; */</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">up</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">createTable</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">autoIncrement</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">primaryKey</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">password</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">created_at</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 現在覺得它應該要必填，所以留著</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">updated_at</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">allowNull</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 現在覺得它應該要必填，所以留著</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">DATE</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token function">down</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> queryInterface<span class="token punctuation">.</span><span class="token function">dropTable</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+&#x2F;** @type &#123;import(&#39;sequelize-cli&#39;).Migration&#125; *&#x2F;
+module.exports &#x3D; &#123;
+  async up(queryInterface, Sequelize) &#123;
+    await queryInterface.createTable(&#39;user&#39;, &#123;
+      id: &#123;
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      &#125;,
+      name: &#123;
+        allowNull: false,
+        type: Sequelize.STRING(50)
+      &#125;,
+      password: &#123;
+        allowNull: false,
+        type: Sequelize.CHAR(128)
+      &#125;,
+      created_at: &#123;
+        allowNull: false, &#x2F;&#x2F; 現在覺得它應該要必填，所以留著
+        type: Sequelize.DATE
+      &#125;,
+      updated_at: &#123;
+        allowNull: false, &#x2F;&#x2F; 現在覺得它應該要必填，所以留著
+        type: Sequelize.DATE
+      &#125;
+    &#125;);
+  &#125;,
+  async down(queryInterface, Sequelize) &#123;
+    await queryInterface.dropTable(&#39;user&#39;);
+  &#125;
+&#125;;</code></pre>
 <p>生成</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-Loaded configuration <span class="token function">file</span> <span class="token string">"config/config.json"</span><span class="token builtin class-name">.</span>
-Using environment <span class="token string">"development"</span><span class="token builtin class-name">.</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW FULL <span class="token environment constant">COLUMNS</span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> AS <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> ORDER BY <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> ASC<span class="token punctuation">;</span>
-<span class="token operator">==</span> <span class="token number">20230901021924</span>-create-user: migrating <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: CREATE TABLE IF NOT EXISTS <span class="token variable"><span class="token variable">`</span>user<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span> INTEGER NOT NULL auto_increment , <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> VARCHAR<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> NOT NULL, <span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span> CHAR<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> NOT NULL, <span class="token variable"><span class="token variable">`</span>created_at<span class="token variable">`</span></span> DATETIME NOT NULL, <span class="token variable"><span class="token variable">`</span>updated_at<span class="token variable">`</span></span> DATETIME NOT NULL, PRIMARY KEY <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span><span class="token punctuation">))</span> <span class="token assign-left variable">ENGINE</span><span class="token operator">=</span>InnoDB<span class="token punctuation">;</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE <span class="token operator">=</span> <span class="token string">'BASE TABLE'</span> AND TABLE_NAME <span class="token operator">=</span> <span class="token string">'SequelizeMeta'</span> AND TABLE_SCHEMA <span class="token operator">=</span> <span class="token string">'good_ideas_lib_dev'</span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SHOW INDEX FROM <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span>
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: INSERT INTO <span class="token variable"><span class="token variable">`</span>SequelizeMeta<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span><span class="token punctuation">)</span> VALUES <span class="token punctuation">(</span>?<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">==</span> <span class="token number">20230901021924</span>-create-user: migrated <span class="token punctuation">(</span><span class="token number">0</span>.039s<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Loaded configuration file &quot;config&#x2F;config.json&quot;.
+Using environment &quot;development&quot;.
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;;
+Executing (default): SHOW FULL COLUMNS FROM &#96;SequelizeMeta&#96;;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): SELECT &#96;name&#96; FROM &#96;SequelizeMeta&#96; AS &#96;SequelizeMeta&#96; ORDER BY &#96;SequelizeMeta&#96;.&#96;name&#96; ASC;
+&#x3D;&#x3D; 20230901021924-create-user: migrating &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Executing (default): CREATE TABLE IF NOT EXISTS &#96;user&#96; (&#96;id&#96; INTEGER NOT NULL auto_increment , &#96;name&#96; VARCHAR(50) NOT NULL, &#96;password&#96; CHAR(128) NOT NULL, &#96;created_at&#96; DATETIME NOT NULL, &#96;updated_at&#96; DATETIME NOT NULL, PRIMARY KEY (&#96;id&#96;)) ENGINE&#x3D;InnoDB;
+Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE &#x3D; &#39;BASE TABLE&#39; AND TABLE_NAME &#x3D; &#39;SequelizeMeta&#39; AND TABLE_SCHEMA &#x3D; &#39;good_ideas_lib_dev&#39;
+Executing (default): SHOW INDEX FROM &#96;SequelizeMeta&#96;
+Executing (default): INSERT INTO &#96;SequelizeMeta&#96; (&#96;name&#96;) VALUES (?);
+&#x3D;&#x3D; 20230901021924-create-user: migrated (0.039s)</code></pre>
 <p>其中和生成資料表有關的部份</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token identifier"><span class="token punctuation">`</span>user<span class="token punctuation">`</span></span> <span class="token punctuation">(</span>
-  <span class="token identifier"><span class="token punctuation">`</span>id<span class="token punctuation">`</span></span> <span class="token keyword">INTEGER</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">auto_increment</span> <span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>name<span class="token punctuation">`</span></span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>password<span class="token punctuation">`</span></span> <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>created_at<span class="token punctuation">`</span></span> <span class="token keyword">DATETIME</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token identifier"><span class="token punctuation">`</span>updated_at<span class="token punctuation">`</span></span> <span class="token keyword">DATETIME</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> 
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token identifier"><span class="token punctuation">`</span>id<span class="token punctuation">`</span></span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE IF NOT EXISTS &#96;user&#96; (
+  &#96;id&#96; INTEGER NOT NULL auto_increment , 
+  &#96;name&#96; VARCHAR(50) NOT NULL, 
+  &#96;password&#96; CHAR(128) NOT NULL, 
+  &#96;created_at&#96; DATETIME NOT NULL, 
+  &#96;updated_at&#96; DATETIME NOT NULL, 
+  PRIMARY KEY (&#96;id&#96;)
+) ENGINE&#x3D;InnoDB;</code></pre>
 <p>這個就和一開始想要的那一段 SQL 一樣了(除了突然想要必填的日期欄位之外)</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
-  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  password <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password CHAR(128) NOT NULL,
+  created_at DATETIME,
+  updated_at DATETIME,
+  PRIMARY KEY (id)
+) ENGINE &#x3D; InnoDB;</code></pre>
 <p>先看看 migration 生成什麼 JS ？？</p>
 <h2 id="migrations-結構"><a class="header-anchor" href="#migrations-結構">¶</a>migrations 結構</h2>
 <p>migrations 產生的 JS 真的會轉成 SQL 的 code。<br>
 所以，想要讓資料表產生之後長怎樣的設定，通通在這裡調整。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
-<span class="token comment">/** @type &#123;import('sequelize-cli').Migration&#125; */</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">up</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 前進一步 </span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token keyword">async</span> <span class="token function">down</span><span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 後退一步</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#39;use strict&#39;;
+&#x2F;** @type &#123;import(&#39;sequelize-cli&#39;).Migration&#125; *&#x2F;
+module.exports &#x3D; &#123;
+  async up(queryInterface, Sequelize) &#123;
+    &#x2F;&#x2F; 前進一步 
+  &#125;,
+  async down(queryInterface, Sequelize) &#123;
+    &#x2F;&#x2F; 後退一步
+  &#125;
+&#125;;</code></pre>
 <p>執行時是用 <code>sequelize-cli</code> 進行，並不是直接用執行 <code>node</code></p>
 <p>執行前進</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate</code></pre>
 <p>執行後退</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate:undo<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:migrate:undo</code></pre>
 <p>其它 sequelize-cli 的細節，用指令查比較多資料也比較符合當下使用的版本</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npx sequelize <span class="token parameter variable">--help</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npx sequelize --help</code></pre>
 <h2 id="不建議使用的指令"><a class="header-anchor" href="#不建議使用的指令">¶</a>不建議使用的指令</h2>
 <p>這是用 Model 改變 table schema 的做法。<br>
 建議還是使用 migration 一步一步改。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">User<span class="token punctuation">.</span><span class="token function">sync</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。</span>
-User<span class="token punctuation">.</span><span class="token function">drop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 刪除資料表</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">User.sync() &#x2F;&#x2F; 同步(新增)，和 migration 效果一樣，但是沒有留下版本記錄，不建議使用。
+User.drop() &#x2F;&#x2F; 刪除資料表</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -535,11 +539,11 @@ User<span class="token punctuation">.</span><span class="token function">drop</s
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/migration/">migration</a> }
+  { <a href="/tags/orm/">orm</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/orm/">orm</a> }
+  { <a href="/tags/migration/">migration</a> }
   </li>
 
 
@@ -567,21 +571,14 @@ User<span class="token punctuation">.</span><span class="token function">drop</s
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

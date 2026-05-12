@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -60,8 +60,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -195,53 +199,53 @@
 <p><a target="_blank" rel="noopener" href="https://developers.google.com/identity/sign-in/web/sign-in">官方網站</a></p>
 <p><strong>public/index.html</strong></p>
 <p>需要載入 Google 的 SDK<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<pre class="line-numbers language-htmlembedded" data-language="htmlembedded"><code class="language-htmlembedded">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;apis.google.com&#x2F;js&#x2F;platform.js&quot; async defer&gt;&lt;&#x2F;script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-htmlembedded" data-language="htmlembedded"><code class="language-htmlembedded">&lt;script src&#x3D;&quot;https:&#x2F;&#x2F;apis.google.com&#x2F;js&#x2F;platform.js&quot; async defer&gt;&lt;&#x2F;script&gt;</code></pre>
 <h3 id="google-initial"><a class="header-anchor" href="#google-initial">¶</a>Google initial</h3>
 <p>在頁面初始的過程，需要在 gapi.load 時初始化或自動登入<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <p><strong>example code</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token function-variable function">startApp</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  gapi<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">'auth2'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">// Retrieve the singleton for the GoogleAuth library and set up the client.</span>
-    auth2 <span class="token operator">=</span> gapi<span class="token punctuation">.</span>auth2<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">client_id</span><span class="token operator">:</span> <span class="token string">'YOUR_CLIENT_ID.apps.googleusercontent.com'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">cookiepolicy</span><span class="token operator">:</span> <span class="token string">'single_host_origin'</span><span class="token punctuation">,</span>
-      <span class="token comment">// Request scopes in addition to 'profile' and 'email'</span>
-      <span class="token comment">//scope: 'additional_scope'</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">attachSignin</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'customBtn'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">var startApp &#x3D; function() &#123;
+  gapi.load(&#39;auth2&#39;, function()&#123;
+    &#x2F;&#x2F; Retrieve the singleton for the GoogleAuth library and set up the client.
+    auth2 &#x3D; gapi.auth2.init(&#123;
+      client_id: &#39;YOUR_CLIENT_ID.apps.googleusercontent.com&#39;,
+      cookiepolicy: &#39;single_host_origin&#39;,
+      &#x2F;&#x2F; Request scopes in addition to &#39;profile&#39; and &#39;email&#39;
+      &#x2F;&#x2F;scope: &#39;additional_scope&#39;
+    &#125;);
+    attachSignin(document.getElementById(&#39;customBtn&#39;));
+  &#125;);
+&#125;;</code></pre>
 <p>在 vue 上實作，必須將這一段放在 main.js 確保不管已登入，還是未登入，在每一次開啟頁面，都會正確初始化</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token keyword">import</span> Vue <span class="token keyword">from</span> <span class="token string">'vue'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> App <span class="token keyword">from</span> <span class="token string">'./App'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> router <span class="token keyword">from</span> <span class="token string">'./router'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">import Vue from &#39;vue&#39;;
+import App from &#39;.&#x2F;App&#39;;
+import router from &#39;.&#x2F;router&#39;;
 
-Vue<span class="token punctuation">.</span>config<span class="token punctuation">.</span>productionTip <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+Vue.config.productionTip &#x3D; false;
 
-<span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">created</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// Google Sign-in initial</span>
-    window<span class="token punctuation">.</span>gapi<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">'auth2'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      window<span class="token punctuation">.</span>gapi<span class="token punctuation">.</span>auth2<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">client_id</span><span class="token operator">:</span> <span class="token string">'YOUR_CLIENT_ID.apps.googleusercontent.com'</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  router<span class="token punctuation">,</span>
-  <span class="token function-variable function">render</span><span class="token operator">:</span> <span class="token parameter">h</span> <span class="token operator">=></span> <span class="token function">h</span><span class="token punctuation">(</span>App<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">$mount</span><span class="token punctuation">(</span><span class="token string">'#app'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+new Vue(&#123;
+  created() &#123;
+    &#x2F;&#x2F; Google Sign-in initial
+    window.gapi.load(&#39;auth2&#39;, () &#x3D;&gt; &#123;
+      window.gapi.auth2.init(&#123;
+        client_id: &#39;YOUR_CLIENT_ID.apps.googleusercontent.com&#39;,
+      &#125;);
+    &#125;);
+  &#125;,
+  router,
+  render: h &#x3D;&gt; h(App)
+&#125;).$mount(&#39;#app&#39;);</code></pre>
 <h3 id="繪製-button"><a class="header-anchor" href="#繪製-button">¶</a>繪製 Button</h3>
 <p>可以使用 <code>gapi.signin2.render</code> 自訂義繪製時機點</p>
 <p><strong>example code</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">gapi<span class="token punctuation">.</span>signin2<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'my-signin2'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">'scope'</span><span class="token operator">:</span> <span class="token string">'profile email'</span><span class="token punctuation">,</span>
-  <span class="token string-property property">'width'</span><span class="token operator">:</span> <span class="token number">240</span><span class="token punctuation">,</span>
-  <span class="token string-property property">'height'</span><span class="token operator">:</span> <span class="token number">50</span><span class="token punctuation">,</span>
-  <span class="token string-property property">'longtitle'</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  <span class="token string-property property">'theme'</span><span class="token operator">:</span> <span class="token string">'dark'</span><span class="token punctuation">,</span>
-  <span class="token string-property property">'onsuccess'</span><span class="token operator">:</span> onSuccess<span class="token punctuation">,</span>
-  <span class="token string-property property">'onfailure'</span><span class="token operator">:</span> onFailure
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">gapi.signin2.render(&#39;my-signin2&#39;, &#123;
+  &#39;scope&#39;: &#39;profile email&#39;,
+  &#39;width&#39;: 240,
+  &#39;height&#39;: 50,
+  &#39;longtitle&#39;: true,
+  &#39;theme&#39;: &#39;dark&#39;,
+  &#39;onsuccess&#39;: onSuccess,
+  &#39;onfailure&#39;: onFailure
+&#125;);</code></pre>
 <p><strong>src/components/googleSigninButton.vue</strong></p>
 <p>直接將 google sign-in button 做成一個按鈕。<br>
 並且在 mounted 時繪制</p>
@@ -256,15 +260,15 @@ Vue<span class="token punctuation">.</span>config<span class="token punctuation"
 <p>登入 method 的綁定方式，要配合 Google API 的做法<br>
 在此，目的是為了傳給後端 <code>id_token</code> 所以輸出只 emit 出 id_token 而已。<br>
 這部份可以依需求修改。</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>google-sign-in-button<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;template&gt;
+  &lt;div&gt;
+    &lt;div id&#x3D;&quot;google-sign-in-button&quot;&gt;&lt;&#x2F;div&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token plain-text">
+&lt;script&gt;
 export default &#123;
-  name: 'GoogleSignInButton',
+  name: &#39;GoogleSignInButton&#39;,
   props: &#123;
     width: &#123;
       type: String,
@@ -276,88 +280,88 @@ export default &#123;
     &#125;
   &#125;,
   mounted() &#123;
-    window.gapi.signin2.render('google-sign-in-button', &#123;
-      scope: 'profile email',
+    window.gapi.signin2.render(&#39;google-sign-in-button&#39;, &#123;
+      scope: &#39;profile email&#39;,
       width: this.width,
       height: this.height,
       longtitle: true,
-      theme: 'light',
+      theme: &#39;light&#39;,
       onsuccess: this.signIn,
-      onfailure: () => &#123;&#125;
+      onfailure: () &#x3D;&gt; &#123;&#125;
     &#125;);
   &#125;,
   methods: &#123;
     signIn(googleUser) &#123;
-      const id_token = googleUser.getAuthResponse().id_token;
-      this.$emit('sign-in', id_token);
+      const id_token &#x3D; googleUser.getAuthResponse().id_token;
+      this.$emit(&#39;sign-in&#39;, id_token);
     &#125;
   &#125;
 &#125;;
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;script&gt;</code></pre>
 <p>使用 GoogleSignInButton component</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-    &lt;GoogleSignInButton @sign-in="oAuthSignIn('google', $event)"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">GoogleSignInButton</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;template&gt;
+  &lt;div&gt;
+    &lt;GoogleSignInButton @sign-in&#x3D;&quot;oAuthSignIn(&#39;google&#39;, $event)&quot;&gt;&lt;&#x2F;GoogleSignInButton&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token plain-text">
-import GoogleSignInButton from '@/components/GoogleSignInButton';
+&lt;script&gt;
+import GoogleSignInButton from &#39;@&#x2F;components&#x2F;GoogleSignInButton&#39;;
 
 export default &#123;
-  name: 'AuthSignin',
+  name: &#39;AuthSignin&#39;,
   components: &#123;
     GoogleSignInButton
   &#125;,
   methods: &#123;
     async oAuthSignIn(provider, id_token) &#123;
       try &#123;
-        await this.$store.dispatch('oAuthLogin', &#123;
+        await this.$store.dispatch(&#39;oAuthLogin&#39;, &#123;
           provider,
           id_token
         &#125;);
-        this.$emit('submit');
+        this.$emit(&#39;submit&#39;);
       &#125; catch (error) &#123;
         console.error(error);
       &#125;
     &#125;
   &#125;
 &#125;;
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;script&gt;</code></pre>
 <h3 id="登出"><a class="header-anchor" href="#登出">¶</a>登出</h3>
 <p>若你想要在登出時，同時斷開使用者給予的授權，就可以增加這一段。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 <p><strong>example code</strong></p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#<span class="token punctuation">"</span></span> <span class="token special-attr"><span class="token attr-name">onclick</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value javascript language-javascript"><span class="token function">signOut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span><span class="token plain-text">Sign out</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token plain-text">
+<pre class="language-jsx" data-language="jsx"><code class="language-jsx">&lt;a href&#x3D;&quot;#&quot; onclick&#x3D;&quot;signOut();&quot;&gt;Sign out&lt;&#x2F;a&gt;
+&lt;script&gt;
   function signOut() &#123;
-    var auth2 = gapi.auth2.getAuthInstance();
+    var auth2 &#x3D; gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () &#123;
-      console.log('User signed out.');
+      console.log(&#39;User signed out.&#39;);
     &#125;);
   &#125;
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;script&gt;</code></pre>
 <p><strong>src/views/navigation.vue</strong></p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>shadow<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-    &lt;botton @click="Logout">登出</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>botton</span><span class="token punctuation">></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;template&gt;
+  &lt;div class&#x3D;&quot;shadow&quot;&gt;
+    &lt;botton @click&#x3D;&quot;Logout&quot;&gt;登出&lt;&#x2F;botton&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token plain-text">
+&lt;script&gt;
 export default &#123;
-  name: 'Navigation',
+  name: &#39;Navigation&#39;,
   methods: &#123;
     async Logout() &#123;
       try &#123;
-        const isLogout = window.confirm('確定要登出');
+        const isLogout &#x3D; window.confirm(&#39;確定要登出&#39;);
         if (isLogout) &#123;
-          const auth2 = window.gapi.auth2.getAuthInstance();
-          auth2.signOut().then(() => &#123;
-            console.log('Google User signed out.');
+          const auth2 &#x3D; window.gapi.auth2.getAuthInstance();
+          auth2.signOut().then(() &#x3D;&gt; &#123;
+            console.log(&#39;Google User signed out.&#39;);
           &#125;);
-          // 可以在這個時候移除 cookie
-          window.alert('已登出');
-          this.$router.push(&#123; name: 'Signin' &#125;); // 回到登入頁
+          &#x2F;&#x2F; 可以在這個時候移除 cookie
+          window.alert(&#39;已登出&#39;);
+          this.$router.push(&#123; name: &#39;Signin&#39; &#125;); &#x2F;&#x2F; 回到登入頁
         &#125;
       &#125; catch (error) &#123;
         if (error instanceof Error) &#123;
@@ -369,10 +373,10 @@ export default &#123;
     &#125;
   &#125;
 &#125;;
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+&lt;&#x2F;script&gt;
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>scss<span class="token punctuation">"</span></span> <span class="token attr-name">scoped</span><span class="token punctuation">></span></span><span class="token plain-text">
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;style lang&#x3D;&quot;scss&quot; scoped&gt;
+&lt;&#x2F;style&gt;</code></pre>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.27/webfontloader.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">participant Web App\nClient as client
 participant Web App\nServer as server
 participant Google 授權畫面 as page
@@ -402,7 +406,7 @@ google->server: 確認身份是否正確
 Note over server: -
 server->client: 跟前端說「正確哦」並提供 server 的 token 使用
 
-Note over client: 登入成功</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><hr class="footnotes-sep">
+Note over client: 登入成功</textarea><textarea id="sequence-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://developers.google.com/identity/sign-in/web/sign-in">加載 Google 平台庫 - 將 Google Sign-In 集成到您的網絡應用程序中</a>) <a href="#fnref1" class="footnote-backref">↩︎</a></p>
@@ -470,21 +474,14 @@ Note over client: 登入成功</textarea><textarea id="sequence-0-options" style
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -60,8 +60,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -230,30 +234,30 @@
 <p>如何適當的暗示或無感的讓開發者重複使用你設計的功能！可以說是相當的重要呀。</p>
 <p><strong>看一個 C++ 的例子</strong></p>
 <p>像是下面的程式碼，這個 <code>getName</code> 的 method。前後加上 <code>const</code> 是什麼意思呢？</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">&#123;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-  <span class="token keyword">const</span> string <span class="token function">getName</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class Human &#123;
+public:
+  const string getName () const;
+&#125;;
+</code></pre>
 <p>每個語言都有自己的細節可以處理指意問題。<br>
 在此是 C++ 的技巧。前面的 <code>const</code> 意思是回傳的字串不可以修改，取得別人的名字，怎麼還可以改呢？而後面的 <code>const</code> 意思是一種保證，一種「實作修改 Human 物件屬性的保證」。語言細節附帶的語意，是程式設計師可以掌握而運用的。而且運用得好，往往會帶給你意想不到的幫助呀!!</p>
 <p>因為要使用 C++ STL 的 sort，裡面的 callback 呼叫的必須是 const function。所以這樣的細節掌握在你偶爾想要用 sort 時，感覺到過去的自己有如神助一般美妙的設計。</p>
 <p><strong>而不好的程式碼</strong></p>
 <p>開發者不熟悉或尚未掌握夠多的語言細節，它所表達出來的語意與語言本身沒有「詞曲咬合」而造成某一種誤解。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">string <span class="token function">initialName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token comment">// not thing about naming</span>
-  <span class="token keyword">return</span> <span class="token string">"chris"</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">string initialName() &#123;
+  &#x2F;&#x2F;...
+  &#x2F;&#x2F; not thing about naming
+  return &quot;chris&quot;;
+&#125;
 
-<span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">&#123;</span>
-  string name<span class="token punctuation">;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-  Human<span class="token operator">:</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token function">initialName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class Human &#123;
+  string name;
+public:
+  Human:name(initialName())&#123;
+    &#x2F;&#x2F;...
+  &#125;;
+&#125;;
+</code></pre>
 <p>在這個例子 <code>initialName</code> 就是一種不良語意，初始化 <code>name</code> 是用另一個全域的 function 處理，還順便處理了其它的事。這種事不是應該放在建構式嗎？</p>
 <h2 id="對應性"><a class="header-anchor" href="#對應性">¶</a>對應性</h2>
 <p>元素集合對元素集合之間的關係，此關係為一種概念模型<br>
@@ -284,36 +288,36 @@
 </table>
 <p>舉一個原生 JavaScript 和 jQuery 的例子。</p>
 <p>原生 JS 的 ES6 版本中，有一個叫 <code>querySelectorAll</code> 的功能，會得到 <code>NodeList</code> 型別的 <code>array-like</code> 物件，可以這麼使用</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span> <span class="token comment">// return NodeList</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">document.querySelectorAll(&#39;div&#39;) &#x2F;&#x2F; return NodeList
+</code></pre>
 <p>而簡潔聞名的 jQuery ，有一個著名的 <code>$()</code> 的功能，會得到 jQuery 物件，可以這麼使用</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$(&#39;div&#39;)
+</code></pre>
 <p>而它們，都是 array-like 也就是「像是 Array 的物件」有 method 可以丟一個 callback。</p>
 <ol>
 <li><code>NodeList</code> vs <code>Array</code></li>
 </ol>
 <p>用 <code>NodeList</code> 跑 <code>forEach</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">document.querySelectorAll(&#39;div&#39;).forEach((item, index) &#x3D;&gt; console.log(index))
+</code></pre>
 <p>用 <code>Array</code> 跑 <code>forEach</code></p>
 <p>利用 <code>[...arrayLike]</code> 得到「真。Array」</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token operator">...</span>document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">[...document.querySelectorAll(&#39;div&#39;)].forEach((item, index) &#x3D;&gt; console.log(index))
+</code></pre>
 <p>可以得到一樣的結果</p>
 <ol start="2">
 <li><code>jQuery 物件</code> vs <code>Array</code></li>
 </ol>
 <p>用 <code>jQuery</code> 跑 <code>map</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$(&#39;div&#39;).map((item, index) &#x3D;&gt; console.log(index))
+</code></pre>
 <p>結果竟然不是印出 <code>index</code> ?<br>
 是印出內容<br>
 <img src="/images/02a3cb78-JunzviV.png" alt=""></p>
 <p>用 <code>Array</code> 跑 <code>map</code></p>
 <p>利用 <code>[...arrayLike]</code> 得到「真。Array」</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token operator">...</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">[...$(&#39;div&#39;)].map((item, index) &#x3D;&gt; console.log(index))
+</code></pre>
 <p>這次是印出索引值</p>
 <p>初學 jQuery 與原生 JavaScript 的朋友們，一定常常遇到這問題吧！<br>
 每次都要查一下。[1]才發現原來它的 callback 是長這樣，開始懷疑自己是不是老是記不住、每次都查是不是不適合寫程式。</p>
@@ -383,21 +387,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

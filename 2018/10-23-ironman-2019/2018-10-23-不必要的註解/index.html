@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -165,57 +169,57 @@
 <h2 id="不適合使用註解的情境"><a class="header-anchor" href="#不適合使用註解的情境">¶</a>不適合使用註解的情境</h2>
 <h3 id="該用-function-name-取代註解"><a class="header-anchor" href="#該用-function-name-取代註解">¶</a>該用 function name 取代註解</h3>
 <p>來看看一段程式碼[2]，給自己五秒鐘看看是不是可以一眼就看出這在做什麼？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//openImage</span>
-  <span class="token keyword">const</span> img <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> height <span class="token operator">=</span> img<span class="token punctuation">.</span>height<span class="token punctuation">;</span>
-  <span class="token keyword">const</span> width <span class="token operator">=</span> img<span class="token punctuation">.</span>width<span class="token punctuation">;</span>
-  canvas<span class="token punctuation">.</span>width <span class="token operator">=</span> width<span class="token punctuation">;</span>
-  canvas<span class="token punctuation">.</span>height <span class="token operator">=</span> height<span class="token punctuation">;</span>
-  ctx<span class="token punctuation">.</span><span class="token function">drawImage</span><span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> image <span class="token operator">=</span> ctx<span class="token punctuation">.</span><span class="token function">getImageData</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function main() &#123;
+  &#x2F;&#x2F;openImage
+  const img &#x3D; document.querySelector(&quot;img&quot;);
+  const canvas &#x3D; document.querySelector(&quot;#draw&quot;);
+  var ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+  const height &#x3D; img.height;
+  const width &#x3D; img.width;
+  canvas.width &#x3D; width;
+  canvas.height &#x3D; height;
+  ctx.drawImage(img, 0, 0, width, height);
+  const image &#x3D; ctx.getImageData(0, 0, width, height);
 
-  <span class="token comment">//imageProcess</span>
-  <span class="token keyword">const</span> threshold_input <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'#threshold'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  threshold <span class="token operator">=</span> threshold_input<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-  <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> image<span class="token punctuation">.</span>data<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">let</span> sum <span class="token operator">=</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token keyword">let</span> color <span class="token operator">=</span> sum <span class="token operator">/</span> <span class="token number">3</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>color <span class="token operator">></span> threshold<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      color <span class="token operator">=</span> <span class="token number">255</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-      color <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// RED</span>
-    image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// GREEN</span>
-    image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// Blue</span>
-  <span class="token punctuation">&#125;</span>
+  &#x2F;&#x2F;imageProcess
+  const threshold_input &#x3D; document.querySelector(&#39;#threshold&#39;);
+  threshold &#x3D; threshold_input.value;
+  for(let i &#x3D; 0; i &lt; image.data.length; i +&#x3D; 4) &#123;
+    let sum &#x3D; image.data[i + 0] + image.data[i + 1] + image.data[i + 2];
+    let color &#x3D; sum &#x2F; 3;
+    if(color &gt; threshold) &#123;
+      color &#x3D; 255;
+    &#125;
+    else &#123;
+      color &#x3D; 0;
+    &#125;
+    image.data[i + 0] &#x3D; color; &#x2F;&#x2F; RED
+    image.data[i + 1] &#x3D; color; &#x2F;&#x2F; GREEN
+    image.data[i + 2] &#x3D; color; &#x2F;&#x2F; Blue
+  &#125;
 
-  <span class="token comment">// report</span>
-  <span class="token keyword">let</span> <span class="token punctuation">[</span>countW<span class="token punctuation">,</span> countB<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">countWB</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">showReport</span><span class="token punctuation">(</span>countW<span class="token punctuation">,</span> countB<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>countW <span class="token operator">/</span> <span class="token punctuation">(</span>countW <span class="token operator">+</span> countB<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> countB <span class="token operator">/</span> <span class="token punctuation">(</span>countW <span class="token operator">+</span> countB<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; report
+  let [countW, countB] &#x3D; countWB(image);
+  showReport(countW, countB);
+  console.log(countW &#x2F; (countW + countB) * 100, countB &#x2F; (countW + countB) * 100);
 
-  <span class="token comment">// drawImage</span>
-  <span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  ctx<span class="token punctuation">.</span><span class="token function">putImageData</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+  &#x2F;&#x2F; drawImage
+  const canvas &#x3D; document.querySelector(&quot;#draw&quot;);
+  var ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+  ctx.putImageData(image, 0, 0);
+&#125;
 
-img<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'load'</span><span class="token punctuation">,</span> main<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+img.addEventListener(&#39;load&#39;, main);
+</code></pre>
 <p>看得出來嗎？<br>
 還是你喜歡看這個版本？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">let</span> image <span class="token operator">=</span> <span class="token function">openImage</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  image <span class="token operator">=</span> <span class="token function">imageProcess</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">report</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">drawImage</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function main() &#123;
+  let image &#x3D; openImage(&quot;img&quot;, &quot;#draw&quot;);
+  image &#x3D; imageProcess(image);
+  report(image);
+  drawImage(image, &quot;#draw&quot;);
+&#125;
+</code></pre>
 <p>先前有提過，曝露太多複雜性的問題，而複雜有段落感、有層次感需要表達。<br>
 在此的第一個例子，就是用註解呈現段落感，但是這並不是一個使用註解的好時機，段落感最好的做法，用 function name 取代註解。</p>
 <p>而簡要的說明自己的程式碼在做什麼，在這個例子，就是要把主程式的內容說一次。</p>
@@ -270,23 +274,23 @@ img<span class="token punctuation">.</span><span class="token function">addEvent
 <li>很勤勞 (但不是好的那種)</li>
 <li>不擅長與人有效的溝通</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">openImage</span><span class="token punctuation">(</span><span class="token parameter">img_tag<span class="token punctuation">,</span> canvas_id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> img <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span>img_tag<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//取得 img</span>
-  <span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span>canvas_id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 取得 canvas</span>
-  <span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 宣告出 canvas 的 2d context </span>
-  <span class="token comment">// 決定 img 長寬</span>
-  <span class="token keyword">const</span> height <span class="token operator">=</span> img<span class="token punctuation">.</span>height<span class="token punctuation">;</span>  
-  <span class="token keyword">const</span> width <span class="token operator">=</span> img<span class="token punctuation">.</span>width<span class="token punctuation">;</span>
-  <span class="token comment">// 定義 canvas 長寬與 img 相同</span>
-  canvas<span class="token punctuation">.</span>width <span class="token operator">=</span> width<span class="token punctuation">;</span>
-  canvas<span class="token punctuation">.</span>height <span class="token operator">=</span> height<span class="token punctuation">;</span>
-  <span class="token comment">// context 由 canvas 的左上開始，畫出 img 的長寬的大小，畫出 img  內容</span>
-  <span class="token comment">// 就是顯示 img 到 canvas</span>
-  ctx<span class="token punctuation">.</span><span class="token function">drawImage</span><span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 回傳 img 的 pixel data</span>
-  <span class="token keyword">return</span> ctx<span class="token punctuation">.</span><span class="token function">getImageData</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function openImage(img_tag, canvas_id) &#123;
+  const img &#x3D; document.querySelector(img_tag); &#x2F;&#x2F;取得 img
+  const canvas &#x3D; document.querySelector(canvas_id); &#x2F;&#x2F; 取得 canvas
+  var ctx &#x3D; canvas.getContext(&quot;2d&quot;); &#x2F;&#x2F; 宣告出 canvas 的 2d context 
+  &#x2F;&#x2F; 決定 img 長寬
+  const height &#x3D; img.height;  
+  const width &#x3D; img.width;
+  &#x2F;&#x2F; 定義 canvas 長寬與 img 相同
+  canvas.width &#x3D; width;
+  canvas.height &#x3D; height;
+  &#x2F;&#x2F; context 由 canvas 的左上開始，畫出 img 的長寬的大小，畫出 img  內容
+  &#x2F;&#x2F; 就是顯示 img 到 canvas
+  ctx.drawImage(img, 0, 0, width, height);
+  &#x2F;&#x2F; 回傳 img 的 pixel data
+  return ctx.getImageData(0, 0, width, height);
+&#125;
+</code></pre>
 <p>這些註解都是語法本身，也就是說，所有的內容都重複了兩次，對於語法純熟的開發者來說，只是贅字[3]而認真要說，是一種語病，要小心!!!</p>
 <h3 id="召喚神獸"><a class="header-anchor" href="#召喚神獸">¶</a>召喚神獸</h3>
 <p>呃…我就不在這貼了，避免被以為是灌水文<br>
@@ -296,13 +300,13 @@ img<span class="token punctuation">.</span><span class="token function">addEvent
 <p>如果只是好玩，請貼在一個閱讀率非常低的地方，例如 service 初始化或主程式宣告的地方。<br>
 原因在於，避免開發者讀到時花很多時間捲過去，而且，這樣對神獸才有真正崇敬之心。</p>
 <h3 id="版本控制"><a class="header-anchor" href="#版本控制">¶</a>版本控制</h3>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// Copyright (c) 2000-2013, Chris Systems Corporation. All rights reserved.</span>
-<span class="token comment">//</span>
-<span class="token comment">// History:</span>
-<span class="token comment">// Date         Reference       Person          Descriptions</span>
-<span class="token comment">// ----------   --------------  --------------  --------------------------------------------</span>
-<span class="token comment">// 2018/10/16   R20181016.01    Chris           Initial</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">&#x2F;&#x2F; Copyright (c) 2000-2013, Chris Systems Corporation. All rights reserved.
+&#x2F;&#x2F;
+&#x2F;&#x2F; History:
+&#x2F;&#x2F; Date         Reference       Person          Descriptions
+&#x2F;&#x2F; ----------   --------------  --------------  --------------------------------------------
+&#x2F;&#x2F; 2018&#x2F;10&#x2F;16   R20181016.01    Chris           Initial
+</code></pre>
 <p>如果看見這樣的註解，相信你已經進入了一間沒有版本控制的公司了。<br>
 好好禱告，神會讓事情好轉的</p>
 <ol>
@@ -317,20 +321,20 @@ img<span class="token punctuation">.</span><span class="token function">addEvent
 而且 <code>git blame</code>[4] 也可以讓你「就算不想負責也不行」，所以這種~~脫褲子放…~~的行為就不用了。<br>
 程式碼只會更混亂</p>
 <p>下面的範例，很聰明的，有單行簽名和多行簽名，相信這種習慣確實造成不必要的困擾，才會出現多行的簽名(但是還是有困擾)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">openImage</span><span class="token punctuation">(</span><span class="token parameter">img_tag<span class="token punctuation">,</span> canvas_id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> img <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span>img_tag<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 20181016 Chris</span>
-  <span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span>canvas_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 20181016 Chris Start</span>
-  <span class="token keyword">const</span> height <span class="token operator">=</span> img<span class="token punctuation">.</span>height<span class="token punctuation">;</span>  
-  <span class="token keyword">const</span> width <span class="token operator">=</span> img<span class="token punctuation">.</span>width<span class="token punctuation">;</span>
-  canvas<span class="token punctuation">.</span>width <span class="token operator">=</span> width<span class="token punctuation">;</span>
-  canvas<span class="token punctuation">.</span>height <span class="token operator">=</span> height<span class="token punctuation">;</span>
-  ctx<span class="token punctuation">.</span><span class="token function">drawImage</span><span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> ctx<span class="token punctuation">.</span><span class="token function">getImageData</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 20181016 Chris End</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">function openImage(img_tag, canvas_id) &#123;
+  const img &#x3D; document.querySelector(img_tag);&#x2F;&#x2F; 20181016 Chris
+  const canvas &#x3D; document.querySelector(canvas_id);
+  var ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+  &#x2F;&#x2F; 20181016 Chris Start
+  const height &#x3D; img.height;  
+  const width &#x3D; img.width;
+  canvas.width &#x3D; width;
+  canvas.height &#x3D; height;
+  ctx.drawImage(img, 0, 0, width, height);
+  return ctx.getImageData(0, 0, width, height);
+  &#x2F;&#x2F; 20181016 Chris End
+&#125;
+</code></pre>
 <h3 id="註解程式碼"><a class="header-anchor" href="#註解程式碼">¶</a>註解程式碼</h3>
 <p>相信這非常的常見，非常非常的…沒有節操<br>
 來看一段…因為太多了，我用縮圖 + 馬賽克</p>
@@ -373,132 +377,132 @@ img<span class="token punctuation">.</span><span class="token function">addEvent
 <p>在前端有時會需要用 JavaScript 拼出一段 HTML。[6]<br>
 若這段 HTML 很複雜，又很難一眼看出來，建議在拼完的結果，將它註解一份出來。<br>
 (也許有更好的做法…暫時還沒有想到)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> doneItem <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> doneItemText <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> doneItemIcons <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> doneItemIconsTrash <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> doneItemIconsDone <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"div"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//添加class</span>
-doneItem<span class="token punctuation">.</span>className<span class="token operator">=</span><span class="token string">"done__item"</span><span class="token punctuation">;</span>
-doneItemText<span class="token punctuation">.</span>className<span class="token operator">=</span><span class="token string">"done__item__text"</span><span class="token punctuation">;</span>
-doneItemIcons<span class="token punctuation">.</span>className<span class="token operator">=</span><span class="token string">"done__item__icons"</span><span class="token punctuation">;</span>
-doneItemIconsTrash<span class="token punctuation">.</span>className<span class="token operator">=</span><span class="token string">"done__item__icons__trash"</span><span class="token punctuation">;</span>
-doneItemIconsDone<span class="token punctuation">.</span>className<span class="token operator">=</span><span class="token string">"done__item__icons__done"</span><span class="token punctuation">;</span>
-<span class="token comment">//添加完成事項內容</span>
-doneItemText<span class="token punctuation">.</span>innerHTML<span class="token operator">=</span>doneContent<span class="token punctuation">;</span>
-<span class="token comment">//添加icon</span>
-doneItemIconsTrash<span class="token punctuation">.</span>innerHTML<span class="token operator">=</span><span class="token string">"&lt;i class="</span><span class="token operator">+</span><span class="token string">'"fas fa-trash-alt"'</span><span class="token operator">+</span><span class="token string">">&lt;/i>"</span><span class="token punctuation">;</span>
-doneItemIconsDone<span class="token punctuation">.</span>innerHTML<span class="token operator">=</span><span class="token string">"&lt;i class="</span><span class="token operator">+</span><span class="token string">'"fas fa-check-circle"'</span><span class="token operator">+</span><span class="token string">">&lt;/i>"</span><span class="token punctuation">;</span>
-<span class="token comment">//添加元素，形成父子關係</span>
-doneItemIcons<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>doneItemIconsTrash<span class="token punctuation">)</span><span class="token punctuation">;</span>
-doneItemIcons<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>doneItemIconsDone<span class="token punctuation">)</span><span class="token punctuation">;</span>
-doneItem<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>doneItemText<span class="token punctuation">)</span><span class="token punctuation">;</span>
-doneItem<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>doneItemIcons<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// doneItem => </span>
-<span class="token comment">// &lt;div class="done__item"></span>
-<span class="token comment">//   &lt;div class="done__item__text">test text&lt;/div></span>
-<span class="token comment">//   &lt;div class="done__item__icons"></span>
-<span class="token comment">//   &lt;div class="done__item__icons__trash"></span>
-<span class="token comment">//     &lt;i class="fas fa-trash-alt">&lt;/i></span>
-<span class="token comment">//   &lt;/div></span>
-<span class="token comment">//   &lt;div class="done__item__icons__done"></span>
-<span class="token comment">//     &lt;i class="fas fa-check-circle">&lt;/i></span>
-<span class="token comment">//   &lt;/div></span>
-<span class="token comment">//   &lt;/div></span>
-<span class="token comment">// &lt;/div></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var doneItem &#x3D; document.createElement(&quot;div&quot;);
+var doneItemText &#x3D; document.createElement(&quot;div&quot;);
+var doneItemIcons &#x3D; document.createElement(&quot;div&quot;);
+var doneItemIconsTrash &#x3D; document.createElement(&quot;div&quot;);
+var doneItemIconsDone &#x3D; document.createElement(&quot;div&quot;);
+&#x2F;&#x2F;添加class
+doneItem.className&#x3D;&quot;done__item&quot;;
+doneItemText.className&#x3D;&quot;done__item__text&quot;;
+doneItemIcons.className&#x3D;&quot;done__item__icons&quot;;
+doneItemIconsTrash.className&#x3D;&quot;done__item__icons__trash&quot;;
+doneItemIconsDone.className&#x3D;&quot;done__item__icons__done&quot;;
+&#x2F;&#x2F;添加完成事項內容
+doneItemText.innerHTML&#x3D;doneContent;
+&#x2F;&#x2F;添加icon
+doneItemIconsTrash.innerHTML&#x3D;&quot;&lt;i class&#x3D;&quot;+&#39;&quot;fas fa-trash-alt&quot;&#39;+&quot;&gt;&lt;&#x2F;i&gt;&quot;;
+doneItemIconsDone.innerHTML&#x3D;&quot;&lt;i class&#x3D;&quot;+&#39;&quot;fas fa-check-circle&quot;&#39;+&quot;&gt;&lt;&#x2F;i&gt;&quot;;
+&#x2F;&#x2F;添加元素，形成父子關係
+doneItemIcons.appendChild(doneItemIconsTrash);
+doneItemIcons.appendChild(doneItemIconsDone);
+doneItem.appendChild(doneItemText);
+doneItem.appendChild(doneItemIcons);
+&#x2F;&#x2F; doneItem &#x3D;&gt; 
+&#x2F;&#x2F; &lt;div class&#x3D;&quot;done__item&quot;&gt;
+&#x2F;&#x2F;   &lt;div class&#x3D;&quot;done__item__text&quot;&gt;test text&lt;&#x2F;div&gt;
+&#x2F;&#x2F;   &lt;div class&#x3D;&quot;done__item__icons&quot;&gt;
+&#x2F;&#x2F;   &lt;div class&#x3D;&quot;done__item__icons__trash&quot;&gt;
+&#x2F;&#x2F;     &lt;i class&#x3D;&quot;fas fa-trash-alt&quot;&gt;&lt;&#x2F;i&gt;
+&#x2F;&#x2F;   &lt;&#x2F;div&gt;
+&#x2F;&#x2F;   &lt;div class&#x3D;&quot;done__item__icons__done&quot;&gt;
+&#x2F;&#x2F;     &lt;i class&#x3D;&quot;fas fa-check-circle&quot;&gt;&lt;&#x2F;i&gt;
+&#x2F;&#x2F;   &lt;&#x2F;div&gt;
+&#x2F;&#x2F;   &lt;&#x2F;div&gt;
+&#x2F;&#x2F; &lt;&#x2F;div&gt;
+</code></pre>
 <h3 id="ppp-開發法-7"><a class="header-anchor" href="#ppp-開發法-7">¶</a>PPP 開發法[7]</h3>
 <p>簡單說，就是這樣做</p>
 <ol>
 <li>先寫下你要寫程式的註解</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 1. 打開圖檔</span>
-<span class="token comment">//     - 宣告好 canvas</span>
-<span class="token comment">//     - 取得 img tag 的影像來源</span>
-<span class="token comment">// 2. 影像處理演算法</span>
-<span class="token comment">//     - 設定閥值</span>
-<span class="token comment">//     - 處理每一個 pixel</span>
-<span class="token comment">//         - 比閥值大，就變白，不然變黑</span>
-<span class="token comment">// 3. 顯示影像處理結果的量化資料</span>
-<span class="token comment">//     - 計數黑白值各多少</span>
-<span class="token comment">//     - 顯示計算結果到畫面上</span>
-<span class="token comment">// 4. 顯示影像處理結果的圖形資料</span>
-<span class="token comment">//     - 影像結果顯示在 canvas 上</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#x2F;&#x2F; 1. 打開圖檔
+&#x2F;&#x2F;     - 宣告好 canvas
+&#x2F;&#x2F;     - 取得 img tag 的影像來源
+&#x2F;&#x2F; 2. 影像處理演算法
+&#x2F;&#x2F;     - 設定閥值
+&#x2F;&#x2F;     - 處理每一個 pixel
+&#x2F;&#x2F;         - 比閥值大，就變白，不然變黑
+&#x2F;&#x2F; 3. 顯示影像處理結果的量化資料
+&#x2F;&#x2F;     - 計數黑白值各多少
+&#x2F;&#x2F;     - 顯示計算結果到畫面上
+&#x2F;&#x2F; 4. 顯示影像處理結果的圖形資料
+&#x2F;&#x2F;     - 影像結果顯示在 canvas 上
+</code></pre>
 <ol start="2">
 <li>在註解下寫下程式碼</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 1. 打開圖檔</span>
-<span class="token comment">//     - 宣告好 canvas</span>
-<span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//     - 取得 img tag 的影像來源</span>
-<span class="token keyword">const</span> img <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> height <span class="token operator">=</span> img<span class="token punctuation">.</span>height<span class="token punctuation">;</span>
-<span class="token keyword">const</span> width <span class="token operator">=</span> img<span class="token punctuation">.</span>width<span class="token punctuation">;</span>
-canvas<span class="token punctuation">.</span>width <span class="token operator">=</span> width<span class="token punctuation">;</span>
-canvas<span class="token punctuation">.</span>height <span class="token operator">=</span> height<span class="token punctuation">;</span>
-ctx<span class="token punctuation">.</span><span class="token function">drawImage</span><span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> image <span class="token operator">=</span> ctx<span class="token punctuation">.</span><span class="token function">getImageData</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#x2F;&#x2F; 1. 打開圖檔
+&#x2F;&#x2F;     - 宣告好 canvas
+const canvas &#x3D; document.querySelector(&quot;#draw&quot;);
+&#x2F;&#x2F;     - 取得 img tag 的影像來源
+const img &#x3D; document.querySelector(&quot;img&quot;);
+var ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+const height &#x3D; img.height;
+const width &#x3D; img.width;
+canvas.width &#x3D; width;
+canvas.height &#x3D; height;
+ctx.drawImage(img, 0, 0, width, height);
+const image &#x3D; ctx.getImageData(0, 0, width, height);
 
 
-<span class="token comment">// 2. 影像處理演算法</span>
-<span class="token comment">//     - 設定閥值</span>
-<span class="token keyword">const</span> threshold_input <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">'#threshold'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-threshold <span class="token operator">=</span> threshold_input<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-<span class="token comment">//     - 處理每一個 pixel</span>
-<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> image<span class="token punctuation">.</span>data<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">let</span> sum <span class="token operator">=</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token keyword">let</span> color <span class="token operator">=</span> sum <span class="token operator">/</span> <span class="token number">3</span><span class="token punctuation">;</span>
-  <span class="token comment">//         - 比閥值大，就變白，不然變黑</span>
-  <span class="token keyword">if</span><span class="token punctuation">(</span>color <span class="token operator">></span> threshold<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    color <span class="token operator">=</span> <span class="token number">255</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-    color <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// RED</span>
-  image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// GREEN</span>
-  image<span class="token punctuation">.</span>data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> color<span class="token punctuation">;</span> <span class="token comment">// Blue</span>
-<span class="token punctuation">&#125;</span>
-<span class="token comment">// 3. 顯示影像處理結果的量化資料</span>
-<span class="token comment">//     - 計數黑白值各多少</span>
-<span class="token keyword">let</span> <span class="token punctuation">[</span>countW<span class="token punctuation">,</span> countB<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">countWB</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//     - 顯示計算結果到畫面上</span>
-<span class="token function">showReport</span><span class="token punctuation">(</span>countW<span class="token punctuation">,</span> countB<span class="token punctuation">)</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>countW <span class="token operator">/</span> <span class="token punctuation">(</span>countW <span class="token operator">+</span> countB<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> countB <span class="token operator">/</span> <span class="token punctuation">(</span>countW <span class="token operator">+</span> countB<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; 2. 影像處理演算法
+&#x2F;&#x2F;     - 設定閥值
+const threshold_input &#x3D; document.querySelector(&#39;#threshold&#39;);
+threshold &#x3D; threshold_input.value;
+&#x2F;&#x2F;     - 處理每一個 pixel
+for(let i &#x3D; 0; i &lt; image.data.length; i +&#x3D; 4) &#123;
+  let sum &#x3D; image.data[i + 0] + image.data[i + 1] + image.data[i + 2];
+  let color &#x3D; sum &#x2F; 3;
+  &#x2F;&#x2F;         - 比閥值大，就變白，不然變黑
+  if(color &gt; threshold) &#123;
+    color &#x3D; 255;
+  &#125;
+  else &#123;
+    color &#x3D; 0;
+  &#125;
+  image.data[i + 0] &#x3D; color; &#x2F;&#x2F; RED
+  image.data[i + 1] &#x3D; color; &#x2F;&#x2F; GREEN
+  image.data[i + 2] &#x3D; color; &#x2F;&#x2F; Blue
+&#125;
+&#x2F;&#x2F; 3. 顯示影像處理結果的量化資料
+&#x2F;&#x2F;     - 計數黑白值各多少
+let [countW, countB] &#x3D; countWB(image);
+&#x2F;&#x2F;     - 顯示計算結果到畫面上
+showReport(countW, countB);
+console.log(countW &#x2F; (countW + countB) * 100, countB &#x2F; (countW + countB) * 100);
 
-<span class="token comment">// 4. 顯示影像處理結果的圖形資料</span>
-<span class="token comment">//     - 影像結果顯示在 canvas 上</span>
-<span class="token keyword">const</span> canvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> ctx <span class="token operator">=</span> canvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-ctx<span class="token punctuation">.</span><span class="token function">putImageData</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; 4. 顯示影像處理結果的圖形資料
+&#x2F;&#x2F;     - 影像結果顯示在 canvas 上
+const canvas &#x3D; document.querySelector(&quot;#draw&quot;);
+var ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+ctx.putImageData(image, 0, 0);
+</code></pre>
 <ol start="3">
 <li>將適合成為 function 的部份歸納成 function</li>
 </ol>
 <p>在此就不細列出各個 function 內的樣子了</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// 1. 打開圖檔</span>
-  <span class="token keyword">let</span> image <span class="token operator">=</span> <span class="token function">openImage</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 2. 影像處理演算法</span>
-  image <span class="token operator">=</span> <span class="token function">imageProcess</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 3. 顯示影像處理結果的量化資料</span>
-  <span class="token function">report</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 4. 顯示影像處理結果的圖形資料</span>
-  <span class="token function">drawImage</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function main() &#123;
+  &#x2F;&#x2F; 1. 打開圖檔
+  let image &#x3D; openImage(&quot;img&quot;, &quot;#draw&quot;);
+  &#x2F;&#x2F; 2. 影像處理演算法
+  image &#x3D; imageProcess(image);
+  &#x2F;&#x2F; 3. 顯示影像處理結果的量化資料
+  report(image);
+  &#x2F;&#x2F; 4. 顯示影像處理結果的圖形資料
+  drawImage(image, &quot;#draw&quot;);
+&#125;
+</code></pre>
 <ol start="4">
 <li>看看有沒有什麼要刪掉的註解。</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">let</span> image <span class="token operator">=</span> <span class="token function">openImage</span><span class="token punctuation">(</span><span class="token string">"img"</span><span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  image <span class="token operator">=</span> <span class="token function">imageProcess</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">report</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">drawImage</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token string">"#draw"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function main() &#123;
+  let image &#x3D; openImage(&quot;img&quot;, &quot;#draw&quot;);
+  image &#x3D; imageProcess(image);
+  report(image);
+  drawImage(image, &quot;#draw&quot;);
+&#125;
+</code></pre>
 <p>為什麼要這樣做？</p>
 <ol>
 <li>開發者不想補註解</li>
@@ -568,21 +572,14 @@ ctx<span class="token punctuation">.</span><span class="token function">putImage
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

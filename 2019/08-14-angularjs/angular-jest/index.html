@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,19 +29,19 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶AngularJS + Jest 實戰  實做專案: https:&#x2F;&#x2F;github.com&#x2F;dwatow&#x2F;AngularJS-demo&#x2F;tree&#x2F;jest-demo 一開始，先 git clone repository git@github.com:dwatow&#x2F;AngularJS-demo.git ¶測試案例  顯示變數內容到畫面 使用 button 改變變數，同時修改畫面  ¶測試初始畫面">
+  <meta name="description" content="¶AngularJS + Jest 實戰  實做專案: https:&#x2F;&#x2F;github.com&#x2F;dwatow&#x2F;AngularJS-demo&#x2F;tree&#x2F;jest-demo 一開始，先 git clone repository git@github.com:dwatow&#x2F;AngularJS-demo.git ¶測試案例  顯示變數內容到畫面 使用 button 改變變數，同時修改畫面  ¶測試">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AngularJS + Jest 實戰">
 <meta property="og:url" content="https://dwatow.github.io/2019/08-14-angularjs/angular-jest/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶AngularJS + Jest 實戰  實做專案: https:&#x2F;&#x2F;github.com&#x2F;dwatow&#x2F;AngularJS-demo&#x2F;tree&#x2F;jest-demo 一開始，先 git clone repository git@github.com:dwatow&#x2F;AngularJS-demo.git ¶測試案例  顯示變數內容到畫面 使用 button 改變變數，同時修改畫面  ¶測試初始畫面">
+<meta property="og:description" content="¶AngularJS + Jest 實戰  實做專案: https:&#x2F;&#x2F;github.com&#x2F;dwatow&#x2F;AngularJS-demo&#x2F;tree&#x2F;jest-demo 一開始，先 git clone repository git@github.com:dwatow&#x2F;AngularJS-demo.git ¶測試案例  顯示變數內容到畫面 使用 button 改變變數，同時修改畫面  ¶測試">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://dwatow.github.io/images/35cfacb5-toh1v1q.png">
 <meta property="article:published_time" content="2019-08-14T09:33:58.000Z">
 <meta property="article:modified_time" content="2026-05-12T02:53:40.996Z">
 <meta property="article:author" content="Chris">
-<meta property="article:tag" content="jest">
 <meta property="article:tag" content="angularjs">
+<meta property="article:tag" content="jest">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://dwatow.github.io/images/35cfacb5-toh1v1q.png">
   <title>
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -152,7 +156,7 @@
 <p><img src="/images/35cfacb5-toh1v1q.png" alt=""></p>
 <p>實做專案: <a target="_blank" rel="noopener" href="https://github.com/dwatow/AngularJS-demo/tree/jest-demo">https://github.com/dwatow/AngularJS-demo/tree/jest-demo</a></p>
 <p>一開始，先 git clone repository</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">git@github.com:dwatow/AngularJS-demo.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">git@github.com:dwatow&#x2F;AngularJS-demo.git</code></pre>
 <h2 id="測試案例"><a class="header-anchor" href="#測試案例">¶</a>測試案例</h2>
 <ol>
 <li>顯示變數內容到畫面</li>
@@ -168,111 +172,111 @@
 <h3 id="測試目標"><a class="header-anchor" href="#測試目標">¶</a>測試目標</h3>
 <p>component 在註冊時，binding 是這樣寫的</p>
 <p><strong>HelloWorld/index.html</strong></p>
-<pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;div class&#x3D;&quot;hello&quot;&gt;
+<pre class="line-numbers language-htmlmixed" data-language="htmlmixed" data-start="1"><code class="language-htmlmixed">&lt;div class&#x3D;&quot;hello&quot;&gt;
   &lt;h1&gt;&#123;&#123; vm.msg &#125;&#125;&lt;&#x2F;h1&gt;
-...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+...</code></pre>
 <p><strong>HelloWorld/index.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">controller</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class controller &#123;
+  constructor() &#123;
+  &#x2F;&#x2F; ...
+  &#125;
+&#125;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"helloWorld"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">"helloWorld"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  template<span class="token punctuation">,</span>
-  controller<span class="token punctuation">,</span>
-  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">msg</span><span class="token operator">:</span> <span class="token string">"&lt;"</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">controllerAs</span><span class="token operator">:</span> <span class="token string">"vm"</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default angular.module(&quot;helloWorld&quot;, []).component(&quot;helloWorld&quot;, &#123;
+  template,
+  controller,
+  bindings: &#123;
+    msg: &quot;&lt;&quot;,
+  &#125;,
+  controllerAs: &quot;vm&quot;,
+&#125;).name;</code></pre>
 <p>在 App 的使用 helloWorld 方式是這樣</p>
 <p><strong>App/index.html</strong></p>
-<pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;hello-world msg&#x3D;&quot;&#39;Welcome to Your AngularJS App&#39;&quot;&gt;&lt;&#x2F;hello-world&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;hello-world msg&#x3D;&quot;&#39;Welcome to Your AngularJS App&#39;&quot;&gt;&lt;&#x2F;hello-world&gt;</code></pre>
 <h3 id="建立測試程式"><a class="header-anchor" href="#建立測試程式">¶</a>建立測試程式</h3>
 <p>為了簡化 AngularJS 框架初始在測試程式的程式碼，使用 angularjs-jest <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <p>宣告 AngularJS 和 AngularJS 的 mock 函數<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <p><strong>test/helloWorld.spec.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">'angular-mocks'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import &#39;angular-mocks&#39;;</code></pre>
 <p>引入要用測試的 module</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> mathservice <span class="token keyword">from</span> <span class="token string">'../src/service/mathmodule.js'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> helloWorld <span class="token keyword">from</span> <span class="token string">'../src/components/HelloWorld/index.js'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="3"><code class="language-javascript">import mathservice from &#39;..&#x2F;src&#x2F;service&#x2F;mathmodule.js&#39;;
+import helloWorld from &#39;..&#x2F;src&#x2F;components&#x2F;HelloWorld&#x2F;index.js&#39;;</code></pre>
 <p>引入要用測試的 angularjs-jest</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> createTestApp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'angularjs-jest'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="5"><code class="language-javascript">import &#123; createTestApp &#125; from &#39;angularjs-jest&#39;;</code></pre>
 <p>引入能在 node 跑類似 jQuery 的功能</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> cheerio <span class="token keyword">from</span> <span class="token string">'cheerio'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="6"><code class="language-javascript">import cheerio from &#39;cheerio&#39;;</code></pre>
 <p>用 angularjs-jest 初始化。並且將 <code>$componentController</code> inject 進測試 app 中。它可以讓我們得到 component 的實體。(不包含 template)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'component: HelloWorld'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> <span class="token function-variable function">getTestApp</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">createTestApp</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">modules</span><span class="token operator">:</span> <span class="token punctuation">[</span>helloWorld<span class="token punctuation">,</span> mathservice<span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">access</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'$componentController'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">//...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="7"><code class="language-javascript">describe(&#39;component: HelloWorld&#39;, function () &#123;
+  const getTestApp &#x3D; () &#x3D;&gt; createTestApp(&#123;
+    modules: [helloWorld, mathservice],
+    access: [&#39;$componentController&#39;],
+  &#125;);
+  &#x2F;&#x2F;...</code></pre>
 <h3 id="寫測試"><a class="header-anchor" href="#寫測試">¶</a>寫測試</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//...</span>
-<span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'initial render binding msg: should be Welcome to Your AngularJS App'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">getTestApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="13"><code class="language-javascript">&#x2F;&#x2F;...
+it(&#39;initial render binding msg: should be Welcome to Your AngularJS App&#39;, () &#x3D;&gt; &#123;
+  const app &#x3D; getTestApp();</code></pre>
 <p>直接取得渲染結果，並且將結果載入 <code>cheerio</code> 中。<br>
 並且測試 <code>h1</code> 內的文字是否與 binding 的字是一樣的。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> element <span class="token operator">=</span> app<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;hello-world msg="'Welcome to Your AngularJS App'">&lt;/hello-world></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> $ <span class="token operator">=</span> cheerio<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>element<span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    
-<span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'h1'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">"Welcome to Your AngularJS App"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="16"><code class="language-javascript">const element &#x3D; app.render(&#96;&lt;hello-world msg&#x3D;&quot;&#39;Welcome to Your AngularJS App&#39;&quot;&gt;&lt;&#x2F;hello-world&gt;&#96;)
+const $ &#x3D; cheerio.load(element.html())    
+expect($(&#39;h1&#39;).text()).toBe(&quot;Welcome to Your AngularJS App&quot;);</code></pre>
 <p>取得 controller 程式執行。並且同時設定 binding。<br>
 測試 <code>vm.msg</code> 內的文字是否與 binding 的字是一樣的。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">  <span class="token keyword">const</span> vm <span class="token operator">=</span> app<span class="token punctuation">.</span><span class="token function">$componentController</span><span class="token punctuation">(</span>helloWorld<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">msg</span><span class="token operator">:</span> <span class="token string">"Welcome to Your AngularJS App"</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token string">"Welcome to Your AngularJS App"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="19"><code class="language-javascript">  const vm &#x3D; app.$componentController(helloWorld, null, &#123;
+    msg: &quot;Welcome to Your AngularJS App&quot;,
+  &#125;);
+  expect(vm.msg).toEqual(&quot;Welcome to Your AngularJS App&quot;);
+&#125;);</code></pre>
 <h2 id="可能的問題-jest-的-loader"><a class="header-anchor" href="#可能的問題-jest-的-loader">¶</a>可能的問題: Jest 的 loader</h2>
 <p>因為 Jest 只吃 JavaScript (和 Webpack 一樣) 所以，有時可以拿 webpack 的 loader 來使用。在此打算使用 html-loader 來載入 html 檔。</p>
 <p>安裝 <code>html-loader-jest</code> 較方便</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-D</span> html-loader-jest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install -D html-loader-jest</code></pre>
 <p>在 package.json 設定 jest 區段<br>
 (這是可以設定 Jest 的眾多方法其中之一)</p>
 <p><strong>package.json</strong></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token property">"jest"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// ...</span>
-    <span class="token property">"transform"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token property">"^.+\\.(js|jsx)$"</span><span class="token operator">:</span> <span class="token string">"babel-jest"</span><span class="token punctuation">,</span>
-      <span class="token property">"^.+\\.html?$"</span><span class="token operator">:</span> <span class="token string">"html-loader-jest"</span><span class="token punctuation">,</span>
-      <span class="token comment">// ...</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &#x2F;&#x2F;...
+  &quot;jest&quot;: &#123;
+    &#x2F;&#x2F; ...
+    &quot;transform&quot;: &#123;
+      &quot;^.+\\.(js|jsx)$&quot;: &quot;babel-jest&quot;,
+      &quot;^.+\\.html?$&quot;: &quot;html-loader-jest&quot;,
+      &#x2F;&#x2F; ...
+    &#125;
+&#125;</code></pre>
 <p>這樣就可以將載入的 html 檔轉成 JavaScript 的字串。</p>
 <h2 id="測試互動改畫面"><a class="header-anchor" href="#測試互動改畫面">¶</a>測試互動改畫面</h2>
 <h3 id="修改畫面"><a class="header-anchor" href="#修改畫面">¶</a>修改畫面</h3>
 <p>目前的測試程式是仿照 vue-cli 產生的畫面。它滿足了第一個測試案例，將變數顯示到畫面上。而第二個測試案例「使用 input」必須要先修改一下，才可以</p>
 <p><strong>HelloWorld/index.html</strong></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hello<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>&#123;&#123; vm.msg &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>button<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>change head 1<span class="token punctuation">"</span></span>
-      <span class="token attr-name">ng-click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>vm.changeHead('Chris')<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;div class&#x3D;&quot;hello&quot;&gt;
+  &lt;h1&gt;&#123;&#123; vm.msg &#125;&#125;&lt;&#x2F;h1&gt;
+  &lt;p&gt;
+    &lt;input type&#x3D;&quot;button&quot; value&#x3D;&quot;change head 1&quot;
+      ng-click&#x3D;&quot;vm.changeHead(&#39;Chris&#39;)&quot;&gt;
+  &lt;&#x2F;p&gt;</code></pre>
 <p><strong>HelloWorld/index.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">controller</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token function">changeHead</span><span class="token punctuation">(</span><span class="token parameter">msg</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>msg <span class="token operator">=</span> msg<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">class controller &#123;
+  &#x2F;&#x2F;...
+  changeHead(msg) &#123;
+    this.msg &#x3D; msg;
+  &#125;
+&#125;</code></pre>
 <h3 id="寫測試-v2"><a class="header-anchor" href="#寫測試-v2">¶</a>寫測試</h3>
 <p>先將初始字串印出來。</p>
 <p><strong>test/helloWorld.spec.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'hello world click button change text to Chris'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> vm <span class="token operator">=</span> app<span class="token punctuation">.</span><span class="token function">$componentController</span><span class="token punctuation">(</span>helloWorld<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">msg</span><span class="token operator">:</span> <span class="token string">"Welcome to Your AngularJS App"</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">"Welcome to Your AngularJS App"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">it(&#39;hello world click button change text to Chris&#39;, () &#x3D;&gt; &#123;
+  const vm &#x3D; app.$componentController(helloWorld, null, &#123;
+    msg: &quot;Welcome to Your AngularJS App&quot;,
+  &#125;);
+  expect(vm.msg).toBe(&quot;Welcome to Your AngularJS App&quot;);</code></pre>
 <p>再執行 <code>changeHead()</code>，<code>ng-click</code> 綁定的 function<br>
 再測試一次一樣的位置，顯示的內容要改變</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">  vm<span class="token punctuation">.</span><span class="token function">changeHead</span><span class="token punctuation">(</span><span class="token string">'Chris'</span><span class="token punctuation">)</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span>msg<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">"Chris"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="6"><code class="language-javascript">  vm.changeHead(&#39;Chris&#39;)
+  expect(vm.msg).toBe(&quot;Chris&quot;);
+&#125;);</code></pre>
 <div class="info">
 <p>要自行執行 event callback<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 </div>
@@ -281,25 +285,25 @@
 <h3 id="改-component"><a class="header-anchor" href="#改-component">¶</a>改 component</h3>
 <p><strong>HelloWorld/index.js</strong></p>
 <p>加上一個</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">controller</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">$log<span class="token punctuation">,</span> mathservice</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>$log <span class="token operator">=</span> $log<span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>mathservice <span class="token operator">=</span> mathservice<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class controller &#123;
+  constructor($log, mathservice) &#123;
+    this.$log &#x3D; $log;
+    this.mathservice &#x3D; mathservice;
+  &#125;
 
-  <span class="token function">$onInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>math <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>mathservice<span class="token punctuation">.</span><span class="token function">addTwoNumbers</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>$log<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>math<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  $onInit() &#123;
+    this.math &#x3D; this.mathservice.addTwoNumbers(1, 2);
+    this.$log.log(this.math);
+  &#125;
+&#125;</code></pre>
 <h3 id="寫測試-v3"><a class="header-anchor" href="#寫測試-v3">¶</a>寫測試</h3>
 <p>在取得 componentController 之後，</p>
 <p><strong>test/helloWorld.spec.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'initial render service data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> vm <span class="token operator">=</span> app<span class="token punctuation">.</span><span class="token function">$componentController</span><span class="token punctuation">(</span>helloWorld<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  vm<span class="token punctuation">.</span><span class="token function">$onInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span>math<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">it(&#39;initial render service data&#39;, () &#x3D;&gt; &#123;
+  const vm &#x3D; app.$componentController(helloWorld);
+  vm.$onInit();
+  expect(vm.math).toBe(3);
+&#125;);</code></pre>
 <div class="info">
 <p>要自行執行 lifecycle</p>
 </div>
@@ -348,11 +352,11 @@
                     tags:
                     
   <li class="meta-text">
-  { <a href="/tags/jest/">jest</a> }
+  { <a href="/tags/angularjs/">angularjs</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/angularjs/">angularjs</a> }
+  { <a href="/tags/jest/">jest</a> }
   </li>
 
 
@@ -380,21 +384,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

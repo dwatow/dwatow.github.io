@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -59,8 +59,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -179,42 +183,42 @@
 <h2 id="用例子看複雜性"><a class="header-anchor" href="#用例子看複雜性">¶</a>用例子看複雜性</h2>
 <p>問題本身: 用瀏覽器的 console 印出 hello world 吧!!</p>
 <p>本質性問題，用程式碼呈現的最低底限</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">console.log(&#39;hello world&#39;)
+</code></pre>
 <p>附屬性問題，管理複雜性</p>
 <p>呼叫 function 印出 hello world</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token parameter">words</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function print(words) &#123;
+  console.log(words);
+&#125;
 
-<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+print(&#39;hello world&#39;)
+</code></pre>
 <p>用 Object 的 Methods</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> object <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">method</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">words</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const object &#x3D; &#123;
+  method: function (words) &#123;
+    console.log(words)
+  &#125;
+&#125;
 
-object<span class="token punctuation">.</span><span class="token function">method</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+object.method(&#39;hello world&#39;)
+</code></pre>
 <p>這一行 hello world 代表著會真正執行目標的程式碼。<br>
 而其它的程式碼是用來輔助管理，讓開發者容易理解、好猜中、好找…這樣的程式可能在訴說著什麼樣的內容。</p>
 <h2 id="這有什麼厲害之處？"><a class="header-anchor" href="#這有什麼厲害之處？">¶</a>這有什麼厲害之處？</h2>
 <p>也許你會說，這是架構問題呀，這不是寫不寫 糙 code 的原因呀。</p>
 <p>來看一些生活上或以前國高中會遇上的例子</p>
-<pre class="line-numbers language-none"><code class="language-none"># 這是曝露過多複雜度的例子
+<pre class="language-none"><code class="language-none"># 這是曝露過多複雜度的例子
 F &#x3D; (m * x * h) &#x2F; (s * s) ## 單位: kg * m^2 &#x2F; s^2
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</code></pre>
 <p>這是什麼？<br>
 這不是一般這個物理定律出現在人們眼中的樣貌。<br>
 無法直覺的理解，而心中不由自主的出現了「這在寫什麼？」的問題<br>
 也許在這問題前，還有個發語詞「糙」</p>
 <p>整理先逆推一下這個公式</p>
-<pre class="line-numbers language-none"><code class="language-none">E &#x3D; m * x * 1&#x2F;s * 1&#x2F;s * h ## v &#x3D; x &#x2F; s
+<pre class="language-none"><code class="language-none">E &#x3D; m * x * 1&#x2F;s * 1&#x2F;s * h ## v &#x3D; x &#x2F; s
 E &#x3D; m * v * 1&#x2F;s * h       ## g &#x3D; v &#x2F; s
 E &#x3D; m * g * h             ## 原本的樣貌
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <p><img src="/images/149bff53-m6RZjmt.png" alt=""></p>
 <p>這是一個位能[2]的公式。</p>
 <p>用了四個符號，代表著一個「能量」概念的表現，以及可以改變能量的變因。隱藏了不必要的複雜度: 將「加速度」的概念呈現成一個符號。</p>
@@ -286,21 +290,14 @@ E &#x3D; m * g * h             ## 原本的樣貌
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

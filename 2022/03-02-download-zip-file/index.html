@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -167,7 +171,7 @@
 <h2 id="使用"><a class="header-anchor" href="#使用">¶</a>使用</h2>
 <p>看<a target="_blank" rel="noopener" href="https://stuk.github.io/jszip/documentation/examples.html">這一篇文件</a>就足以上手了。</p>
 <p>安裝</p>
-<pre class="line-numbers language-none"><code class="language-none">$ npm install jszip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">$ npm install jszip</code></pre>
 <p>在 vue 專案</p>
 <p><strong>/utility/downloadZip.js</strong></p>
 <p>由於，使用 ZIP 我只需要兩個功能<br>
@@ -181,50 +185,50 @@
 </ul>
 </li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> JSZip <span class="token keyword">from</span> <span class="token string">'jszip'</span><span class="token punctuation">;</span>
-<span class="token comment">// usage document</span>
-<span class="token comment">// https://stuk.github.io/jszip/documentation/examples.html</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import JSZip from &#39;jszip&#39;;
+&#x2F;&#x2F; usage document
+&#x2F;&#x2F; https:&#x2F;&#x2F;stuk.github.io&#x2F;jszip&#x2F;documentation&#x2F;examples.html
 
-<span class="token comment">// create an instance of JSZip</span>
-<span class="token keyword">const</span> zip <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JSZip</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; create an instance of JSZip
+const zip &#x3D; new JSZip();
 
-<span class="token keyword">function</span> <span class="token function">addFile</span><span class="token punctuation">(</span><span class="token parameter">pathFilename<span class="token punctuation">,</span> content</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// create a file</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'add file'</span><span class="token punctuation">,</span> pathFilename<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  zip<span class="token punctuation">.</span><span class="token function">file</span><span class="token punctuation">(</span>pathFilename<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// const img = zip.folder('images');</span>
-  <span class="token comment">// img.file('smile.gif', imgData, &#123; base64: true &#125;);</span>
-<span class="token punctuation">&#125;</span>
+function addFile(pathFilename, content) &#123;
+  &#x2F;&#x2F; create a file
+  console.log(&#39;add file&#39;, pathFilename, content);
+  zip.file(pathFilename, content);
+  &#x2F;&#x2F; const img &#x3D; zip.folder(&#39;images&#39;);
+  &#x2F;&#x2F; img.file(&#39;smile.gif&#39;, imgData, &#123; base64: true &#125;);
+&#125;
 
-<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">download</span><span class="token punctuation">(</span>filename <span class="token operator">=</span> <span class="token string">'downloadFile.zip'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// generate a zip file</span>
-  <span class="token keyword">const</span> blob <span class="token operator">=</span> <span class="token keyword">await</span> zip<span class="token punctuation">.</span><span class="token function">generateAsync</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'blob'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>blob<span class="token punctuation">.</span>size <span class="token operator">&lt;</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'nothing in zip file'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+async function download(filename &#x3D; &#39;downloadFile.zip&#39;) &#123;
+  &#x2F;&#x2F; generate a zip file
+  const blob &#x3D; await zip.generateAsync(&#123; type: &#39;blob&#39; &#125;);
+  if (blob.size &lt; 25) throw new Error(&#39;nothing in zip file&#39;);
   
-  <span class="token comment">// for browser</span>
-  <span class="token keyword">const</span> blobURL <span class="token operator">=</span> <span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">createObjectURL</span><span class="token punctuation">(</span>blob<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>blobURL<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> anchor <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">const</span> clickEvent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MouseEvent</span><span class="token punctuation">(</span><span class="token string">'click'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    anchor<span class="token punctuation">.</span>href <span class="token operator">=</span> blobURL<span class="token punctuation">;</span>
-    anchor<span class="token punctuation">.</span>download <span class="token operator">=</span> filename<span class="token punctuation">;</span>
-    anchor<span class="token punctuation">.</span><span class="token function">dispatchEvent</span><span class="token punctuation">(</span>clickEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">'generate zip file is success'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">url</span><span class="token operator">:</span> blobURL
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+  &#x2F;&#x2F; for browser
+  const blobURL &#x3D; URL.createObjectURL(blob);
+  if (blobURL) &#123;
+    const anchor &#x3D; document.createElement(&#39;a&#39;);
+    const clickEvent &#x3D; new MouseEvent(&#39;click&#39;);
+    anchor.href &#x3D; blobURL;
+    anchor.download &#x3D; filename;
+    anchor.dispatchEvent(clickEvent);
+  &#125;
+  return &#123;
+    message: &#39;generate zip file is success&#39;,
+    url: blobURL
+  &#125;;
+&#125;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  addFile<span class="token punctuation">,</span>
+export default &#123;
+  addFile,
   download
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;;</code></pre>
 <p>在某個 component 裡使用時…</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> zip <span class="token keyword">from</span> <span class="token string">'@/utility/downloadZip'</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import zip from &#39;@&#x2F;utility&#x2F;downloadZip&#39;;
 
-zip<span class="token punctuation">.</span><span class="token function">addFile</span><span class="token punctuation">(</span><span class="token string">'file_name'</span><span class="token punctuation">,</span> <span class="token string">'file_content'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-zip<span class="token punctuation">.</span><span class="token function">download</span><span class="token punctuation">(</span><span class="token string">'zip_file_name'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+zip.addFile(&#39;file_name&#39;, &#39;file_content&#39;);
+zip.download(&#39;zip_file_name&#39;);</code></pre>
 <p>這樣就可以簡單的實現 zip 下載檔案啦！</p>
 
     
@@ -279,21 +283,14 @@ zip<span class="token punctuation">.</span><span class="token function">download
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

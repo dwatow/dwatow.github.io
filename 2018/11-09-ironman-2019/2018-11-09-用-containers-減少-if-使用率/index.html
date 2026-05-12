@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -163,23 +167,23 @@
 <p>故事是這樣的。<br>
 依組合語言的使用型式造出了 C 樣貌，而「相同型別的連續記憶體空間」就被稱為了「陣列」</p>
 <p><strong>陣列</strong></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">ArrayLength</span> <span class="token expression"><span class="token number">10</span></span></span>
+<pre class="language-c" data-language="c"><code class="language-c">#include &lt;stdio.h&gt;
+#define ArrayLength 10
 
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> array<span class="token punctuation">[</span>ArrayLength<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-    array<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">//setter</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> ArrayLength<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d"</span><span class="token punctuation">,</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//getter</span>
-    <span class="token punctuation">&#125;</span>
+int main()
+&#123;
+    int array[ArrayLength] &#x3D; &#123;0, 1, 2, 3, 4, 5, 6, 7, 8, 9&#125;;
+    array[4] &#x3D; 0; &#x2F;&#x2F;setter
+    for (int i &#x3D; 0; i &lt; ArrayLength; i++) &#123;
+        printf(&quot;%d&quot;, array[i]); &#x2F;&#x2F;getter
+    &#125;
 
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    return 0;
+&#125;
+</code></pre>
 <p><strong>輸出</strong></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">0123056789
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">0123056789
+</code></pre>
 <p>優點，就是擁有了抽象資料型別: array<br>
 缺點，在執行時期 <code>array</code> 是不可以變動長度的。對於大型專案來說，記憶體無法得到善用。<br>
 所以，有了「資料結構」這門課！！教教大家從「如何善用記憶體，又可以保持相同的使用方便性」入手。</p>
@@ -201,129 +205,129 @@
 (建議使用文字就好)</p>
 <p>C++ 代表性的關聯式容器: <code>set</code>, <code>map</code></p>
 <h2 id="利用容器寫程式"><a class="header-anchor" href="#利用容器寫程式">¶</a>利用容器寫程式</h2>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"start"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"processing"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"staged"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"finish"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"error"</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">if (apiData.status &#x3D;&#x3D;&#x3D; 1) &#123;
+   project.status &#x3D; &quot;start&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 2) &#123;
+   project.status &#x3D; &quot;processing&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 3) &#123;
+   project.status &#x3D; &quot;staged&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 4) &#123;
+   project.status &#x3D; &quot;finish&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 0) &#123;
+   project.status &#x3D; &quot;error&quot;
+&#125;
+</code></pre>
 <p>消除這個 <code>if-else</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> status <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token string">"error"</span><span class="token punctuation">,</span>
-  <span class="token string">"start"</span><span class="token punctuation">,</span>
-  <span class="token string">"processing"</span><span class="token punctuation">,</span>
-  <span class="token string">"staged"</span><span class="token punctuation">,</span>
-  <span class="token string">"finish"</span><span class="token punctuation">,</span>
-<span class="token punctuation">]</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const status &#x3D; [
+  &quot;error&quot;,
+  &quot;start&quot;,
+  &quot;processing&quot;,
+  &quot;staged&quot;,
+  &quot;finish&quot;,
+]
 
-project<span class="token punctuation">.</span>status <span class="token operator">=</span> status<span class="token punctuation">[</span>apiData<span class="token punctuation">.</span>status<span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+project.status &#x3D; status[apiData.status]
+</code></pre>
 <p>為什麼可以這樣做呢？<br>
 其實 if-else 裡，與容器透過索引值找到內容的方法相同，再看一次如下</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"start"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"processing"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"staged"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"finish"</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token string">"error"</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">if (apiData.status &#x3D;&#x3D;&#x3D; 0 + 1) &#123;
+   project.status &#x3D; &quot;start&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 0 + 2) &#123;
+   project.status &#x3D; &quot;processing&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 0 + 3) &#123;
+   project.status &#x3D; &quot;staged&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 0 + 4) &#123;
+   project.status &#x3D; &quot;finish&quot;
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; 0 + 0) &#123;
+   project.status &#x3D; &quot;error&quot;
+&#125;
+</code></pre>
 <p>反過來呢？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token string">"start"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">1</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token string">"processing"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">2</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token string">"staged"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">3</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token string">"finish"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">4</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>apiData<span class="token punctuation">.</span>status <span class="token operator">===</span> <span class="token string">"error"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-   project<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">if (apiData.status &#x3D;&#x3D;&#x3D; &quot;start&quot;) &#123;
+   project.status &#x3D; 1
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; &quot;processing&quot;) &#123;
+   project.status &#x3D; 2
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; &quot;staged&quot;) &#123;
+   project.status &#x3D; 3
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; &quot;finish&quot;) &#123;
+   project.status &#x3D; 4
+&#125;
+else if (apiData.status &#x3D;&#x3D;&#x3D; &quot;error&quot;) &#123;
+   project.status &#x3D; 0
+&#125;
+</code></pre>
 <p>再消除一次這個 <code>if-else</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> status <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"error"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"start"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"processing"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"staged"</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"finish"</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const status &#x3D; &#123;
+  &quot;error&quot;: 0,
+  &quot;start&quot;: 1,
+  &quot;processing&quot;: 2,
+  &quot;staged&quot;: 3,
+  &quot;finish&quot;: 4,
+&#125;
 
-project<span class="token punctuation">.</span>status <span class="token operator">=</span> status<span class="token punctuation">[</span>apiData<span class="token punctuation">.</span>status<span class="token punctuation">]</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+project.status &#x3D; status[apiData.status]
+</code></pre>
 <p>為什麼可以這樣做呢？<br>
 關聯式容器在 <code>key-value</code> 找值的過程，做了很多的判斷。(它有寫 <code>if-else</code> 了)，所以可以利用這個容器特性省掉一些不必要的 <code>if-else</code> 變成程式碼冗贅的語法。</p>
 <h2 id="消除重複"><a class="header-anchor" href="#消除重複">¶</a>消除重複</h2>
 <p>在此就要特別介紹一下 <code>Set</code> 每個元素，都當作 key。也就是不重複元素的 list 或 array。</p>
 <p>如果在 C++ 中，這個問題也不用像我以前不懂事這樣寫一堆 code[4]</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> vch<span class="token punctuation">;</span>
-<span class="token comment">//...</span>
-std<span class="token double-colon punctuation">::</span><span class="token function">sort</span><span class="token punctuation">(</span>vch<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vch<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//排序</span>
-eraseit <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span><span class="token function">unique</span><span class="token punctuation">(</span>vch<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vch<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//排不重覆元素</span>
-vch<span class="token punctuation">.</span><span class="token function">erase</span><span class="token punctuation">(</span>eraseit<span class="token punctuation">,</span> vch<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//沒被排到的刪掉</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">std::vector&lt;int&gt; vch;
+&#x2F;&#x2F;...
+std::sort(vch.begin(), vch.end());  &#x2F;&#x2F;排序
+eraseit &#x3D; std::unique(vch.begin(), vch.end());  &#x2F;&#x2F;排不重覆元素
+vch.erase(eraseit, vch.end()); &#x2F;&#x2F;沒被排到的刪掉
+</code></pre>
 <p><strong>輸出</strong></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token number">0</span>, <span class="token number">0</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">2</span>, <span class="token number">2</span>, <span class="token number">3</span>, <span class="token number">3</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">7</span>, <span class="token number">9</span>, <span class="token number">9</span>,
-<span class="token number">0</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">9</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">7</span>, <span class="token number">9</span>, <span class="token number">9</span>,
-<span class="token number">0</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">9</span>,
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">0, 0, 1, 2, 2, 2, 3, 3, 3, 5, 5, 6, 6, 6, 6, 6, 7, 7, 9, 9,
+0, 1, 2, 3, 5, 6, 7, 9, 3, 5, 5, 6, 6, 6, 6, 6, 7, 7, 9, 9,
+0, 1, 2, 3, 5, 6, 7, 9,
+</code></pre>
 <p>後來都這樣寫</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token function">show</span><span class="token punctuation">(</span>vch<span class="token punctuation">)</span><span class="token punctuation">;</span>
-std<span class="token double-colon punctuation">::</span>set<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">sch</span> <span class="token punctuation">(</span>vch<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vch<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">show</span><span class="token punctuation">(</span>sch<span class="token punctuation">)</span><span class="token punctuation">;</span>
-std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">cloneVch</span> <span class="token punctuation">(</span>sch<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sch<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">show</span><span class="token punctuation">(</span>cloneVch<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">show(vch);
+std::set&lt;int&gt; sch (vch.begin(), vch.end());
+show(sch);
+std::vector&lt;int&gt; cloneVch (sch.begin(), sch.end());
+show(cloneVch);
+</code></pre>
 <p><strong>輸出</strong></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token number">3</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">5</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">2</span>, <span class="token number">9</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">7</span>, <span class="token number">0</span>, <span class="token number">9</span>, <span class="token number">3</span>, <span class="token number">6</span>, <span class="token number">0</span>, <span class="token number">6</span>, <span class="token number">2</span>, <span class="token number">6</span>,
-<span class="token number">0</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">9</span>,
-<span class="token number">0</span>, <span class="token number">1</span>, <span class="token number">2</span>, <span class="token number">3</span>, <span class="token number">5</span>, <span class="token number">6</span>, <span class="token number">7</span>, <span class="token number">9</span>,
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">3, 6, 7, 5, 3, 5, 6, 2, 9, 1, 2, 7, 0, 9, 3, 6, 0, 6, 2, 6,
+0, 1, 2, 3, 5, 6, 7, 9,
+0, 1, 2, 3, 5, 6, 7, 9,
+</code></pre>
 <p>看起來好像也不差。<br>
 有時會用 if-else 判斷是否已存在就不用講了。</p>
 <h2 id="在-javascript-中"><a class="header-anchor" href="#在-javascript-中">¶</a>在 JavaScript 中</h2>
 <p>ES5 的標準中，想用關聯式容器就用 <code>&#123;&#125;</code> ，想用循序式容器用 <code>[]</code></p>
 <p>ES6 的標準已經有 Set 可以用，來看看兩者的比較[5]</p>
 <p>ES6 的寫法，不用自己寫 if 囉</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-s<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"goodbye"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span>
-s<span class="token punctuation">.</span>size <span class="token operator">===</span> <span class="token number">2</span>
-s<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token boolean">true</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> key <span class="token keyword">of</span> s<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// insertion order</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">let s &#x3D; new Set()
+s.add(&quot;hello&quot;).add(&quot;goodbye&quot;).add(&quot;hello&quot;)
+s.size &#x3D;&#x3D;&#x3D; 2
+s.has(&quot;hello&quot;) &#x3D;&#x3D;&#x3D; true
+for (let key of s.values()) &#x2F;&#x2F; insertion order
+    console.log(key)
+</code></pre>
 <p>用 ES5 的寫法就是有 if。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> s <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-s<span class="token punctuation">[</span><span class="token string">"hello"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span><span class="token string">"goodbye"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span><span class="token string">"hello"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">2</span><span class="token punctuation">;</span>
-s<span class="token punctuation">[</span><span class="token string">"hello"</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> key <span class="token keyword">in</span> s<span class="token punctuation">)</span> <span class="token comment">// arbitrary order</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">hasOwnProperty</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var s &#x3D; &#123;&#125;;
+s[&quot;hello&quot;] &#x3D; true; s[&quot;goodbye&quot;] &#x3D; true; s[&quot;hello&quot;] &#x3D; true;
+Object.keys(s).length &#x3D;&#x3D;&#x3D; 2;
+s[&quot;hello&quot;] &#x3D;&#x3D;&#x3D; true;
+for (var key in s) &#x2F;&#x2F; arbitrary order
+    if (s.hasOwnProperty(key))
+        console.log(s[key]);
+</code></pre>
 <p>雖然，不寫就不是不存在 (本來就必須存在)，但是要利用它的 if 邏輯，也許自己的程式碼可以保持某種程度的簡潔(狂熱!!!)</p>
 <h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
 <p>[1]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93#%E5%85%A7%E5%AE%B9">標準模板庫 - 維基百科，自由的百科全書</a><br>
@@ -384,21 +388,14 @@ s<span class="token punctuation">[</span><span class="token string">"hello"</spa
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

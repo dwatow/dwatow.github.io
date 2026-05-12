@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -40,9 +40,9 @@
 <meta property="article:published_time" content="2023-07-28T09:27:09.000Z">
 <meta property="article:modified_time" content="2026-05-12T02:55:35.873Z">
 <meta property="article:author" content="Chris">
-<meta property="article:tag" content="foreign key">
 <meta property="article:tag" content="database">
 <meta property="article:tag" content="mariadb">
+<meta property="article:tag" content="foreign key">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://dwatow.github.io/images/4aa5233b-c10efb8a-8d9e-4b57-9635-61db14c9d4c5.png">
   <title>
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -158,71 +162,71 @@
 <p>除了 user 之外的表，照理來說都會有 foreign key</p>
 <h2 id="讀者-資料表"><a class="header-anchor" href="#讀者-資料表">¶</a>「讀者」資料表</h2>
 <p>使用者與讀者之間的關係是「一對一」</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> reader <span class="token punctuation">(</span>
-  id <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  password <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  slack_id <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  line_id <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  phone <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  email <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE reader (
+  id CHAR(10) NOT NULL,
+  password VARCHAR(128),
+  slack_id VARCHAR(50),
+  line_id VARCHAR(50),
+  phone CHAR(10),
+  email VARCHAR(50),
+  PRIMARY KEY (id),
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+) ENGINE &#x3D; InnoDB;</code></pre>
 <ul>
 <li><code>id</code> 想要記錄讀者的身份證字號，可以用身份證就可以借書了。</li>
 <li><code>password</code> 和 user 一樣,</li>
 <li><code>creator_id</code> 是 <code>FOREIGN KEY</code> 參考 <code>user.id</code></li>
 </ul>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DESCRIBE</span> reader<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">+------------+--------------+------+-----+---------+----------------+
-<span class="token operator">|</span> Field      <span class="token operator">|</span> Type         <span class="token operator">|</span> Null <span class="token operator">|</span> Key <span class="token operator">|</span> Default <span class="token operator">|</span> Extra          <span class="token operator">|</span>
+<pre class="language-sql" data-language="sql"><code class="language-sql">DESCRIBE reader;</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">+------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
 +------------+--------------+------+-----+---------+----------------+
-<span class="token operator">|</span> <span class="token function">id</span>         <span class="token operator">|</span> char<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>      <span class="token operator">|</span> NO   <span class="token operator">|</span> PRI <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span> auto_increment <span class="token operator">|</span>
-<span class="token operator">|</span> password   <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
-<span class="token operator">|</span> slack_id   <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
-<span class="token operator">|</span> line_id    <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
-<span class="token operator">|</span> phone      <span class="token operator">|</span> char<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>     <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
-<span class="token operator">|</span> email      <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
-<span class="token operator">|</span> creator_id <span class="token operator">|</span> int<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>      <span class="token operator">|</span> NO   <span class="token operator">|</span> MUL <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>                <span class="token operator">|</span>
+| id         | char(10)      | NO   | PRI | &lt;null&gt;  | auto_increment |
+| password   | varchar(128) | YES  |     | &lt;null&gt;  |                |
+| slack_id   | varchar(50)  | YES  |     | &lt;null&gt;  |                |
+| line_id    | varchar(50)  | YES  |     | &lt;null&gt;  |                |
+| phone      | char(10)     | YES  |     | &lt;null&gt;  |                |
+| email      | varchar(50)  | YES  |     | &lt;null&gt;  |                |
+| creator_id | int(11)      | NO   | MUL | &lt;null&gt;  |                |
 +------------+--------------+------+-----+---------+----------------+
 
-<span class="token number">8</span> rows <span class="token keyword">in</span> <span class="token builtin class-name">set</span>
-Time: <span class="token number">0</span>.046s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+8 rows in set
+Time: 0.046s</code></pre>
 <p>透過最簡單的語法 <code>FOREIGN KEY (creator_id) REFERENCES user (id)</code> 定義了一個 FOREIGN KEY。</p>
 <p>在此有兩個預設值需要注意</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ON</span> <span class="token keyword">DELETE</span>
-<span class="token keyword">ON</span> <span class="token keyword">UPDATE</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">ON DELETE
+ON UPDATE</code></pre>
 <p>這兩個的預設值各別是如何？</p>
 <h3 id="經過實測"><a class="header-anchor" href="#經過實測">¶</a>經過實測</h3>
 <p>先刪除 reader 沒問題<br>
 但如先刪除 user，會出現錯誤訊息</p>
-<pre class="line-numbers language-none"><code class="language-none">Query 1 ERROR: 
+<pre class="language-none"><code class="language-none">Query 1 ERROR: 
 Cannot delete or update a parent row: 
   a foreign key constraint fails (
     &#96;good_ideas_lib&#96;.&#96;reader&#96;, 
     CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;)
       REFERENCES &#96;user&#96; (&#96;id&#96;)
-  )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  )</code></pre>
 <p>修改 reader 的 creator_id 不會出現問題<br>
 但修改的 key 沒有存在的話，就會出錯誤訊息。</p>
-<pre class="line-numbers language-none"><code class="language-none">Query 1 ERROR: 
+<pre class="language-none"><code class="language-none">Query 1 ERROR: 
 Cannot add or update a child row: 
   a foreign key constraint fails (
     &#96;good_ideas_lib&#96;.&#96;reader&#96;, 
     CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;) 
       REFERENCES &#96;user&#96; (&#96;id&#96;)
-  )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  )</code></pre>
 <p>修改 user 的 id，會出現錯誤訊息</p>
-<pre class="line-numbers language-none"><code class="language-none">Query 1 ERROR: 
+<pre class="language-none"><code class="language-none">Query 1 ERROR: 
 Cannot delete or update a parent row: 
   a foreign key constraint fails (
     &#96;good_ideas_lib&#96;.&#96;reader&#96;, 
     CONSTRAINT &#96;reader_ibfk_1&#96; FOREIGN KEY (&#96;creator_id&#96;) 
       REFERENCES &#96;user&#96; (&#96;id&#96;)
-  )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  )</code></pre>
 <h2 id="on-delect-和-on-update-的四種模式"><a class="header-anchor" href="#on-delect-和-on-update-的四種模式">¶</a>ON DELECT 和 ON UPDATE 的四種模式<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></h2>
 <ul>
 <li><strong>RESTRICT</strong>（約束）：預設模式。當在父表刪除資料時，會比對子表是否有對應的資料，如果有則不允許刪除。</li>
@@ -237,52 +241,52 @@ Cannot delete or update a parent row:
 <p>以此為例，只需要思考「因為 user 刪除，reader 資料的建立者不能留空白，也不能無法參考，所以要限制無法刪除；如果 user 更新了 id ，那麼 reader 的 creator_id 也需要一起更新」</p>
 <p>而且不用考慮刪除/更新 reader 的 creator_id 的情況，因為這種情況應該是自由的，想怎麼做都行，不受約束。</p>
 <p>設定如下，再試一次</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> reader <span class="token punctuation">(</span>
-  id <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  password <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  slack_id <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  line_id <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  phone <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  email <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DESC</span> reader<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">+------------+--------------+------+-----+---------+-------+
-<span class="token operator">|</span> Field      <span class="token operator">|</span> Type         <span class="token operator">|</span> Null <span class="token operator">|</span> Key <span class="token operator">|</span> Default <span class="token operator">|</span> Extra <span class="token operator">|</span>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE reader (
+  id CHAR(10) NOT NULL,
+  password VARCHAR(128),
+  slack_id VARCHAR(50),
+  line_id VARCHAR(50),
+  phone CHAR(10),
+  email VARCHAR(50),
+  PRIMARY KEY (id),
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">DESC reader;</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">+------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
 +------------+--------------+------+-----+---------+-------+
-<span class="token operator">|</span> <span class="token function">id</span>         <span class="token operator">|</span> char<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>     <span class="token operator">|</span> NO   <span class="token operator">|</span> PRI <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> password   <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span> <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> slack_id   <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> line_id    <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> phone      <span class="token operator">|</span> char<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>     <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> email      <span class="token operator">|</span> varchar<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>  <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> created_at <span class="token operator">|</span> datetime     <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> updated_at <span class="token operator">|</span> datetime     <span class="token operator">|</span> YES  <span class="token operator">|</span>     <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
-<span class="token operator">|</span> creator_id <span class="token operator">|</span> int<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>      <span class="token operator">|</span> NO   <span class="token operator">|</span> MUL <span class="token operator">|</span> <span class="token operator">&lt;</span>null<span class="token operator">></span>  <span class="token operator">|</span>       <span class="token operator">|</span>
+| id         | char(10)     | NO   | PRI | &lt;null&gt;  |       |
+| password   | varchar(128) | YES  |     | &lt;null&gt;  |       |
+| slack_id   | varchar(50)  | YES  |     | &lt;null&gt;  |       |
+| line_id    | varchar(50)  | YES  |     | &lt;null&gt;  |       |
+| phone      | char(10)     | YES  |     | &lt;null&gt;  |       |
+| email      | varchar(50)  | YES  |     | &lt;null&gt;  |       |
+| created_at | datetime     | YES  |     | &lt;null&gt;  |       |
+| updated_at | datetime     | YES  |     | &lt;null&gt;  |       |
+| creator_id | int(11)      | NO   | MUL | &lt;null&gt;  |       |
 +------------+--------------+------+-----+---------+-------+
 
-<span class="token number">9</span> rows <span class="token keyword">in</span> <span class="token builtin class-name">set</span>
-Time: <span class="token number">0</span>.039s
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+9 rows in set
+Time: 0.039s
+</code></pre>
 <h3 id="經過實測-v2"><a class="header-anchor" href="#經過實測-v2">¶</a>經過實測</h3>
 <p>確實修改 user 的 id 之後，reader 的 creator_id 會自動修改。</p>
 <h2 id="出版社-資料表"><a class="header-anchor" href="#出版社-資料表">¶</a>「出版社」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> publisher <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
-  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE publisher (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <p>這段 SQL，新增了一個 publisher 的資料表<br>
 此資料表有 5 個欄位</p>
 <ol>
@@ -306,117 +310,117 @@ Time: <span class="token number">0</span>.039s
 <li>updated_at: 更新日期時間</li>
 </ol>
 <p>增加了兩個與資料表同名的檔案 <code>publisher.frm</code>, <code>publisher.ibd</code></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">:/var/lib/mysql/good_ideas_lib<span class="token comment"># ls</span>
-db.opt	publisher.frm  publisher.ibd  user.frm	user.ibd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">:&#x2F;var&#x2F;lib&#x2F;mysql&#x2F;good_ideas_lib# ls
+db.opt	publisher.frm  publisher.ibd  user.frm	user.ibd</code></pre>
 <h2 id="作者-資料表"><a class="header-anchor" href="#作者-資料表">¶</a>「作者」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> author <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
-  name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE author (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <h2 id="書籍-資料表"><a class="header-anchor" href="#書籍-資料表">¶</a>「書籍」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> book <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  title <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  isbn <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">13</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  author_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>author_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> author <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  publisher_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>publisher_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> publisher <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  date_public <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  description <span class="token keyword">TEXT</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE book (
+  id INT AUTO_INCREMENT NOT NULL,
+  title VARCHAR(50),
+  isbn VARCHAR(13),
+  author_id INT NOT NULL,
+  FOREIGN KEY (author_id) REFERENCES author (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  publisher_id INT NOT NULL,
+  FOREIGN KEY (publisher_id) REFERENCES publisher (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  date_public DATE NOT NULL,
+  description TEXT,
+  PRIMARY KEY (id),
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <h2 id="實體書-資料表"><a class="header-anchor" href="#實體書-資料表">¶</a>「實體書」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> abook <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  book_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>book_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> book <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  storage <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  owner_id <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>owner_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> reader <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE abook (
+  id INT AUTO_INCREMENT NOT NULL,
+  PRIMARY KEY (id),
+  book_id INT NOT NULL,
+  FOREIGN KEY (book_id) REFERENCES book (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  storage VARCHAR(50),
+  owner_id CHAR(10),
+  FOREIGN KEY (owner_id) REFERENCES reader (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <h2 id="書評-資料表"><a class="header-anchor" href="#書評-資料表">¶</a>「書評」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> thought <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  book_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>book_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> book <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  note <span class="token keyword">TEXT</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE thought (
+  id INT AUTO_INCREMENT NOT NULL,
+  PRIMARY KEY (id),
+  book_id INT NOT NULL,
+  FOREIGN KEY (book_id) REFERENCES book (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  note TEXT,
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <h2 id="借書單-資料表"><a class="header-anchor" href="#借書單-資料表">¶</a>「借書單」資料表</h2>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> borrowing <span class="token punctuation">(</span>
-  id <span class="token keyword">INT</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">,</span>
-  reader_id <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>reader_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> reader <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  abook_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>abook_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> abook <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span><span class="token punctuation">,</span>
-  start_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  end_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  created_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  updated_at <span class="token keyword">DATETIME</span><span class="token punctuation">,</span>
-  creator_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
-  <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>creator_id<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> <span class="token keyword">user</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
-    <span class="token keyword">ON</span> <span class="token keyword">DELETE</span> <span class="token keyword">RESTRICT</span>
-    <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CASCADE</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span> <span class="token operator">=</span> <span class="token keyword">InnoDB</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-sql" data-language="sql"><code class="language-sql">CREATE TABLE borrowing (
+  id INT AUTO_INCREMENT NOT NULL,
+  PRIMARY KEY (id),
+  reader_id CHAR(10) NOT NULL,
+  FOREIGN KEY (reader_id) REFERENCES reader (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  abook_id INT NOT NULL,
+  FOREIGN KEY (abook_id) REFERENCES abook (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  start_at DATETIME,
+  end_at DATETIME,
+  created_at DATETIME,
+  updated_at DATETIME,
+  creator_id INT NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES user (id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+) ENGINE &#x3D; InnoDB;</code></pre>
 <p>以上！<br>
 照著貼，就可以建立出一個資料庫囉！</p>
-<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SHOW</span> <span class="token keyword">TABLES</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">+--------------------------+
-<span class="token operator">|</span> Tables_in_good_ideas_lib <span class="token operator">|</span>
+<pre class="language-sql" data-language="sql"><code class="language-sql">SHOW TABLES;</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">+--------------------------+
+| Tables_in_good_ideas_lib |
 +--------------------------+
-<span class="token operator">|</span> abook                    <span class="token operator">|</span>
-<span class="token operator">|</span> author                   <span class="token operator">|</span>
-<span class="token operator">|</span> book                     <span class="token operator">|</span>
-<span class="token operator">|</span> borrowing                <span class="token operator">|</span>
-<span class="token operator">|</span> publisher                <span class="token operator">|</span>
-<span class="token operator">|</span> reader                   <span class="token operator">|</span>
-<span class="token operator">|</span> thought                  <span class="token operator">|</span>
-<span class="token operator">|</span> user                     <span class="token operator">|</span>
+| abook                    |
+| author                   |
+| book                     |
+| borrowing                |
+| publisher                |
+| reader                   |
+| thought                  |
+| user                     |
 +--------------------------+
 
-<span class="token number">8</span> rows <span class="token keyword">in</span> <span class="token builtin class-name">set</span>
-Time: <span class="token number">0</span>.026s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+8 rows in set
+Time: 0.026s</code></pre>
 <p>實際跑一下 TablePlus 的外掛，畫出來是這樣</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/goodideas-studio-training-camp/web-camp-in-node/assets/1825852/c10efb8a-8d9e-4b57-9635-61db14c9d4c5"><img src="/images/4aa5233b-c10efb8a-8d9e-4b57-9635-61db14c9d4c5.png" alt="image"></a></p>
 <h2 id="建立-migration"><a class="header-anchor" href="#建立-migration">¶</a>建立 migration</h2>
@@ -455,15 +459,15 @@ Time: <span class="token number">0</span>.026s<span aria-hidden="true" class="li
                     tags:
                     
   <li class="meta-text">
-  { <a href="/tags/foreign-key/">foreign key</a> }
-  </li>
-
-  <li class="meta-text">
   { <a href="/tags/database/">database</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/mariadb/">mariadb</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/foreign-key/">foreign key</a> }
   </li>
 
 
@@ -491,21 +495,14 @@ Time: <span class="token number">0</span>.026s<span aria-hidden="true" class="li
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

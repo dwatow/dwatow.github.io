@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -174,55 +178,55 @@
 <p>用 npm 安裝 AngularJS<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <p>在此要加上版號，限制只安裝 AngularJS (最後的版本是 1.7.x)<br>
 (安裝 AngularJS 1.5 以上的版本，才可以使用 Component 未來框架的重構會更現代化)</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> --save-dev angular@1.7<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save-dev angular@1.7</code></pre>
 <h2 id="加入-webpack"><a class="header-anchor" href="#加入-webpack">¶</a>加入 Webpack</h2>
 <h3 id="了解原本-gulp-的運作"><a class="header-anchor" href="#了解原本-gulp-的運作">¶</a>了解原本 Gulp 的運作。</h3>
 <p>先看看你自己的 Gulp 專案上的 task 怎麼設定的<br>
 在此，我手上的專案是將所有的 js 檔案串接成 all.js。(之後的 webpack 也是要做這件事)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> gulp <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> concat <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-concat'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> gulpLivereload <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-livereload'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var gulp &#x3D; require(&#39;gulp&#39;);
+var concat &#x3D; require(&#39;gulp-concat&#39;);
+var gulpLivereload &#x3D; require(&#39;gulp-livereload&#39;);
 
-gulp<span class="token punctuation">.</span><span class="token function">task</span><span class="token punctuation">(</span><span class="token string">'all'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span>
+gulp.task(&#39;all&#39;, () &#x3D;&gt;
   gulp
-    <span class="token punctuation">.</span><span class="token function">src</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'./js/**/*.js'</span><span class="token punctuation">,</span><span class="token string">'./app.js'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">'all.js'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>gulp<span class="token punctuation">.</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'./'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">gulpLivereload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    .src([&#39;.&#x2F;js&#x2F;**&#x2F;*.js&#39;,&#39;.&#x2F;app.js&#39;])
+    .pipe(concat(&#39;all.js&#39;))
+    .pipe(gulp.dest(&#39;.&#x2F;&#39;))
+    .pipe(gulpLivereload()));
 
-gulp<span class="token punctuation">.</span><span class="token function">task</span><span class="token punctuation">(</span><span class="token string">'watch'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  gulpLivereload<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  gulp<span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">"./js/**/*.js"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"all"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  gulp<span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">"./app.js"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"all"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+gulp.task(&#39;watch&#39;, () &#x3D;&gt; &#123;
+  gulpLivereload.listen();
+  gulp.watch(&quot;.&#x2F;js&#x2F;**&#x2F;*.js&quot;, [&quot;all&quot;]);
+  gulp.watch(&quot;.&#x2F;app.js&quot;, [&quot;all&quot;]);
+&#125;)</code></pre>
 <h3 id="開始-webpack"><a class="header-anchor" href="#開始-webpack">¶</a>開始 Webpack</h3>
 <p>安裝 webpack</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> --save-dev webpack<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save-dev webpack</code></pre>
 <p>安裝 dev-server</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> --save-dev webpack-dev-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save-dev webpack-dev-server</code></pre>
 <p><strong>config</strong><br>
 在 webpack.config.js 中的 outputFileName 設定。</p>
 <p>原本由 Gulp 將 <code>*.js</code> 編成 <code>all.js</code><br>
 改成用 Webpack 編出 <code>all.js</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const path &#x3D; require(&#39;path&#39;);
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">entry</span><span class="token operator">:</span> <span class="token string">'./entryFileName.js'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">output</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">filename</span><span class="token operator">:</span> <span class="token string">'outputFileName.js'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">path</span><span class="token operator">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">devServer</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">contentBase</span><span class="token operator">:</span> <span class="token string">'./'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">"production"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; &#123;
+  entry: &#39;.&#x2F;entryFileName.js&#39;,
+  output: &#123;
+    filename: &#39;outputFileName.js&#39;,
+    path: path.resolve(__dirname, &#39;&#39;)
+  &#125;,
+  devServer: &#123;
+    contentBase: &#39;.&#x2F;&#39;
+  &#125;,
+  mode: &quot;production&quot;
+&#125;;</code></pre>
 <p>然後開始 try-error 的看看頁面是不是有正常運作。<br>
 下面是我遇到的一些問題，提供當案例參考。</p>
 <h2 id="開始一一解決問題"><a class="header-anchor" href="#開始一一解決問題">¶</a>開始一一解決問題</h2>
 <h3 id="模組相依順序"><a class="header-anchor" href="#模組相依順序">¶</a>模組相依順序</h3>
 <p><strong>主要是發生在這樣的 source code</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'myApp'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'team'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.module(&#39;myApp&#39;, [&#39;team&#39;]);</code></pre>
 <p>彷彿 angular module 的中括號會失去作用</p>
 <p><strong>瀏覽器 Console 的錯誤訊息</strong></p>
 <div class="danger">
@@ -237,29 +241,29 @@ Module ‘team’ is not available! You either misspelled the module name or for
 重新整理整個 project 的 javascript 檔的相依關係。</p>
 <p>(不知道要不要刪掉，確定完再來刪)</p>
 <p><strong>example</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./module1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 增加這幾行</span>
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./module2'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 增加這幾行</span>
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./module3'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 增加這幾行</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">require(&#39;.&#x2F;module1&#39;);   &#x2F;&#x2F; 增加這幾行
+require(&#39;.&#x2F;module2&#39;);   &#x2F;&#x2F; 增加這幾行
+require(&#39;.&#x2F;module3&#39;);  &#x2F;&#x2F; 增加這幾行
 
-angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"module"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'module1'</span><span class="token punctuation">,</span> <span class="token string">'module2'</span><span class="token punctuation">,</span> <span class="token string">'module3'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+angular.module(&quot;module&quot;, [&#39;module1&#39;, &#39;module2&#39;, &#39;module3&#39;]);</code></pre>
 <h3 id="立即時執行函數前的-require-要加分號"><a class="header-anchor" href="#立即時執行函數前的-require-要加分號">¶</a>立即時執行函數前的 <code>require</code> 要加分號</h3>
 <p>錯誤訊息</p>
 <div class="danger">
 <p>Uncaught TypeError: __webpack_require__(…) is not a function</p>
 </div>
 <p>原本的寫法若是立即執行</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> app <span class="token operator">=</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span>"<span class="token comment">//...</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">(function() &#123;
+  var app &#x3D; angular.module(&quot;&#x2F;&#x2F;...
+  &#x2F;&#x2F;...
+&#125;)();</code></pre>
 <p>前面加上 <code>require()</code> 後，要記得加分號 <code>;</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'module1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//沒問題</span>
-<span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'module1'</span><span class="token punctuation">)</span>  <span class="token comment">//出問題</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">require(&#39;module1&#39;); &#x2F;&#x2F;沒問題
+require(&#39;module1&#39;)  &#x2F;&#x2F;出問題
 
-<span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> app <span class="token operator">=</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span>"<span class="token comment">//...</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+(function() &#123;
+  var app &#x3D; angular.module(&quot;&#x2F;&#x2F;...
+  &#x2F;&#x2F;...
+&#125;)();</code></pre>
 <h3 id="js-套件相依順序"><a class="header-anchor" href="#js-套件相依順序">¶</a>JS 套件相依順序</h3>
 <p>使用 bower 的套件要改用 npm 安裝。(注意版本)<br>
 原本使用 html script tag 的方式引入，都要改由 javascript 的 <code>require()</code> 的方式引入。</p>
@@ -269,19 +273,19 @@ angular<span class="token punctuation">.</span><span class="token function">modu
 <p>angular.js:15536 Possibly unhandled rejection: undefined</p>
 </div>
 <p>這是一個版本的問題，網路上教學建議使用下面的做法，是不好的<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$qProvider<span class="token punctuation">.</span><span class="token function">errorOnUnhandledRejections</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$qProvider.errorOnUnhandledRejections(false)。</code></pre>
 <p>這個問題是一個已被解決的 bug<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 <p><strong>package.json</strong></p>
 <p>原本</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"angular"</span><span class="token operator">:</span> <span class="token string">"^1.7.4"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"angular-route"</span><span class="token operator">:</span> <span class="token string">"^1.5.7"</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  &quot;angular&quot;: &quot;^1.7.4&quot;,
+  &quot;angular-route&quot;: &quot;^1.5.7&quot;,
+&#125;</code></pre>
 <p>angular-route 換新版</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"angular"</span><span class="token operator">:</span> <span class="token string">"^1.7.4"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"angular-route"</span><span class="token operator">:</span> <span class="token string">"^1.5.11"</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  &quot;angular&quot;: &quot;^1.7.4&quot;,
+  &quot;angular-route&quot;: &quot;^1.5.11&quot;,
+&#125;</code></pre>
 <blockquote>
 <p>AngularJS 適用的 angular-route 版本最新就是 1.5.11</p>
 </blockquote>
@@ -291,54 +295,54 @@ angular<span class="token punctuation">.</span><span class="token function">modu
 <p>Uncaught ReferenceError: jQuery is not defined</p>
 </div>
 <p>發生在，把下面這段程式</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">window<span class="token punctuation">.</span>jQuery <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'jquery'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">window.jQuery &#x3D; require(&#39;jquery&#39;);</code></pre>
 <p>改成這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> $ <span class="token keyword">from</span> <span class="token string">'jquery'</span><span class="token punctuation">;</span>
-window<span class="token punctuation">.</span>jQuery <span class="token operator">=</span> $<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import $ from &#39;jquery&#39;;
+window.jQuery &#x3D; $;</code></pre>
 <p>解決方式<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
 <p><strong>webpack.config.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> webpack <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const webpack &#x3D; require(&#39;webpack&#39;);
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>ProvidePlugin</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-      <span class="token string-property property">'jQuery'</span><span class="token operator">:</span> <span class="token string">'jquery'</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; &#123;
+  plugins: [
+    new webpack.ProvidePlugin(&#123;
+      &#39;jQuery&#39;: &#39;jquery&#39;
+    &#125;)
+  ],
+&#125;</code></pre>
 <p>在 config 加上這個可以宣告成全域變數 <code>window.jQuery</code></p>
 <h2 id="修正-router"><a class="header-anchor" href="#修正-router">¶</a>修正 router</h2>
 <p>網址是否樣子一樣？</p>
 <h3 id="angular-router-的-hash-設定"><a class="header-anchor" href="#angular-router-的-hash-設定">¶</a>angular-router 的 hash 設定</h3>
 <p><strong>原本的網址</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;host.name&#x2F;#&#x2F;hash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">https:&#x2F;&#x2F;host.name&#x2F;#&#x2F;hash</code></pre>
 <p><strong>出錯的網址</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;host.name&#x2F;#!&#x2F;hash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">https:&#x2F;&#x2F;host.name&#x2F;#!&#x2F;hash</code></pre>
 <p><strong>解決方式</strong></p>
 <p>加入 <code>$locationProvider</code> 處理網址<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'$routeProvider'</span><span class="token punctuation">,</span> <span class="token string">'$locationProvider'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$routeProvider<span class="token punctuation">,</span> $locationProvider</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  $locationProvider<span class="token punctuation">.</span><span class="token function">hashPrefix</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.config([&#39;$routeProvider&#39;, &#39;$locationProvider&#39;, function($routeProvider, $locationProvider) &#123;
+  $locationProvider.hashPrefix(&#39;&#39;);
+  &#x2F;&#x2F;...
+&#125;])</code></pre>
 <h3 id="angular-route-套件版本匹配問題-v2"><a class="header-anchor" href="#angular-route-套件版本匹配問題-v2">¶</a>angular-route 套件版本匹配問題</h3>
 <p>錯誤訊息</p>
 <div class="danger">
 <p>angular.js:15536 Possibly unhandled rejection: undefined</p>
 </div>
 <p>這是一個版本的問題，網路上教學建議使用下面的做法，是不好的<sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$qProvider<span class="token punctuation">.</span><span class="token function">errorOnUnhandledRejections</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$qProvider.errorOnUnhandledRejections(false)。</code></pre>
 <p>這個問題是一個已被解決的 bug<sup class="footnote-ref"><a href="#fn3" id="fnref3:1">[3:1]</a></sup></p>
 <p><strong>package.json</strong></p>
 <p>原本</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"angular"</span><span class="token operator">:</span> <span class="token string">"^1.7.4"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"angular-route"</span><span class="token operator">:</span> <span class="token string">"^1.5.7"</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  &quot;angular&quot;: &quot;^1.7.4&quot;,
+  &quot;angular-route&quot;: &quot;^1.5.7&quot;,
+&#125;</code></pre>
 <p>angular-route 換新版</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"angular"</span><span class="token operator">:</span> <span class="token string">"^1.7.4"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"angular-route"</span><span class="token operator">:</span> <span class="token string">"^1.5.11"</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  &quot;angular&quot;: &quot;^1.7.4&quot;,
+  &quot;angular-route&quot;: &quot;^1.5.11&quot;,
+&#125;</code></pre>
 <blockquote>
 <p>AngularJS 適用的 angular-route 版本最新就是 1.5.11</p>
 </blockquote>
@@ -348,32 +352,32 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <div class="danger">
 <p>TypeError: Cannot read property ‘value’ of undefined</p>
 </div>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"dataTable"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">"dTable"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token literal-property property">controller</span><span class="token operator">:</span> myController<span class="token punctuation">,</span>
-  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">init</span><span class="token operator">:</span> <span class="token string">'&lt;'</span><span class="token punctuation">,</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.module(&quot;dataTable&quot;, []).component(&quot;dTable&quot;, &#123;
+  &#x2F;&#x2F;...
+  controller: myController,
+  bindings: &#123;
+    init: &#39;&lt;&#39;,
+    &#x2F;&#x2F;...
+  &#125;,
+  &#x2F;&#x2F;...
+&#125;);
 
-<span class="token keyword">function</span> <span class="token function">myController</span> <span class="token punctuation">(</span><span class="token comment">/* ... */</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token keyword">this</span><span class="token punctuation">.</span>init<span class="token punctuation">.</span>value <span class="token comment">//error</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function myController (&#x2F;* ... *&#x2F;) &#123;
+  &#x2F;&#x2F;...
+  this.init.value &#x2F;&#x2F;error
+  &#x2F;&#x2F;...
+&#125;</code></pre>
 <p>簡單的說就是 component 裡 <code>bindings</code> 的變數，並沒有在 controller function 的 <code>this</code> 裡。</p>
 <p><strong>解決方式</strong></p>
 <p>在 AngularJS 的 component 裡，<code>bindings</code> 的變數，必須要等 <code>$onInit</code> 時期，才會建構完成。</p>
 <p>所以，有關 <code>bindings</code> 變數的操作都要放到 <code>$onInit</code> 裡~~，至於為什麼之前可以跑，我就不知道了~~，之前可以跑的原因，是因為 controller 並沒有 lifecycle 所以將 controller 這個 function 跑完就執行變數初始化。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">myController</span> <span class="token punctuation">(</span><span class="token comment">/* ... */</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function-variable function">$onInit</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>init<span class="token punctuation">.</span>value
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function myController (&#x2F;* ... *&#x2F;) &#123;
+  &#x2F;&#x2F;...
+  this.$onInit &#x3D; function () &#123;
+    this.init.value
+  &#125;
+  &#x2F;&#x2F;...
+&#125;</code></pre>
 <h2 id="時間格式問題"><a class="header-anchor" href="#時間格式問題">¶</a>時間格式問題</h2>
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30537886/error-ngmodeldatefmt-expected-2015-05-29t190616-693209z-to-be-a-date-a">https://stackoverflow.com/questions/30537886/error-ngmodeldatefmt-expected-2015-05-29t190616-693209z-to-be-a-date-a</a></p>
 <p>原本就有的 bug 暫不處理</p>
@@ -381,7 +385,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <p>這個問題，發生在已加上 alasql 套件相依的檔案上，而且還有使用 XLSX 的 alasql 語法。</p>
 <p>錯誤訊息</p>
 <div class="danger">
-<pre class="line-numbers language-none"><code class="language-none">angular.js:15536 Error: Please include the xlsx.js library
+<pre class="language-none"><code class="language-none">angular.js:15536 Error: Please include the xlsx.js library
     at getXLSX (alasql.js:4299)
     at Object.alasql.into.XLSX (alasql.js:17035)
     at alasql.Query.eval [as intoallfn] (eval at yy.Select.compile (alasql.js:NaN), &lt;anonymous&gt;:3:33)
@@ -391,63 +395,63 @@ module<span class="token punctuation">.</span>exports <span class="token operato
     at eval (alasql.js:6865)
     at Array.forEach (&lt;anonymous&gt;)
     at queryfn (alasql.js:6861)
-    at statement (alasql.js:8009) &quot;Possibly unhandled rejection: &#123;&#125;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    at statement (alasql.js:8009) &quot;Possibly unhandled rejection: &#123;&#125;&quot;</code></pre>
 </div>
 <p>要先知道， alasql 本來就有相依性於 xlsx</p>
 <p><img src="/images/b9980773-rcskWY0.png" alt=""></p>
 <p><strong>alasql 本身有個 bug</strong></p>
 <p>以 browser 執行環境為例!!</p>
 <p>下面的 <code>getXLSX()</code> 一直都會 return <code>null</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token function-variable function">getXLSX</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> <span class="token constant">XLSX</span> <span class="token operator">=</span> alasql<span class="token punctuation">[</span><span class="token string">"private"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>externalXlsxLib<span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var getXLSX &#x3D; function() &#123;
+  var XLSX &#x3D; alasql[&quot;private&quot;].externalXlsxLib;
 
-  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token constant">XLSX</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token constant">XLSX</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  if (XLSX) &#123;
+    return XLSX;
+  &#125;
 
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>utils<span class="token punctuation">.</span>isNode <span class="token operator">||</span> utils<span class="token punctuation">.</span>isBrowserify <span class="token operator">||</span> utils<span class="token punctuation">.</span>isMeteorServer<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">/*not-for-browser/*
-    XLSX = require('xlsx') || null;
-    //*/</span>
-  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-    <span class="token constant">XLSX</span> <span class="token operator">=</span> utils<span class="token punctuation">.</span>global<span class="token punctuation">.</span><span class="token constant">XLSX</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  if (utils.isNode || utils.isBrowserify || utils.isMeteorServer) &#123;
+    &#x2F;*not-for-browser&#x2F;*
+    XLSX &#x3D; require(&#39;xlsx&#39;) || null;
+    &#x2F;&#x2F;*&#x2F;
+  &#125; else &#123;
+    XLSX &#x3D; utils.global.XLSX || null;
+  &#125;
 
-  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">===</span> <span class="token constant">XLSX</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'Please include the xlsx.js library'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  if (null &#x3D;&#x3D;&#x3D; XLSX) &#123;
+    throw new Error(&#39;Please include the xlsx.js library&#39;);
+  &#125;
 
-  <span class="token keyword">return</span> <span class="token constant">XLSX</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  return XLSX;
+&#125;;</code></pre>
 <p>這一段程式碼出了問題，所以造成無法順利運作<br>
 目前尚未有好的解決方案。</p>
 <p>不過有找到臨時解決方式<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup>，我自己是以下面的步驟解決</p>
 <p><strong>安裝</strong></p>
 <p>如果要用 alasql + xlsx 的話，一定要另外自己安裝 xlsx 套件。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">--save</span> alasql xlsx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save alasql xlsx</code></pre>
 <blockquote>
 <p>關於 xls 的套件，非常多。<br>
 有 xls, xlsjs, js-xlsx … 太多啦！這些是我誤以為而安裝上去的</p>
 </blockquote>
 <p><strong>webpack.config.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">resolve</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">alias</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token string-property property">"@"</span><span class="token operator">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'./'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">resolve: &#123;
+  alias: &#123;
+    &quot;@&quot;: path.resolve(__dirname, &#39;.&#x2F;&#39;)
+  &#125;
+&#125;</code></pre>
 <p><strong>using alasql 的檔案.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> alasql <span class="token keyword">from</span> <span class="token string">'@/alasql'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import alasql from &#39;@&#x2F;alasql&#39;;</code></pre>
 <p><strong>/alasql/index.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> alasql <span class="token keyword">from</span> <span class="token string">'alasql'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token constant">XLSX</span> <span class="token keyword">from</span> <span class="token string">'xlsx'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import alasql from &#39;alasql&#39;;
+import XLSX from &#39;xlsx&#39;;
 
-alasql<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>isBrowserify <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-alasql<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>global<span class="token punctuation">.</span><span class="token constant">XLSX</span> <span class="token operator">=</span> <span class="token constant">XLSX</span><span class="token punctuation">;</span>
+alasql.utils.isBrowserify &#x3D; false;
+alasql.utils.global.XLSX &#x3D; XLSX;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> alasql<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default alasql;</code></pre>
 <p>重點是在使用時，強制設定。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">alasql<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>isBrowserify <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-alasql<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>global<span class="token punctuation">.</span><span class="token constant">XLSX</span> <span class="token operator">=</span> <span class="token constant">XLSX</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">alasql.utils.isBrowserify &#x3D; false;
+alasql.utils.global.XLSX &#x3D; XLSX;</code></pre>
 <p>只是我把它集中起來，要使用時，再宣告 <code>import alasql from '@/alasql';</code></p>
 <h2 id="webpack-編-prod-不會動-dev-正常"><a class="header-anchor" href="#webpack-編-prod-不會動-dev-正常">¶</a>Webpack 編 prod 不會動, dev 正常</h2>
 <p>沒有錯誤訊息</p>
@@ -459,17 +463,17 @@ alasql<span class="token punctuation">.</span>utils<span class="token punctuatio
 <li>menu 的顯示與否是用 API 回傳值控制 <code>ng-show</code></li>
 <li>登入畫面內容，是由 <code>ngView</code> 渲染</li>
 </ol>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-  <span class="token comment">&lt;!-- &lt;ng-include src="'./partial/navbar.html'">&lt;/ng-include> --></span>
-  <span class="token comment">&lt;!-- ngInclude: --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ng-include</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>./partial/navbarByFunc.html'<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ng-scope<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment">&lt;!-- menu --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ng-include</span><span class="token punctuation">></span></span>
-  <span class="token comment">&lt;!-- ngView: --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">ng-view</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ng-scope<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment">&lt;!-- form --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;body&gt;
+  &lt;!-- &lt;ng-include src&#x3D;&quot;&#39;.&#x2F;partial&#x2F;navbar.html&#39;&quot;&gt;&lt;&#x2F;ng-include&gt; --&gt;
+  &lt;!-- ngInclude: --&gt;
+  &lt;ng-include src&#x3D;&quot;&#39;.&#x2F;partial&#x2F;navbarByFunc.html&#39;&quot; class&#x3D;&quot;ng-scope&quot;&gt;
+    &lt;!-- menu --&gt;
+  &lt;&#x2F;ng-include&gt;
+  &lt;!-- ngView: --&gt;
+  &lt;div ng-view&#x3D;&quot;&quot; class&#x3D;&quot;ng-scope&quot;&gt;
+    &lt;!-- form --&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;body&gt;</code></pre>
 <h3 id="找線索"><a class="header-anchor" href="#找線索">¶</a>找線索</h3>
 <p>懷疑過</p>
 <ul>
@@ -478,33 +482,33 @@ alasql<span class="token punctuation">.</span>utils<span class="token punctuatio
 </ul>
 <p>當然，這就花了很多時間排除</p>
 <p>在茫茫大海中，無意間改改下面這段程式碼…(沒錯！單純的只是基於操 code 看不順眼想修改)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'$routeProvider'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$routeProvider</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-  $routeProvider<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span><span class="token punctuation">&#123;</span><span class="token comment">/*...*/</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>  <span class="token comment">// 剛進網站 要進入登入頁</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.config([&#39;$routeProvider&#39;, function($routeProvider)&#123;
+  $routeProvider.when(&#39;&#x2F;&#39;,&#123;&#x2F;*...*&#x2F;&#125;)  &#x2F;&#x2F; 剛進網站 要進入登入頁
 
-  <span class="token keyword">var</span> originalWhen <span class="token operator">=</span> $routeProvider<span class="token punctuation">.</span>when<span class="token punctuation">;</span>
-  $routeProvider<span class="token punctuation">.</span><span class="token function-variable function">when</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">path<span class="token punctuation">,</span> route</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 重新寫一個 when 並且呼叫原本的 when</span>
-    <span class="token keyword">return</span> <span class="token function">originalWhen</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>$routeProvider<span class="token punctuation">,</span> path<span class="token punctuation">,</span> route<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  var originalWhen &#x3D; $routeProvider.when;
+  $routeProvider.when &#x3D; function(path, route) &#123;
+    &#x2F;&#x2F; 重新寫一個 when 並且呼叫原本的 when
+    return originalWhen.call($routeProvider, path, route);
+  &#125;;
 
-  <span class="token comment">/* other route*/</span>
-  $routeProvider<span class="token punctuation">.</span><span class="token function">when</span> <span class="token punctuation">(</span><span class="token comment">/* ... */</span><span class="token punctuation">)</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;* other route*&#x2F;
+  $routeProvider.when (&#x2F;* ... *&#x2F;)
+  &#x2F;&#x2F;...
+&#125;]);</code></pre>
 <p>4~12 行可以和 29 行合併成這樣寫</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$routeProvider<span class="token punctuation">.</span><span class="token function">when</span> <span class="token punctuation">(</span><span class="token comment">/* ... */</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token comment">//...</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">$routeProvider.when (&#x2F;* ... *&#x2F;).when().when()&#x2F;&#x2F;...</code></pre>
 <p>但是竟然改變了出錯的行為</p>
 <p><strong>發現新線索</strong></p>
 <p>開新的畫面，除了 menu 之外，畫面其它的地方都空白<br>
 仔細觀察發現 <code>ngView</code> 並沒有渲染任何東西。</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-  <span class="token comment">&lt;!-- &lt;ng-include src="'./partial/navbar.html'">&lt;/ng-include> --></span>
-  <span class="token comment">&lt;!-- ngInclude: --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ng-include</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>./partial/navbarByFunc.html'<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ng-scope<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment">&lt;!-- menu --></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ng-include</span><span class="token punctuation">></span></span>
-  <span class="token comment">&lt;!-- ngView: --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;body&gt;
+  &lt;!-- &lt;ng-include src&#x3D;&quot;&#39;.&#x2F;partial&#x2F;navbar.html&#39;&quot;&gt;&lt;&#x2F;ng-include&gt; --&gt;
+  &lt;!-- ngInclude: --&gt;
+  &lt;ng-include src&#x3D;&quot;&#39;.&#x2F;partial&#x2F;navbarByFunc.html&#39;&quot; class&#x3D;&quot;ng-scope&quot;&gt;
+    &lt;!-- menu --&gt;
+  &lt;&#x2F;ng-include&gt;
+  &lt;!-- ngView: --&gt;
+&lt;&#x2F;body&gt;</code></pre>
 <h2 id="整理線索"><a class="header-anchor" href="#整理線索">¶</a>整理線索</h2>
 <ol>
 <li>發現從登入之後，登入畫面出錯(不會被替換成其它的頁面內容) -&gt; 登入後，的 <code>ngView</code> 不渲染</li>
@@ -514,46 +518,46 @@ alasql<span class="token punctuation">.</span>utils<span class="token punctuatio
 <h2 id="檢視-route-可能出問題的地方"><a class="header-anchor" href="#檢視-route-可能出問題的地方">¶</a>檢視 route 可能出問題的地方</h2>
 <p>恢復這段程式成修改前的樣子。</p>
 <p><strong>route.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'$routeProvider'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$routeProvider</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-  $routeProvider<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token comment">//暫時放著</span>
-    <span class="token literal-property property">templateUrl</span><span class="token operator">:</span> <span class="token string">'./../pages/login.html'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">controller</span><span class="token operator">:</span> <span class="token string">'loginController as Ctrl'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">resolve</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">validateAuth</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token string">'funcService'</span><span class="token punctuation">,</span>
-        <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">funcService</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-          funcService<span class="token punctuation">.</span><span class="token function">validateAuth</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-      <span class="token punctuation">]</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.config([&#39;$routeProvider&#39;, function($routeProvider)&#123;
+  $routeProvider.when(&#39;&#x2F;&#39;, &#123; &#x2F;&#x2F;暫時放著
+    templateUrl: &#39;.&#x2F;..&#x2F;pages&#x2F;login.html&#39;,
+    controller: &#39;loginController as Ctrl&#39;,
+    resolve: &#123;
+      validateAuth: [
+        &#39;funcService&#39;,
+        function(funcService) &#123;
+          funcService.validateAuth(&quot;&#x2F;&quot;);
+        &#125;
+      ]
+    &#125;
+  &#125;)
 
-  <span class="token keyword">const</span> originalWhen <span class="token operator">=</span> $routeProvider<span class="token punctuation">.</span>when<span class="token punctuation">;</span>
-  $routeProvider<span class="token punctuation">.</span><span class="token function-variable function">when</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">path<span class="token punctuation">,</span> route</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    route<span class="token punctuation">.</span>resolve <span class="token operator">||</span> <span class="token punctuation">(</span>route<span class="token punctuation">.</span>resolve <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    angular<span class="token punctuation">.</span><span class="token function">extend</span><span class="token punctuation">(</span>route<span class="token punctuation">.</span>resolve<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-      <span class="token function-variable function">validateAuth</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">funcService</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> funcService<span class="token punctuation">.</span><span class="token function">validateAuth</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token function">originalWhen</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>$routeProvider<span class="token punctuation">,</span> path<span class="token punctuation">,</span> route<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  const originalWhen &#x3D; $routeProvider.when;
+  $routeProvider.when &#x3D; function(path, route) &#123;
+    route.resolve || (route.resolve &#x3D; &#123;&#125;);
+    angular.extend(route.resolve, &#123;
+      validateAuth: function(funcService) &#123;
+        return funcService.validateAuth();
+      &#125;
+    &#125;);
+    return originalWhen.call($routeProvider, path, route);
+  &#125;;
 
-  $routeProvider<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/default'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">templateUrl</span><span class="token operator">:</span> <span class="token string">'../pages/default.html'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  $routeProvider.when(&#39;&#x2F;default&#39;, &#123;
+    templateUrl: &#39;..&#x2F;pages&#x2F;default.html&#39;
+  &#125;)
+&#125;]);</code></pre>
 <p>先看看 <code>$routeProvider</code> 的用法<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup> ，在此有一個 <code>resolve</code> 的進階用法，但是一般的範例的 <code>resolve</code> 用法如下<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup></p>
 <p><strong>網路上的範例</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$routeProvider<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">"/news"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">templateUrl</span><span class="token operator">:</span> <span class="token string">"newsView.html"</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">controller</span><span class="token operator">:</span> <span class="token string">"newsController"</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">resolve</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function-variable function">message</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">messageService</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> messageService<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">$routeProvider.when(&quot;&#x2F;news&quot;, &#123;
+  templateUrl: &quot;newsView.html&quot;,
+  controller: &quot;newsController&quot;,
+  resolve: &#123;
+    message: function(messageService)&#123;
+        return messageService.getMessage();
+    &#125;
+  &#125;
+&#125;)</code></pre>
 <p>如同官網文件<sup class="footnote-ref"><a href="#fn7" id="fnref7:1">[7:1]</a></sup>介紹，它是一個 object ，而且是記錄「為特定頁面載入前執行的程式碼」</p>
 <p>前面覆寫的 <code>$routeProvider.when</code> 的情況也不知道是不是正確的，就先將這些 <code>resolve</code> 都註解掉。</p>
 <h3 id="webpack-的-prod-編出來的-route-就會動了"><a class="header-anchor" href="#webpack-的-prod-編出來的-route-就會動了">¶</a>Webpack 的 prod 編出來的 route 就會動了</h3>
@@ -572,23 +576,23 @@ alasql<span class="token punctuation">.</span>utils<span class="token punctuatio
 <li>$routeUpdate</li>
 </ul>
 <p>AngularJS 的文件沒有 <code>$routeChangeStart</code> 的範例程式，所以另外找了一下<sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$rootScope<span class="token punctuation">,</span> $location</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  $rootScope<span class="token punctuation">.</span><span class="token function">$on</span><span class="token punctuation">(</span> <span class="token string">"$routeChangeStart"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">event<span class="token punctuation">,</span> next<span class="token punctuation">,</span> current</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>$rootScope<span class="token punctuation">.</span>loggedInUser <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// no logged user, redirect to /login</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span> next<span class="token punctuation">.</span>templateUrl <span class="token operator">===</span> <span class="token string">"partials/login.html"</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-        $location<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">"/login"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.run(function($rootScope, $location) &#123;
+  $rootScope.$on( &quot;$routeChangeStart&quot;, function(event, next, current) &#123;
+    if ($rootScope.loggedInUser &#x3D;&#x3D; null) &#123;
+      &#x2F;&#x2F; no logged user, redirect to &#x2F;login
+      if ( next.templateUrl &#x3D;&#x3D;&#x3D; &quot;partials&#x2F;login.html&quot;) &#123;
+      &#125; else &#123;
+        $location.path(&quot;&#x2F;login&quot;);
+      &#125;
+    &#125;
+  &#125;);
+&#125;);</code></pre>
 <p>將程式碼搬過去，宣告好。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$rootScope<span class="token punctuation">,</span> $location<span class="token punctuation">,</span> funcService</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  $rootScope<span class="token punctuation">.</span><span class="token function">$on</span><span class="token punctuation">(</span> <span class="token string">"$routeChangeStart"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">event<span class="token punctuation">,</span> next<span class="token punctuation">,</span> current</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    funcService<span class="token punctuation">.</span><span class="token function">validateAuth</span><span class="token punctuation">(</span>next<span class="token punctuation">.</span>originalPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.run(function($rootScope, $location, funcService) &#123;
+  $rootScope.$on( &quot;$routeChangeStart&quot;, function(event, next, current) &#123;
+    funcService.validateAuth(next.originalPath);
+  &#125;);
+&#125;)</code></pre>
 <p>route 就會是依設計上的正常運作。</p>
 <h2 id="最後"><a class="header-anchor" href="#最後">¶</a>最後</h2>
 <p>成功 build 出 /dist 的檔案之後，就可以拔掉 gulp 了，剩下的就是設定 webpack 讓它功能正常運作。</p>
@@ -670,21 +674,14 @@ alasql<span class="token punctuation">.</span>utils<span class="token punctuatio
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

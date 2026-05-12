@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -155,47 +159,47 @@
 <p>arrow function 用 Function.prototype.bind 理解是最適合不過的了。<br>
 arrow function 的 由宣告時 function scope 使用的 this 決定的。</p>
 <div>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> obj <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token function-variable function">arrow</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">fnObj</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">fnObjBind</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">fnObjBindNull</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'"use strict"; console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">undefined</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">var obj &#x3D; &#123;
+    arrow: () &#x3D;&gt; console.log(this),
+    fn: function() &#123; console.log(this) &#125;,
+    fnObj: new Function(&#39;console.log(this)&#39;),
+    fnObjBind: new Function(&#39;console.log(this)&#39;).bind(this),
+    fnObjBindNull: new Function(&#39;&quot;use strict&quot;; console.log(this)&#39;).bind(undefined)
+&#125;
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'global obj.fn()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
- <span class="token comment">// &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;</span>
+console.log(&#39;global obj.fn()&#39;, obj.fn())
+ &#x2F;&#x2F; &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'global obj.fnObj()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fnObj</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">// &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;</span>
+console.log(&#39;global obj.fnObj()&#39;, obj.fnObj())
+&#x2F;&#x2F; &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ&#125;
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'global obj.arrow()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">arrow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">// Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;</span>
+console.log(&#39;global obj.arrow()&#39;, obj.arrow())
+&#x2F;&#x2F; Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'global obj.fnObjBind()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fnObjBind</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">// Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;</span>
+console.log(&#39;global obj.fnObjBind()&#39;, obj.fnObjBind())
+&#x2F;&#x2F; Window &#123;parent: Window, opener: null, top: Window, length: 0, frames: Window, …&#125;
 
-<span class="token keyword">function</span> <span class="token constant">AAA</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 直接執行 this 還是 global，但是如果指定成其它的，就可以改變這裡的 this ≠ global</span>
-    <span class="token keyword">var</span> obj <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token function-variable function">arrow</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">fnObj</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">fnObjBind</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">fnObjBindNull</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Function</span><span class="token punctuation">(</span><span class="token string">'"use strict"; console.log(this)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">undefined</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'AAA obj.fn()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#123;</span><span class="token literal-property property">arrow</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">fn</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">fnObj</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">fnObjBind</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">fnObjBindNull</span><span class="token operator">:</span> ƒ<span class="token punctuation">&#125;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'AAA obj.fnObj()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fnObj</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token function">#document</span> <span class="token punctuation">(</span>https<span class="token operator">:</span><span class="token operator">/</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">dwatow.github.io</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'AAA obj.arrow()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">arrow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token function">#document</span> <span class="token punctuation">(</span>https<span class="token operator">:</span><span class="token operator">/</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">dwatow.github.io</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'AAA obj.fnObjBind()'</span><span class="token punctuation">,</span> obj<span class="token punctuation">.</span><span class="token function">fnObjBind</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">undefined</span>
-<span class="token punctuation">&#125;</span>
+function AAA() &#123;
+    &#x2F;&#x2F; 直接執行 this 還是 global，但是如果指定成其它的，就可以改變這裡的 this ≠ global
+    var obj &#x3D; &#123;
+        arrow: () &#x3D;&gt; console.log(this),
+        fn: function() &#123; console.log(this) &#125;,
+        fnObj: new Function(&#39;console.log(this)&#39;),
+        fnObjBind: new Function(&#39;console.log(this)&#39;).bind(this),
+        fnObjBindNull: new Function(&#39;&quot;use strict&quot;; console.log(this)&#39;).bind(undefined)
+    &#125;
+    console.log(&#39;AAA obj.fn()&#39;, obj.fn())
+    &#123;arrow: ƒ, fn: ƒ, fnObj: ƒ, fnObjBind: ƒ, fnObjBindNull: ƒ&#125;
+    console.log(&#39;AAA obj.fnObj()&#39;, obj.fnObj())
+    #document (https:&#x2F;&#x2F;dwatow.github.io&#x2F;)
+    console.log(&#39;AAA obj.arrow()&#39;, obj.arrow())
+    #document (https:&#x2F;&#x2F;dwatow.github.io&#x2F;)
+    console.log(&#39;AAA obj.fnObjBind()&#39;, obj.fnObjBind())
+    undefined
+&#125;
 
-<span class="token keyword">const</span> AAAdocument <span class="token operator">=</span> <span class="token constant">AAA</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span>document<span class="token punctuation">)</span> <span class="token comment">// 改變「呼叫 function 的 function scope 的」 this 指定成 document (隨決定的)</span>
-<span class="token function">AAAdocument</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const AAAdocument &#x3D; AAA.bind(document) &#x2F;&#x2F; 改變「呼叫 function 的 function scope 的」 this 指定成 document (隨決定的)
+AAAdocument();</code></pre>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">start=>start: What is "this"?
 end=>end: "this" is this
@@ -228,7 +232,7 @@ isObjectMethod(yes, right)->contextObject->end
 isNullOrUndefined(yes, right)->isStrictMode1
 isNullOrUndefined(no)->argObj1->end
 contextObject->end
-globalObject->end</textarea><textarea id="flowchart-0-options" style="display: none">{"theme":"simple","scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+globalObject->end</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
     
     </section>
     
@@ -277,21 +281,14 @@ globalObject->end</textarea><textarea id="flowchart-0-options" style="display: n
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

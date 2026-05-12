@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="在 JavaScript 中，儲存資料的方式，長這樣。 &amp;#123;   name: &#39;Chris&#39;,   age: 18 &amp;#125;  ¶抽象資料型別 ADT 強型別語言的話，要先宣告「抽象資料型別」 struct User &amp;#123;   char *name;   int age; &amp;#125;;  然後宣告一個實體 struct User chris;  chris.name &#x3D; &quot;C">
+  <meta name="description" content="在 JavaScript 中，儲存資料的方式，長這樣。 &amp;#123;   name: &#39;Chris&#39;,   age: 18 &amp;#125;  ¶抽象資料型別 ADT 強型別語言的話，要先宣告「抽象資料型別」 struct User &amp;#123;   char *name;   int age; &amp;#125;;  然後宣告一個實體 struct User chris;  chris.n">
 <meta property="og:type" content="article">
 <meta property="og:title" content="存放資料的 state、module">
 <meta property="og:url" content="https://dwatow.github.io/2021/09-26-ironman-2021/2021-09-26-%E5%AD%98%E6%94%BE%E8%B3%87%E6%96%99%E7%9A%84-statemodule/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="在 JavaScript 中，儲存資料的方式，長這樣。 &amp;#123;   name: &#39;Chris&#39;,   age: 18 &amp;#125;  ¶抽象資料型別 ADT 強型別語言的話，要先宣告「抽象資料型別」 struct User &amp;#123;   char *name;   int age; &amp;#125;;  然後宣告一個實體 struct User chris;  chris.name &#x3D; &quot;C">
+<meta property="og:description" content="在 JavaScript 中，儲存資料的方式，長這樣。 &amp;#123;   name: &#39;Chris&#39;,   age: 18 &amp;#125;  ¶抽象資料型別 ADT 強型別語言的話，要先宣告「抽象資料型別」 struct User &amp;#123;   char *name;   int age; &amp;#125;;  然後宣告一個實體 struct User chris;  chris.n">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://dwatow.github.io/images/5f389961-BFysM1Y.png">
 <meta property="article:published_time" content="2021-09-25T16:00:00.000Z">
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -150,74 +154,74 @@
 
 
     <p>在 JavaScript 中，儲存資料的方式，長這樣。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  name: &#39;Chris&#39;,
+  age: 18
+&#125;
+</code></pre>
 <h2 id="抽象資料型別-adt"><a class="header-anchor" href="#抽象資料型別-adt">¶</a>抽象資料型別 ADT</h2>
 <p>強型別語言的話，要先宣告「抽象資料型別」</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">;</span>
-  <span class="token keyword">int</span> age<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-c" data-language="c"><code class="language-c">struct User &#123;
+  char *name;
+  int age;
+&#125;;
+</code></pre>
 <p>然後宣告一個實體</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">User</span> chris<span class="token punctuation">;</span>
+<pre class="language-c" data-language="c"><code class="language-c">struct User chris;
 
-chris<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"Chris"</span><span class="token punctuation">;</span>
-chris<span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">18</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+chris.name &#x3D; &quot;Chris&quot;;
+chris.age &#x3D; 18;
+</code></pre>
 <p>這樣要變更資料，是直接修改變數本身。像是 JavaScript 操作物件一樣的做法。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> chris <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">0</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const chris &#x3D; &#123;
+  name: &#39;&#39;,
+  age: 0
+&#125;
 
-chris<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"Chris"</span><span class="token punctuation">;</span>
-chris<span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">18</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+chris.name &#x3D; &quot;Chris&quot;;
+chris.age &#x3D; 18;
+</code></pre>
 <p>但是，這樣會遇到一些問題</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> chris <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">first_name</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">last_name</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const chris &#x3D; &#123;
+  first_name: &#39;&#39;,
+  last_name: &#39;&#39;,
+&#125;
 
-chris<span class="token punctuation">.</span>first_name <span class="token operator">=</span> <span class="token string">"Chris"</span><span class="token punctuation">;</span>
-chris<span class="token punctuation">.</span>last_name <span class="token operator">=</span> <span class="token string">"Wang"</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+chris.first_name &#x3D; &quot;Chris&quot;;
+chris.last_name &#x3D; &quot;Wang&quot;;
+</code></pre>
 <p>如果想要 full name 就要另外寫一個邏輯，把它們組合起來。或者寫一個 <code>chris.full_name</code> 儲存 <code>&quot;Chris Wang&quot;</code></p>
 <p>那麼，會不會遇到資料不同步的問題？<br>
 如果只是單純改變 <code>last_name</code> 需要同步改變 <code>full_name</code> 的內容嗎？</p>
 <h2 id="抽象介面"><a class="header-anchor" href="#抽象介面">¶</a>抽象介面</h2>
 <p>抽象資料型別，在物件的體現，就是相關的資料與行為，要放在一起。通常強型別語言，都是放在 class 上面。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
-  string first_name<span class="token punctuation">;</span>
-  string last_name<span class="token punctuation">;</span>
-  string full_name<span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class User &#123;
+  string first_name;
+  string last_name;
+  string full_name;
   
-  string <span class="token function">setFirstName</span><span class="token punctuation">(</span><span class="token keyword">const</span> string<span class="token operator">&amp;</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    first_name <span class="token operator">=</span> name<span class="token punctuation">;</span>
-    full_name <span class="token operator">=</span> name <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> last_name
-  <span class="token punctuation">&#125;</span>
+  string setFirstName(const string&amp; name) &#123;
+    first_name &#x3D; name;
+    full_name &#x3D; name + &quot; &quot; + last_name
+  &#125;
   
-  string <span class="token function">setLastName</span><span class="token punctuation">(</span><span class="token keyword">const</span> string<span class="token operator">&amp;</span> name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    last_name <span class="token operator">=</span> name<span class="token punctuation">;</span>
-    full_name <span class="token operator">=</span> first_name <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> name
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  string setLastName(const string&amp; name) &#123;
+    last_name &#x3D; name;
+    full_name &#x3D; first_name + &quot; &quot; + name
+  &#125;
+&#125;;
+</code></pre>
 <p>一樣將 <code>full_name</code> 視為<strong>資料</strong>，並且在設定 <code>first_name</code> 或 <code>last_name</code> 時，同步資料。</p>
 <p>另一種做法</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
-  string first_name<span class="token punctuation">;</span>
-  string last_name<span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class User &#123;
+  string first_name;
+  string last_name;
   
-  string <span class="token function">getFullName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> first_name <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> last_name<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  string getFullName() const &#123;
+    return first_name + &quot; &quot; + last_name;
+  &#125;
+&#125;;
+</code></pre>
 <p>將<strong>取得全名</strong>，視為的<strong>行為</strong>，裡面的實作就是將 <code>first_name</code> 和 <code>last_name</code> 組合起來。</p>
 <p>這兩種做法都是透過 User 的抽象行為，操作資料。</p>
 <p>當然也有針對各別資料設定 getter/setter 的做法。起初這樣寫會覺得很多此一舉，但是後來如果要在 setter 加入資料的定義域，或者要在增加一個 getter 代表資料的另一種表現型式。都是很方便的事情。</p>
@@ -225,39 +229,39 @@ chris<span class="token punctuation">.</span>last_name <span class="token operat
 <blockquote>
 <p>後面我就用 javascript 實作</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>birthday <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">class User &#123;
+  constructor() &#123;
+    this.birthday &#x3D; new Date();
+  &#125;
 
-  <span class="token function">setBirthday</span><span class="token punctuation">(</span><span class="token parameter">year<span class="token punctuation">,</span> month<span class="token punctuation">,</span> day</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">.</span><span class="token function">setYear</span><span class="token punctuation">(</span>year<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">.</span><span class="token function">setMonth</span><span class="token punctuation">(</span>month <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">.</span><span class="token function">setDate</span><span class="token punctuation">(</span>day<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  setBirthday(year, month, day) &#123;
+    this.birthday.setYear(year);
+    this.birthday.setMonth(month -1);
+    this.birthday.setDate(day);
+  &#125;
     
-  <span class="token function">getBirthday</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  getBirthday () &#123;
+    return this.birthday;
+  &#125;
   
-  <span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getFullYear</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">.</span><span class="token function">getFullYear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  getAge() &#123;
+    return new Date().getFullYear() - this.birthday.getFullYear();
+  &#125;
+&#125;;
+</code></pre>
 <p>有了<strong>抽象行為</strong>可以將生日與年齡的關係建立起來，並且讓資料只有一筆，不會有資料同步的問題。</p>
 <h3 id="定義域"><a class="header-anchor" href="#定義域">¶</a>定義域</h3>
 <p>如果你想要在輸入月份超過 12 月，就要拋出例外的話。<br>
 就可以隨時在 setter 的 method 裡面加上限制條件。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">setBirthday</span><span class="token punctuation">(</span><span class="token parameter">year<span class="token punctuation">,</span> month<span class="token punctuation">,</span> day</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// ...</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>month <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">12</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">'month > 12'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>birthday<span class="token punctuation">.</span><span class="token function">setMonth</span><span class="token punctuation">(</span>month <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// ...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">class User &#123;
+  setBirthday(year, month, day) &#123;
+    &#x2F;&#x2F; ...
+    if ((month -1) &gt; 12) throw Error(&#39;month &gt; 12&#39;);
+    this.birthday.setMonth(month -1);
+    &#x2F;&#x2F; ...
+  &#125;
+&#125;;
+</code></pre>
 <p>如果沒有先寫好 setter ，在想加上條件時，就會比較辛苦的再寫一個 function 並且<code>birthday.setMonth(month -1);</code> 搬進去，再將所有原本寫 <code>birthday.setMonth(month -1);</code> 替換成 <code>setBirthday()</code>。</p>
 <h2 id="今天不是要講-vuex-的-state"><a class="header-anchor" href="#今天不是要講-vuex-的-state">¶</a>今天不是要講 vuex 的 state</h2>
 <p><a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/state.html">State | Vuex</a></p>
@@ -276,13 +280,13 @@ chris<span class="token punctuation">.</span>last_name <span class="token operat
 <p>通常系統上需要儲存的方式和後端資料表不一樣。以 user 為例，要嘛就是顯示一個 user 的「列表」要嘛就是顯示「一筆」 user 資料。</p>
 <p>所以，我有一個極致的用法(但不見得每一次都是這樣使用)</p>
 <p>在每一個 module 裡的 state 都這樣規畫，其實就可以符合每一個畫面的需要了。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">one</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">list</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  state: &#123;
+    one: &#123;&#125;,
+    list: []
+  &#125;
+&#125;
+</code></pre>
 <p>這只是一種極致的做法<br>
 極致的地方在於，state 裡的命名，都只有 one 和 list<br>
 當如果有其它的需求，就會另外命名<br>
@@ -341,21 +345,14 @@ chris<span class="token punctuation">.</span>last_name <span class="token operat
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

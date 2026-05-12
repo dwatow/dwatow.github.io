@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -165,119 +169,119 @@
 <p>原本 angularjs 自定 <code>module</code> 的寫法是直接接 <code>.controller()</code> 指定 controller (function)<br>
 換成 component 的寫法，要在 angularjs 自定 <code>module</code> 後接著 <code>.component()</code> 並且給予一個定義物件，定義 component 的 <code>template</code> 和 <code>controller</code> 之類的屬性。<br>
 建議使用 <code>controllerAs</code> 。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"addReport"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">controller</span><span class="token punctuation">(</span><span class="token string">"myController"</span><span class="token punctuation">,</span> myController<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">angular.module(&quot;addReport&quot;, [])
+.controller(&quot;myController&quot;, myController);</code></pre>
 <p>→</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"injectName"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">"tagName"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">isShow</span><span class="token operator">:</span> <span class="token string">'&lt;'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  template<span class="token punctuation">,</span>
-  <span class="token literal-property property">controller</span><span class="token operator">:</span> myController<span class="token punctuation">,</span>
-  <span class="token literal-property property">controllerAs</span><span class="token operator">:</span> <span class="token string">'Ctrl'</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export default angular.module(&quot;injectName&quot;, [])
+.component(&quot;tagName&quot;, &#123;
+  bindings: &#123;
+    isShow: &#39;&lt;&#39;,
+  &#125;,
+  template,
+  controller: myController,
+  controllerAs: &#39;Ctrl&#39;,
+&#125;).name;</code></pre>
 <blockquote>
 <p>injectName 通常會和 tagName 同名。</p>
 </blockquote>
 <p><strong>templage</strong></p>
 <p><code>$ctrl</code> 就剩下一種了，無法直接使用外部的 ctrl ，但是可以透過 binding 將變數傳進來。</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">ng-if</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>MCtrl.fun<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>max-width:800px<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">ng-click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.goBack()<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>返回列表<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>report-form</span> <span class="token attr-name">report</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.report<span class="token punctuation">"</span></span> <span class="token attr-name">submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>report-form</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span> <span class="token comment">&lt;!--container--></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;div ng-if&#x3D;&quot;MCtrl.fun&quot; class&#x3D;&quot;container&quot; style&#x3D;&quot;max-width:800px&quot;&gt;
+  &lt;p&gt;&lt;a ng-click&#x3D;&quot;Ctrl.goBack()&quot;&gt;返回列表&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+  &lt;report-form report&#x3D;&quot;Ctrl.report&quot; submit&#x3D;&quot;Ctrl.submit&quot;&gt;&lt;&#x2F;report-form&gt;
+&lt;&#x2F;div&gt; &lt;!--container--&gt;</code></pre>
 <p>→</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">ng-if</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.isShow<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>max-width:800px<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">ng-click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.goBack()<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>返回列表<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>report-form</span> <span class="token attr-name">report</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.report<span class="token punctuation">"</span></span> <span class="token attr-name">submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>report-form</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;div ng-if&#x3D;&quot;Ctrl.isShow&quot; class&#x3D;&quot;container&quot; style&#x3D;&quot;max-width:800px&quot;&gt;
+  &lt;p&gt;&lt;a ng-click&#x3D;&quot;Ctrl.goBack()&quot;&gt;返回列表&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+  &lt;report-form report&#x3D;&quot;Ctrl.report&quot; submit&#x3D;&quot;Ctrl.submit&quot;&gt;&lt;&#x2F;report-form&gt;
+&lt;&#x2F;div&gt;</code></pre>
 <h2 id="router"><a class="header-anchor" href="#router">¶</a>router</h2>
 <p>在 route 的 when 裡，只要指定 template，並且填上 component 的使用方式。就包含渲染用的 template ，跑什麼 controller。</p>
 <p>不建議使用外部指定的 controller</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">route</span> <span class="token punctuation">(</span><span class="token parameter">$routeProvider<span class="token punctuation">,</span> $locationProvider</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  $locationProvider<span class="token punctuation">.</span><span class="token function">hashPrefix</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function route ($routeProvider, $locationProvider) &#123;
+  $locationProvider.hashPrefix(&#39;&#39;);
 
   $routeProvider
-  <span class="token comment">//...</span>
-  <span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/addReport'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">templateUrl</span><span class="token operator">:</span> <span class="token string">'./addReport.html'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">controller</span><span class="token operator">:</span> <span class="token string">'myController'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F;...
+  .when(&#39;&#x2F;addReport&#39;, &#123;
+    templateUrl: &#39;.&#x2F;addReport.html&#39;,
+    controller: &#39;myController&#39;
+  &#125;)
+&#125;</code></pre>
 <p>→</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">route</span> <span class="token punctuation">(</span><span class="token parameter">$routeProvider<span class="token punctuation">,</span> $locationProvider</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  $locationProvider<span class="token punctuation">.</span><span class="token function">hashPrefix</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function route ($routeProvider, $locationProvider) &#123;
+  $locationProvider.hashPrefix(&#39;&#39;);
 
   $routeProvider
-  <span class="token comment">//...</span>
-  <span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/addReport'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;tag-name is-show="true">&lt;/tag-name></span><span class="token template-punctuation string">`</span></span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F;...
+  .when(&#39;&#x2F;addReport&#39;, &#123;
+    template: &#96;&lt;tag-name is-show&#x3D;&quot;true&quot;&gt;&lt;&#x2F;tag-name&gt;&#96;
+  &#125;)
+&#125;</code></pre>
 <p>只要把 component 在 html 的使用形式當作 <code>template</code></p>
 <h2 id="binding-function"><a class="header-anchor" href="#binding-function">¶</a>binding function</h2>
 <p>component 要這樣設定的話</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">binding</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">onSubmit</span><span class="token operator">:</span> <span class="token string">'&amp;'</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">binding: &#123;
+  onSubmit: &#39;&amp;&#39;
+&#125;</code></pre>
 <p>template 要這樣寫</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">ng-submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.onSubmit(&#123;$event: Ctrl.code&#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;form ng-submit&#x3D;&quot;Ctrl.onSubmit(&#123;$event: Ctrl.code&#125;)&quot;&gt;
 ...
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;form&gt;</code></pre>
 <p>使用這個 components 要這樣寫</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">myController</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-  <span class="token function">sumit</span><span class="token punctuation">(</span><span class="token parameter">code</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// code === Ctrl.code of component</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>my-form</span> <span class="token attr-name">on-submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Ctrl.submit($event)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>my-form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class myController &#123;
+  constructor () &#123;&#125;
+  sumit(code) &#123;
+    &#x2F;&#x2F; code &#x3D;&#x3D;&#x3D; Ctrl.code of component
+  &#125;
+&#125;</code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;my-form on-submit&#x3D;&quot;Ctrl.submit($event)&quot;&gt;&lt;&#x2F;my-form&gt;</code></pre>
 <h2 id="controller-of-component-es6-class"><a class="header-anchor" href="#controller-of-component-es6-class">¶</a>controller of component → ES6 class</h2>
 <ul>
 <li>改用 <code>class</code> 要注意要先宣告，再 <code>export</code></li>
 <li>內建相依要在 <code>constructor</code> 設定給 this<br>
 不要在 <code>constructor</code> 做初始化變數的事，改到 <code>$onInit</code> 做<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"injectName"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">"tagName"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">isShow</span><span class="token operator">:</span> <span class="token string">'&lt;'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  template<span class="token punctuation">,</span>
-  <span class="token literal-property property">controller</span><span class="token operator">:</span> myController<span class="token punctuation">,</span>
-  <span class="token literal-property property">controllerAs</span><span class="token operator">:</span> <span class="token string">'Ctrl'</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export default angular.module(&quot;injectName&quot;, [])
+.component(&quot;tagName&quot;, &#123;
+  bindings: &#123;
+    isShow: &#39;&lt;&#39;,
+  &#125;,
+  template,
+  controller: myController,
+  controllerAs: &#39;Ctrl&#39;,
+&#125;).name;
 
-myController<span class="token punctuation">.</span>$inject <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+myController.$inject &#x3D; []
 
-<span class="token keyword">function</span> <span class="token function">myController</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'constructor'</span><span class="token punctuation">)</span>
-  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function-variable function">$onInit</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'$onInit'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function myController () &#123;
+  console.log(&#39;constructor&#39;)
+  this.$onInit &#x3D; function () &#123;
+    console.log(&#39;$onInit&#39;)
+  &#125;
+&#125;</code></pre>
 <p>→</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">myController</span><span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token parameter">$routeParams</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'constructor'</span><span class="token punctuation">)</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>$routeParams <span class="token operator">=</span> $routeParams
-  <span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class myController&#123;
+  constructor ($routeParams) &#123;
+    console.log(&#39;constructor&#39;)
+    this.$routeParams &#x3D; $routeParams
+  &#125;
 
-  <span class="token function">$onInit</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'$onInit'</span><span class="token punctuation">)</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>$routeParams<span class="token punctuation">.</span>parameter<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+  $onInit () &#123;
+    console.log(&#39;$onInit&#39;)
+    console.log(this.$routeParams.parameter)
+  &#125;
+&#125;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"injectName"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">"tagName"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">isShow</span><span class="token operator">:</span> <span class="token string">'&lt;'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  template<span class="token punctuation">,</span>
-  <span class="token literal-property property">controller</span><span class="token operator">:</span> myController<span class="token punctuation">,</span>
-  <span class="token literal-property property">controllerAs</span><span class="token operator">:</span> <span class="token string">'Ctrl'</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default angular.module(&quot;injectName&quot;, [])
+.component(&quot;tagName&quot;, &#123;
+  bindings: &#123;
+    isShow: &#39;&lt;&#39;,
+  &#125;,
+  template,
+  controller: myController,
+  controllerAs: &#39;Ctrl&#39;,
+&#125;).name;</code></pre>
 <h2 id="保持-scope-broadcast-或-scope-on-運作"><a class="header-anchor" href="#保持-scope-broadcast-或-scope-on-運作">¶</a>保持 <code>$scope.$broadcast</code> 或 <code>$scope.$on</code> 運作</h2>
 <p>其實 <code>$scope</code> 是要被消滅的，但是一時之間不要修改太大的幅度的話，可以先依照下面的建議放置</p>
 <ul>
@@ -288,25 +292,25 @@ myController<span class="token punctuation">.</span>$inject <span class="token o
 <p>要移除 <code>$inject</code> 語法，就要靠 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/ng-annotate">ng-annotate</a> 套件<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
 <p>相依注入的寫法要拿掉，可以說是費了相當大的困難，目前最好的選擇，可以說是 <a target="_blank" rel="noopener" href="https://github.com/schmod/babel-plugin-angularjs-annotate">babel-plugin-angularjs-annotate</a> 這個原生後繼者</p>
 <p>安裝</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">npm</span> <span class="token function">install</span> babel-plugin-angularjs-annotate --save-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install babel-plugin-angularjs-annotate --save-dev</code></pre>
 <p>在 .babelrc file 加上</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"presets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"@babel/preset-env"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"angularjs-annotate"</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &quot;presets&quot;: [&quot;@babel&#x2F;preset-env&quot;],
+  &quot;plugins&quot;: [&quot;angularjs-annotate&quot;]
+&#125;</code></pre>
 <p>並且! 修改 webpack.config.js 在 babel 的設定，取消排除 <code>node_modules</code> 雖然會造成編出來的 all.js 變肥大，不過這是另一個可以被解決的問題。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">entry</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">output</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">module</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">rules</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.js$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
-      <span class="token comment">//exclude: /(node_modules|vendor)/,</span>
-      <span class="token literal-property property">loader</span><span class="token operator">:</span> <span class="token string">"babel-loader"</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module.exports &#x3D; &#123;
+  entry: &#123;&#125;,
+  output: &#123;&#125;,
+  module: &#123;
+    rules: [&#123;
+      test: &#x2F;\.js$&#x2F;,
+      &#x2F;&#x2F;exclude: &#x2F;(node_modules|vendor)&#x2F;,
+      loader: &quot;babel-loader&quot;
+    &#125;]
+  &#125;
+&#125;;
+</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -367,21 +371,14 @@ myController<span class="token punctuation">.</span>$inject <span class="token o
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

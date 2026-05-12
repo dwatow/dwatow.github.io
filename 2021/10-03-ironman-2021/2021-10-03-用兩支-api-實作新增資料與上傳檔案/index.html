@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -160,55 +164,55 @@
 <p>遇到這種 API，怎麼做呢？</p>
 <h3 id="post-user-id"><a class="header-anchor" href="#post-user-id">¶</a><code>POST</code> <code>/user/:id</code></h3>
 <p><strong>request body</strong></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  name<span class="token operator">:</span> 'chris'<span class="token punctuation">,</span>
-  avatar<span class="token operator">:</span> 'http<span class="token operator">:</span><span class="token comment">//127.0.0.1/img/user_1.jpg'</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  name: &#39;chris&#39;,
+  avatar: &#39;http:&#x2F;&#x2F;127.0.0.1&#x2F;img&#x2F;user_1.jpg&#39;
+&#125;
+</code></pre>
 <p>**response 200 **</p>
 <p>(略)</p>
 <h3 id="post-file"><a class="header-anchor" href="#post-file">¶</a><code>POST</code> <code>/file</code></h3>
 <p><strong>request header</strong></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  'Content-Type'<span class="token operator">:</span> 'multipart/form-data'
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &#39;Content-Type&#39;: &#39;multipart&#x2F;form-data&#39;
+&#125;
+</code></pre>
 <p><strong>request body</strong></p>
 <p>form-data</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  file<span class="token operator">:</span> (binary)
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  file: (binary)
+&#125;
+</code></pre>
 <p>**response 200 **</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  data<span class="token operator">:</span> '/file/<span class="token operator">:</span>file_path'
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  data: &#39;&#x2F;file&#x2F;:file_path&#39;
+&#125;
+</code></pre>
 <h2 id="依照-api-文件寫-vuex"><a class="header-anchor" href="#依照-api-文件寫-vuex">¶</a>依照 API 文件寫 vuex</h2>
 <p>依前幾天建立的默契，可以知道</p>
 <ol>
 <li>state 要建立 file</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token keyword">null</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">state: &#123;
+  file: null
+&#125;,
+</code></pre>
 <ol start="2">
 <li>mutations 要建立 file</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">mutations</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">file</span><span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    state<span class="token punctuation">.</span>file <span class="token operator">=</span> payload
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">mutations: &#123;
+  file(state, payload) &#123;
+    state.file &#x3D; payload
+  &#125;
+&#125;,
+</code></pre>
 <ol start="3">
 <li>getters 要建立 file</li>
 </ol>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">file</span><span class="token operator">:</span> <span class="token parameter">state</span> <span class="token operator">=></span> state<span class="token punctuation">.</span>file
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">getters: &#123;
+  file: state &#x3D;&gt; state.file
+&#125;,
+</code></pre>
 <p>這些一定要做。</p>
 <ol>
 <li>避免直接存取資料</li>
@@ -224,43 +228,43 @@
 <p>所以</p>
 <p>要 file 可以用 <code>$store.getters.file</code> 就取得</p>
 <p><strong>@/store/actions.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> backendAPI <span class="token keyword">from</span> <span class="token string">'@/utility/backendAPI.js'</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import backendAPI from &#39;@&#x2F;utility&#x2F;backendAPI.js&#39;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">uploadFile</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit<span class="token punctuation">,</span> getters <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> file <span class="token operator">=</span> getters<span class="token punctuation">.</span>file<span class="token punctuation">;</span>
-    <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">formDataPOST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/file</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> file <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> res<span class="token punctuation">.</span>data
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default &#123;
+  async uploadFile(&#123; commit, getters &#125;) &#123;
+    const file &#x3D; getters.file;
+    const res &#x3D; await backendAPI.formDataPOST(&#96;&#x2F;file&#96;, &#123; file &#125;)
+    return res.data
+  &#125;
+  &#x2F;&#x2F; ...
+&#125;
+</code></pre>
 <p><strong>src/store/user/actions.js</strong></p>
 <p>在 createUser 上面加上 uploadFile</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> backendAPI <span class="token keyword">from</span> <span class="token string">'@/utility/backendAPI.js'</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import backendAPI from &#39;@&#x2F;utility&#x2F;backendAPI.js&#39;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">async</span> <span class="token function">createUser</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> dispatch<span class="token punctuation">,</span> getters <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> name <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>getters<span class="token punctuation">.</span>file <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  	  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'uploadFile'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">POST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-        name<span class="token punctuation">,</span>
-        <span class="token literal-property property">avatar</span><span class="token operator">:</span> res<span class="token punctuation">.</span>data<span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">POST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-        name<span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">// ...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default &#123;
+  async createUser(&#123; dispatch, getters &#125;, &#123; name &#125;) &#123;
+    if (getters.file !&#x3D; null) &#123;
+  	  const res &#x3D; await dispatch(&#39;uploadFile&#39;);
+      await backendAPI.POST(&#96;&#x2F;user&#96;, &#123;
+        name,
+        avatar: res.data,
+      &#125;);
+    &#125; else &#123;
+      await backendAPI.POST(&#96;&#x2F;user&#96;, &#123;
+        name,
+      &#125;);
+    &#125;
+  &#125;,
+  &#x2F;&#x2F; ...
+&#125;
+</code></pre>
 <p>在新增時就可以直接</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">onSubmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'createUser'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span>getters<span class="token punctuation">.</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">onSubmit() &#123;
+  this.$store.dispatch(&#39;createUser&#39;, this.$store.getters.user);
+&#125;
+</code></pre>
 <h2 id="另一種不推薦的做法"><a class="header-anchor" href="#另一種不推薦的做法">¶</a>另一種不推薦的做法</h2>
 <p>直接在選取完檔案之後，就將檔案先上傳。而不是等到要新增人員時才上傳。</p>
 <p>缺點: 在一次修改的過程中，不斷的換掉檔案，就會不斷的上傳，導致伺服器上的垃圾檔案會更新變多。</p>
@@ -317,21 +321,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

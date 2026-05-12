@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -39,8 +39,8 @@
 <meta property="article:published_time" content="2019-01-20T09:36:20.000Z">
 <meta property="article:modified_time" content="2020-06-08T02:46:46.000Z">
 <meta property="article:author" content="Chris">
-<meta property="article:tag" content="webpack">
 <meta property="article:tag" content="prettier">
+<meta property="article:tag" content="webpack">
 <meta property="article:tag" content="eslint">
 <meta name="twitter:card" content="summary">
   <title>
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -152,44 +156,44 @@
 這次自己來裝看看…順便也研究一下要怎麼和 prettier 一起使用。</p>
 <h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
 <p>在官網找到 npm 上的安裝方式<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install eslint --save-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install eslint --save-dev</code></pre>
 <p>如果你要用在 webpack 可以使用 eslint-loader<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install eslint-loader --save-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install eslint-loader --save-dev</code></pre>
 <p><strong>webpack.config.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">module</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">rules</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.js$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
-        <span class="token literal-property property">exclude</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">(node_modules)</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
-        <span class="token literal-property property">include</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">"src"</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">enforce</span><span class="token operator">:</span> <span class="token string">"pre"</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">use</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-          <span class="token punctuation">&#123;</span>
-            <span class="token literal-property property">loader</span><span class="token operator">:</span> <span class="token string">"eslint-loader"</span>
-          <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">]</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">module.exports &#x3D; &#123;
+  module: &#123;
+    rules: [
+      &#123;
+        test: &#x2F;\.js$&#x2F;,
+        exclude: &#x2F;(node_modules)&#x2F;,
+        include: [resolve(&quot;src&quot;)],
+        enforce: &quot;pre&quot;,
+        use: [
+          &#123;
+            loader: &quot;eslint-loader&quot;
+          &#125;
+        ]
+      &#125;
+    ]
+  &#125;
+&#125;;</code></pre>
 <h2 id="style-設定"><a class="header-anchor" href="#style-設定">¶</a>Style 設定</h2>
 <p>使用問答來進行 <code>.eslintrc.json</code> 檔的生成<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npx eslint --init<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npx eslint --init</code></pre>
 <p>生成的檔案內容</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"es6"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token property">"node"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token property">"browser"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"extends"</span><span class="token operator">:</span> <span class="token string">"eslint:recommended"</span><span class="token punctuation">,</span>
-  <span class="token property">"parserOptions"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"ecmaVersion"</span><span class="token operator">:</span> <span class="token number">2015</span><span class="token punctuation">,</span>
-    <span class="token property">"sourceType"</span><span class="token operator">:</span> <span class="token string">"module"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> ... <span class="token punctuation">&#125;</span> 請刪除整段
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &quot;env&quot;: &#123;
+    &quot;es6&quot;: true,
+    &quot;node&quot;: true,
+    &quot;browser&quot;: true
+  &#125;,
+  &quot;extends&quot;: &quot;eslint:recommended&quot;,
+  &quot;parserOptions&quot;: &#123;
+    &quot;ecmaVersion&quot;: 2015,
+    &quot;sourceType&quot;: &quot;module&quot;
+  &#125;,
+  &quot;rules&quot;: &#123; ... &#125; 請刪除整段
+&#125;</code></pre>
 <h3 id="若要和-prettier-併用"><a class="header-anchor" href="#若要和-prettier-併用">¶</a>若要和 prettier 併用<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></h3>
 <ol>
 <li>打開 <code>.eslintrc</code> 檔</li>
@@ -203,36 +207,36 @@
 <li>設定 webpack.config.js</li>
 </ol>
 <p><strong>webpack.config.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">module</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">rules</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">test</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.js$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
-        <span class="token literal-property property">exclude</span><span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">(node_modules)</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span>
-        <span class="token literal-property property">include</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">"src"</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">enforce</span><span class="token operator">:</span> <span class="token string">"pre"</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">use</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-          <span class="token punctuation">&#123;</span>
-            <span class="token literal-property property">loader</span><span class="token operator">:</span> <span class="token string">"eslint-loader"</span>
-          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-          <span class="token punctuation">&#123;</span>
-            <span class="token literal-property property">loader</span><span class="token operator">:</span> <span class="token string">"prettier-loader"</span>
-          <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">]</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">]</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">module.exports &#x3D; &#123;
+  module: &#123;
+    rules: [
+      &#123;
+        test: &#x2F;\.js$&#x2F;,
+        exclude: &#x2F;(node_modules)&#x2F;,
+        include: [resolve(&quot;src&quot;)],
+        enforce: &quot;pre&quot;,
+        use: [
+          &#123;
+            loader: &quot;eslint-loader&quot;
+          &#125;,
+          &#123;
+            loader: &quot;prettier-loader&quot;
+          &#125;
+        ]
+      &#125;
+    ]
+  &#125;
+&#125;;</code></pre>
 <p>這樣就可以跑完 prettier 跑 eslint 設定檔衝突也不會發生了。</p>
 <h2 id="省略不-lint"><a class="header-anchor" href="#省略不-lint">¶</a>省略不 lint</h2>
 <p>如果目前正在 debug 的地方，要加上 <code>console.log()</code>，想省略不要 lint ，可以利用 eslint 的特殊註解來標註<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
 <p>兩種基本的用法</p>
 <p><strong>單行</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"這一行沒有 eslint"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// eslint-disable-line</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">console.log(&quot;這一行沒有 eslint&quot;); &#x2F;&#x2F; eslint-disable-line</code></pre>
 <p><strong>多行的區塊</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">/* eslint-disable */</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"這裡沒有 eslint"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">/* eslint-enable */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;* eslint-disable *&#x2F;
+console.log(&quot;這裡沒有 eslint&quot;);
+&#x2F;* eslint-enable *&#x2F;</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -265,11 +269,11 @@ console<span class="token punctuation">.</span><span class="token function">log<
                     tags:
                     
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
+  { <a href="/tags/prettier/">prettier</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/prettier/">prettier</a> }
+  { <a href="/tags/webpack/">webpack</a> }
   </li>
 
   <li class="meta-text">
@@ -301,21 +305,14 @@ console<span class="token punctuation">.</span><span class="token function">log<
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

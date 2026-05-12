@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -164,9 +168,9 @@
 </blockquote>
 <p>看來，這些解釋都還滿清楚的。(笑)<br>
 簡單的說就是</p>
-<pre class="line-numbers language-none"><code class="language-none">內聚，指的是和其它程式碼「無」相關
+<pre class="language-none"><code class="language-none">內聚，指的是和其它程式碼「無」相關
 耦合，指的是和其它程式碼「有」相關
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</code></pre>
 <p>只是寫程式的人都知道「高內聚，低耦合」，對於這個口訣該如何用於運用呢？</p>
 <h2 id="運用時要想到的觀念"><a class="header-anchor" href="#運用時要想到的觀念">¶</a>運用時要想到的觀念</h2>
 <p>書上[4]有些線索可以找得到</p>
@@ -238,56 +242,56 @@ you should be able to forget the details and use the routine without any knowled
 <h2 id="舉個例子"><a class="header-anchor" href="#舉個例子">¶</a>舉個例子</h2>
 <p>這是一段，原本不是 JavaScript 的 Code</p>
 <p>給你自己幾秒鐘，看看這一段在做什麼</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">WebService</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">var</span> yaml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">var</span> xml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/event.json"</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class WebService &#123;
+  constructor ()&#123;
+    var yaml_pathname &#x3D; &quot;webservice&#x2F;config&#x2F;configfile.yaml&quot;);
+    var xml_pathname &#x3D; &quot;webservice&#x2F;config&#x2F;event.json&quot;;
 
-    <span class="token keyword">var</span> yaml_file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span> <span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">var</span> <span class="token constant">MESSASGE_LOG</span> <span class="token operator">=</span> <span class="token string">"MessageLog"</span><span class="token punctuation">;</span>
+    var yaml_file &#x3D; new yamlFile (yaml_pathanme);
+    var MESSASGE_LOG &#x3D; &quot;MessageLog&quot;;
 
-    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>yaml_file<span class="token punctuation">.</span><span class="token function">isExists</span><span class="token punctuation">(</span><span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span>fileName <span class="token operator">=</span> <span class="token string">"Log/MsgLog.log"</span><span class="token punctuation">;</span>
-        <span class="token comment">//...</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">,</span> <span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">else</span>
-    <span class="token punctuation">&#123;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">,</span> <span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    if(!yaml_file.isExists(MESSASGE_LOG)) &#123;
+        this.fileLog.fileName &#x3D; &quot;Log&#x2F;MsgLog.log&quot;;
+        &#x2F;&#x2F;...
+        this.fileLog.save(yaml_pathanme, MESSASGE_LOG);
+    &#125;
+    else
+    &#123;
+        this.fileLog.load(yaml_pathanme, MESSASGE_LOG);
+    &#125;
 
-    <span class="token keyword">var</span> event <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Event</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    event<span class="token punctuation">.</span><span class="token function">loadConfig</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    event<span class="token punctuation">.</span><span class="token function">saveConfig</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    var event &#x3D; new Event();
+    event.loadConfig(yaml_pathanme);
+    event.saveConfig(yaml_pathanme);
 
-    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"Sent"</span><span class="token punctuation">,</span> Sent<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"Received"</span><span class="token punctuation">,</span> Received<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"TransactionError"</span><span class="token punctuation">,</span> transactionError<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"MonitorEventReceived"</span><span class="token punctuation">,</span> monitorEventReceived<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event.on(&quot;Sent&quot;, Sent);
+    event.on(&quot;Received&quot;, Received);
+    event.on(&quot;TransactionError&quot;, transactionError);
+    event.on(&quot;MonitorEventReceived&quot;, monitorEventReceived);
 
 
-    <span class="token keyword">var</span> yaml <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">var</span> system_yaml_pathanme <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">var</span> system_yaml <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span><span class="token punctuation">(</span>system_yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    var yaml &#x3D; new yamlFile(yaml_pathanme);
+    var system_yaml_pathanme &#x3D; &quot;webservice&#x2F;config&#x2F;configfile.yaml&quot;);
+    var system_yaml &#x3D; new yamlFile(system_yaml_pathanme);
+    &#x2F;&#x2F;...
+  &#125;
+&#125;
+</code></pre>
 <p>改寫成這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">WebService</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> yaml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">const</span> xml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/event.json"</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class WebService &#123;
+  constructor ()&#123;
+    const yaml_pathname &#x3D; &quot;webservice&#x2F;config&#x2F;configfile.yaml&quot;);
+    const xml_pathname &#x3D; &quot;webservice&#x2F;config&#x2F;event.json&quot;;
 
-    <span class="token function">initialMsgLogFile</span><span class="token punctuation">(</span>yaml_pathname<span class="token punctuation">,</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Log/MsgLog.log</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    initialMsgLogFile(yaml_pathname, &#96;Log&#x2F;MsgLog.log&#96;);
 
-    <span class="token keyword">var</span> config <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">filePathConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">initialSystemLogFile</span><span class="token punctuation">(</span>config<span class="token punctuation">.</span>systemIniPathname<span class="token punctuation">,</span> config<span class="token punctuation">.</span>logPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    var config &#x3D; new filePathConfig();
+    initialSystemLogFile(config.systemIniPathname, config.logPath);
 
-    <span class="token function">initialEvent</span><span class="token punctuation">(</span>yaml_pathname<span class="token punctuation">,</span> xml_pathname<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    initialEvent(yaml_pathname, xml_pathname);
+  &#125;
+&#125;
+</code></pre>
 <h3 id="也許會有疑問"><a class="header-anchor" href="#也許會有疑問">¶</a>也許會有疑問</h3>
 <p>「程式碼沒有要重複使用，為什麼要弄成一個 function？」<br>
 但是，反問一下這個問題<br>
@@ -359,21 +363,14 @@ you should be able to forget the details and use the routine without any knowled
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

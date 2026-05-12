@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -176,8 +180,8 @@
 <p>到 Vue1 左右的時代，其實看得見真正的雙向綁定語法。</p>
 <p>而我猜在 Vue 的 0.11 (<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue/tree/0.11.0">大約2014/11/7</a>) 和 0.12 版 <code>v-model</code> 就是真的<a target="_blank" rel="noopener" href="https://011.vuejs.org/guide/forms.html">雙向綁定</a>，在文件上到 1.0 版有說 <a target="_blank" rel="noopener" href="https://v1.vuejs.org/guide/forms.html">v-model 是語法糖</a>，但<a target="_blank" rel="noopener" href="https://v1.vuejs.org/api/#v-model">沒解釋它是怎麼組成的</a>，在 v2 版才說它是<a target="_blank" rel="noopener" href="https://vuejs.org/v2/api/#model">由 value + input 組成的</a>。</p>
 <h3 id="我有一個大膽的猜想"><a class="header-anchor" href="#我有一個大膽的猜想">¶</a>我有一個大膽的猜想</h3>
-<pre class="line-numbers language-none"><code class="language-none">AngularJS -(借鑑)-&gt; Vue 0.11 -(相容)-&gt; Vue1 -(相容)-&gt; Vue2
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">AngularJS -(借鑑)-&gt; Vue 0.11 -(相容)-&gt; Vue1 -(相容)-&gt; Vue2
+</code></pre>
 <p><code>v-model</code> 只是為了向下相容而留著的語法 (是嗎？)</p>
 <h2 id="what-is-v-model"><a class="header-anchor" href="#what-is-v-model">¶</a>What is <code>v-model</code></h2>
 <p>為了要好好的善用 v-model 我們必須了解什麼情況之下，要記得拆成什麼樣的語法。</p>
@@ -186,16 +190,16 @@
 <p>在 Vue3 的官網有寫<br>
 <a target="_blank" rel="noopener" href="https://v3.vuejs.org/guide/forms.html">https://v3.vuejs.org/guide/forms.html</a></p>
 <p>text and textarea elements use value property and input event;</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string">"text"</span> <span class="token operator">:</span>value<span class="token operator">=</span><span class="token string">"text"</span> @input<span class="token operator">=</span><span class="token string">"updateText"</span><span class="token operator">></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>input</span><span class="token punctuation">></span></span>
-<span class="token operator">&lt;</span>textarea <span class="token operator">:</span>value<span class="token operator">=</span><span class="token string">"text"</span> @input<span class="token operator">=</span><span class="token string">"updateText"</span><span class="token operator">></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>textarea</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;input type&#x3D;&quot;text&quot; :value&#x3D;&quot;text&quot; @input&#x3D;&quot;updateText&quot;&gt;&lt;&#x2F;input&gt;
+&lt;textarea :value&#x3D;&quot;text&quot; @input&#x3D;&quot;updateText&quot;&gt;&lt;&#x2F;textarea&gt;
+</code></pre>
 <p>checkboxes and radiobuttons use checked property and change event;</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string">"checkbox"</span> <span class="token operator">:</span>checked<span class="token operator">=</span><span class="token string">"status === 'A'"</span> value<span class="token operator">=</span><span class="token string">"A"</span> @change<span class="token operator">=</span><span class="token string">"updateStatus"</span><span class="token operator">></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>input</span><span class="token punctuation">></span></span>
-<span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string">"radio"</span> <span class="token operator">:</span>checked<span class="token operator">=</span><span class="token string">"status === 'B'"</span> value<span class="token operator">=</span><span class="token string">"B"</span> @change<span class="token operator">=</span><span class="token string">"updateStatus"</span><span class="token operator">></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>input</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;input type&#x3D;&quot;checkbox&quot; :checked&#x3D;&quot;status &#x3D;&#x3D;&#x3D; &#39;A&#39;&quot; value&#x3D;&quot;A&quot; @change&#x3D;&quot;updateStatus&quot;&gt;&lt;&#x2F;input&gt;
+&lt;input type&#x3D;&quot;radio&quot; :checked&#x3D;&quot;status &#x3D;&#x3D;&#x3D; &#39;B&#39;&quot; value&#x3D;&quot;B&quot; @change&#x3D;&quot;updateStatus&quot;&gt;&lt;&#x2F;input&gt;
+</code></pre>
 <p>select fields use value as a prop and change as an event.</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token operator">&lt;</span>select <span class="token operator">:</span>value<span class="token operator">=</span><span class="token string">"selectedOption"</span> @change<span class="token operator">=</span><span class="token string">"updateOption"</span> <span class="token operator">:</span>options<span class="token operator">=</span><span class="token string">"options"</span><span class="token operator">></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-jsx" data-language="jsx" data-start="1"><code class="language-jsx">&lt;select :value&#x3D;&quot;selectedOption&quot; @change&#x3D;&quot;updateOption&quot; :options&#x3D;&quot;options&quot;&gt;&lt;&#x2F;select&gt;
+</code></pre>
 <p>大多數的時候 <code>v-model = :value + @input</code> ，如果在點擊變更狀態 (select) 時，就要將 <code>@input</code> 改成 <code>@change</code> ，如果只要點一下就可以改好 (checkboxes)，就把 <code>:value</code> 改成 <code>:checked</code></p>
 <h2 id="也許會充滿疑惑-但這是一切的開端"><a class="header-anchor" href="#也許會充滿疑惑-但這是一切的開端">¶</a>也許會充滿疑惑，但這是一切的開端</h2>
 <p>先說，不是一定要這麼做，這只是我的個人小小的偏好。<br>
@@ -253,21 +257,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

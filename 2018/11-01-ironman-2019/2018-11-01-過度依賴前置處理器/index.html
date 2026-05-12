@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -153,8 +157,8 @@
 <p>良好程式碼的優點大同小異。<br>
 不好的程式碼的糙點卻各有巧妙之處。</p>
 </blockquote>
-<pre class="line-numbers language-none"><code class="language-none">此篇的 coding 建議，不適用於 C
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">此篇的 coding 建議，不適用於 C
+</code></pre>
 <h2 id="前置處理器"><a class="header-anchor" href="#前置處理器">¶</a>前置處理器</h2>
 <p>C 語言做到 template 或 generics 就只能使用 MARCO 這樣的前置處理器。<br>
 而 C++ 語言本身內建 template 或 generics 的寫法，所以能使用語法取代就使用語法，不要依賴 C++ 相容於 C 的特性，狂用 MARCO。</p>
@@ -165,84 +169,84 @@
 <h4 id="用在-try-catch"><a class="header-anchor" href="#用在-try-catch">¶</a>用在 <code>try-catch</code></h4>
 <p>在這使用前置處理器，不是一個好主意。</p>
 <p><strong>設計</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">START</span><span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">END</span><span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span>exception<span class="token operator">&amp;</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"Occur exception"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">return</span> <span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"Occur exception"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">return</span> <span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define START()\
+  try &#123;\
+
+#define END()\
+  &#125;\
+    catch(exception&amp; e) &#123;\
+    log(&quot;Occur exception&quot;);\
+    return ;\
+  &#125;\
+    catch(...) &#123;\
+    log(&quot;Occur exception&quot;);\
+    return ;\
+  &#125;\
+</code></pre>
 <p><strong>實際使用</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">START</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token comment">// do something...</span>
-  <span class="token function">END</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">void function () &#123;
+  START()
+  &#x2F;&#x2F; do something...
+  END()
+&#125;
+</code></pre>
 <p>因為就是發生例外了，才要 trace code、下中斷點</p>
 <p><strong>如果真的要 trace code、下中斷點 要怎麼做？</strong></p>
 <p>就做一次前置處理器的行為，把 code 貼過去，變成真正在跑的樣子，再讓錯誤發生，才可以 trace code、下中斷點。QQ</p>
 <h4 id="有-side-effect-的前置處理器"><a class="header-anchor" href="#有-side-effect-的前置處理器">¶</a>有 Side effect 的前置處理器</h4>
 <p>下面這一段的問題，其實不全然是前置處理器的問題，主要的原因在於，它有 side effect</p>
 <p><strong>設計</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">BEGIN_TRANSACTION</span><span class="token expression"><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">int</span> status_code <span class="token operator">=</span> ERROR_SUCCESS<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression">Transaction<span class="token operator">*</span> transaction <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression">transaction <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Transaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define BEGIN_TRANSACTION(transaction, status_code)\
+  int status_code &#x3D; ERROR_SUCCESS;\
+  Transaction* transaction &#x3D; 0;\
+  try\
+  &#123;\
+    transaction &#x3D; new Transaction();\
+    try\
+    &#123;\
 
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">END_TRANSACTION</span><span class="token expression"><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token operator">!</span>transaction<span class="token operator">-></span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token keyword">if</span><span class="token punctuation">(</span> status_code <span class="token operator">==</span> SUCCESS <span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-              <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-              <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-              <span class="token expression">transaction<span class="token operator">-></span><span class="token function">Rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token keyword">delete</span> transaction<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+#define END_TRANSACTION(transaction, status_code)\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+&#125;\
+catch(...)\
+&#123;\
+&#125;\
+&#123;\
+  try\
+  &#123;\
+      if( !transaction-&gt;Commit() )\
+      &#123;\
+          if( status_code &#x3D;&#x3D; SUCCESS )\
+          &#123;\
+              status_code &#x3D; TRANSACTION_ERROR;\
+              log(&quot;END_TRANSACTION Error&quot;);\
+              transaction-&gt;Rollback();\
+          &#125;\
+      &#125;\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+  \
+  try\
+  &#123;\
+      delete transaction;\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+&#125;
+</code></pre>
 <p><strong>使用</strong></p>
 <p>使用上，有幾個問題</p>
 <ol>
@@ -251,12 +255,12 @@
 </ol>
 <p>用起來的行為，已經違反原本 C/C++ 的使用常理，就不是一個好的設計。<br>
 但是若使用一般 function 的設計，它所帶來的限制，反而會帶你走到一個相對好的設計。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">BEGIN_TRANSACTION</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span>
-  <span class="token comment">//do something...</span>
-  <span class="token function">END_TRANSACTION</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">void doSomething() &#123;
+  BEGIN_TRANSACTION(transaction, status_code)
+  &#x2F;&#x2F;do something...
+  END_TRANSACTION(transaction, status_code)
+&#125;
+</code></pre>
 <p>上述程式碼還有 <code>try-catch</code> 可以說嘴，就讓我留到下次吧。</p>
 <h3 id="好的前置處理器用法"><a class="header-anchor" href="#好的前置處理器用法">¶</a>好的前置處理器用法</h3>
 <p>我自己是不使用 前置處理器那一派的，所以沒有什麼使用上的好方法，最好的方法就是用語法取代它。</p>
@@ -264,17 +268,17 @@
 使用前置處理器隱藏複雜性、抽象了完整的程式碼片段並且有適當的命名取代之</p>
 <p><strong>在 C++ 可以用在「條件編譯」</strong>[1]</p>
 <p>可以在每一段不需要到產品 code 上的程式碼加上</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">_debug</span></span>
-  <span class="token comment">/* debug code*/</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#ifdef _debug
+  &#x2F;* debug code*&#x2F;
+#endif
+</code></pre>
 <p>也可以寫成一段 MARCO function。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token function">defined</span><span class="token punctuation">(</span>DEBUG<span class="token punctuation">)</span></span></span>
-  <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">DebugCode</span><span class="token expression"><span class="token punctuation">(</span>code_fragment<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> </span><span class="token comment">/* debug code*/</span> <span class="token expression"><span class="token punctuation">&#125;</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
-  <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">DebugCode</span><span class="token expression"><span class="token punctuation">(</span>code_fragment<span class="token punctuation">)</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#if defined(DEBUG)
+  #define DebugCode(code_fragment) &#123; &#x2F;* debug code*&#x2F; &#125;
+#else
+  #define DebugCode(code_fragment)
+#endif
+</code></pre>
 <h2 id="前端的前置處理器-sass"><a class="header-anchor" href="#前端的前置處理器-sass">¶</a>前端的前置處理器 SASS</h2>
 <p>在六年前，SASS 的出現有如神乎其技一般，可以讓 CSS 的撰寫更加的靈活與方便 (沒錯這就是前置處理器處理的痛點)</p>
 <p>SASS 提供的幾個特色，在寫 CSS 時有如神助。</p>
@@ -302,97 +306,97 @@
 <p><strong>考慮生成檔案大小來編排語法</strong></p>
 <p>在 SASS 中若你這樣寫，確實會生成較少重複的 <code>@media desktop-size</code> 語法，但是這也是前置處理器的問題，並不是開發者的問題。</p>
 <p><strong>mobile.sass</strong></p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">.card </span><span class="token punctuation">&#123;</span>
-  <span class="token comment">// all design of mobile</span>
-  <span class="token property">width</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">.card &#123;
+  &#x2F;&#x2F; all design of mobile
+  width: 100%;
+&#125;
+</code></pre>
 <p><strong>desktop.sass</strong></p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token atrule"><span class="token rule">@media</span> desktop-size</span> <span class="token punctuation">&#123;</span>
-   <span class="token comment">// all design of desktop</span>
-  <span class="token selector">.card </span><span class="token punctuation">&#123;</span>
-    <span class="token property">width</span><span class="token punctuation">:</span> 25%<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">@media desktop-size &#123;
+   &#x2F;&#x2F; all design of desktop
+  .card &#123;
+    width: 25%;
+  &#125;
+&#125;
+</code></pre>
 <p>我個人建議的做法</p>
 <p>檔名是以畫面或元件區分，而每個畫面或元件若有屬性設計成不同尺寸可以同時出現。<br>
 原因是，在處理 RWD 時，其實會一起考慮「某個畫面的各個尺寸」，而不是「某個尺寸的各個畫面」。</p>
 <p><strong>index.sass</strong></p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token comment">// all design of mobile</span>
-<span class="token selector">.card </span><span class="token punctuation">&#123;</span>
-  <span class="token property">width</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
-  <span class="token atrule"><span class="token rule">@media</span> desktop-size</span> <span class="token punctuation">&#123;</span>
-     <span class="token comment">// all design of desktop</span>
-     <span class="token property">width</span><span class="token punctuation">:</span> 25%<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">&#x2F;&#x2F; all design of mobile
+.card &#123;
+  width: 100%;
+  @media desktop-size &#123;
+     &#x2F;&#x2F; all design of desktop
+     width: 25%;
+  &#125;
+&#125;
+</code></pre>
 <p><strong>過度使用巢狀式語法</strong></p>
 <p>巢狀式語法，很好用，好用到常聽見「就像用 HTML 一樣呀」。<br>
 所以，有看過這樣的用法，這其實是不良的用法</p>
 <p>SASS</p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">.folks </span><span class="token punctuation">&#123;</span>
-  <span class="token selector">.talkbubble </span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">@include</span> set_font_<span class="token function">color</span><span class="token punctuation">(</span><span class="token variable">$light_gray</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token property">position</span><span class="token punctuation">:</span> relative<span class="token punctuation">;</span>
-    <span class="token property">line-height</span><span class="token punctuation">:</span> 40px<span class="token punctuation">;</span>
-    <span class="token comment">//...</span>
+<pre class="language-scss" data-language="scss"><code class="language-scss">.folks &#123;
+  .talkbubble &#123;
+    @include set_font_color($light_gray);
+    position: relative;
+    line-height: 40px;
+    &#x2F;&#x2F;...
   
-    <span class="token selector"><span class="token parent important">&amp;</span>::before </span><span class="token punctuation">&#123;</span>
-      <span class="token keyword">@include</span> aligh_<span class="token function">center</span><span class="token punctuation">(</span><span class="token variable">$triangle_hdight</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">@include</span> aligh_<span class="token function">sharp</span><span class="token punctuation">(</span><span class="token variable">$triangle_hdight</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    &amp;::before &#123;
+      @include aligh_center($triangle_hdight);
+      @include aligh_sharp($triangle_hdight);
+    &#125;
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p>HTML</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>folks<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>talkbubble text-center my-5<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>We design greate websites and all sorts of interactive products from start to finish<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token comment">&lt;!--  ...  --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;div class&#x3D;&quot;folks&quot;&gt;
+  &lt;div class&#x3D;&quot;talkbubble text-center my-5&quot;&gt;We design greate websites and all sorts of interactive products from start to finish&lt;&#x2F;div&gt;
+  &lt;!--  ...  --&gt;
+&lt;&#x2F;div&gt;
+</code></pre>
 <p>在這個例子中， <code>talkbubble</code> 是一個可以獨立存在的描述，而不一定是非在 <code>folks</code> 不可。<br>
 這個判斷，也是回歸到問題本身，判斷語法與語意的咬合問題。</p>
 <p><strong>過度使用巢狀式語法 更極端的例子</strong></p>
 <p>將 Selector 變成超級長的情況。<br>
 這將會降低瀏覽器讀取 Selector 的效能。[2]</p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">body </span><span class="token punctuation">&#123;</span>
-  <span class="token selector">header </span><span class="token punctuation">&#123;</span>
-    <span class="token selector">nav </span><span class="token punctuation">&#123;</span>
-      <span class="token comment">//...</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token selector">main </span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token selector">footer </span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">body &#123;
+  header &#123;
+    nav &#123;
+      &#x2F;&#x2F;...
+    &#125;
+  &#125;
+  main &#123;
+    &#x2F;&#x2F;...
+  &#125;
+  footer &#123;
+    &#x2F;&#x2F;...
+  &#125;
+&#125;
+</code></pre>
 <p>或者</p>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">body </span><span class="token punctuation">&#123;</span>
-  <span class="token selector">header </span><span class="token punctuation">&#123;</span>
-    <span class="token selector">nav </span><span class="token punctuation">&#123;</span>
-      <span class="token comment">//...</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">body </span><span class="token punctuation">&#123;</span>
-  <span class="token selector">main </span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-scss" data-language="scss"><code class="language-scss"><span class="token selector">body </span><span class="token punctuation">&#123;</span>
-  <span class="token selector">footer </span><span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">body &#123;
+  header &#123;
+    nav &#123;
+      &#x2F;&#x2F;...
+    &#125;
+  &#125;
+&#125;
+</code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">body &#123;
+  main &#123;
+    &#x2F;&#x2F;...
+  &#125;
+&#125;
+</code></pre>
+<pre class="language-scss" data-language="scss"><code class="language-scss">body &#123;
+  footer &#123;
+    &#x2F;&#x2F;...
+  &#125;
+&#125;
+</code></pre>
 <h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
 <p>[1]: 《Code Complete 2/e》, Ch8 防禦性程式設計, 8.6 除錯輔助工具<br>
 [2]: <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10191613?sc=iThelpR">前端新手村 CSS Cascade 串接</a></p>
@@ -457,21 +461,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

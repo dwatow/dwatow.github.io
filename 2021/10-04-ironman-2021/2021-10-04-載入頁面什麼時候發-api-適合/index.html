@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -59,8 +59,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -155,50 +159,50 @@
 <h2 id="一開始-官網教-axios-的地方"><a class="header-anchor" href="#一開始-官網教-axios-的地方">¶</a>一開始，官網教 axios 的地方</h2>
 <p><a target="_blank" rel="noopener" href="https://vuejs.org/v2/cookbook/using-axios-to-consume-apis.html">Using Axios to Consume APIs — Vue.js</a></p>
 <p>官網教我們用 axios，並且為了將 axios 的資料儲存起來，在 mounted 裡發 API 確保 data 的存取是沒問題的。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">mounted</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">mounted () &#123;
   axios
-    <span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'https://api.coindesk.com/v1/bpi/currentprice.json'</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">response</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>info <span class="token operator">=</span> response<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    .get(&#39;https:&#x2F;&#x2F;api.coindesk.com&#x2F;v1&#x2F;bpi&#x2F;currentprice.json&#39;)
+    .then(response &#x3D;&gt; (this.info &#x3D; response))
+&#125;
+</code></pre>
 <p>所以，如是你對發送 API 的問題，查閱了官網，就會把 <code>fetchUser</code> 寫在 mounted 上面</p>
 <h2 id="官網教-lifecycle-的地方"><a class="header-anchor" href="#官網教-lifecycle-的地方">¶</a>官網教 lifecycle 的地方</h2>
 <p><a target="_blank" rel="noopener" href="https://vuejs.org/v2/guide/instance.html#Data-and-Methods">The Vue Instance — Vue.js</a></p>
 <p>當 Vue 執行到 created 的時候，data 會進入 reactivity 系統上。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
-  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">user</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'chris'</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">beforeCreate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] beforeCreate'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">created</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] created'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">beforeMount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] beforeMount'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] mounted'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export default &#123;
+  name: &#39;About&#39;,
+  data() &#123;
+    return &#123;
+      user: &#123;
+        name: &#39;chris&#39;
+      &#125;
+    &#125;
+  &#125;,
+  beforeCreate() &#123;
+    console.warn(&#39;[component About] beforeCreate&#39;, this.user)
+  &#125;,
+  created() &#123;
+    console.warn(&#39;[component About] created&#39;, this.user)
+  &#125;,
+  beforeMount() &#123;
+    console.warn(&#39;[component About] beforeMount&#39;, this.user)
+  &#125;,
+  mounted() &#123;
+    console.warn(&#39;[component About] mounted&#39;, this.user)
+  &#125;
+&#125;;
+</code></pre>
 <p><img src="/images/27848fd5-PiexFmg.png" alt=""></p>
 <p>因為 created 的時候，data 已經宣告完畢，並且可以存取了，所以，如是你了解 lifecycle 就會把 <code>fetchUser</code> 寫在 created 上面</p>
 <h2 id="如果你用了-vue-router-看了官網"><a class="header-anchor" href="#如果你用了-vue-router-看了官網">¶</a>如果你用了 vue-router，看了官網</h2>
 <p><a target="_blank" rel="noopener" href="https://router.vuejs.org/guide/advanced/navigation-guards.html">Navigation Guards | Vue Router</a></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VueRouter</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token operator">...</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const router &#x3D; new VueRouter(&#123; ... &#125;)
 
-router<span class="token punctuation">.</span><span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">to<span class="token punctuation">,</span> from<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[router beforeEach]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+router.beforeEach((to, from, next) &#x3D;&gt; &#123;
+  console.log(&#39;[router beforeEach]&#39;);
+  next()
+&#125;)
+</code></pre>
 <p><img src="/images/27848fd5-KcbQlhR.png" alt=""></p>
 <p>會發現 beforeEach 比 component 還要早觸發，如果想要讓回傳的資料更早拿到讓頁面載入時，不要看見空白頁，再跳出資料的話，放在 befoeEach 是你的好選擇。</p>
 <h2 id="如果你不想要每一頁都-fetchuser"><a class="header-anchor" href="#如果你不想要每一頁都-fetchuser">¶</a>如果你不想要每一頁都 fetchUser</h2>
@@ -207,17 +211,17 @@ router<span class="token punctuation">.</span><span class="token function">befor
 像 fetchUser，通常就是有使用者詳細資料的頁面才會需要。<br>
 所以，並不是每一頁都要打這一支 API，所以如果可以分成每一頁才需要的 API 這樣使用上就有效率多了，管理上也方便管理</p>
 <p>這時，你就需要 beforeEnter</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">'/about'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
-  <span class="token function-variable function">component</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token comment">/* webpackChunkName: "about" */</span> <span class="token string">'../views/About.vue'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token function-variable function">beforeEnter</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">to<span class="token punctuation">,</span> from<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[router beforeEnter]'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#123;
+  path: &#39;&#x2F;about&#39;,
+  name: &#39;About&#39;,
+  component: () &#x3D;&gt; import(&#x2F;* webpackChunkName: &quot;about&quot; *&#x2F; &#39;..&#x2F;views&#x2F;About.vue&#39;),
+  beforeEnter: (to, from, next) &#x3D;&gt; &#123;
+    console.log(&#39;[router beforeEnter]&#39;);
+    next()
+  &#125;
+&#125;,
 
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <p><img src="/images/27848fd5-LVJ35lO.png" alt=""></p>
 <p>透過 beforeEach 就可以在頁面載入之前，將請求送出去，並且會等待請求回來完成，才載入畫面。</p>
 <p>如果在 beforeEach 寫下了 <code>if (to.path === &quot;/user&quot;)</code> 這樣的判斷，就表示你需要 beforeEnter，透過 beforeEnter 也可以在頁面載入之前，將請求送出去，並且會等待請求回來完成，才載入畫面，而且各別畫面各別設定。</p>
@@ -274,21 +278,14 @@ router<span class="token punctuation">.</span><span class="token function">befor
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

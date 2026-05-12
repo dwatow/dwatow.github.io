@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -187,18 +191,18 @@
 <p>要不要 return 這件事，其實是值得討論的。<br>
 而且，我們其實早就習慣 return 了。</p>
 <p>高中數學有學過</p>
-<pre class="line-numbers language-none"><code class="language-none">y &#x3D; sin(x)
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">y &#x3D; sin(x)
+</code></pre>
 <p>假想一下 <code>sin()</code> 的實作會是長怎樣？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sin</span><span class="token punctuation">(</span><span class="token parameter">radians</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> <span class="token constant">PI</span> <span class="token operator">=</span> <span class="token number">3.1415926588</span><span class="token punctuation">;</span>
-  <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">parseInt</span><span class="token punctuation">(</span>radians <span class="token operator">%</span> <span class="token constant">PI</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">function sin(radians) &#123;
+  const PI &#x3D; 3.1415926588;
+  while (parseInt(radians % PI)) &#123;
+    &#x2F;&#x2F;...
+  &#125;
 
-  <span class="token comment">//...</span>
-  <span class="token keyword">return</span> opposite <span class="token operator">/</span> hypotenuse<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F;...
+  return opposite &#x2F; hypotenuse;
+&#125;</code></pre>
 <p>有 return 將斜邊與對邊相除之後的比例，回傳出來。<br>
 換句話說，<code>比例 = sin</code> 是不是等同於 <code>y = sin(x)</code> 的語意呢？</p>
 <p>如果今天，我們寫了這樣正確的 <code>sin</code> 函數，但是命名不寫 <code>sin</code> 寫了 <code>ChrisCalculated()</code> 這樣是不是完全看不出來，函數實作內容了？如果不了解 sin 定義的人，看了也一定不懂裡面就是 sin 函數。</p>
@@ -207,22 +211,22 @@
 <h2 id="兩個輸出要怎辦？"><a class="header-anchor" href="#兩個輸出要怎辦？">¶</a>兩個輸出要怎辦？</h2>
 <p>在 C++ 中，兩個輸出很簡單，輸出處傳入指標或參考即可。<br>
 兩者在函數的修改，都會影響其變數本體，而不是副本。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">Fun</span><span class="token punctuation">(</span>input i1<span class="token punctuation">,</span> output<span class="token operator">*</span> o1<span class="token punctuation">,</span> output<span class="token operator">*</span> o2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">void Fun(input i1, output* o1, output* o2) &#123;
 
-<span class="token punctuation">&#125;</span>
+&#125;
 
-<span class="token keyword">void</span> <span class="token function">Fun</span><span class="token punctuation">(</span>input i1<span class="token punctuation">,</span> output<span class="token operator">&amp;</span> o1<span class="token punctuation">,</span> output<span class="token operator">&amp;</span> o2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+void Fun(input i1, output&amp; o1, output&amp; o2) &#123;
 
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;
+</code></pre>
 <p>在 JavaScript 中，就將輸出變成物件再傳入。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">Fun</span><span class="token punctuation">(</span><span class="token parameter">input i1<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>output o1<span class="token punctuation">,</span> output o2<span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">function Fun(input i1, &#123;output o1, output o2&#125;) &#123;
 
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+&#125;
+</code></pre>
 <p>這兩種都不是好方法，因為變數傳入函數之後，一般來說都是預設不會修改其變數本身，或者它的修改都不會影響傳入參數之前的樣子 (傳入副本)。</p>
 <p>這樣做確實會產生某些「變數與函數之間的耦合性」要特別寫註解告知伙伴。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">Fun</span><span class="token punctuation">(</span>i1<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> o1<span class="token punctuation">,</span> o2 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// o1, o2: Fun1 的執行結果</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">Fun(i1, &#123; o1, o2 &#125;); &#x2F;&#x2F; o1, o2: Fun1 的執行結果</code></pre>
 
     
     </section>
@@ -280,21 +284,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

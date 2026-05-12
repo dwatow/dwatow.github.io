@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶Node.js 的 module.exports 和 require 今天想要在 JavaScript 做一個 module 被主程式呼叫  example.js main.js  ¶最基本的使用方式 最基本，要先知道「 module 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？ ¶example.js var text &#x3D; &quot;hello&quot;; module.exports &#x3D;">
+  <meta name="description" content="¶Node.js 的 module.exports 和 require 今天想要在 JavaScript 做一個 module 被主程式呼叫  example.js main.js  ¶最基本的使用方式 最基本，要先知道「 module 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？ ¶example.js var text &#x3D; &quot;hello&quot;; m">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node.js 的 module.exports 和 require">
 <meta property="og:url" content="https://dwatow.github.io/2018/02-13-js-module-require-exports/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶Node.js 的 module.exports 和 require 今天想要在 JavaScript 做一個 module 被主程式呼叫  example.js main.js  ¶最基本的使用方式 最基本，要先知道「 module 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？ ¶example.js var text &#x3D; &quot;hello&quot;; module.exports &#x3D;">
+<meta property="og:description" content="¶Node.js 的 module.exports 和 require 今天想要在 JavaScript 做一個 module 被主程式呼叫  example.js main.js  ¶最基本的使用方式 最基本，要先知道「 module 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？ ¶example.js var text &#x3D; &quot;hello&quot;; m">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-02-13T05:54:16.000Z">
 <meta property="article:modified_time" content="2020-06-08T02:46:46.000Z">
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -155,21 +159,21 @@
 <h2 id="最基本的使用方式"><a class="header-anchor" href="#最基本的使用方式">¶</a>最基本的使用方式</h2>
 <p>最基本，要先知道「 <code>module</code> 怎麼樣呼叫過來」，會是一個 scop，是一個 object 嗎？</p>
 <h3 id="example-js"><a class="header-anchor" href="#example-js">¶</a>example.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> text <span class="token operator">=</span> <span class="token string">"hello"</span><span class="token punctuation">;</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> text<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var text &#x3D; &quot;hello&quot;;
+module.exports &#x3D; text;</code></pre>
 <h3 id="main-js"><a class="header-anchor" href="#main-js">¶</a>main.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> example <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"./example.js"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>example<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var example &#x3D; require(&quot;.&#x2F;example.js&quot;);
+console.log(example);</code></pre>
 <h3 id="顯示結果"><a class="header-anchor" href="#顯示結果">¶</a>顯示結果</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node main.js
-hello<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">$ node main.js
+hello</code></pre>
 <p>在此，可以得到一些初步的收獲</p>
 <ol>
 <li><code>module.exports</code> 像是 <code>return</code></li>
 <li><code>require</code> 像是 call function ，等號左值會得到 return 值，無論它是什麼。</li>
 </ol>
 <p>在此，在主程式得到的結果是</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> module <span class="token operator">=</span> text<span class="token punctuation">;</span> <span class="token comment">// var text = "hello";</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var module &#x3D; text; &#x2F;&#x2F; var text &#x3D; &quot;hello&quot;;</code></pre>
 <p><code>require('./example.js')</code> 是載入一個檔案。回傳一個…它要回傳的東西。<br>
 也就是說，一個檔案，可以視為一個模組，讓這個模組回傳「該回傳的東西」</p>
 <p>如果 <code>module.exports = object</code> 就是回傳 object<br>
@@ -178,20 +182,20 @@ hello<span aria-hidden="true" class="line-numbers-rows"><span></span><span></spa
 …(沒完沒了)</p>
 <h2 id="做一些像物件的東西"><a class="header-anchor" href="#做一些像物件的東西">¶</a>做一些像物件的東西</h2>
 <h3 id="example-js-v2"><a class="header-anchor" href="#example-js-v2">¶</a>example.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> text <span class="token operator">=</span> <span class="token string">"hello"</span><span class="token punctuation">;</span>
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">getText</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> text<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var text &#x3D; &quot;hello&quot;;
+module.exports &#x3D; &#123;
+  getText: function() &#123;
+    return text;
+  &#125;
+&#125;;</code></pre>
 <h3 id="main-js-v2"><a class="header-anchor" href="#main-js-v2">¶</a>main.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> example <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"./example.js"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>example<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>example<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var example &#x3D; require(&quot;.&#x2F;example.js&quot;);
+console.log(example.getText());
+console.log(example.text);</code></pre>
 <h3 id="顯示結果-v2"><a class="header-anchor" href="#顯示結果-v2">¶</a>顯示結果</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node main.js
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">$ node main.js
 hello
-undefined<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+undefined</code></pre>
 <p>上述推論的沒有錯。<br>
 可以將 <code>module</code> 當作閉包。</p>
 <h2 id="小心遇到的雷點"><a class="header-anchor" href="#小心遇到的雷點">¶</a>小心遇到的雷點</h2>
@@ -199,38 +203,38 @@ undefined<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 因為參考(或指標)被修改，會造成物件內容被修改(這不直覺呀!!)，所以危險，要避免。</p>
 <p>在初學 js 寫 object 的時候，也會遇到這一類的問題，在此用一個簡化的方式來說明。</p>
 <h3 id="example-js-v3"><a class="header-anchor" href="#example-js-v3">¶</a>example.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> text <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">"hello"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var text &#x3D; &#123;
+  message: &quot;hello&quot;
+&#125;;
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">getText</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> text<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; &#123;
+  getText: function() &#123;
+    return text;
+  &#125;
+&#125;;</code></pre>
 <h3 id="main-js-v3"><a class="header-anchor" href="#main-js-v3">¶</a>main.js</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> example <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"./example.js"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> text <span class="token operator">=</span> example<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-text<span class="token punctuation">.</span>message <span class="token operator">=</span> <span class="token number">34789</span><span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>example<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var example &#x3D; require(&quot;.&#x2F;example.js&quot;);
+var text &#x3D; example.getText();
+text.message &#x3D; 34789;
+console.log(example.getText());</code></pre>
 <h3 id="顯示結果-v3"><a class="header-anchor" href="#顯示結果-v3">¶</a>顯示結果</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node main.js
-&#123; message: 34789 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">$ node main.js
+&#123; message: 34789 &#125;</code></pre>
 <p>因為 js 的 call by sharing，會讓 <code>module</code> 回傳物件的內容被改掉了。</p>
 <h3 id="想要避免的話"><a class="header-anchor" href="#想要避免的話">¶</a>想要避免的話</h3>
 <p>正常的回傳值，要回傳一個副本，執行 call by value 的效果。<br>
 所以，在這種 call by sharing 的情況，就要使用 object clone 的技巧。<br>
 在 function 內部先建立副本，再將副本回傳出來，等同於自己做 call by value。</p>
 <p>在 JavaScript 中，可以使用 <code>Object.assign</code> 來建立物件深層 clone 的副本。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> text <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">message</span><span class="token operator">:</span> <span class="token string">"hello"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var text &#x3D; &#123;
+  message: &quot;hello&quot;
+&#125;;
 
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token function-variable function">getText</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> text<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+module.exports &#x3D; &#123;
+  getText: function() &#123;
+    return Object.assign(&#123;&#125;, text);
+  &#125;
+&#125;;</code></pre>
 
     
     </section>
@@ -280,21 +284,14 @@ module<span class="token punctuation">.</span>exports <span class="token operato
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

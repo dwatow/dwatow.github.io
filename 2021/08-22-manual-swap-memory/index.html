@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -155,29 +159,29 @@
 所以要設定一下虛擬記憶體 (swap) 的大小。通常雲端主機並不會幫你設定，要自己來。</p>
 <h2 id="查看記憶體"><a class="header-anchor" href="#查看記憶體">¶</a>查看記憶體</h2>
 <p>通常 Swap 會設置為實體記憶體的兩倍<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，所以要先看一下目前記憶體有多大。<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">free</span>
-              total        used        <span class="token function">free</span>      shared  buff/cache   available
-Mem:        <span class="token number">3999756</span>      <span class="token number">328648</span>     <span class="token number">3139664</span>       <span class="token number">43328</span>      <span class="token number">531444</span>     <span class="token number">3502496</span>
-Swap:        <span class="token number">102396</span>           <span class="token number">0</span>      <span class="token number">102396</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">$ free
+              total        used        free      shared  buff&#x2F;cache   available
+Mem:        3999756      328648     3139664       43328      531444     3502496
+Swap:        102396           0      102396</code></pre>
 <p>total 3999756 就是總共使用幾 K。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">free</span> <span class="token parameter variable">-m</span>
-              total        used        <span class="token function">free</span>      shared  buff/cache   available
-Mem:           <span class="token number">3906</span>         <span class="token number">310</span>        <span class="token number">3076</span>          <span class="token number">42</span>         <span class="token number">519</span>        <span class="token number">3430</span>
-Swap:            <span class="token number">99</span>           <span class="token number">0</span>          <span class="token number">99</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">$ free -m
+              total        used        free      shared  buff&#x2F;cache   available
+Mem:           3906         310        3076          42         519        3430
+Swap:            99           0          99</code></pre>
 <p>可以改用 mega 為單位，</p>
 <h2 id="設定"><a class="header-anchor" href="#設定">¶</a>設定</h2>
 <p>設定 swap<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> fallocate <span class="token parameter variable">-l</span> 1G /swapfile
-<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /swapfile
-<span class="token function">sudo</span> <span class="token function">mkswap</span> /swapfile
-<span class="token function">sudo</span> <span class="token function">swapon</span> /swapfile<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">sudo fallocate -l 1G &#x2F;swapfile
+sudo chmod 600 &#x2F;swapfile
+sudo mkswap &#x2F;swapfile
+sudo swapon &#x2F;swapfile</code></pre>
 <h2 id="開機啟用"><a class="header-anchor" href="#開機啟用">¶</a>開機啟用</h2>
 <p>開機掛載 swap</p>
-<pre class="line-numbers language-bashscript" data-language="bashscript"><code class="language-bashscript">sudo vim &#x2F;etc&#x2F;fstab<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-bashscript" data-language="bashscript"><code class="language-bashscript">sudo vim &#x2F;etc&#x2F;fstab</code></pre>
 <p>開啟檔案，到最後加入此行</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token punctuation">..</span>.
-<span class="token comment"># 開機掛載 swap</span>
-/swapfile   none swap    sw <span class="token number">0</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">...
+# 開機掛載 swap
+&#x2F;swapfile   none swap    sw 0 0</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -242,21 +246,14 @@ Swap:            <span class="token number">99</span>           <span class="tok
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

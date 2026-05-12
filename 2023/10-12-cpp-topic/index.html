@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -53,8 +53,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -158,12 +162,12 @@
 <blockquote>
 <p><code>++i</code> 快！因為覆寫運算子時，程式會這樣寫</p>
 <p><code>++i</code>:  //加完i，回傳i</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> i<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">i &#x3D; i + 1;
+return i;</code></pre>
 <p><code>i++</code>:  //回傳i，再加i</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> j <span class="token operator">=</span> i
-i <span class="token operator">=</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> j<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">int j &#x3D; i
+i &#x3D; i+1;
+return j;</code></pre>
 <p>因為回傳必定在程式語言的最後一步，所以要先暫存加完的結果。</p>
 </blockquote>
 <p>另外還有另一個也算是正解 <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
@@ -173,83 +177,83 @@ i <span class="token operator">=</span> i<span class="token operator">+</span><s
 </blockquote>
 <p>兩者答案都可以</p>
 <h3 id="2-這列程式有什麼錯誤？"><a class="header-anchor" href="#2-這列程式有什麼錯誤？">¶</a>2. 這列程式有什麼錯誤？</h3>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;map></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;list></span></span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;list&gt;
  
-<span class="token keyword">void</span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  std<span class="token double-colon punctuation">::</span>map<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>list<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token operator">>></span>  filter<span class="token punctuation">;</span>   <span class="token comment">//  &lt;-- 這一列</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+void DoSomething()
+&#123;
+  std::map&lt;std::string, std::list&lt;std::string&gt;&gt;  filter;   &#x2F;&#x2F;  &lt;-- 這一列
+&#125;</code></pre>
 <p>如果有注意過 <code>cout</code> 運算子的人，並且對其運算子進行覆寫，應該就會有印象 <code>&gt;&gt;</code> 是一個運算子。</p>
 <blockquote>
 <p><code>&gt;&gt;</code>，中間要空白<br>
 <code>std::map&lt;std::string, std::list&lt;std::string&gt; &gt;  filter;</code></p>
 </blockquote>
 <h3 id="3-對於單純的get與set屬性-哪個介面設計得好？為什麼？-set與get各選一個"><a class="header-anchor" href="#3-對於單純的get與set屬性-哪個介面設計得好？為什麼？-set與get各選一個">¶</a>3. 對於單純的get與set屬性，哪個介面設計得好？為什麼？(Set與Get各選一個)</h3>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">CompanyEmployeesList</span>
-<span class="token punctuation">&#123;</span>
-<span class="token keyword">private</span>
-    Employee cv_Employee<span class="token punctuation">;</span>
-     <span class="token comment">//...</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class CompanyEmployeesList
+&#123;
+private
+    Employee cv_Employee;
+     &#x2F;&#x2F;...
+public:
+           Employee GetEmployee(int m_EmployeeNumber);
+           Employee GetEmployee(int m_EmployeeNumber) const;
+     const Employee GetEmployee(int m_EmployeeNumber);
+     const Employee GetEmployee(int m_EmployeeNumber) const;
 
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+           Employee GetEmployee(const int m_EmployeeNumber);
+           Employee GetEmployee(const int m_EmployeeNumber) const;
+     const Employee GetEmployee(const int m_EmployeeNumber);
+     const Employee GetEmployee(const int m_EmployeeNumber) const;
 
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-           Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+           Employee GetEmployee(const int&amp; m_EmployeeNumber);
+           Employee GetEmployee(const int&amp; m_EmployeeNumber) const;
+     const Employee GetEmployee(const int&amp; m_EmployeeNumber);
+     const Employee GetEmployee(const int&amp; m_EmployeeNumber) const;
 
-     <span class="token keyword">void</span> <span class="token function">SetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">,</span> Employee m_Employee<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">void</span> <span class="token function">SetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">,</span> Employee m_Employee<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">void</span> <span class="token function">SetEmployee</span><span class="token punctuation">(</span><span class="token keyword">int</span> m_EmployeeNumber<span class="token punctuation">,</span> <span class="token keyword">const</span> Employee<span class="token operator">&amp;</span> m_Employee<span class="token punctuation">)</span><span class="token punctuation">;</span>
-     <span class="token keyword">void</span> <span class="token function">SetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">,</span> <span class="token keyword">const</span> Employee<span class="token operator">&amp;</span> m_Employee<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+     void SetEmployee(int m_EmployeeNumber, Employee m_Employee);
+     void SetEmployee(const int&amp; m_EmployeeNumber, Employee m_Employee);
+     void SetEmployee(int m_EmployeeNumber, const Employee&amp; m_Employee);
+     void SetEmployee(const int&amp; m_EmployeeNumber, const Employee&amp; m_Employee);
+&#125;;</code></pre>
 <blockquote>
 <p>對於單純只是要存取屬性，選以下這兩個介面是最好的，也是限制最多的。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">CompanyEmployeesList</span>
-<span class="token punctuation">&#123;</span>
-<span class="token keyword">private</span>
-    Employee cv_Employee<span class="token punctuation">;</span>
-    <span class="token comment">//...</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-     <span class="token keyword">const</span> Employee <span class="token function">GetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp" data-start="1"><code class="language-cpp">class CompanyEmployeesList
+&#123;
+private
+    Employee cv_Employee;
+    &#x2F;&#x2F;...
+public:
+     const Employee GetEmployee(const int&amp; m_EmployeeNumber) const;</code></pre>
 <p>Get是一個唯讀的 function，所有的值在此 function 皆不會改變。<br>
 回傳值是一個唯讀的物件副本。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">SetEmployee</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> m_EmployeeNumber<span class="token punctuation">,</span> <span class="token keyword">const</span> Employee<span class="token operator">&amp;</span> m_Employee<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp" data-start="8"><code class="language-cpp">void SetEmployee(const int&amp; m_EmployeeNumber, const Employee&amp; m_Employee);
+&#125;;</code></pre>
 <p>傳入的參數是唯讀的 refreance，傳入 refreance 是該物件實體，不像副本還要花時間 copy 一份，而傳入設定成 const 則表示不可修改。<br>
 所以，以這種方式傳入參數，是速度快又保證不會被修改的方式。</p>
 </blockquote>
 <h3 id="4-實作捕捉建構子與解構子的exception"><a class="header-anchor" href="#4-實作捕捉建構子與解構子的exception">¶</a>4. 實作捕捉建構子與解構子的exception</h3>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">foo</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
-<span class="token keyword">public</span><span class="token operator">:</span>
-    <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//建構子</span>
-    <span class="token operator">~</span><span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//解構子</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">class foo&#123;
+    int i;
+    char c;
+public:
+    foo();  &#x2F;&#x2F;建構子
+    ~foo(); &#x2F;&#x2F;解構子
+&#125;;</code></pre>
 <p>提示：<br>
 一般而言，建構子是這樣寫</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">foo<span class="token double-colon punctuation">::</span><span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token operator">:</span><span class="token function">i</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">c</span><span class="token punctuation">(</span><span class="token char">''</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  <span class="token comment">// &lt;-- 建構初始列: 屬性初始化</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">foo::foo()
+:i(0), c(&#39;&#39;)&#123;  &#x2F;&#x2F; &lt;-- 建構初始列: 屬性初始化
 
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;</code></pre>
 <blockquote>
 <p>建構子的exception</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">foo<span class="token double-colon punctuation">::</span><span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">try</span><span class="token operator">:</span><span class="token function">i</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">c</span><span class="token punctuation">(</span><span class="token char">''</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>  <span class="token operator">&lt;</span><span class="token operator">--</span> 建構初始列
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">foo::foo()
+try:i(0), c(&#39;&#39;)&#123;  &lt;-- 建構初始列
     
-<span class="token punctuation">&#125;</span><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;catch(...)
+&#123;    &#125;</code></pre>
 <p>解構子不可以有exception！！<br>
 如果答對，可以問「為什麼」</p>
 <p>因為解構式exception</p>
@@ -263,40 +267,40 @@ i <span class="token operator">=</span> i<span class="token operator">+</span><s
 <p><code>#define k 5</code> vs <code>const int k = 5;</code></p>
 <blockquote>
 <p><code>const int k = 5;</code> 較好</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">a1</span> <span class="token expression"><span class="token number">1</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">a2</span> <span class="token expression"><span class="token number">2</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">a3</span> <span class="token expression"><span class="token number">3</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">a4</span> <span class="token expression"><span class="token number">4</span></span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">a5</span> <span class="token expression"><span class="token number">5</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define a1 1
+#define a2 2
+#define a3 3
+#define a4 4
+#define a5 5</code></pre>
 <p>和</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">enum</span> <span class="token class-name">A</span> <span class="token punctuation">&#123;</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">,</span> a3<span class="token punctuation">,</span> a4<span class="token punctuation">,</span> a5<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">enum A &#123;a1, a2, a3, a4, a5&#125;;</code></pre>
 <p>之間也是 <code>enum A &#123;a1, a2, a3, a4, a5&#125;;</code> 比較好</p>
 <p>因為編譯器可以幫你檢查型別。</p>
 </blockquote>
 <ol start="6">
 <li>去掉重覆的元素</li>
 </ol>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> intv<span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">std::vector&lt;int&gt; intv;
+intv.push(5);
+intv.push(5);
+intv.push(5);
+intv.push(5);
+intv.push(5);</code></pre>
 <blockquote>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std<span class="token double-colon punctuation">::</span>set<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">ints</span><span class="token punctuation">(</span>intv<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> intv<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-intv<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>ints<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ints<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">std::set&lt;int&gt; ints(intv.begin(), intv.end());
+intv.clear();
+intv.insert(ints.begin(), ints.end();</code></pre>
 <p>(做法很多，換容器這種做法，這是我覺得最省事的做法)</p>
 </blockquote>
 <h3 id="7-下面這個c-程式是否有問題"><a class="header-anchor" href="#7-下面這個c-程式是否有問題">¶</a>7. 下面這個C++程式是否有問題</h3>
 <p>是/否</p>
 <p>若有問題，請回答為什麼，並請試寫一個標準C++的版本</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;stdio.h&gt;
 
-<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d\n"</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+void main()
+&#123;
+  printf(&quot;%d\n&quot;, 3);
+&#125;</code></pre>
 <blockquote>
 <ol>
 <li>C++ 標準函式庫的 <code>#include</code> 檔案，不會有 .h 的副檔名。要在 C++ 使用 C 函式庫要寫 <code>#include &lt;cstdio&gt;</code></li>
@@ -304,13 +308,13 @@ intv<span class="token punctuation">.</span><span class="token function">insert<
 <li>不一定要有 <code>return 0;</code> (後來的 complier 會幫你 <code>return 0;</code>) 但標準還是需要加上 <code>return 0;</code></li>
 </ol>
 <p>標準的寫法</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#include &lt;iostream&gt;
  
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token number">3</span> <span class="token operator">&lt;&lt;</span> std<span class="token double-colon punctuation">::</span>endl<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+int main()
+&#123;
+    std::cout &lt;&lt; 3 &lt;&lt; std::endl;
+    return 0;
+&#125;</code></pre>
 </blockquote>
 <hr class="footnotes-sep">
 <section class="footnotes">
@@ -366,21 +370,14 @@ intv<span class="token punctuation">.</span><span class="token function">insert<
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

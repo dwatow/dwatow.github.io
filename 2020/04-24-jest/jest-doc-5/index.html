@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -164,7 +168,7 @@
 <p>在 <a target="_blank" rel="noopener" href="http://xunitpatterns.com/Test%20Double.html">xunitpatterns</a> 裡特別分成五種 Test Double<br>
 分別是 Dummy Object、Test Stub、Test Spy、Fake Object 與 Mock Object。</p>
 <p>其實，就是假的，到超級假的等級區分。</p>
-<pre class="line-numbers language-none"><code class="language-none">No Implement &gt; Dummies &gt; Stubs &gt; Spies &gt; Facke &gt; Real Implement<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">No Implement &gt; Dummies &gt; Stubs &gt; Spies &gt; Facke &gt; Real Implement</code></pre>
 <p>常見的術語，只要知道 Stub、Spy、Mock</p>
 <ul>
 <li>Stub: 回傳 hack-code 內容。</li>
@@ -207,29 +211,29 @@
 <h2 id="using-a-mock-function"><a class="header-anchor" href="#using-a-mock-function">¶</a>Using a mock function</h2>
 <p>Let’s imagine we’re testing an implementation of a function forEach, which invokes a callback for each item in a supplied array.</p>
 <p>假設我們寫了一個 <code>forEach</code> 想要測試它，而執行它，需要 Array 和 callback 當作參數。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">items<span class="token punctuation">,</span> callback</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> index <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> index <span class="token operator">&lt;</span> items<span class="token punctuation">.</span>length<span class="token punctuation">;</span> index<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">callback</span><span class="token punctuation">(</span>items<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">function forEach(items, callback) &#123;
+  for (let index &#x3D; 0; index &lt; items.length; index++) &#123;
+    callback(items[index]);
+  &#125;
+&#125;</code></pre>
 <p>為了要測試 forEach，可以使用一個 mock function ，並且檢查它被呼叫的情況。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> mockCallback <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token parameter">x</span> <span class="token operator">=></span> <span class="token number">42</span> <span class="token operator">+</span> x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> mockCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const mockCallback &#x3D; jest.fn(x &#x3D;&gt; 42 + x);
+forEach([0, 1], mockCallback);
 
-<span class="token comment">// The mock function is called twice</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockCallback<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The mock function is called twice
+expect(mockCallback.mock.calls.length).toBe(2);
 
-<span class="token comment">// The first argument of the first call to the function was 0</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockCallback<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The first argument of the first call to the function was 0
+expect(mockCallback.mock.calls[0][0]).toBe(0);
 
-<span class="token comment">// The first argument of the second call to the function was 1</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockCallback<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The first argument of the second call to the function was 1
+expect(mockCallback.mock.calls[1][0]).toBe(1);
 
-<span class="token comment">// The return value of the first call to the function was 42</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockCallback<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>results<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; The return value of the first call to the function was 42
+expect(mockCallback.mock.results[0].value).toBe(42);</code></pre>
 <h2 id="mock-property"><a class="header-anchor" href="#mock-property">¶</a><code>.mock</code> property</h2>
 <p>每個 mock function，都有一個叫 <code>.mock</code> 的屬性，裡面會記載著 function 如何被呼叫、丟了什麼參數，回傳什麼回傳值。隨著 JavaScript 的持性， mock function 也會記得每次被呼叫時的 <code>this</code> 是誰。</p>
-<pre class="line-numbers language-javascriptconst" data-language="javascriptconst"><div class="caption"><span>myMock </span></div><code class="language-javascriptconst">
+<pre class="line-numbers language-javascriptconst" data-language="javascriptconst" data-start="1"><div class="caption"><span>myMock</span></div><code class="language-javascriptconst">
 const a &#x3D; new myMock(); &#x2F;&#x2F; 第一次呼叫
  const b &#x3D; &#123;
     name: &quot;b&quot;
@@ -241,11 +245,11 @@ console.log(myMock.mock.instances);
 &#x2F;&#x2F; &gt; [ &lt;a&gt;, &lt;b&gt; ]
 
 &#x2F;&#x2F; 實際測出來，這樣印較清楚
-console.log(myMock.mock.instances.constructor.name, &quot;\n&quot;, JSON.stringify(myMock.mock.instances));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+console.log(myMock.mock.instances.constructor.name, &quot;\n&quot;, JSON.stringify(myMock.mock.instances));</code></pre>
 <p>實測印出</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">console.log <span class="token number">2020</span>-04-16/mock.test.js:11
+<pre class="language-shell" data-language="shell"><code class="language-shell">console.log 2020-04-16&#x2F;mock.test.js:11
   Array
-   <span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>,<span class="token punctuation">&#123;</span><span class="token string">"name"</span><span class="token builtin class-name">:</span><span class="token string">"b"</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+   [&#123;&#125;,&#123;&quot;name&quot;:&quot;b&quot;&#125;]</code></pre>
 <p>mock 物件的內容，用在斷言下面幾種情況</p>
 <ol>
 <li>mock function 吃什麼參數</li>
@@ -253,115 +257,115 @@ console.log(myMock.mock.instances.constructor.name, &quot;\n&quot;, JSON.stringi
 <li>mock function new 了幾個實例</li>
 </ol>
 <p>下面的實際執行程式碼，也可以直接翻譯。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock object of mock function as call mockFunction'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> someMockFunction <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token string">'return value'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">someMockFunction</span><span class="token punctuation">(</span><span class="token string">'first arg'</span><span class="token punctuation">,</span> <span class="token string">'second arg'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock object of mock function as call mockFunction&#39;, () &#x3D;&gt; &#123;
+  const someMockFunction &#x3D; jest.fn(() &#x3D;&gt; &#39;return value&#39;);
+  someMockFunction(&#39;first arg&#39;, &#39;second arg&#39;);
 
-  <span class="token comment">// someMockFunction.假物件屬性.呼叫.次數</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; someMockFunction.假物件屬性.呼叫.次數
+  expect(someMockFunction.mock.calls.length).toBe(1);
 
-  <span class="token comment">// someMockFunction.假物件屬性.呼叫[第幾次][第幾個參數]</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'first arg'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'second arg'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; someMockFunction.假物件屬性.呼叫[第幾次][第幾個參數]
+  expect(someMockFunction.mock.calls[0][0]).toBe(&#39;first arg&#39;);
+  expect(someMockFunction.mock.calls[0][1]).toBe(&#39;second arg&#39;);
 
-  <span class="token comment">// someMockFunction.假物件屬性.回傳值[第幾次]</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>results<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'return value'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; someMockFunction.假物件屬性.回傳值[第幾次]
+  expect(someMockFunction.mock.results[0].value).toBe(&#39;return value&#39;);
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock object of mock function as new mockFunction'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> someMockFunction <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">someMockFunction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  a<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'test'</span><span class="token punctuation">;</span>
-  <span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">someMockFunction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;mock object of mock function as new mockFunction&#39;, () &#x3D;&gt; &#123;
+  const someMockFunction &#x3D; jest.fn();
+  const a &#x3D; new someMockFunction();
+  a.name &#x3D; &#39;test&#39;;
+  const b &#x3D; new someMockFunction();
 
-  <span class="token comment">// someMockFunction.假物件屬性.用 new 呼叫.次數</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>instances<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; someMockFunction.假物件屬性.用 new 呼叫.次數
+  expect(someMockFunction.mock.instances.length).toBe(2);
 
-  <span class="token comment">// someMockFunction.假物件屬性.用 new 呼叫[第幾次]的物件.name</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>someMockFunction<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>instances<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F; someMockFunction.假物件屬性.用 new 呼叫[第幾次]的物件.name
+  expect(someMockFunction.mock.instances[0].name).toEqual(&#39;test&#39;);
+&#125;);</code></pre>
 <h2 id="mock-return-values"><a class="header-anchor" href="#mock-return-values">¶</a>Mock Return Values</h2>
 <p><strong>執行假物件的回傳值</strong>，可以在呼叫前 <code>mockReturnValueOnce</code> 快速設定。<br>
 不用寫任何邏輯的方式，直接設定回傳值。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'return Value of mock function'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> myMock <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;return Value of mock function&#39;, () &#x3D;&gt; &#123;
+  const myMock &#x3D; jest.fn();
 
-  <span class="token comment">// console.log(myMock());</span>
-  <span class="token comment">// > undefined</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; console.log(myMock());
+  &#x2F;&#x2F; &gt; undefined
+  expect(myMock()).toBeUndefined();
 
-  myMock<span class="token punctuation">.</span><span class="token function">mockReturnValueOnce</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
-        <span class="token punctuation">.</span><span class="token function">mockReturnValueOnce</span><span class="token punctuation">(</span><span class="token string">'x'</span><span class="token punctuation">)</span>
-        <span class="token punctuation">.</span><span class="token function">mockReturnValue</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  myMock.mockReturnValueOnce(10)
+        .mockReturnValueOnce(&#39;x&#39;)
+        .mockReturnValue(true);
 
-  <span class="token comment">// console.log(myMock(), myMock(), myMock(), myMock());</span>
-  <span class="token comment">// > 10, 'x', true, true</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'x'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; console.log(myMock(), myMock(), myMock(), myMock());
+  &#x2F;&#x2F; &gt; 10, &#39;x&#39;, true, true
+  expect(myMock()).toBe(10);
+  expect(myMock()).toBe(&#39;x&#39;);
+  expect(myMock()).toBe(true);
+  expect(myMock()).toBe(true);
 
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>myMock<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>results<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">console.log <span class="token number">2020</span>-04-16/returnValue.test.js:19
-  <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
-    <span class="token string">"type"</span><span class="token builtin class-name">:</span><span class="token string">"return"</span>
-  <span class="token punctuation">&#125;</span>, <span class="token punctuation">&#123;</span>
-    <span class="token string">"type"</span><span class="token builtin class-name">:</span><span class="token string">"return"</span>,<span class="token string">"value"</span>:10
-  <span class="token punctuation">&#125;</span>, <span class="token punctuation">&#123;</span>
-    <span class="token string">"type"</span><span class="token builtin class-name">:</span><span class="token string">"return"</span>,<span class="token string">"value"</span><span class="token builtin class-name">:</span><span class="token string">"x"</span>
-  <span class="token punctuation">&#125;</span>, <span class="token punctuation">&#123;</span>
-    <span class="token string">"type"</span><span class="token builtin class-name">:</span><span class="token string">"return"</span>,<span class="token string">"value"</span>:true
-  <span class="token punctuation">&#125;</span>, <span class="token punctuation">&#123;</span>
-    <span class="token string">"type"</span><span class="token builtin class-name">:</span><span class="token string">"return"</span>,<span class="token string">"value"</span>:true
-  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  console.log(JSON.stringify(myMock.mock.results));
+&#125;);</code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">console.log 2020-04-16&#x2F;returnValue.test.js:19
+  [&#123;
+    &quot;type&quot;:&quot;return&quot;
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:10
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:&quot;x&quot;
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:true
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:true
+  &#125;]</code></pre>
 <p>在呼叫之前，直接塞回傳值。取代真實行為時，避免需要複雜的 stub</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock to stub'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> filterTestFn <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">
+test(&#39;mock to stub&#39;, () &#x3D;&gt; &#123;
+  const filterTestFn &#x3D; jest.fn();
 
   filterTestFn
-    <span class="token punctuation">.</span><span class="token function">mockReturnValueOnce</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">mockReturnValueOnce</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    .mockReturnValueOnce(true)
+    .mockReturnValueOnce(false);
 
-  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">num</span> <span class="token operator">=></span> <span class="token function">filterTestFn</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  const result &#x3D; [11, 12].filter(num &#x3D;&gt; filterTestFn(num));
 
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// > [11]</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>filterTestFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// > [ [11], [12] ]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  console.log(result);
+  &#x2F;&#x2F; &gt; [11]
+  console.log(filterTestFn.mock.calls);
+  &#x2F;&#x2F; &gt; [ [11], [12] ]
+&#125;);</code></pre>
 <p>實際上，該 mock 掉的都是一些相依套件的情況。<br>
 但是技術上是相同的，避免在假物件內實作測不到的邏輯</p>
 <h2 id="mocking-modules"><a class="header-anchor" href="#mocking-modules">¶</a>Mocking Modules</h2>
 <p>來看看更接近真實案例的 code，對 axios 進行 mock！</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// users.js</span>
-<span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">'axios'</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; users.js
+import axios from &#39;axios&#39;;
 
-<span class="token keyword">class</span> <span class="token class-name">Users</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">static</span> <span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/users.json'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">resp</span> <span class="token operator">=></span> resp<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+class Users &#123;
+  static all() &#123;
+    return axios.get(&#39;&#x2F;users.json&#39;).then(resp &#x3D;&gt; resp.data);
+  &#125;
+&#125;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> Users<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default Users;</code></pre>
 <p>為了不要真的發送 API 又不修改 axios，又要執行測試，就是要把 axios 模組給 mock 起來。</p>
 <p>mock 好了之後，<code>axios.get()</code> 就變成 mock function ，可以用 <code>.mockResolvedValue</code> 設定它回傳 prmise 時，裡面要帶什麼值。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// users.test.js</span>
-<span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">'axios'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Users <span class="token keyword">from</span> <span class="token string">'./users'</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; users.test.js
+import axios from &#39;axios&#39;;
+import Users from &#39;.&#x2F;users&#39;;
 
-jest<span class="token punctuation">.</span><span class="token function">mock</span><span class="token punctuation">(</span><span class="token string">'axios'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+jest.mock(&#39;axios&#39;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'should fetch users'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Bob'</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-  axios<span class="token punctuation">.</span>get<span class="token punctuation">.</span><span class="token function">mockResolvedValue</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">data</span><span class="token operator">:</span> users
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;should fetch users&#39;, () &#x3D;&gt; &#123;
+  const users &#x3D; [&#123;name: &#39;Bob&#39;&#125;];
+  axios.get.mockResolvedValue(&#123;
+    data: users
+  &#125;);
 
-  <span class="token keyword">return</span> Users<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token operator">=></span> <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span>users<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  return Users.all().then(data &#x3D;&gt; expect(data).toEqual(users));
 
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;);</code></pre>
 <p>或者用 <code>axios.get.mockImplementation(() =&gt; Promise.resolve(resp))</code> 也可以</p>
 <blockquote>
 <p>這幾個差在哪？<br>
@@ -372,119 +376,119 @@ jest.fn(): 實作 function 內容</p>
 </blockquote>
 <h2 id="mock-implementations"><a class="header-anchor" href="#mock-implementations">¶</a>Mock Implementations</h2>
 <p>假實作 fake 比起假回傳的 Stub 來得更強大。強大到幾乎可以取代假回傳 (stub)，但是就是自己要寫很多 code。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock function'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> myMockFn <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token parameter">callback</span> <span class="token operator">=></span> <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock function&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest.fn(callback &#x3D;&gt; callback(null, true));
 
-  <span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> val</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// 印出 true</span>
+  myMockFn((err, val) &#x3D;&gt; console.log(val));
+  &#x2F;&#x2F; 印出 true
 
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeInstanceOf</span><span class="token punctuation">(</span>Function<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  expect(myMockFn.mock.calls[0][0]).toBeInstanceOf(Function);
+&#125;);</code></pre>
 <p><code>mockImplementation</code> 可以定義一個 mock function 的<strong>預設的假行為</strong>。<br>
 瘋狂的完全取代原本的模組，就算它還沒有實作。(危險)</p>
 <p><strong>emptyImplement.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// some implementation;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module.exports &#x3D; function () &#123;
+  &#x2F;&#x2F; some implementation;
+&#125;;</code></pre>
 <p><strong>emptyImplement.test.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">jest<span class="token punctuation">.</span><span class="token function">mock</span><span class="token punctuation">(</span><span class="token string">'./emptyImplement'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// this happens automatically with automocking</span>
-<span class="token keyword">const</span> emptyImplement <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./emptyImplement'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">jest.mock(&#39;.&#x2F;emptyImplement&#39;); &#x2F;&#x2F; this happens automatically with automocking
+const emptyImplement &#x3D; require(&#39;.&#x2F;emptyImplement&#39;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock empty module'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// emptyImplement is a mock function</span>
-  emptyImplement<span class="token punctuation">.</span><span class="token function">mockImplementation</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;mock empty module&#39;, () &#x3D;&gt; &#123;
+  &#x2F;&#x2F; emptyImplement is a mock function
+  emptyImplement.mockImplementation(() &#x3D;&gt; 42);
 
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">emptyImplement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  expect(emptyImplement()).toBe(42);
+&#125;);</code></pre>
 <p>覆蓋率是 0</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">-------------------<span class="token operator">|</span>---------<span class="token operator">|</span>----------<span class="token operator">|</span>---------<span class="token operator">|</span>---------<span class="token operator">|</span>-------------------
-File               <span class="token operator">|</span> % Stmts <span class="token operator">|</span> % Branch <span class="token operator">|</span> % Funcs <span class="token operator">|</span> % Lines <span class="token operator">|</span> Uncovered Line <span class="token comment">#s</span>
--------------------<span class="token operator">|</span>---------<span class="token operator">|</span>----------<span class="token operator">|</span>---------<span class="token operator">|</span>---------<span class="token operator">|</span>-------------------
-All files          <span class="token operator">|</span>     <span class="token number">100</span> <span class="token operator">|</span>      <span class="token number">100</span> <span class="token operator">|</span>      <span class="token number">0</span> <span class="token operator">|</span>     <span class="token number">100</span> <span class="token operator">|</span>
- emptyImplement.js <span class="token operator">|</span>     <span class="token number">100</span> <span class="token operator">|</span>      <span class="token number">100</span> <span class="token operator">|</span>       <span class="token number">0</span> <span class="token operator">|</span>     <span class="token number">100</span> <span class="token operator">|</span>
- ------------------<span class="token operator">|</span>---------<span class="token operator">|</span>----------<span class="token operator">|</span>---------<span class="token operator">|</span>---------<span class="token operator">|</span>-------------------<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |      0 |     100 |
+ emptyImplement.js |     100 |      100 |       0 |     100 |
+ ------------------|---------|----------|---------|---------|-------------------</code></pre>
 <p>當你需要「假物件實作免洗筷」時，可以使用 <code>mockImplementationOnce</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> myMockFn <span class="token operator">=</span> jest
-  <span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">mockImplementationOnce</span><span class="token punctuation">(</span><span class="token parameter">cb</span> <span class="token operator">=></span> <span class="token function">cb</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">mockImplementationOnce</span><span class="token punctuation">(</span><span class="token parameter">cb</span> <span class="token operator">=></span> <span class="token function">cb</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const myMockFn &#x3D; jest
+  .fn()
+  .mockImplementationOnce(cb &#x3D;&gt; cb(null, true))
+  .mockImplementationOnce(cb &#x3D;&gt; cb(null, false));
 
-<span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> val</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// > true</span>
+myMockFn((err, val) &#x3D;&gt; console.log(val));
+&#x2F;&#x2F; &gt; true
 
-<span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> val</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// > false</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+myMockFn((err, val) &#x3D;&gt; console.log(val));
+&#x2F;&#x2F; &gt; false</code></pre>
 <p>免洗筷用完時，再呼叫會跑<strong>預設假行為</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock mockImplementationOnce call lots of times'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> myMockFn <span class="token operator">=</span> jest
-  <span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token string">'default'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">mockImplementationOnce</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token string">'first call'</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">mockImplementationOnce</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token string">'second call'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock mockImplementationOnce call lots of times&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest
+  .fn(() &#x3D;&gt; &#39;default&#39;)
+  .mockImplementationOnce(() &#x3D;&gt; &#39;first call&#39;)
+  .mockImplementationOnce(() &#x3D;&gt; &#39;second call&#39;);
 
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'first call'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'second call'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">myMockFn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  expect(myMockFn()).toMatch(&#39;first call&#39;);
+  expect(myMockFn()).toMatch(&#39;second call&#39;);
+  expect(myMockFn()).toMatch(&#39;default&#39;);
+  expect(myMockFn()).toMatch(&#39;default&#39;);
 
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  expect(myMockFn.mock.calls[0][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[1][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[2][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[3][0]).toBeUndefined();
+  expect(myMockFn.mock.calls.length).toBe(4);
+&#125;);</code></pre>
 <p>通常這種 <strong>免洗筷</strong> 都是用來應付鍊狀呼叫<br>
 而鍊狀呼叫的假物件，就是回傳 this ，可以使用 <code>mockReturnThis()</code> 來實作。</p>
 <blockquote>
 <p>疑問: <code>axios.create()</code> 就可以這樣做？</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> otherObj <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">myMethod</span><span class="token operator">:</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const otherObj &#x3D; &#123;
+  myMethod: jest.fn(function () &#123;
+    return this;
+  &#125;),
+&#125;;</code></pre>
 <p>可以寫成</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> myObj <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">myMethod</span><span class="token operator">:</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">mockReturnThis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const myObj &#x3D; &#123;
+  myMethod: jest.fn().mockReturnThis(),
+&#125;;</code></pre>
 <h2 id="mock-names"><a class="header-anchor" href="#mock-names">¶</a>Mock Names</h2>
 <p>一個 function 都會有一個 name，就算是 <code>jest.fn()</code> 也是。</p>
 <ul>
 <li>可以用 <code>.mockName()</code> 給一個 mockName。</li>
 <li>可以用 <code>.getMockName()</code> 要取得 function name。</li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'mock name'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> myMockFn <span class="token operator">=</span> jest
-    <span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">mockReturnValue</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">mockImplementation</span><span class="token punctuation">(</span><span class="token parameter">scalar</span> <span class="token operator">=></span> <span class="token number">42</span> <span class="token operator">+</span> scalar<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock name&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest
+    .fn()
+    .mockReturnValue(&#39;default&#39;)
+    .mockImplementation(scalar &#x3D;&gt; 42 + scalar);
 
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span><span class="token function">getMockName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">"jest.fn()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  expect(myMockFn.getMockName()).toMatch(&quot;jest.fn()&quot;);
 
-  myMockFn<span class="token punctuation">.</span><span class="token function">mockName</span><span class="token punctuation">(</span><span class="token string">'add42'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>myMockFn<span class="token punctuation">.</span><span class="token function">getMockName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">"add42"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  myMockFn.mockName(&#39;add42&#39;);
+  expect(myMockFn.getMockName()).toMatch(&quot;add42&quot;);
+&#125;);</code></pre>
 <h2 id="custom-matchers"><a class="header-anchor" href="#custom-matchers">¶</a>Custom Matchers</h2>
 <p>為了 mock function 而生的 Matcher</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'test mock function matcher'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> mockFunc <span class="token operator">=</span> jest<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;test mock function matcher&#39;, () &#x3D;&gt; &#123;
+  const mockFunc &#x3D; jest.fn();
 
-  <span class="token keyword">const</span> arg1 <span class="token operator">=</span> <span class="token string">'chris'</span>
-  <span class="token keyword">const</span> arg2 <span class="token operator">=</span> <span class="token string">'mary'</span>
-  <span class="token function">mockFunc</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  const arg1 &#x3D; &#39;chris&#39;
+  const arg2 &#x3D; &#39;mary&#39;
+  mockFunc(arg1, arg2);
+  expect(mockFunc).toHaveBeenCalled();
 
-  <span class="token comment">// The mock function was called at least once with the specified args</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenCalledWith</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; The mock function was called at least once with the specified args
+  expect(mockFunc).toHaveBeenCalledWith(arg1, arg2);
 
-  <span class="token comment">// The last call to the mock function was called with the specified args</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toHaveBeenLastCalledWith</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  &#x2F;&#x2F; The last call to the mock function was called with the specified args
+  expect(mockFunc).toHaveBeenLastCalledWith(arg1, arg2);
 
-  <span class="token comment">// All calls and the name of the mock is written as a snapshot</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatchSnapshot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F; All calls and the name of the mock is written as a snapshot
+  expect(mockFunc).toMatchSnapshot();
+&#125;);</code></pre>
 <p>其中的 Snapshot 第一次執行，會儲存執行結果。<br>
 第二次執行，會拿上次執行的結果與這次比對。</p>
-<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; Jest Snapshot v1, https:&#x2F;&#x2F;goo.gl&#x2F;fbAQLP
+<pre class="language-none"><code class="language-none">&#x2F;&#x2F; Jest Snapshot v1, https:&#x2F;&#x2F;goo.gl&#x2F;fbAQLP
 
 exports[&#96;test mock function matcher 1&#96;] &#x3D; &#96;
 [MockFunction] &#123;
@@ -501,28 +505,28 @@ exports[&#96;test mock function matcher 1&#96;] &#x3D; &#96;
     &#125;,
   ],
 &#125;
-&#96;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#96;;</code></pre>
 <p>以上這些都是語法糖。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// The mock function was called at least once</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeGreaterThan</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; The mock function was called at least once
+expect(mockFunc.mock.calls.length).toBeGreaterThan(0);
 
-<span class="token comment">// The mock function was called at least once with the specified args</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toContainEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The mock function was called at least once with the specified args
+expect(mockFunc.mock.calls).toContainEqual([arg1, arg2]);
 
-<span class="token comment">// The last call to the mock function was called with the specified args</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
-  arg1<span class="token punctuation">,</span>
-  arg2<span class="token punctuation">,</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The last call to the mock function was called with the specified args
+expect(mockFunc.mock.calls[mockFunc.mock.calls.length - 1]).toEqual([
+  arg1,
+  arg2,
+]);
 
-<span class="token comment">// The first arg of the last call to the mock function was `42`</span>
-<span class="token comment">// (note that there is no sugar helper for this specific of an assertion)</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; The first arg of the last call to the mock function was &#96;42&#96;
+&#x2F;&#x2F; (note that there is no sugar helper for this specific of an assertion)
+expect(mockFunc.mock.calls[mockFunc.mock.calls.length - 1][0]).toBe(42);
 
-<span class="token comment">// A snapshot will check that a mock was invoked the same number of times,</span>
-<span class="token comment">// in the same order, with the same arguments. It will also assert on the name.</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>calls<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">expect</span><span class="token punctuation">(</span>mockFunc<span class="token punctuation">.</span><span class="token function">getMockName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'a mock name'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; A snapshot will check that a mock was invoked the same number of times,
+&#x2F;&#x2F; in the same order, with the same arguments. It will also assert on the name.
+expect(mockFunc.mock.calls).toEqual([[arg1, arg2]]);
+expect(mockFunc.getMockName()).toBe(&#39;a mock name&#39;);</code></pre>
 <h2 id="先告一段落"><a class="header-anchor" href="#先告一段落">¶</a>先告一段落</h2>
 <p>對於 Jest 系列，其實讀書會還在進行中，預計再過一個月左右。<br>
 會針對幾個議題做深入的討論。</p>
@@ -603,21 +607,14 @@ exports[&#96;test mock function matcher 1&#96;] &#x3D; &#96;
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

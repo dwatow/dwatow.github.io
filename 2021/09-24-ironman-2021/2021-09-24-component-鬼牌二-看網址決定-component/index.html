@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -60,8 +60,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -161,16 +165,16 @@
 大部份的 SPA 網站都具備這樣的功能 (才對) 畢竟任何一個前端框架的生態圈都包含 route 的功能。</p>
 <h2 id="用-vue-router"><a class="header-anchor" href="#用-vue-router">¶</a>用 vue router</h2>
 <p>用 vue-cli 的 hello world 當例子</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Home<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span> |
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/about<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>About<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;template&gt;
+  &lt;div id&#x3D;&quot;app&quot;&gt;
+    &lt;div id&#x3D;&quot;nav&quot;&gt;
+      &lt;router-link to&#x3D;&quot;&#x2F;&quot;&gt;Home&lt;&#x2F;router-link&gt; |
+      &lt;router-link to&#x3D;&quot;&#x2F;about&quot;&gt;About&lt;&#x2F;router-link&gt;
+    &lt;&#x2F;div&gt;
+    &lt;router-view&#x2F;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
+</code></pre>
 <p><strong><code>http://localhost:8080/</code></strong></p>
 <p><img src="/images/6e0530b4-5ViQdIO.png" alt=""></p>
 <p><strong><code>http://localhost:8080/about</code></strong></p>
@@ -183,73 +187,73 @@
 <h2 id="怎麼決定-跳轉到哪"><a class="header-anchor" href="#怎麼決定-跳轉到哪">¶</a>怎麼決定「跳轉到哪」</h2>
 <p>我自己除了 nav 很少使用 <code>route-link</code>，它最後會渲染成 <code>&lt;a href=&quot;&quot;&gt;&lt;/a&gt;</code></p>
 <p>大部份都使用 <code>$router.push(&#123; name: RouteName &#125;)</code> 像是下面這樣使用</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$route.push(&#123; name: 'Home' &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;button @click&#x3D;&quot;$route.push(&#123; name: &#39;Home&#39; &#125;)&quot;&gt;&lt;&#x2F;button&gt;
+</code></pre>
 <h2 id="哪個位置-要跳轉"><a class="header-anchor" href="#哪個位置-要跳轉">¶</a>「哪個位置」要跳轉</h2>
 <p>切版時，留一個 html tag 的位置，寫下 <code>&lt;route-view /&gt;</code> 這個位置自然放進「網址指定的 component 」進來。</p>
 <p>其實這很簡單，但是真正不容易發現的是，可不可以設定 props</p>
 <h3 id="跳轉不同的-component-可以放相同的-props-嗎？"><a class="header-anchor" href="#跳轉不同的-component-可以放相同的-props-嗎？">¶</a>跳轉不同的 component 可以放相同的 props 嗎？</h3>
 <p>昨天用了</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>component</span> <span class="token attr-name">:is</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>componentName<span class="token punctuation">"</span></span>
-  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>mock<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>mock = $event<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>component</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;component :is&#x3D;&quot;componentName&quot;
+  :data&#x3D;&quot;mock&quot;
+  @update:data&#x3D;&quot;mock &#x3D; $event&quot;&gt;
+&lt;&#x2F;component&gt;
+</code></pre>
 <p>那天可以將 <code>route-view</code> 的 tag 放上 props 嗎？</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>route-view</span> <span class="token attr-name">:is</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>componentName<span class="token punctuation">"</span></span>
-  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>mock<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>mock = $event<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>route-view</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;route-view :is&#x3D;&quot;componentName&quot;
+  :data&#x3D;&quot;mock&quot;
+  @update:data&#x3D;&quot;mock &#x3D; $event&quot;&gt;
+&lt;&#x2F;route-view&gt;
+</code></pre>
 <p>直接拿 hello world 的 code 來改看看</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>nav<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Home<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span> |
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/about<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>About<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span> <span class="token attr-name">:chris</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; name: 'chris', age: 18 &#125;<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;template&gt;
+  &lt;div id&#x3D;&quot;app&quot;&gt;
+    &lt;div id&#x3D;&quot;nav&quot;&gt;
+      &lt;router-link to&#x3D;&quot;&#x2F;&quot;&gt;Home&lt;&#x2F;router-link&gt; |
+      &lt;router-link to&#x3D;&quot;&#x2F;about&quot;&gt;About&lt;&#x2F;router-link&gt;
+    &lt;&#x2F;div&gt;
+    &lt;router-view :chris&#x3D;&quot;&#123; name: &#39;chris&#39;, age: 18 &#125;&quot;&#x2F;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
+</code></pre>
 <p><strong>Home.vue</strong></p>
 <p>指定 prop 並直接顯示在畫面上</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>home<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span>chris: &#123;&#123; chris &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Vue logo<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>../assets/logo.png<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Home'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">chris</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;template&gt;
+  &lt;div class&#x3D;&quot;home&quot;&gt;
+    &lt;pre&gt;chris: &#123;&#123; chris &#125;&#125;&lt;&#x2F;pre&gt;
+    &lt;img alt&#x3D;&quot;Vue logo&quot; src&#x3D;&quot;..&#x2F;assets&#x2F;logo.png&quot;&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
+</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export default &#123;
+  name: &#39;Home&#39;,
+  props: &#123;
+    chris: &#123;
+      type: String,
+      required: true,
+    &#125;,
+  &#125;,
+&#125;;
+</code></pre>
 <p><strong>About.vue</strong></p>
 <p>指定 prop 並直接顯示在畫面上</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>about<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span>chris: &#123;&#123; chris &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>This is an about page<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">chris</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;template&gt;
+  &lt;div class&#x3D;&quot;about&quot;&gt;
+    &lt;pre&gt;chris: &#123;&#123; chris &#125;&#125;&lt;&#x2F;pre&gt;
+    &lt;h1&gt;This is an about page&lt;&#x2F;h1&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;template&gt;
+</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">export default &#123;
+  name: &#39;About&#39;,
+  props: &#123;
+    chris: &#123;
+      type: String,
+      required: true,
+    &#125;,
+  &#125;,
+&#125;;
+</code></pre>
 <p><img src="/images/6e0530b4-KHc3Df5.png" alt=""><br>
 <img src="/images/6e0530b4-DVr2L1u.png" alt=""></p>
 <p>直接在 <code>&lt;route-view&gt;</code> 給 props，是會在適合的 component 自己吃自己需要的 props。</p>
@@ -306,21 +310,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

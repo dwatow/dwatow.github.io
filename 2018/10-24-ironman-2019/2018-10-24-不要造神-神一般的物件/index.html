@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -176,88 +180,88 @@ minimap 大概只顯示 200 行。<br>
 <p>以刪除成員為例!!<br>
 此程式碼已經修改成 js 的實作。(原本不是)</p>
 <p><strong>kernel</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceKernel</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token function">delMember</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  res<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">returncode</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">returnMessage</span><span class="token operator">:</span> <span class="token string">""</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class serviceKernel &#123;
+  &#x2F;&#x2F;...
+  delMember(req, res) &#123;
+  res.body &#x3D; &#123;
+    returncode: 0,
+    returnMessage: &quot;&quot;
+  &#125;;
 
-  <span class="token keyword">let</span> input <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">serviceImplement<span class="token punctuation">.</span>DelRestoreMemberData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">let</span> output <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">serviceImplement<span class="token punctuation">.</span>BaseResultData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  let input &#x3D; new serviceImplement.DelRestoreMemberData();
+  let output &#x3D; new serviceImplement.BaseResultData();
 
-    input<span class="token punctuation">.</span>Id      <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"id"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    input<span class="token punctuation">.</span>Version <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"version"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    input.Id      &#x3D; req.body[&quot;id&quot;];
+    input.Version &#x3D; req.body[&quot;version&quot;];
 
-    serviceImplement<span class="token punctuation">.</span><span class="token function">processDelMember</span><span class="token punctuation">(</span>input<span class="token punctuation">,</span> output<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    serviceImplement.processDelMember(input, output);
 
-    res<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"returncode"</span><span class="token punctuation">]</span> <span class="token operator">=</span> output<span class="token punctuation">.</span>returnCode<span class="token punctuation">;</span>
-    res<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"returnmessage"</span><span class="token punctuation">]</span> <span class="token operator">=</span> output<span class="token punctuation">.</span>returnMessage<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    res.body[&quot;returncode&quot;] &#x3D; output.returnCode;
+    res.body[&quot;returnmessage&quot;] &#x3D; output.returnMessage;
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p><strong>implement</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceImplement</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token function">processDelMember</span><span class="token punctuation">(</span> filter<span class="token punctuation">,</span> resultData <span class="token comment">/*out*/</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">let</span> execute_result_code <span class="token operator">=</span> serviceTransactions<span class="token punctuation">.</span><span class="token function">processDelMember</span><span class="token punctuation">(</span>filter<span class="token punctuation">,</span> resultData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class serviceImplement &#123;
+  &#x2F;&#x2F;...
+  processDelMember( filter, resultData &#x2F;*out*&#x2F; ) &#123;
+    let execute_result_code &#x3D; serviceTransactions.processDelMember(filter, resultData);
 
-    <span class="token keyword">if</span> <span class="token punctuation">(</span> execute_result_code <span class="token operator">!=</span> <span class="token constant">SUCCESS</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>execute_result_code<span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
+    if ( execute_result_code !&#x3D; SUCCESS ) &#123;
+      console.log(execute_result_code)
+    &#125;
 
-    resultData<span class="token punctuation">.</span>returnCode <span class="token operator">=</span> execute_result_code<span class="token punctuation">;</span>
-    resultData<span class="token punctuation">.</span>returnMessage <span class="token operator">=</span> <span class="token function">getErrMessages</span><span class="token punctuation">(</span>execute_result_code<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    resultData.returnCode &#x3D; execute_result_code;
+    resultData.returnMessage &#x3D; getErrMessages(execute_result_code);
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p><strong>Transactions</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceTransactions</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token function">processDelMember</span><span class="token punctuation">(</span><span class="token parameter">delFilter<span class="token punctuation">,</span> resultData</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">let</span> result_code <span class="token operator">=</span> <span class="token constant">SUCCESS</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class serviceTransactions &#123;
+  &#x2F;&#x2F;...
+  processDelMember(delFilter, resultData) &#123;
+    let result_code &#x3D; SUCCESS;
 
-    <span class="token keyword">let</span> db_emp_list <span class="token operator">=</span> database<span class="token punctuation">.</span>employee<span class="token punctuation">.</span><span class="token function">getDataset</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">id</span><span class="token operator">:</span> delFilter<span class="token punctuation">.</span>id
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    let db_emp_list &#x3D; database.employee.getDataset(&#123;
+      id: delFilter.id
+    &#125;);
 
-    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>db_emp_list<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      result_code <span class="token operator">=</span> <span class="token constant">ID_NOT_EXIST</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span> db_emp_list<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"DATABASE_DATA_FAIL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Database have two the same record or more in database.employee"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"id: "</span> <span class="token operator">+</span> delFilter<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    if(!db_emp_list.length) &#123;
+      result_code &#x3D; ID_NOT_EXIST;
+      return result_code;
+    &#125;
+    else if( db_emp_list.length &gt; 1 ) &#123;
+      console.log(&quot;DATABASE_DATA_FAIL&quot;);
+      console.log(&quot;Database have two the same record or more in database.employee&quot;);
+      console.log(&quot;id: &quot; + delFilter.id);
 
-      result_code <span class="token operator">=</span> <span class="token constant">DATABASE_DATA_FAIL</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+      result_code &#x3D; DATABASE_DATA_FAIL;
+      return result_code;
+    &#125;
 
-    <span class="token keyword">let</span> <span class="token constant">PARAM</span> <span class="token operator">=</span> database<span class="token punctuation">.</span>employee<span class="token punctuation">.</span>id<span class="token punctuation">;</span>
-    <span class="token keyword">let</span> db_sys <span class="token operator">=</span> database<span class="token punctuation">.</span>systemParameters<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">sectionId</span><span class="token operator">:</span> <span class="token string">'admin'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">targetParmeter</span><span class="token operator">:</span> <span class="token string">'id'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">targetValue</span><span class="token operator">:</span> delFilter<span class="token punctuation">.</span>Id
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    let PARAM &#x3D; database.employee.id;
+    let db_sys &#x3D; database.systemParameters.getData(&#123;
+      sectionId: &#39;admin&#39;,
+      targetParmeter: &#39;id&#39;,
+      targetValue: delFilter.Id
+    &#125;);
 
-    <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token operator">!</span>db_sys <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      result_code <span class="token operator">=</span> <span class="token constant">DISALLOW_DELETE_ADMINISTRATOR_ACCOUNT</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    if( !db_sys ) &#123;
+      result_code &#x3D; DISALLOW_DELETE_ADMINISTRATOR_ACCOUNT;
+      return result_code;
+    &#125;
 
-    <span class="token keyword">let</span> db_emp <span class="token operator">=</span> db_emp_list<span class="token punctuation">.</span><span class="token function">shift</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    db_emp<span class="token punctuation">.</span>modifyDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    database<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    let db_emp &#x3D; db_emp_list.shift();
+    db_emp.modifyDate &#x3D; new Date();
+    database.save();
 
-    <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    return result_code;
+  &#125;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p>在 <code>serviceKernel</code>, <code>serviceImplement</code>, <code>serviceTransactions</code> 三個 class 中，是把所有的 API 通通放進去當作 function 。</p>
 <blockquote>
 <p>若是用 express 的架構來反思 God Object 其實是不需要的，因為它的 docs 裡介紹的 function 沒有屬於任何的 object 而在此介紹的範例有。</p>
@@ -271,24 +275,24 @@ minimap 大概只顯示 200 行。<br>
 <p>在一個後端中，最重要的主詞是 API。每一個 API 都應該是一個抽象，它有它自己的邏輯。</p>
 <p>另外，如果有接資料庫的話，每一個 Table 也有一個自己的邏輯和資料。(ORM 的概念)</p>
 <p>所以，後端出了兩個主詞: 「API」、「Table」</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">api</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class api &#123;
+  &#x2F;&#x2F;...
+&#125;
 
-<span class="token keyword">class</span> <span class="token class-name">table</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class table &#123;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p>這樣要怎麼寫呢？<br>
 換一個樣子來看看。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">controller</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">class controller &#123;
+  &#x2F;&#x2F;...
+&#125;
 
-<span class="token keyword">class</span> <span class="token class-name">model</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+class model &#123;
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <p>這樣有沒有和 MVC 有呼應到了呢？</p>
 <h2 id="前端怎麼辦？也要分嗎？"><a class="header-anchor" href="#前端怎麼辦？也要分嗎？">¶</a>前端怎麼辦？也要分嗎？</h2>
 <p>在這個時代，前端依然有在分類邏輯，而且，不這麼做就 GG 了。</p>
@@ -362,21 +366,14 @@ components，有 components 的邏輯，由資料決定，開發者透過 <code>
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

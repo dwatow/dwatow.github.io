@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -163,24 +167,24 @@
 <h2 id="open-source-世界-也有的默契"><a class="header-anchor" href="#open-source-世界-也有的默契">¶</a>Open source 世界，也有的默契</h2>
 <p>在 OpenSource 世界的起初。<br>
 是否想過，在不盛行 IDE 的世界。只靠著 GNU 的工具，怎麼知道這個 project 的 build 怎麼下？</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">gcc main.c <span class="token parameter variable">-o</span> main
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">gcc main.c -o main
+</code></pre>
 <p>如果專案很大，相依性很複雜，又如何知道該如何 build？<br>
 仔細觀察這些 C/C++ 的大型專案，都有 makefile 。</p>
 <p>沒有人有義務，應該知道或一眼就看得出專案用什麼指令編譯或執行誰可以跑起來。<br>
 如果用英文說，就是「No, One!!..」後面自行翻譯</p>
 <p><strong>makefile</strong></p>
-<pre class="line-numbers language-none"><code class="language-none">build:
+<pre class="language-none"><code class="language-none">build:
 	gcc main.c -o main
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</code></pre>
 <p>將指令放進來，在可執行文件中，暗示了開發者「用 <code>gcc main.c -o main</code> 可以 <code>build</code> 專案」，所以，可以用這樣的指令 build</p>
-<pre class="line-numbers language-none"><code class="language-none">make build
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">make build
+</code></pre>
 <h2 id="來看看雷神之鎚"><a class="header-anchor" href="#來看看雷神之鎚">¶</a>來看看雷神之鎚</h2>
 <p>來源: <a target="_blank" rel="noopener" href="https://github.com/id-Software/Quake/blob/master/QW/Makefile.Linux">https://github.com/id-Software/Quake/blob/master/QW/Makefile.Linux</a></p>
 <p>第 66 行可以看到 SETUP AND BUILD 段落，裡面有 <code>build_debug</code> 和 <code>build_release</code>。<br>
 可以找到一些蛛絲馬跡。</p>
-<pre class="line-numbers language-none"><code class="language-none">#############################################################################
+<pre class="language-none"><code class="language-none">#############################################################################
 # SETUP AND BUILD
 #############################################################################
 
@@ -208,11 +212,11 @@ build_release:
 all: build_debug build_release
 
 targets: $(TARGETS)
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <h2 id="用問的建置方式就是糙"><a class="header-anchor" href="#用問的建置方式就是糙">¶</a>用問的建置方式就是糙!!!</h2>
 <p>如果對這件事沒有警覺心，那來舉個例子。</p>
 <p>AngularJS 通常是用 gulp + closure 做 JS 相依性問題的處理。</p>
-<pre class="line-numbers language-none"><code class="language-none">img&#x2F;
+<pre class="language-none"><code class="language-none">img&#x2F;
 js&#x2F;
 pages&#x2F;
 partial&#x2F;
@@ -227,30 +231,30 @@ gulpfile.js
 index.html
 package-lock.json
 package.json
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <h2 id="先來看看-npm"><a class="header-anchor" href="#先來看看-npm">¶</a>先來看看 npm</h2>
 <p>為什麼呢？前端有了打包工具之後，就要靠 node 執行，並且用 npm 管理套件相依<br>
 所以，有 npm 先看 npm</p>
 <p><strong>package.json</strong></p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"erp_front"</span><span class="token punctuation">,</span>
-  <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"1.0.0"</span><span class="token punctuation">,</span>
-  <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-  <span class="token property">"main"</span><span class="token operator">:</span> <span class="token string">"app.js"</span><span class="token punctuation">,</span>
-  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"test"</span><span class="token operator">:</span> <span class="token string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"author"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-  <span class="token property">"license"</span><span class="token operator">:</span> <span class="token string">"ISC"</span><span class="token punctuation">,</span>
-  <span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"gulp"</span><span class="token operator">:</span> <span class="token string">"^3.9.1"</span><span class="token punctuation">,</span>
-    <span class="token property">"gulp-livereload"</span><span class="token operator">:</span> <span class="token string">"^3.8.1"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token property">"dependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"gulp-concat"</span><span class="token operator">:</span> <span class="token string">"^2.6.0"</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &quot;name&quot;: &quot;erp_front&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;app.js&quot;,
+  &quot;scripts&quot;: &#123;
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  &#125;,
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;devDependencies&quot;: &#123;
+    &quot;gulp&quot;: &quot;^3.9.1&quot;,
+    &quot;gulp-livereload&quot;: &quot;^3.8.1&quot;
+  &#125;,
+  &quot;dependencies&quot;: &#123;
+    &quot;gulp-concat&quot;: &quot;^2.6.0&quot;
+  &#125;
+&#125;
+</code></pre>
 <p>看見 script 了嗎？什麼都沒有，如同 <code>npm init -y</code> 的結果。<br>
 只有 test ，指令還是預設的樣子。</p>
 <p>大驚!!!<br>
@@ -258,23 +262,23 @@ package.json
 <p>驚嚇之餘<br>
 發現有安裝 gulp，來看看 gulpfile.js</p>
 <p><strong>gulpfile.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> gulp <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> concat <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-concat'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> gulpLivereload <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-livereload'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var gulp &#x3D; require(&#39;gulp&#39;);
+var concat &#x3D; require(&#39;gulp-concat&#39;);
+var gulpLivereload &#x3D; require(&#39;gulp-livereload&#39;);
 
-gulp<span class="token punctuation">.</span><span class="token function">task</span><span class="token punctuation">(</span><span class="token string">'all'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> gulp<span class="token punctuation">.</span><span class="token function">src</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'./js/**/*.js'</span><span class="token punctuation">,</span><span class="token string">'./app.js'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-        <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">'all.js'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>gulp<span class="token punctuation">.</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'./'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">gulpLivereload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+gulp.task(&#39;all&#39;, function() &#123;
+  return gulp.src([&#39;.&#x2F;js&#x2F;**&#x2F;*.js&#39;,&#39;.&#x2F;app.js&#39;])
+        .pipe(concat(&#39;all.js&#39;))
+        .pipe(gulp.dest(&#39;.&#x2F;&#39;))
+        .pipe(gulpLivereload())
+&#125;);
 
-gulp<span class="token punctuation">.</span><span class="token function">task</span><span class="token punctuation">(</span><span class="token string">'watch'</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  gulpLivereload<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  gulp<span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">"./js/**/*.js"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"all"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  gulp<span class="token punctuation">.</span><span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">"./app.js"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"all"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+gulp.task(&#39;watch&#39;, function() &#123;
+  gulpLivereload.listen();
+  gulp.watch(&quot;.&#x2F;js&#x2F;**&#x2F;*.js&quot;, [&quot;all&quot;]);
+  gulp.watch(&quot;.&#x2F;app.js&quot;, [&quot;all&quot;]);
+&#125;)
+</code></pre>
 <p>不懂 gulp 的，就不知道怎麼用了，對吧？<br>
 (現在 gulp 用起來還比 webpack 難搞呀!!)</p>
 <p>然後…<br>
@@ -383,21 +387,14 @@ gulp<span class="token punctuation">.</span><span class="token function">task</s
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

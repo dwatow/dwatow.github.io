@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -153,70 +157,70 @@
 常見的兩種手法如下</p>
 <p>最簡單又常見的「一個 url → 一個 route → 一個 component」</p>
 <p>用 HTML 裡記錄路徑</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/user<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;router-link to&#x3D;&quot;&#x2F;user&quot; &gt;&lt;&#x2F;router-link&gt;</code></pre>
 <p>用 JavaScript 裡記錄路徑</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VueRouter</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token operator">...</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'/user'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const router &#x3D; new VueRouter(&#123;...&#125;);
+router.push(&#39;&#x2F;user&#39;)</code></pre>
 <h2 id="點擊-改變多層路徑"><a class="header-anchor" href="#點擊-改變多層路徑">¶</a>點擊 改變多層路徑</h2>
 <p>巢狀式的 route 又要怎麼控制要顯示的 component 呢？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VueRouter</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">routes</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/user/:id"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">component</span><span class="token operator">:</span> User<span class="token punctuation">,</span>
-      <span class="token literal-property property">children</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">&#123;</span> <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/user/foo/:key"</span><span class="token punctuation">,</span> <span class="token literal-property property">component</span><span class="token operator">:</span> Foo <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-        <span class="token punctuation">&#123;</span> <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/user/bar/:key"</span><span class="token punctuation">,</span> <span class="token literal-property property">component</span><span class="token operator">:</span> Bar <span class="token punctuation">&#125;</span>
-      <span class="token punctuation">]</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const router &#x3D; new VueRouter(&#123;
+  routes: [
+    &#123;
+      path: &quot;&#x2F;user&#x2F;:id&quot;,
+      component: User,
+      children: [
+        &#123; path: &quot;&#x2F;user&#x2F;foo&#x2F;:key&quot;, component: Foo &#125;,
+        &#123; path: &quot;&#x2F;user&#x2F;bar&#x2F;:key&quot;, component: Bar &#125;
+      ]
+    &#125;
+  ]
+&#125;);</code></pre>
 <p>第一層 Component 的 <code>router-view</code></p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Hello App!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/user/foo/abcfoode<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Go to Foo<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-link</span> <span class="token attr-name">to</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/user/bar/abarbcde<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Go to Bar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-link</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-view</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-html" data-language="html" data-start="1"><code class="language-html">&lt;div id&#x3D;&quot;app&quot;&gt;
+  &lt;h1&gt;Hello App!&lt;&#x2F;h1&gt;
+  &lt;router-link to&#x3D;&quot;&#x2F;user&#x2F;foo&#x2F;abcfoode&quot;&gt;Go to Foo&lt;&#x2F;router-link&gt;
+  &lt;router-link to&#x3D;&quot;&#x2F;user&#x2F;bar&#x2F;abarbcde&quot;&gt;Go to Bar&lt;&#x2F;router-link&gt;
+  &lt;router-view&gt;&lt;&#x2F;router-view&gt;
+&lt;&#x2F;div&gt;</code></pre>
 <p>第二層 Component 的 <code>router-view</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> User <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
-  &lt;div class="user">
-    &lt;h2>User &#123;&#123; $route.params.id &#125;&#125;&lt;/h2>
-    &lt;router-view>&lt;/router-view>
-  &lt;/div></span><span class="token template-punctuation string">`</span></span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const User &#x3D; &#123;
+  template: &#96;
+  &lt;div class&#x3D;&quot;user&quot;&gt;
+    &lt;h2&gt;User &#123;&#123; $route.params.id &#125;&#125;&lt;&#x2F;h2&gt;
+    &lt;router-view&gt;&lt;&#x2F;router-view&gt;
+  &lt;&#x2F;div&gt;&#96;
+&#125;;</code></pre>
 <p>第三層 Components</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> Foo <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
-  &lt;div>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const Foo &#x3D; &#123;
+  template: &#96;
+  &lt;div&gt;
     foo &#123;&#123; $route.params.key &#125;&#125;
-  &lt;/div></span><span class="token template-punctuation string">`</span></span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> Bar <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
-  &lt;div>
+  &lt;&#x2F;div&gt;&#96;
+&#125;;
+const Bar &#x3D; &#123;
+  template: &#96;
+  &lt;div&gt;
     bar &#123;&#123; $route.params.key &#125;&#125;
-  &lt;/div></span><span class="token template-punctuation string">`</span></span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &lt;&#x2F;div&gt;&#96;
+&#125;;</code></pre>
 <h3 id="點擊-多個-router-view"><a class="header-anchor" href="#點擊-多個-router-view">¶</a>點擊 多個 router-view</h3>
 <p>這個做法是一個 component 裡有兩個 <code>router-view</code> 那為了不讓 component 放錯位置，所以要對 <code>router-view</code> 命名</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>view one<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-view</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>view two<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>a<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-view</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>view three<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>b<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>router-view</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-html" data-language="html" data-start="1"><code class="language-html">&lt;router-view class&#x3D;&quot;view one&quot;&gt;&lt;&#x2F;router-view&gt;
+&lt;router-view class&#x3D;&quot;view two&quot; name&#x3D;&quot;a&quot;&gt;&lt;&#x2F;router-view&gt;
+&lt;router-view class&#x3D;&quot;view three&quot; name&#x3D;&quot;b&quot;&gt;&lt;&#x2F;router-view&gt;</code></pre>
 <p>在一次 route 裡設定 指定多個 component，而且要對應到指定名稱。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VueRouter</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">routes</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">components</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">default</span><span class="token operator">:</span> Foo<span class="token punctuation">,</span>
-        <span class="token literal-property property">a</span><span class="token operator">:</span> Bar<span class="token punctuation">,</span>
-        <span class="token literal-property property">b</span><span class="token operator">:</span> Baz
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const router &#x3D; new VueRouter(&#123;
+  routes: [
+    &#123;
+      path: &quot;&#x2F;&quot;,
+      components: &#123;
+        default: Foo,
+        a: Bar,
+        b: Baz
+      &#125;
+    &#125;
+  ]
+&#125;);</code></pre>
 
     
     </section>
@@ -266,21 +270,14 @@ router<span class="token punctuation">.</span><span class="token function">push<
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

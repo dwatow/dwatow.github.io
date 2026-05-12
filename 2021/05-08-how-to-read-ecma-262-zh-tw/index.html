@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -59,8 +59,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -170,32 +174,32 @@
 所有 JavaScript 引擎開發人員都以規範為主，確保他們閃亮亮的新功能運作如同預期，就如同其它的 JavaScript 引擎一樣。</p>
 <p>但是我覺得此規範不只是給「JavaScript 引擎開發者」這種神話生物閱讀，實際上，我覺得對你或<strong>一般的 JavaScript 撰寫人員也很有用，只是你沒有意識到。</strong></p>
 <p>假設，你在日常的工作中發現了特別的東西</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> <span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
-<span class="token number">1</span>
-<span class="token operator">></span> <span class="token class-name">Array</span><span class="token punctuation">.</span>prototype
-<span class="token punctuation">[</span><span class="token number">42</span><span class="token punctuation">,</span> <span class="token literal-property property">constructor</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">concat</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">copyWithin</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">find</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> …<span class="token punctuation">]</span>
-<span class="token operator">></span> Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span><span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">)</span>
-<span class="token boolean">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> <span class="token class-name">Set</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>  <span class="token comment">// Uncaught TypeError</span>
-Uncaught TypeError<span class="token operator">:</span> Method <span class="token class-name">Set</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>add called on incompatible receiver #<span class="token operator">&lt;</span>Set<span class="token operator">></span>
-    at Set<span class="token punctuation">.</span><span class="token function">add</span> <span class="token punctuation">(</span><span class="token operator">&lt;</span>anonymous<span class="token operator">></span><span class="token punctuation">)</span>
-    at <span class="token operator">&lt;</span>anonymous<span class="token operator">></span><span class="token operator">:</span><span class="token number">1</span><span class="token operator">:</span><span class="token number">15</span>
-<span class="token operator">></span> <span class="token class-name">Set</span><span class="token punctuation">.</span>prototype
-Set <span class="token punctuation">&#123;</span><span class="token literal-property property">constructor</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">has</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">add</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token keyword">delete</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> <span class="token literal-property property">clear</span><span class="token operator">:</span> ƒ<span class="token punctuation">,</span> …<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&gt; Array.prototype.push(42)
+1
+&gt; Array.prototype
+[42, constructor: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, find: ƒ, …]
+&gt; Array.isArray(Array.prototype)
+true</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&gt; Set.prototype.add(42)  &#x2F;&#x2F; Uncaught TypeError
+Uncaught TypeError: Method Set.prototype.add called on incompatible receiver #&lt;Set&gt;
+    at Set.add (&lt;anonymous&gt;)
+    at &lt;anonymous&gt;:1:15
+&gt; Set.prototype
+Set &#123;constructor: ƒ, has: ƒ, add: ƒ, delete: ƒ, clear: ƒ, …&#125;</code></pre>
 <p>困惑為什麼一個方法可以用在原型，另一個方法卻不能用在原型。而且<a target="_blank" rel="noopener" href="https://www.google.com/search?q=array+prototype+push+on+prototype">Google 總是找不到</a>，<a target="_blank" rel="noopener" href="https://stackoverflow.com/search?q=array+prototype+push+on+prototype">Stack Overflow 也幫不到你</a>。</p>
 <p>閱讀規範能解惑。</p>
 <p>或者，你可能想知道惡名昭彰的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality_operators">寬鬆相等</a> (<code>==</code>) 跑起來是什麼樣的 function。(在此<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>不嚴謹的使用 “function” 這個詞) 即使是勤奮好學的軟體工程師，在查找 MDN 所找到的收獲遠不及對你眼睛的傷害。<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
 <p>閱讀規範能解惑。</p>
 <div class="info">
 <p>譯註: 一些精彩的 WAT 反應</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token operator">+</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token operator">+</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-<span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span>
-<span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">"wat"</span><span class="token punctuation">)</span>
-<span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">"wat"</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token function">Array</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">"wat"</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"Batman!"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">[] + []
+[] + &#123;&#125;
+&#123;&#125; + []
+&#123;&#125; + &#123;&#125;
+Array(16)
+Array(16).join(&quot;wat&quot;)
+Array(16).join(&quot;wat&quot; + 1)
+Array(16).join(&quot;wat&quot; - 1) + &quot;Batman!&quot;</code></pre>
 </div>
 <p>另外，對於不熟悉 JavaScript 的開發人員，我不推薦讀 spec。如果你是 JavaScript 新手，請先上網玩一輪！建立一些 web apps！找 JavaScript 的寶寶監視器應用！或任何什麼都行！<br>
 當你歷經了許多 JavaScript 的缺陷或者對 JavaScript 有經驗豐富到不用擔心，只要符合其中一個就可以考慮回到這個文件看看。</p>
@@ -545,11 +549,11 @@ evaluated 其實也許是 eval() 的意思，直翻是評估，是編譯 JS 的�
 </ol>
 </div>
 <p>這可能會依稀回想起你的 C 錯誤處理方式：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token function">abstractOp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Step 1</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>result <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>             <span class="token comment">// Step 2</span>
-  <span class="token keyword">return</span> result<span class="token punctuation">;</span>            <span class="token comment">// Step 2 (continued)</span>
-                            <span class="token comment">// Step 3 is unneeded</span>
-<span class="token comment">// func() succeeded; carrying on...  // Step 4</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-c" data-language="c"><code class="language-c">int result &#x3D; abstractOp();  &#x2F;&#x2F; Step 1
+if (result &lt; 0)             &#x2F;&#x2F; Step 2
+  return result;            &#x2F;&#x2F; Step 2 (continued)
+                            &#x2F;&#x2F; Step 3 is unneeded
+&#x2F;&#x2F; func() succeeded; carrying on...  &#x2F;&#x2F; Step 4</code></pre>
 </blockquote>
 <p>但是為了減少這些大量重複的步驟，ECMAScript spec 的編輯人員自 ES2016 開始加入一些縮寫方式，透過以下兩種寫法等效的表達相同的規範。</p>
 <blockquote>
@@ -641,24 +645,24 @@ A few steps that call an abstract operation that cannot ever throw with an excla
 <p>其中，設定 Array 的 length 屬性，看起來是一個可以刪除的普通屬性(但其實不能被刪除)。相反，<code>new Map().size</code> 只是一個在 <code>Map.prototype</code> 上的 <code>getter</code> 函數，沒有像 <code>[].length</code> 這種的魔法屬性。</p>
 </blockquote>
 <blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> <span class="token keyword">const</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">[</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span> <span class="token punctuation">]</span>
-<span class="token operator">></span> arr<span class="token punctuation">.</span>length <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">[</span> <span class="token number">0</span> <span class="token punctuation">]</span>
-<span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">getOwnPropertyDescriptor</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"length"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#123;</span> <span class="token literal-property property">value</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">writable</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">enumerable</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">configurable</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">getOwnPropertyDescriptor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"size"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">undefined</span>
-<span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">getOwnPropertyDescriptor</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token punctuation">.</span>prototype<span class="token punctuation">,</span> <span class="token string">"size"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#123;</span> <span class="token literal-property property">get</span><span class="token operator">:</span> <span class="token punctuation">[</span>Function<span class="token operator">:</span> <span class="token keyword">get</span> size<span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">set</span><span class="token operator">:</span> <span class="token keyword">undefined</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">enumerable</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">configurable</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&gt; const arr &#x3D; [0, 1, 2, 3];
+&gt; console.log(arr);
+[ 0, 1, 2, 3 ]
+&gt; arr.length &#x3D; 1;
+&gt; console.log(arr);
+[ 0 ]
+&gt; console.log(Object.getOwnPropertyDescriptor([], &quot;length&quot;));
+&#123; value: 1,
+  writable: true,
+  enumerable: false,
+  configurable: false &#125;</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&gt; console.log(Object.getOwnPropertyDescriptor(new Map(), &quot;size&quot;));
+undefined
+&gt; console.log(Object.getOwnPropertyDescriptor(Map.prototype, &quot;size&quot;));
+&#123; get: [Function: get size],
+  set: undefined,
+  enumerable: false,
+  configurable: true &#125;</code></pre>
 <p>透過 override [[DefineOwnProperty]] 這個 internal method 可以實現這個神奇的行為。(但是改不了已經定義好的魔法屬性)，詳情可參考 <a target="_blank" rel="noopener" href="https://tc39.es/ecma262/#sec-array-exotic-objects">§9.4.2 Array Exotic Objects</a></p>
 </blockquote>
 <p>ECMAScript 規範也允許其它的規範定義自己特有的 exotic objects。透過這種機制可以指定在瀏覽器上跨域 API 存取的限制 (參考 <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy">WindowProxy</a>)。JavaScript 開發者也可以透過 <code>Proxy</code> API 建立自己的 exotic objects。</p>
@@ -679,7 +683,7 @@ A few steps that call an abstract operation that cannot ever throw with an excla
 <p>設假現下列這樣的問題:</p>
 <blockquote>
 <p>不執行下面程式碼，這段會回傳什麼？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token class-name">String</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">undefined</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">String.prototype.substring.call(undefined, 2, 4)</code></pre>
 </blockquote>
 <p>這是一個棘手的問題。似乎有兩個合理的解果:</p>
 <ol>
@@ -727,11 +731,11 @@ A few steps that call an abstract operation that cannot ever throw with an excla
 <blockquote>
 <p>規範只有規定拋出 Error 的型別，沒有規定要包含什麼訊息。意思是實作可能有不同的錯誤訊息，甚至是本地的錯誤訊息。</p>
 <p>例如:  Google 的 V8 6.4 版 (內建在 Google Chrome 64) 的訊息是</p>
-<pre class="line-numbers language-none"><code class="language-none">TypeError: String.prototype.substring called on null or undefined<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">TypeError: String.prototype.substring called on null or undefined</code></pre>
 <p>而 Mozilla Firefox 的 57.0 版給的訊息，少到沒什麼幫助</p>
-<pre class="line-numbers language-none"><code class="language-none">TypeError: can&#39;t convert undefined to object<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">TypeError: can&#39;t convert undefined to object</code></pre>
 <p>相同的 ChakraCore 的 1.7.5.0 版 (Microsoft Edge 的 JavaScript 引擎) 走的是 V8 的路線。</p>
-<pre class="line-numbers language-none"><code class="language-none">TypeError: String.prototype.substring: &#39;this&#39; is null or undefined<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">TypeError: String.prototype.substring: &#39;this&#39; is null or undefined</code></pre>
 </blockquote>
 <h2 id="2-7-example-can-boolean-and-string-ever-throw-exceptions"><a class="header-anchor" href="#2-7-example-can-boolean-and-string-ever-throw-exceptions">¶</a>2.7 Example: Can <code>Boolean()</code> and <code>String()</code> ever throw exceptions?</h2>
 <p>當撰寫到任務關鍵程式碼時，第一重要的程式碼，往往是要寫一個例外處理。因此，要常思考「某些內建函數有拋過例外嗎？」</p>
@@ -812,65 +816,65 @@ When String is called with argument value, the following steps are taken:</p>
 <p>EXAMPLE 10<br>
 <code>String()</code><br>
 <strong>Several examples <code>String()</code> where throws</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   OrdinaryGet step 8.</span>
-<span class="token comment">//   Ordinary Object's [[Get]]() step 1.</span>
-<span class="token comment">//   GetV step 3.</span>
-<span class="token comment">//   GetMethod step 2.</span>
-<span class="token comment">//   ToPrimitive step 2.d.</span>
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token keyword">get</span> <span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>toPrimitive<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Breaking JavaScript"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   GetMethod step 4.</span>
-<span class="token comment">//   ToPrimitive step 2.d.</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   OrdinaryGet step 8.
+&#x2F;&#x2F;   Ordinary Object&#39;s [[Get]]() step 1.
+&#x2F;&#x2F;   GetV step 3.
+&#x2F;&#x2F;   GetMethod step 2.
+&#x2F;&#x2F;   ToPrimitive step 2.d.
+String(&#123;
+  get [Symbol.toPrimitive]() &#123;
+    throw new Error(&quot;Breaking JavaScript&quot;);
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   GetMethod step 4.
+&#x2F;&#x2F;   ToPrimitive step 2.d.
 
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token keyword">get</span> <span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>toPrimitive<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token string">"Breaking JavaScript"</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   ToPrimitive step 2.e.i.</span>
+String(&#123;
+  get [Symbol.toPrimitive]() &#123;
+    return &quot;Breaking JavaScript&quot;;
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   ToPrimitive step 2.e.i.
 
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>toPrimitive<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Breaking JavaScript"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   ToPrimitive step 2.e.iii.</span>
+String(&#123;
+  [Symbol.toPrimitive]() &#123;
+    throw new Error(&quot;Breaking JavaScript&quot;);
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   ToPrimitive step 2.e.iii.
 
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>toPrimitive<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span> <span class="token string-property property">"breaking"</span><span class="token operator">:</span> <span class="token string">"JavaScript"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   OrdinaryToPrimitive step 5.b.i.</span>
-<span class="token comment">//   ToPrimitive step 2.g.</span>
+String(&#123;
+  [Symbol.toPrimitive]() &#123;
+    return &#123; &quot;breaking&quot;: &quot;JavaScript&quot; &#125;;
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   OrdinaryToPrimitive step 5.b.i.
+&#x2F;&#x2F;   ToPrimitive step 2.g.
 
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Breaking JavaScript"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   OrdinaryToPrimitive step 5.b.i.</span>
-<span class="token comment">//   ToPrimitive step 2.g.</span>
+String(&#123;
+  toString() &#123;
+    throw new Error(&quot;Breaking JavaScript&quot;);
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   OrdinaryToPrimitive step 5.b.i.
+&#x2F;&#x2F;   ToPrimitive step 2.g.
 
-<span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Breaking JavaScript"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Spec stack trace:</span>
-<span class="token comment">//   OrdinaryToPrimitive step 6.</span>
-<span class="token comment">//   ToPrimitive step 2.g.</span>
+String(&#123;
+  valueOf() &#123;
+    throw new Error(&quot;Breaking JavaScript&quot;);
+  &#125;
+&#125;);</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; Spec stack trace:
+&#x2F;&#x2F;   OrdinaryToPrimitive step 6.
+&#x2F;&#x2F;   ToPrimitive step 2.g.
 
-<span class="token function">String</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+String(Object.create(null));</code></pre>
 </blockquote>
 <p>So for String(), our conclusion is that it never throws exceptions for primitive values, but may throw errors for Objects.</p>
 <p>所以 <code>String()</code> 絕對不會在 primitive values 時拋出例外，但是會在 Object 時可能拋出例外，是我們的結論。</p>
@@ -980,21 +984,14 @@ ECMAScript® 2022 Language Specification</a> <a href="#fnref16" class="footnote-
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

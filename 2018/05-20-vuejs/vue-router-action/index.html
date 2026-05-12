@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -172,49 +176,49 @@
 </li>
 </ul>
 <p>路徑結構會像這樣 (列舉一些內頁可能的例子)</p>
-<pre class="line-numbers language-none"><code class="language-none">+ 首頁
+<pre class="language-none"><code class="language-none">+ 首頁
 + 主頁
     + 最新消息
     + 產品內容
     + 購物車
     + 關於我們
-    + ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    + ...</code></pre>
 <p>若加上網址，結構就會像這樣<br>
 (假設 host: <a href="http://dwatow.github.io">dwatow.github.io</a>)</p>
-<pre class="line-numbers language-none"><code class="language-none">+ 首頁: dwatow.github.io&#x2F;
+<pre class="language-none"><code class="language-none">+ 首頁: dwatow.github.io&#x2F;
 + 主頁: dwatow.github.io&#x2F;main
     + 最新消息: dwatow.github.io&#x2F;main&#x2F;news
     + 產品內容: dwatow.github.io&#x2F;main&#x2F;products
     + 購物車:   dwatow.github.io&#x2F;main&#x2F;carts
     + 關於我們: dwatow.github.io&#x2F;main&#x2F;about
-    + ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    + ...</code></pre>
 <p>有發現嗎？網址會有部份共用，就像是檔案結構般(但其實不是)</p>
 <p><strong>實作上</strong></p>
 <p>根目錄 和 主頁 要放一個 <code>&lt;router-view&gt;&lt;/router-view&gt;</code><br>
 在 vue-router 的 router 設計，要使用 <code>children</code> 代表某一層要共用，有子層結構<br>
 在共用層要使用 <code>redirect</code> 指向某一個子層</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> route <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">routes</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">redirect</span><span class="token operator">:</span> <span class="token string">"/login"</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/login"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"login"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">component</span><span class="token operator">:</span> login
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">path</span><span class="token operator">:</span> <span class="token string">"/main"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"main"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">component</span><span class="token operator">:</span> main<span class="token punctuation">,</span>
-      <span class="token literal-property property">redirect</span><span class="token operator">:</span> <span class="token string">"/main/index"</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">children</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token comment">//...</span>
-      <span class="token punctuation">]</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var route &#x3D; new Router(&#123;
+  routes: [
+    &#123;
+      path: &quot;&#x2F;&quot;,
+      redirect: &quot;&#x2F;login&quot;
+    &#125;,
+    &#123;
+      path: &quot;&#x2F;login&quot;,
+      name: &quot;login&quot;,
+      component: login
+    &#125;,
+    &#123;
+      path: &quot;&#x2F;main&quot;,
+      name: &quot;main&quot;,
+      component: main,
+      redirect: &quot;&#x2F;main&#x2F;index&quot;,
+      children: [
+        &#x2F;&#x2F;...
+      ]
+    &#125;
+  ]
+&#125;);</code></pre>
 <div class="danger">
 <p>一個看似簡單的巢狀結構，其實還要搭配畫面的結構才可以順利運作。</p>
 </div>
@@ -236,21 +240,21 @@
 <p>第一點，只有在第一次畫面載入時，才會發生。透過 router 切換頁面內容，是不會造成 components 消滅或重新生成 (vue 本來的設計，就是這樣)。<br>
 第二點， router 原生的設計，就有這一個時機 (<code>beforeEach</code>) 可以使用。</p>
 <p>直接對 router 物件使用 method</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VueRouter</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token operator">...</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const router &#x3D; new VueRouter(&#123; ... &#125;)
 
-router<span class="token punctuation">.</span><span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">to<span class="token punctuation">,</span> from<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token keyword">switch</span><span class="token punctuation">(</span>to<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">case</span> <span class="token string">'news'</span><span class="token operator">:</span>
-      <span class="token keyword">await</span> router<span class="token punctuation">.</span>app<span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'API'</span><span class="token punctuation">,</span> <span class="token string">'/news'</span><span class="token punctuation">)</span>
-      <span class="token keyword">break</span>
-    <span class="token keyword">case</span> <span class="token string">'products'</span><span class="token operator">:</span>
-      <span class="token keyword">await</span> router<span class="token punctuation">.</span>app<span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'API'</span><span class="token punctuation">,</span> <span class="token string">'/products'</span><span class="token punctuation">)</span>
-      <span class="token keyword">break</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+router.beforeEach(async (to, from, next) &#x3D;&gt; &#123;
+  &#x2F;&#x2F;...
+  switch(to.name) &#123;
+    case &#39;news&#39;:
+      await router.app.$store.dispatch(&#39;API&#39;, &#39;&#x2F;news&#39;)
+      break
+    case &#39;products&#39;:
+      await router.app.$store.dispatch(&#39;API&#39;, &#39;&#x2F;products&#39;)
+      break
+    &#x2F;&#x2F;...
+  &#125;
+  next()
+&#125;)</code></pre>
 <ul>
 <li>to: 下一個 route</li>
 <li>from: 上一個 route (進入首頁 = null)</li>
@@ -271,7 +275,7 @@ router<span class="token punctuation">.</span><span class="token function">befor
 <p>在使用 vue 時，這種流程、頁面切換的條件、程式碼執行。都會使用 vue router<br>
 通常入門 vue router 時，會先學用 HTML 指定的方式 <code>&lt;router-link :to=&quot;...&quot;&gt;</code>，按下就會前往某個 <code>path</code>，但是就謹止於此的簡單需求。</p>
 <p>若遇到這種(語意上相同)「切換頁面，若…要導向」的 Story，就要考慮使用 JavaScript ，有邏輯的「選擇式導向」。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>location<span class="token punctuation">,</span> onComplete<span class="token operator">?</span><span class="token punctuation">,</span> onAbort<span class="token operator">?</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">router.push(location, onComplete?, onAbort?)</code></pre>
 <ul>
 <li>location
 <ul>
@@ -281,7 +285,7 @@ router<span class="token punctuation">.</span><span class="token function">befor
 </li>
 </ul>
 <p>就可以寫這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">router.push(&quot;&#x2F;&quot;);</code></pre>
 <div class="danger">
 <p>短短一句 code 要先懂這些事呀</p>
 </div>
@@ -334,21 +338,14 @@ router<span class="token punctuation">.</span><span class="token function">befor
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

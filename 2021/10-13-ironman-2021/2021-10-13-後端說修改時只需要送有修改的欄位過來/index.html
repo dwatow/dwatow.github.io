@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -167,105 +171,105 @@
 <ul>
 <li>設定初值時，要同步清掉 dirty</li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> actions <span class="token keyword">from</span> <span class="token string">'./actions'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import actions from &#39;.&#x2F;actions&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  actions<span class="token punctuation">,</span>
-  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">one</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dirty</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">list</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">mutations</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      state<span class="token punctuation">.</span>one <span class="token operator">=</span> payload
-      state<span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token function">userDirty</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      state<span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token operator">...</span>state<span class="token punctuation">.</span>dirty<span class="token punctuation">,</span>
+export default &#123;
+  actions,
+  state: &#123;
+    one: &#123;&#125;,
+    dirty: &#123;&#125;,
+    list: [],
+  &#125;,
+  mutations: &#123;
+    user (state, payload) &#123;
+      state.one &#x3D; payload
+      state.dirty &#x3D; &#123;&#125;
+    &#125;,
+    userDirty (state, payload) &#123;
+      state.dirty &#x3D; &#123;
+        ...state.dirty,
         payload
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token function">users</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      state<span class="token punctuation">.</span>list <span class="token operator">=</span> payload
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> state<span class="token punctuation">.</span>one<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token function">userDirty</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> state<span class="token punctuation">.</span>dirty<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token function">userForm</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-        <span class="token operator">...</span>state<span class="token punctuation">.</span>one<span class="token punctuation">,</span>
-        <span class="token operator">...</span>state<span class="token punctuation">.</span>dirty
-      <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token function">users</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> state<span class="token punctuation">.</span>list<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      &#125;
+    &#125;,
+    users (state, payload) &#123;
+      state.list &#x3D; payload
+    &#125;
+  &#125;,
+  getters: &#123;
+    user (state) &#123;
+      return state.one;
+    &#125;,
+    userDirty (state) &#123;
+      return state.dirty;
+    &#125;,
+    userForm (state) &#123;
+      return &#123;
+        ...state.one,
+        ...state.dirty
+      &#125;;
+    &#125;,
+    users (state) &#123;
+      return state.list;
+    &#125;,
+  &#125;,
+&#125;;
+</code></pre>
 <h3 id="store-user-actions-js"><a class="header-anchor" href="#store-user-actions-js">¶</a><strong>store/user/actions.js</strong></h3>
 <p>這樣要求的話，後端給的 API 應該是要指定成 PATCH 的唷！(不是的話請後端看一下 RESTful API)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token constant">API</span> <span class="token keyword">from</span> <span class="token string">'@/utils/API'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import API from &#39;@&#x2F;utils&#x2F;API&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token keyword">async</span> <span class="token function">updateClient</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> getters <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> id <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token constant">API</span><span class="token punctuation">.</span><span class="token constant">PATCH</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/clients/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>id<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> getters<span class="token punctuation">.</span>clientDirty<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment">// ...</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+export default &#123;
+  &#x2F;&#x2F;...
+  async updateClient(&#123; getters &#125;, &#123; id &#125;) &#123;
+    const res &#x3D; await API.PATCH(&#96;&#x2F;clients&#x2F;$&#123;id&#125;&#96;, getters.clientDirty);
+    &#x2F;&#x2F; ...
+  &#125;
+  &#x2F;&#x2F;...
+&#125;;
+</code></pre>
 <p><strong>components/UserForm.vue</strong></p>
 <p>這裡，是處理物件第一層 property 的那一層。<br>
 要改寫成「改什麼，物件就只帶什麼傳出去」。</p>
 <p>原本的</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'update:first_name'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token operator">...</span>data<span class="token punctuation">,</span>
-  <span class="token literal-property property">first_name</span><span class="token operator">:</span> $event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">$emit(&#39;update:first_name&#39;, &#123;
+  ...data,
+  first_name: $event.target.value
+&#125;)
+</code></pre>
 <p>改成這樣寫</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'update:first_name'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">first_name</span><span class="token operator">:</span> $event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">$emit(&#39;update:first_name&#39;, &#123;
+  first_name: $event.target.value
+&#125;)
+</code></pre>
 <p>整頁長這樣</p>
 <blockquote>
 <p>只留下資料流相關的 code 其它先刪掉啦</p>
 </blockquote>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">@submit.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('submit')<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>first_name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.first_name<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:first_name', &#123;
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;form @submit.prevent&#x3D;&quot;$emit(&#39;submit&#39;)&quot;&gt;
+  &lt;label&gt;first_name&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;text&quot;
+      :value&#x3D;&quot;data.first_name&quot;
+      @input&#x3D;&quot;$emit(&#39;update:first_name&#39;, &#123;
         first_name: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>last_name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.last_name<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:last_name', &#123;
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;label&gt;last_name&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;text&quot;
+      :value&#x3D;&quot;data.last_name&quot;
+      @input&#x3D;&quot;$emit(&#39;update:last_name&#39;, &#123;
         last_name: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>email<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.email<span class="token punctuation">"</span></span>
-      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:email', &#123;
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;label&gt;email&lt;br&#x2F;&gt;
+    &lt;input type&#x3D;&quot;email&quot;
+      :value&#x3D;&quot;data.email&quot;
+      @input&#x3D;&quot;$emit(&#39;update:email&#39;, &#123;
         email: $event.target.value
-      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>送出<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      &#125;)&quot;&gt;
+  &lt;&#x2F;label&gt;&lt;br&#x2F;&gt;
+  &lt;input type&#x3D;&quot;submit&quot; value&#x3D;&quot;送出&quot;&gt;
+&lt;&#x2F;form&gt;
+</code></pre>
 <p><strong>src/views/UpdateUser.vue</strong></p>
 <p>資料流修改之後，比較重要的是 update 的頁面要改成編輯 <code>userDirty</code> 這個空物件。<br>
 將修改的內容累積在它身上</p>
@@ -274,14 +278,14 @@
 <p>改成這樣</p>
 <p><code>$store.commit('userDirty', $event)</code></p>
 <p>引用時，就變這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">&lt;</span>UserForm
-  <span class="token operator">:</span>data<span class="token operator">=</span><span class="token string">"data"</span>
-  @update<span class="token operator">:</span>first_name<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
-  @update<span class="token operator">:</span>last_name<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
-  @update<span class="token operator">:</span>email<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
-  @submit<span class="token operator">=</span><span class="token string">"onSubmit"</span>
-<span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>UserForm<span class="token operator">></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&lt;UserForm
+  :data&#x3D;&quot;data&quot;
+  @update:first_name&#x3D;&quot;$store.commit(&#39;userDirty&#39;, $event)&quot;
+  @update:last_name&#x3D;&quot;$store.commit(&#39;userDirty&#39;, $event)&quot;
+  @update:email&#x3D;&quot;$store.commit(&#39;userDirty&#39;, $event)&quot;
+  @submit&#x3D;&quot;onSubmit&quot;
+&gt;&lt;&#x2F;UserForm&gt;
+</code></pre>
 <h2 id="畫面-資料現況"><a class="header-anchor" href="#畫面-資料現況">¶</a>畫面 + 資料現況</h2>
 <p>原本這樣</p>
 <p><img src="/images/6a7f052e-3WYDW80.png" alt=""></p>
@@ -343,21 +347,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

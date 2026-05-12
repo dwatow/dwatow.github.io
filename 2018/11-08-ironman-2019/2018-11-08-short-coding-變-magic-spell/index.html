@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  會被視為 Short Coding 技巧  三元運算式 隱含的強制轉型 ! or ~ 的轉態 ++, --運算子的使用  ¶「開新眼界」的走火入魔版 respons_message &#x3D; (webhook_event.message) ? handleMessage(webhook_event.message) : (webhook">
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  會被視為 Short Coding 技巧  三元運算式 隱含的強制轉型 ! or ~ 的轉態 ++, --運算子的使用  ¶「開新眼界」的走火入魔版 respons_message &#x3D; (webhook_event.message) ? handleMessage(webhook_event.message) : (we">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Short Coding 變 Magic Spell">
 <meta property="og:url" content="https://dwatow.github.io/2018/11-08-ironman-2019/2018-11-08-short-coding-%E8%AE%8A-magic-spell/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  會被視為 Short Coding 技巧  三元運算式 隱含的強制轉型 ! or ~ 的轉態 ++, --運算子的使用  ¶「開新眼界」的走火入魔版 respons_message &#x3D; (webhook_event.message) ? handleMessage(webhook_event.message) : (webhook">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  會被視為 Short Coding 技巧  三元運算式 隱含的強制轉型 ! or ~ 的轉態 ++, --運算子的使用  ¶「開新眼界」的走火入魔版 respons_message &#x3D; (webhook_event.message) ? handleMessage(webhook_event.message) : (we">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-11-07T16:00:00.000Z">
 <meta property="article:modified_time" content="2026-05-12T02:37:09.006Z">
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -161,127 +165,127 @@
 <li><code>++</code>, <code>--</code>運算子的使用</li>
 </ul>
 <h2 id="開新眼界-的走火入魔版"><a class="header-anchor" href="#開新眼界-的走火入魔版">¶</a>「開新眼界」的走火入魔版</h2>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">respons_message <span class="token operator">=</span> <span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>message<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>message<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>postback<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token function">handlePostback</span><span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>postback<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">respons_message &#x3D; (webhook_event.message) ? handleMessage(webhook_event.message) : (webhook_event.postback) ? handlePostback(webhook_event.postback) : &quot;&quot;;
+</code></pre>
 <p>原本是這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>message<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  respons_message <span class="token operator">=</span> <span class="token function">handleMessage</span><span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>postback<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  respons_message <span class="token operator">=</span> <span class="token function">handlePostback</span><span class="token punctuation">(</span>webhook_event<span class="token punctuation">.</span>postback<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">if (webhook_event.message) &#123;
+  respons_message &#x3D; handleMessage(webhook_event.message);
+&#125; else if (webhook_event.postback) &#123;
+  respons_message &#x3D; handlePostback(webhook_event.postback);
+&#125;
+</code></pre>
 <p>在發現 <code>?:</code> 這種三元運算子可以縮短程式碼。讓這種寫法影響你大腦分泌的多巴胺時 (感覺到美妙)，就糟了，走火入魔的開始。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myAge
-<span class="token keyword">if</span> <span class="token punctuation">(</span>age <span class="token operator">&lt;</span> <span class="token number">18</span><span class="token punctuation">)</span>
-  myAge <span class="token operator">=</span> age
-<span class="token keyword">else</span>
-  myAge <span class="token operator">=</span> <span class="token number">18</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var myAge
+if (age &lt; 18)
+  myAge &#x3D; age
+else
+  myAge &#x3D; 18
   
-<span class="token keyword">var</span> chris <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> myAge
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+var chris &#x3D; &#123;
+  age: myAge
+&#125;
+</code></pre>
 <p>變成這樣</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> chris <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token punctuation">(</span>age <span class="token operator">&lt;</span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token operator">?</span> age <span class="token operator">:</span> <span class="token number">18</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var chris &#x3D; &#123;
+  age: (age &lt; 18) ? age : 18
+&#125;
+</code></pre>
 <p>有因為分泌多一點的「多巴胺」而感到美妙嗎？哈哈</p>
 <h2 id="再少一行-再少一行"><a class="header-anchor" href="#再少一行-再少一行">¶</a>再少一行！再少一行！</h2>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> fontColor <span class="token operator">=</span> <span class="token string">'#22beff'</span>
-<span class="token keyword">var</span> gray <span class="token operator">=</span> <span class="token function">encode</span><span class="token punctuation">(</span>fontColor<span class="token punctuation">)</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>gray <span class="token operator">></span> <span class="token number">255</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// doSomething</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var fontColor &#x3D; &#39;#22beff&#39;
+var gray &#x3D; encode(fontColor)
+if (gray &gt; 255) &#123;
+  &#x2F;&#x2F; doSomething
+&#125;
+</code></pre>
 <p>再少一行</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> gray <span class="token operator">=</span> <span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">'#22beff'</span><span class="token punctuation">)</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>gray <span class="token operator">></span> <span class="token number">255</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// doSomething</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var gray &#x3D; encode(&#39;#22beff&#39;)
+if (gray &gt; 255) &#123;
+  &#x2F;&#x2F; doSomething
+&#125;
+</code></pre>
 <p>再少一行</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">'#22beff'</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">255</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// doSomething</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">if (encode(&#39;#22beff&#39;) &gt; 255) &#123;
+  &#x2F;&#x2F; doSomething
+&#125;
+</code></pre>
 <p>你看得出，它編碼編出來是什麼嗎？</p>
 <p><strong>賦值，也要 Short Coding</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var a &#x3D; 1;
+var b &#x3D; 1;
+</code></pre>
 <p>也許有人會這樣寫</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var a &#x3D; 1, b &#x3D; 1;
+</code></pre>
 <p>試過這樣嗎？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> b <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">// a = 1, b = 1</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var a &#x3D; b &#x3D; 1; &#x2F;&#x2F; a &#x3D; 1, b &#x3D; 1
+</code></pre>
 <p><strong>函數參數，也要 Short Coding</strong>[1]</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">a <span class="token operator">=</span> a <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token function">foo</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">a &#x3D; a - 1;
+foo(a);
+</code></pre>
 <p>再少一行</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">foo</span><span class="token punctuation">(</span><span class="token operator">--</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 分辨得出和 foo(a--); 的差異嗎？</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">foo(--a);  &#x2F;&#x2F; 分辨得出和 foo(a--); 的差異嗎？
+</code></pre>
 <h2 id="開始走火入魔"><a class="header-anchor" href="#開始走火入魔">¶</a>開始走火入魔</h2>
 <h3 id="合併相同長度的迴圈"><a class="header-anchor" href="#合併相同長度的迴圈">¶</a>合併相同長度的迴圈!!</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
-<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var a &#x3D; [1, 2, 3, 4, 5]
+var b &#x3D; [5, 3, 9, 8, 1]
 
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> a<span class="token punctuation">.</span>length<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">//做一些處理 a 的事</span>
-<span class="token punctuation">&#125;</span>
+for (let i &#x3D; 0; i &lt; a.length; ++i) &#123;
+  a[i] + 1; &#x2F;&#x2F;做一些處理 a 的事
+&#125;
 
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>length<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">23</span><span class="token punctuation">;</span> <span class="token comment">//做一些處理 b 的事</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+for (let i &#x3D; 0; i &lt; b.length; ++i) &#123;
+  b[i] + 23; &#x2F;&#x2F;做一些處理 b 的事
+&#125;
+</code></pre>
 <p>變成</p>
 <p>其實，你要看 a 和 b 的迴圈是否表示相同語意？<br>
 合併語法的好原則，是依語意判斷</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
-<span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var a &#x3D; [1, 2, 3, 4, 5]
+var b &#x3D; [5, 3, 9, 8, 1]
 
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> a<span class="token punctuation">.</span>length<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">//做一些處理 a 的事</span>
-  b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">23</span><span class="token punctuation">;</span> <span class="token comment">//做一些處理 b 的事</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+for (let i &#x3D; 0; i &lt; a.length; ++i) &#123;
+  a[i] + 1; &#x2F;&#x2F;做一些處理 a 的事
+  b[i] + 23; &#x2F;&#x2F;做一些處理 b 的事
+&#125;
+</code></pre>
 <h3 id="使用守護運算子"><a class="header-anchor" href="#使用守護運算子">¶</a>使用守護運算子</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>member <span class="token operator">&amp;&amp;</span> member<span class="token punctuation">.</span>isExist<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">saveFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">if (member &amp;&amp; member.isExist) &#123;
+  saveFile();
+&#125;
+</code></pre>
 <p>改成</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">member <span class="token operator">&amp;&amp;</span> member<span class="token punctuation">.</span>isExist <span class="token operator">&amp;&amp;</span> <span class="token function">saveFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">member &amp;&amp; member.isExist &amp;&amp; saveFile();
+</code></pre>
 <blockquote>
 <p>JavaScript 的 <code>||</code> 和 <code>&amp;&amp;</code> 是一種判斷 + 選擇回傳的機制[2]<br>
 <code>a ? a : b</code> 約略等同 <code>a || b</code>[3]<br>
 <code>a ? b : a</code> 約略等同 <code>a &amp;&amp; b</code></p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> status <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">let status &#x3D; null;
     
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">!</span>project<span class="token punctuation">.</span>workItem<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  status <span class="token operator">=</span> <span class="token string">'working'</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-  status <span class="token operator">=</span> <span class="token string">'initialed'</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+if (!!project.workItem) &#123;
+  status &#x3D; &#39;working&#39;;
+&#125; else &#123;
+  status &#x3D; &#39;initialed&#39;;
+&#125;
+</code></pre>
 <p>改成</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> status <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">!</span>project<span class="token punctuation">.</span>workItem<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token string">'working'</span> <span class="token operator">||</span> <span class="token string">'initialed'</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const status &#x3D; (!!project.workItem) &amp;&amp; &#39;working&#39; || &#39;initialed&#39;;
+</code></pre>
 <blockquote>
 <p>三元運算式反而在這時是很適合使用的</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> status <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token operator">!</span>project<span class="token punctuation">.</span>workItem<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token string">'working'</span> <span class="token operator">:</span> <span class="token string">'initialed'</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const status &#x3D; (!!project.workItem) ? &#39;working&#39; : &#39;initialed&#39;;
+</code></pre>
 <h3 id="偵測-indexof"><a class="header-anchor" href="#偵測-indexof">¶</a>偵測 indexOf</h3>
 <p><code>indexOf</code> 找不到會 return -1，在 JavaScript 中，<code>~</code> 使用 2 的補數，就可以偵測 是否 <code>-1</code> 轉成 <code>0</code> 並且在 if 中進行強制轉型成 boolean 值</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">~</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">//true</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">if (~[1, 2, 3].indexOf(2)) &#123;  &#x2F;&#x2F;true
+  &#x2F;&#x2F;...
+&#125;
+</code></pre>
 <h2 id="coding-golf"><a class="header-anchor" href="#coding-golf">¶</a>Coding Golf</h2>
 <blockquote>
 <p>Code Golf 是一種 coding 挑戰， 它追求的特點就一個字： 短。為了實現某個功能， 用盡可能短的代碼去實現， 縮短哪怕一個字節也是進步。起這個名字顯然是因為高爾夫球的規則也是爭取用最短的桿數完成比賽。[4]</p>
@@ -302,53 +306,53 @@
 <p>看個例子</p>
 <p><strong>webpack 官網中，一小段程式碼</strong></p>
 <p>看見了嗎？ 除了命名被 Uglify 之外，</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">n<span class="token punctuation">.</span><span class="token function-variable function">n</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> t <span class="token operator">=</span> e <span class="token operator">&amp;&amp;</span> e<span class="token punctuation">.</span>__esModule
-  <span class="token operator">?</span>
-  <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> e<span class="token punctuation">.</span>default
-  <span class="token punctuation">&#125;</span>
-  <span class="token operator">:</span>
-  <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> e
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">n.n &#x3D; function(e) &#123;
+  var t &#x3D; e &amp;&amp; e.__esModule
+  ?
+  function() &#123;
+    return e.default
+  &#125;
+  :
+  function() &#123;
+    return e
+  &#125;;
   
-  <span class="token keyword">return</span> n<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">,</span> t<span class="token punctuation">)</span><span class="token punctuation">,</span> t
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  return n.d(t, &quot;a&quot;, t), t
+&#125;
+</code></pre>
 <h2 id="不寫分號的-js-可以再短一點"><a class="header-anchor" href="#不寫分號的-js-可以再短一點">¶</a>不寫分號的 JS 可以再短一點</h2>
 <p>這其實也是 UglifyJS 有做的事。<br>
 這件事其實在 2013 年出版的書[6] 就有提到這件事。自動補上分號，是 JavaScript 的容錯機制，有人將它視為一種 coding 風格，我也真服了他！(認真，因為他打算一輩子寫 JavaScript or Python 吧？)</p>
 <h2 id="short-coding-究竟是不是好的？"><a class="header-anchor" href="#short-coding-究竟是不是好的？">¶</a>Short Coding，究竟是不是好的？</h2>
 <p>只要程式碼沒有複雜，就是好的。<br>
 (我自己會使用下面的技巧)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> me <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> duringBirthdayToNow <span class="token operator">></span> <span class="token number">18</span> <span class="token operator">?</span> <span class="token number">18</span> <span class="token operator">:</span> duringBirthdayToNow<span class="token punctuation">,</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> Nickname <span class="token operator">&amp;&amp;</span> parentsGiveName<span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var me &#x3D; &#123;
+  age: duringBirthdayToNow &gt; 18 ? 18 : duringBirthdayToNow,
+  name: Nickname &amp;&amp; parentsGiveName,
+&#125;
+</code></pre>
 <p>下面這一段，不這麼寫就會像下面這樣寫。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> age<span class="token punctuation">;</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>duringBirthdayToNow <span class="token operator">></span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> age <span class="token operator">=</span> <span class="token number">18</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> age <span class="token operator">=</span> duringBirthdayToNow
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var age;
+if (duringBirthdayToNow &gt; 18) &#123;
+  var age &#x3D; 18
+&#125;
+else &#123;
+  var age &#x3D; duringBirthdayToNow
+&#125;
 
-<span class="token keyword">var</span> name<span class="token punctuation">;</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>Nickname<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  name <span class="token operator">=</span> Nickname<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-  name <span class="token operator">=</span> parentsGiveName<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+var name;
+if (Nickname) &#123;
+  name &#x3D; Nickname;
+&#125;
+else &#123;
+  name &#x3D; parentsGiveName;
+&#125;
 
-<span class="token keyword">var</span> me <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  age<span class="token punctuation">,</span>
-  name<span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+var me &#x3D; &#123;
+  age,
+  name,
+&#125;
+</code></pre>
 <p>當然，若兩者都看得懂就不會變密碼。<br>
 若看不懂就會變成密碼。<br>
 太複雜的邏輯、巢狀式條件式，都不建議使用 Short Coding 處理。</p>
@@ -421,21 +425,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

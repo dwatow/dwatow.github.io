@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -158,162 +162,162 @@
 <p>如何設計一個好的 Form Component 就成為了這一篇文章的重點。<br>
 在讀 code 上會有更多的資訊可以讀，也希望在界面上有更多的隱喻可以了解實作。</p>
 <p>以這個物件為例，這是一個「書籍」的物件，裡頭的型別包含字串與數字。這是一個「抽象資料型別」，現在拿出紙筆畫一下，如果要將它變成表單，你會怎麼做呢？。</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"從自學到成功轉職軟體工程師"</span><span class="token punctuation">,</span>
-  <span class="token property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263330120"</span><span class="token punctuation">,</span>
-  <span class="token property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-01-24"</span><span class="token punctuation">,</span>s
-  <span class="token property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token property">"pages"</span><span class="token operator">:</span> <span class="token number">264</span><span class="token punctuation">,</span>
-  <span class="token property">"set_price"</span><span class="token operator">:</span> <span class="token number">520</span><span class="token punctuation">,</span>
-  <span class="token property">"author"</span><span class="token operator">:</span> <span class="token string">"Chris"</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &quot;name&quot;: &quot;從自學到成功轉職軟體工程師&quot;,
+  &quot;isbn&quot;: &quot;6263330120&quot;,
+  &quot;publish_date&quot;: &quot;2022-01-24&quot;,s
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 264,
+  &quot;set_price&quot;: 520,
+  &quot;author&quot;: &quot;Chris&quot;
+&#125;</code></pre>
 <p>用原生的 form 表示，畫面就如同這樣。</p>
 <p><img src="/images/553062ff-Dy4rudZ.png" alt=""></p>
 <p>那如果我們要用 vue 來寫要怎麼做呢？</p>
 <h2 id="尚未自己包-component"><a class="header-anchor" href="#尚未自己包-component">¶</a>尚未自己包 Component</h2>
 <p>照官網的做法，應該會選用 v-model 綁定欄位</p>
 <p><strong>/src/views/Document.vue</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.name<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>isbn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>isbn<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.isbn<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish date<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_date<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish house<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_house<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_house<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>pages<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pages<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.pages<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>set price<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>set_price<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.set_price<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>author<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>author<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.author<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;form action&#x3D;&quot;&quot;&gt;
+  &lt;label&gt;
+    &lt;div&gt;name&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;name&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;form.name&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;isbn&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;isbn&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;form.isbn&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish date&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_date&quot;
+     type&#x3D;&quot;date&quot;
+     v-model&#x3D;&quot;form.publish_date&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish house&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_house&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;form.publish_house&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;pages&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;pages&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;form.pages&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;set price&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;set_price&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;form.set_price&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;author&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;author&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;form.author&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em&quot;&gt;
+    &lt;button type&#x3D;&quot;submit&quot;&gt;submit&lt;&#x2F;button&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;form&gt;</code></pre>
 <h2 id="設計-form-元件"><a class="header-anchor" href="#設計-form-元件">¶</a>設計 Form 元件</h2>
 <p>包成 Component 之後。</p>
 <p><strong>/src/views/Document.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>padding: 50px<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span> <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;div style&#x3D;&quot;padding: 50px&quot;&gt;
+  &lt;BookForm :data&#x3D;&quot;form&quot;&gt;
+    &lt;button type&#x3D;&quot;submit&quot;&gt;submit&lt;&#x2F;button&gt;
+  &lt;&#x2F;BookForm&gt;
+&lt;&#x2F;div&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>維持資料在 view 決定的角度來設計 component，讓 BookForm 成為 pure component</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ref <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'vue'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> BookForm <span class="token keyword">from</span> <span class="token string">'@/components/BookForm.vue'</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import &#123; ref &#125; from &#39;vue&#39;;
+import BookForm from &#39;@&#x2F;components&#x2F;BookForm.vue&#39;;
 
-<span class="token keyword">const</span> form <span class="token operator">=</span> <span class="token function">ref</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"從自學到成功轉職軟體工程師"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263330120"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-01-24"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">264</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">520</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"Chris"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const form &#x3D; ref(&#123;
+  &quot;name&quot;: &quot;從自學到成功轉職軟體工程師&quot;,
+  &quot;isbn&quot;: &quot;6263330120&quot;,
+  &quot;publish_date&quot;: &quot;2022-01-24&quot;,
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 264,
+  &quot;set_price&quot;: 520,
+  &quot;author&quot;: &quot;Chris&quot;
+&#125;)</code></pre>
 <p><strong>/src/component/BookForm.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>isbn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>isbn<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.isbn<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish date<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.publish_date<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish house<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_house<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.publish_house<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>pages<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pages<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.pages<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>set price<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>set_price<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.set_price<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>author<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>author<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.author<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;form action&#x3D;&quot;&quot;&gt;
+  &lt;label&gt;
+    &lt;div&gt;name&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;name&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.data.name&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;isbn&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;isbn&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.data.isbn&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish date&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_date&quot;
+     type&#x3D;&quot;date&quot;
+     v-model&#x3D;&quot;props.data.publish_date&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish house&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_house&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.data.publish_house&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;pages&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;pages&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;props.data.pages&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;set price&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;set_price&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;props.data.set_price&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;author&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;author&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.data.author&quot;&#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em&quot;&gt;
+    &lt;slot&gt;&lt;&#x2F;slot&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;form&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>挖一個 props 先讓資料進來</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token function">defineProps</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Object<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const props &#x3D; defineProps(&#123;
+  data: &#123;
+    type: Object,
+    required: true
+  &#125;
+&#125;)</code></pre>
 <p>現在有兩個方向</p>
 <ol>
 <li>維持 v-model</li>
@@ -323,195 +327,195 @@
 <p>那就是要改變 props</p>
 <p><strong>/src/views/Document.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>padding: 50px<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span> 
-    <span class="token attr-name">:name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.name<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:isbn</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.isbn<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:publish_date</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_date<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:publish_house</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_house<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:pages</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.pages<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:set_price</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.set_price<span class="token punctuation">"</span></span>
-    <span class="token attr-name">:author</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.author<span class="token punctuation">"</span></span>
-  <span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;div style&#x3D;&quot;padding: 50px&quot;&gt;
+  &lt;BookForm 
+    :name&#x3D;&quot;form.name&quot;
+    :isbn&#x3D;&quot;form.isbn&quot;
+    :publish_date&#x3D;&quot;form.publish_date&quot;
+    :publish_house&#x3D;&quot;form.publish_house&quot;
+    :pages&#x3D;&quot;form.pages&quot;
+    :set_price&#x3D;&quot;form.set_price&quot;
+    :author&#x3D;&quot;form.author&quot;
+  &gt;
+    &lt;button type&#x3D;&quot;submit&quot;&gt;submit&lt;&#x2F;button&gt;
+  &lt;&#x2F;BookForm&gt;
+&lt;&#x2F;div&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>(不變)</p>
 <p><strong>/src/component/BookForm.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.name<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>isbn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>isbn<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.isbn<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish date<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.publish_date<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish house<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_house<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.publish_house<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>pages<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pages<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.pages<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>set price<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>set_price<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.set_price<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>author<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>author<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.author<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;form action&#x3D;&quot;&quot;&gt;
+  &lt;label&gt;
+    &lt;div&gt;name&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;name&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.name&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;isbn&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;isbn&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.isbn&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish date&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_date&quot;
+     type&#x3D;&quot;date&quot;
+     v-model&#x3D;&quot;props.publish_date&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish house&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_house&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.publish_house&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;pages&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;pages&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;props.pages&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;set price&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;set_price&quot;
+     type&#x3D;&quot;number&quot;
+     v-model&#x3D;&quot;props.set_price&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;author&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;author&quot;
+     type&#x3D;&quot;text&quot;
+     v-model&#x3D;&quot;props.author&quot; &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em&quot;&gt;
+    &lt;slot&gt;&lt;&#x2F;slot&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;form&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>props 要改成很多個</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token function">defineProps</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">isbn</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">publish_date</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">publish_house</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">pages</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">set_price</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">author</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> String<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const props &#x3D; defineProps(&#123;
+  name: &#123;
+    type: String,
+    required: true
+  &#125;,
+  isbn: &#123;
+    type: String,
+    required: true
+  &#125;,
+  publish_date: &#123;
+    type: String,
+    required: true
+  &#125;,
+  publish_house: &#123;
+    type: String,
+    required: true
+  &#125;,
+  pages: &#123;
+    type: Number,
+    required: true
+  &#125;,
+  set_price: &#123;
+    type: Number,
+    required: true
+  &#125;,
+  author: &#123;
+    type: String,
+    required: true
+  &#125;
+&#125;)</code></pre>
 <p><strong>修改值會出現這個問題</strong></p>
 <div class="warning">
 <p>[Vue warn] Set operation on key “name” failed: target is readonly.</p>
 </div>
 <p><strong>加上 emit 與 computed get/set</strong><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <p><strong>script</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> emits <span class="token operator">=</span> <span class="token function">defineEmits</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
-  <span class="token string">'update:name'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:isbn'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:publish_date'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:publish_house'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:pages'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:set_price'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:author'</span><span class="token punctuation">,</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const emits &#x3D; defineEmits([
+  &#39;update:name&#39;,
+  &#39;update:isbn&#39;,
+  &#39;update:publish_date&#39;,
+  &#39;update:publish_house&#39;,
+  &#39;update:pages&#39;,
+  &#39;update:set_price&#39;,
+  &#39;update:author&#39;,
+])
 
-<span class="token keyword">const</span> name <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>name
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:name'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> isbn <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>isbn
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:isbn'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> publish_date <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>publish_date
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:publish_date'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> publish_house <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>publish_house
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:publish_house'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> pages <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>pages
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:pages'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> set_price <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>set_price
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:set_price'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> author <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> props<span class="token punctuation">.</span>author
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">set</span><span class="token punctuation">(</span>newValue<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update:author'</span><span class="token punctuation">,</span> newValue<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const name &#x3D; computed(&#123;
+  get() &#123;
+    return props.name
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:name&#39;, newValue)
+  &#125;
+&#125;)
+const isbn &#x3D; computed(&#123;
+  get() &#123;
+    return props.isbn
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:isbn&#39;, newValue)
+  &#125;
+&#125;)
+const publish_date &#x3D; computed(&#123;
+  get() &#123;
+    return props.publish_date
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:publish_date&#39;, newValue)
+  &#125;
+&#125;)
+const publish_house &#x3D; computed(&#123;
+  get() &#123;
+    return props.publish_house
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:publish_house&#39;, newValue)
+  &#125;
+&#125;)
+const pages &#x3D; computed(&#123;
+  get() &#123;
+    return props.pages
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:pages&#39;, newValue)
+  &#125;
+&#125;)
+const set_price &#x3D; computed(&#123;
+  get() &#123;
+    return props.set_price
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:set_price&#39;, newValue)
+  &#125;
+&#125;)
+const author &#x3D; computed(&#123;
+  get() &#123;
+    return props.author
+  &#125;,
+  set(newValue) &#123;
+    emits(&#39;update:author&#39;, newValue)
+  &#125;
+&#125;)</code></pre>
 <p>最後再改一下外部使用方式，維持 v-model 的做法</p>
 <p><strong>/src/views/Document.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.name<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>isbn</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.isbn<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>publish_date</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_date<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>publish_house</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.publish_house<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>pages</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.pages<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>set_price</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.set_price<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">v-model:</span>author</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.author<span class="token punctuation">"</span></span>
-<span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;BookForm
+  v-model:name&#x3D;&quot;form.name&quot;
+  v-model:isbn&#x3D;&quot;form.isbn&quot;
+  v-model:publish_date&#x3D;&quot;form.publish_date&quot;
+  v-model:publish_house&#x3D;&quot;form.publish_house&quot;
+  v-model:pages&#x3D;&quot;form.pages&quot;
+  v-model:set_price&#x3D;&quot;form.set_price&quot;
+  v-model:author&#x3D;&quot;form.author&quot;
+&gt;
+  &lt;button type&#x3D;&quot;submit&quot;&gt;submit&lt;&#x2F;button&gt;
+&lt;&#x2F;BookForm&gt;</code></pre>
 <p><strong>優點:</strong></p>
 <ul>
 <li>在 template 優雅使用的 <code>v-model</code> 處理雙向綁定。</li>
@@ -532,19 +536,19 @@
 <blockquote>
 <p>由於在原生的元件上的 v-model 所以 <code>$event</code> 要再 <code>.target.value</code> 才是輸出的值。</p>
 </blockquote>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
- <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
- <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
- <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name<span class="token punctuation">"</span></span>
- <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name = $event.target.value<span class="token punctuation">"</span></span>
-<span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;input
+ name&#x3D;&quot;name&quot;
+ type&#x3D;&quot;text&quot;
+ :value&#x3D;&quot;props.data.name&quot;
+ @input&#x3D;&quot;props.data.name &#x3D; $event.target.value&quot;
+&#x2F;&gt;</code></pre>
 <p>再將 @input 裡面改寫成使用 emits 將值往外丟，就完成 BookForm 雙向綁定的任務。</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
- <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
- <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
- <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name<span class="token punctuation">"</span></span>
- <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:name', $event.target.value)<span class="token punctuation">"</span></span>
-<span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;input
+ name&#x3D;&quot;name&quot;
+ type&#x3D;&quot;text&quot;
+ :value&#x3D;&quot;props.data.name&quot;
+ @input&#x3D;&quot;emits(&#39;update:name&#39;, $event.target.value)&quot;
+&#x2F;&gt;</code></pre>
 <p>在這樣的寫法上，可以省去寫一組 computed-get/set 的工。</p>
 </div>
 <h4 id="輸出-輸入型別相同"><a class="header-anchor" href="#輸出-輸入型別相同">¶</a>輸出/輸入型別相同</h4>
@@ -552,144 +556,144 @@
 重點並不是傳出新的值，而是修改到相同的位置。(所以要回傳的是原本的物件)</p>
 <div class="info">
 <p>接下來要改一下 emits 回傳出去的東西</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
- <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
- <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
- <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name<span class="token punctuation">"</span></span>
- <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:name', &#123;
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;input
+ name&#x3D;&quot;name&quot;
+ type&#x3D;&quot;text&quot;
+ :value&#x3D;&quot;props.data.name&quot;
+ @input&#x3D;&quot;emits(&#39;update:name&#39;, &#123;
    ...props.data,
    name: $event.target.value
- &#125;)<span class="token punctuation">"</span></span>
-<span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ &#125;)&quot;
+&#x2F;&gt;</code></pre>
 <p>這樣的寫法，可以避免修改的複雜度傳到外面去。<br>
 通常「怎麼修改」的這種 setter 概念的邏輯，是需要被重複使用的。</p>
 </div>
 <p>最後看一下最後的版本(改得不多)</p>
 <p><strong>/src/component/BookForm.vue</strong></p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.name<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:name', &#123;
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;form action&#x3D;&quot;&quot;&gt;
+  &lt;label&gt;
+    &lt;div&gt;name&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;name&quot;
+     type&#x3D;&quot;text&quot;
+     :value&#x3D;&quot;props.data.name&quot;
+     @input&#x3D;&quot;emits(&#39;update:name&#39;, &#123;
        ...props.data,
        name: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>isbn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>isbn<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.isbn<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:isbn', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;isbn&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;isbn&quot;
+     type&#x3D;&quot;text&quot;
+     :value&#x3D;&quot;props.data.isbn&quot;
+     @input&#x3D;&quot;emits(&#39;update:isbn&#39;, &#123;
        ...props.data,
        isbn: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish date<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.publish_date<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:publish_date', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish date&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_date&quot;
+     type&#x3D;&quot;date&quot;
+     :value&#x3D;&quot;props.data.publish_date&quot;
+     @input&#x3D;&quot;emits(&#39;update:publish_date&#39;, &#123;
        ...props.data,
        publish_date: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>publish house<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>publish_house<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.publish_house<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:publish_house', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;publish house&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;publish_house&quot;
+     type&#x3D;&quot;text&quot;
+     :value&#x3D;&quot;props.data.publish_house&quot;
+     @input&#x3D;&quot;emits(&#39;update:publish_house&#39;, &#123;
        ...props.data,
        publish_house: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>pages<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pages<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.pages<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:pages', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;pages&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;pages&quot;
+     type&#x3D;&quot;number&quot;
+     :value&#x3D;&quot;props.data.pages&quot;
+     @input&#x3D;&quot;emits(&#39;update:pages&#39;, &#123;
        ...props.data,
        pages: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>set price<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>set_price<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.set_price<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:set_price', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;set price&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;set_price&quot;
+     type&#x3D;&quot;number&quot;
+     :value&#x3D;&quot;props.data.set_price&quot;
+     @input&#x3D;&quot;emits(&#39;update:set_price&#39;, &#123;
        ...props.data,
        set_price: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>author<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
-     <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>author<span class="token punctuation">"</span></span>
-     <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
-     <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>props.data.author<span class="token punctuation">"</span></span>
-     <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>emits('update:author', &#123;
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;label&gt;
+    &lt;div&gt;author&lt;&#x2F;div&gt;
+    &lt;input
+     name&#x3D;&quot;author&quot;
+     type&#x3D;&quot;text&quot;
+     :value&#x3D;&quot;props.data.author&quot;
+     @input&#x3D;&quot;emits(&#39;update:author&#39;, &#123;
        ...props.data,
        author: $event.target.value
-     &#125;)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+     &#125;)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;label&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em&quot;&gt;
+    &lt;slot&gt;&lt;&#x2F;slot&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;form&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>也要寫一組和另一個寫法一模一樣的 emits</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token function">defineProps</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Object<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const props &#x3D; defineProps(&#123;
+  data: &#123;
+    type: Object,
+    required: true
+  &#125;
+&#125;)
 
-<span class="token keyword">const</span> emits <span class="token operator">=</span> <span class="token function">defineEmits</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
-  <span class="token string">'update:name'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:isbn'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:publish_date'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:publish_house'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:pages'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:set_price'</span><span class="token punctuation">,</span>
-  <span class="token string">'update:author'</span><span class="token punctuation">,</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const emits &#x3D; defineEmits([
+  &#39;update:name&#39;,
+  &#39;update:isbn&#39;,
+  &#39;update:publish_date&#39;,
+  &#39;update:publish_house&#39;,
+  &#39;update:pages&#39;,
+  &#39;update:set_price&#39;,
+  &#39;update:author&#39;,
+])</code></pre>
 <p>最後再改一下外部使用方式</p>
 <p><strong>/src/views/Document.vue</strong></p>
 <p><strong>template</strong></p>
 <p>在此 BookForm 的輸入是「書籍」這樣的物件。輸出也是「書籍」的物件。</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span>
-  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>isbn</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>publish_date</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>publish_house</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>pages</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>set_price</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-  <span class="token attr-name"><span class="token namespace">@update:</span>author</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form = $event<span class="token punctuation">"</span></span>
-<span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>submit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;BookForm
+  :data&#x3D;&quot;form&quot;
+  @update:name&#x3D;&quot;form &#x3D; $event&quot;
+  @update:isbn&#x3D;&quot;form &#x3D; $event&quot;
+  @update:publish_date&#x3D;&quot;form &#x3D; $event&quot;
+  @update:publish_house&#x3D;&quot;form &#x3D; $event&quot;
+  @update:pages&#x3D;&quot;form &#x3D; $event&quot;
+  @update:set_price&#x3D;&quot;form &#x3D; $event&quot;
+  @update:author&#x3D;&quot;form &#x3D; $event&quot;
+&gt;
+  &lt;button type&#x3D;&quot;submit&quot;&gt;submit&lt;&#x2F;button&gt;
+&lt;&#x2F;BookForm&gt;</code></pre>
 <p><strong>優點:</strong></p>
 <ul>
 <li>可以在「使用時」透過界面的設計看得出編輯的欄位有幾個。</li>
@@ -766,21 +770,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

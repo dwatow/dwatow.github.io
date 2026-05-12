@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -52,8 +52,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -146,46 +150,46 @@
 
     <h1 id="在-nginx-的-log-顯示請求的-body-json-格式"><a class="header-anchor" href="#在-nginx-的-log-顯示請求的-body-json-格式">¶</a>在 nginx 的 log 顯示請求的 body(json 格式)</h1>
 <h2 id="ssh-登入"><a class="header-anchor" href="#ssh-登入">¶</a>ssh 登入</h2>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">ssh</span> 帳號@主機位址<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">ssh 帳號@主機位址</code></pre>
 <blockquote>
 <p>必要的話，要用 <code>-i</code> 來指定使用的 key</p>
 </blockquote>
 <h2 id="檢查-nginx-版本"><a class="header-anchor" href="#檢查-nginx-版本">¶</a>檢查 nginx 版本</h2>
-<pre class="line-numbers language-ssh" data-language="ssh"><code class="language-ssh">nginx -V<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-ssh" data-language="ssh"><code class="language-ssh">nginx -V</code></pre>
 <p>必須注意 <code>escape=json</code> 要 Nginx 1.11.5 之後才支援</p>
 <h2 id="先看一下有沒有設定"><a class="header-anchor" href="#先看一下有沒有設定">¶</a>先看一下有沒有設定</h2>
-<pre class="line-numbers language-ssh" data-language="ssh"><code class="language-ssh">less &#x2F;etc&#x2F;nginx&#x2F;nginx.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-ssh" data-language="ssh"><code class="language-ssh">less &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</code></pre>
 <p>注意 http 段落中，有一個在設定 log 的地方，內容大約如下</p>
-<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">http</span></span> <span class="token punctuation">&#123;</span>
+<pre class="language-nginx" data-language="nginx"><code class="language-nginx">http &#123;
         ...
-        <span class="token comment">##</span>
-        <span class="token comment"># Logging Settings</span>
-        <span class="token comment">##</span>
+        ##
+        # Logging Settings
+        ##
 
-        <span class="token directive"><span class="token keyword">access_log</span> /var/log/nginx/access.log</span><span class="token punctuation">;</span>
-        <span class="token directive"><span class="token keyword">error_log</span> /var/log/nginx/error.log</span><span class="token punctuation">;</span>
+        access_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log;
+        error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log;
         ...
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;</code></pre>
 <h2 id="編輯設定檔"><a class="header-anchor" href="#編輯設定檔">¶</a>編輯設定檔</h2>
-<pre class="line-numbers language-ssh" data-language="ssh"><code class="language-ssh">sudo vim &#x2F;etc&#x2F;nginx&#x2F;nginx.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-ssh" data-language="ssh"><code class="language-ssh">sudo vim &#x2F;etc&#x2F;nginx&#x2F;nginx.conf</code></pre>
 <p>要設定 nginx 的 log format 請求才會出現 JOSN 的內容</p>
-<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">http</span></span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">##</span>
-  <span class="token comment"># Logging Settings</span>
-  <span class="token comment">##</span>
+<pre class="language-nginx" data-language="nginx"><code class="language-nginx">http &#123;
+  ##
+  # Logging Settings
+  ##
 
-  <span class="token comment"># log_format compression</span>
-  <span class="token comment"># '[$time_local] $remote_addr - $status '</span>
-  <span class="token comment"># '"$request" $request_body';</span>
+  # log_format compression
+  # &#39;[$time_local] $remote_addr - $status &#39;
+  # &#39;&quot;$request&quot; $request_body&#39;;
 
-  <span class="token directive"><span class="token keyword">log_format</span> json_log
-  <span class="token comment"># escape=json # Nginx 1.11.5 之後才支援</span>
-  <span class="token string">'[<span class="token variable">$time_local]</span> <span class="token variable">$remote_addr</span> - <span class="token variable">$status</span> '</span>
-  <span class="token string">'"<span class="token variable">$request</span>" <span class="token variable">$request_body</span>'</span></span><span class="token punctuation">;</span>
+  log_format json_log
+  # escape&#x3D;json # Nginx 1.11.5 之後才支援
+  &#39;[$time_local] $remote_addr - $status &#39;
+  &#39;&quot;$request&quot; $request_body&#39;;
 
-  <span class="token directive"><span class="token keyword">access_log</span> /var/log/nginx/access.log json_log</span><span class="token punctuation">;</span>
-  <span class="token directive"><span class="token keyword">error_log</span> /var/log/nginx/error.log</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  access_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log json_log;
+  error_log &#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log;
+&#125;</code></pre>
 <ol>
 <li><code>log_format json_log escape=json</code></li>
 </ol>
@@ -196,28 +200,28 @@
 <p>設定 access_log 在 <code>/var/log/nginx/access.log</code> 以 json_log 格式儲存。</p>
 <h2 id="測試-nginx-設定檔正確性"><a class="header-anchor" href="#測試-nginx-設定檔正確性">¶</a>測試 nginx 設定檔正確性</h2>
 <p>確認無誤之後，再重啟，所以要先測試一下指令是否有錯誤</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> nginx <span class="token parameter variable">-t</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sudo nginx -t </code></pre>
 <h2 id="無縫重啟-nginx"><a class="header-anchor" href="#無縫重啟-nginx">¶</a>無縫重啟 nginx</h2>
 <p>透過 systemctl 重啟 nginx (推薦使用)</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> systemctl reload nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sudo systemctl reload nginx</code></pre>
 <p>另一種寫法，直接重啟 nginx</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> nginx <span class="token parameter variable">-s</span> reload<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sudo nginx -s reload</code></pre>
 <h2 id="查看-log-看效果"><a class="header-anchor" href="#查看-log-看效果">¶</a>查看 log 看效果</h2>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">tail</span> <span class="token parameter variable">-f</span> /var/log/nginx/access.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">sudo tail -f &#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log</code></pre>
 <h1 id="加碼-舊版的話"><a class="header-anchor" href="#加碼-舊版的話">¶</a>加碼(舊版的話)</h1>
 <h2 id="python"><a class="header-anchor" href="#python">¶</a>Python<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
 <p><strong><a target="_blank" rel="noopener" href="http://decode.py">decode.py</a></strong></p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> json
+<pre class="language-python" data-language="python"><code class="language-python">import json
 
-msg <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+msg &#x3D; &quot;&quot;&quot;
 &#123;\x22id\x22:1&#125;
-"""</span>
+&quot;&quot;&quot;
 
-res_obj <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>msg<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'raw_unicode_escape'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>res_obj<span class="token punctuation">,</span> ensure_ascii<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+res_obj &#x3D; json.loads(msg.encode(&#39;raw_unicode_escape&#39;).decode(&#39;utf8&#39;))
+print(json.dumps(res_obj, ensure_ascii&#x3D;False))</code></pre>
 <p>執行後會印出解碼後的樣子。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">python3 decode.py
-<span class="token punctuation">&#123;</span><span class="token string">"id"</span>:1<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">python3 decode.py
+&#123;&quot;id&quot;:1&#125;</code></pre>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -260,21 +264,14 @@ res_obj <span class="token operator">=</span> json<span class="token punctuation
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

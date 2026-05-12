@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 return queryInterface.addColumn(   &#39;ta">
+  <meta name="description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 return queryInterface.addColumn(   &amp;#3">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sequelize 的 Relations&#x2F;Associations">
 <meta property="og:url" content="https://dwatow.github.io/2018/09-24-sequelize/sequelize-associations/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 return queryInterface.addColumn(   &#39;ta">
+<meta property="og:description" content="¶Sequelize 的 Relations&#x2F;Associations ¶migrations 關聯 (foreign key 欄位) 在 queryInterface.createTable &#x2F; addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。 return queryInterface.addColumn(   &amp;#3">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2018-09-24T08:15:35.000Z">
 <meta property="article:modified_time" content="2024-01-03T04:37:24.939Z">
@@ -54,8 +54,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -149,22 +153,22 @@
     <h1 id="sequelize-的-relations-associations"><a class="header-anchor" href="#sequelize-的-relations-associations">¶</a>Sequelize 的 Relations/Associations</h1>
 <h2 id="migrations-關聯-foreign-key-欄位"><a class="header-anchor" href="#migrations-關聯-foreign-key-欄位">¶</a>migrations 關聯 (foreign key 欄位)</h2>
 <p>在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">return</span> queryInterface<span class="token punctuation">.</span><span class="token function">addColumn</span><span class="token punctuation">(</span>
-  <span class="token string">'tableName'</span><span class="token punctuation">,</span>
-  <span class="token string">'fieldName'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span><span class="token punctuation">.</span><span class="token constant">UNSIGNED</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">references</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">model</span><span class="token operator">:</span> <span class="token string">'tableName'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'fieldName'</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'SET NULL'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">onUpdate</span><span class="token operator">:</span> <span class="token string">'CASCADE'</span>
-    <span class="token comment">//...</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">return queryInterface.addColumn(
+  &#39;tableName&#39;,
+  &#39;fieldName&#39;,
+  &#123;
+    type: Sequelize.INTEGER.UNSIGNED,
+    references: &#123;
+      model: &#39;tableName&#39;,
+      key: &#39;fieldName&#39;
+    &#125;,
+    onDelete: &#39;SET NULL&#39;,
+    onUpdate: &#39;CASCADE&#39;
+    &#x2F;&#x2F;...
+  &#125;)
+&#125;,</code></pre>
 <h2 id="define-關聯-類型"><a class="header-anchor" href="#define-關聯-類型">¶</a>define 關聯 類型</h2>
-<pre class="line-numbers language-none"><code class="language-none">Model.hasOne(target: Model, options: object): HasOne<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">Model.hasOne(target: Model, options: object): HasOne</code></pre>
 <p>User model is <strong>source</strong><br>
 Project model is <strong>target</strong></p>
 <p><strong>命名</strong><br>
@@ -174,20 +178,20 @@ foreign key = (target model + primary key) 的名字<br>
 <p>one source with one target.</p>
 <p><code>.hasOne()</code> 在 target model 放上 key<br>
 <code>.belongsTo()</code> 在 source model 放上 key</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Project 有一個 memberId 欄位，放 member 的 id</span>
-<span class="token comment">// target = member</span>
-Member<span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>  <span class="token comment">// 擁有</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#x2F;&#x2F; Project 有一個 memberId 欄位，放 member 的 id
+&#x2F;&#x2F; target &#x3D; member
+Member.hasOne(Project)  &#x2F;&#x2F; 擁有
 
-<span class="token comment">// Member 有一個 projectId 欄位，放 project 的 id</span>
-<span class="token comment">// target = project</span>
-Member<span class="token punctuation">.</span><span class="token function">belongsTo</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span> <span class="token comment">// 屬於</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; Member 有一個 projectId 欄位，放 project 的 id
+&#x2F;&#x2F; target &#x3D; project
+Member.belongsTo(Project) &#x2F;&#x2F; 屬於</code></pre>
 <p>用 <code>.hasOne()</code> 會贈送 getter/setter</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">Project<span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span>models<span class="token punctuation">.</span>member<span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">Project.hasOne(models.member)
 
-Project<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">project</span> <span class="token operator">=></span> project<span class="token punctuation">.</span>getMember<span class="token punctuation">)</span> <span class="token comment">// function</span>
-Project<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">project</span> <span class="token operator">=></span> project<span class="token punctuation">.</span>setMember<span class="token punctuation">)</span> <span class="token comment">// function</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Project.findById(1)
+.then(project &#x3D;&gt; project.getMember) &#x2F;&#x2F; function
+Project.findById(1)
+.then(project &#x3D;&gt; project.setMember) &#x2F;&#x2F; function</code></pre>
 <h3 id="foreign-key-as"><a class="header-anchor" href="#foreign-key-as">¶</a>foreign key &amp; as</h3>
 <ul>
 <li>foreignKey 的名字是給 database 用的</li>
@@ -199,20 +203,20 @@ Project<span class="token punctuation">.</span><span class="token function">find
 </ul>
 </li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">options</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token keyword">as</span><span class="token operator">:</span> <span class="token string">'forJs'</span><span class="token punctuation">&#125;</span>
-<span class="token literal-property property">options</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token literal-property property">foreignKey</span><span class="token operator">:</span> <span class="token string">'forDb'</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">options: &#123;as: &#39;forJs&#39;&#125;
+options: &#123;foreignKey: &#39;forDb&#39;&#125;</code></pre>
 <p><strong>example:</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Person 關聯自己</span>
-<span class="token keyword">const</span> Person <span class="token operator">=</span> sequelize<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">'person'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token comment">/* ... */</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#x2F;&#x2F; Person 關聯自己
+const Person &#x3D; sequelize.define(&#39;person&#39;, &#123; &#x2F;* ... *&#x2F;&#125;)
 
-Person<span class="token punctuation">.</span><span class="token function">hasOne</span><span class="token punctuation">(</span>Person<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token keyword">as</span><span class="token operator">:</span> <span class="token string">'Father'</span><span class="token punctuation">,</span> <span class="token literal-property property">foreignKey</span><span class="token operator">:</span> <span class="token string">'DadId'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token comment">// this will add the attribute FatherId to Person</span>
-person<span class="token punctuation">.</span><span class="token function">getFather</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-person<span class="token punctuation">.</span><span class="token function">setFather</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Person.hasOne(Person, &#123;as: &#39;Father&#39;, foreignKey: &#39;DadId&#39;&#125;)
+&#x2F;&#x2F; this will add the attribute FatherId to Person
+person.getFather()
+person.setFather()</code></pre>
 <h3 id="一對多-hasmany"><a class="header-anchor" href="#一對多-hasmany">¶</a>一對多 <code>.hasMany()</code></h3>
 <p>one source with multiple targets (one target to one source)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">Project<span class="token punctuation">.</span><span class="token function">hasMany</span><span class="token punctuation">(</span>User<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token keyword">as</span><span class="token operator">:</span> <span class="token string">'Workers'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-project<span class="token punctuation">.</span>getWorkers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">Project.hasMany(User, &#123;as: &#39;Workers&#39;&#125;)
+project.getWorkers</code></pre>
 <h3 id="多對多-belongstomany"><a class="header-anchor" href="#多對多-belongstomany">¶</a>多對多 <code>.belongsToMany()</code></h3>
 <p>使用 <code>.belongsToMany()</code> 時，使用 <code>through</code> 指定事先定義好的 model-<code>UserProject</code> (用來產生 join table 用的)<br>
 這個 model 會有 <code>projectId</code> 和 <code>userId</code>。</p>
@@ -221,16 +225,16 @@ project<span class="token punctuation">.</span>getWorkers<span aria-hidden="true
 <li><code>User</code> 會有 <code>getProjects</code>, <code>setProjects</code>, <code>addPrject</code>, <code>addProjects</code></li>
 </ul>
 <p><strong>example:</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">UserProject <span class="token operator">=</span> sequelize<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">'user_project'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">role</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">STRING</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-User<span class="token punctuation">.</span><span class="token function">belongsToMany</span><span class="token punctuation">(</span>Project<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">through</span><span class="token operator">:</span> UserProject <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Project<span class="token punctuation">.</span><span class="token function">belongsToMany</span><span class="token punctuation">(</span>User<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">through</span><span class="token operator">:</span> UserProject <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// through is required!</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">UserProject &#x3D; sequelize.define(&#39;user_project&#39;, &#123;
+  role: Sequelize.STRING
+&#125;);
+User.belongsToMany(Project, &#123; through: UserProject &#125;);
+Project.belongsToMany(User, &#123; through: UserProject &#125;);
+&#x2F;&#x2F; through is required!
 
-user<span class="token punctuation">.</span><span class="token function">addProject</span><span class="token punctuation">(</span>project<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">through</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">role</span><span class="token operator">:</span> <span class="token string">'manager'</span> <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+user.addProject(project, &#123;
+  through: &#123; role: &#39;manager&#39; &#125;
+&#125;);</code></pre>
 <h2 id="define-修改-刪除-hook"><a class="header-anchor" href="#define-修改-刪除-hook">¶</a>define 修改/刪除 hook</h2>
 <p>建立關聯，增加 foreign key 到屬性。<br>
 所有的關聯，更新用 <code>CASCADE</code> ，刪除用 <code>SET NULL</code> ，除了 n:m 關聯，用 <code>CASCADE</code> 刪除。</p>
@@ -249,9 +253,9 @@ user<span class="token punctuation">.</span><span class="token function">addProj
 <li><code>SET NULL</code>, 子表 foreign key 設為 null</li>
 </ol>
 <p><strong>example:</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">Category<span class="token punctuation">.</span><span class="token function">hasMany</span><span class="token punctuation">(</span>models<span class="token punctuation">.</span>Product<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'cascade'</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">Category.hasMany(models.Product, &#123;
+  onDelete: &#39;cascade&#39;
+&#125;);</code></pre>
 
     
     </section>
@@ -301,21 +305,14 @@ user<span class="token punctuation">.</span><span class="token function">addProj
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

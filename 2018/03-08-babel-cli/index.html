@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -39,8 +39,8 @@
 <meta property="article:published_time" content="2018-03-08T06:51:40.000Z">
 <meta property="article:modified_time" content="2021-06-15T08:39:46.000Z">
 <meta property="article:author" content="Chris">
-<meta property="article:tag" content="nodejs">
 <meta property="article:tag" content="webpack">
+<meta property="article:tag" content="nodejs">
 <meta property="article:tag" content="vue">
 <meta property="article:tag" content="babel">
 <meta property="article:tag" content="JavaScript">
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -158,7 +162,7 @@
 <p>開一個新的 npm 專案，並且初始化完成之後。<br>
 安裝 <code>babel-core</code></p>
 <p>試著將這段程式碼從 es6 轉譯成 es5</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> <span class="token function-variable function">x</span> <span class="token operator">=</span> <span class="token parameter">n</span> <span class="token operator">=></span> n <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">let x &#x3D; n &#x3D;&gt; n + 1;</code></pre>
 <blockquote>
 <p>學習的過程，有找到阮一峰的教學<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup><br>
 跟著文章裡的範例做，但是失敗了！<br>
@@ -166,28 +170,28 @@
 </blockquote>
 <h2 id="初探-babel-core"><a class="header-anchor" href="#初探-babel-core">¶</a>初探 babel-core</h2>
 <h3 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install --save-dev babel-core<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install --save-dev babel-core</code></pre>
 <h3 id="程式碼"><a class="header-anchor" href="#程式碼">¶</a>程式碼</h3>
 <p>引用自阮一峰的範例<sup class="footnote-ref"><a href="#fn2" id="fnref2:1">[2:1]</a></sup></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> babel <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"babel-core"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var babel &#x3D; require(&quot;babel-core&quot;);
 
-<span class="token keyword">var</span> es6Code <span class="token operator">=</span> <span class="token string">"let x = n => n + 1"</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> es5Code <span class="token operator">=</span> babel<span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span>es6Code<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">presets</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"es2015"</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>code<span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>es5Code<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+var es6Code &#x3D; &quot;let x &#x3D; n &#x3D;&gt; n + 1&quot;;
+var es5Code &#x3D; babel.transform(es6Code, &#123;
+  presets: [&quot;es2015&quot;]
+&#125;).code;
+console.log(es5Code);</code></pre>
 <p>執行失敗，原因在於，只是安裝 <code>babel-core</code> 而已。在這一步，對於 babel 的運作，還不是很了解。</p>
 <p>將錯誤訊息 Google 之後。<br>
 跟著錯誤訊息，找到了新線索<br>
 還要再裝</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install babel-preset-es2015<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install babel-preset-es2015</code></pre>
 <p>執行成功!!</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node index.js
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node index.js
 &quot;use strict&quot;;
 
 var x &#x3D; function x(n) &#123;
   return n + 1;
-&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;;</code></pre>
 <p>總算是可以透過安裝 <code>babel-core</code> 來同作 babel 的核心功能。</p>
 <p>但是，這並不能解決心中的疑問。</p>
 <ol>
@@ -197,7 +201,7 @@ var x &#x3D; function x(n) &#123;
 <p>接下來，來看看從官網文件的教學，解決心中的疑問吧！</p>
 <h2 id="官網安裝"><a class="header-anchor" href="#官網安裝">¶</a>官網安裝</h2>
 <p><a target="_blank" rel="noopener" href="https://babeljs.io/">官網首頁</a>就有這個指令</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install --save-dev babel-cli babel-preset-env<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">npm install --save-dev babel-cli babel-preset-env</code></pre>
 <p>官網一開始就叫我們安裝兩個套件</p>
 <ul>
 <li><code>babel-cli</code></li>
@@ -205,17 +209,17 @@ var x &#x3D; function x(n) &#123;
 </ul>
 <p>跟據反覆實驗的觀察 <code>babel-cli</code> 包含了 <code>babel-core</code></p>
 <p>在尚未安裝 <code>babel-preset-es2015</code> 時，我們暫時先將它註解掉，並且執行看看</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> babel <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"babel-core"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var babel &#x3D; require(&quot;babel-core&quot;);
 
-<span class="token keyword">var</span> es6Code <span class="token operator">=</span> <span class="token string">"let x = n => n + 1"</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> es5Code <span class="token operator">=</span> babel<span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span>es6Code<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//presets: ['es2015']</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>code<span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>es5Code<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+var es6Code &#x3D; &quot;let x &#x3D; n &#x3D;&gt; n + 1&quot;;
+var es5Code &#x3D; babel.transform(es6Code, &#123;
+  &#x2F;&#x2F;presets: [&#39;es2015&#39;]
+&#125;).code;
+console.log(es5Code);</code></pre>
 <p>發現，它可以 work，不過結果與剛剛有差。<br>
 而且，是原封不動的將程式碼吐出來。</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node index.js
-let x &#x3D; n &#x3D;&gt; n + 1;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node index.js
+let x &#x3D; n &#x3D;&gt; n + 1;</code></pre>
 <p>這是怎麼回事？<br>
 我們跟著第二條線索 <code>babel-preset-env</code> 來看看是怎麼回事吧</p>
 <h2 id="preset"><a class="header-anchor" href="#preset">¶</a>Preset</h2>
@@ -234,45 +238,45 @@ let x &#x3D; n &#x3D;&gt; n + 1;<span aria-hidden="true" class="line-numbers-row
 <p>babel 首頁就是叫我們安裝這一套</p>
 </blockquote>
 <p>安裝</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">npm install babel-preset-env --save-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">npm install babel-preset-env --save-dev</code></pre>
 <p>設定 options<br>
 在 babel-core 的 options 這樣設定</p>
 <blockquote>
 <p>babel 也建議這樣設定</p>
 </blockquote>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"presets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"env"</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> babel <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"babel-core"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
+  &quot;presets&quot;: [&quot;env&quot;]
+&#125;</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var babel &#x3D; require(&quot;babel-core&quot;);
 
-<span class="token keyword">var</span> es6Code <span class="token operator">=</span> <span class="token string">"let x = n => n + 1"</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> es5Code <span class="token operator">=</span> babel<span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span>es6Code<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//presets: ['es2015']</span>
-  <span class="token literal-property property">presets</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"env"</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>code<span class="token punctuation">;</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>es5Code<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+var es6Code &#x3D; &quot;let x &#x3D; n &#x3D;&gt; n + 1&quot;;
+var es5Code &#x3D; babel.transform(es6Code, &#123;
+  &#x2F;&#x2F;presets: [&#39;es2015&#39;]
+  presets: [&quot;env&quot;]
+&#125;).code;
+console.log(es5Code);</code></pre>
 <p>執行程式，可以轉譯出來</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ node index.js
+<pre class="line-numbers language-shell" data-language="shell" data-start="1"><code class="language-shell">$ node index.js
 &quot;use strict&quot;;
 
 
 var x &#x3D; function x(n) &#123;
   return n + 1;
-&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;;</code></pre>
 <p>其中，要設定轉譯的支援範圍，是 babel 的強項。</p>
 <p>它使用了<a target="_blank" rel="noopener" href="https://github.com/ai/browserslist">browserslist</a> 的 parse 來解析設定值。它可以使用較 human friendly 的句子進行設定。</p>
 <p>例如:<br>
 所有瀏覽器最近的兩版, 並且 Safari 的<br>
 7 版(含)以上</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"presets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">[</span><span class="token string">"env"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-      <span class="token string-property property">"targets"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token string-property property">"browsers"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"last 2 versions"</span><span class="token punctuation">,</span> <span class="token string">"safari >= 7"</span><span class="token punctuation">]</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#123;
+  &quot;presets&quot;: [
+    [&quot;env&quot;, &#123;
+      &quot;targets&quot;: &#123;
+        &quot;browsers&quot;: [&quot;last 2 versions&quot;, &quot;safari &gt;&#x3D; 7&quot;]
+      &#125;
+    &#125;]
+  ]
+&#125;</code></pre>
 <p>官網文件的教學，也包含了轉成 node.js 的教學。有興趣可以去看</p>
 <p>現在，我們學會了 babel 的安裝、設定和使用，現在回過頭再來看看，為什麼要另外安裝 <a target="_blank" rel="noopener" href="https://babeljs.io/docs/plugins/preset-es2015/">babel-preset-es2015</a></p>
 <p>其實就是一套指定版本的 preset。<br>
@@ -307,11 +311,11 @@ var x &#x3D; function x(n) &#123;
                     tags:
                     
   <li class="meta-text">
-  { <a href="/tags/nodejs/">nodejs</a> }
+  { <a href="/tags/webpack/">webpack</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/webpack/">webpack</a> }
+  { <a href="/tags/nodejs/">nodejs</a> }
   </li>
 
   <li class="meta-text">
@@ -351,21 +355,14 @@ var x &#x3D; function x(n) &#123;
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

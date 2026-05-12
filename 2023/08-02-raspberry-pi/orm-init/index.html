@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -162,29 +166,29 @@
 <p>設定 config</p>
 <p><strong>專案/config/config.json</strong></p>
 <p>最上面加一段，不 git 的</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  <span class="token property">"root"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"sa"</span><span class="token punctuation">,</span>
-    <span class="token property">"password"</span><span class="token operator">:</span> <span class="token null keyword">null</span><span class="token punctuation">,</span>
-    <span class="token property">"database"</span><span class="token operator">:</span> <span class="token string">"good_ideas_lib_dev"</span><span class="token punctuation">,</span>
-    <span class="token property">"host"</span><span class="token operator">:</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
-    <span class="token property">"dialect"</span><span class="token operator">:</span> <span class="token string">"mysql"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-json" data-language="json"><code class="language-json">&#123;
+  &quot;root&quot;: &#123;
+    &quot;username&quot;: &quot;sa&quot;,
+    &quot;password&quot;: null,
+    &quot;database&quot;: &quot;good_ideas_lib_dev&quot;,
+    &quot;host&quot;: &quot;127.0.0.1&quot;,
+    &quot;dialect&quot;: &quot;mysql&quot;
+  &#125;,
+  &#x2F;&#x2F;...
+&#125;</code></pre>
 <p>設定</p>
 <ul>
 <li>username 最高管理者帳號</li>
 <li>password 最高管理者密碼</li>
 <li>database 即將要新增的新資料庫</li>
 </ul>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:create <span class="token parameter variable">--env</span><span class="token operator">=</span>root
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize db:create --env&#x3D;root
 
-Sequelize CLI <span class="token punctuation">[</span>Node: <span class="token number">18.16</span>.0, CLI: <span class="token number">6.6</span>.1, ORM: <span class="token number">6.32</span>.1<span class="token punctuation">]</span>
+Sequelize CLI [Node: 18.16.0, CLI: 6.6.1, ORM: 6.32.1]
 
-Loaded configuration <span class="token function">file</span> <span class="token string">"config/config.json"</span><span class="token builtin class-name">.</span>
-Using environment <span class="token string">"root"</span><span class="token builtin class-name">.</span>
-Database good_ideas_lib_dev created.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Loaded configuration file &quot;config&#x2F;config.json&quot;.
+Using environment &quot;root&quot;.
+Database good_ideas_lib_dev created.</code></pre>
 <p><code>--env=root</code> 可以控制要執行哪一段設定</p>
 <h2 id="用-sql-設定新資料庫與帳號"><a class="header-anchor" href="#用-sql-設定新資料庫與帳號">¶</a>用 SQL 設定新資料庫與帳號</h2>
 <p>看之前的<a href="https://dwatow.github.io/2023/06-28-raspberry-pi/mariadb-init/#%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%9D%E6%AC%A1%E8%A8%AD%E5%AE%9A">文章</a></p>
@@ -196,31 +200,31 @@ Database good_ideas_lib_dev created.<span aria-hidden="true" class="line-numbers
 </blockquote>
 <p>直接在專案根目錄新增一個 main.js</p>
 <p><strong>專案/main.js</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">&#123;</span> Sequelize <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sequelize'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const &#123; Sequelize &#125; &#x3D; require(&#39;sequelize&#39;);
 
-<span class="token keyword">const</span> development <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// 請設定，並複製一份 config/config.js 裡的 development 的設定</span>
-<span class="token punctuation">&#125;</span>
+const development &#x3D; &#123;
+  &#x2F;&#x2F; 請設定，並複製一份 config&#x2F;config.js 裡的 development 的設定
+&#125;
 
-<span class="token comment">// Option 3: Passing parameters separately (other dialects)</span>
-<span class="token keyword">const</span> sequelize <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequelize</span><span class="token punctuation">(</span>development<span class="token punctuation">.</span>database<span class="token punctuation">,</span> development<span class="token punctuation">.</span>username<span class="token punctuation">,</span> development<span class="token punctuation">.</span>password<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">host</span><span class="token operator">:</span> development<span class="token punctuation">.</span>host<span class="token punctuation">,</span>
-  <span class="token literal-property property">dialect</span><span class="token operator">:</span> development<span class="token punctuation">.</span>dialect
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&#x2F;&#x2F; Option 3: Passing parameters separately (other dialects)
+const sequelize &#x3D; new Sequelize(development.database, development.username, development.password, &#123;
+  host: development.host,
+  dialect: development.dialect
+&#125;);
 
-<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">await</span> sequelize<span class="token punctuation">.</span><span class="token function">authenticate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Connection has been established successfully.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Unable to connect to the database:'</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+async function main() &#123;
+  try &#123;
+    await sequelize.authenticate();
+    console.log(&#39;Connection has been established successfully.&#39;);
+  &#125; catch (error) &#123;
+    console.error(&#39;Unable to connect to the database:&#39;, error);
+  &#125;
+&#125;
+main()</code></pre>
 <p>測試</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ <span class="token function">node</span> main.js
-Executing <span class="token punctuation">(</span>default<span class="token punctuation">)</span>: SELECT <span class="token number">1</span>+1 AS result
-Connection has been established successfully.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ node main.js
+Executing (default): SELECT 1+1 AS result
+Connection has been established successfully.</code></pre>
 <p>連線成功！</p>
 
     
@@ -275,21 +279,14 @@ Connection has been established successfully.<span aria-hidden="true" class="lin
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

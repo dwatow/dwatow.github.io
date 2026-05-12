@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -159,17 +163,17 @@
 <p>如何設計一個好的 List Component 就成為了這一篇文章的重點。<br>
 在讀 code 上會有更多的資訊可以讀，也希望在界面上有更多的隱喻可以了解實作。</p>
 <p>以上一篇的物件為元素組成的陣列為例，這是一個「書籍」的陣列，裡頭的元素是物件。這依然是一個「抽象資料型別」，現在拿出紙筆畫一下，如果要將它變成列表，該怎麼做呢？。</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
-  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"從自學到成功轉職軟體工程師"</span><span class="token punctuation">,</span>
-  <span class="token property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263330120"</span><span class="token punctuation">,</span>
-  <span class="token property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-01-24"</span><span class="token punctuation">,</span>s
-  <span class="token property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token property">"pages"</span><span class="token operator">:</span> <span class="token number">264</span><span class="token punctuation">,</span>
-  <span class="token property">"set_price"</span><span class="token operator">:</span> <span class="token number">520</span><span class="token punctuation">,</span>
-  <span class="token property">"author"</span><span class="token operator">:</span> <span class="token string">"Chris"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">[&#123;
+  &quot;name&quot;: &quot;從自學到成功轉職軟體工程師&quot;,
+  &quot;isbn&quot;: &quot;6263330120&quot;,
+  &quot;publish_date&quot;: &quot;2022-01-24&quot;,s
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 264,
+  &quot;set_price&quot;: 520,
+  &quot;author&quot;: &quot;Chris&quot;
+&#125;, &#123;
   ...
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;]</code></pre>
 <p>我想讓它成為重複出現的表單，這樣既可以編輯，也可以顯示，符合更多的可能性。<br>
 也符合真實案例的複雜程度，畫面就如同這樣。</p>
 <p><img src="/images/8a5a3aee-PUgAmkf.png" alt=""></p>
@@ -178,200 +182,200 @@
 <p>List 需要的編輯行為: 新增元素、編輯元素、移除元素，顯示所有內容。在之後的設計上，會讓這些 method 跟著 List 這個 component。<br>
 在此就不管 v-model 的做法。直接使用「把 v-model 拆開」的 BookForm 接續下一步。</p>
 <p><strong>/src/views/Document.vue</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>book_list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>books<span class="token punctuation">"</span></span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>(form, index) in list<span class="token punctuation">"</span></span> <span class="token attr-name">:key</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.isbn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span>
-      <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>isbn</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>publish_date</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>publish_house</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>pages</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>set_price</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>author</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList($event, index)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-left: 3.5em;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete<span class="token punctuation">"</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onRemoveOneOfList(index)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>X<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>create<span class="token punctuation">"</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onAddOneToList<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>＋<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ref <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'vue'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> BookForm <span class="token keyword">from</span> <span class="token string">'@/components/BookForm.vue'</span><span class="token punctuation">;</span>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;div class&#x3D;&quot;book_list&quot;&gt;
+  &lt;div class&#x3D;&quot;books&quot; v-for&#x3D;&quot;(form, index) in list&quot; :key&#x3D;&quot;form.isbn&quot;&gt;
+    &lt;BookForm
+      :data&#x3D;&quot;form&quot;
+      @update:name&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:isbn&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:publish_date&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:publish_house&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:pages&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:set_price&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+      @update:author&#x3D;&quot;onUpdateOneOfList($event, index)&quot;
+    &gt;
+    &lt;&#x2F;BookForm&gt;
+    &lt;div style&#x3D;&quot;margin-left: 3.5em;&quot;&gt;
+      &lt;button class&#x3D;&quot;delete&quot; @click&#x3D;&quot;onRemoveOneOfList(index)&quot;&gt;X&lt;&#x2F;button&gt;
+    &lt;&#x2F;div&gt;
+  &lt;&#x2F;div&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em;&quot;&gt;
+    &lt;button class&#x3D;&quot;create&quot; @click&#x3D;&quot;onAddOneToList&quot;&gt;＋&lt;&#x2F;button&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import &#123; ref &#125; from &#39;vue&#39;;
+import BookForm from &#39;@&#x2F;components&#x2F;BookForm.vue&#39;;
 
-<span class="token keyword">const</span> list <span class="token operator">=</span> <span class="token function">ref</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"從自學到成功轉職軟體工程師"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263330120"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-01-24"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">264</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">520</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"Chris"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"金魚都能懂的 CSS 必學屬性"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"9864348825"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-05-03"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">480</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">720</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"李建杭（Amos Li）"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"約耳再談軟體"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263246103"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2023-09-14"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"碁峰資訊"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">336</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">580</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"約耳"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+const list &#x3D; ref([&#123;
+  &quot;name&quot;: &quot;從自學到成功轉職軟體工程師&quot;,
+  &quot;isbn&quot;: &quot;6263330120&quot;,
+  &quot;publish_date&quot;: &quot;2022-01-24&quot;,
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 264,
+  &quot;set_price&quot;: 520,
+  &quot;author&quot;: &quot;Chris&quot;
+&#125;, &#123;
+  &quot;name&quot;: &quot;金魚都能懂的 CSS 必學屬性&quot;,
+  &quot;isbn&quot;: &quot;9864348825&quot;,
+  &quot;publish_date&quot;: &quot;2022-05-03&quot;,
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 480,
+  &quot;set_price&quot;: 720,
+  &quot;author&quot;: &quot;李建杭（Amos Li）&quot;
+&#125;, &#123;
+  &quot;name&quot;: &quot;約耳再談軟體&quot;,
+  &quot;isbn&quot;: &quot;6263246103&quot;,
+  &quot;publish_date&quot;: &quot;2023-09-14&quot;,
+  &quot;publish_house&quot;: &quot;碁峰資訊&quot;,
+  &quot;pages&quot;: 336,
+  &quot;set_price&quot;: 580,
+  &quot;author&quot;: &quot;約耳&quot;
+  &#125;])
 
-<span class="token keyword">function</span> <span class="token function">onAddOneToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  list<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token punctuation">[</span>
-    <span class="token operator">...</span>list<span class="token punctuation">.</span>value<span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">""</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span>
+function onAddOneToList() &#123;
+  list.value &#x3D; [
+    ...list.value,
+    &#123;
+      &quot;name&quot;: &quot;&quot;,
+      &quot;isbn&quot;: &quot;&quot;,
+      &quot;publish_date&quot;: &quot;&quot;,
+      &quot;publish_house&quot;: &quot;&quot;,
+      &quot;pages&quot;: 0,
+      &quot;set_price&quot;: 0,
+      &quot;author&quot;: &quot;&quot;
+    &#125;,
+  ]
+&#125;
 
-<span class="token keyword">function</span> <span class="token function">onUpdateOneOfList</span><span class="token punctuation">(</span><span class="token parameter">one<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  list<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token punctuation">[</span>
-    <span class="token operator">...</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    one<span class="token punctuation">,</span>
-    <span class="token operator">...</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span>
+function onUpdateOneOfList(one, index) &#123;
+  list.value &#x3D; [
+    ...list.value.slice(0, index),
+    one,
+    ...list.value.slice(index + 1),
+  ]
+&#125;
 
-<span class="token keyword">function</span> <span class="token function">onRemoveOneOfList</span><span class="token punctuation">(</span><span class="token parameter">index</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  list<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token punctuation">[</span>
-    <span class="token operator">...</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token operator">...</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function onRemoveOneOfList(index) &#123;
+  list.value &#x3D; [
+    ...list.value.slice(0, index),
+    ...list.value.slice(index + 1),
+  ]
+&#125;</code></pre>
 <h2 id="設計-list-元件"><a class="header-anchor" href="#設計-list-元件">¶</a>設計 List 元件</h2>
 <p>包成 Component 之後。</p>
 <p><strong>/src/views/Document.vue</strong></p>
 <p>為了讓 List 成為 component 而且元素型別是可以抽換的，並且這個 component 本身就可以新增、刪除、修改元素。<br>
 在刪除與修改元素時，還可以把 index 給換掉。</p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>List</span> <span class="token attr-name">v-slot</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; form, update &#125;<span class="token punctuation">"</span></span> 
-  <span class="token attr-name">:list</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@add</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList<span class="token punctuation">"</span></span>
-  <span class="token attr-name">@del</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList<span class="token punctuation">"</span></span>
-<span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>BookForm</span>
-    <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>isbn</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>publish_date</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>publish_house</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>pages</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>set_price</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-    <span class="token attr-name"><span class="token namespace">@update:</span>author</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateList(update($event))<span class="token punctuation">"</span></span>
-  <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>BookForm</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>List</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-xml" data-language="xml"><code class="language-xml">&lt;List v-slot&#x3D;&quot;&#123; form, update &#125;&quot; 
+  :list&#x3D;&quot;list&quot;
+  @add&#x3D;&quot;onUpdateList&quot;
+  @del&#x3D;&quot;onUpdateList&quot;
+&gt;
+  &lt;BookForm
+    :data&#x3D;&quot;form&quot;
+    @update:name&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:isbn&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:publish_date&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:publish_house&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:pages&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:set_price&#x3D;&quot;onUpdateList(update($event))&quot;
+    @update:author&#x3D;&quot;onUpdateList(update($event))&quot;
+  &gt;&lt;&#x2F;BookForm&gt;
+&lt;&#x2F;List&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>維持資料在 view 決定的角度來設計 component，讓 BookForm 成為 pure component</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ref <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'vue'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> BookForm <span class="token keyword">from</span> <span class="token string">'@/components/BookForm.vue'</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">import &#123; ref &#125; from &#39;vue&#39;;
+import BookForm from &#39;@&#x2F;components&#x2F;BookForm.vue&#39;;
 
-<span class="token keyword">const</span> list <span class="token operator">=</span> <span class="token function">ref</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"從自學到成功轉職軟體工程師"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263330120"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-01-24"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">264</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">520</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"Chris"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"金魚都能懂的 CSS 必學屬性"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"9864348825"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2022-05-03"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"博碩文化"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">480</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">720</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"李建杭（Amos Li）"</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-  <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">"約耳再談軟體"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">"6263246103"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">"2023-09-14"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">"碁峰資訊"</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">336</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">580</span><span class="token punctuation">,</span>
-  <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">"約耳"</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+const list &#x3D; ref([&#123;
+  &quot;name&quot;: &quot;從自學到成功轉職軟體工程師&quot;,
+  &quot;isbn&quot;: &quot;6263330120&quot;,
+  &quot;publish_date&quot;: &quot;2022-01-24&quot;,
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 264,
+  &quot;set_price&quot;: 520,
+  &quot;author&quot;: &quot;Chris&quot;
+&#125;, &#123;
+  &quot;name&quot;: &quot;金魚都能懂的 CSS 必學屬性&quot;,
+  &quot;isbn&quot;: &quot;9864348825&quot;,
+  &quot;publish_date&quot;: &quot;2022-05-03&quot;,
+  &quot;publish_house&quot;: &quot;博碩文化&quot;,
+  &quot;pages&quot;: 480,
+  &quot;set_price&quot;: 720,
+  &quot;author&quot;: &quot;李建杭（Amos Li）&quot;
+&#125;, &#123;
+  &quot;name&quot;: &quot;約耳再談軟體&quot;,
+  &quot;isbn&quot;: &quot;6263246103&quot;,
+  &quot;publish_date&quot;: &quot;2023-09-14&quot;,
+  &quot;publish_house&quot;: &quot;碁峰資訊&quot;,
+  &quot;pages&quot;: 336,
+  &quot;set_price&quot;: 580,
+  &quot;author&quot;: &quot;約耳&quot;
+  &#125;])
 
-<span class="token keyword">function</span> <span class="token function">onUpdateList</span><span class="token punctuation">(</span><span class="token parameter">new_list</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  list<span class="token punctuation">.</span>value <span class="token operator">=</span> new_list
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function onUpdateList(new_list) &#123;
+  list.value &#x3D; new_list
+&#125;</code></pre>
 <p><strong>/src/component/BookForm.vue</strong></p>
 <p>把原本 BookForm 的位置換成 slot。<br>
 從 slot 傳出 form 與 修改 form 的 onUpdateOneOfList</p>
 <p><strong>template</strong></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>book_list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>books<span class="token punctuation">"</span></span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>(form, index) in list<span class="token punctuation">"</span></span> <span class="token attr-name">:key</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form.isbn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span> <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>form<span class="token punctuation">"</span></span> <span class="token attr-name">:update</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onUpdateOneOfList(index)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-left: 3.5em;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>delete<span class="token punctuation">"</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onRemoveOneOfList(index)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>X<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top: .5em;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>create<span class="token punctuation">"</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onAddOneToList<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>＋<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;div class&#x3D;&quot;book_list&quot;&gt;
+  &lt;div class&#x3D;&quot;books&quot; v-for&#x3D;&quot;(form, index) in list&quot; :key&#x3D;&quot;form.isbn&quot;&gt;
+    &lt;slot :data&#x3D;&quot;form&quot; :update&#x3D;&quot;onUpdateOneOfList(index)&quot;&gt;&lt;&#x2F;slot&gt;
+    &lt;div style&#x3D;&quot;margin-left: 3.5em;&quot;&gt;
+      &lt;button class&#x3D;&quot;delete&quot; @click&#x3D;&quot;onRemoveOneOfList(index)&quot;&gt;X&lt;&#x2F;button&gt;
+    &lt;&#x2F;div&gt;
+  &lt;&#x2F;div&gt;
+  &lt;div style&#x3D;&quot;margin-top: .5em;&quot;&gt;
+    &lt;button class&#x3D;&quot;create&quot; @click&#x3D;&quot;onAddOneToList&quot;&gt;＋&lt;&#x2F;button&gt;
+  &lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;</code></pre>
 <p><strong>script</strong></p>
 <p>把原本 method 裡改值的部份，改成吐出與 <code>props.list</code> 相同型別 (Array) 的事件。<br>
 將 onUpdateOneOfList 改成閉包，將 index 封裝在 List 裡面。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> props <span class="token operator">=</span> <span class="token function">defineProps</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">list</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">type</span><span class="token operator">:</span> Array<span class="token punctuation">,</span>
-    <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const props &#x3D; defineProps(&#123;
+  list: &#123;
+    type: Array,
+    required: true
+  &#125;
+&#125;)
 
-<span class="token keyword">const</span> emits <span class="token operator">=</span> <span class="token function">defineEmits</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
-  <span class="token string">'add'</span><span class="token punctuation">,</span> <span class="token string">'del'</span><span class="token punctuation">,</span> <span class="token string">'update'</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span>
+const emits &#x3D; defineEmits([
+  &#39;add&#39;, &#39;del&#39;, &#39;update&#39;
+])
 
-<span class="token keyword">function</span> <span class="token function">onAddOneToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'add'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
-    <span class="token operator">...</span>props<span class="token punctuation">.</span>list<span class="token punctuation">.</span>value<span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token string-property property">"name"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"isbn"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"publish_date"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"publish_house"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"pages"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"set_price"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      <span class="token string-property property">"author"</span><span class="token operator">:</span> <span class="token string">""</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
+function onAddOneToList() &#123;
+  emits(&#39;add&#39;, [
+    ...props.list.value,
+    &#123;
+      &quot;name&quot;: &quot;&quot;,
+      &quot;isbn&quot;: &quot;&quot;,
+      &quot;publish_date&quot;: &quot;&quot;,
+      &quot;publish_house&quot;: &quot;&quot;,
+      &quot;pages&quot;: 0,
+      &quot;set_price&quot;: 0,
+      &quot;author&quot;: &quot;&quot;
+    &#125;
+  ])
+&#125;
 
-<span class="token keyword">function</span> <span class="token function">onUpdateOneOfList</span><span class="token punctuation">(</span><span class="token parameter">index</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">one</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'update'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
-      <span class="token operator">...</span>props<span class="token punctuation">.</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-      one<span class="token punctuation">,</span>
-      <span class="token operator">...</span>props<span class="token punctuation">.</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token punctuation">]</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">function</span> <span class="token function">onRemoveOneOfList</span><span class="token punctuation">(</span><span class="token parameter">index</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">emits</span><span class="token punctuation">(</span><span class="token string">'del'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
-    <span class="token operator">...</span>props<span class="token punctuation">.</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token operator">...</span>props<span class="token punctuation">.</span>list<span class="token punctuation">.</span>value<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function onUpdateOneOfList(index) &#123;
+  return function (one) &#123;
+    emits(&#39;update&#39;, [
+      ...props.list.value.slice(0, index),
+      one,
+      ...props.list.value.slice(index + 1),
+    ])
+  &#125;
+&#125;
+function onRemoveOneOfList(index) &#123;
+  emits(&#39;del&#39;, [
+    ...props.list.value.slice(0, index),
+    ...props.list.value.slice(index + 1),
+  ])
+&#125;</code></pre>
 <p><strong>優點:</strong></p>
 <ul>
 <li>可以將 List 的行為，跟著 List 的 component，編輯與 Form 的編輯相容。</li>
@@ -443,21 +447,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

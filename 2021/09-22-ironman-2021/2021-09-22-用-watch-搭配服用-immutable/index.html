@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -59,8 +59,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -160,85 +164,85 @@
 <p>在此將它的介紹拆成兩個部份，會有助於觀念上的釐清。<br>
 對於四種簡單型別的 watch 方式。</p>
 <p>第一種就是直接用一個和 data 同名的 watch 。讓資料在 set 的同時，可以呼叫一次這個放在 watch 的 function</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">a</span><span class="token operator">:</span> <span class="token number">1</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function-variable function">a</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">val<span class="token punctuation">,</span> oldVal</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'new: %s, old: %s'</span><span class="token punctuation">,</span> val<span class="token punctuation">,</span> oldVal<span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data: &#123;
+    a: 1
+  &#125;,
+  watch: &#123;
+    a: function (val, oldVal) &#123;
+      console.log(&#39;new: %s, old: %s&#39;, val, oldVal)
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p>第二種，就是將 method 放到 watch 上面，因為有時候有些 method 會主動觸發，有時又要被動觸發，就必須這樣安排，不過另一種做法也可以放在第一種方法的 function 中再呼叫 <code>someMethod</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">b</span><span class="token operator">:</span> <span class="token number">2</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// string method name</span>
-    <span class="token literal-property property">b</span><span class="token operator">:</span> <span class="token string">'someMethod'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">methods</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">someMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// do something...</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data: &#123;
+    b: 2
+  &#125;,
+  watch: &#123;
+    &#x2F;&#x2F; string method name
+    b: &#39;someMethod&#39;,
+  &#125;,
+  methods: &#123;
+    someMethod() &#123;
+      &#x2F;&#x2F; do something...
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p>第三種做法，watch 裡放的就不只是 method 了。而是一個 config ，註冊了一個 handler 並且設定它要 <code>deep:true</code> 的這樣觸發。</p>
 <p>第四種做法就出現 <code>immediate</code> 這個關鍵字，並且也是設定成 true。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">c</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">d</span><span class="token operator">:</span> <span class="token number">4</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// the callback will be called whenever any of the watched object properties change regardless of their nested depth</span>
-    <span class="token literal-property property">c</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token function-variable function">handler</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">val<span class="token punctuation">,</span> oldVal</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">/* ... */</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">deep</span><span class="token operator">:</span> <span class="token boolean">true</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token comment">// the callback will be called immediately after the start of the observation</span>
-    <span class="token literal-property property">d</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">handler</span><span class="token operator">:</span> <span class="token string">'someMethod'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">immediate</span><span class="token operator">:</span> <span class="token boolean">true</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data: &#123;
+    c: 3,
+    d: 4
+  &#125;,
+  watch: &#123;
+    &#x2F;&#x2F; the callback will be called whenever any of the watched object properties change regardless of their nested depth
+    c: &#123;
+      handler: function (val, oldVal) &#123; &#x2F;* ... *&#x2F; &#125;,
+      deep: true
+    &#125;,
+    &#x2F;&#x2F; the callback will be called immediately after the start of the observation
+    d: &#123;
+      handler: &#39;someMethod&#39;,
+      immediate: true
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p>最後一做法，在範例程式碼中，有出現較深的資料結構。<br>
 如果 watch 較深的資料時，可以直接用 <code>e.f</code> 來監聰深度的結構改變。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">e</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">f</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">g</span><span class="token operator">:</span> <span class="token number">5</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// you can pass array of callbacks, they will be called one-by-one</span>
-    <span class="token literal-property property">e</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token string">'handle1'</span><span class="token punctuation">,</span>
-      <span class="token keyword">function</span> <span class="token function">handle2</span> <span class="token punctuation">(</span><span class="token parameter">val<span class="token punctuation">,</span> oldVal</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">/* ... */</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#123;</span>
-        <span class="token function-variable function">handler</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token function">handle3</span> <span class="token punctuation">(</span><span class="token parameter">val<span class="token punctuation">,</span> oldVal</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">/* ... */</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-        <span class="token comment">/* ... */</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token comment">// watch vm.e.f's value: &#123;g: 5&#125;</span>
-    <span class="token string-property property">'e.f'</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">val<span class="token punctuation">,</span> oldVal</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">/* ... */</span> <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data: &#123;
+    e: &#123;
+      f: &#123;
+        g: 5
+      &#125;
+    &#125;
+  &#125;,
+  watch: &#123;
+    &#x2F;&#x2F; you can pass array of callbacks, they will be called one-by-one
+    e: [
+      &#39;handle1&#39;,
+      function handle2 (val, oldVal) &#123; &#x2F;* ... *&#x2F; &#125;,
+      &#123;
+        handler: function handle3 (val, oldVal) &#123; &#x2F;* ... *&#x2F; &#125;,
+        &#x2F;* ... *&#x2F;
+      &#125;
+    ],
+    &#x2F;&#x2F; watch vm.e.f&#39;s value: &#123;g: 5&#125;
+    &#39;e.f&#39;: function (val, oldVal) &#123; &#x2F;* ... *&#x2F; &#125;
+  &#125;
+&#125;
+</code></pre>
 <h2 id="用替換了哪個記憶體位址了解-immutable-1"><a class="header-anchor" href="#用替換了哪個記憶體位址了解-immutable-1">¶</a>用替換了哪個記憶體位址了解 immutable[1]</h2>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">let user &#x3D; &#123;
+  name: &#39;Chris&#39;,
+  age: 18,
+&#125;;
+</code></pre>
 <p><img src="/images/3b651d28-v6im2d4.png" alt=""></p>
 <p>畫成記憶體圖，如下圖 (假設 JavaScript 是以 call by sharing 實作的話)</p>
 <blockquote>
@@ -247,105 +251,105 @@
 <p>如果是 mutable (可變的，就直接改掉 user 的成員變數所指向的位置)，將 <code>user.age</code> 改成 19 的動作，就是指向 <code>0xFF0400</code> 指向 <code>0xFF0408</code>。</p>
 <p><img src="/images/3b651d28-35tziZQ.png" alt=""></p>
 <p>程式碼如下</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">let user &#x3D; &#123;
+  name: &#39;Chris&#39;,
+  age: 18,
+&#125;;
 
-user<span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">19</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+user.age &#x3D; 19
+</code></pre>
 <p>對於修改記憶體位址的位置來說，就不是 <code>user</code> 被替換，而是 <code>user.age</code> 的位置被替換。</p>
 <p>如果要 immutable 就是換掉 user 為目標。(修改的是藍色線的指向，要指向新的一個物件)，將 <code>user</code> 改成 另一個 object 的動作，就是指向 <code>0xFF0200</code> 指向 <code>0xFF0210</code>。</p>
 <p><img src="/images/3b651d28-L94cyuD.png" alt=""></p>
 <p>程式碼如下</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">let user &#x3D; &#123;
+  name: &#39;Chris&#39;,
+  age: 18,
+&#125;;
 
-user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">19</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+user &#x3D; &#123;
+  name: &#39;Chris&#39;,
+  age: 19,
+&#125;
+</code></pre>
 <p>對於修改記憶體位址的位置來說，就是 <code>user</code> 被替換。</p>
 <h2 id="那-immutable-和-vue-的-watch-有什麼關係？"><a class="header-anchor" href="#那-immutable-和-vue-的-watch-有什麼關係？">¶</a>那 immutable 和 Vue 的 watch 有什麼關係？</h2>
 <p>把上述的例子，拿來 vue 裡面放，就像這樣，也許會放在 vuex 不過意思差不多就是這樣。</p>
 <p>有個 data 裡面有一個深一點的資料結構，也許是 object 也許是 array (在此用 object 當例子)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-      user <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data () &#123;
+    return &#123;
+      user &#123;
+        name: &#39;Chris&#39;,
+        age: 18
+      &#125;
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p>Vue.js 可以監聽的範圍，基本上只要是 <code>return &#123;&#125;</code> 這一層裡面的變數 watch 都可以正常連動。以這個例子來說，就是修改 user 就可以正常連動，但是有時候我們只是想要修改 age 怎辦？</p>
 <p>就可以準備一個已經改好的物件，<code>&#123; name: 'Chris', age: 19&#125;</code> 來替換掉 user 原本的物件就可以了。這樣一來，對 user 來說就不是修改，而是替換，也可以讓 vue.js 保證 watch 可以連動，不需要查詢這麼特別又複雜的使用方式。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
-      user <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">user</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'update other data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-  <span class="token literal-property property">methods</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">updateUserAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">this</span><span class="token punctuation">.</span>user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token operator">...</span><span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">,</span>
-        <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">19</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  data () &#123;
+    return &#123;
+      user &#123;
+        name: &#39;Chris&#39;,
+        age: 18
+      &#125;
+    &#125;
+  &#125;,
+  watch: &#123;
+    user() &#123;
+      console.log(&#39;update other data&#39;);
+    &#125;
+  &#125;
+  methods: &#123;
+    updateUserAge() &#123;
+      this.user &#x3D; &#123;
+        ...this.user,
+        age: 19
+      &#125;
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p><code>updateUserAge</code> 就是一個簡單的做法，讓你在執行時， watch 的部份保證會連動到。Vue.js 會查覺到記憶體位址修改，所以要更新畫面。</p>
 <h2 id="vue-js-的連動更新畫面"><a class="header-anchor" href="#vue-js-的連動更新畫面">¶</a>Vue.js 的連動更新畫面</h2>
 <p>有時候，vuex 的資料結構太深，mutate 只修改成員變數時，也會造成無法正確觸發 getters 的問題，導致畫面沒有正確更新</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vuex<span class="token punctuation">.</span>Store</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">user</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">mutations</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">userName</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> name <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// 這樣可能 (我是說可能) 就會出現問題</span>
-      state<span class="token punctuation">.</span>user<span class="token punctuation">.</span>name <span class="token operator">=</span> name
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const store &#x3D; new Vuex.Store(&#123;
+  state: &#123;
+    user: &#123;
+      name: &#39;Chris&#39;,
+      age: 18
+    &#125;
+  &#125;,
+  mutations: &#123;
+    userName (state, &#123; name &#125;) &#123;
+      &#x2F;&#x2F; 這樣可能 (我是說可能) 就會出現問題
+      state.user.name &#x3D; name
+    &#125;
+  &#125;
+&#125;)
+</code></pre>
 <p>但是，只要保持 immutable 的觀念，讓更新。在<a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/mutations.html#mutations-follow-vue-s-reactivity-rules">官網</a>的介紹中，叫 Reactivity Rules</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vuex<span class="token punctuation">.</span>Store</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">user</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Chris'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">18</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">mutations</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">userName</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> name <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// 這樣一定可以更新</span>
-      state<span class="token punctuation">.</span>user <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-        <span class="token operator">...</span>state<span class="token punctuation">.</span>user<span class="token punctuation">,</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const store &#x3D; new Vuex.Store(&#123;
+  state: &#123;
+    user: &#123;
+      name: &#39;Chris&#39;,
+      age: 18
+    &#125;
+  &#125;,
+  mutations: &#123;
+    userName (state, &#123; name &#125;) &#123;
+      &#x2F;&#x2F; 這樣一定可以更新
+      state.user &#x3D; &#123;
+        ...state.user,
         name
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+      &#125;
+    &#125;
+  &#125;
+&#125;)
+</code></pre>
 <h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://www.ithome.com.tw/voice/135952">傳值？傳參？</a></li>
@@ -403,21 +407,14 @@ user <span class="token operator">=</span> <span class="token punctuation">&#123
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

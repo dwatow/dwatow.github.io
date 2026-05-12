@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="¶AngularJS 遷移 controller 到 component  ¶將 controller 改寫成 component 這個改變，大約在 AngularJS 1.5 版出現。 也是前端框架的大變動時代。 由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML&#x2F;CSS&#x2F;JS 打包成一包，放在任何網站都不會跑版。 ¶先整理元件 .&#x2F;src&#x2F; ├── rout">
+  <meta name="description" content="¶AngularJS 遷移 controller 到 component  ¶將 controller 改寫成 component 這個改變，大約在 AngularJS 1.5 版出現。 也是前端框架的大變動時代。 由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML&#x2F;CSS&#x2F;JS 打包成一包，放在任何網站都不會跑版。 ¶先整理元件 .&#x2F;src&amp;#x2F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AngularJS 遷移 controller 到 component">
 <meta property="og:url" content="https://dwatow.github.io/2020/11-25-angularjs/angularjs-migration-1-5/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="¶AngularJS 遷移 controller 到 component  ¶將 controller 改寫成 component 這個改變，大約在 AngularJS 1.5 版出現。 也是前端框架的大變動時代。 由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML&#x2F;CSS&#x2F;JS 打包成一包，放在任何網站都不會跑版。 ¶先整理元件 .&#x2F;src&#x2F; ├── rout">
+<meta property="og:description" content="¶AngularJS 遷移 controller 到 component  ¶將 controller 改寫成 component 這個改變，大約在 AngularJS 1.5 版出現。 也是前端框架的大變動時代。 由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML&#x2F;CSS&#x2F;JS 打包成一包，放在任何網站都不會跑版。 ¶先整理元件 .&#x2F;src&amp;#x2F">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://dwatow.github.io/images/ccee86ba-64fbzVm.png">
 <meta property="article:published_time" content="2020-11-25T09:19:23.000Z">
@@ -58,8 +58,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -157,95 +161,95 @@
 也是前端框架的大變動時代。</p>
 <p>由於有了 component 的概念，也前端也引進封裝的技術，期待可以做到將 HTML/CSS/JS 打包成一包，放在任何網站都不會跑版。</p>
 <h3 id="先整理元件"><a class="header-anchor" href="#先整理元件">¶</a>先整理元件</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./src/
-├── route/
+<pre class="language-bash" data-language="bash"><code class="language-bash">.&#x2F;src&#x2F;
+├── route&#x2F;
 │   └── index.js
-├── pages/
-│   └── map/
+├── pages&#x2F;
+│   └── map&#x2F;
 │       ├── map.html
 │       ├── view.html
 │       └── advanced-search.html
-└── js/
-    └── map/
+└── js&#x2F;
+    └── map&#x2F;
         ├── map.js
         ├── view.js
-        └── advanced-search.js<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        └── advanced-search.js</code></pre>
 <p><strong>html</strong></p>
-<pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;div ng-show&#x3D;&quot;MCtrl...&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;
+<pre class="line-numbers language-htmlmixed" data-language="htmlmixed" data-start="1"><code class="language-htmlmixed">&lt;div ng-show&#x3D;&quot;MCtrl...&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;
   &lt;div ng-show&#x3D;&#39;!Ctrl.showAdvencedSearch&#39; class&#x3D;&quot;&quot;&gt;
     &lt;!--  中間略  --&gt;
     &lt;map-view&gt;&lt;&#x2F;map-view&gt;
     &lt;advanced-search&gt;&lt;&#x2F;advanced-search&gt;
   &lt;&#x2F;div&gt;
-&lt;&#x2F;div&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;div&gt;</code></pre>
 <p>在 controller 寫法中最讓人覺得麻煩的，就是 不同層的 controller 會交疊在一起，在 html 上多層次的呈現，使用者互動是跨 controller 的。但是這也增加了維護上的困難，因為其實人在理解畫面時，並不是這樣的想法，而是現代前端框架使用的 component 的概念，AngularJS 也在後來的版本跟了這個寫法，今天就是要介紹要怎麼改寫成 component 的寫法。</p>
 <p><strong>javascript</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">'./view'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">'./advanced-search'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import &#39;.&#x2F;view&#39;;
+import &#39;.&#x2F;advanced-search&#39;;
 
-<span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">var</span> app <span class="token operator">=</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"map"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"view"</span><span class="token punctuation">,</span><span class="token string">"advanced-search"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  app<span class="token punctuation">.</span><span class="token function">controller</span><span class="token punctuation">(</span><span class="token string">"mapController"</span><span class="token punctuation">,</span> mapController<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  mapController<span class="token punctuation">.</span>$inject <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"$scope"</span><span class="token punctuation">,</span> <span class="token string">"authService"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+(function() &#123;
+  var app &#x3D; angular.module(&quot;map&quot;, [&quot;view&quot;,&quot;advanced-search&quot;]);
+  app.controller(&quot;mapController&quot;, mapController);
+  mapController.$inject &#x3D; [&quot;$scope&quot;, &quot;authService&quot;];
 
-  <span class="token keyword">function</span> <span class="token function">mapController</span><span class="token punctuation">(</span><span class="token parameter">$scope<span class="token punctuation">,</span> authService</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// 中間略</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  function mapController($scope, authService) &#123;
+    &#x2F;&#x2F; 中間略
+  &#125;
+&#125;)();</code></pre>
 <p>AngularJS 自帶「相依模組管理」，可以在前端做相依模組的設定，但是整個專案變成 webpack 時，就必須在後端做相依模組管理，這個必須在 AngularJS + ESM(或 CommonJS) 的做法重疊的情況，又該怎麼做呢？</p>
 <p><strong>route</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ngRoute <span class="token keyword">from</span> <span class="token string">'angular-route'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import ngRoute from &#39;angular-route&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'route'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>ngRoute<span class="token punctuation">]</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'$routeProvider'</span><span class="token punctuation">,</span> <span class="token string">'$locationProvider'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">$routeProvider<span class="token punctuation">,</span> $locationProvider</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  $locationProvider<span class="token punctuation">.</span><span class="token function">hashPrefix</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">//登入</span>
+export default angular.module(&#39;route&#39;, [ngRoute])
+  .config([&#39;$routeProvider&#39;, &#39;$locationProvider&#39;, ($routeProvider, $locationProvider) &#x3D;&gt; &#123;
+  $locationProvider.hashPrefix(&#39;&#39;);
+  &#x2F;&#x2F;登入
   $routeProvider
-  <span class="token comment">// 中間略</span>
-  <span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/map'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token comment">//地圖顯示頁面</span>
-    <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../pages/map/map.html'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">controller</span><span class="token operator">:</span> <span class="token string">'mapController as Ctrl'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token comment">// 中間略</span>
-  <span class="token punctuation">.</span><span class="token function">otherwise</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">redirectTo</span><span class="token operator">:</span> <span class="token string">'/'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F; 中間略
+  .when(&#39;&#x2F;map&#39;, &#123; &#x2F;&#x2F;地圖顯示頁面
+    template: require(&#39;..&#x2F;pages&#x2F;map&#x2F;map.html&#39;),
+    controller: &#39;mapController as Ctrl&#39;
+  &#125;)
+  &#x2F;&#x2F; 中間略
+  .otherwise(&#123;
+    redirectTo: &#39;&#x2F;&#39;
+  &#125;)
+&#125;])</code></pre>
 <h2 id="先整理沒有相依模組的-code"><a class="header-anchor" href="#先整理沒有相依模組的-code">¶</a>先整理沒有相依模組的 code</h2>
 <p>因為我們要做成 component 所以最後會將檔案整理在一起。<br>
 <strong>一次整理一組，不要一口氣做全部。</strong> 確保每一步都是正確的</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./src/
-└── components/
-    ├── map/
+<pre class="language-bash" data-language="bash"><code class="language-bash">.&#x2F;src&#x2F;
+└── components&#x2F;
+    ├── map&#x2F;
     │   ├── index.html
     │   └── index.js
-    ├── view/
+    ├── view&#x2F;
     │   ├── index.html
     │   └── index.js
-    └── advanced-search/
+    └── advanced-search&#x2F;
         ├── index.html
-        └── index.js<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        └── index.js</code></pre>
 <p><strong>javascript</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> template <span class="token keyword">from</span> <span class="token string">'./index.html'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import template from &#39;.&#x2F;index.html&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">"map"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">'map'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-    template<span class="token punctuation">,</span>
-    controller<span class="token punctuation">,</span>
-    <span class="token literal-property property">controllerAs</span><span class="token operator">:</span> <span class="token string">'Ctrl'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">isShow</span><span class="token operator">:</span> <span class="token string">'&lt;'</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+export default angular.module(&quot;map&quot;, [])
+  .component(&#39;map&#39;, &#123;
+    template,
+    controller,
+    controllerAs: &#39;Ctrl&#39;,
+    bindings: &#123;
+      isShow: &#39;&lt;&#39;
+    &#125;
+  &#125;).name;
 
-controller<span class="token punctuation">.</span>$inject <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"$scope"</span><span class="token punctuation">,</span> <span class="token string">"authService"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+controller.$inject &#x3D; [&quot;$scope&quot;, &quot;authService&quot;];
 
-<span class="token keyword">function</span> <span class="token function">controller</span><span class="token punctuation">(</span><span class="token parameter">$scope<span class="token punctuation">,</span> authService</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// 中間略</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+function controller($scope, authService) &#123;
+  &#x2F;&#x2F; 中間略
+&#125;</code></pre>
 <ol>
 <li>html 移到相同目錄，並用 ESM 引入成 template。(webpack 要安裝 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/html-loader">html-loader</a>)</li>
 <li>controller 內容不變，只有將命名改成 controller。</li>
@@ -261,32 +265,32 @@ controller<span class="token punctuation">.</span>$inject <span class="token ope
 <code>angular.module(&quot;map&quot;, [])</code> 中 module method 的第二個參數，在沒有相依模組的情況之下，還是要給一個空陣列。</p>
 </blockquote>
 <p><strong>html</strong></p>
-<pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;div ng-show&#x3D;&quot;Ctrl.isShow&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;
+<pre class="line-numbers language-htmlmixed" data-language="htmlmixed" data-start="1"><code class="language-htmlmixed">&lt;div ng-show&#x3D;&quot;Ctrl.isShow&quot; class&#x3D;&quot;container mb-15&quot; style&#x3D;&quot;position:relative;&quot;&gt;
   &lt;div ng-show&#x3D;&#39;!Ctrl.showAdvencedSearch&#39; class&#x3D;&quot;&quot;&gt;
     &lt;!--  中間略  --&gt;
     &lt;map-view&gt;&lt;&#x2F;map-view&gt;
     &lt;advanced-search&gt;&lt;&#x2F;advanced-search&gt;
   &lt;&#x2F;div&gt;
-&lt;&#x2F;div&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;&#x2F;div&gt;</code></pre>
 <p>由於目前是由 controller 控製渲染，所以要把 MCtrl 改成 Ctrl，並且將 <code>MCtrl...</code> 移到正確的位置。</p>
 <p><strong>route</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ngRoute <span class="token keyword">from</span> <span class="token string">'angular-route'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import ngRoute from &#39;angular-route&#39;;
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'route'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>ngRoute<span class="token punctuation">]</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'$routeProvider'</span><span class="token punctuation">,</span> <span class="token string">'$locationProvider'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">$routeProvider<span class="token punctuation">,</span> $locationProvider</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  $locationProvider<span class="token punctuation">.</span><span class="token function">hashPrefix</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">//登入</span>
+export default angular.module(&#39;route&#39;, [ngRoute])
+  .config([&#39;$routeProvider&#39;, &#39;$locationProvider&#39;, ($routeProvider, $locationProvider) &#x3D;&gt; &#123;
+  $locationProvider.hashPrefix(&#39;&#39;);
+  &#x2F;&#x2F;登入
   $routeProvider
-  <span class="token comment">// 中間略</span>
-  <span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/map'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token comment">//地圖顯示頁面</span>
-    <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;map is-show="MCtrl...">&lt;/map></span><span class="token template-punctuation string">`</span></span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token comment">// 中間略</span>
-  <span class="token punctuation">.</span><span class="token function">otherwise</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">redirectTo</span><span class="token operator">:</span> <span class="token string">'/'</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F; 中間略
+  .when(&#39;&#x2F;map&#39;, &#123; &#x2F;&#x2F;地圖顯示頁面
+    template: &#96;&lt;map is-show&#x3D;&quot;MCtrl...&quot;&gt;&lt;&#x2F;map&gt;&#96;
+  &#125;)
+  &#x2F;&#x2F; 中間略
+  .otherwise(&#123;
+    redirectTo: &#39;&#x2F;&#39;
+  &#125;)
+&#125;]).name;</code></pre>
 <p>因為此 component 會跟著 route 變化而使用，所以使用於 route<br>
 route 會變化相對應的 html 出來，讓 AngularJS 呼叫相對應註冊好的 component。<br>
 所以，在 route 中，呼叫 template 的名稱 <code>&lt;map is-show=&quot;MCtrl...&quot;&gt;&lt;/map&gt;</code> 要和 component 定義的一樣。<br>
@@ -295,25 +299,25 @@ route 會變化相對應的 html 出來，讓 AngularJS 呼叫相對應註冊好
 <p>由於上述程式碼，要引入至根元件中。</p>
 <p><strong>main.js</strong></p>
 <p>原本的寫法</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> router <span class="token keyword">from</span> <span class="token string">'@/route'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import router from &#39;@&#x2F;route&#39;;
 
-<span class="token keyword">import</span> <span class="token string">'./js/v2/map/map.js'</span><span class="token punctuation">;</span>
+import &#39;.&#x2F;js&#x2F;v2&#x2F;map&#x2F;map.js&#39;;
 
-angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'MainApp'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
-  router<span class="token punctuation">,</span>
-  <span class="token string">"map"</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+angular.module(&#39;MainApp&#39;, [
+  router,
+  &quot;map&quot;
+])</code></pre>
 <p>改寫成</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> angular <span class="token keyword">from</span> <span class="token string">'angular'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> router <span class="token keyword">from</span> <span class="token string">'@/route'</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">import angular from &#39;angular&#39;;
+import router from &#39;@&#x2F;route&#39;;
 
-<span class="token keyword">import</span> map <span class="token keyword">from</span> <span class="token string">'./component/map'</span><span class="token punctuation">;</span>
+import map from &#39;.&#x2F;component&#x2F;map&#39;;
 
-angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'MainApp'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
-  router<span class="token punctuation">,</span>
+angular.module(&#39;MainApp&#39;, [
+  router,
   map
-<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+])</code></pre>
 <p>引用時，會引入該 component 的名稱。相容於 AngularJS 的相依設定。<br>
 記得將舊的刪除，避免相同名稱重複註冊。</p>
 <h2 id="結語"><a class="header-anchor" href="#結語">¶</a>結語</h2>
@@ -376,21 +380,14 @@ angular<span class="token punctuation">.</span><span class="token function">modu
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

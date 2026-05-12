@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -63,8 +63,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -168,9 +172,9 @@
 transition 還有一個「隨時可以中斷」的特性。若在 running transition 時，CSS 改變了，就會馬上改變，而不會等完成 transition 之後才套用。</p>
 <p><strong>語法</strong></p>
 <p>(縮寫)</p>
-<pre class="line-numbers language-none"><code class="language-none">transition: 屬性 持續時間 delay時間 變化函數<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">transition: 屬性 持續時間 delay時間 變化函數</code></pre>
 <p>因為 transition 要有轉變對象，開始時間、持續時間、結束時間，所以至少要寫下面這樣</p>
-<pre class="line-numbers language-none"><code class="language-none">transition: 屬性 持續時間<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">transition: 屬性 持續時間</code></pre>
 <p>delay時間 變化函數 都是使用預設值。</p>
 <h2 id="transition-property-屬性"><a class="header-anchor" href="#transition-property-屬性">¶</a><code>transition-property</code> 屬性</h2>
 <p>值: 指定轉換的 CSS 屬性名稱 或 <code>none</code><br>
@@ -197,21 +201,21 @@ transition 還有一個「隨時可以中斷」的特性。若在 running transi
 設定值為負數(-n)時，只有顯示時間延遲，執行時間延遲。所以會有「起始動畫到 n 秒」的效果</p>
 <p><strong>來看個例子</strong><br>
 體驗一下 transition</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">.box</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid black<span class="token punctuation">;</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #f00<span class="token punctuation">;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
-  <span class="token property">transition</span><span class="token punctuation">:</span> all 1s -.3s<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;div class&#x3D;&quot;box&quot;&gt;&lt;&#x2F;div&gt;</code></pre>
+<pre class="language-css" data-language="css"><code class="language-css">.box &#123;
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+  background-color: #f00;
+  margin-left: 0;
+  transition: all 1s -.3s;
+&#125;
 
 
-<span class="token selector">.box:hover</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #00f<span class="token punctuation">;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 50px<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+.box:hover &#123;
+  background-color: #00f;
+  margin-left: 50px;
+&#125;</code></pre>
 <p><img src="/images/42816c01-oGolSuh.gif" alt="Imgur"></p>
 <h2 id="常見的雷"><a class="header-anchor" href="#常見的雷">¶</a>常見的雷</h2>
 <p><strong>例子1: 元素要以淡出的方式消失在畫面上!!!</strong></p>
@@ -238,62 +242,62 @@ transition 還有一個「隨時可以中斷」的特性。若在 running transi
 但是往往會搞不清楚要寫在哪才是正確的。<br>
 在此寫了一個 hover 花1秒，恢復花5秒的 transition</p>
 <p>先來看看原始碼</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">.box</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid black<span class="token punctuation">;</span>
+<pre class="language-css" data-language="css"><code class="language-css">.box &#123;
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
 
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #f00<span class="token punctuation">;</span>
-  <span class="token property">border-radius</span><span class="token punctuation">:</span> 50%<span class="token punctuation">;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #eef<span class="token punctuation">;</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span>30000000000deg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  background-color: #f00;
+  border-radius: 50%;
+  margin-left: 0;
+  background-color: #eef;
+  transform: rotate(30000000000deg);
 
-  <span class="token property">transition</span><span class="token punctuation">:</span> all 5s 0s<span class="token punctuation">;</span>
+  transition: all 5s 0s;
 
-<span class="token punctuation">&#125;</span>
+&#125;
 
-<span class="token selector">.box:hover</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">border-radius</span><span class="token punctuation">:</span> 0%<span class="token punctuation">;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 50px<span class="token punctuation">;</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #fee<span class="token punctuation">;</span>
-  <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span>0deg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+.box:hover &#123;
+  border-radius: 0%;
+  margin-left: 50px;
+  background-color: #fee;
+  transform: rotate(0deg);
 
-  <span class="token property">transition</span><span class="token punctuation">:</span> all 1s 0s<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>margin-top<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+  transition: all 1s 0s;
+&#125;</code></pre>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;div class&#x3D;&quot;margin-top&quot;&gt;&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;box&quot;&gt;&lt;&#x2F;div&gt;</code></pre>
 <p><img src="/images/42816c01-FLmsenZ.gif" alt=""><br>
 上圖標示 hover 的作用區間，恢復的作用區間。(用顏色標示)</p>
 <p>也就是說，元素只有在一開始是沒有 hover ，一旦要成為 hover 就是游標懸停時開始，所以 1秒變成方形的 <code>transition</code> 要寫在 <code>:hover</code> 上面；相反的，當游標離開元素，就要套用5秒變成圓形的 CSS。</p>
 <p><strong>例子2: display: none -&gt; display: block</strong></p>
 <p>先說結果: 沒有 transition</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>c1<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>checkbox<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">#c1:checked ~ .box</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 0px<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-html" data-language="html"><code class="language-html">&lt;input id&#x3D;&quot;c1&quot; type&#x3D;&quot;checkbox&quot;&gt;
+&lt;div class&#x3D;&quot;box&quot;&gt;&lt;&#x2F;div&gt;</code></pre>
+<pre class="language-css" data-language="css"><code class="language-css">#c1:checked ~ .box &#123;
+  margin-left: 0px;
+&#125;
 
-<span class="token selector">.box</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">width</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #0a0<span class="token punctuation">;</span>
-  <span class="token property">margin-left</span><span class="token punctuation">:</span> 50px<span class="token punctuation">;</span>
-  <span class="token property">transition</span><span class="token punctuation">:</span> 1s -.3s linear<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+.box &#123;
+  height: 100px;
+  width: 100px;
+  background-color: #0a0;
+  margin-left: 50px;
+  transition: 1s -.3s linear;
+&#125;</code></pre>
 <p>結果是這樣<br>
 <img src="/images/42816c01-oF8c0zU.gif" alt=""></p>
 <p>若我們要在一開始消失，後來出現。<br>
 在 CSS 加上 <code>display: none</code> -&gt; <code>display: block</code> 的切換</p>
-<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token selector">#c1:checked ~ .box</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">/* 和上面的一樣 */</span>
-  <span class="token property">display</span><span class="token punctuation">:</span> block<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
+<pre class="language-css" data-language="css"><code class="language-css">#c1:checked ~ .box &#123;
+  &#x2F;* 和上面的一樣 *&#x2F;
+  display: block;
+&#125;
 
-<span class="token selector">.box</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">/* 和上面的一樣 */</span>
-  <span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+.box &#123;
+  &#x2F;* 和上面的一樣 *&#x2F;
+  display: none;
+&#125;</code></pre>
 <p>結果是這樣<br>
 <img src="/images/42816c01-Ap2lDMk.gif" alt=""></p>
 <p>那怎麼辦呢？<br>
@@ -364,21 +368,14 @@ transition 還有一個「隨時可以中斷」的特性。若在 running transi
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

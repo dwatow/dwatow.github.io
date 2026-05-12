@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -56,8 +56,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -224,25 +228,25 @@ CppUnit 的<strong>測試主程式</strong>，一般來說是固定寫法，有�
 這些測試會有「一致的準備過程」，有時還需要有「一致的收尾」。</p>
 <h2 id="repeating-setup-for-many-tests"><a class="header-anchor" href="#repeating-setup-for-many-tests">¶</a>Repeating Setup For Many Tests</h2>
 <p>例如: 資料庫的初始與釋放</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">initializeCityDatabase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
+  initializeCityDatabase();
+&#125;);
 
-<span class="token function">afterEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">clearCityDatabase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+afterEach(() &#x3D;&gt; &#123;
+  clearCityDatabase();
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'city database has Vienna'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isCity</span><span class="token punctuation">(</span><span class="token string">'Vienna'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeTruthy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;city database has Vienna&#39;, () &#x3D;&gt; &#123;
+  expect(isCity(&#39;Vienna&#39;)).toBeTruthy();
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'city database has San Juan'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isCity</span><span class="token punctuation">(</span><span class="token string">'San Juan'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeTruthy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+test(&#39;city database has San Juan&#39;, () &#x3D;&gt; &#123;
+  expect(isCity(&#39;San Juan&#39;)).toBeTruthy();
+&#125;);</code></pre>
 <p>如果遇到非同步的準備/釋放過程，可以在 <code>beforeEah</code>/<code>afterEach</code> 中使用 <code>return</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> <span class="token function">initializeCityDatabase</span><span class="token punctuation">(</span><span class="token string">"beforeEach"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
+  return initializeCityDatabase(&quot;beforeEach&quot;);
+&#125;);</code></pre>
 <h2 id="one-time-setup"><a class="header-anchor" href="#one-time-setup">¶</a>One-Time Setup</h2>
 <p>只想要用一次的初始/釋放。<br>
 也可以說只想在第一次的 <code>beforeEach</code> 才有的初始，可以放在 <code>beforeAll</code><br>
@@ -250,123 +254,123 @@ CppUnit 的<strong>測試主程式</strong>，一般來說是固定寫法，有�
 <h2 id="scoping"><a class="header-anchor" href="#scoping">¶</a>Scoping</h2>
 <p>一般而言，<code>before</code>/<code>after</code> 會為每一個測試(<code>test</code> 區塊)進行前置與後置作業。<br>
 但是，如果你想要將測試分類，並且每一類會執行各別的 before/after 區塊的話，可以用 <code>describe</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> <span class="token function">asyncInitializeCityDatabase</span><span class="token punctuation">(</span><span class="token string">"beforeEach VVVVVVV asyncInitializeCityDatabase"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
+  return asyncInitializeCityDatabase(&quot;beforeEach VVVVVVV asyncInitializeCityDatabase&quot;);
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'city database has Vienna'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isCity</span><span class="token punctuation">(</span><span class="token string">'Vienna'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeTruthy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;city database has Vienna&#39;, () &#x3D;&gt; &#123;
+  expect(isCity(&#39;Vienna&#39;)).toBeTruthy();
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'city database has San Juan'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isCity</span><span class="token punctuation">(</span><span class="token string">'San Juan'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeTruthy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+test(&#39;city database has San Juan&#39;, () &#x3D;&gt; &#123;
+  expect(isCity(&#39;San Juan&#39;)).toBeTruthy();
+&#125;);
 
-<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'matching cities to foods'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// Applies only to tests in this describe block</span>
-  <span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token function">asyncInitializeFoodDatabase</span><span class="token punctuation">(</span><span class="token string">"describe beforeEach VVVVVVV asyncInitializeFoodDatabase"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+describe(&#39;matching cities to foods&#39;, () &#x3D;&gt; &#123;
+  &#x2F;&#x2F; Applies only to tests in this describe block
+  beforeEach(() &#x3D;&gt; &#123;
+    return asyncInitializeFoodDatabase(&quot;describe beforeEach VVVVVVV asyncInitializeFoodDatabase&quot;);
+  &#125;);
 
-  <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'Vienna &lt;3 sausage'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isValidCityFoodPair</span><span class="token punctuation">(</span><span class="token string">'Vienna'</span><span class="token punctuation">,</span> <span class="token string">'Wiener Schnitzel'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  test(&#39;Vienna &lt;3 sausage&#39;, () &#x3D;&gt; &#123;
+    expect(isValidCityFoodPair(&#39;Vienna&#39;, &#39;Wiener Schnitzel&#39;)).toBe(true);
+  &#125;);
 
-  <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'San Juan &lt;3 plantains'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">isValidCityFoodPair</span><span class="token punctuation">(</span><span class="token string">'San Juan'</span><span class="token punctuation">,</span> <span class="token string">'Mofongo'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  test(&#39;San Juan &lt;3 plantains&#39;, () &#x3D;&gt; &#123;
+    expect(isValidCityFoodPair(&#39;San Juan&#39;, &#39;Mofongo&#39;)).toBe(true);
+  &#125;);
+&#125;);</code></pre>
 <p>執行順序 (拿掉不必要的資訊)</p>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 全域</span>
+<pre class="language-shell" data-language="shell"><code class="language-shell"># 全域
 beforeEach VVVVVVV asyncInitializeCityDatabase
-<span class="token operator">></span> run <span class="token builtin class-name">test</span> Vienna
+&gt; run test Vienna
 beforeEach VVVVVVV asyncInitializeCityDatabase
-<span class="token operator">></span> run <span class="token builtin class-name">test</span> San Juan
+&gt; run test San Juan
 beforeEach VVVVVVV asyncInitializeCityDatabase
-<span class="token comment"># describe 區塊</span>
+# describe 區塊
 describe beforeEach VVVVVVV asyncInitializeFoodDatabase
-<span class="token operator">></span> run <span class="token builtin class-name">test</span> Vienna
+&gt; run test Vienna
 beforeEach VVVVVVV asyncInitializeCityDatabase
 describe beforeEach VVVVVVV asyncInitializeFoodDatabase
-<span class="token operator">></span> run <span class="token builtin class-name">test</span> San Juan<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&gt; run test San Juan</code></pre>
 <p>如果有多層的 <code>describe</code> 。<br>
 每一層 <code>describe</code> 外面如果有 <code>beforeEach</code> 的話也會先執行 <code>beforeEach</code>，再執行 <code>describe</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">beforeAll</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'1 - beforeAll'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">afterAll</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'1 - afterAll'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'1 - beforeEach'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">afterEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'1 - afterEach'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'1 - test'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'Scoped / Nested block'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">beforeAll</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'2 - beforeAll'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">afterAll</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'2 - afterAll'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">beforeEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'2 - beforeEach'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">afterEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'2 - afterEach'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'2 - test'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeAll(() &#x3D;&gt; console.log(&#39;1 - beforeAll&#39;));
+afterAll(() &#x3D;&gt; console.log(&#39;1 - afterAll&#39;));
+beforeEach(() &#x3D;&gt; console.log(&#39;1 - beforeEach&#39;));
+afterEach(() &#x3D;&gt; console.log(&#39;1 - afterEach&#39;));
+test(&#39;&#39;, () &#x3D;&gt; console.log(&#39;1 - test&#39;));
+describe(&#39;Scoped &#x2F; Nested block&#39;, () &#x3D;&gt; &#123;
+  beforeAll(() &#x3D;&gt; console.log(&#39;2 - beforeAll&#39;));
+  afterAll(() &#x3D;&gt; console.log(&#39;2 - afterAll&#39;));
+  beforeEach(() &#x3D;&gt; console.log(&#39;2 - beforeEach&#39;));
+  afterEach(() &#x3D;&gt; console.log(&#39;2 - afterEach&#39;));
+  test(&#39;&#39;, () &#x3D;&gt; console.log(&#39;2 - test&#39;));
+&#125;);
 
-<span class="token comment">// 1 - beforeAll</span>
-<span class="token comment">// 1 - beforeEach</span>
-<span class="token comment">// 1 - test</span>
-<span class="token comment">// 1 - afterEach</span>
-<span class="token comment">// 2 - beforeAll</span>
-<span class="token comment">// 1 - beforeEach</span>
-<span class="token comment">// 2 - beforeEach</span>
-<span class="token comment">// 2 - test</span>
-<span class="token comment">// 2 - afterEach</span>
-<span class="token comment">// 1 - afterEach</span>
-<span class="token comment">// 2 - afterAll</span>
-<span class="token comment">// 1 - afterAll</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; 1 - beforeAll
+&#x2F;&#x2F; 1 - beforeEach
+&#x2F;&#x2F; 1 - test
+&#x2F;&#x2F; 1 - afterEach
+&#x2F;&#x2F; 2 - beforeAll
+&#x2F;&#x2F; 1 - beforeEach
+&#x2F;&#x2F; 2 - beforeEach
+&#x2F;&#x2F; 2 - test
+&#x2F;&#x2F; 2 - afterEach
+&#x2F;&#x2F; 1 - afterEach
+&#x2F;&#x2F; 2 - afterAll
+&#x2F;&#x2F; 1 - afterAll</code></pre>
 <h2 id="order-of-execution-of-describe-and-test-blocks"><a class="header-anchor" href="#order-of-execution-of-describe-and-test-blocks">¶</a>Order of execution of describe and test blocks</h2>
 <p>執行順序！這一段就厲害了，完全超乎你想像的執行順序。<br>
 Jest 在執行 <code>test</code> 區段之前，會先把 <code>describe</code> 執行完。</p>
 <p>一個 <code>describe</code> 執行完，就先把目前搜集的所有 <code>test</code> 跑完。<br>
 這些 <code>test</code> 執行完，再執行接下來會遇到的 <code>describe</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'outer'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'describe outer-a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">describe(&#39;outer&#39;, () &#x3D;&gt; &#123;
+  console.log(&#39;describe outer-a&#39;);
 
-  <span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'describe inner 1'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'describe inner 1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'test 1'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'test for describe inner 1'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  describe(&#39;describe inner 1&#39;, () &#x3D;&gt; &#123;
+    console.log(&#39;describe inner 1&#39;);
+    test(&#39;test 1&#39;, () &#x3D;&gt; &#123;
+      console.log(&#39;test for describe inner 1&#39;);
+      expect(true).toEqual(true);
+    &#125;);
+  &#125;);
 
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'describe outer-b'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console.log(&#39;describe outer-b&#39;);
 
-  <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'test 1'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'test for describe outer'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  test(&#39;test 1&#39;, () &#x3D;&gt; &#123;
+    console.log(&#39;test for describe outer&#39;);
+    expect(true).toEqual(true);
+  &#125;);
 
-  <span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'describe inner 2'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'describe inner 2'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'test for describe inner 2'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'test for describe inner 2'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  describe(&#39;describe inner 2&#39;, () &#x3D;&gt; &#123;
+    console.log(&#39;describe inner 2&#39;);
+    test(&#39;test for describe inner 2&#39;, () &#x3D;&gt; &#123;
+      console.log(&#39;test for describe inner 2&#39;);
+      expect(false).toEqual(false);
+    &#125;);
+  &#125;);
 
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'describe outer-c'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console.log(&#39;describe outer-c&#39;);
+&#125;);
 
-<span class="token comment">// describe outer-a</span>
-<span class="token comment">// describe inner 1</span>
-<span class="token comment">// describe outer-b</span>
-<span class="token comment">// describe inner 2</span>
-<span class="token comment">// describe outer-c</span>
-<span class="token comment">// test for describe inner 1</span>
-<span class="token comment">// test for describe outer</span>
-<span class="token comment">// test for describe inner 2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F; describe outer-a
+&#x2F;&#x2F; describe inner 1
+&#x2F;&#x2F; describe outer-b
+&#x2F;&#x2F; describe inner 2
+&#x2F;&#x2F; describe outer-c
+&#x2F;&#x2F; test for describe inner 1
+&#x2F;&#x2F; test for describe outer
+&#x2F;&#x2F; test for describe inner 2</code></pre>
 <h2 id="general-advice"><a class="header-anchor" href="#general-advice">¶</a>General Advice</h2>
 <p>建議你，如果遇到測試失敗時，就先使用 <code>test.only()</code> 讓其它的測試先不跑，只跑出錯的，看看是不是還是失敗。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">test<span class="token punctuation">.</span><span class="token function">only</span><span class="token punctuation">(</span><span class="token string">'this will be the only test that runs'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test.only(&#39;this will be the only test that runs&#39;, () &#x3D;&gt; &#123;
+  expect(true).toBe(false);
+&#125;);
 
-<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'this test will not run'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">'A'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'A'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+test(&#39;this test will not run&#39;, () &#x3D;&gt; &#123;
+  expect(&#39;A&#39;).toBe(&#39;A&#39;);
+&#125;);</code></pre>
 <p>通常在測試大型專案的一小部份時出錯，而單獨執行不會失敗，最好檢查一下是不是被其它的測試干擾到了。</p>
 <p>通常檢查需不需要在 beforeEach 加上清除共享資料就可以解決。如果不確定，就先在 beforeEach 記錄這些共享資料。</p>
 <h2 id="下回見"><a class="header-anchor" href="#下回見">¶</a>下回見</h2>
@@ -444,21 +448,14 @@ Jest 在執行 <code>test</code> 區段之前，會先把 <code>describe</code> 
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

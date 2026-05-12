@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶exception: try-catch + throw 很少人用過吧？ 但是真正製作產品上，傳聞寫 try-catch 的 code 比寫正常邏輯還多是正常的。 ¶介紹語法 Syntax 先介紹 throw 和 Error 的用法 function willHappenError() &amp;#123;   &#x2F;&#x2F;...   thro">
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶exception: try-catch + throw 很少人用過吧？ 但是真正製作產品上，傳聞寫 try-catch 的 code 比寫正常邏輯還多是正常的。 ¶介紹語法 Syntax 先介紹 throw 和 Error 的用法 function willHappenError() &amp;#123;   &#x2F;&#x2F;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="過度焦慮的 try-catch">
 <meta property="og:url" content="https://dwatow.github.io/2018/11-05-ironman-2019/2018-11-05-%E9%81%8E%E5%BA%A6%E7%84%A6%E6%85%AE%E7%9A%84-try-catch/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶exception: try-catch + throw 很少人用過吧？ 但是真正製作產品上，傳聞寫 try-catch 的 code 比寫正常邏輯還多是正常的。 ¶介紹語法 Syntax 先介紹 throw 和 Error 的用法 function willHappenError() &amp;#123;   &#x2F;&#x2F;...   thro">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶exception: try-catch + throw 很少人用過吧？ 但是真正製作產品上，傳聞寫 try-catch 的 code 比寫正常邏輯還多是正常的。 ¶介紹語法 Syntax 先介紹 throw 和 Error 的用法 function willHappenError() &amp;#123;   &#x2F;&#x2F;">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://dwatow.github.io/images/82b8a5fd-NEfFqbA.png">
 <meta property="og:image" content="https://dwatow.github.io/images/82b8a5fd-jant79Y.png">
@@ -60,8 +60,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -161,14 +165,14 @@
 但是真正製作產品上，傳聞寫 <code>try-catch</code> 的 code 比寫正常邏輯還多是正常的。</p>
 <h3 id="介紹語法-syntax"><a class="header-anchor" href="#介紹語法-syntax">¶</a>介紹語法 Syntax</h3>
 <p>先介紹 <code>throw</code> 和 <code>Error</code> 的用法</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">willHappenError</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//...</span>
-  <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">"this is my error"</span><span class="token punctuation">)</span>
-  <span class="token comment">//...</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function willHappenError() &#123;
+  &#x2F;&#x2F;...
+  throw Error(&quot;this is my error&quot;)
+  &#x2F;&#x2F;...
+&#125;
 
-<span class="token function">willHappenError</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+willHappenError ();
+</code></pre>
 <p><strong>執行順序</strong></p>
 <p>當發生 exception (<code>Error</code>) 時，執行順序，就不是我們一般熟知那樣的順序，而是有點像是「有某種特定規律的 <code>goto()</code> 」的執行方式。</p>
 <p><img src="/images/82b8a5fd-NEfFqbA.png" alt=""></p>
@@ -187,28 +191,28 @@
 拋出來的會是 Exception 物件，而不是 Exception 指標。</p>
 </blockquote>
 <h3 id="那-try-catch-呢？"><a class="header-anchor" href="#那-try-catch-呢？">¶</a>那 try-catch 呢？</h3>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">happenError</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
-  <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">"this is my error"</span><span class="token punctuation">)</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function happenError() &#123;
+  console.log(2)
+  throw Error(&quot;this is my error&quot;)
+  console.log(3)
+&#125;
 
-<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    <span class="token function">happenError</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">catch</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>message<span class="token punctuation">)</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
+try &#123;
+    console.log(1)
+    happenError ();
+    console.log(4)
+&#125;
+catch(e) &#123;
+  console.log(5)
+  console.log(e.message)
+  console.log(6)
+&#125;
+finally &#123;
+  console.log(7)
+&#125;
 
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+console.log(8)
+</code></pre>
 <p><strong>執行順序</strong></p>
 <p><img src="/images/82b8a5fd-gGo02pT.png" alt=""></p>
 <ol>
@@ -236,36 +240,36 @@ console<span class="token punctuation">.</span><span class="token function">log<
 </ol>
 <p>絕對不要用 MARCO 把 try 和 catch 分開裝起來。</p>
 <p><strong>設計</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">START</span><span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">END</span><span class="token expression"><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span>exception<span class="token operator">&amp;</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"Occur exception"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">return</span> <span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"Occur exception"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">return</span> <span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define START()\
+  try &#123;\
+
+#define END()\
+  &#125;\
+    catch(exception&amp; e) &#123;\
+    log(&quot;Occur exception&quot;);\
+    return ;\
+  &#125;\
+    catch(...) &#123;\
+    log(&quot;Occur exception&quot;);\
+    return ;\
+  &#125;\
+</code></pre>
 <p><strong>實際使用</strong></p>
 <p>使用上其實和一般使用的習慣不同。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">START</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token comment">// do something...</span>
-  <span class="token function">END</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">void function () &#123;
+  START()
+  &#x2F;&#x2F; do something...
+  END()
+&#125;
+</code></pre>
 <p>要加分號嗎？<br>
 加了是不是算結束的語意？</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">START</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// do something...</span>
-  <span class="token function">END</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">void function () &#123;
+  START();
+  &#x2F;&#x2F; do something...
+  END();
+&#125;
+</code></pre>
 <p>有一本書，針對例外處理的程式碼該如何編排做了相當的研究，不得不大推一下 <a target="_blank" rel="noopener" href="https://www.books.com.tw/products/0010637503">《笑談軟體工程：例外處理設計的逆襲》</a></p>
 <p>同作者的部落格中也有介紹幾個 try-catch 的壞味道[1]</p>
 <blockquote>
@@ -285,122 +289,122 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <p>這篇就介紹一下我自己遇到的案例與正確的認識吧。</p>
 <p>再拿 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10207123">過度依賴前置處理器</a> 提過的 code</p>
 <p><strong>設計</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">BEGIN_TRANSACTION</span><span class="token expression"><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">int</span> status_code <span class="token operator">=</span> ERROR_SUCCESS<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression">Transaction<span class="token operator">*</span> transaction <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-    <span class="token expression">transaction <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Transaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-    <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define BEGIN_TRANSACTION(transaction, status_code)\
+  int status_code &#x3D; ERROR_SUCCESS;\
+  Transaction* transaction &#x3D; 0;\
+  try\
+  &#123;\
+    transaction &#x3D; new Transaction();\
+    try\
+    &#123;\
 
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">END_TRANSACTION</span><span class="token expression"><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token operator">!</span>transaction<span class="token operator">-></span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token keyword">if</span><span class="token punctuation">(</span> status_code <span class="token operator">==</span> SUCCESS <span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-              <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-              <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-              <span class="token expression">transaction<span class="token operator">-></span><span class="token function">Rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-          <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">try</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token keyword">delete</span> transaction<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#123;</span></span><span class="token punctuation">\</span>
-      <span class="token expression">status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-      <span class="token expression"><span class="token function">log</span><span class="token punctuation">(</span></span><span class="token string">"END_TRANSACTION Error"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">\</span>
-  <span class="token expression"><span class="token punctuation">&#125;</span></span><span class="token punctuation">\</span>
-<span class="token expression"><span class="token punctuation">&#125;</span></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+#define END_TRANSACTION(transaction, status_code)\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+&#125;\
+catch(...)\
+&#123;\
+&#125;\
+&#123;\
+  try\
+  &#123;\
+      if( !transaction-&gt;Commit() )\
+      &#123;\
+          if( status_code &#x3D;&#x3D; SUCCESS )\
+          &#123;\
+              status_code &#x3D; TRANSACTION_ERROR;\
+              log(&quot;END_TRANSACTION Error&quot;);\
+              transaction-&gt;Rollback();\
+          &#125;\
+      &#125;\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+  \
+  try\
+  &#123;\
+      delete transaction;\
+  &#125;\
+  catch(...)\
+  &#123;\
+      status_code &#x3D; TRANSACTION_ERROR;\
+      log(&quot;END_TRANSACTION Error&quot;);\
+  &#125;\
+&#125;
+</code></pre>
 <p>先把 MARCO 和 try-catch 拿掉看看</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> status_code <span class="token operator">=</span> ERROR_SUCCESS<span class="token punctuation">;</span>
-Transaction <span class="token operator">*</span>transaction <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-transaction <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Transaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">int status_code &#x3D; ERROR_SUCCESS;
+Transaction *transaction &#x3D; 0;
+transaction &#x3D; new Transaction();
 
-<span class="token comment">// do something</span>
+&#x2F;&#x2F; do something
 
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>transaction<span class="token operator">-></span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>status_code <span class="token operator">==</span> SUCCESS<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span>
-    <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"END_TRANSACTION Error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    transaction<span class="token operator">-></span><span class="token function">Rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
+if (!transaction-&gt;Commit()) &#123;
+  if (status_code &#x3D;&#x3D; SUCCESS) &#123;
+    status_code &#x3D; TRANSACTION_ERROR;
+    log(&quot;END_TRANSACTION Error&quot;);
+    transaction-&gt;Rollback();
+  &#125;
+&#125;
 
-<span class="token keyword">delete</span> transaction<span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+delete transaction;
+</code></pre>
 <p>這樣的 code 是不是擺在一起就好看多了？</p>
 <p>「難道不能這樣寫 code 嗎？」</p>
 <p>客戶產品上線，怕出現「意料之外」的情況。<br>
 造成無法回頭的問題。</p>
 <p>「告訴你！你愈這樣，就愈容易遇到」</p>
 <p>而且，還是可以加 <code>try-catch</code></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">int</span> status_code <span class="token operator">=</span> ERROR_SUCCESS<span class="token punctuation">;</span>
-  Transaction <span class="token operator">*</span>transaction <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  transaction <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Transaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">try &#123;
+  int status_code &#x3D; ERROR_SUCCESS;
+  Transaction *transaction &#x3D; 0;
+  transaction &#x3D; new Transaction();
   
-  <span class="token comment">// do something</span>
+  &#x2F;&#x2F; do something
   
-  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>transaction<span class="token operator">-></span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> status_code <span class="token operator">==</span> SUCCESS<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span>
-    <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"END_TRANSACTION Error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    transaction<span class="token operator">-></span><span class="token function">Rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+  if (!transaction-&gt;Commit() &amp;&amp; status_code &#x3D;&#x3D; SUCCESS) &#123;
+    status_code &#x3D; TRANSACTION_ERROR;
+    log(&quot;END_TRANSACTION Error&quot;);
+    transaction-&gt;Rollback();
+  &#125;
 
-  <span class="token keyword">delete</span> transaction<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span>
-  <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"END_TRANSACTION Error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  delete transaction;
+&#125;
+catch (...) &#123;
+  status_code &#x3D; TRANSACTION_ERROR;
+  log(&quot;END_TRANSACTION Error&quot;);
+&#125;
+</code></pre>
 <p>「難道你就不能…」(好了好了…)</p>
 <h2 id="你的焦慮-空白-catch"><a class="header-anchor" href="#你的焦慮-空白-catch">¶</a>你的焦慮 空白 catch</h2>
 <p>再拿剛剛那一段 MARCO 裡的 <code>END_TRANSACTION()</code><br>
 不知道你有沒有仔細看裡面有一段</p>
 <p><strong>設計</strong></p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">END_TRANSACTION</span><span class="token expression"><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> status_code<span class="token punctuation">)</span></span><span class="token punctuation">\</span>
-<span class="token comment">//... code</span></span>
-<span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>\
-<span class="token punctuation">&#123;</span>\
-  <span class="token operator">&lt;</span><span class="token operator">-</span> 空白的 <span class="token keyword">catch</span> 
-<span class="token punctuation">&#125;</span>\
-  <span class="token operator">&lt;</span><span class="token operator">-</span> 這裡沒有東西 單純用大括號括出 scope
-<span class="token punctuation">&#123;</span>\
-  <span class="token comment">//...other code</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">#define END_TRANSACTION(transaction, status_code)\
+&#x2F;&#x2F;... code
+catch(...)\
+&#123;\
+  &lt;- 空白的 catch 
+&#125;\
+  &lt;- 這裡沒有東西 單純用大括號括出 scope
+&#123;\
+  &#x2F;&#x2F;...other code
+&#125;
+</code></pre>
 <p>糙 code 讓你眼花瞭亂呀。<br>
 無法一眼看出來的就是糙!!</p>
 <p>不知道出現什麼錯誤，所以使用 <code>catch(...)</code><br>
 不知道要怎麼處理，所以使用空白的 <code>catch</code> block</p>
-<pre class="line-numbers language-none"><code class="language-none">如果非要用空白的 catch 不可，請加上註解!!!
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">如果非要用空白的 catch 不可，請加上註解!!!
+</code></pre>
 <p>另外，單純用大括號括出 scope ，我也不懂就什麼會寫出這種東西。</p>
 <h2 id="這樣的程式碼-還有什麼糙點呢？"><a class="header-anchor" href="#這樣的程式碼-還有什麼糙點呢？">¶</a>這樣的程式碼，還有什麼糙點呢？</h2>
 <p>如果寫程式需要這麼害怕和焦慮，請務必再重新熟悉語法，而不是依賴 try-catch 讓你的程式碼不顯示錯誤 (不是不出錯)</p>
@@ -409,34 +413,34 @@ transaction <span class="token operator">=</span> <span class="token keyword">ne
 <p>debug 就是要解決出錯的原因。但是這樣的程式碼還出現在 debug mode 要如何找到錯誤的原因呢？</p>
 <p>還遇過，初始化由 try-catch 巧妙的容錯，造成無法好好修改的邏輯，真是可怕的回憶</p>
 <p>C++ 使用 MARCO 進行條件編譯</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">catch</span> <span class="token punctuation">(</span>Exception e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span>
-  <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"END_TRANSACTION Error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">_DEBUG  </span><span class="token comment">// release mode 再加上去</span></span>
-<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  status_code <span class="token operator">=</span> TRANSACTION_ERROR<span class="token punctuation">;</span>
-  <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"END_TRANSACTION Error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">catch (Exception e) &#123;
+  status_code &#x3D; TRANSACTION_ERROR;
+  log(&quot;END_TRANSACTION Error&quot;);
+&#125;
+#ifndef _DEBUG  &#x2F;&#x2F; release mode 再加上去
+catch (...) &#123;
+  status_code &#x3D; TRANSACTION_ERROR;
+  log(&quot;END_TRANSACTION Error&quot;);
+&#125;
+#endif
+</code></pre>
 <p><strong>不要巢狀 try-catch</strong></p>
 <p>你有用過 <code>goto()</code> 嗎？就是發明巢狀後，才可以大幅順利的不使用它，你知道嗎？</p>
 <p>這樣的結構，會讓你不知道要如何處理垃圾收集</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">try &#123;
+  try &#123;
 
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">&#123;</span>
+  &#125; catch &#123;
   
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+  &#125;
+&#125; catch &#123;
+  try &#123;
 
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">&#123;</span>
+  &#125; catch &#123;
   
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#125;
+&#125;
+</code></pre>
 <p>如果一定要，就用 function 包起來，給它一個好命名。</p>
 <h2 id="正確的使用-try-catch"><a class="header-anchor" href="#正確的使用-try-catch">¶</a>正確的使用 try-catch</h2>
 <p><code>try-catch</code> 要如何使用？</p>
@@ -446,13 +450,13 @@ transaction <span class="token operator">=</span> <span class="token keyword">ne
 <li>第二件事，辨別「正常流程」和「錯誤流程」。<br>
 「正常流程放一起，錯誤流程另外寫」的概念，把原本沒有 try-catch 中用 if 處理錯誤流程，獨立出來。因為錯誤流程常常有一致的處理流程與呈現方式</li>
 </ol>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">//正常</span>
-<span class="token punctuation">&#125;</span>
-<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-  <span class="token comment">// 出錯</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-cpp" data-language="cpp"><code class="language-cpp">try &#123;
+  &#x2F;&#x2F;正常
+&#125;
+catch (...)&#123;
+  &#x2F;&#x2F; 出錯
+&#125;
+</code></pre>
 <p>「當你內心充滿焦慮時，一定要正面對決問題」<br>
 這是人生的問題呀</p>
 <h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
@@ -510,21 +514,14 @@ transaction <span class="token operator">=</span> <span class="token keyword">ne
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

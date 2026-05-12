@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -63,8 +63,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -166,30 +170,30 @@
 <p>這是一個原本用在 dynamic component 的 lifecycle，為了在常切換 component 的情境之下，不要重複的銷毀又重新建立 component。</p>
 <p><a target="_blank" rel="noopener" href="https://vuejs.org/v2/api/#keep-alive">keep-alive, API — Vue.js</a></p>
 <p>因為有它保持讓 component 一直存在，所以，不再觸發 created 和 destoryed 那麼在上面的初始與釋放資源的行為怎麼辦？就不會有任何機會再觸發了？</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>keep-alive</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>component</span> <span class="token attr-name">:is</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>view<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>component</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>keep-alive</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;keep-alive&gt;
+  &lt;component :is&#x3D;&quot;view&quot;&gt;&lt;&#x2F;component&gt;
+&lt;&#x2F;keep-alive&gt;
+</code></pre>
 <p>在我的例子上，要將 keep-alive 加在 router-view 上面</p>
 <p><a target="_blank" rel="noopener" href="https://router.vuejs.org/api/#router-view">router-view, API Reference | Vue Router</a></p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>keep-alive</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>router-view</span> <span class="token punctuation">/></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>keep-alive</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml" data-language="xml" data-start="1"><code class="language-xml">&lt;keep-alive&gt;
+  &lt;router-view &#x2F;&gt;
+&lt;&#x2F;keep-alive&gt;
+</code></pre>
 <p>加上兩個 life cycle</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token function">destroyed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] destroyed'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">activated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] activated'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token function">deactivated</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">'[component About] deactivated'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>user<span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#123;
+  &#x2F;&#x2F; ...
+  destroyed() &#123;
+    console.warn(&#39;[component About] destroyed&#39;, this.user)
+  &#125;,
+  activated() &#123;
+    console.warn(&#39;[component About] activated&#39;, this.user)
+  &#125;,
+  deactivated() &#123;
+    console.warn(&#39;[component About] deactivated&#39;, this.user)
+  &#125;
+&#125;
+</code></pre>
 <p>刷新頁面，進入 Home</p>
 <p><img src="/images/760b4e79-ULa88dQ.png" alt=""></p>
 <p>切換到 About</p>
@@ -204,17 +208,17 @@
 <p><a target="_blank" rel="noopener" href="https://vuejs.org/v2/api/#vm-nextTick">vm.$nextTick( [callback] ), API — Vue.js</a></p>
 <p>用「等 DOM 更新好之後，再執行的時候」通常在這個時候如果有一些 jQuery 套件會需要執行 <code>document.querySelector</code> 就要在這個時候執行。</p>
 <p>通常會在 mounted 時才註冊 nextTick 的 callback</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
-  <span class="token comment">// ...</span>
-  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">$nextTick</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token comment">// DOM is now updated</span>
-      <span class="token comment">// `this` is bound to the current instance</span>
-      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">export default &#123;
+  &#x2F;&#x2F; ...
+  mounted() &#123;
+    this.$nextTick(function () &#123;
+      &#x2F;&#x2F; DOM is now updated
+      &#x2F;&#x2F; &#96;this&#96; is bound to the current instance
+      this.doSomething()
+    &#125;
+  &#125;
+&#125;
+</code></pre>
 <p><img src="/images/760b4e79-YxHzhSL.png" alt=""></p>
 <p>通常會因為簡單的 DOM 結構渲染速度很快，加上非同步的關係，所以很少使用這個 hook。</p>
 
@@ -270,21 +274,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

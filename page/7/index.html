@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -50,8 +50,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -183,12 +187,12 @@
 <li>沒有 side effect</li>
 </ol>
 <h3 id="回傳值-引數-return-value-arguments"><a class="header-anchor" href="#回傳值-引數-return-value-arguments">¶</a>回傳值/引數 return value/arguments</h3>
-<pre class="line-numbers language-none"><code class="language-none">input -&gt; 邏輯運算 -&gt; output
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">input -&gt; 邏輯運算 -&gt; output
+</code></pre>
 <p>「相同的輸入，只會得到相同的輸出」是什麼意思呢？</p>
 <p>以純 FP 來說，這個 function 內部是沒有變數宣告的，所以裡面只有邏輯運算。有變數的地方，只有 argument，也就是說可以把所有的 pure function 變成這樣的關係</p>
-<pre class="line-numbers language-none"><code class="language-none">arguments -&gt; 邏輯運算 -&gt; return value
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-none"><code class="language-none">arguments -&gt; 邏輯運算 -&gt; return value
+</code></pre>
 <h3 id="副作用-side-effective"><a class="header-anchor" href="#副作用-side-effective">¶</a>副作用 side effective</h3>
 <p>簡單的說，就是不用 arguments 和 return value 來進行資料流，或者</p>
 <ol>
@@ -198,36 +202,36 @@
 <h2 id="impure-function-不-pure-的-function"><a class="header-anchor" href="#impure-function-不-pure-的-function">¶</a>impure function (不 pure 的 function)</h2>
 <p>順便來討論一下「impure function」是什麼。</p>
 <p>先說一個比較經典的特例，取亂數</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">Math.random()
+</code></pre>
 <p>這個函數是 pure 的嗎？不是，因為每一次都<code>沒有輸入，但是每一次的輸出都不一樣</code>。<br>
 只要任何一個輸出，有相同的輸入，就 impure 了。</p>
 <blockquote>
 <p>取得現在的時間也是 impure。</p>
 </blockquote>
 <p>再看另一個例子，計數器</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">let count &#x3D; 0;
 
-<span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> <span class="token operator">++</span>count<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 1</span>
-<span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 2</span>
-<span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 3</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+function counter() &#123;
+  return ++count;
+&#125;
+</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">counter() &#x2F;&#x2F; 1
+counter() &#x2F;&#x2F; 2
+counter() &#x2F;&#x2F; 3
+</code></pre>
 <p>函數 <code>counter</code> 和取亂數一樣，沒有輸入輸出不同。另外還有一個 impure 的特性，比取亂數更加明顯，就是它有 side effect (事實上 <code>random</code> 是靠 side effect 取亂數的)，變數 <code>count</code> 對 <code>counter</code> 來說，是一種「全域變數」的存在。</p>
 <p>難道純 FP 一個無法宣告變數的環境，還會有<code>全域變數</code>這種 side effect 嗎？有的</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token parameter">count <span class="token operator">=</span> <span class="token number">0</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">++</span>count<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> counter0 <span class="token operator">=</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">function counter(count &#x3D; 0) &#123;
+  return () &#x3D;&gt; ++count;
+&#125;
+</code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">const counter0 &#x3D; counter(0);
 
-<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 1</span>
-<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 2</span>
-<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 3</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+counter0() &#x2F;&#x2F; 1
+counter0() &#x2F;&#x2F; 2
+counter0() &#x2F;&#x2F; 3
+</code></pre>
 <p>使用閉包的手法，就可以為純 FP 的環境，儲存全域變數產生 side effect，counter0 變成了 impure function，有一些語言支援 <code>static 變數</code>，其實就像是閉包做到的效果。</p>
 <h2 id="那和前端框架有什麼關係？"><a class="header-anchor" href="#那和前端框架有什麼關係？">¶</a>那和前端框架有什麼關係？</h2>
 <p>如果你是用 React 就可以直接明白 pure function 和 pure component 之間的關係，因為 React 的 component 有一種就是直接寫個 function 做一次渲染，本身並不記錄 data 的。(雖然後來有 hook 好像就都這樣做)。</p>
@@ -296,21 +300,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

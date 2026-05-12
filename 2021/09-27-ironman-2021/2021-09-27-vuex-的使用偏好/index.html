@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -57,8 +57,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -172,8 +176,8 @@
 <p>Replace that Object with a fresh one. For example, using the object spread syntax (opens new window)we can write it like this:</p>
 </li>
 </ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">state<span class="token punctuation">.</span>obj <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token operator">...</span>state<span class="token punctuation">.</span>obj<span class="token punctuation">,</span> <span class="token literal-property property">newProp</span><span class="token operator">:</span> <span class="token number">123</span> <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">state.obj &#x3D; &#123; ...state.obj, newProp: 123 &#125;
+</code></pre>
 </blockquote>
 <p>不過我覺得「靠自己，好自在」。所以只要修改值，就要注意 immutable，以及觸發自動修改畫面的機制 (符合 MVVM 的精神)</p>
 <h3 id="實務上的狀況"><a class="header-anchor" href="#實務上的狀況">¶</a>實務上的狀況</h3>
@@ -208,16 +212,16 @@
 所以，我自己的用法會是「同步行為與非同步行為，分成 action 和 muation」</p>
 <h3 id="實務上的狀況-v2"><a class="header-anchor" href="#實務上的狀況-v2">¶</a>實務上的狀況</h3>
 <p><strong>如果看見這樣寫</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'fetchUsers'</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">this.$store.dispatch(&#39;fetchUsers&#39;)
+</code></pre>
 <p>就是它要發一個 API 去請求 User 的列表，並且會在裡面呼叫 <code>commit('users', res.data)</code> 將 response 的 body 儲存在 state 裡。</p>
 <p><strong>如果看見這樣寫</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">,</span> users<span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">this.$store.commit(&#39;users&#39;, users)
+</code></pre>
 <p>就只是將資料儲存到 state 裡。</p>
 <p><strong>如果看見這樣寫</strong></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">,</span> users<span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">this.$store.dispatch(&#39;users&#39;, users)
+</code></pre>
 <p>我會不知道，這是非同步的還是同步的行為，中間經造了什麼將 users 儲存到 state 裡。</p>
 <p>請遵守這些原則</p>
 <p><strong>命名要加上動詞</strong></p>
@@ -302,13 +306,13 @@
 </li>
 </ul>
 <p>取得主管的下拉式選單中，有一個 <code>$store.getters.leaders</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">leaders</span><span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> getters</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> departments <span class="token operator">=</span> getters<span class="token punctuation">.</span>departments<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> state<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> departments<span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token parameter">department</span> <span class="token operator">=></span> department<span class="token punctuation">.</span>leader <span class="token operator">===</span> user<span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">getters: &#123;
+  leaders(state, getters) &#123;
+    const departments &#x3D; getters.departments;
+    return state.users.filter(user &#x3D;&gt; departments.some(department &#x3D;&gt; department.leader &#x3D;&#x3D;&#x3D; user))
+  &#125;
+&#125;
+</code></pre>
 <p>將整理資料的程式碼寫在 getters ，而不是在 mutation 的時候整理資料，有幾個好處</p>
 <ul>
 <li>後端的 API 可以單純一點，前端依自己的<strong>畫面需求</strong>整理資料。</li>
@@ -318,31 +322,31 @@
 <p><strong>mutation</strong></p>
 <p>第一個參數是 state (所屬的 module 裡的 state)<br>
 第二個參數是 payload (帶什麼新東西要來修改值)？</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">mutation</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    state<span class="token punctuation">.</span>user <span class="token operator">=</span> payload
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">mutation: &#123;
+  user (state, payload) &#123;
+    state.user &#x3D; payload
+  &#125;
+&#125;
+</code></pre>
 <p><strong>getters</strong></p>
 <p>第一個參數是 state (所屬的 module 裡的 state)<br>
 第二個參數是跨 module 的 getters (不直接取得 state)</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">leaders</span><span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> getters</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> departments <span class="token operator">=</span> getters<span class="token punctuation">.</span>departments<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> state<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> departments<span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token parameter">department</span> <span class="token operator">=></span> department<span class="token punctuation">.</span>leader <span class="token operator">===</span> user<span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">getters: &#123;
+  leaders(state, getters) &#123;
+    const departments &#x3D; getters.departments;
+    return state.users.filter(user &#x3D;&gt; departments.some(department &#x3D;&gt; department.leader &#x3D;&#x3D;&#x3D; user))
+  &#125;
+&#125;
+</code></pre>
 <p><strong>actions</strong></p>
 <p>第一個參數是 context 跨 module 取得 dispatch, commit, getters (不直接取得 state)<br>
 第二個參數這次傳進來的參數，用起來和 mutation 的 payload 一樣。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">actions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">fetchUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> dispatch<span class="token punctuation">,</span> commit<span class="token punctuation">,</span> getters <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> user_id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token comment">// ...</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">actions: &#123;
+  fetchUser (&#123; dispatch, commit, getters &#125;, user_id) &#123;
+    &#x2F;&#x2F; ...
+  &#125;
+&#125;
+</code></pre>
 <p>透過觀察參數可以發現 mutation 和 getters 的設計，修改/讀取都是以 state 為核心。而 actions 比較像是面對這些 module 的獨立 function 。有點像是後端的 controller。</p>
 <p>所以，我在使用 vuex 的資料夾規畫上面。只會把 <strong>actions.js</strong> 獨立成一個檔案。<code>state</code>, <code>mutation</code>, <code>getters</code> 這三樣，會是放在一起的，形成了一個有自己 getter/setter 的抽象資料型別。</p>
 <p><img src="/images/0a53204c-3iNpgO0.png" alt=""></p>
@@ -399,21 +403,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

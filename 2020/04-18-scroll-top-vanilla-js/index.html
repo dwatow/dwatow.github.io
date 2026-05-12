@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -53,8 +53,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -162,48 +166,48 @@
 <li>最外面使用一個 IIFE 包起來，避免全域污染。</li>
 </ol>
 <h2 id="原始碼"><a class="header-anchor" href="#原始碼">¶</a>原始碼</h2>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'scrolltop'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">(() &#x3D;&gt; &#123;
+  console.log(&#39;scrolltop&#39;);
   
-  document<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'.toc-link'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">link</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    link<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'click'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      e<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">const</span> header <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token function">decodeURIComponent</span><span class="token punctuation">(</span>link<span class="token punctuation">.</span>hash<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token function">scrollTo</span><span class="token punctuation">(</span>header<span class="token punctuation">.</span>offsetTop<span class="token punctuation">,</span> <span class="token number">550</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+  document.querySelectorAll(&#39;.toc-link&#39;).forEach(link &#x3D;&gt; &#123;
+    link.addEventListener(&#39;click&#39;, function (e) &#123;
+      e.preventDefault();
+      const header &#x3D; document.querySelector(decodeURIComponent(link.hash));
+      scrollTo(header.offsetTop, 550);
+    &#125;)
+  &#125;)
 
-  <span class="token keyword">function</span> <span class="token function">scrollTo</span> <span class="token punctuation">(</span><span class="token parameter">to<span class="token punctuation">,</span> duration</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">const</span> element <span class="token operator">=</span> document<span class="token punctuation">.</span>documentElement<span class="token punctuation">;</span>
-    <span class="token keyword">var</span> start <span class="token operator">=</span> element<span class="token punctuation">.</span>scrollTop<span class="token punctuation">,</span>
-      change <span class="token operator">=</span> to <span class="token operator">-</span> start<span class="token punctuation">,</span>
-      currentTime <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
-      increment <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
+  function scrollTo (to, duration) &#123;
+    const element &#x3D; document.documentElement;
+    var start &#x3D; element.scrollTop,
+      change &#x3D; to - start,
+      currentTime &#x3D; 0,
+      increment &#x3D; 20;
 
-    <span class="token keyword">var</span> <span class="token function-variable function">animateScroll</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    var animateScroll &#x3D; function () &#123;
       
-      currentTime <span class="token operator">+=</span> increment<span class="token punctuation">;</span>
-      <span class="token keyword">var</span> val <span class="token operator">=</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">easeInOutQuad</span><span class="token punctuation">(</span>currentTime<span class="token punctuation">,</span> start<span class="token punctuation">,</span> change<span class="token punctuation">,</span> duration<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">.</span><span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      element<span class="token punctuation">.</span>scrollTop <span class="token operator">=</span> val<span class="token punctuation">;</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span>currentTime <span class="token operator">&lt;</span> duration<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token function">setTimeout</span><span class="token punctuation">(</span>animateScroll<span class="token punctuation">,</span> increment<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-    <span class="token function">animateScroll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
+      currentTime +&#x3D; increment;
+      var val &#x3D; parseInt(Math.easeInOutQuad(currentTime, start, change, duration));
+      console.log(val.toFixed(4));
+      element.scrollTop &#x3D; val;
+      if (currentTime &lt; duration) &#123;
+        setTimeout(animateScroll, increment);
+      &#125;
+    &#125;;
+    animateScroll();
+  &#125;
 
-  <span class="token comment">//t = current time</span>
-  <span class="token comment">//b = start value</span>
-  <span class="token comment">//c = change in value</span>
-  <span class="token comment">//d = duration</span>
-  Math<span class="token punctuation">.</span><span class="token function-variable function">easeInOutQuad</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">t<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">,</span> d</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    t <span class="token operator">/=</span> d <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>t <span class="token operator">&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">return</span> c <span class="token operator">/</span> <span class="token number">2</span> <span class="token operator">*</span> t <span class="token operator">*</span> t <span class="token operator">+</span> b<span class="token punctuation">;</span>
-    t<span class="token operator">--</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token operator">-</span>c <span class="token operator">/</span> <span class="token number">2</span> <span class="token operator">*</span> <span class="token punctuation">(</span>t <span class="token operator">*</span> <span class="token punctuation">(</span>t <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> b<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &#x2F;&#x2F;t &#x3D; current time
+  &#x2F;&#x2F;b &#x3D; start value
+  &#x2F;&#x2F;c &#x3D; change in value
+  &#x2F;&#x2F;d &#x3D; duration
+  Math.easeInOutQuad &#x3D; function (t, b, c, d) &#123;
+    t &#x2F;&#x3D; d &#x2F; 2;
+    if (t &lt; 1) return c &#x2F; 2 * t * t + b;
+    t--;
+    return -c &#x2F; 2 * (t * (t - 2) - 1) + b;
+  &#125;;
+&#125;)()</code></pre>
     
     </section>
     
@@ -248,21 +252,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>

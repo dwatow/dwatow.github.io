@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-    <head><link rel=manifest href=/manifest.json>
+    <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -29,12 +29,12 @@
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet"
   />
-  <meta name="description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;&#39; &amp;#125;  re">
+  <meta name="description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="actions 就是 Vuex 裡「共用的 method」">
 <meta property="og:url" content="https://dwatow.github.io/2021/10-02-ironman-2021/2021-10-02-actions-%E5%B0%B1%E6%98%AF-vuex-%E8%A3%A1%E5%85%B1%E7%94%A8%E7%9A%84-method/index.html">
 <meta property="og:site_name" content="《Chris 技術筆記》">
-<meta property="og:description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;&#39; &amp;#125;  re">
+<meta property="og:description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2021-10-01T16:00:00.000Z">
 <meta property="article:modified_time" content="2026-05-12T02:43:37.827Z">
@@ -55,8 +55,12 @@
     src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
   ></script>
   
-<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
- 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
 
   
@@ -157,52 +161,52 @@
 </ul>
 <p><code>POST</code> <code>/login</code></p>
 <p>request body</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  user<span class="token operator">:</span> ''<span class="token punctuation">,</span>
-  password<span class="token operator">:</span> ''
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  user: &#39;&#39;,
+  password: &#39;&#39;
+&#125;
+</code></pre>
 <p>response 200</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  token<span class="token operator">:</span> ''
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  token: &#39;&#39;
+&#125;
+</code></pre>
 <p><code>POST</code> <code>/file</code></p>
 <p>request header</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  'Content-Type'<span class="token operator">:</span> 'multipart/form-data'
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  &#39;Content-Type&#39;: &#39;multipart&#x2F;form-data&#39;
+&#125;
+</code></pre>
 <p>request body</p>
 <p>form-data</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  file<span class="token operator">:</span> (binary)
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  file: (binary)
+&#125;
+</code></pre>
 <p>response 200</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
-  data<span class="token operator">:</span> '/file/<span class="token operator">:</span>file_path'
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-json" data-language="json" data-start="1"><code class="language-json">&#123;
+  data: &#39;&#x2F;file&#x2F;:file_path&#39;
+&#125;
+</code></pre>
 <p>這些行為有時候可以寫在 acitons。</p>
 <h2 id="實作-vuex"><a class="header-anchor" href="#實作-vuex">¶</a>實作 vuex</h2>
 <p>在 action 可以直接定義 login, logout, uploadFile 的動作。</p>
 <p>應該還有其它的用途，但是我一時之間想不到。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">POST</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
-  <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'setToken'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>token<span class="token punctuation">)</span>
-  cookies<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">'token'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>token<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token function">logout</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'setToken'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>
-  cookies<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token keyword">async</span> <span class="token function">uploadFile</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> file</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">formDataPOST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/file</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> file <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-  <span class="token keyword">return</span> res<span class="token punctuation">.</span>data
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">async login(&#123; commit &#125;, payload) &#123;
+  const res &#x3D; await backendAPI.POST(&#39;&#x2F;login&#39;, payload)
+  commit(&#39;setToken&#39;, res.token)
+  cookies.set(&#39;token&#39;, res.token)
+&#125;,
+logout(&#123; commit &#125;) &#123;
+  commit(&#39;setToken&#39;, &#39;&#39;)
+  cookies.clear()
+  router.push(&#39;&#x2F;&#39;)
+&#125;,
+async uploadFile(&#123; commit &#125;, file) &#123;
+  const res &#x3D; await backendAPI.formDataPOST(&#96;&#x2F;file&#96;, &#123; file &#125;)
+  return res.data
+&#125;
+</code></pre>
 <p>這些和 CRUD 不一樣的是，API 發送結束，並不是只有更新資料的 commit 而已。有時還有一些其它的事情要做。</p>
 <p>列舉一些其它可能會有特別在 actions 出現的實作。不過如果這些邏輯和畫面有關，就有可能會在 component 上實作，而不是 actions</p>
 <ul>
@@ -264,21 +268,14 @@
         </div>
     </div>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
     
 <script src="/js/ixbg/ixbg.js"></script>
 
     
 <script src="/js/scrollTop.js"></script>
 
-<script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308598')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1778556308635')
-    .then(function () {console.log('ServiceWorker Register Successfully.')})
-    .catch(function (e) {console.error(e)});
-}
-</script></body>
+</body>
 </html>
