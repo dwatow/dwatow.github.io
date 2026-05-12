@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-14-ironman-2021/2021-10-14-表格元件共用攻略/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="前面講完表單這樣常見又複雜的製作方式，其實在對付的是一種「以物件為根的」資料結構。並且同時又處理掉了物件的物件，以及物件的陣列。那麼所有的表單其實就沒有什麼好害怕的了，是吧？(是嗎？) 那麼，如果以要處理「以陣列為根的」資料結構呢？通常，我們會使用 UI component 來處理這個問題。哈哈~~ 這一次，我就以 BootstrapVue 為例。(這一招可以適用於其它 UI component">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表格元件共用攻略">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-14-ironman-2021/2021-10-14-%E8%A1%A8%E6%A0%BC%E5%85%83%E4%BB%B6%E5%85%B1%E7%94%A8%E6%94%BB%E7%95%A5/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="前面講完表單這樣常見又複雜的製作方式，其實在對付的是一種「以物件為根的」資料結構。並且同時又處理掉了物件的物件，以及物件的陣列。那麼所有的表單其實就沒有什麼好害怕的了，是吧？(是嗎？) 那麼，如果以要處理「以陣列為根的」資料結構呢？通常，我們會使用 UI component 來處理這個問題。哈哈~~ 這一次，我就以 BootstrapVue 為例。(這一招可以適用於其它 UI component">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/crpbMXx.png">
+<meta property="og:image" content="https://i.imgur.com/dM0Wgf3.png">
+<meta property="og:image" content="https://i.imgur.com/B1076ZW.png">
+<meta property="og:image" content="https://i.imgur.com/BYdnBN8.png">
+<meta property="og:image" content="https://i.imgur.com/rEUXmYV.png">
+<meta property="article:published_time" content="2021-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.831Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta property="article:tag" content="bootstrapvue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/crpbMXx.png">
+  <title>
+    表格元件共用攻略 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>表格元件共用攻略</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%97%E8%A1%A8"><span class="toc-text">列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E7%94%A8%E8%A1%A8%E6%A0%BC-component"><span class="toc-text">共用表格 component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%8F%E9%A1%8C%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-text">問題是什麼？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E8%A1%93%E9%9C%80%E6%B1%82"><span class="toc-text">技術需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E9%81%A9%E5%90%88%E7%9A%84-api"><span class="toc-text">找適合的 API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C-%E4%BD%A0%E7%94%A8%E7%9A%84%E6%98%AF-vue2-%E5%8F%AF%E4%BB%A5%E8%A9%A6%E8%A9%A6-scopedslot"><span class="toc-text">如果，你用的是 Vue2 可以試試 $scopedSlot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C-%E4%BD%A0%E7%94%A8%E7%9A%84%E6%98%AF-vue3-%E5%8F%AF%E4%BB%A5%E8%A9%A6%E8%A9%A6-slots"><span class="toc-text">如果，你用的是 Vue3 可以試試 $slots</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E9%BA%BC%E7%94%A8%E5%91%A2%EF%BC%9F"><span class="toc-text">怎麼用呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%BE%8C%E4%B8%80%E5%80%8B%E8%B3%87%E6%96%99%E9%A7%81%E5%8B%95%E7%9A%84%E6%8B%BC%E5%9C%96-%E8%A1%A8%E6%A0%BC-%E6%98%AF-array-%E8%A3%A1%E7%9A%84-object"><span class="toc-text">最後一個資料駁動的拼圖: 表格 &#x3D; 是 Array 裡的 Object</span></a></li></ol>
+  </div>
+
+
+    <p>前面講完表單這樣常見又複雜的製作方式，其實在對付的是一種「<strong>以物件為根</strong>的」資料結構。並且同時又處理掉了物件的物件，以及物件的陣列。那麼所有的表單其實就沒有什麼好害怕的了，是吧？(是嗎？)</p>
+<p>那麼，如果以要處理「<strong>以陣列為根</strong>的」資料結構呢？通常，我們會使用 UI component 來處理這個問題。哈哈~~</p>
+<p>這一次，我就以 BootstrapVue 為例。(這一招可以適用於其它 UI component 唷！)<br>
+來看看我們會遇到什麼難題吧！</p>
+<h2 id="列表"><a class="header-anchor" href="#列表">¶</a>列表</h2>
+<p>以 <a target="_blank" rel="noopener" href="https://bootstrap-vue.org/docs/components/table">Table | Components | BootstrapVue</a> 這個元件為主角</p>
+<p>要處理一個這樣的資料</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token literal-property property">first_name</span><span class="token operator">:</span> <span class="token string">'Dickerson'</span><span class="token punctuation">,</span> <span class="token literal-property property">last_name</span><span class="token operator">:</span> <span class="token string">'Macdonald'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">21</span><span class="token punctuation">,</span> <span class="token literal-property property">first_name</span><span class="token operator">:</span> <span class="token string">'Larsen'</span><span class="token punctuation">,</span> <span class="token literal-property property">last_name</span><span class="token operator">:</span> <span class="token string">'Shaw'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">89</span><span class="token punctuation">,</span> <span class="token literal-property property">first_name</span><span class="token operator">:</span> <span class="token string">'Geneva'</span><span class="token punctuation">,</span> <span class="token literal-property property">last_name</span><span class="token operator">:</span> <span class="token string">'Wilson'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span> <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">38</span><span class="token punctuation">,</span> <span class="token literal-property property">first_name</span><span class="token operator">:</span> <span class="token string">'Jami'</span><span class="token punctuation">,</span> <span class="token literal-property property">last_name</span><span class="token operator">:</span> <span class="token string">'Carney'</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'first_name'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'名'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'last_name'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'姓'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'年紀'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>設定到表格 component 時，其實就是放進兩個</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">striped</span> <span class="token attr-name">hover</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>items<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li>striped</li>
+<li>hover</li>
+</ul>
+<p>畫面像這樣</p>
+<p><img src="https://i.imgur.com/crpbMXx.png" alt=""></p>
+<h2 id="需求"><a class="header-anchor" href="#需求">¶</a>需求</h2>
+<ul>
+<li>如果整個站，不只是 User 這個 Array 呢？共用的只有 Array 操作，而元素內的型別需要各別處理。</li>
+<li>想要讓整個網站的 table 吃相同的設定、想改時，可以一起改</li>
+</ul>
+<p>這樣的需求，是不是能夠做一個 list 的 component 了呢？</p>
+<h2 id="共用表格-component"><a class="header-anchor" href="#共用表格-component">¶</a>共用表格 component</h2>
+<p><strong>src/components/list.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">striped</span> <span class="token attr-name">hover</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>items<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'List'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">items</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Array<span class="token punctuation">,</span>
+      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">fields</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Array<span class="token punctuation">,</span>
+      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>src/views/Users.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>List</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.users<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>List</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>src/views/Departments.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>List</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.departments<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>List</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>做完了。謝謝 還沒完！</p>
+<p>咦？我們不是做到這兩點了嗎？</p>
+<ul>
+<li>如果整個站，不只是 User 這個 Array 呢？共用的只有 Array 操作，而元素內的型別需要各別處理。</li>
+<li>想要讓整個網站的 table 吃相同的設定、想改時，可以一起改</li>
+</ul>
+<p>但是，如果我們想要客製欄位，怎辦？</p>
+<p><a target="_blank" rel="noopener" href="https://bootstrap-vue.org/docs/components/table#comp-ref-b-table-slots">Slots - Table | Components | BootstrapVue</a></p>
+<h2 id="問題是什麼？"><a class="header-anchor" href="#問題是什麼？">¶</a>問題是什麼？</h2>
+<p>在我們重新封裝了 UI Component 的元件之後，是不是就受限了使用方式了呢？<br>
+還可以依照官網的說明使用我們封裝過的元件嗎？</p>
+<p>這樣一來，就可以封裝「共用特定的使用方式」，依官網的使用方式，又可以依不同的資料客製使用方式。</p>
+<p>聽不太懂？！沒關係，先看結果，究竟是要做到什麼效果呢？</p>
+<h3 id="技術需求"><a class="header-anchor" href="#技術需求">¶</a>技術需求</h3>
+<ol>
+<li>封裝對於 table 的 props 設定。</li>
+<li>客製欄位渲染方式，使用的是 slot ，要在自己封裝好的元件，使用 bootstrap 的 slot</li>
+</ol>
+<p>在 <a target="_blank" rel="noopener" href="https://bootstrap-vue.org/docs/components/table#comp-ref-b-table-slots">Custom data rendering</a> 這一段有介紹怎麼樣寫。而最終就是想要照著寫。</p>
+<blockquote>
+<p>記住，任何自己發明的 props、slot 最好都要寫一份文件，不要以為別人都看得懂你的設計。QQ<br>
+因為我不想寫文件，所以致力於「別人的文件，就是我的文件」<br>
+只要用法和 UI Component 一樣，基本上就可以使用它強大的功能與文件。</p>
+</blockquote>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>List</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.users<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">#cell(name)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; item &#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    &#123;&#123; item.last_name &#125;&#125; &#123;&#123; item.last_name &#125;&#125;
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>List</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'姓名'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'年紀'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>透過前面介紹的技巧知道 $attrs 和 $listeners 可以在自訂的 component 上使用 UI Component 。但是，<code>&lt;slot&gt;</code> 呢？</p>
+<h3 id="找適合的-api"><a class="header-anchor" href="#找適合的-api">¶</a>找適合的 API</h3>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">striped</span> <span class="token attr-name">hover</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>items<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- 在這裡究竟要放什麼呢？ --></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>探索之前，先印出來看</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'List'</span><span class="token punctuation">,</span>
+  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'在這裡印出要測試的 API'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="如果-你用的是-vue2-可以試試-scopedslot"><a class="header-anchor" href="#如果-你用的是-vue2-可以試試-scopedslot">¶</a>如果，你用的是 Vue2 可以試試 <code>$scopedSlot</code></h4>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span>&#123;&#123; Object.keys($scopedSlot) &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.imgur.com/dM0Wgf3.png" alt=""></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'List'</span><span class="token punctuation">,</span>
+  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>$scopedSlot<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.imgur.com/B1076ZW.png" alt=""></p>
+<h4 id="如果-你用的是-vue3-可以試試-slots"><a class="header-anchor" href="#如果-你用的是-vue3-可以試試-slots">¶</a>如果，你用的是 Vue3 可以試試 <code>$slots</code></h4>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>pre</span><span class="token punctuation">></span></span>&#123;&#123; Object.keys($slots) &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>pre</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.imgur.com/BYdnBN8.png" alt=""></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'List'</span><span class="token punctuation">,</span>
+  <span class="token function">mounted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>$scopedSlot<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.imgur.com/rEUXmYV.png" alt=""></p>
+<blockquote>
+<p>總之，我們得了一個長得像這樣的東西</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">[</span> <span class="token string">"cell(name)"</span> <span class="token punctuation">]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</blockquote>
+<h2 id="怎麼用呢？"><a class="header-anchor" href="#怎麼用呢？">¶</a>怎麼用呢？</h2>
+<p>由於因為 BootstrapVue 還不支援 Vue3 所以剩下部份，我們就用 Vue2 實現吧！ (目前看起來就 API 不太一樣而已)</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>items<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>(value, key) in $scopedSlots<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">v-slot:</span>[key]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; item &#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span> <span class="token attr-name">:name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>key<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">v-bind:</span>item</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>item<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣一來，原本我們寫成這樣的東西</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">striped</span> <span class="token attr-name">hover</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.users<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">#cell(name)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; item &#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    &#123;&#123; item.last_name &#125;&#125; &#123;&#123; item.last_name &#125;&#125;
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>就可以寫成下面這兩個組合</p>
+<p><strong>src/views/users.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>List</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.users<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">#cell(name)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; item &#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    &#123;&#123; item.last_name &#125;&#125; &#123;&#123; item.last_name &#125;&#125;
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>List</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>src/components/list.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b-table</span> <span class="token attr-name">striped</span> <span class="token attr-name">hover</span> <span class="token attr-name">:items</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>items<span class="token punctuation">"</span></span> <span class="token attr-name">:fields</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fields<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>(value, key) in $scopedSlots<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">v-slot:</span>[key]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123; item &#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>slot</span> <span class="token attr-name">:name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>key<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">v-bind:</span>item</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>item<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>slot</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b-table</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功的將 bootstrap-vue 的 table，其中的 slot 移植到我們自己的 component 上使用。<br>
+這樣一來，還有什麼可以阻止得了我呀！哈哈哈</p>
+<p>之後，不管是 props, events 甚至是 slot 都可以任意使用啦，任何的 component 我就可以自由的封裝共用的設定，而開放非共用的設定。包裝成自己想要的 component 了！</p>
+<h2 id="最後一個資料駁動的拼圖-表格-是-array-裡的-object"><a class="header-anchor" href="#最後一個資料駁動的拼圖-表格-是-array-裡的-object">¶</a>最後一個資料駁動的拼圖: 表格 = 是 Array 裡的 Object</h2>
+<p>我們實作過下面這四種變化了</p>
+<ul>
+<li>Object</li>
+<li>Object 裡的 Object</li>
+<li>Object 裡的 Array</li>
+<li>Array 裡的 Object</li>
+</ul>
+<p>未來遇到任何奇奇怪怪的資料結構，就完全不用害怕囉！<br>
+不用再說「呃…後端這個結構太複雜，是不是可以拆開做呢？」</p>
+<p>最後，你覺得這一系列有進階嗎？<br>
+歡迎留言告訴我。</p>
+<p>也歡迎你留下自己習慣的寫法 (repo)，與我分享唷！</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-10-13T16:00:00.000Z" itemprop="datePublished">
+              2021-10-14
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/bootstrapvue/">bootstrapvue</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

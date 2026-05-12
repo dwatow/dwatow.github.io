@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/09-25-ironman-2021/2021-09-25-統一狀態管理-單一資料流/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="我一開始在學 Vuex 的時候，覺得很難懂，不知道它是在做什麼的。當時的我，就想先追朔單一資料流的始祖(應該是吧？) flux ¶Flux 它提出了不少更新畫面的理論與觀念，之後的 Redux 和 Vuex 使用的專有名詞，都和它的用詞有相關性。  撰寫本文時 flux 已進入維護模式，不建議使用了。  整體的模型長這樣。  由於這是 facebook 出的 pattern 所以上面都會講要和 R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="統一狀態管理 + 單一資料流">
+<meta property="og:url" content="https://dwatow.github.io/2021/09-25-ironman-2021/2021-09-25-%E7%B5%B1%E4%B8%80%E7%8B%80%E6%85%8B%E7%AE%A1%E7%90%86-%E5%96%AE%E4%B8%80%E8%B3%87%E6%96%99%E6%B5%81/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="我一開始在學 Vuex 的時候，覺得很難懂，不知道它是在做什麼的。當時的我，就想先追朔單一資料流的始祖(應該是吧？) flux ¶Flux 它提出了不少更新畫面的理論與觀念，之後的 Redux 和 Vuex 使用的專有名詞，都和它的用詞有相關性。  撰寫本文時 flux 已進入維護模式，不建議使用了。  整體的模型長這樣。  由於這是 facebook 出的 pattern 所以上面都會講要和 R">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://github.com/facebook/flux/raw/main/img/flux-diagram-white-background.png">
+<meta property="og:image" content="https://i.imgur.com/528VzYL.png">
+<meta property="article:published_time" content="2021-09-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.830Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/facebook/flux/raw/main/img/flux-diagram-white-background.png">
+  <title>
+    統一狀態管理 + 單一資料流 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>統一狀態管理 + 單一資料流</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#flux"><span class="toc-text">Flux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E7%9A%84%E6%97%85%E8%A1%8C"><span class="toc-text">資料的旅行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dispatcher"><span class="toc-text">Dispatcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#store"><span class="toc-text">Store</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#action"><span class="toc-text">Action</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#view-%E5%9C%96%E4%B8%8A%E6%98%AF-reactviews"><span class="toc-text">View (圖上是 ReactViews)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E5%96%AE%E4%B8%80%E8%B3%87%E6%96%99%E6%B5%81%EF%BC%9F"><span class="toc-text">為什麼要單一資料流？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%92%E6%9C%89%E5%96%AE%E4%B8%80%E8%B3%87%E6%96%99%E6%B5%81%E7%9A%84-angularjs"><span class="toc-text">沒有單一資料流的 AngularJS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%8C%E4%BE%86%E7%9A%84-vuex"><span class="toc-text">後來的 Vuex</span></a></li></ol>
+  </div>
+
+
+    <p>我一開始在學 Vuex 的時候，覺得很難懂，不知道它是在做什麼的。當時的我，就想先追朔<strong>單一資料流</strong>的始祖(應該是吧？) <a target="_blank" rel="noopener" href="https://github.com/facebook/flux">flux</a></p>
+<h2 id="flux"><a class="header-anchor" href="#flux">¶</a>Flux</h2>
+<p>它提出了不少更新畫面的理論與觀念，之後的 Redux 和 Vuex 使用的專有名詞，都和它的用詞有相關性。</p>
+<blockquote>
+<p>撰寫本文時 flux 已進入維護模式，不建議使用了。</p>
+</blockquote>
+<p>整體的模型長這樣。</p>
+<p><img src="https://github.com/facebook/flux/raw/main/img/flux-diagram-white-background.png" alt=""></p>
+<p>由於這是 facebook 出的 pattern 所以上面都會講要和 React 整合。</p>
+<p>這個圖的出發點在 User Interactions 網頁和使用者互動的時候，會呼叫 Action Creators ，在此處理非同步的 Web API 取得遠端伺服器上的資料。</p>
+<p>經過中間的輾轉，將資料儲存在 Store。再經過 Change Events + Store Queries 將資料更新到畫面上。</p>
+<h2 id="資料的旅行"><a class="header-anchor" href="#資料的旅行">¶</a>資料的旅行</h2>
+<p><img src="https://i.imgur.com/528VzYL.png" alt=""></p>
+<h3 id="dispatcher"><a class="header-anchor" href="#dispatcher">¶</a>Dispatcher</h3>
+<ul>
+<li>整個 application 唯一的一個 (singleton)</li>
+<li>Store 向 Dispatcher 註冊通知變更</li>
+<li>Action 透過 Dispatcher 更新 Store</li>
+</ul>
+<h3 id="store"><a class="header-anchor" href="#store">¶</a>Store</h3>
+<ul>
+<li>每個 application 可擁有多個 store</li>
+<li>資料中⼼</li>
+<li>透過 action 呼叫 mutate 更改 store 的 data</li>
+<li>no public setter, only getter</li>
+<li>資料改變發⽣在 ‘change’ event</li>
+</ul>
+<h3 id="action"><a class="header-anchor" href="#action">¶</a>Action</h3>
+<ul>
+<li>定義內部 API</li>
+<li>動作中心</li>
+<li>任何與 application 的互動方式</li>
+<li>語意化命名行為</li>
+</ul>
+<h3 id="view-圖上是-reactviews"><a class="header-anchor" href="#view-圖上是-reactviews">¶</a>View (圖上是 ReactViews)</h3>
+<ul>
+<li>Data 從 Store 拿出來顯示</li>
+<li>View 必須訂閱 store 的 change 事件</li>
+<li>Action 也是由View 與使⽤者戶動而觸發的</li>
+</ul>
+<h2 id="為什麼要單一資料流？"><a class="header-anchor" href="#為什麼要單一資料流？">¶</a>為什麼要單一資料流？</h2>
+<p>其實，只要宣告一個全域變數或物件，甚至做出 getter/setter 的抽象給物件使用，就足以管理這些全域的資料了，為什麼還要「單一資料流」呢？</p>
+<p>其實，最主要的原因在於方便 debug ，如果一切都順利，是不是單資料流似乎不是這麼重要，但是萬一出錯了，是不是單一資料流就會是一件很重要的事情，它會將很多連續執行的資料設定，弄成由 dispacher 處理，一次處理一個。並且可以透過開發者工具看見。</p>
+<p>透過一步一步的查詢，可以看得見哪一次賦值不如預期，所以造成問題。</p>
+<h2 id="沒有單一資料流的-angularjs"><a class="header-anchor" href="#沒有單一資料流的-angularjs">¶</a>沒有單一資料流的 AngularJS</h2>
+<p>在 AngularJS 中就有出現廣播的方式，每次呼叫都會通知程式碼呼叫它註冊好的 callback，而 dispatcher 其實是一種廣播系統，它限縮在一個可控的狀況。讓各處都可以呼叫註冊好的 callback。</p>
+<p>雖然語法相同，但是用法不同，就會造成災難。<br>
+由於是廣播系統，所以有些人的用法就是直接從這個 view 呼叫另一個 view 的 method ，為的是原本更新資料沒有更新到的畫面，可以強制更新。</p>
+<p>但也許更新資料本身並沒有遵守 immutable 的原則，所以才會出問題，而不需要呼叫強制更新。造成不必要的耦合。</p>
+<p>AngularJS 也有 service 來處理共用的程式碼。但是正因為在那個時候也許單一資料流還不是顯學，所以沒有把這個東西做成一個套件。所以用 service 只是用來共用的人，就很難管理修改資料的前後順序與除錯的問題。</p>
+<h2 id="後來的-vuex"><a class="header-anchor" href="#後來的-vuex">¶</a>後來的 Vuex</h2>
+<p>使用了 dispatch 來呼叫 action<br>
+使用了 commit 來呼叫 mutation<br>
+使用了 getters 來呼叫 getters<br>
+使用了 state 來呼叫 state</p>
+<p>接下來會花幾天的時間，慢慢的介紹，我自己如何看待 vuex 以及如何使用它。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-24T16:00:00.000Z" itemprop="datePublished">
+              2021-09-25
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

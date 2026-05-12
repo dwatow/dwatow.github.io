@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/09-27-ironman-2021/2021-09-27-vuex-的使用偏好/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="這是我個人的使用偏好，而且是以抽象資料型別的使用方式來理解 vuex 的使用方式。也許，我是說也許啦！和官網的不太一樣。  昨天介紹了物件設計的核心原則，就是不要直接修改資料，務必要透過抽象行為來修改，以保持彈性與添加限制的同時，可以維護概念整體性。  這個原則，在後端也適用於 MVC 的 Module  ¶module 的 setter: mutation Mutations | Vuex 的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vuex 的使用偏好">
+<meta property="og:url" content="https://dwatow.github.io/2021/09-27-ironman-2021/2021-09-27-vuex-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%81%8F%E5%A5%BD/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="這是我個人的使用偏好，而且是以抽象資料型別的使用方式來理解 vuex 的使用方式。也許，我是說也許啦！和官網的不太一樣。  昨天介紹了物件設計的核心原則，就是不要直接修改資料，務必要透過抽象行為來修改，以保持彈性與添加限制的同時，可以維護概念整體性。  這個原則，在後端也適用於 MVC 的 Module  ¶module 的 setter: mutation Mutations | Vuex 的">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/3iNpgO0.png">
+<meta property="article:published_time" content="2021-09-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.834Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/3iNpgO0.png">
+  <title>
+    Vuex 的使用偏好 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vuex 的使用偏好</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#module-%E7%9A%84-setter-mutation"><span class="toc-text">module 的 setter: mutation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E5%8B%99%E4%B8%8A%E7%9A%84%E7%8B%80%E6%B3%81"><span class="toc-text">實務上的狀況</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actions-%E5%91%A2%EF%BC%9F"><span class="toc-text">Actions 呢？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E5%8B%99%E4%B8%8A%E7%9A%84%E7%8B%80%E6%B3%81-v2"><span class="toc-text">實務上的狀況</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-%E7%9A%84-getter-getters"><span class="toc-text">module 的 getter: getters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%80%E5%AF%9F%E5%AE%83%E5%80%91%E7%9A%84%E5%8F%83%E6%95%B8"><span class="toc-text">觀察它們的參數</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>這是我個人的使用偏好，而且是以抽象資料型別的使用方式來理解 vuex 的使用方式。也許，我是說也許啦！和官網的不太一樣。</p>
+</blockquote>
+<p>昨天介紹了物件設計的核心原則，就是不要直接修改資料，務必要透過抽象行為來修改，以保持彈性與添加限制的同時，可以維護概念整體性。</p>
+<blockquote>
+<p>這個原則，在後端也適用於 MVC 的 Module</p>
+</blockquote>
+<h2 id="module-的-setter-mutation"><a class="header-anchor" href="#module-的-setter-mutation">¶</a>module 的 setter: mutation</h2>
+<p><a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/mutations.html">Mutations | Vuex</a> 的開章明義就說，想要改變 state ，就要 over my dead body (透過 mutation)。</p>
+<blockquote>
+<p>The only way to actually change state in a Vuex store is by committing a mutation.</p>
+</blockquote>
+<p>所以，其實 mutation 本身就隱含著 setter 的任務。必須單純的修改值，並且適時的可以加入定義域限制。</p>
+<p>「mutation 是唯一可以改變 state 的角色」，意思是說改變的同時要可以觸發修改畫面。所以，修改的原則，也是要符合 immutable，或者用 Vue 提供的 API <code>Vue.set(obj, 'newProp', 123)</code></p>
+<blockquote>
+<ul>
+<li>
+<p>Use <code>Vue.set(obj, 'newProp', 123)</code>, or</p>
+</li>
+<li>
+<p>Replace that Object with a fresh one. For example, using the object spread syntax (opens new window)we can write it like this:</p>
+</li>
+</ul>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">state<span class="token punctuation">.</span>obj <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token operator">...</span>state<span class="token punctuation">.</span>obj<span class="token punctuation">,</span> <span class="token literal-property property">newProp</span><span class="token operator">:</span> <span class="token number">123</span> <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</blockquote>
+<p>不過我覺得「靠自己，好自在」。所以只要修改值，就要注意 immutable，以及觸發自動修改畫面的機制 (符合 MVVM 的精神)</p>
+<h3 id="實務上的狀況"><a class="header-anchor" href="#實務上的狀況">¶</a>實務上的狀況</h3>
+<p>通常 mutation 是在接受 Web API 之後將 Web API 的資料 (通常是 GET 的 API) 儲存到 state。</p>
+<p>而這個步驟就足以決定你的 vuex 管理是否簡單或複雜。</p>
+<p>請遵守這些原則</p>
+<p><strong>命名不要用動詞</strong><br>
+<strong>命名要與 getters 同名</strong><br>
+<strong>命名要注意單數/複數</strong></p>
+<p>因為使用的時候是</p>
+<ul>
+<li><code>this.$store.commit('user', data)</code></li>
+<li><code>this.$store.commit('users', data)</code></li>
+</ul>
+<p>光這一行，你看得出什麼樣的資訊？看不出什麼樣的資訊呢？</p>
+<ul>
+<li><input type="checkbox" id="checkbox0" checked="true"><label for="checkbox0">要 set 進 state</label></li>
+<li><input type="checkbox" id="checkbox1" checked="true"><label for="checkbox1">要儲存到 user 的 module，是單數資料 (一筆)</label></li>
+</ul>
+<p>看得出這樣的資訊就夠了。</p>
+<p>至於 set 進 user 需不需要定義域的阻擋邏輯，通常 API 來的資料，都已經通過畫面的欄位驗證以及後端在接收到 POST 的時的驗證，資料經過了這些驗證而進入資料庫，所以在取得資料時，其實應該相信這些機制的作用，不用在這個環節再阻擋或驗證一次。</p>
+<p>但如果，你的 commit 是直接透過畫面把值設定進來，也許需要在 Mutation 加入驗證，因為要確保 state 是正確的，才不會影響 getters 在輸出資料時，還要寫更多的邏輯處理。</p>
+<h2 id="actions-呢？"><a class="header-anchor" href="#actions-呢？">¶</a>Actions 呢？</h2>
+<p><a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/actions.html">Actions | Vuex</a></p>
+<p>官網的 Actions 說，它可以寫非同步行為，而且要用 action 呼叫 mutation</p>
+<blockquote>
+<p>mutation 不要寫非同步行為<br>
+不要用 action 直接改 state</p>
+</blockquote>
+<p>官網說建議要透過 action 呼叫 mutation 的理由，是萬一你要非同步的使用 mutation 的話，就可以直接添加在 action。</p>
+<p>我自己的解讀是「如果沒有要非同步，直接 commit 也是可以」<br>
+所以，我自己的用法會是「同步行為與非同步行為，分成 action 和 muation」</p>
+<h3 id="實務上的狀況-v2"><a class="header-anchor" href="#實務上的狀況-v2">¶</a>實務上的狀況</h3>
+<p><strong>如果看見這樣寫</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'fetchUsers'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>就是它要發一個 API 去請求 User 的列表，並且會在裡面呼叫 <code>commit('users', res.data)</code> 將 response 的 body 儲存在 state 裡。</p>
+<p><strong>如果看見這樣寫</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">,</span> users<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>就只是將資料儲存到 state 裡。</p>
+<p><strong>如果看見這樣寫</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">this</span><span class="token punctuation">.</span>$store<span class="token punctuation">.</span><span class="token function">dispatch</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">,</span> users<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>我會不知道，這是非同步的還是同步的行為，中間經造了什麼將 users 儲存到 state 裡。</p>
+<p>請遵守這些原則</p>
+<p><strong>命名要加上動詞</strong></p>
+<p>以 User Module 為例 action 的命名會依 API 的用途為主。CRUD 的話已經有一定的命名原則。</p>
+<table>
+<thead>
+<tr>
+<th>行為</th>
+<th>命名</th>
+<th>實際使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增</td>
+<td>createUser</td>
+<td>$store.dispatch(‘createUser’)</td>
+</tr>
+<tr>
+<td>讀取</td>
+<td>fetchUser</td>
+<td>$store.dispatch(‘fetchUser’, id)</td>
+</tr>
+<tr>
+<td>讀取</td>
+<td>fetchUsers</td>
+<td>$store.dispatch(‘fetchUsers’)</td>
+</tr>
+<tr>
+<td>修改</td>
+<td>updateUser</td>
+<td>$store.dispatch(‘updateUser’, id)</td>
+</tr>
+<tr>
+<td>刪除</td>
+<td>deleteUsers</td>
+<td>$store.dispatch(‘deleteUsers’)</td>
+</tr>
+<tr>
+<td>刪除</td>
+<td>deleteUser</td>
+<td>$store.dispatch(‘deleteUser’, id)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>命名要具體的描述行為，不需與 API 相同</strong></p>
+<p>有時候網站會有一些留言的機制。而留言的目的也許有不同的 type<br>
+有時 API 的開法， type 並不是參數，而是 path 的一部份</p>
+<ul>
+<li><code>POST</code> <code>/message/issue</code></li>
+<li><code>POST</code> <code>/message/comments</code></li>
+</ul>
+<p>這個 issues 和 comments 就會把 actions 設計成</p>
+<ul>
+<li><code>$store.dispatch('createMessage', &#123; type, body &#125;)</code>
+<ul>
+<li>type: <code>comments | issue</code></li>
+</ul>
+</li>
+</ul>
+<p>這樣 actions 的命名，是一種「使用非同步行為」的描述，而不只是非同步行為轉變形式的樣子</p>
+<p><strong>命名要注意單數/複數</strong></p>
+<p>名詞的部份和 commit 一樣，而且也是隱喻著要 commit 到哪裡去。</p>
+<h2 id="module-的-getter-getters"><a class="header-anchor" href="#module-的-getter-getters">¶</a>module 的 getter: getters</h2>
+<p><a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/getters.html#property-style-access">Getters | Vuex</a></p>
+<p>根據 state 的狀態衍生出其它的資料。<br>
+可以理解是一種共用的 computed 也可以理解是一種「整理資料的資料邏輯」</p>
+<p>如果今天，在修改使用者 (ex: <code>id=1</code>) user 的表單中，需要設定該 user 的主管，這個主管會是由一個下拉式選單來顯示。</p>
+<p>那麼資料該怎麼取得呢？</p>
+<ul>
+<li>取得原本使用者的資料
+<ul>
+<li><code>$store.dispatch('fetchUser', 1)</code></li>
+</ul>
+</li>
+<li>取得主管下拉式選單內容
+<ul>
+<li><code>$store.dispatch('fetchUsers')</code></li>
+<li><code>$store.getters.leaders</code></li>
+<li><code>leaderOptions</code> (在 computed 裡或 getters 也可以)</li>
+</ul>
+</li>
+</ul>
+<p>取得主管的下拉式選單中，有一個 <code>$store.getters.leaders</code></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">leaders</span><span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> getters</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> departments <span class="token operator">=</span> getters<span class="token punctuation">.</span>departments<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> state<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> departments<span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token parameter">department</span> <span class="token operator">=></span> department<span class="token punctuation">.</span>leader <span class="token operator">===</span> user<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>將整理資料的程式碼寫在 getters ，而不是在 mutation 的時候整理資料，有幾個好處</p>
+<ul>
+<li>後端的 API 可以單純一點，前端依自己的<strong>畫面需求</strong>整理資料。</li>
+<li>有些資料來源相同，可以降低發送 API 的資數</li>
+</ul>
+<h2 id="觀察它們的參數"><a class="header-anchor" href="#觀察它們的參數">¶</a>觀察它們的參數</h2>
+<p><strong>mutation</strong></p>
+<p>第一個參數是 state (所屬的 module 裡的 state)<br>
+第二個參數是 payload (帶什麼新東西要來修改值)？</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">mutation</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    state<span class="token punctuation">.</span>user <span class="token operator">=</span> payload
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>getters</strong></p>
+<p>第一個參數是 state (所屬的 module 裡的 state)<br>
+第二個參數是跨 module 的 getters (不直接取得 state)</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">leaders</span><span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> getters</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> departments <span class="token operator">=</span> getters<span class="token punctuation">.</span>departments<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> state<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> departments<span class="token punctuation">.</span><span class="token function">some</span><span class="token punctuation">(</span><span class="token parameter">department</span> <span class="token operator">=></span> department<span class="token punctuation">.</span>leader <span class="token operator">===</span> user<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>actions</strong></p>
+<p>第一個參數是 context 跨 module 取得 dispatch, commit, getters (不直接取得 state)<br>
+第二個參數這次傳進來的參數，用起來和 mutation 的 payload 一樣。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">actions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">fetchUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> dispatch<span class="token punctuation">,</span> commit<span class="token punctuation">,</span> getters <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> user_id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>透過觀察參數可以發現 mutation 和 getters 的設計，修改/讀取都是以 state 為核心。而 actions 比較像是面對這些 module 的獨立 function 。有點像是後端的 controller。</p>
+<p>所以，我在使用 vuex 的資料夾規畫上面。只會把 <strong>actions.js</strong> 獨立成一個檔案。<code>state</code>, <code>mutation</code>, <code>getters</code> 這三樣，會是放在一起的，形成了一個有自己 getter/setter 的抽象資料型別。</p>
+<p><img src="https://i.imgur.com/3iNpgO0.png" alt=""></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-26T16:00:00.000Z" itemprop="datePublished">
+              2021-09-27
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

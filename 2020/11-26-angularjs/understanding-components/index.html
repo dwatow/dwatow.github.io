@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,13 +139,13 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-Component-AngularJS-%E9%96%8B%E7%99%BC%E6%8C%87%E5%8D%97"><span class="toc-text">翻譯 Component - AngularJS 開發指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CONTENTS"><span class="toc-text">CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-and-configuring-a-Component"><span class="toc-text">Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-between-Directive-definition-and-Component-definition"><span class="toc-text">Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Component-based-application-architecture"><span class="toc-text">Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components-as-route-templates"><span class="toc-text">Components as route templates</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BF%BB%E8%AD%AF-component-angularjs-%E9%96%8B%E7%99%BC%E6%8C%87%E5%8D%97"><span class="toc-text">翻譯 Component - AngularJS 開發指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#contents"><span class="toc-text">CONTENTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-and-configuring-a-component"><span class="toc-text">Creating and configuring a Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#comparison-between-directive-definition-and-component-definition"><span class="toc-text">Comparison between Directive definition and Component definition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#component-based-application-architecture"><span class="toc-text">Component-based application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#components-as-route-templates"><span class="toc-text">Components as route templates</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="翻譯-Component-AngularJS-開發指南"><a class="header-anchor" href="#翻譯-Component-AngularJS-開發指南">¶</a>翻譯 Component - AngularJS 開發指南</h1>
+    <h1 id="翻譯-component-angularjs-開發指南"><a class="header-anchor" href="#翻譯-component-angularjs-開發指南">¶</a>翻譯 Component - AngularJS 開發指南</h1>
 <p><a target="_blank" rel="noopener" href="https://docs.angularjs.org/guide/component">原文: AngularJS: Developer Guide: Components</a></p>
-<h2 id="CONTENTS"><a class="header-anchor" href="#CONTENTS">¶</a>CONTENTS</h2>
+<h2 id="contents"><a class="header-anchor" href="#contents">¶</a>CONTENTS</h2>
 <blockquote>
 <p>Creating and configuring a Component<br>
 Comparison between Directive definition and Component definition<br>
@@ -168,16 +170,22 @@ Unit-testing Component Controllers</p>
 <li>使用 directive 的進階定義選項 像是 priority, terminal, multi-element</li>
 <li>要透過 attribute 或 css class 觸發 directive</li>
 </ul>
-<h2 id="Creating-and-configuring-a-Component"><a class="header-anchor" href="#Creating-and-configuring-a-Component">¶</a>Creating and configuring a Component</h2>
+<h2 id="creating-and-configuring-a-component"><a class="header-anchor" href="#creating-and-configuring-a-component">¶</a>Creating and configuring a Component</h2>
 <p>可以用 AngularJS module (由 <code>angular.module()</code> 回傳)的 <code>.component()</code> 註冊 Components<br>
 這個 method 有兩個 arguments</p>
 <ul>
 <li>Components 的名字</li>
 <li>組態物件 (注意，不像是 <code>.directive()</code> ，這個 method 沒有 factory 功能)</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;hero-detail hero&#x3D;&quot;ctrl.hero&quot;&gt;&lt;&#x2F;hero-detail&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">&#x27;heroApp&#x27;</span>)</span><br><span class="line">.component(<span class="string">&#x27;heroDetail&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">`&lt;span&gt;Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span&gt;`</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    hero: <span class="string">&#x27;=&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Comparison-between-Directive-definition-and-Component-definition"><a class="header-anchor" href="#Comparison-between-Directive-definition-and-Component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
+<pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;hero-detail hero&#x3D;&quot;ctrl.hero&quot;&gt;&lt;&#x2F;hero-detail&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'heroApp'</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">'heroDetail'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;span>Name: &#123;&#123;$ctrl.hero.name&#125;&#125;&lt;/span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">hero</span><span class="token operator">:</span> <span class="token string">'='</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="comparison-between-directive-definition-and-component-definition"><a class="header-anchor" href="#comparison-between-directive-definition-and-component-definition">¶</a>Comparison between Directive definition and Component definition</h2>
 <p>比較 Component vs Directive</p>
 <table>
 <thead>
@@ -275,7 +283,7 @@ Unit-testing Component Controllers</p>
 </tr>
 </tbody>
 </table>
-<h2 id="Component-based-application-architecture"><a class="header-anchor" href="#Component-based-application-architecture">¶</a>Component-based application architecture</h2>
+<h2 id="component-based-application-architecture"><a class="header-anchor" href="#component-based-application-architecture">¶</a>Component-based application architecture</h2>
 <p>如前所述，component helper 有助於用簡單的 component-base 架構你的應用程式。但是 component helper 在建構一個 componet 時，還額外做了哪些事？</p>
 <ul>
 <li><strong>Components 只控制自己的 View 和 Data</strong><br>
@@ -290,12 +298,16 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
 <li>用 <code>&amp;</code> bindings 實現 Output 當作 components 的 callback。<br>
 反而不是操作 Input Data，component 呼叫正確的 Output Event 改變資料。以 deletion 來說，意思是 component 不刪除 hero 自己，但是用正確的 event 傳給 owner component ，用 hero 當變數。</li>
 </ul>
-  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;</span><br><span class="line">&lt;button ng-click&#x3D;&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;&#x2F;button&gt;</span><br></pre></td></tr></table></figure>
+  <pre class="line-numbers language-htmlmixed" data-language="htmlmixed"><code class="language-htmlmixed">&lt;!-- note that we use kebab-case for bindings in the template as usual --&gt;
+&lt;button ng-click&#x3D;&quot;$ctrl.onDelete(&#123;hero: $ctrl.hero&#125;)&quot;&gt;Delete&lt;&#x2F;button&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>用這個方式，外層的 component 可以決定 event 回傳值回來之後，還要做什麼。</li>
 </ul>
-  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">editable-field</span> <span class="attr">on-delete</span>=<span class="string">&quot;$ctrl.deleteHero(&#123;hero&#125;)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">editable-field</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure>
-  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 class</span></span><br><span class="line">deleteHero (result) &#123; <span class="comment">//result =&#123; hero &#125;</span></span><br><span class="line">  <span class="built_in">this</span>.$http.delete(...).then(<span class="function">() =&gt;</span> &#123;<span class="comment">/*...*/</span>&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>editable-field</span> <span class="token attr-name">on-delete</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$ctrl.deleteHero(&#123;hero&#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>editable-field</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+  <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ES6 class</span>
+<span class="token function">deleteHero</span> <span class="token punctuation">(</span><span class="token parameter">result</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">//result =&#123; hero &#125;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>$http<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span><span class="token operator">...</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token comment">/*...*/</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li>Components 有明確的 lifecycle:<br>
 每一個 component 可以實作 lifecycle hooks。這些 methods 會在 component 生命週期中的特定時間點被呼叫。下列這些 hook methods 可以實作:
@@ -314,16 +326,30 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
 <li>應用程式是樹狀的 component:<br>
 理想情況，整個應用程式應該是一個實現明確定義的輸入和輸出的組件樹，並最小化雙向綁定。可以更容易地預測數據何時發生變化以及組件的狀態。</li>
 </ul>
-<h2 id="Components-as-route-templates"><a class="header-anchor" href="#Components-as-route-templates">¶</a>Components as route templates</h2>
+<h2 id="components-as-route-templates"><a class="header-anchor" href="#components-as-route-templates">¶</a>Components as route templates</h2>
 <p>Components 也可以用在 route 的 <code>template</code> (以 <code>ngRoute</code> 為例)。在 component-base 的應用程式 ，每一個 view 都是一個 component:</p>
 <p>當使用 <code>$routeProvider</code> ，你可以避免一些重複的寫法 (boilerplate)，透過解析 route 相依直接傳遞給 component。從 1.5 版開始，ngRoute 自動解析 route scope 指定給 <code>$resolve</code> (你也可以用 <code>resolveAs</code> 改變它)。當使用 component ，你可以利用此功能直接傳遞 component，無需另外指定 controller。</p>
 <p>換句話說(上面如果看不懂)，指的是透過 route 的 resolve 功能，可以直接給 component binding 的變數內容。</p>
 <p><strong>home.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> home = angular.module(<span class="string">&#x27;home&#x27;</span>).component(<span class="string">&#x27;home&#x27;</span>, &#123;</span><br><span class="line">  template: <span class="string">&#x27;&lt;h1&gt;Home&lt;/h1&gt;&lt;p&gt;Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p&gt;&#x27;</span>,</span><br><span class="line">  bindings: &#123;</span><br><span class="line">    user: <span class="string">&#x27;&lt;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> home <span class="token operator">=</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'home'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">component</span><span class="token punctuation">(</span><span class="token string">'home'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token string">'&lt;h1>Home&lt;/h1>&lt;p>Hello, &#123;&#123; $ctrl.user.name &#125;&#125; !&lt;/p>'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">bindings</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">user</span><span class="token operator">:</span> <span class="token string">'&lt;'</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>route.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> route = angular.module(<span class="string">&#x27;route&#x27;</span>, []).config(<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>) </span>&#123;</span><br><span class="line">  $routeProvider.when(<span class="string">&#x27;/&#x27;</span>, &#123;</span><br><span class="line">    template: <span class="string">&#x27;&lt;home user=&quot;$resolve.user&quot;&gt;&lt;/home&gt;&#x27;</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>) </span>&#123; <span class="keyword">return</span> $http.get(<span class="string">&#x27;...&#x27;</span>); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).name;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> route <span class="token operator">=</span> angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'route'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$routeProvider</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  $routeProvider<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">template</span><span class="token operator">:</span> <span class="token string">'&lt;home user="$resolve.user">&lt;/home>'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">resolve</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token function-variable function">user</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">$http</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> $http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'...'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>main.js</strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> route <span class="keyword">from</span> <span class="string">&#x27;./route.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> home <span class="keyword">from</span> <span class="string">&#x27;./home.js&#x27;</span></span><br><span class="line">angular.module(<span class="string">&#x27;myMod&#x27;</span>, [route, home])</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> route <span class="token keyword">from</span> <span class="token string">'./route.js'</span>
+<span class="token keyword">import</span> home <span class="token keyword">from</span> <span class="token string">'./home.js'</span>
+angular<span class="token punctuation">.</span><span class="token function">module</span><span class="token punctuation">(</span><span class="token string">'myMod'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>route<span class="token punctuation">,</span> home<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
     
     </section>
@@ -367,7 +393,7 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -384,12 +410,12 @@ Components 應該從來都不要修改自己 scope 以外的 data 或 DOM。一�
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

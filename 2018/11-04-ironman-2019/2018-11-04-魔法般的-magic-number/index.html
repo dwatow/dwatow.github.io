@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/11-04-ironman-2019/2018-11-04-魔法般的-magic-number/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶先看程式碼 這是優透的程式設計師寫的 code。[1] 看看有沒有看不懂的地方。 float Q_rsqrt( float number ) &amp;#123; 	long i; 	float x2, y; 	const float threehalfs &#x3D; 1.5F;  	x2 &#x3D; number * 0.5F; 	y  &#x3D; numb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="魔法般的 magic number">
+<meta property="og:url" content="https://dwatow.github.io/2018/11-04-ironman-2019/2018-11-04-%E9%AD%94%E6%B3%95%E8%88%AC%E7%9A%84-magic-number/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶先看程式碼 這是優透的程式設計師寫的 code。[1] 看看有沒有看不懂的地方。 float Q_rsqrt( float number ) &amp;#123; 	long i; 	float x2, y; 	const float threehalfs &#x3D; 1.5F;  	x2 &#x3D; number * 0.5F; 	y  &#x3D; numb">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://dwatow.github.io/images/emoticon/emoticon25.gif">
+<meta property="og:image" content="https://dwatow.github.io/images/emoticon/emoticon41.gif">
+<meta property="article:published_time" content="2018-11-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:37:02.804Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="magic number">
+<meta property="article:tag" content="1597463007">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dwatow.github.io/images/emoticon/emoticon25.gif">
+  <title>
+    魔法般的 magic number - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>魔法般的 magic number</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="toc-text">先看程式碼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#magic-number"><span class="toc-text">magic number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#magic-number-%E5%BC%95%E7%94%B3%E7%BE%A9"><span class="toc-text">magic number 引申義</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%A4%9A%E5%B8%B8%E8%A6%8B%EF%BC%9F"><span class="toc-text">有多常見？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E9%BA%BC%E6%A8%A3%E6%89%8D%E4%B8%8D%E7%B3%99%EF%BC%9F"><span class="toc-text">怎麼樣才不糙？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E5%AF%A6%E4%B8%96%E7%95%8C%E8%A3%A1%E7%9A%84-magic-number"><span class="toc-text">真實世界裡的 magic number</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E4%B8%B2%E4%B9%9F%E4%B8%8D%E8%A6%81-magic-string-4"><span class="toc-text">字串也不要 magic string[4]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%A4%96%E8%A9%B1-%E6%98%A8%E5%A4%A9%E5%8F%83%E5%8A%A0-%E5%A0%85%E6%8C%81%E5%9C%A8%E6%BF%81%E6%B0%B4%E6%BA%AA%E4%BB%A5%E5%8D%97%E7%9A%84-mopcon"><span class="toc-text">提外話，昨天參加 (堅持在濁水溪以南的…)MOPCON</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<h2 id="先看程式碼"><a class="header-anchor" href="#先看程式碼">¶</a>先看程式碼</h2>
+<p>這是優透的程式設計師寫的 code。[1]</p>
+<p>看看有沒有看不懂的地方。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">float</span> <span class="token function">Q_rsqrt</span><span class="token punctuation">(</span> <span class="token keyword">float</span> number <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">long</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">float</span> x2<span class="token punctuation">,</span> y<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token keyword">float</span> threehalfs <span class="token operator">=</span> <span class="token number">1.5F</span><span class="token punctuation">;</span>
+
+	x2 <span class="token operator">=</span> number <span class="token operator">*</span> <span class="token number">0.5F</span><span class="token punctuation">;</span>
+	y  <span class="token operator">=</span> number<span class="token punctuation">;</span>
+	i  <span class="token operator">=</span> <span class="token operator">*</span> <span class="token punctuation">(</span> <span class="token keyword">long</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token operator">&amp;</span>y<span class="token punctuation">;</span>                       <span class="token comment">// evil floating point bit level hacking</span>
+	i  <span class="token operator">=</span> <span class="token number">0x5f3759df</span> <span class="token operator">-</span> <span class="token punctuation">(</span> i <span class="token operator">>></span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>               <span class="token comment">// what the fuck?</span>
+	y  <span class="token operator">=</span> <span class="token operator">*</span> <span class="token punctuation">(</span> <span class="token keyword">float</span> <span class="token operator">*</span> <span class="token punctuation">)</span> <span class="token operator">&amp;</span>i<span class="token punctuation">;</span>
+	y  <span class="token operator">=</span> y <span class="token operator">*</span> <span class="token punctuation">(</span> threehalfs <span class="token operator">-</span> <span class="token punctuation">(</span> x2 <span class="token operator">*</span> y <span class="token operator">*</span> y <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 1st iteration </span>
+<span class="token comment">//      y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed</span>
+
+	<span class="token keyword">return</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="magic-number"><a class="header-anchor" href="#magic-number">¶</a>magic number</h2>
+<p>上面是一個「快速&quot;平方根倒數&quot;演算法」，用數學表示就是</p>
+<pre class="line-numbers language-none"><code class="language-none">x &#x3D;&gt; x^(-1&#x2F;2)
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>一般的寫法會這樣寫</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">1.0</span><span class="token operator">/</span><span class="token function">sqrt</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>經測試，magic number 的 code 比這段常見的 code 快4倍[2]</p>
+<p>magic number 相傳源自於「雷神之鎚 3代」的 3D繪圖引擎中，大量使用的「快速平方根倒數演算法」。裡面有使用一個 <code>0x5f3759df</code> 的數字。讓整個場景渲染的效能大增並且沒有明顯的畫質降低。<strong>彷彿魔法般沒有出現的原因。</strong> 而且起源已不可考。</p>
+<h2 id="magic-number-引申義"><a class="header-anchor" href="#magic-number-引申義">¶</a>magic number 引申義</h2>
+<p>wiki 對於 magic number 的解釋如下</p>
+<blockquote>
+<p>程式設計中所謂的魔術數字（magic number）是指寫死在程式碼裡的具體數值（如「10」「123」等以數字直接寫出的值）。雖然程式作者寫的時候自己能了解數值的意義，但對其他程式員而言，甚至製作者本人經過一段時間後，會難以了解這個數值的用途，只能苦笑諷刺「這個數值的意義雖然不懂，不過至少程式能夠執行，真是個魔術般的數字」而得名。[3]</p>
+</blockquote>
+<p>也就是「 hard-code number 這樣的行為，是必須要小心處理」的。</p>
+<h2 id="有多常見？"><a class="header-anchor" href="#有多常見？">¶</a>有多常見？</h2>
+<p>《Code complete 2/e》Ch3 變數</p>
+<p>程式教育，不自覺的教你寫了 magic number，下面這樣的程式碼，一定寫過吧？</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">switch</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">case</span> <span class="token number">12</span><span class="token operator">:</span>
+  <span class="token comment">//..</span>
+<span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">></span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>x<span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>「那怎辦？程式設計的基本，就教我寫糙 code？！」<br>
+「我知道了！寫註解！一定是這樣的！註解加上去就沒事了」</p>
+<p>再看一次上面的 magic number (也許是後來看 code 的人) 幫他加上的註解</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">i  <span class="token operator">=</span> <span class="token number">0x5f3759df</span> <span class="token operator">-</span> <span class="token punctuation">(</span> i <span class="token operator">>></span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>               <span class="token comment">// what the fuck?</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="怎麼樣才不糙？"><a class="header-anchor" href="#怎麼樣才不糙？">¶</a>怎麼樣才不糙？</h2>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>以這一段 for-loop 為例</p>
+<p>第一步、把 10 處理掉</p>
+<p>將 10 加上命名，對於整個問題的描述，是不是又增加了解問題線索？<br>
+也許，這個問題要印出所有學生的資料？</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> student_total <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> student_total<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>第二步、把 0 處理掉</p>
+<p>別忘了 0 也是 magic number ，可以的話，將它也命名吧</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> begin_cleaning_students <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> student_total <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> begin_cleaning_students<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> student_total<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>第三步、(命名狂熱者適用) 把短命名處理掉</p>
+<p>如果可以，把 i 的短命名拿掉，搭配其它的命名</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> begin_cleaning_students <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> student_total <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> index_student <span class="token operator">=</span> begin_cleaning_students<span class="token punctuation">;</span> index_student <span class="token operator">&lt;</span> student_total<span class="token punctuation">;</span> <span class="token operator">++</span>index_student<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>現在，我們對問題的全貌有更多的線索了，也許這是走訪即將負責打掃學生的清單的程式。</p>
+<h2 id="真實世界裡的-magic-number"><a class="header-anchor" href="#真實世界裡的-magic-number">¶</a>真實世界裡的 magic number</h2>
+<p>在物理學，其實也有非常多這樣的數字 (常數)。但是，再回來看看人月神話裡描述物理學厲害的原因。</p>
+<blockquote>
+<p>數學和物理學之所以能在過去三個世紀突飛猛進，就是藉由為複雜現象建立出簡單的模型 (model) ，然後從模型中推導出現象的特性，並透過實驗來驗證這些特性。<br>
+這種方式之所以行得通，是因為在模型中所排除掉的複雜性 並非現象的本質。[name=《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239]</p>
+</blockquote>
+<p>最常見的</p>
+<p>π: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9C%93%E5%91%A8%E7%8E%87">pi</a><br>
+c: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%89%E9%80%9F">光速</a><br>
+h: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%99%AE%E6%9C%97%E5%85%8B%E5%B8%B8%E6%95%B0">Planck constant</a> 不同單位，還有不同的數，甚至還有變化數<br>
+e: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/E_(%E6%95%B0%E5%AD%A6%E5%B8%B8%E6%95%B0)">Euler’s number</a><br>
+…太多太多</p>
+<p>但是，它們都有命名與由來呀。</p>
+<p>不然，<code>閱讀程式將會成為命案推理的過程</code>損失的是你我的熱情與業主的成本呀。</p>
+<h2 id="字串也不要-magic-string-4"><a class="header-anchor" href="#字串也不要-magic-string-4">¶</a>字串也不要 magic string[4]</h2>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>token <span class="token operator">=</span> <span class="token string">'bM+fWkp/v9pxqFpTwXQPDfriZRZ4lZTLEMQtFhzs55ImfU'</span><span class="token punctuation">)</span> <span class="token comment">//亂截一段無意義的內容</span>
+  <span class="token comment">//...</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>這是什麼 token ？給誰的特權？可以拿掉嗎？<br>
+可以的話，程式內的字串務必用「列舉」型別取代。<br>
+若沒有列舉，也許用物件也行。</p>
+<p>字串的直接比對，有時是會因為字元編碼有看不出來的差異。千萬要小心</p>
+<h2 id="提外話-昨天參加-堅持在濁水溪以南的-mopcon"><a class="header-anchor" href="#提外話-昨天參加-堅持在濁水溪以南的-mopcon">¶</a>提外話，昨天參加 (堅持在濁水溪以南的…)MOPCON</h2>
+<p>昨天在 <a target="_blank" rel="noopener" href="https://mopcon.org/2018/schedule.php">MOPCON</a> 中，在聽完 Akane 講完後，就跑去 BOF ，Howard 在介紹好想工作室。<br>
+正好在廣告這個系列的文章，然後 MOPCON 的工作人員 Brook 很熱情的問</p>
+<p>「請問『可不可以不要寫糙 code 』是誰寫的？」</p>
+<p>我就舉手<br>
+她說。</p>
+<p>「這個系列超讚的！我好喜歡」</p>
+<p>哇~~ 聽了我都臉紅了！<img src="/images/emoticon/emoticon25.gif" alt="/images/emoticon/emoticon25.gif">哈哈~~不過很開心就是了<br>
+沒有面對面遇過如此熱情的讀者。<br>
+這一系列，會繼續加油的！<img src="/images/emoticon/emoticon41.gif" alt="/images/emoticon/emoticon41.gif"><br>
+也請喜歡這一系列的朋友，非常歡迎留言給我。<br>
+如果有共鳴的朋友可以給我素材在留言裡。(或 mail 給我也行呀)</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: <a target="_blank" rel="noopener" href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/game/q_math.c#L552">Quake-III-Arena - Gihtub</a><br>
+[2]: <a target="_blank" rel="noopener" href="http://www.matrix67.com/blog/archives/362">舊聞一則：神秘的0x5f3759df 不可思議的Quake III源碼</a><br>
+[3]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%AD%94%E8%A1%93%E6%95%B8%E5%AD%97_(%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88)">魔術數字 (程式設計)</a><br>
+[4]: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Magic_string">Magic string</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-11-03T16:00:00.000Z" itemprop="datePublished">
+              2018-11-04
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/magic-number/">magic number</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/1597463007/">1597463007</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,11 +139,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-9-CppUnit%E8%BC%B8%E5%87%BAXml-Jenkins%E9%A1%AF%E7%A4%BAReport"><span class="toc-text">C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第一步，就是先看單元測試專案的main怎麼改[1] </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">接下來就是設定Jenkins。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">建置時要建置單元測試專案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">建置後要執行單元測試的執行檔。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">xUnitTest的plug-in要吃的，也只是xml檔。 </span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#c-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6-9-cppunit%E8%BC%B8%E5%87%BAxml-jenkins%E9%A1%AF%E7%A4%BAreport"><span class="toc-text">C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">第一步，就是先看單元測試專案的main怎麼改[1] </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">接下來就是設定Jenkins。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">建置時要建置單元測試專案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">建置後要執行單元測試的執行檔。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">xUnitTest的plug-in要吃的，也只是xml檔。 </span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="C-單元測試-9-CppUnit輸出Xml-Jenkins顯示Report"><a class="header-anchor" href="#C-單元測試-9-CppUnit輸出Xml-Jenkins顯示Report">¶</a>C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</h1>
+    <h1 id="c-單元測試-9-cppunit輸出xml-jenkins顯示report"><a class="header-anchor" href="#c-單元測試-9-cppunit輸出xml-jenkins顯示report">¶</a>C++單元測試(9) - CppUnit輸出Xml, Jenkins顯示Report</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/06/cppunitxml-jenkinsreport.html">https://darkblack01.blogspot.com/2015/06/cppunitxml-jenkinsreport.html</a><br>
 移植時的最後更新日期: 2015-12-23T14:16:57.657+08:00</p>
 <p>這次的標題，下得很「關鍵字」<br />這次的故事是這樣的，使用CppUnit單元測試框架，使用Jenkins的CI系統+xUnitTest的plug-in。<br /><br />要讓CppUnit輸出Xml，再讓xUnitTest的plug-in吃到Xml，在Jenkins上顯示。<br /><br /><h2><span style="font-size: x-large;">第一步，就是先看單元測試專案的main怎麼改[1] </span></h2><pre class="prettyprint"><code>int main()<br />&#123;<br />    CppUnit::TestResult testresult;<br />    CppUnit::TestResultCollector collectedresults;<br />    testresult.addListener (&amp;collectedresults);<br /><br />    CppUnit::TextUi::TestRunner runner;<br />    CppUnit::TestFactoryRegistry &amp;registry = CppUnit::TestFactoryRegistry::getRegistry();<br />    runner.addTest( registry.makeTest() );<br />    runner.run(testresult);<br /><br />    std::ofstream xmlFileOut(“CppUnitTestDmServerResults.xml”);<br />    CppUnit::XmlOutputter xmlOut(&amp;collectedresults, xmlFileOut);<br />    xmlOut.write();<br /><br />    return 0;<br />&#125;</code></pre><br />主要就是要讓 testresult 放進 runner.run(testresult) 參數中。<br />這樣Xml輸出就會有東西了。<br /><br /><h2><span style="font-size: x-large;">接下來就是設定Jenkins。</span></h2>Jenkins加上xUnitTest的plug-in很多文章都有寫。就不多說了。<br />進入你Job的設定裡<br />要注意的如下<br /><br /><ol><li>建置時要建置單元測試專案</li><li>建置後要執行單元測試的執行檔。(輸出xml)</li><li>xUnitTest的plug-in要吃的，也只是xml檔。</li></ol><h3><span style="font-size: large;">建置時要建置單元測試專案</span></h3><div>在Visual Studio上，就是要設定.sln檔，在某種Config時，是不是會建置呢？(要把單元測試的專案打勾唷)<br /><br /></div><h3><span style="font-size: large;">建置後要執行單元測試的執行檔。</span></h3>在Jos的建置，加上一個「執行Windows批次指令」，執行單元測試執行檔。<br />(當然如果你是Linux系統，就要加一個「執行Shell」)<br /><br /><h3><span style="font-size: large;">xUnitTest的plug-in要吃的，也只是xml檔。 </span></h3>在Jos的建置後動作，加上Publish xUnit test result report<br />在裡面再加上一個CppUnit-1.12.1 (default)<br />其中Pattern的欄位，填入單元測試專案的xml路徑檔名<br /><br />剩下的就照說明填囉~<br /><br /><br />參考資料: [1] <a target="_blank" rel="noopener" href="https://schneide.wordpress.com/2008/09/29/using-hudson-for-ccmakecppunit/">Using Hudson for C++/CMake/CppUnit - Posted by volkerkaiser</a></p>
@@ -188,7 +190,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -205,12 +207,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

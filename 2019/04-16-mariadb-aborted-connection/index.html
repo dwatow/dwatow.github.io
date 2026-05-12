@@ -72,17 +72,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -96,12 +94,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -139,25 +141,49 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mariadb-%E7%9A%84-Docker-%E5%9C%A8%E6%AF%8F%E6%AC%A1%E5%AF%AB%E5%85%A5%E6%9C%83-Aborted-connection"><span class="toc-text">Mariadb 的 Docker 在每次寫入會 Aborted connection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C%E7%92%B0%E5%A2%83"><span class="toc-text">執行環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%8C%AF%E6%8F%8F%E8%BF%B0"><span class="toc-text">出錯描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF"><span class="toc-text">錯誤訊息:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88"><span class="toc-text">解決方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%9C%AC%E5%8E%9F%E5%9B%A0"><span class="toc-text">根本原因</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mariadb-%E7%9A%84-docker-%E5%9C%A8%E6%AF%8F%E6%AC%A1%E5%AF%AB%E5%85%A5%E6%9C%83-aborted-connection"><span class="toc-text">Mariadb 的 Docker 在每次寫入會 Aborted connection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C%E7%92%B0%E5%A2%83"><span class="toc-text">執行環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%8C%AF%E6%8F%8F%E8%BF%B0"><span class="toc-text">出錯描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF"><span class="toc-text">錯誤訊息:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88"><span class="toc-text">解決方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%9C%AC%E5%8E%9F%E5%9B%A0"><span class="toc-text">根本原因</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Mariadb-的-Docker-在每次寫入會-Aborted-connection"><a class="header-anchor" href="#Mariadb-的-Docker-在每次寫入會-Aborted-connection">¶</a>Mariadb 的 Docker 在每次寫入會 Aborted connection</h1>
+    <h1 id="mariadb-的-docker-在每次寫入會-aborted-connection"><a class="header-anchor" href="#mariadb-的-docker-在每次寫入會-aborted-connection">¶</a>Mariadb 的 Docker 在每次寫入會 Aborted connection</h1>
 <h2 id="執行環境"><a class="header-anchor" href="#執行環境">¶</a>執行環境</h2>
 <p>node.js + express<br>
 pm2<br>
 docker</p>
 <h2 id="出錯描述"><a class="header-anchor" href="#出錯描述">¶</a>出錯描述</h2>
 <p>送出寫入資料庫，就出現錯誤</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): INSERT INTO (資料庫寫入指令);</span><br><span class="line">web_1    | backend-system-API-0  | POST /api/v2/daily-report/ 200 1421.081 ms - -</span><br><span class="line">web_1    | backend-system-API-0  | Executing (743fe5ec-04ba-4c3b-8f8f-6d945bba7681): COMMIT;</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959498872576 [Warning] Aborted connection 12 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959499175680 [Warning] Aborted connection 11 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br><span class="line">maria_1  | 2019-04-02  3:09:32 139959595984640 [Warning] Aborted connection 9 to db: <span class="string">&#x27;backend-system&#x27;</span> user: (帳號) host: (IP) (Got an error reading communication packets)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">web_1    <span class="token operator">|</span> backend-system-API-0  <span class="token operator">|</span> Executing <span class="token punctuation">(</span>743fe5ec-04ba-4c3b-8f8f-6d945bba7681<span class="token punctuation">)</span>: INSERT INTO <span class="token punctuation">(</span>資料庫寫入指令<span class="token punctuation">)</span><span class="token punctuation">;</span>
+web_1    <span class="token operator">|</span> backend-system-API-0  <span class="token operator">|</span> Executing <span class="token punctuation">(</span>743fe5ec-04ba-4c3b-8f8f-6d945bba7681<span class="token punctuation">)</span>: INSERT INTO <span class="token punctuation">(</span>資料庫寫入指令<span class="token punctuation">)</span><span class="token punctuation">;</span>
+web_1    <span class="token operator">|</span> backend-system-API-0  <span class="token operator">|</span> POST /api/v2/daily-report/ <span class="token number">200</span> <span class="token number">1421.081</span> ms - -
+web_1    <span class="token operator">|</span> backend-system-API-0  <span class="token operator">|</span> Executing <span class="token punctuation">(</span>743fe5ec-04ba-4c3b-8f8f-6d945bba7681<span class="token punctuation">)</span>: COMMIT<span class="token punctuation">;</span>
+maria_1  <span class="token operator">|</span> <span class="token number">2019</span>-04-02  <span class="token number">3</span>:09:32 <span class="token number">139959498872576</span> <span class="token punctuation">[</span>Warning<span class="token punctuation">]</span> Aborted connection <span class="token number">12</span> to db: <span class="token string">'backend-system'</span> user: <span class="token punctuation">(</span>帳號<span class="token punctuation">)</span> host: <span class="token punctuation">(</span>IP<span class="token punctuation">)</span> <span class="token punctuation">(</span>Got an error reading communication packets<span class="token punctuation">)</span>
+maria_1  <span class="token operator">|</span> <span class="token number">2019</span>-04-02  <span class="token number">3</span>:09:32 <span class="token number">139959499175680</span> <span class="token punctuation">[</span>Warning<span class="token punctuation">]</span> Aborted connection <span class="token number">11</span> to db: <span class="token string">'backend-system'</span> user: <span class="token punctuation">(</span>帳號<span class="token punctuation">)</span> host: <span class="token punctuation">(</span>IP<span class="token punctuation">)</span> <span class="token punctuation">(</span>Got an error reading communication packets<span class="token punctuation">)</span>
+maria_1  <span class="token operator">|</span> <span class="token number">2019</span>-04-02  <span class="token number">3</span>:09:32 <span class="token number">139959595984640</span> <span class="token punctuation">[</span>Warning<span class="token punctuation">]</span> Aborted connection <span class="token number">9</span> to db: <span class="token string">'backend-system'</span> user: <span class="token punctuation">(</span>帳號<span class="token punctuation">)</span> host: <span class="token punctuation">(</span>IP<span class="token punctuation">)</span> <span class="token punctuation">(</span>Got an error reading communication packets<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="錯誤訊息"><a class="header-anchor" href="#錯誤訊息">¶</a>錯誤訊息:</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Aborted connection 12 to db</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Aborted connection <span class="token number">12</span> to db<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="解決方案"><a class="header-anchor" href="#解決方案">¶</a>解決方案</h2>
 <p>在 <strong>ecosystem.config.js</strong> 加這行</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ignore_watch: [<span class="string">&#x27;node_modules&#x27;</span>, <span class="string">&#x27;db&#x27;</span>],</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'node_modules'</span><span class="token punctuation">,</span> <span class="token string">'db'</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>整個檔案</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Application configuration section</span></span><br><span class="line"><span class="comment">   * http://pm2.keymetrics.io/docs/usage/application-declaration/</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  apps: [</span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">&quot;backend-system-API&quot;</span>,</span><br><span class="line">      script: <span class="string">&quot;bin/www&quot;</span>,</span><br><span class="line">      max_restarts: <span class="number">1</span>,</span><br><span class="line">      autorestart: <span class="literal">false</span>,</span><br><span class="line">      watch: <span class="literal">true</span>,</span><br><span class="line">      ignore_watch: [<span class="string">&quot;node_modules&quot;</span>, <span class="string">&quot;db&quot;</span>],</span><br><span class="line">      env: &#123;</span><br><span class="line">        NODE_PATH: <span class="string">&quot;.&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">/**
+   * Application configuration section
+   * http://pm2.keymetrics.io/docs/usage/application-declaration/
+   */</span>
+  <span class="token literal-property property">apps</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"backend-system-API"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">script</span><span class="token operator">:</span> <span class="token string">"bin/www"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">max_restarts</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">autorestart</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">watch</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">ignore_watch</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"node_modules"</span><span class="token punctuation">,</span> <span class="token string">"db"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">env</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token constant">NODE_PATH</span><span class="token operator">:</span> <span class="token string">"."</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="根本原因"><a class="header-anchor" href="#根本原因">¶</a>根本原因</h2>
 <p>db 資料夾，在 <code>INSERT</code> 時會自動更新<br>
 所以 pm2 就自動啟動了，造成出錯。</p>
@@ -217,7 +243,7 @@ docker</p>
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -234,12 +260,12 @@ docker</p>
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

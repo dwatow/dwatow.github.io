@@ -69,17 +69,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -93,12 +91,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -136,31 +138,51 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vue-Component-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8-v-model"><span class="toc-text">Vue Component 也可以用 v-model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90-v-model"><span class="toc-text">解析 v-model</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vue-component-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%94%A8-v-model"><span class="toc-text">Vue Component 也可以用 v-model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90-v-model"><span class="toc-text">解析 v-model</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Vue-Component-也可以用-v-model"><a class="header-anchor" href="#Vue-Component-也可以用-v-model">¶</a>Vue Component 也可以用 v-model</h1>
+    <h1 id="vue-component-也可以用-v-model"><a class="header-anchor" href="#vue-component-也可以用-v-model">¶</a>Vue Component 也可以用 v-model</h1>
 <p>前端框架的演進中，雙向綁定的設計是方便而不良的設計，像是 angular2 和 vue2 都已經拿掉了雙向綁定的設定。<br>
 而在 vue2 裡有 <code>v-model</code> 其實是一種用單向綁定與事件而實現的雙向綁定語法。</p>
 <p>又要如何實作，才可以讓 <code>v-model</code> 作用在自己設計的 component 呢？</p>
 <h2 id="解析-v-model"><a class="header-anchor" href="#解析-v-model">¶</a>解析 <code>v-model</code></h2>
 <p>先知道</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">v-model</span>=<span class="string">&quot;parentData&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其實是</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">&quot;parentData&quot;</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">&quot;parentData = $event.target.value&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData<span class="token punctuation">"</span></span>
+       <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData = $event.target.value<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>所以，也是有可能可以設計一個可化用 <code>v-model</code> 的 component</p>
 <p><strong>parents</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">my-component</span> <span class="attr">v-model</span>=<span class="string">&quot;parentData&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">my-component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">&#x27;./myComponent.vue&#x27;</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line">      data () &#123;</span><br><span class="line"><span class="javascript">          parentData: <span class="string">&#x27;&#x27;</span></span></span><br><span class="line">      &#125;,</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>my-component</span> <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>my-component</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+    <span class="token keyword">import</span> myComponent <span class="token keyword">from</span> <span class="token string">'./myComponent.vue'</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          <span class="token literal-property property">parentData</span><span class="token operator">:</span> <span class="token string">''</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>child</strong></p>
 <p>對照 parent 的真實面貌</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">&quot;parentData&quot;</span></span></span><br><span class="line"><span class="tag">       @<span class="attr">input</span>=<span class="string">&quot;parentData = $event.target.value&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData<span class="token punctuation">"</span></span>
+       <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>parentData = $event.target.value<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>component 的實作</p>
 <ul>
 <li><code>:value</code> 在 component 裡要 <code>props</code></li>
 <li><code>@input</code> 在 component 裡要 <code>$emit</code></li>
 </ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">&quot;$emit(&#x27;input&#x27;, retuanValue)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">&#x27;./myComponent.vue&#x27;</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">        props: [<span class="string">&#x27;value&#x27;</span>],</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('input', retuanValue)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+    <span class="token keyword">import</span> myComponent <span class="token keyword">from</span> <span class="token string">'./myComponent.vue'</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'value'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
     
     </section>
@@ -200,7 +222,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -217,12 +239,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

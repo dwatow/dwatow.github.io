@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,11 +139,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Iverilog-Gtkwave-Notepad-%E7%9A%84verilog%E7%92%B0%E5%A2%83"><span class="toc-text">Iverilog + Gtkwave + Notepad++的verilog環境</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iverilog-gtkwave-notepad-%E7%9A%84verilog%E7%92%B0%E5%A2%83"><span class="toc-text">Iverilog + Gtkwave + Notepad++的verilog環境</span></a></li></ol>
   </div>
 
 
-    <h1 id="Iverilog-Gtkwave-Notepad-的verilog環境"><a class="header-anchor" href="#Iverilog-Gtkwave-Notepad-的verilog環境">¶</a>Iverilog + Gtkwave + Notepad++的verilog環境</h1>
+    <h1 id="iverilog-gtkwave-notepad-的verilog環境"><a class="header-anchor" href="#iverilog-gtkwave-notepad-的verilog環境">¶</a>Iverilog + Gtkwave + Notepad++的verilog環境</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/10/iverilog-gtkwave-notepadverilog.html">https://darkblack01.blogspot.com/2012/10/iverilog-gtkwave-notepadverilog.html</a><br>
 移植時的最後更新日期: 2012-10-09T11:25:14.422+08:00</p>
 <p>之前是用Xilinx或Altera的FPGA合成verilog<br />最近，和朋友交流，發現Linux的用法，在windows上的樣子就像這次要講的一樣<br />也就是這樣的組合可以讓你在windows體會一下linux的應用程式都怎麼使用。<br /><br />另外，iverilog是Icarus Verilog的縮寫。<br /><br />本文會提供一個sample code、指令<br />只要照著做，就可以建立這樣環境。<br /><br /><a name='more'></a><br /><br />首先下載這些軟體<br /><a href="http://notepad-plus-plus.org/" target="_blank">Notepad++</a><br /><a href="http://bleyer.org/icarus/" target="_blank">iverilog</a><br /><br />都安裝好之後，在Notepad<ins>開新文件，並且直接開始寫verilog<br /><div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://4.bp.blogspot.com/-pjZ6XmVFCYs/UHOZD6OD_ZI/AAAAAAAAEZM/gMlPyvGGZoI/s1600/iverilog+in+Npp.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-pjZ6XmVFCYs/UHOZD6OD_ZI/AAAAAAAAEZM/gMlPyvGGZoI/s1600/iverilog+in+Npp.png" /></a></div><br />Sample Code:<br /><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//abc.v">//abc.v</a><br />module abc(iclk, irst, ocnt);<br /><br />input iclk, irst;<br />output [3:0] ocnt;<br />reg    [3:0] ocnt;<br /><br />always@(posedge iclk, posedge irst)<br />begin<br />    if (irst)<br />        ocnt &lt;= 0;<br />    else<br />        ocnt &lt;= ocnt + 1;<br />end<br />endmodule<br /></code></pre><pre class="prettyprint"><code><a target="_blank" rel="noopener" href="//abcTB.v">//abcTB.v</a> is a testbench of abc.v<br />module abcTB();<br /><br />reg clk, rst;<br />wire [3:0] cnt;<br /><br />initial begin<br /> clk = 0;<br /> rst = 0;<br /> #10 rst = 1;<br /> #10 rst = 0;<br />end<br /><br />always #10 clk = ~clk;<br /><br />abc g(clk, rst, cnt);<br /><br />initial<br />begin<br />    $dumpfile(“abc.vcd”);<br />    $dumpvars;<br />end<br /><br />endmodule<br /></code></pre>在abcTB.v上面加上`include “abc.v”;<br /><br />在Notepad</ins>的「外掛模組」→「Plugin Manager」裡新增一個叫NppExec<br /><br />重開Notepad++，可以在「外掛模組」找到NppExec。<br /><br />在Notepad++<br />「外掛模組」→「NppExec」→「Follow $(CURRENT_DIRECTORY)」，打勾。<br />「外掛模組」→「NppExec」→「Show Console Dialog」<br /><br />在下面會出現console<br />輸入指令<br /><span style="font-family: Courier New, Courier, monospace;">iverilog abcTB.v</span><br />可以compiler.v檔。並且生成abc.vcd，另外a.out是預設檔名的輸出檔（不知道其作用！XD）。<br /><br />輸入指令<br /><span style="font-family: Courier New, Courier, monospace;">cmd</span><br />進入cmd模式<br /><br />輸入指令<br /><span style="font-family: Courier New, Courier, monospace;">gtkwave abc.vcd</span><br /><br />就可以看見波形的tool了<br />左下角的腳位全選按「Append」，再按上面的箭頭就可以看見波形了。<br /><br /></p>
@@ -180,7 +182,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -197,12 +199,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

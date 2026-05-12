@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/11-13-ironman-2019/2018-11-13-軟體架構的-top-down-bottom-up/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。   先說: Top down 和 Bottom up 是兩者都會交叉使用的設計方式。 由上而下的設計是從高度抽象層開始 由下而上的設計，從細節開始 開發心智模式 ≠ 使用者心智模式  由上而下與由下而上各有各自的譬諭方式(抽象)與術語使用。 ¶由上而下 (Top down)  人腦同一時間只能專注在特定範圍的細節，過多的細節會被分類">
+<meta property="og:type" content="article">
+<meta property="og:title" content="軟體架構的 Top down &amp; Bottom up">
+<meta property="og:url" content="https://dwatow.github.io/2018/11-13-ironman-2019/2018-11-13-%E8%BB%9F%E9%AB%94%E6%9E%B6%E6%A7%8B%E7%9A%84-top-down-bottom-up/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。   先說: Top down 和 Bottom up 是兩者都會交叉使用的設計方式。 由上而下的設計是從高度抽象層開始 由下而上的設計，從細節開始 開發心智模式 ≠ 使用者心智模式  由上而下與由下而上各有各自的譬諭方式(抽象)與術語使用。 ¶由上而下 (Top down)  人腦同一時間只能專注在特定範圍的細節，過多的細節會被分類">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/eLkLGcR.jpg">
+<meta property="article:published_time" content="2018-11-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:37:16.654Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="系統架構">
+<meta property="article:tag" content="botton up">
+<meta property="article:tag" content="top down">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/eLkLGcR.jpg">
+  <title>
+    軟體架構的 Top down &amp; Bottom up - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>軟體架構的 Top down &amp; Bottom up</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B1%E4%B8%8A%E8%80%8C%E4%B8%8B-top-down"><span class="toc-text">由上而下 (Top down)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E8%A8%8A%E6%9E%B6%E6%A7%8B%E5%AD%B8"><span class="toc-text">資訊架構學</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#solution-domain-3"><span class="toc-text">solution domain[3]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B1%E4%B8%8B%E8%80%8C%E4%B8%8A-bottom-up"><span class="toc-text">由下而上 (Bottom up)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E8%A8%8A%E6%9E%B6%E6%A7%8B%E5%AD%B8-v2"><span class="toc-text">資訊架構學</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-domain-3"><span class="toc-text">problem domain[3]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5-web-back-end-%E7%82%BA%E4%BE%8B"><span class="toc-text">以 Web back-end 為例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E6%AD%A3%E5%AF%AB%E7%A8%8B%E5%BC%8F%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="toc-text">真正寫程式的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p><img src="https://i.imgur.com/eLkLGcR.jpg" alt=""></p>
+<p>先說: Top down 和 Bottom up 是兩者都會交叉使用的設計方式。</p>
+<p>由上而下的設計是從高度抽象層開始<br>
+由下而上的設計，從細節開始</p>
+<pre class="line-numbers language-none"><code class="language-none">開發心智模式 ≠ 使用者心智模式
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>由上而下與由下而上各有各自的譬諭方式(抽象)與術語使用。</p>
+<h2 id="由上而下-top-down"><a class="header-anchor" href="#由上而下-top-down">¶</a>由上而下 (Top down)</h2>
+<blockquote>
+<p>人腦同一時間只能專注在特定範圍的細節，過多的細節會被分類或分解成多層次。[1]</p>
+</blockquote>
+<p>要程式碼無法成為友善的知識記錄的載具，原因也是因為這一段是使用者不熟悉的，直接閱讀不只是英文，而是充滿一堆譬諭或術語。</p>
+<h3 id="資訊架構學"><a class="header-anchor" href="#資訊架構學">¶</a>資訊架構學</h3>
+<p>而很巧的是，這個角度在 UX/UI 領域的書[2]也有介紹，由上而下，將是設計一個網站的全域導覽、輔助導覽…等，提供使用者一個資訊空間，讓使用者了解自己身處空間的何處，並且前往哪裡可以找到想找到的內容。</p>
+<p>其實道理和開發者追縱原始碼是一樣的，從「由上而下」的這個設計，也許是一個框架開始，追縱每一個使用者互動，或者每一個網路請求為起點，了解接下來會發生的事會是什麼範圍的程式碼，若出錯了也了解哪個範圍的程式碼需要修改，好的框架使用，會帶領你前往出錯的地方，也會保證不會出錯的範圍。</p>
+<p>簡單的說<br>
+對使用者的 UX/UI 要「以使用者友善」的角度切入設計概念模型。<br>
+對開發者的程式碼安排，要「以<code>開發者</code>友善」的角度切入整個專案原始碼，一樣要設計概念模型。</p>
+<h3 id="solution-domain-3"><a class="header-anchor" href="#solution-domain-3">¶</a>solution domain[3]</h3>
+<p>由上而下寫的是 solution domain 的 code，有時會是以特定框架 (前後端框架)、Design Pattern (微架構) 組合、者某種重複的程式 (middleware) 和程式進入點 (像是 event 或 API) 的角度開始了解程式。而且，優良的由上而下設計，可以提供開發者一個概念模型，讓開發者可以用一種熟悉的概念快速上手整個程式的運作。</p>
+<h2 id="由下而上-bottom-up"><a class="header-anchor" href="#由下而上-bottom-up">¶</a>由下而上 (Bottom up)</h2>
+<p>由下而上，往往要做的是</p>
+<ol>
+<li>定義主要角色</li>
+<li>封裝複雜度，將所謂的「底層」的複雜封裝起來</li>
+</ol>
+<p>呼應到《沒有銀彈》的隱藏複雜度與借鏡物理學進步的原因。</p>
+<blockquote>
+<p>數學和物理學之所以能在過去三個世紀突飛猛進，就是藉由為複雜現象建立出簡單的模型 (model) ，然後從模型中推導出現象的特性，並透過實驗來驗證這些特性。<br>
+這種方式之所以行得通，是因為在模型中所排除掉的複雜性 並非現象的本質。[4]</p>
+</blockquote>
+<h3 id="資訊架構學-v2"><a class="header-anchor" href="#資訊架構學-v2">¶</a>資訊架構學</h3>
+<p>一樣很巧的是，這個角度在 UX/UI 領域的書[2]也有介紹，由下而上，將是盤點整個網站的內容，並且將其分類與整理在一個表格上，每個內容要怎麼呈現尚未決定，但是會先知道網站可以提供的內容有哪些，可以弄成一覽表最好。</p>
+<p>這個道理，其實也和開發者會將「即將解決的問題」寫成各種 Class 和 Methods 歸納得好好的就是良好的由下而上的設計，將問題內會需要表達的主詞先找到都做成 Class 就是優良的設計。</p>
+<h3 id="problem-domain-3"><a class="header-anchor" href="#problem-domain-3">¶</a>problem domain[3]</h3>
+<p>在此的重點「<code>要以使用者熟悉</code>」的角度切入整個專案原始碼。使用用的是使用者熟悉的字彙與術語，要將程式碼寫得像是在「操作真實世界的事物」般，可以感覺到愈寫愈清楚專案在做什麼。(這是真的)</p>
+<p>由下而上在於描述 problem domain 內容的 code。往往在這一段，糙 code 來自於不夠深入了解問題核心而隨意命名或者不知道邏輯分類，也因為不了解問題真實面貌，造成耦合性與內聚性安排不恰當。</p>
+<p>盤點你要解決的問題中，有幾個名詞，將它們整理成心智圖，並且將它們所屬的動詞都建成相關的抽象資料型別。再將心智圖整理成 Class Diagram ，目前處理的問題中會需要設計什麼樣的類別，誰與誰可以共用，漸漸的就會在這個地方，再次使用上 Design Pattern 也說不定呢。<br>
+經過較為仔細的設計流程，就比較不會在架構設計上出現糙 code 。之後再重構時也會比較有架構</p>
+<h2 id="以-web-back-end-為例"><a class="header-anchor" href="#以-web-back-end-為例">¶</a>以 Web back-end 為例</h2>
+<p>後端框架其實很容易理解，兩個主詞: API 和 資料表。</p>
+<p><strong>由上而下的設計</strong></p>
+<p>回答這些問題</p>
+<ol>
+<li>API 是誰？</li>
+<li>API 怎麼觸發？</li>
+<li>API 會做什麼事？</li>
+</ol>
+<p>相信每一個寫過後端的工程師，每天都在回答過這三個問題。<br>
+而且，共同的語言會這麼問</p>
+<ol>
+<li>這個 controller 叫什麼名字？(函數命名)</li>
+<li>這個 controller 由哪些 route 觸發？</li>
+<li>這個 controller 做了什麼</li>
+</ol>
+<p>其中，「這個 controller 做了什麼」的問題可以透過上次有寫過的重點「邏輯分類」，讓邏輯再被分解成多層次。甚至分到由下而上的層次。</p>
+<p>簡單的說，由上而下所寫的程式碼，往往是 solution domain 的 code。</p>
+<p><strong>由下而上的設計</strong></p>
+<p>回答這些問題</p>
+<ol>
+<li>有哪些資料要操作？(抽象資料，不是基本型別)</li>
+<li>這些抽象資料在什麼情況之下要做事？</li>
+<li>這些抽象資料要做什麼事？</li>
+</ol>
+<p>相信每一個寫過後端的工程師，每天都在回答過這三個問題。<br>
+而且，共同的語言會這麼問</p>
+<ol>
+<li>這個 model 叫什麼名字？(資料表或演算法命名)</li>
+<li>這個 model 在哪些 controller 觸發？</li>
+<li>這個 model 做了什麼？</li>
+</ol>
+<p>是不是有 <code>一個 model 可以是很多種實體</code> 的 case ，透過一個欄位的 type 可以切換呢？model 彼此之間是不是有什麼特別的關係？(除了關聯式資料表上的關係之外)</p>
+<p><strong>在這要特別提到</strong></p>
+<p>「將 table 裡的資料 query 出來」應該屬於 model 的 constructor 或 getter，而不屬於放在 controller 上的 code。</p>
+<p>原因在於要設計 <code>最小條件搜尋唯一值</code> 或 <code>最小條件搜尋列表</code>，這在整個專案中是永遠不變 (也許會增減)，而且是依照不同 table 的命名而所有不同的。(不是每個 table 都會設計垃圾筒機制，改變 enable 欄位的 boolean 值)</p>
+<h2 id="真正寫程式的地方"><a class="header-anchor" href="#真正寫程式的地方">¶</a>真正寫程式的地方</h2>
+<p>對於 UX/UI 的領域，是使用者工作會用到的範圍。而對開發者來說，意思是「真正寫程式的地方」，要考慮的是在框架中的哪裡呼叫什麼 Object.Methods 然後再寫一些邏輯判斷。</p>
+<p>由下而上提供的 function 是不是有非同步？需要在這裡寫重複使用的程式碼，再互相呼叫嗎？(有點像是 Vux 的 Action)</p>
+<p>優良的程式碼，在這一層會很薄。幾乎就只是在串接框架和內容之間。沒有寫什麼太多的 code。若有太多的邏輯與複雜的判斷，要嘛屬於框架，要嘛屬於內容。也就是說，如果你的邏輯沒有歸納到這兩層，也許就是糙 code。程式設計就是不斷的增厚框架的應用，不斷的豐富內容的抽象資料型別。然後再框架呼叫抽象資料型別。</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: 《Code Complete 2/e》Ch5<br>
+[2]: 《資訊架構學 4/e》第十三章 設計與文件<br>
+[3]: <a target="_blank" rel="noopener" href="http://teddy-chen-tw.blogspot.com/2010/04/problem-domain-vs-solution-domain.html">Problem Domain vs. Solution Domain</a><br>
+[4]: 《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-11-12T16:00:00.000Z" itemprop="datePublished">
+              2018-11-13
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/">系統架構</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/botton-up/">botton up</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/top-down/">top down</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

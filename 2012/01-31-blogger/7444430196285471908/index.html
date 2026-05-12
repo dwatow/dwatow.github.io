@@ -68,17 +68,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -92,12 +90,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -135,11 +137,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MFC%E6%AA%94%E6%A1%88%E8%AE%80%E5%AF%AB%E3%80%81%E7%9B%B8%E5%B0%8D%E6%87%89%E7%9A%84%E4%BE%8B%E5%A4%96%E8%99%95%E7%90%86"><span class="toc-text">MFC檔案讀寫、相對應的例外處理</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mfc%E6%AA%94%E6%A1%88%E8%AE%80%E5%AF%AB-%E7%9B%B8%E5%B0%8D%E6%87%89%E7%9A%84%E4%BE%8B%E5%A4%96%E8%99%95%E7%90%86"><span class="toc-text">MFC檔案讀寫、相對應的例外處理</span></a></li></ol>
   </div>
 
 
-    <h1 id="MFC檔案讀寫、相對應的例外處理"><a class="header-anchor" href="#MFC檔案讀寫、相對應的例外處理">¶</a>MFC檔案讀寫、相對應的例外處理</h1>
+    <h1 id="mfc檔案讀寫-相對應的例外處理"><a class="header-anchor" href="#mfc檔案讀寫-相對應的例外處理">¶</a>MFC檔案讀寫、相對應的例外處理</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/01/cfile-cmemfile-csharefile.html">https://darkblack01.blogspot.com/2012/01/cfile-cmemfile-csharefile.html</a><br>
 移植時的最後更新日期: 2012-02-01T08:56:42.091+08:00</p>
 <p><span style="font-family: Verdana, sans-serif;"><b>檔案讀寫類別</b></span><br /><br /><span style="font-family: Verdana, sans-serif;"><b>CFile</b></span><br /><span style="font-family: Verdana, sans-serif;">├<b>CMemFile　好的執行效能</b></span><br /><span style="font-family: Verdana, sans-serif;">│└<b>CShareFile　記憶體中，可以共享檔案</b></span><br /><span style="font-family: Verdana, sans-serif;">├COleStreamFile</span><br /><span style="font-family: Verdana, sans-serif;">│└ CMonikerFile</span><br /><span style="font-family: Verdana, sans-serif;">│　└ CAsyncMonikerFile</span><br /><span style="font-family: Verdana, sans-serif;">│　　└ CDataPathProperty</span><br /><span style="font-family: Verdana, sans-serif;">│　　　└ CCachedDataPathProperty</span><br /><span style="font-family: Verdana, sans-serif;">├CScoketFile</span><br /><span style="font-family: Verdana, sans-serif;">└<b>CStdioFile　有緩衝區　標準輸出入檔案</b></span><br /><span style="font-family: Verdana, sans-serif;">　└CInternetFile</span><br /><span style="font-family: Verdana, sans-serif;">　　├CGopherfile</span><br /><span style="font-family: Verdana, sans-serif;">　　└CHttpFile</span><br /><br /><a name='more'></a><br /><br /><span style="font-family: Verdana, sans-serif;">CFile</span><br /><span style="font-family: Verdana, sans-serif;">是否新建檔案，開&amp;讀舊檔，唯讀寫，禁止共享（讀或寫）</span><br /><span style="font-family: Verdana, sans-serif;">（使用Win32API）</span><br /><span style="font-family: Verdana, sans-serif;"></span><br /><span style="font-family: Verdana, sans-serif;">CStdioFile</span><span style="font-family: Verdana, sans-serif;">可指定文字模式、二進位模式開檔</span><br /><span style="font-family: Verdana, sans-serif;">（使用C語言函式）</span><br /><span style="font-family: Verdana, sans-serif;"></span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">讀取的資料量   CStdioFile.<b>Read</b>(指標 讀取資料的記憶體位址, UINT 欲讀取的資料量);</span><br /><br /><br /><span style="font-family: Verdana, sans-serif;">StringRead()的用法類似Read()</span><br /><span style="font-family: Verdana, sans-serif;">除了：</span><br /><span style="font-family: Verdana, sans-serif;">1. 讀取到’\n’結束。</span><br /><span style="font-family: Verdana, sans-serif;">2. 輸出結束自動加上null。</span><br /><span style="font-family: Verdana, sans-serif;">3. 會「回傳（讀取的）記憶體位址」，若讀不到東西回傳null。</span><br /><br /><span style="color: #0b5394;">讀取資料的記憶體位址   CStdioFile.<b>StringRead</b>(指標 讀取資料的記憶體位址 , UINT 欲讀取的資料量);</span><br /><br /><span style="color: #0b5394;">BOOL   CStdioFile.<b>StringRead</b>(CString&amp;);</span><br /><br /><br /><br /><span style="font-family: Verdana, sans-serif;"><b>檔案的例外處理類別</b></span><br /><br /><span style="font-family: Verdana, sans-serif;">CException</span><br /><span style="font-family: Verdana, sans-serif;">└<b>CFileException</b></span><br /><br /><span style="font-family: Verdana, sans-serif;">例外處理範例：</span><br /><br /><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;"><b>try</b></span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">{</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    <b>CFile </b>MyFile(“MyFile.old”, CFile::modeRead);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">}</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;"><b>catch</b>(<b>CFileException </b>*fx)</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">{</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    <b>TCHAR </b>buf[255];</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    fx-&gt;GetErrorMessage(buf, 255);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    <b>CString </b>strPrompt(buf);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    AfxMessageBox(strPrompt);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">}</span><br /><br /><span style="font-family: Verdana, sans-serif;">或者</span><br /><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;"><b>CFile </b>MyFile;</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;"><b>CFileException </b>fx;</span><br /><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">if(!MyFile.Open(“Myfile.old”, CFile::modeRead, &amp;fx))</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">{</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    <b>TCHAR </b>buf[255];</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    fx.GetErrorMessage(buf, 255);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    <b>CString </b>strPrompt(buf);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">    AfxMessageBox(strPrompt);</span><br /><span style="color: #0b5394; font-family: Verdana, sans-serif;">}</span></p>
@@ -178,7 +180,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -195,12 +197,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

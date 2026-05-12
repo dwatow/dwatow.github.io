@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-19-ironman-2019/2018-10-19-糙-code-與他們的產地-if-的判斷式/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  Linus Torvalds 生生 在 TED 的分享中[1] 提到了對於程式碼品味的事。在此節錄一段較關鍵的內容  It does not have the if statement. And it doesn’t really matter – I don’t want you understand why it doesn’">
+<meta property="og:type" content="article">
+<meta property="og:title" content="糙 code 與他們的產地 - if 的判斷式">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-19-ironman-2019/2018-10-19-%E7%B3%99-code-%E8%88%87%E4%BB%96%E5%80%91%E7%9A%84%E7%94%A2%E5%9C%B0-if-%E7%9A%84%E5%88%A4%E6%96%B7%E5%BC%8F/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  Linus Torvalds 生生 在 TED 的分享中[1] 提到了對於程式碼品味的事。在此節錄一段較關鍵的內容  It does not have the if statement. And it doesn’t really matter – I don’t want you understand why it doesn’">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/JlSXDt2.png">
+<meta property="og:image" content="https://i.imgur.com/9LiEP9N.png">
+<meta property="article:published_time" content="2018-10-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:37.252Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="if">
+<meta property="article:tag" content="float">
+<meta property="article:tag" content="ieee754">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/JlSXDt2.png">
+  <title>
+    糙 code 與他們的產地 - if 的判斷式 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>糙 code 與他們的產地 - if 的判斷式</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E6%B8%9B%E5%B0%91%E4%BD%BF%E7%94%A8-if"><span class="toc-text">物件導向減少使用 if</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#array-%E5%8E%BB%E6%8E%89%E9%87%8D%E8%A4%87%E5%80%BC"><span class="toc-text">Array 去掉重複值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A4%87%E9%9B%9C%E7%9A%84%E9%82%8F%E8%BC%AF"><span class="toc-text">複雜的邏輯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#de-morgan-s-laws-%E7%AC%9B%E6%91%A9%E6%A0%B9%E5%AE%9A%E7%90%86-3"><span class="toc-text">De Morgan’s laws (笛摩根定理)[3]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#if-%E8%A3%A1%E7%9A%84-float-%E8%A6%81%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%B7"><span class="toc-text">if 裡的 float 要如何判斷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p>Linus Torvalds 生生 在 TED 的分享中[1] 提到了對於程式碼品味的事。在此節錄一段較關鍵的內容</p>
+<blockquote>
+<p>It does not have the if statement. And it doesn’t really matter – I don’t want you understand why it doesn’t have the if statement, but I want you to understand that sometimes you can see a problem in a different way and rewrite it so that a special case goes away and becomes the normal case. And that’s good code. But this is simple code. This is CS 101. This is not important – although, details are important.[name=Linus, 15:34, TED]</p>
+</blockquote>
+<p>簡單的說，if 是「糙點發生的出發點」。</p>
+<p>好的工程師，會懂得到很多個需求中，找出一致的邏輯。<br>
+但是，這完全取決於「整體概念性」，而不只整理語法的結果。</p>
+<h2 id="物件導向減少使用-if"><a class="header-anchor" href="#物件導向減少使用-if">¶</a>物件導向減少使用 if</h2>
+<p>用一個物件導向的例子來說明吧。</p>
+<p>這是一個偵測器，量測 <code>Lv</code> 值，所以只有 get 各種的值</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> sensor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sensor</span><span class="token punctuation">(</span><span class="token string">"simulation"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Lv <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">Lv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> x  <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">x</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> y  <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">y</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是，這看似平靜的使用方式，其實每一個實作裡充滿的糙 code 呀!!</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">Sensor</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token parameter">mode</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>mode <span class="token operator">=</span> mode<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">Lv</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mode <span class="token operator">==</span> <span class="token string">'simulation'</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_Lv<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">x</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mode <span class="token operator">==</span> <span class="token string">'simulation'</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_x<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">y</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mode <span class="token operator">==</span> <span class="token string">'simulation'</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_y<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看到了滿滿的 <code>if</code> 了嗎？</p>
+<p>是不是會有漏寫的？寫反寫錯，如果模式很多是不是會亂掉，不照順序寫會不會更糙？</p>
+<p><strong>如何降低糙點？</strong></p>
+<p>建立一個 simSensor 和 realSensor 並且繼承 Sensor 這個基礎類別。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">simSensor</span> <span class="token keyword">extends</span> <span class="token class-name">Sensor</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">get</span> <span class="token function">Lv</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">x</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">y</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">class</span> <span class="token class-name">realSensor</span> <span class="token keyword">extends</span> <span class="token class-name">Sensor</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">get</span> <span class="token function">Lv</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span>_Lv<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">x</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span>_x<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token keyword">get</span> <span class="token function">y</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span>_y<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用上只有改變一點點</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// const sensor = new Sensor("simulation");</span>
+<span class="token comment">// 改成下面這樣寫</span>
+<span class="token keyword">const</span> sensor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">simSensor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// const sensor = new realSensor();</span>
+<span class="token keyword">const</span> Lv <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">Lv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> x  <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">x</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> y  <span class="token operator">=</span> sensor<span class="token punctuation">.</span><span class="token function">y</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣是不是維護起來舒適多了呢？</p>
+<h2 id="array-去掉重複值"><a class="header-anchor" href="#array-去掉重複值">¶</a>Array 去掉重複值</h2>
+<p>在處理 Array 元素重複問題時，常常會寫 if 並且走訪元素找重複。<br>
+好一點的，會使用 <code>Array.prototype.includes</code></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> arr2 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+arr<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>arr2<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    arr2<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+arr2  <span class="token comment">// [1, 2, 3, 4, 5]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是，這很糙!!!<br>
+其實，只要換容器，就可以輕鬆做到這件事。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
+<span class="token keyword">var</span> arr2 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment">// [1, 2, 3, 4, 5]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>你看！沒有任何的 <code>if</code> 這樣的品味才對</p>
+<h2 id="複雜的邏輯"><a class="header-anchor" href="#複雜的邏輯">¶</a>複雜的邏輯</h2>
+<p>在看下一段的解釋之前，先看看這一段 code</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// origList = []</span>
+query <span class="token operator">=</span> origList<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> 
+  <span class="token punctuation">(</span>id<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>id<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+  <span class="token punctuation">(</span>name<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>name <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">||</span> 
+  <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>englishName <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>englishName<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>偷瞄到了嗎？看不懂再移動視線到上面看看這段 code 吧！</p>
+<p>解釋解釋這段在寫什麼鬼條件。</p>
+<p>它原本不是 js 的程式，為了避免侵權的問題，在此改寫成 js 的 code。<br>
+不影響它的糙點！</p>
+<p>這是一個，畫面要做 filter 的例子。</p>
+<p>使用方式:</p>
+<ul>
+<li>要先勾選要過濾的欄位，再填上關鍵字</li>
+<li>有 id, name, englishName 要過濾</li>
+</ul>
+<p>發現，這麼複雜的邏輯一次曝露出太多的「程式細節」了。<br>
+有時，我們只是想知道，它考慮某個條件的邏輯是如何如何，或者想知道有沒有考慮某個條件。</p>
+<p><strong>如何降低糙點？</strong></p>
+<p>只要能夠用一個名稱來稱呼這些邏輯，就可以用具名的 function 包起來。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">filterId</span> <span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> item<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>id<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">filterName</span> <span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>name <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">filterEnglistName</span> <span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>englishName <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>englishName<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// origList = []</span>
+query <span class="token operator">=</span> origList<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> 
+  id<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">filterId</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+  name<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">filterName</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">filterEnglistName</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在此之前，很難發現，它把 name 和 englishName 當作相同的欄位一起 filter 對吧？<br>
+現在，發現了這些檢查的邏輯其實很類似，可以讓它們合併合併。</p>
+<p>並且，可以相容 (或修正) id 欄位的檢查邏輯</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">isKeyword</span> <span class="token punctuation">(</span><span class="token parameter">word<span class="token punctuation">,</span> inputWord</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token operator">!</span>word <span class="token operator">&amp;&amp;</span> word<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>inputWord<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// origList = []</span>
+query <span class="token operator">=</span> origList<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">item</span> <span class="token operator">=></span> 
+  id<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>id<span class="token punctuation">,</span> id<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+  name<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>name<span class="token punctuation">,</span> name<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>englishName<span class="token punctuation">,</span> name<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣也可以跟別人說「所有欄位的檢查邏輯是不是相同的」。</p>
+<p><strong>如果這段用在 <code>if</code></strong></p>
+<p>if 裡面會常出現複雜的判斷邏輯，我們把剛剛的 filter 改寫改寫。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 原本的寫法</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>id<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>id<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+    <span class="token punctuation">(</span>name<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>name <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">||</span> 
+    <span class="token operator">!</span><span class="token operator">!</span>item<span class="token punctuation">.</span>englishName <span class="token operator">&amp;&amp;</span> item<span class="token punctuation">.</span>englishName<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這麼一坨，真的是一坨呀!!! (和剛剛一樣的東西)<br>
+寫這種東西是你的驕傲嗎？</p>
+<p>改成這樣</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>id<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>id<span class="token punctuation">,</span> id<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+  name<span class="token punctuation">.</span>isChecked <span class="token operator">&amp;&amp;</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>name<span class="token punctuation">,</span> name<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">isKeyword</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>englishName<span class="token punctuation">,</span> name<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看上去的 DX[2] 是不是就舒適多了？</p>
+<h2 id="de-morgan-s-laws-笛摩根定理-3"><a class="header-anchor" href="#de-morgan-s-laws-笛摩根定理-3">¶</a>De Morgan’s laws (笛摩根定理)[3]</h2>
+<p><img src="https://i.imgur.com/JlSXDt2.png" alt=""></p>
+<p>意思是</p>
+<p><img src="https://i.imgur.com/9LiEP9N.png" alt=""></p>
+<p>寫成 JavaScript 的話，就是</p>
+<p>且 = AND<br>
+或 = OR</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">!</span><span class="token punctuation">(</span>p <span class="token operator">&amp;&amp;</span> q<span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token punctuation">(</span><span class="token operator">!</span>p <span class="token operator">||</span> <span class="token operator">!</span>q<span class="token punctuation">)</span>
+<span class="token operator">!</span><span class="token punctuation">(</span>p <span class="token operator">||</span> q<span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token punctuation">(</span><span class="token operator">!</span>p <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>q<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>邏輯加上 NOT</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">p <span class="token operator">-</span><span class="token operator">></span> <span class="token operator">!</span>p
+q <span class="token operator">-</span><span class="token operator">></span> <span class="token operator">!</span>q
+<span class="token operator">&amp;&amp;</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token operator">||</span>
+<span class="token operator">||</span><span class="token operator">-</span><span class="token operator">></span> <span class="token operator">&amp;&amp;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以，遇到 <code>if ()</code> 裡的邏輯很複雜時，<code>not</code> 加得很亂時，就可以考慮使用 De Morgan’s laws 整理，也許可以換個角度思考或理解，也可以在邏輯上達到等價[4]。</p>
+<p>以剛剛的例子，加上 <code>not</code> 就變這樣</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 原本的寫法</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token operator">!</span>id<span class="token punctuation">.</span>isChecked <span class="token operator">||</span> <span class="token operator">!</span>item<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>id<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+    <span class="token punctuation">(</span><span class="token operator">!</span>name<span class="token punctuation">.</span>isChecked <span class="token operator">||</span> <span class="token operator">!</span>item<span class="token punctuation">.</span>name <span class="token operator">||</span> <span class="token operator">!</span>item<span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> 
+    <span class="token operator">!</span>item<span class="token punctuation">.</span>englishName <span class="token operator">||</span> <span class="token operator">!</span>item<span class="token punctuation">.</span>englishName<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// nothing</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="if-裡的-float-要如何判斷"><a class="header-anchor" href="#if-裡的-float-要如何判斷">¶</a>if 裡的 float 要如何判斷</h2>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">3.2</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">0.1</span> <span class="token operator">===</span> <span class="token number">3.3</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>a + 0.1 === 3.3</code> 判斷的結果是 <code>false</code></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">0.1</span><span class="token punctuation">)</span>
+<span class="token comment">// 3.3000000000000003</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>有沒有想過，你的判斷試會正確，完全是碰巧的 (走運)。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">3.2</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> b <span class="token operator">=</span> a <span class="token operator">+</span> <span class="token number">0.1</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">0.1</span> <span class="token operator">===</span> b<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其實是 <code>3.3000000000000003 === 3.3000000000000003</code> 呀!!</p>
+<p><code>float</code> 最早是由 IEEE 754[5] 來的，之後也許有其它更進步的標準，但是還是可以透過它來了解「浮點誤差」。簡單的說 <code>float</code> 是一種 科學記號的儲存方式[6] 造成的誤差現象。</p>
+<p>所以，<code>float</code> 在 <code>if</code> 裡，就不能直接使用 <code>==</code> 或 <code>===</code> 這類「偵測相等」的判斷方式。</p>
+<p>必須要用精度夾擊(寫到這一刻想到的詞)。</p>
+<p>若想偵測的精度是小數點以下一位</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">3.2</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>a <span class="token operator">+</span> <span class="token number">0.1</span> <span class="token operator">></span> <span class="token number">3.29</span> <span class="token operator">&amp;&amp;</span> a <span class="token operator">+</span> <span class="token number">0.1</span> <span class="token operator">&lt;</span> <span class="token number">3.31</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>a + 0.1 &gt; 3.29 &amp;&amp; a + 0.1 &lt; 3.31</code> 判斷的結果是 <code>true</code></p>
+<p>而且，這樣寫符合精度。</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: <a target="_blank" rel="noopener" href="https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux/transcript?language=zh-tw#t-1006860">Linus Torvalds: The mind behind Linux | TED Talk</a><br>
+[2]: <a target="_blank" rel="noopener" href="https://medium.com/@chiunhau/%E5%B7%A5%E7%A8%8B%E5%B8%AB%E5%BF%83%E4%B8%AD%E6%9C%80%E8%BB%9F%E7%9A%84%E4%B8%80%E5%A1%8A-%E8%AB%87%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC%E8%80%85%E9%AB%94%E9%A9%97-developer-experience-96e0cfacb316">工程師心中最軟的一塊：談前端開發者體驗（Developer Experience）</a><br>
+[3]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BE%B7%E6%91%A9%E6%A0%B9%E5%AE%9A%E5%BE%8B">De Morgan’s laws</a><br>
+[4]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%80%BB%E8%BE%91%E7%AD%89%E4%BB%B7">邏輯等價 - 維基百科，自由的百科全書</a><br>
+[5]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/IEEE_754">IEEE 754 - 維基百科，自由的百科全書</a><br>
+[6]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%B5%AE%E7%82%B9%E6%95%B0">浮點數 - 維基百科，自由的百科全書</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-18T16:00:00.000Z" itemprop="datePublished">
+              2018-10-19
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/if/">if</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/float/">float</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/ieee754/">ieee754</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

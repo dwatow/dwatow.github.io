@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/09-19-ironman-2021/2021-09-19-pure-component/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="在寫 Vue.js 或 React 的過程，一定都會聽過這個名詞。 並不是所有的 component 都必須 pure ，不是這樣的，是有時候會需要 pure 有時候不需要，重點是開發者是不是可以掌握「我現在要不要 pure」而不是靠本能 pure。 ¶快速複習 pure function 的重點 在 pure function 這個專有名詞中，我們獲得兩個重點  輸出只和輸入有關 沒有 side">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pure component">
+<meta property="og:url" content="https://dwatow.github.io/2021/09-19-ironman-2021/2021-09-19-pure-component/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="在寫 Vue.js 或 React 的過程，一定都會聽過這個名詞。 並不是所有的 component 都必須 pure ，不是這樣的，是有時候會需要 pure 有時候不需要，重點是開發者是不是可以掌握「我現在要不要 pure」而不是靠本能 pure。 ¶快速複習 pure function 的重點 在 pure function 這個專有名詞中，我們獲得兩個重點  輸出只和輸入有關 沒有 side">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-09-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.828Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+  <title>
+    pure component - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>pure component</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E8%A4%87%E7%BF%92-pure-function-%E7%9A%84%E9%87%8D%E9%BB%9E"><span class="toc-text">快速複習 pure function 的重點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BC%B8%E5%87%BA%E8%BC%B8%E5%85%A5"><span class="toc-text">輸出輸入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#side-effect"><span class="toc-text">Side effect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AA%B0%E8%A9%B2-pure"><span class="toc-text">誰該 pure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%90%AC%E4%B8%80%E4%B8%8D-pure"><span class="toc-text">萬一不 pure</span></a></li></ol>
+  </div>
+
+
+    <p>在寫 Vue.js 或 React 的過程，一定都會聽過這個名詞。<br>
+並不是所有的 component 都必須 pure ，不是這樣的，是有時候會需要 pure 有時候不需要，重點是開發者是不是可以掌握「我現在要不要 pure」而不是靠本能 pure。</p>
+<h2 id="快速複習-pure-function-的重點"><a class="header-anchor" href="#快速複習-pure-function-的重點">¶</a>快速複習 pure function 的重點</h2>
+<p>在 pure function 這個專有名詞中，我們獲得兩個重點</p>
+<ol>
+<li>輸出只和輸入有關</li>
+<li>沒有 side effect</li>
+</ol>
+<p>也就是說，如果 component 也可以做到一樣的效果，不是 pure 至少也要「等效 pure」。</p>
+<h2 id="輸出輸入"><a class="header-anchor" href="#輸出輸入">¶</a>輸出輸入</h2>
+<p>Vue.js 在 component 的語法中，我認為輸入可以指 props，輸出可以指 event。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/v2/guide/components-props.html">components props</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/v2/guide/components-custom-events.html">components custom events</a></li>
+</ul>
+<p>從這個角度切入的話，要符合「輸出只和輸入有關」可以翻譯成「<strong>event 只和 prop 有關</strong>」(請畫重點。XDD)</p>
+<p>而且在純 FP 的情況之下 ，是不會宣告變數的，所以盡可能的在 pure component 裡面，不要使用 data ，雖然大多數的情況之下，都是可以<strong>用 computed 來取代不被修改的 data</strong>，但還是有畫面邏輯需要的例外狀況。</p>
+<p>重點:</p>
+<ol>
+<li>event 只和 prop 有關</li>
+<li>用 computed 來取代不被修改的 data</li>
+</ol>
+<blockquote>
+<p>就算你用 slot 這個定義依然沒有矛盾。因為 slot 的 props 會接到另一個 component 的 props。</p>
+</blockquote>
+<h2 id="side-effect"><a class="header-anchor" href="#side-effect">¶</a>Side effect</h2>
+<p>一般來說，就是不使用 props ，但可以取得資料的做法。</p>
+<p>基本的常見情況</p>
+<ul>
+<li>在 component 裡直接存取 vuex 的資料。 -&gt; Side effect</li>
+<li>在 component 裡打 API 取得資料。 -&gt; Side effect</li>
+<li>在 compenent 裡存取 cookie、localStorage。 -&gt; Side effect</li>
+<li>在 compenent 裡存取檔案。 -&gt; Side effect</li>
+</ul>
+<p>有些較難判斷的</p>
+<ul>
+<li>在 compenent 裡存取 $route -&gt; 算是全域變數 Side effect</li>
+<li>在 compenent 裡存取 import 進來的可變資料 -&gt; 通常是 Singleton 算是全域變數 Side effect</li>
+<li>在 compenent 裡 (使用 $ref) 存取 DOM 上的資訊當資料 -&gt; 算是存取文件 Side effect</li>
+</ul>
+<p>相信還有很多其它的狀況，像是使用 canvas 還是 maps 都是很難判斷的情況，所以一開始不要用這個來練習。</p>
+<h2 id="誰該-pure"><a class="header-anchor" href="#誰該-pure">¶</a>誰該 pure</h2>
+<p>在 vue-cli 工具幫我們建置好的專案目錄中，有一個 views 和 component 兩個地方可以放 <code>.vue</code> 檔。初學的時候，只知道要放<strong>重複使用的 component</strong>，其實真正的意思是放「pure component」唯有 pure 才「好用 (方便重複使用)」，但也因為 pure 不適合由這個 component 決定資料是誰。</p>
+<p>反而是由另一個目錄 views 的 <code>.vue</code> 檔來決定要載什麼資料，在 views 裡的 <code>.vue</code> 檔，引用 pure component 決定「要怎麼處理、呈現資料」，<strong>什麼 type 的資料，就選用相對應的 component 處理</strong> (重要！要畫重點)。</p>
+<h2 id="萬一不-pure"><a class="header-anchor" href="#萬一不-pure">¶</a>萬一不 pure</h2>
+<p>其實就不 pure 而已，並不是一定要遵守這個原則，只是照著嚴格理論有它的優點，但<strong>並不是要記教條</strong>。沒有 pure 其實就沒有而已。哈哈~~ 維護上麻煩一點，寫的時候小心就可以了。</p>
+<p>但是，要是有一絲絲的可能，可以完美的接近嚴格理論，我願意遵守。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-18T16:00:00.000Z" itemprop="datePublished">
+              2021-09-19
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

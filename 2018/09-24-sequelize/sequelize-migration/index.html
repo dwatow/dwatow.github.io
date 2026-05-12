@@ -69,17 +69,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -93,12 +91,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -136,11 +138,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sequelize-Migration"><span class="toc-text">Sequelize Migration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4"><span class="toc-text">指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AA%94%E6%A1%88%E6%9E%B6%E6%A7%8B"><span class="toc-text">檔案架構</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E8%A1%A8-%E8%B3%87%E6%96%99%E8%A1%A8%E6%AC%84%E4%BD%8D"><span class="toc-text">資料表 &amp; 資料表欄位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C-migrate-%E5%BE%8C%E8%A6%81%E5%9F%B7%E8%A1%8C-SQL"><span class="toc-text">執行 migrate 後要執行 SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E8%A1%A8%E9%97%9C%E8%81%AF"><span class="toc-text">資料表關聯</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hook"><span class="toc-text">Hook</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Available-constraints"><span class="toc-text">Available constraints:</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sequelize-migration"><span class="toc-text">Sequelize Migration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4"><span class="toc-text">指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AA%94%E6%A1%88%E6%9E%B6%E6%A7%8B"><span class="toc-text">檔案架構</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E8%A1%A8-%E8%B3%87%E6%96%99%E8%A1%A8%E6%AC%84%E4%BD%8D"><span class="toc-text">資料表 &amp; 資料表欄位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C-migrate-%E5%BE%8C%E8%A6%81%E5%9F%B7%E8%A1%8C-sql"><span class="toc-text">執行 migrate 後要執行 SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E8%A1%A8%E9%97%9C%E8%81%AF"><span class="toc-text">資料表關聯</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hook"><span class="toc-text">Hook</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#available-constraints"><span class="toc-text">Available constraints:</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Sequelize-Migration"><a class="header-anchor" href="#Sequelize-Migration">¶</a>Sequelize Migration</h1>
+    <h1 id="sequelize-migration"><a class="header-anchor" href="#sequelize-migration">¶</a>Sequelize Migration</h1>
 <p>Sequelize 2 之後，增加了 cli 的功能<br>
 透過一次又一次的維護檔，確保移植時有相同的建構過程</p>
 <p>migration 就是拿來變動資料表的。<br>
@@ -152,15 +154,25 @@
 </ul>
 <h2 id="指令"><a class="header-anchor" href="#指令">¶</a>指令</h2>
 <p>要新增一次的 migration ，只要下這個指令，並且想好 migration message 。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sequelize migration:create --name &lt;migration message&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">$ sequelize migration:create <span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>migration message<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>就會產生檔案 <code>migrations/20180703032321-&lt;migration message&gt;.js</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>執行檔案裡的 <code>up()</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sequelize db:migrate:undo</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">sequelize db:migrate:undo<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>執行檔案裡的 <code>down()</code></p>
 <h2 id="檔案架構"><a class="header-anchor" href="#檔案架構">¶</a>檔案架構</h2>
 <p>function <code>up</code>, <code>down</code> ，都回傳 promise</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 要增加內容的動作</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  down: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 要減少內容的動作</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token string">'use strict'</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token function-variable function">up</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 要增加內容的動作</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">down</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 要減少內容的動作</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>下面來介紹一下，<code>up()</code> 和 <code>down()</code> 裡面要怎麼寫</p>
 <h2 id="資料表-資料表欄位"><a class="header-anchor" href="#資料表-資料表欄位">¶</a>資料表 &amp; 資料表欄位</h2>
 <p><a target="_blank" rel="noopener" href="http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-init">參考 attribute, options 用法</a></p>
@@ -195,14 +207,33 @@
 </ul>
 </li>
 </ul>
-<h2 id="執行-migrate-後要執行-SQL"><a class="header-anchor" href="#執行-migrate-後要執行-SQL">¶</a>執行 migrate 後要執行 SQL</h2>
+<h2 id="執行-migrate-後要執行-sql"><a class="header-anchor" href="#執行-migrate-後要執行-sql">¶</a>執行 migrate 後要執行 SQL</h2>
 <p>使用 <code>queryInterface.sequelize.query(SQL 語法)</code> 的用法，可以讓 migration 完成時，也增加當時必要的 SQL 語法。</p>
 <p>雖然是 <code>query</code> 的 method ，它卻是一個可以執行 SQL 語法，改變資料庫資料的 method。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">up: <span class="function">(<span class="params">queryInterface, Sequelize</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> queryInterface.method(</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      queryInterface.sequelize.query(<span class="string">`UPDATE table SET column=field`</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function-variable function">up</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">queryInterface<span class="token punctuation">,</span> Sequelize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> queryInterface<span class="token punctuation">.</span><span class="token function">method</span><span class="token punctuation">(</span>
+      <span class="token comment">//...</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      queryInterface<span class="token punctuation">.</span>sequelize<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">UPDATE table SET column=field</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="資料表關聯"><a class="header-anchor" href="#資料表關聯">¶</a>資料表關聯</h2>
 <p>在 queryInterface.createTable / addColumn 中，在 attributes 定義欄位的物件中，寫 reference 決定資料庫變動後，關聯是否存在。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> queryInterface.addColumn(</span><br><span class="line">  <span class="string">&#x27;tableName&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;fieldName&#x27;</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    type: Sequelize.INTEGER.UNSIGNED,</span><br><span class="line">    references: &#123;</span><br><span class="line">      model: <span class="string">&#x27;tableName&#x27;</span>,</span><br><span class="line">      key: <span class="string">&#x27;fieldName&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    onDelete: <span class="string">&#x27;SET NULL&#x27;</span>,</span><br><span class="line">    onUpdate: <span class="string">&#x27;CASCADE&#x27;</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<h3 id="Hook"><a class="header-anchor" href="#Hook">¶</a>Hook</h3>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">return</span> queryInterface<span class="token punctuation">.</span><span class="token function">addColumn</span><span class="token punctuation">(</span>
+  <span class="token string">'tableName'</span><span class="token punctuation">,</span>
+  <span class="token string">'fieldName'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> Sequelize<span class="token punctuation">.</span><span class="token constant">INTEGER</span><span class="token punctuation">.</span><span class="token constant">UNSIGNED</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">references</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">model</span><span class="token operator">:</span> <span class="token string">'tableName'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'fieldName'</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'SET NULL'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">onUpdate</span><span class="token operator">:</span> <span class="token string">'CASCADE'</span>
+    <span class="token comment">//...</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="hook"><a class="header-anchor" href="#hook">¶</a>Hook</h3>
 <p>當呼叫 add/set 函數時，beforeUpdate/afterUpdate 也會執行<br>
 唯一可以執行 beforeDestroy/afterDestroy 的方式，就是設定 associations 屬性 onDelete: ‘cascade’<br>
 參考: <a target="_blank" rel="noopener" href="http://docs.sequelizejs.com/manual/tutorial/hooks.html">http://docs.sequelizejs.com/manual/tutorial/hooks.html</a></p>
@@ -215,7 +246,7 @@
 <li><code>SET DEFAULT</code>, 子表 foreign key 設為 default (Innodb not use)</li>
 <li><code>SET NULL</code>, 子表 foreign key 設為 null</li>
 </ol>
-<h3 id="Available-constraints"><a class="header-anchor" href="#Available-constraints">¶</a>Available constraints:</h3>
+<h3 id="available-constraints"><a class="header-anchor" href="#available-constraints">¶</a>Available constraints:</h3>
 <ul>
 <li>UNIQUE</li>
 <li>DEFAULT (MSSQL only)</li>
@@ -224,15 +255,38 @@
 <li>PRIMARY KEY</li>
 </ul>
 <p>UNIQUE</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">&#x27;Users&#x27;</span>, [<span class="string">&#x27;email&#x27;</span>], &#123;</span><br><span class="line">  type: <span class="string">&#x27;unique&#x27;</span>,</span><br><span class="line">  name: <span class="string">&#x27;custom_unique_constraint_name&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'email'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'unique'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_unique_constraint_name'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>CHECK</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">&#x27;Users&#x27;</span>, [<span class="string">&#x27;roles&#x27;</span>], &#123;</span><br><span class="line">  type: <span class="string">&#x27;check&#x27;</span>,</span><br><span class="line">  where: &#123;</span><br><span class="line">     roles: [<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;moderator&#x27;</span>, <span class="string">&#x27;guest&#x27;</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'roles'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'check'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">where</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+     <span class="token literal-property property">roles</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'admin'</span><span class="token punctuation">,</span> <span class="token string">'moderator'</span><span class="token punctuation">,</span> <span class="token string">'guest'</span><span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Default - MSSQL only</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">&#x27;Users&#x27;</span>, [<span class="string">&#x27;roles&#x27;</span>], &#123;</span><br><span class="line">   type: <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">   defaultValue: <span class="string">&#x27;guest&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'roles'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'default'</span><span class="token punctuation">,</span>
+   <span class="token literal-property property">defaultValue</span><span class="token operator">:</span> <span class="token string">'guest'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Primary Key</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">&#x27;Users&#x27;</span>, [<span class="string">&#x27;username&#x27;</span>], &#123;</span><br><span class="line">   type: <span class="string">&#x27;primary key&#x27;</span>,</span><br><span class="line">   name: <span class="string">&#x27;custom_primary_constraint_name&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'primary key'</span><span class="token punctuation">,</span>
+   <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_primary_constraint_name'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Foreign Key</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">queryInterface.addConstraint(<span class="string">&#x27;Posts&#x27;</span>, [<span class="string">&#x27;username&#x27;</span>], &#123;</span><br><span class="line">  type: <span class="string">&#x27;foreign key&#x27;</span>,</span><br><span class="line">  name: <span class="string">&#x27;custom_fkey_constraint_name&#x27;</span>,</span><br><span class="line">  references: &#123; <span class="comment">//Required field</span></span><br><span class="line">    table: <span class="string">&#x27;target_table_name&#x27;</span>,</span><br><span class="line">    field: <span class="string">&#x27;target_column_name&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  onDelete: <span class="string">&#x27;cascade&#x27;</span>,</span><br><span class="line">  onUpdate: <span class="string">&#x27;cascade&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">queryInterface<span class="token punctuation">.</span><span class="token function">addConstraint</span><span class="token punctuation">(</span><span class="token string">'Posts'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'foreign key'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'custom_fkey_constraint_name'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">references</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token comment">//Required field</span>
+    <span class="token literal-property property">table</span><span class="token operator">:</span> <span class="token string">'target_table_name'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">field</span><span class="token operator">:</span> <span class="token string">'target_column_name'</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">onDelete</span><span class="token operator">:</span> <span class="token string">'cascade'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">onUpdate</span><span class="token operator">:</span> <span class="token string">'cascade'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
     
     </section>
@@ -272,7 +326,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -289,12 +343,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

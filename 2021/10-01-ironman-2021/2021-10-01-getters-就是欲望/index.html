@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-01-ironman-2021/2021-10-01-getters-就是欲望/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶用 getters 抽象 state  整個系列寫得太嚴肅了，這次在標題上小小的中二一下。  vuex 的 getters 用來展現欲望，展現想要使用資料的樣子。這個道理是基於 ADT 的設計。Web API 的 GET api 也是一樣的道理，所以 GET 通常會帶很多 query。也正因為如此，所以 facebook 後來推出了 GraphQL 我想也是為了滿足人類各式各樣的欲望，讓 GET">
+<meta property="og:type" content="article">
+<meta property="og:title" content="getters 就是欲望">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-01-ironman-2021/2021-10-01-getters-%E5%B0%B1%E6%98%AF%E6%AC%B2%E6%9C%9B/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶用 getters 抽象 state  整個系列寫得太嚴肅了，這次在標題上小小的中二一下。  vuex 的 getters 用來展現欲望，展現想要使用資料的樣子。這個道理是基於 ADT 的設計。Web API 的 GET api 也是一樣的道理，所以 GET 通常會帶很多 query。也正因為如此，所以 facebook 後來推出了 GraphQL 我想也是為了滿足人類各式各樣的欲望，讓 GET">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-09-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.837Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+  <title>
+    getters 就是欲望 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>getters 就是欲望</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%A8-getters-%E6%8A%BD%E8%B1%A1-state"><span class="toc-text">用 getters 抽象 state</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E9%81%8E-%E6%AD%A3%E5%B8%B8%E7%9A%84-leaders-%E5%B1%AC%E6%96%BC-department"><span class="toc-text">不過…正常的 leaders 屬於 department</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="用-getters-抽象-state"><a class="header-anchor" href="#用-getters-抽象-state">¶</a>用 getters 抽象 state</h1>
+<blockquote>
+<p>整個系列寫得太嚴肅了，這次在標題上小小的中二一下。</p>
+</blockquote>
+<p>vuex 的 getters 用來展現欲望，展現想要使用資料的樣子。這個道理是基於 ADT 的設計。Web API 的 GET api 也是一樣的道理，所以 GET 通常會帶很多 query。也正因為如此，所以 facebook 後來推出了 GraphQL 我想也是為了滿足人類各式各樣的欲望，讓 GET 資料的方式更加彈性。</p>
+<ul>
+<li>主管列表</li>
+<li>在職人員列表</li>
+</ul>
+<p><strong>@/store/user/index.js</strong></p>
+<p>做在 mutation 存在 state</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> actions <span class="token keyword">from</span> <span class="token string">'./actions'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">leader_users</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">active_users</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">mutation</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">leaderUsers</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> users</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> leader_id_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span>users<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">leaders<span class="token punctuation">,</span> user</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+          leaders<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>department<span class="token punctuation">.</span>leader_id<span class="token punctuation">)</span>
+          <span class="token keyword">return</span> leaders<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      state<span class="token punctuation">.</span>leader_users <span class="token operator">=</span> users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> leader_id_list<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">activeUsers</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> users</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      state<span class="token punctuation">.</span>active_users <span class="token operator">=</span> users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> user<span class="token punctuation">.</span>is_active<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">leaderUsers</span><span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>leader_users<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">activeUsers</span><span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>active_users<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>缺點</p>
+<ul>
+<li>要資料，重發 API</li>
+<li>要存在不同的 state 管理上會愈來愈多東西
+<ul>
+<li>如果有一個畫面的下拉式選單，需要人員列表，同時也需要主管列表，那麼就要分開儲存</li>
+</ul>
+</li>
+<li>弱化了 getters 的重要性，
+<ul>
+<li>不一定要寫 getters 要看需求。</li>
+</ul>
+</li>
+</ul>
+<p><strong>@/store/user/index.js</strong></p>
+<p>做在 getters</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> actions <span class="token keyword">from</span> <span class="token string">'./actions'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">new</span> <span class="token class-name">Vuex<span class="token punctuation">.</span>Store</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">leaderUsers</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> leader_id_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token operator">...</span>state<span class="token punctuation">.</span>list<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">leaders<span class="token punctuation">,</span> user</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+          leaders<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>department<span class="token punctuation">.</span>leader_id<span class="token punctuation">)</span>
+          <span class="token keyword">return</span> leaders<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>list<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> leader_id_list<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">activeUsers</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>list
+        <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> user<span class="token punctuation">.</span>is_active<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>個人偏愛這一種安排方式</p>
+<p>優點</p>
+<ul>
+<li>只要打一次 API 就可以一直用到爆</li>
+<li>state 唯一</li>
+</ul>
+<p>缺點</p>
+<ul>
+<li>複雜集中在 getters</li>
+</ul>
+<blockquote>
+<p>不過這就是本質性問題！只能移動、隱藏，無法消滅</p>
+</blockquote>
+<h2 id="不過-正常的-leaders-屬於-department"><a class="header-anchor" href="#不過-正常的-leaders-屬於-department">¶</a>不過…正常的 leaders 屬於 department</h2>
+<p>部門主管，屬於 department 的 module</p>
+<p><strong>@/store/department/index.js</strong></p>
+<p>做在 getters</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> actions <span class="token keyword">from</span> <span class="token string">'./actions'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">new</span> <span class="token class-name">Vuex<span class="token punctuation">.</span>Store</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">leaders</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> getters</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> leader_id_list <span class="token operator">=</span> state<span class="token punctuation">.</span>list<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">department</span> <span class="token operator">=></span> department<span class="token punctuation">.</span>leader_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> getters<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">user</span> <span class="token operator">=></span> leader_id_list<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-30T16:00:00.000Z" itemprop="datePublished">
+              2021-10-01
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

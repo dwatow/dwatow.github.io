@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/09-29-ironman-2021/2021-09-29-讓程式碼化為-api-doc/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="先寫 API 文件。 可以使用mockAPI的服務取得一組 user 的 API。 ¶因應需求寫的 API 文件 ¶GET &#x2F;user response 200 &amp;#123;   &quot;data&quot;: [     &amp;#123;       &quot;createdAt&quot;: &quot;2021-09-28T06:15:33.861Z&quot;,       &quot;name&quot;: &quot;chris&quot;,       &quot;avatar&quot;: &quot;ht">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讓程式碼化為 API Doc">
+<meta property="og:url" content="https://dwatow.github.io/2021/09-29-ironman-2021/2021-09-29-%E8%AE%93%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%8C%96%E7%82%BA-api-doc/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="先寫 API 文件。 可以使用mockAPI的服務取得一組 user 的 API。 ¶因應需求寫的 API 文件 ¶GET &#x2F;user response 200 &amp;#123;   &quot;data&quot;: [     &amp;#123;       &quot;createdAt&quot;: &quot;2021-09-28T06:15:33.861Z&quot;,       &quot;name&quot;: &quot;chris&quot;,       &quot;avatar&quot;: &quot;ht">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/Y9BXcu9.png">
+<meta property="og:image" content="https://i.imgur.com/S720QTn.png">
+<meta property="article:published_time" content="2021-09-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.835Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Y9BXcu9.png">
+  <title>
+    讓程式碼化為 API Doc - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>讓程式碼化為 API Doc</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E6%87%89%E9%9C%80%E6%B1%82%E5%AF%AB%E7%9A%84-api-%E6%96%87%E4%BB%B6"><span class="toc-text">因應需求寫的 API 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#get-user"><span class="toc-text">GET &#x2F;user</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-user-id"><span class="toc-text">GET &#x2F;user&#x2F;:id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#post-user"><span class="toc-text">POST &#x2F;user</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#put-user-id"><span class="toc-text">PUT &#x2F;user&#x2F;:id</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete-user-id"><span class="toc-text">DELETE &#x2F;user&#x2F;:id</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-actions-%E5%AF%AB-api-%E6%96%87%E4%BB%B6%E5%AF%A6%E4%BD%9C"><span class="toc-text">用 actions 寫 API 文件實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BA%86%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84-network-%E5%9B%BA%E5%AE%9A%E5%9C%A8-action-%E5%8F%96%E5%BE%97"><span class="toc-text">為了瀏覽器的 Network 固定在 action 取得</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%8D%E7%9C%8B%E4%B8%80%E4%B8%8B-vuex-%E7%9A%84%E5%9C%96"><span class="toc-text">再看一下 Vuex 的圖</span></a></li></ol>
+  </div>
+
+
+    <p>先寫 API 文件。</p>
+<p>可以使用<a target="_blank" rel="noopener" href="https://mockapi.io/">mockAPI</a>的服務取得一組 user 的 API。</p>
+<h2 id="因應需求寫的-api-文件"><a class="header-anchor" href="#因應需求寫的-api-文件">¶</a>因應需求寫的 API 文件</h2>
+<h3 id="get-user"><a class="header-anchor" href="#get-user">¶</a><code>GET</code> <code>/user</code></h3>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T06:15:33.861Z"</span><span class="token punctuation">,</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+      <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T08:06:09.227Z"</span><span class="token punctuation">,</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Elizabeth Shields"</span><span class="token punctuation">,</span>
+      <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://cdn.fakercloud.com/avatars/russoedu_128.jpg"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"2"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-27T16:50:44.188Z"</span><span class="token punctuation">,</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Everett Stokes"</span><span class="token punctuation">,</span>
+      <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://cdn.fakercloud.com/avatars/bobwassermann_128.jpg"</span><span class="token punctuation">,</span>
+      <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"3"</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="get-user-id"><a class="header-anchor" href="#get-user-id">¶</a><code>GET</code> <code>/user/:id</code></h3>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T06:15:33.861Z"</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+    <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="post-user"><a class="header-anchor" href="#post-user">¶</a><code>POST</code> <code>/user</code></h3>
+<p>request body</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+  <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T01:16:41.617Z"</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+    <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"4"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="put-user-id"><a class="header-anchor" href="#put-user-id">¶</a><code>PUT</code> <code>/user/:id</code></h3>
+<p>request body</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+  <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T06:15:33.861Z"</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+    <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="delete-user-id"><a class="header-anchor" href="#delete-user-id">¶</a><code>DELETE</code> <code>/user/:id</code></h3>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"createdAt"</span><span class="token operator">:</span> <span class="token string">"2021-09-28T06:15:33.861Z"</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"chris"</span><span class="token punctuation">,</span>
+    <span class="token property">"avatar"</span><span class="token operator">:</span> <span class="token string">"https://fakeimg.pl/300/"</span><span class="token punctuation">,</span>
+    <span class="token property">"id"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="用-actions-寫-api-文件實作"><a class="header-anchor" href="#用-actions-寫-api-文件實作">¶</a>用 actions 寫 API 文件實作</h2>
+<p>前幾天的 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10273267">Vuex使用偏好</a> 有說 action 可以寫非同步行為，還有它的命名規則。在此就利用這些原則，配合上一篇的基礎建設，在這裡「將 API 文件寫成程式碼」，成為「程式碼可以自我文件化」的一種體現。</p>
+<p><strong>@/store/actions.js</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> backendAPI <span class="token keyword">from</span> <span class="token string">'@/utility/backendAPI.js'</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">async</span> <span class="token function">fetchUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">GET</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>id<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+      <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token keyword">async</span> <span class="token function">fetchUsers</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">GET</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+      <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token keyword">async</span> <span class="token function">createUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> id<span class="token punctuation">,</span> name<span class="token punctuation">,</span> phone <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">POST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+        name<span class="token punctuation">,</span>
+        avatar
+      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token keyword">async</span> <span class="token function">updateUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> id<span class="token punctuation">,</span> name<span class="token punctuation">,</span> phone <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">PUT</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>id<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+        name<span class="token punctuation">,</span>
+        avatar
+      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token keyword">async</span> <span class="token function">deleteUser</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> id</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">DELETE</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/user/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>id<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中，這些部份，就如同你的 API Doc 在除錯的時候，可以直接搜尋 path 並且對一下 method 和 param 有沒有給錯。這裡和 API Doc 一樣，API 會給錯，都是 component 的問題了。</p>
+<pre class="line-numbers language-none"><code class="language-none">backendAPI.GET(&#96;&#x2F;user&#x2F;$&#123;id&#125;&#96;)
+backendAPI.GET(&#96;&#x2F;user&#96;)
+backendAPI.POST(&#96;&#x2F;user&#96;, &#123;
+  name,
+  avatar
+&#125;)
+backendAPI.PUT(&#96;&#x2F;user&#x2F;$&#123;id&#125;&#96;, &#123;
+  name,
+  avatar
+&#125;)
+backendAPI.DELETE(&#96;&#x2F;user&#x2F;$&#123;id&#125;&#96;)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="為了瀏覽器的-network-固定在-action-取得"><a class="header-anchor" href="#為了瀏覽器的-network-固定在-action-取得">¶</a>為了瀏覽器的 Network 固定在 action 取得</h2>
+<p>為了讓在這裡的 <code>res</code> (在 <code>fetchUser</code>、<code>fetchUsers</code> 有宣告) 就如同下圖的樣子，所以需要前一篇的<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10273786">處理 API 層次感之地基篇</a>，讓 response 吐出來的樣子，和瀏覽器的 Network 看到的一樣。</p>
+<p><img src="https://i.imgur.com/Y9BXcu9.png" alt=""></p>
+<h2 id="再看一下-vuex-的圖"><a class="header-anchor" href="#再看一下-vuex-的圖">¶</a>再看一下 Vuex 的圖</h2>
+<p>目前我們實作了下面這一個部份</p>
+<p><img src="https://i.imgur.com/S720QTn.png" alt=""></p>
+<p>接下來，慢慢的將 Vuex 把這些東西都做好。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-28T16:00:00.000Z" itemprop="datePublished">
+              2021-09-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

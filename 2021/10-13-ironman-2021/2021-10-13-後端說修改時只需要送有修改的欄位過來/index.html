@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-13-ironman-2021/2021-10-13-後端說修改時只需要送有修改的欄位過來/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="今天來介紹一個，因為後端提出這個需求。要接 PATCH API 而產生的做法。  如果都是 PUT 就不用這麼做了。  ¶要修改的地方 ¶store&#x2F;user&#x2F;index.js  加上一個 dirty 的物件，當作 「有改才有 key 值」的物件 加上一個 mutation:userDirty 要給 dirty 用，因為要累計之前的修改，所以寫法和 user 不一樣 加上同名的 getters:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="後端說修改時只需要送「有修改的欄位」過來">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-13-ironman-2021/2021-10-13-%E5%BE%8C%E7%AB%AF%E8%AA%AA%E4%BF%AE%E6%94%B9%E6%99%82%E5%8F%AA%E9%9C%80%E8%A6%81%E9%80%81%E6%9C%89%E4%BF%AE%E6%94%B9%E7%9A%84%E6%AC%84%E4%BD%8D%E9%81%8E%E4%BE%86/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="今天來介紹一個，因為後端提出這個需求。要接 PATCH API 而產生的做法。  如果都是 PUT 就不用這麼做了。  ¶要修改的地方 ¶store&#x2F;user&#x2F;index.js  加上一個 dirty 的物件，當作 「有改才有 key 值」的物件 加上一個 mutation:userDirty 要給 dirty 用，因為要累計之前的修改，所以寫法和 user 不一樣 加上同名的 getters:">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/3WYDW80.png">
+<meta property="og:image" content="https://i.imgur.com/eTXvtNt.png">
+<meta property="article:published_time" content="2021-10-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.838Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/3WYDW80.png">
+  <title>
+    後端說修改時只需要送「有修改的欄位」過來 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>後端說修改時只需要送「有修改的欄位」過來</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E4%BF%AE%E6%94%B9%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="toc-text">要修改的地方</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#store-user-index-js"><span class="toc-text">store&#x2F;user&#x2F;index.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#store-user-actions-js"><span class="toc-text">store&#x2F;user&#x2F;actions.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%95%AB%E9%9D%A2-%E8%B3%87%E6%96%99%E7%8F%BE%E6%B3%81"><span class="toc-text">畫面 + 資料現況</span></a></li></ol>
+  </div>
+
+
+    <p>今天來介紹一個，因為後端提出這個需求。要接 PATCH API 而產生的做法。</p>
+<blockquote>
+<p>如果都是 PUT 就不用這麼做了。</p>
+</blockquote>
+<h2 id="要修改的地方"><a class="header-anchor" href="#要修改的地方">¶</a>要修改的地方</h2>
+<h3 id="store-user-index-js"><a class="header-anchor" href="#store-user-index-js">¶</a><strong>store/user/index.js</strong></h3>
+<ul>
+<li>加上一個 dirty 的物件，當作 「有改才有 key 值」的物件</li>
+<li>加上一個 mutation:<code>userDirty</code> 要給 dirty 用，因為要累計之前的修改，所以寫法和 <code>user</code> 不一樣</li>
+<li>加上同名的 getters: <code>userDirty</code> 要拿到 dirty</li>
+<li>加上一個 <code>userForm</code> 取得改 code 之前相同的結果，修改 user 時，沒修改的東西也包含在上面。</li>
+</ul>
+<p>透過解構賦值的特性，後的 key 值會蓋掉前面的 key 值來做到，修改前後混合。<br>
+原本的 user 就只是拿來設定初值用的！</p>
+<ul>
+<li>設定初值時，要同步清掉 dirty</li>
+</ul>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> actions <span class="token keyword">from</span> <span class="token string">'./actions'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  actions<span class="token punctuation">,</span>
+  <span class="token literal-property property">state</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">one</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">dirty</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">list</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">mutations</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      state<span class="token punctuation">.</span>one <span class="token operator">=</span> payload
+      state<span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">userDirty</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      state<span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token operator">...</span>state<span class="token punctuation">.</span>dirty<span class="token punctuation">,</span>
+        payload
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">users</span> <span class="token punctuation">(</span><span class="token parameter">state<span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      state<span class="token punctuation">.</span>list <span class="token operator">=</span> payload
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">getters</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">user</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>one<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">userDirty</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>dirty<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">userForm</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+        <span class="token operator">...</span>state<span class="token punctuation">.</span>one<span class="token punctuation">,</span>
+        <span class="token operator">...</span>state<span class="token punctuation">.</span>dirty
+      <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token function">users</span> <span class="token punctuation">(</span><span class="token parameter">state</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> state<span class="token punctuation">.</span>list<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="store-user-actions-js"><a class="header-anchor" href="#store-user-actions-js">¶</a><strong>store/user/actions.js</strong></h3>
+<p>這樣要求的話，後端給的 API 應該是要指定成 PATCH 的唷！(不是的話請後端看一下 RESTful API)</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token constant">API</span> <span class="token keyword">from</span> <span class="token string">'@/utils/API'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token keyword">async</span> <span class="token function">updateClient</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> getters <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> id <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token constant">API</span><span class="token punctuation">.</span><span class="token constant">PATCH</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/clients/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>id<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> getters<span class="token punctuation">.</span>clientDirty<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>components/UserForm.vue</strong></p>
+<p>這裡，是處理物件第一層 property 的那一層。<br>
+要改寫成「改什麼，物件就只帶什麼傳出去」。</p>
+<p>原本的</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'update:first_name'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token operator">...</span>data<span class="token punctuation">,</span>
+  <span class="token literal-property property">first_name</span><span class="token operator">:</span> $event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>改成這樣寫</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$emit</span><span class="token punctuation">(</span><span class="token string">'update:first_name'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">first_name</span><span class="token operator">:</span> $event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>整頁長這樣</p>
+<blockquote>
+<p>只留下資料流相關的 code 其它先刪掉啦</p>
+</blockquote>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">@submit.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('submit')<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>first_name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.first_name<span class="token punctuation">"</span></span>
+      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:first_name', &#123;
+        first_name: $event.target.value
+      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>last_name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.last_name<span class="token punctuation">"</span></span>
+      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:last_name', &#123;
+        last_name: $event.target.value
+      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>email<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>email<span class="token punctuation">"</span></span>
+      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.email<span class="token punctuation">"</span></span>
+      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:email', &#123;
+        email: $event.target.value
+      &#125;)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>送出<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>src/views/UpdateUser.vue</strong></p>
+<p>資料流修改之後，比較重要的是 update 的頁面要改成編輯 <code>userDirty</code> 這個空物件。<br>
+將修改的內容累積在它身上</p>
+<p>原本這樣</p>
+<p><code>$store.commit('user', $event)</code></p>
+<p>改成這樣</p>
+<p><code>$store.commit('userDirty', $event)</code></p>
+<p>引用時，就變這樣</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">&lt;</span>UserForm
+  <span class="token operator">:</span>data<span class="token operator">=</span><span class="token string">"data"</span>
+  @update<span class="token operator">:</span>first_name<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
+  @update<span class="token operator">:</span>last_name<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
+  @update<span class="token operator">:</span>email<span class="token operator">=</span><span class="token string">"$store.commit('userDirty', $event)"</span>
+  @submit<span class="token operator">=</span><span class="token string">"onSubmit"</span>
+<span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>UserForm<span class="token operator">></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="畫面-資料現況"><a class="header-anchor" href="#畫面-資料現況">¶</a>畫面 + 資料現況</h2>
+<p>原本這樣</p>
+<p><img src="https://i.imgur.com/3WYDW80.png" alt=""></p>
+<p>我們來改一下名字 chris -&gt; chriss</p>
+<p><img src="https://i.imgur.com/eTXvtNt.png" alt=""></p>
+<p>userDirty 就增加了一個值，增加了一個我們有修改才出現的值。<br>
+這時就算改回原本的，它也會存在唷！</p>
+<p>這樣我們只要在 PUT 時傳送 <code>userDirt</code>。後端的需求是不是就滿足了呢？</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-10-12T16:00:00.000Z" itemprop="datePublished">
+              2021-10-13
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

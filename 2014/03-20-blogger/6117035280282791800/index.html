@@ -69,17 +69,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -93,12 +91,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -136,11 +138,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E5%88%9D%E9%AB%94%E9%A9%97%EF%BC%8C%E7%95%AB%E5%9C%96%E7%9A%84%E8%AE%80%E3%80%81%E5%AF%AB%E3%80%81%E9%A1%AF%E7%A4%BA"><span class="toc-text">C#初體驗，畫圖的讀、寫、顯示</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#c-%E5%88%9D%E9%AB%94%E9%A9%97-%E7%95%AB%E5%9C%96%E7%9A%84%E8%AE%80-%E5%AF%AB-%E9%A1%AF%E7%A4%BA"><span class="toc-text">C#初體驗，畫圖的讀、寫、顯示</span></a></li></ol>
   </div>
 
 
-    <h1 id="C-初體驗，畫圖的讀、寫、顯示"><a class="header-anchor" href="#C-初體驗，畫圖的讀、寫、顯示">¶</a>C#初體驗，畫圖的讀、寫、顯示</h1>
+    <h1 id="c-初體驗-畫圖的讀-寫-顯示"><a class="header-anchor" href="#c-初體驗-畫圖的讀-寫-顯示">¶</a>C#初體驗，畫圖的讀、寫、顯示</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/03/c.html">https://darkblack01.blogspot.com/2014/03/c.html</a><br>
 移植時的最後更新日期: 2014-03-20T11:59:54.056+08:00</p>
 <p>Visual Studio C# 2010 Express<br />WindowsFormsApplication專案<br /><br /><b>將檔案讀進來顯示、編輯</b><br /><ul><li>Image.FromFile(str); (讀取)</li><li>Image→PictureBox.Image(顯示)</li><li>Image→Graphics(編輯)</li></ul><pre class="prettyprint"><code class="language-cs">Image image = Image.FromFile(strNamePath);   //從檔案讀取<br />pictureBox.Image = image;                    //顯示在控制項Picture Box上<br />Graphics graph = Graphics.FromImage(image);  //開放編輯</code></pre><br /><br /><b>建立檔案編輯、顯示後存檔</b><br /><ul><li>Bitmap→graph(編輯)</li><li>Bitmap→Picture.Image(顯示)</li><li>Bitmap.save(); (存檔)</li></ul><pre class="prettyprint"><code class="language-cs">Bitmap bmp = new Bitmap(200, 200);<br />Graphics graph = Graphics.FromImage(bmp);  //開放編輯權限<br />/* 編輯… */<br />pictureBox.Image = bmp;                    //顯示<br />bmp.Save(strNamePath, System.Drawing.Imaging.ImageFormat.Bmp);  //存檔</code></pre><br /><br /><b>讀檔之後再存檔</b><br /><ul><li>Image.FromFile(str); (讀取)</li><li>Bitmap(Image)(轉格式)</li><li>Bitmap.save(); (存檔)</li></ul><pre class="prettyprint"><code>Image image = Image.FromFile(strOpenPathName);<br />Bitmap bmp = new Bitmap(image);<br />bmp.Save(strSavePathName, System.Drawing.Imaging.ImageFormat.Bmp);</code></pre><br /><br /><b>讀檔、編輯、存檔</b><br />這個方法，畫出來的內容會被讀進來的檔案蓋住！要注意唷！ <ul><li>Image.FromFile(str); (讀取)</li><li>Bitmap(Image)(轉格式)</li><li>Bitmap.save(); (存檔)</li></ul><pre class="prettyprint"><code>// Create a Bitmap object from a file.<br />Bitmap myBitmap = new Bitmap(“Grapes.jpg”);<br />         <br />// Draw myBitmap to the screen.<br />e.Graphics.DrawImage(myBitmap, 0, 0, myBitmap.Width,<br />    myBitmap.Height);<br />         <br />// Set each pixel in myBitmap to black.<br />for (int Xcount = 0; Xcount &lt; myBitmap.Width; Xcount++)<br />&#123;<br />    for (int Ycount = 0; Ycount &lt; myBitmap.Height; Ycount++)<br />    &#123;<br />        myBitmap.SetPixel(Xcount, Ycount, Color.Black);<br />    &#125;<br />&#125;<br />         <br />// Draw myBitmap to the screen again.<br />e.Graphics.DrawImage(myBitmap, myBitmap.Width, 0,<br />    myBitmap.Width, myBitmap.Height);</code></pre>參考自: <a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/system.drawing.bitmap.setpixel(v=vs.80).aspx">Bitmap.SetPixel 方法</a></p>
@@ -183,7 +185,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -200,12 +202,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

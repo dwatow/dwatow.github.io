@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-24-ironman-2019/2018-10-24-不要造神-神一般的物件/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  這次來介紹一個有趣的物件，叫 God Object[1]。  任何 variable 都丟進去，導致某一個物件全知。 任何 function 都丟進去，導致某一個物件全能。  任何問題找他就對了。這種全知全能的物件，就被稱為 God Object。 ¶在後端遇見神 為了避免程式碼外洩，我們只看 minimap 這段程式碼，總共有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不要造神 (神一般的物件)">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-24-ironman-2019/2018-10-24-%E4%B8%8D%E8%A6%81%E9%80%A0%E7%A5%9E-%E7%A5%9E%E4%B8%80%E8%88%AC%E7%9A%84%E7%89%A9%E4%BB%B6/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  這次來介紹一個有趣的物件，叫 God Object[1]。  任何 variable 都丟進去，導致某一個物件全知。 任何 function 都丟進去，導致某一個物件全能。  任何問題找他就對了。這種全知全能的物件，就被稱為 God Object。 ¶在後端遇見神 為了避免程式碼外洩，我們只看 minimap 這段程式碼，總共有">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/PQ0UcVN.png">
+<meta property="article:published_time" content="2018-10-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:44.974Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="god object">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/PQ0UcVN.png">
+  <title>
+    不要造神 (神一般的物件) - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>不要造神 (神一般的物件)</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E5%BE%8C%E7%AB%AF%E9%81%87%E8%A6%8B%E7%A5%9E"><span class="toc-text">在後端遇見神</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%8F%E8%BC%AF%E7%9A%84%E5%88%86%E9%A1%9E"><span class="toc-text">邏輯的分類</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E6%80%8E%E9%BA%BC%E8%BE%A6%EF%BC%9F%E4%B9%9F%E8%A6%81%E5%88%86%E5%97%8E%EF%BC%9F"><span class="toc-text">前端怎麼辦？也要分嗎？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#helper-object"><span class="toc-text">Helper Object</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p>這次來介紹一個有趣的物件，叫 God Object[1]。</p>
+<ul>
+<li>任何 variable 都丟進去，導致某一個物件全知。</li>
+<li>任何 function 都丟進去，導致某一個物件全能。</li>
+</ul>
+<p>任何問題找他就對了。這種全知全能的物件，就被稱為 God Object。</p>
+<h2 id="在後端遇見神"><a class="header-anchor" href="#在後端遇見神">¶</a>在後端遇見神</h2>
+<p>為了避免程式碼外洩，我們只看 minimap</p>
+<p>這段程式碼，總共有 755 行。<br>
+minimap 大概只顯示 200 行。<br>
+可視區一次顯示 30 行。</p>
+<p><img src="https://i.imgur.com/PQ0UcVN.png" alt=""></p>
+<p>而且這是三位一體，基督教的三一真神[2]呀!!!<br>
+(三個 GodObject 互相呼叫的架構。)</p>
+<p>後端從 route 來之後，會依序經過這三層</p>
+<ol>
+<li>Kernel: 用來將 API 的資料 (JSON之類的) 存放在臨時物件中。</li>
+<li>Implement: 用來將臨時物件做一些處理 (通常不處理)</li>
+<li>Transactions: 用來將臨時物件的內容放進 Database</li>
+</ol>
+<p>以刪除成員為例!!<br>
+此程式碼已經修改成 js 的實作。(原本不是)</p>
+<p><strong>kernel</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceKernel</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token function">delMember</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  res<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">returncode</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">returnMessage</span><span class="token operator">:</span> <span class="token string">""</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">let</span> input <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">serviceImplement<span class="token punctuation">.</span>DelRestoreMemberData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> output <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">serviceImplement<span class="token punctuation">.</span>BaseResultData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    input<span class="token punctuation">.</span>Id      <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"id"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    input<span class="token punctuation">.</span>Version <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"version"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    serviceImplement<span class="token punctuation">.</span><span class="token function">processDelMember</span><span class="token punctuation">(</span>input<span class="token punctuation">,</span> output<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    res<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"returncode"</span><span class="token punctuation">]</span> <span class="token operator">=</span> output<span class="token punctuation">.</span>returnCode<span class="token punctuation">;</span>
+    res<span class="token punctuation">.</span>body<span class="token punctuation">[</span><span class="token string">"returnmessage"</span><span class="token punctuation">]</span> <span class="token operator">=</span> output<span class="token punctuation">.</span>returnMessage<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>implement</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceImplement</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token function">processDelMember</span><span class="token punctuation">(</span> filter<span class="token punctuation">,</span> resultData <span class="token comment">/*out*/</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> execute_result_code <span class="token operator">=</span> serviceTransactions<span class="token punctuation">.</span><span class="token function">processDelMember</span><span class="token punctuation">(</span>filter<span class="token punctuation">,</span> resultData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> execute_result_code <span class="token operator">!=</span> <span class="token constant">SUCCESS</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>execute_result_code<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    resultData<span class="token punctuation">.</span>returnCode <span class="token operator">=</span> execute_result_code<span class="token punctuation">;</span>
+    resultData<span class="token punctuation">.</span>returnMessage <span class="token operator">=</span> <span class="token function">getErrMessages</span><span class="token punctuation">(</span>execute_result_code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>Transactions</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">serviceTransactions</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+  <span class="token function">processDelMember</span><span class="token punctuation">(</span><span class="token parameter">delFilter<span class="token punctuation">,</span> resultData</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> result_code <span class="token operator">=</span> <span class="token constant">SUCCESS</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">let</span> db_emp_list <span class="token operator">=</span> database<span class="token punctuation">.</span>employee<span class="token punctuation">.</span><span class="token function">getDataset</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">id</span><span class="token operator">:</span> delFilter<span class="token punctuation">.</span>id
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>db_emp_list<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      result_code <span class="token operator">=</span> <span class="token constant">ID_NOT_EXIST</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span> db_emp_list<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"DATABASE_DATA_FAIL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Database have two the same record or more in database.employee"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"id: "</span> <span class="token operator">+</span> delFilter<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      result_code <span class="token operator">=</span> <span class="token constant">DATABASE_DATA_FAIL</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">let</span> <span class="token constant">PARAM</span> <span class="token operator">=</span> database<span class="token punctuation">.</span>employee<span class="token punctuation">.</span>id<span class="token punctuation">;</span>
+    <span class="token keyword">let</span> db_sys <span class="token operator">=</span> database<span class="token punctuation">.</span>systemParameters<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">sectionId</span><span class="token operator">:</span> <span class="token string">'admin'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">targetParmeter</span><span class="token operator">:</span> <span class="token string">'id'</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">targetValue</span><span class="token operator">:</span> delFilter<span class="token punctuation">.</span>Id
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token operator">!</span>db_sys <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      result_code <span class="token operator">=</span> <span class="token constant">DISALLOW_DELETE_ADMINISTRATOR_ACCOUNT</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">let</span> db_emp <span class="token operator">=</span> db_emp_list<span class="token punctuation">.</span><span class="token function">shift</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    db_emp<span class="token punctuation">.</span>modifyDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    database<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> result_code<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在 <code>serviceKernel</code>, <code>serviceImplement</code>, <code>serviceTransactions</code> 三個 class 中，是把所有的 API 通通放進去當作 function 。</p>
+<blockquote>
+<p>若是用 express 的架構來反思 God Object 其實是不需要的，因為它的 docs 裡介紹的 function 沒有屬於任何的 object 而在此介紹的範例有。</p>
+</blockquote>
+<p>這是什麼樣的糙點呢？</p>
+<p>請再回頭仔細看看，這所謂的三層之間的責任是什麼呢？各別做了什麼事？</p>
+<p>再想想，什麼是 MVC 架構？</p>
+<h2 id="邏輯的分類"><a class="header-anchor" href="#邏輯的分類">¶</a>邏輯的分類</h2>
+<p>組合語言 演進成 C 語言 的時代，是不是就是把邏輯分類呢？</p>
+<p>在這樣的 God Object 產出，原因多半是開發者沒有仔細了解這個程式架構中，有什麼概念是保有完整性的呢？換句話說，有什麼「主詞」可以先被抓出來。</p>
+<p>在一個後端中，最重要的主詞是 API。每一個 API 都應該是一個抽象，它有它自己的邏輯。</p>
+<p>另外，如果有接資料庫的話，每一個 Table 也有一個自己的邏輯和資料。(ORM 的概念)</p>
+<p>所以，後端出了兩個主詞: 「API」、「Table」</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">api</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">table</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣要怎麼寫呢？<br>
+換一個樣子來看看。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">controller</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">model</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣有沒有和 MVC 有呼應到了呢？</p>
+<h2 id="前端怎麼辦？也要分嗎？"><a class="header-anchor" href="#前端怎麼辦？也要分嗎？">¶</a>前端怎麼辦？也要分嗎？</h2>
+<p>在這個時代，前端依然有在分類邏輯，而且，不這麼做就 GG 了。</p>
+<p>「前端框架是以資料驅動的方式設計而成。」</p>
+<p>這是什麼意思呢？</p>
+<p>資料，有資料的邏輯，靠開發者撰寫。<br>
+畫面，有畫面邏輯，由資料決定，資料與畫面之間的邏輯，由開發者撰寫。</p>
+<p>這樣要怎麼寫呢？<br>
+換一個樣子來看看。</p>
+<p>vuex 存放資料，vuex 的邏輯放在 action 裡，透過 mutation, getter 存取 store 的資料。<br>
+components，有 components 的邏輯，由資料決定，開發者透過 <code>v-if</code>, <code>v-for</code>…語法完成資料與畫面的邏輯。</p>
+<p>其實前端早就正在進行邏輯的分類了。</p>
+<h2 id="helper-object"><a class="header-anchor" href="#helper-object">¶</a>Helper Object</h2>
+<p>一直以來，我沒有寫過這樣的物件。但是一直聽說它的存在。<br>
+尤其是在 Java 的世界。原因在於有些類似 middleware 的工具需要存在，但不屬於誰，就放在 Helper Object 中。</p>
+<p>但是，我個人覺得，這個一個也許不用存在的物件。但是幫他分類有時太花心思，不過，如果不分類新人接手怎麼會知道裡面的「巧妙之處」呢？</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/God_object">God object</a><br>
+[2]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-tw/%E4%B8%89%E4%BD%8D%E4%B8%80%E9%AB%94">三位一體</a><br>
+[3]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/MVC">MVC - 維基百科，自由的百科全書</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-23T16:00:00.000Z" itemprop="datePublished">
+              2018-10-24
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/god-object/">god object</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

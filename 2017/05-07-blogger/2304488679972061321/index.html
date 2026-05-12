@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,11 +139,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Javascript-%E7%9A%84%E4%BA%8C%E5%80%BC%E5%8C%96%E6%BC%94%E7%AE%97%E6%B3%95"><span class="toc-text">Javascript 的二值化演算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">主程式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">演算法處理 </span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">執行注意事項</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#javascript-%E7%9A%84%E4%BA%8C%E5%80%BC%E5%8C%96%E6%BC%94%E7%AE%97%E6%B3%95"><span class="toc-text">Javascript 的二值化演算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">主程式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">演算法處理 </span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">執行注意事項</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Javascript-的二值化演算法"><a class="header-anchor" href="#Javascript-的二值化演算法">¶</a>Javascript 的二值化演算法</h1>
+    <h1 id="javascript-的二值化演算法"><a class="header-anchor" href="#javascript-的二值化演算法">¶</a>Javascript 的二值化演算法</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack02.blogspot.com/2017/05/javascript.html">https://darkblack02.blogspot.com/2017/05/javascript.html</a><br>
 移植時的最後更新日期: 2017-05-07T10:12:29.494+08:00</p>
 <p>影像處理一直是寫程式的一個口袋題目，不管是做<a href="https://darkblack02.blogspot.tw/2011/05/rawsmooth.html" target="_blank">smooth演算法</a>，還是更簡單的<a href="https://darkblack02.blogspot.tw/2016/04/python-bitmap.html" target="_blank">取pixel值</a>，在這個部落格都各別以C++和python實現過了。<br /><br />最近，受朋友所託寫一個影像處理的小程式，是用來做二值化的演算法，其中的寫法是用原生的Javascript寫的，無需加任何的library即可執行。<br /><br />完整版的程式放在<a href="https://github.com/dwatow/ImageBinarization" target="_blank">github</a>上面<br /><br /><h3><span style="font-size: large;">主程式</span></h3><pre class="prettyprint"><code class="language-javascript">function main() &#123;<br />      const canvas = document.querySelector(&quot;#draw&quot;);<br />      var ctx = canvas.getContext(“2d”);<br />      const height = img.height;<br />      const width = img.width;<br />      canvas.width = width;<br />      canvas.height = height;<br />      ctx.drawImage(img, 0, 0, width, height);<br />      let image = ctx.getImageData(0, 0, width, height);<br /><br />      threshold = threshold_input.value;<br />      image = imageProcess(image);<br /><br />      let [countW, countB] = countWB(image);<br />      showReport(countW, countB);<br /><br />      console.log(countW/(countW+countB)*100, countB/(countW+countB)*100);<br />      ctx.putImageData(image, 0, 0);<br />    &#125;</code></pre><h3><span style="font-size: large;">演算法處理 </span></h3><pre class="prettyprint"><code class="language-javascript"> function imageProcess(frame) &#123;<br />      for(let i = 0; i &lt; frame.data.length; i += 4) &#123;<br />        let sum<br />          = frame.data[i + 0] +<br />            frame.data[i + 1] +<br />            frame.data[i + 2];<br /><br />        let color = sum / 3;<br /><br />        if (color &gt; threshold) &#123;<br />          color = 255;<br />        &#125;<br />        else &#123;<br />          color = 0;<br />        &#125;<br /><br />        frame.data[i + 0] = color; // RED<br />        frame.data[i + 1] = color; // GREEN<br />        frame.data[i + 2] = color; // Blue<br />      &#125;<br />      return frame;<br />    &#125;</code></pre><br /><h3><span style="font-size: large;">執行注意事項</span></h3>其中，<code>getImageData</code>語法，無法用瀏覽器透過<code>file://</code>讀取，所以在此建議使用<a href="https://darkblack02.blogspot.tw/search?updated-max=2017-04-29T10:37:00%2B08:00&amp;max-results=1" target="_blank">python的簡易web server</a>即可透過<code>localhost:8000</code>(預設用8000)成功取得影像資料。</p>
@@ -188,7 +190,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -205,12 +207,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

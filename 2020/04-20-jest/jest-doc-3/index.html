@@ -71,17 +71,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -95,12 +93,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -138,34 +140,52 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%80-Jest-Doc-%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%B8%AC%E8%A9%A6"><span class="toc-text">讀 Jest Doc - 非同步測試</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Testing-Asynchronous-Code"><span class="toc-text">Testing Asynchronous Code</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Callbacks"><span class="toc-text">Callbacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Promises"><span class="toc-text">Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#resolves-rejects"><span class="toc-text">.resolves &#x2F; .rejects</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Async-Await"><span class="toc-text">Async&#x2F;Await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%9B%9E%E8%A6%8B"><span class="toc-text">下回見</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%95%8F%E9%A1%8C"><span class="toc-text">問題</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%80-jest-doc-%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%B8%AC%E8%A9%A6"><span class="toc-text">讀 Jest Doc - 非同步測試</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#testing-asynchronous-code"><span class="toc-text">Testing Asynchronous Code</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#callbacks"><span class="toc-text">Callbacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#promises"><span class="toc-text">Promises</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#resolves-rejects"><span class="toc-text">.resolves &#x2F; .rejects</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#async-await"><span class="toc-text">Async&#x2F;Await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%9B%9E%E8%A6%8B"><span class="toc-text">下回見</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%95%8F%E9%A1%8C"><span class="toc-text">問題</span></a></li></ol>
   </div>
 
 
-    <h1 id="讀-Jest-Doc-非同步測試"><a class="header-anchor" href="#讀-Jest-Doc-非同步測試">¶</a>讀 Jest Doc - 非同步測試</h1>
+    <h1 id="讀-jest-doc-非同步測試"><a class="header-anchor" href="#讀-jest-doc-非同步測試">¶</a>讀 Jest Doc - 非同步測試</h1>
 <p>上一回，我們看了各式各樣的基本的斷言庫，可以讓我們測試簡單型別(Number/String/Boolean)，測試非零值(undefined/null)，測試複雜型別(Object/Array)，甚至還可以測試是否例外的發生行為，以及測試例外錯誤(Error)</p>
 <p>這一回，來看看 JavaScript 的宿命對決，要怎麼測試非同步問題。<br>
 這個就沒什麼測試觀念要帶入 <s>，就純粹的在看是不是會寫 JavaScript 而已</s>。<br>
 對非同步沒有經驗或不懂的朋友，可以先看看影片: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">所以說event loop到底是什麼玩意兒？| Philip Roberts | JSConf EU</a> 了解一下再繼續看哦</p>
-<h1 id="Testing-Asynchronous-Code"><a class="header-anchor" href="#Testing-Asynchronous-Code">¶</a>Testing Asynchronous Code</h1>
+<h1 id="testing-asynchronous-code"><a class="header-anchor" href="#testing-asynchronous-code">¶</a>Testing Asynchronous Code</h1>
 <p>依照<a target="_blank" rel="noopener" href="https://medium.com/@peterchang_82818/javascript-es7-async-await-%E6%95%99%E5%AD%B8-703473854f29-tutorial-example-703473854f29">非同步的聖經</a>的步調，來看非同步的三位一體吧！</p>
-<h2 id="Callbacks"><a class="header-anchor" href="#Callbacks">¶</a>Callbacks</h2>
+<h2 id="callbacks"><a class="header-anchor" href="#callbacks">¶</a>Callbacks</h2>
 <p><strong>待測物</strong></p>
 <p>待測 function 是一個 <code>fetchData</code> 吃一個 callback 當參數。<br>
 內部實作，就讓它隔一段時間再執行 callback，模仿 API 發送成功之後，呼叫 callback 的行為。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchData</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    callback(<span class="string">&#x27;peanut butter&#x27;</span>)</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token parameter">callback</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">callback</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>測試程式</strong></p>
 <div class="danger">
 <p>測試千萬不要這樣寫</p>
 </div>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Don&#x27;t do this!</span></span><br><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fetchData(callback); <span class="comment">// 執行 (最後一行) 就...結束了。</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Don't do this!</span>
+<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">function</span> <span class="token function">callback</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">fetchData</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 執行 (最後一行) 就...結束了。</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>這樣寫的話， <code>fetchData</code> 因為在最後一行，所以只要它跑完就結束了。JavaScript 是非同步語言，所以這種發送 API 的事都是主執行緒結束時在處理的，但是主執行緒結束，Jest 也就結束了，沒有跑 callback 等同於沒有跑測試 QQ</p>
 <p>怎辦？ Jest 給了我們一個 <code>done</code> 的用法 (在此為了不要和上一個例子差太多，所以我改寫了 jest 官網上的範例)</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function"><span class="params">done</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">    done();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fetchData(callback);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter'</span><span class="token punctuation">,</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">function</span> <span class="token function">callback</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">fetchData</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>只要你有引入 done 就一定要執行 done 不然就會失敗。<br>
 算是很好的保障機制。 <code>done()</code> 的時間點會安排在測試的最後。<br>
 如果有 try-catch 我建議放在 <code>finally</code> 的區段。</p>
-<h2 id="Promises"><a class="header-anchor" href="#Promises">¶</a>Promises</h2>
+<h2 id="promises"><a class="header-anchor" href="#promises">¶</a>Promises</h2>
 <p><strong>待測物</strong></p>
 <p>待測 function 是一個 <code>fetchData</code> 吃一個 callback 當參數。<br>
 內部實作，除了承上的特性之外，還需要讓它回傳一個 promise 物件。</p>
@@ -176,7 +196,30 @@
 因為設計 setTimeout 是為了在 API 成功回傳之後，執行的內容<br>
 而 exception 發生的時間點，通常是在 <code>new Promise()</code> 的 callback 這一層。所以特別寫出這個待測物的細節。</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchData</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      resolve(<span class="string">&#x27;peanut butter&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchDataReject</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      reject(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fetchDataErr</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      reject(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token parameter">callback</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token parameter">resolve</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">fetchDataReject</span><span class="token punctuation">(</span><span class="token parameter">callback</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token function">reject</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">function</span> <span class="token function">fetchDataErr</span><span class="token punctuation">(</span><span class="token parameter">callback</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token function">reject</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>測試程式</strong></p>
 <p>想要弄懂 Promise 可以先看看這一篇: <a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/primers/promises?hl=zh-tw">JavaScript Promise：簡介  |  Web  |  Google Developers</a></p>
 <div class="danger">
@@ -186,11 +229,18 @@
 <p>注意: 使用 promise 可以不用 done，但是要記得在該 return 時加上 return。<br>
 <code>expect</code> 寫在 <code>.then</code> 或 <code>.catch</code> 裡的 callback 時， <code>fetchData</code> 前要加 <code>return</code>。</p>
 </div>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> fetchData().then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>可靠的 <code>Promise.reject()</code></strong></p>
 <p>如果你想測試 <code>Promise.reject()</code> 可靠的執行。除了使用 <code>.catch</code> 註冊一個會執行 <code>expect</code> 的 callback 之外。最好再加一個 <code>expect.assertions(1);</code> 讓 Jest 知道你應該要執行一次 assertion。<br>
 確保它真的會跑到 assertion 而不是就這樣默默的都執行對了。不會 reject 然後又沒報錯。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the fetch fails with an error&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  expect.assertions(<span class="number">1</span>); <span class="comment">// 讓 Jest 知道你應該要執行一次 assertion。</span></span><br><span class="line">  <span class="keyword">return</span> fetchData().catch(<span class="function"><span class="params">e</span> =&gt;</span> expect(e).toMatch(<span class="string">&#x27;error&#x27;</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the fetch fails with an error'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  expect<span class="token punctuation">.</span><span class="token function">assertions</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 讓 Jest 知道你應該要執行一次 assertion。</span>
+  <span class="token keyword">return</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token parameter">e</span> <span class="token operator">=></span> <span class="token function">expect</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="resolves-rejects"><a class="header-anchor" href="#resolves-rejects">¶</a>.resolves / .rejects</h3>
 <p>Jest 斷言庫提供了 promise 的簡便寫法，這時就是 Effective Jest 的時刻了。</p>
 <div class="danger">
@@ -199,19 +249,45 @@
 無論使用哪一種，最後要記得，在該 <code>return</code> 時加上 <code>return。</code></p>
 </div>
 <p><strong>可靠的 <code>Promise.resolve()</code></strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter(shorthand)&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> expect(fetchData()).resolves.toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter(shorthand)'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>resolves<span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><strong>可靠的 <code>Promise.reject()</code></strong></p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the fetch fails with an error(shorthand)&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> expect(fetchDataReject()).rejects.toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Async-Await"><a class="header-anchor" href="#Async-Await">¶</a>Async/Await</h2>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the fetch fails with an error(shorthand)'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">fetchDataReject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rejects<span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="async-await"><a class="header-anchor" href="#async-await">¶</a>Async/Await</h2>
 <p>使用 async/await 第一件事，就是要先會用 promise</p>
 <ol>
 <li>記得在要執行 await 的函數開頭，加上 async。</li>
 <li>用 try-catch 捕捉 reject 的結果。 (取代 <code>.catch</code> 的語法)</li>
 </ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> fetchData();</span><br><span class="line">  expect(data).toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an error&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  expect.assertions(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> fetchDataErr();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    expect(e).toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the fetch fails with an error'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  expect<span class="token punctuation">.</span><span class="token function">assertions</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">await</span> <span class="token function">fetchDataErr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>Jest 斷言庫提供了 async/await 的簡便寫法，這時就是 Effective Jest 的時刻了。</p>
 <p>在 .resolves / .rejects 的同法，也可以搭配 async/await</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">test(<span class="string">&#x27;the data is peanut butter(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchData()).resolves.toBe(<span class="string">&#x27;peanut butter&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an reject error(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchDataReject()).rejects.toMatch(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">test(<span class="string">&#x27;the fetch fails with an exception error(shorthand)&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> expect(fetchDataErr()).rejects.toThrow(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the data is peanut butter(shorthand)'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">await</span> <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>resolves<span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token string">'peanut butter'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the fetch fails with an reject error(shorthand)'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">await</span> <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">fetchDataReject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rejects<span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">test</span><span class="token punctuation">(</span><span class="token string">'the fetch fails with an exception error(shorthand)'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">await</span> <span class="token function">expect</span><span class="token punctuation">(</span><span class="token function">fetchDataErr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rejects<span class="token punctuation">.</span><span class="token function">toThrow</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="下回見"><a class="header-anchor" href="#下回見">¶</a>下回見</h2>
 <p>喜歡的話歡迎訂閱、按讚、分享。<br>
 有任何問題也歡迎在下方留言討論。</p>
@@ -267,7 +343,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -284,12 +360,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

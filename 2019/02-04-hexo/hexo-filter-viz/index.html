@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,11 +139,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hexo-%E5%8A%A0%E4%B8%8A-Graphviz-%E5%8A%9F%E8%83%BD"><span class="toc-text">Hexo 加上 Graphviz 功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B-hackmd-%E7%9A%84-code"><span class="toc-text">看 hackmd 的 code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Viz-js-%E2%89%A0-Viz"><span class="toc-text">Viz.js ≠ Viz</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-filter-viz-%E6%9B%B4%E6%96%B0%E5%AE%83"><span class="toc-text">hexo-filter-viz 更新它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hexo-%E5%8A%A0%E4%B8%8A-graphviz-%E5%8A%9F%E8%83%BD"><span class="toc-text">Hexo 加上 Graphviz 功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B-hackmd-%E7%9A%84-code"><span class="toc-text">看 hackmd 的 code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#viz-js-viz"><span class="toc-text">Viz.js ≠ Viz</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-filter-viz-%E6%9B%B4%E6%96%B0%E5%AE%83"><span class="toc-text">hexo-filter-viz 更新它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Hexo-加上-Graphviz-功能"><a class="header-anchor" href="#Hexo-加上-Graphviz-功能">¶</a>Hexo 加上 Graphviz 功能</h1>
+    <h1 id="hexo-加上-graphviz-功能"><a class="header-anchor" href="#hexo-加上-graphviz-功能">¶</a>Hexo 加上 Graphviz 功能</h1>
 <p>今天突然心血來潮，除夕沒事就來改改 hexo 寫寫程式吧</p>
 <p>一開始也是想「移植 hackmd 的功能到 hexo」下一個就是，我超愛也很常用的 Graphviz<br>
 改這個之前，都是貼上 svg code 上來。而不是在 hexo 上直接寫 source code。</p>
@@ -150,13 +152,47 @@
 <h2 id="看-hackmd-的-code"><a class="header-anchor" href="#看-hackmd-的-code">¶</a>看 hackmd 的 code</h2>
 <p>憑著記憶找了一下是在哪個位子。<br>
 運氣真好，一下就被我找到了<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// graphviz</span></span><br><span class="line"><span class="keyword">var</span> graphvizs = view.find(<span class="string">&#x27;div.graphviz.raw&#x27;</span>).removeClass(<span class="string">&#x27;raw&#x27;</span>)</span><br><span class="line">graphvizs.each(<span class="function"><span class="keyword">function</span> (<span class="params">key, value</span>) </span>&#123;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> $value = $(value)</span><br><span class="line">  <span class="keyword">var</span> $ele = $(value).parent().parent()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> graphviz = Viz($value.text())</span><br><span class="line">  <span class="keyword">if</span> (!graphviz) <span class="keyword">throw</span> <span class="built_in">Error</span>(<span class="string">&#x27;viz.js output empty graph&#x27;</span>)</span><br><span class="line">  $value.html(graphviz)</span><br><span class="line"></span><br><span class="line">  $ele.addClass(<span class="string">&#x27;graphviz&#x27;</span>)</span><br><span class="line">  $value.children().unwrap().unwrap()</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">  $value.unwrap()</span><br><span class="line">  $value.parent().append(<span class="string">&#x27;&lt;div class=&quot;alert alert-warning&quot;&gt;&#x27;</span> + err + <span class="string">&#x27;&lt;/div&gt;&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.warn(err)</span><br><span class="line">&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// graphviz</span>
+<span class="token keyword">var</span> graphvizs <span class="token operator">=</span> view<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">'div.graphviz.raw'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">removeClass</span><span class="token punctuation">(</span><span class="token string">'raw'</span><span class="token punctuation">)</span>
+graphvizs<span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">key<span class="token punctuation">,</span> value</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">var</span> $value <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+  <span class="token keyword">var</span> $ele <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">parent</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">var</span> graphviz <span class="token operator">=</span> <span class="token function">Viz</span><span class="token punctuation">(</span>$value<span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>graphviz<span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token function">Error</span><span class="token punctuation">(</span><span class="token string">'viz.js output empty graph'</span><span class="token punctuation">)</span>
+  $value<span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span>graphviz<span class="token punctuation">)</span>
+
+  $ele<span class="token punctuation">.</span><span class="token function">addClass</span><span class="token punctuation">(</span><span class="token string">'graphviz'</span><span class="token punctuation">)</span>
+  $value<span class="token punctuation">.</span><span class="token function">children</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  $value<span class="token punctuation">.</span><span class="token function">unwrap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  $value<span class="token punctuation">.</span><span class="token function">parent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'&lt;div class="alert alert-warning">'</span> <span class="token operator">+</span> err <span class="token operator">+</span> <span class="token string">'&lt;/div>'</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>這就是 hacmkd 處理 graphviz 的地方。其中 <code>var graphviz = Viz($value.text())</code> 似乎就是處理的語法。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Viz = <span class="built_in">require</span>(<span class="string">&#x27;viz.js&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> Viz <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'viz.js'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在 21 行之處，有宣告…，這不就是套件名稱了嗎？！帥呀！來研究一下</p>
-<h2 id="Viz-js-≠-Viz"><a class="header-anchor" href="#Viz-js-≠-Viz">¶</a>Viz.js ≠ Viz</h2>
+<h2 id="viz-js-viz"><a class="header-anchor" href="#viz-js-viz">¶</a>Viz.js ≠ Viz</h2>
 <p>說明文件<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>，足以說明如何使用</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;viz.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;full.render.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> viz = <span class="keyword">new</span> Viz();</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">  viz.renderSVGElement(<span class="string">&#x27;digraph &#123; a -&gt; b &#125;&#x27;</span>)</span></span><br><span class="line"><span class="javascript">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">element</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.body.appendChild(element);</span></span><br><span class="line">  &#125;)</span><br><span class="line"><span class="javascript">  .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">    <span class="comment">// Create a new Viz instance (@see Caveats page for more info)</span></span></span><br><span class="line"><span class="javascript">    viz = <span class="keyword">new</span> Viz();</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">    <span class="comment">// Possibly display the error</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.error(error);</span></span><br><span class="line">  &#125;);</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viz.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>full.render.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+  <span class="token keyword">var</span> viz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Viz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  viz<span class="token punctuation">.</span><span class="token function">renderSVGElement</span><span class="token punctuation">(</span><span class="token string">'digraph &#123; a -> b &#125;'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">element</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>element<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token parameter">error</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// Create a new Viz instance (@see Caveats page for more info)</span>
+    viz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Viz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Possibly display the error</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>發現了嗎？ <code>var viz = new Viz();</code> + <code>viz.renderSVGElement('digraph &#123; a -&gt; b &#125;')</code> 的用法，是不是和 hackmd 不一樣呢？簡單的說，Viz.js 已經更新到 2.x 版了。而 hacmkd 使用的版本是 1.x 版的。</p>
 <p>不過，光知道套件還不能直接上 hexo，還要找找 hexo 的外掛程式，依之前的命名規則，應該是叫做 <code>hexo-filter-viz</code> <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>。而果然沒錯，有這個套件，立馬裝來試看看。</p>
 <p>結果，一直渲染不出來，只有一塊白色的區塊，但是有 svg code。<br>
@@ -169,7 +205,7 @@
 <p>有興趣的朋友們，可以裝我 github 上的版本。<br>
 如果 pull request 成功合併之後，再安裝它的版本。<br>
 目前 npm 沒有 package 可以安裝。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/dwatow/hexo-filter-viz.git</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">npm</span> <span class="token function">install</span> https://github.com/dwatow/hexo-filter-viz.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>直接跑 hackmd 的語法測試，成功的話出現這樣的畫面</p>
 <p><img src="https://i.imgur.com/J7RZhAc.png" alt=""></p>
 <hr class="footnotes-sep">
@@ -220,7 +256,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -237,12 +273,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

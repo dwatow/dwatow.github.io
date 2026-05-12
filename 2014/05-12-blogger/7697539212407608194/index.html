@@ -70,17 +70,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -94,12 +92,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -137,11 +139,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sliverlight-Bindling"><span class="toc-text">Sliverlight&#x2F;&#x2F;Bindling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Binding有分成三種模式。</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sliverlight-bindling"><span class="toc-text">Sliverlight&#x2F;&#x2F;Bindling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Binding有分成三種模式。</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Sliverlight-Bindling"><a class="header-anchor" href="#Sliverlight-Bindling">¶</a>Sliverlight//Bindling</h1>
+    <h1 id="sliverlight-bindling"><a class="header-anchor" href="#sliverlight-bindling">¶</a>Sliverlight//Bindling</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2014/05/sliverlightbindling.html">https://darkblack01.blogspot.com/2014/05/sliverlightbindling.html</a><br>
 移植時的最後更新日期: 2014-05-15T14:14:26.732+08:00</p>
 <p>一開始，先來看看Binding without C#的做法，適合給前端的視覺設計做動態頁面時，有全權的決定權(因為，都用XAML)。<br />這個例子是一個Slider調整TextBlock的FontSize屬性。<br />拉動Slider，TextBlock的字型大小就會改變。 XML檔<br /><pre class="prettyprint"><code class="language-xml">&lt;Slider x:Name=“sliderFontSize” Minimum=“9” Maximum=“400” Value=“16”/&gt;<br />&lt;TextBlock x:Name=“lblSampleText” Text=“Simple Text” <br />           FontSize=&quot;&#123;Binding ElementName=sliderFontSize, Path=Value&#125;&quot;/&gt;<br /></code></pre>Binding時，ElementName指定XAML的物件，並且使用Path指定該物件的其中一個屬性。達到了不需要C#而達到了動態頁面的效果。 <br />我們來看看，如何利用CS建立物件並且利用Blinding呼叫物件屬性顯示在XML上面的兩個例子。<br /><br /><h3><span style="font-size: large;">Binding有分成三種模式。</span></h3>(目前，都還沒加上C#，以純XAML的物件傳值在討論)<br /><ul><li>One-time: </li>將目標記憶體位址初始化此XML的屬性，並且取消Binding的關係。<br /><li>One-Way: </li>此XML的屬性，像(C<ins>的)指標指向某指定的記憶體位址，如果XML的屬性被覆寫，就失去了Binding的關係，如果覆寫記憶體位址，則會更新XML的屬性。 <li>Two-Way: </li>此XML的屬性，像(C</ins>的)參考，與某一個XML的物件互為同一個記憶體位址，可以更新(XML的物件)彼此。<br /></ul><br /><br />後續是有加上C#的code時，Bindling的情況，我自己也不是很懂！哈哈。<br /><br />第一個例子，介面的Button如何和程式碼的Button連結在一起，並且觸發Click的事件，並且執行設定好關聯的函式myButton_Click。<br /><br />XML檔 <br /><pre class="prettyprint"><code class="language-xml">    &lt;Grid x:Name=“LayoutRoot” Background=“White”&gt;<br />        &lt;Grid.ColumnDefinitions&gt;<br />            &lt;ColumnDefinition Width=“100”/&gt;<br />            &lt;ColumnDefinition /&gt;<br />        &lt;/Grid.ColumnDefinitions&gt;<br /><br />        &lt;Canvas …&gt;<br />            &lt;Button Name=“xmlButton” Click=“myButton_Click” Content=&quot;&#123;Binding Content&#125;&quot; … /&gt;<br />        &lt;/Canvas&gt;<br />        <br />    &lt;/Grid&gt;</code></pre>CS檔 <br /><pre class="prettyprint"><code class="language-cs">namespace SliverlightOne<br />&#123;<br />    public partial class MainPage : UserControl<br />    &#123;<br />        //…<br />        private int i;<br /><br />        public MainPage()<br />        &#123;<br />            InitializeComponent();<br /><br />            Button csButton = new Button() &#123; Content = “this is …” &#125;;//obj editor<br />            xmlButton.DataContext = csButton; //xml obj = cs obj<br />            //…<br />        &#125;<br /><br />        private void myButton_Click(object sender, RoutedEventArgs e)<br />        &#123;<br />            xmlButton.Content = ++i;<br />        &#125;<br />        //…<br />    &#125;<br />&#125;</code></pre>第二個例子，我們來看看介面的DataGrid和CS的List如何建立關聯性，並且利用Blinding呼叫物件屬性顯示在介面上。<br />XML檔<br />其中 Canvas.Left=“10” AutoGenerateColumns=“False” 不自動生成顯示表格，為了要自訂欄位標籤 <br /><pre class="prettyprint"><code class="language-xml">    &lt;Grid x:Name=“LayoutRoot” Background=“White”&gt;<br />        &lt;Grid.ColumnDefinitions&gt;<br />            &lt;ColumnDefinition Width=“100”/&gt;<br />            &lt;ColumnDefinition /&gt;<br />        &lt;/Grid.ColumnDefinitions&gt;<br />        &lt;Canvas Grid.Column=“1” …&gt;<br />            &lt;sdk:DataGrid Name=“dgData” Canvas.Left=“10” AutoGenerateColumns=“False” …&gt;<br />                &lt;sdk:DataGrid.Columns&gt;<br />                    &lt;sdk:DataGridTextColumn Binding=&quot;&#123;Binding Id&#125;&quot; Header=&quot;_Id&quot;/&gt;<br />                    &lt;sdk:DataGridTextColumn Binding=&quot;&#123;Binding Name&#125;&quot; Header=&quot;_Name&quot;/&gt;<br />                &lt;/sdk:DataGrid.Columns&gt;<br />            &lt;/sdk:DataGrid&gt;<br /><br />        &lt;/Canvas&gt;<br />    &lt;/Grid&gt;<br />&lt;/UserControl&gt;</code></pre>CS檔 <br /><pre class="prettyprint"><code class="language-cs">namespace SliverlightOne<br />&#123;<br />    public partial class MainPage : UserControl<br />    &#123;<br />        public class abc  //define my Data class<br />        &#123;<br />            private string cv_Id;<br /><br />            public string Id<br />            &#123;<br />                get &#123; return cv_Id; &#125;<br />                set &#123; cv_Id = value; &#125;<br />            &#125;<br />        &#125;<br /><br />        public MainPage()<br />        &#123;<br />            InitializeComponent();<br />            //…<br />            List&lt;abc&gt; tList = new List&lt;abc&gt;();<br />            tList.Add(new abc &#123; Id = “a”, Name = “aa” &#125;);<br />            tList.Add(new abc &#123; Id = “B”, Name = “BB” &#125;);<br />            dgData.ItemsSource = tList; //xml obj = cs obj<br />        &#125;<br />    &#125;<br />&#125;</code></pre></p>
@@ -188,7 +190,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -205,12 +207,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

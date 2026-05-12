@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-21-ironman-2019/2018-10-21-實務上的高內聚與低耦合/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶先來看看學術怎麼說 這兩個名詞是由 Larry Constantine 提出來的[1][2]，並且給出了一個好的程式碼，該努力的方向，「高內聚，低耦合」。這兩個詞各別的意思如下  Cohesion (內聚) [3] 用白話文解釋，把執行某個功能所需用到的程式與資料都塞在某一個模組（function, class, package">
+<meta property="og:type" content="article">
+<meta property="og:title" content="實務上的高內聚與低耦合">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-21-ironman-2019/2018-10-21-%E5%AF%A6%E5%8B%99%E4%B8%8A%E7%9A%84%E9%AB%98%E5%85%A7%E8%81%9A%E8%88%87%E4%BD%8E%E8%80%A6%E5%90%88/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  ¶先來看看學術怎麼說 這兩個名詞是由 Larry Constantine 提出來的[1][2]，並且給出了一個好的程式碼，該努力的方向，「高內聚，低耦合」。這兩個詞各別的意思如下  Cohesion (內聚) [3] 用白話文解釋，把執行某個功能所需用到的程式與資料都塞在某一個模組（function, class, package">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-10-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:40.310Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="內聚">
+<meta property="article:tag" content="耦合">
+<meta name="twitter:card" content="summary">
+  <title>
+    實務上的高內聚與低耦合 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>實務上的高內聚與低耦合</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E4%BE%86%E7%9C%8B%E7%9C%8B%E5%AD%B8%E8%A1%93%E6%80%8E%E9%BA%BC%E8%AA%AA"><span class="toc-text">先來看看學術怎麼說</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%8B%E7%94%A8%E6%99%82%E8%A6%81%E6%83%B3%E5%88%B0%E7%9A%84%E8%A7%80%E5%BF%B5"><span class="toc-text">運用時要想到的觀念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E5%8B%99%E4%B8%8A%E5%8F%88%E8%A6%81%E5%A6%82%E4%BD%95-%E9%AB%98%E5%85%A7%E8%81%9A-%E4%BD%8E%E8%80%A6%E5%90%88-%E5%91%A2%EF%BC%9F"><span class="toc-text">實務上又要如何「高內聚，低耦合」呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A7%E8%81%9A%E6%80%A7"><span class="toc-text">內聚性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%80%A6%E5%90%88%E6%80%A7"><span class="toc-text">耦合性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3%E8%A6%81%E6%80%8E%E9%BA%BC%E5%81%9A%E5%91%A2%EF%BC%9F"><span class="toc-text">那要怎麼做呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%88%89%E5%80%8B%E4%BE%8B%E5%AD%90"><span class="toc-text">舉個例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9F%E8%A8%B1%E6%9C%83%E6%9C%89%E7%96%91%E5%95%8F"><span class="toc-text">也許會有疑問</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%AD%B8%E5%88%B0%E5%95%8F%E9%A1%8C%E6%9C%AC%E8%BA%AB"><span class="toc-text">回歸到問題本身</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<h2 id="先來看看學術怎麼說"><a class="header-anchor" href="#先來看看學術怎麼說">¶</a>先來看看學術怎麼說</h2>
+<p>這兩個名詞是由 Larry Constantine 提出來的[1][2]，並且給出了一個好的程式碼，該努力的方向，「高內聚，低耦合」。這兩個詞各別的意思如下</p>
+<blockquote>
+<p><strong>Cohesion (內聚)</strong> [3]<br>
+用白話文解釋，把執行某個功能所需用到的程式與資料都塞在某一個模組（function, class, package, etc）之中，使得該模組可被視為一個單獨的個體執行，那麼這個模組的 cohesion 就愈高。內聚，內聚，顧名思義就是把程式，資料這些有的沒的東西都『聚在一起』打包起來。</p>
+</blockquote>
+<blockquote>
+<p><strong>Coupling (耦合)</strong> [3]<br>
+如果某個模組跟『其他人（另一個模組）』有關係（例如，使用 global variables 或是接受其他模組傳入的參數）那麼這兩個模組就彼此耦合。</p>
+</blockquote>
+<p>看來，這些解釋都還滿清楚的。(笑)<br>
+簡單的說就是</p>
+<pre class="line-numbers language-none"><code class="language-none">內聚，指的是和其它程式碼「無」相關
+耦合，指的是和其它程式碼「有」相關
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>只是寫程式的人都知道「高內聚，低耦合」，對於這個口訣該如何用於運用呢？</p>
+<h2 id="運用時要想到的觀念"><a class="header-anchor" href="#運用時要想到的觀念">¶</a>運用時要想到的觀念</h2>
+<p>書上[4]有些線索可以找得到</p>
+<blockquote>
+<p>Reduce complexity<br>
+you should be able to forget the details and use the routine without any knowledge of its internal workings.</p>
+</blockquote>
+<p>意思是說好的程式碼，是要可以<code>隱藏複雜性</code>的，而寫完就可以忘記細節的常式(函數)，就是好的程式碼。</p>
+<p>前幾篇有引用自人月神話的觀念「複雜性」可以知道，軟體本質複雜性是無法消除，更別說被簡化了。這是完全不可能的。但是附屬性問題衍生的複雜性，可以用管理的方式消除，也就是適時的隱藏或歸納它。</p>
+<p><code>整理、歸納複雜性</code> 是好的工程師的必要能力之一，但是，這又該如何進行呢？<br>
+一樣來自於人月神話的觀念。</p>
+<ul>
+<li>概念整體性</li>
+<li>隱藏複雜性</li>
+</ul>
+<p><strong>概念整體性</strong></p>
+<p>在這些歸納、整理的階層與表達方式尋求一種一致的觀念與表達方式。<br>
+讓系統呈現的<code>層次感</code>不會這麼難以讓人理解。</p>
+<blockquote>
+<p>我主強在系統設計時，保有概念整體性 (conceptual integrity) 是最重要的原則<br>
+–《人月神話》, 第 4 章 專制、民主與系統設計, p.67</p>
+</blockquote>
+<blockquote>
+<p>每個部份都要反映相同的理念，取得各方面需求的平衡，在語法上，每個地方都是用相同的技巧，在語意上，用的都是類似的觀念。概念整體性</p>
+</blockquote>
+<blockquote>
+<p>一個井然有序，優雅的軟體產品所展現給每一位使用者的，無論是在應用上、在執行這項應用的策略上、在使用者介面指定動作和參數的手法上，都必須是前後連貫的一套心智模式 (mental model)<br>
+–《人月神話》, 《人月神話》二十年, p.326</p>
+</blockquote>
+<p><strong>隱藏複雜性</strong></p>
+<p>好的工程師會模仿物理學家在解決問題時，使用數學工具的思考方式。</p>
+<blockquote>
+<p>數學和物理學之所以能在過去三個世紀突飛猛進，就是藉由為複雜現象建立出簡單的模型 (model) ，然後從模型中推導出現象的特性，並透過實驗來驗證這些特性。<br>
+這種方式之所以行得通，是因為在模型中所排除掉的複雜性 並非現象的本質。<br>
+–《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239</p>
+</blockquote>
+<h2 id="實務上又要如何-高內聚-低耦合-呢？"><a class="header-anchor" href="#實務上又要如何-高內聚-低耦合-呢？">¶</a>實務上又要如何「高內聚，低耦合」呢？</h2>
+<h2 id="內聚性"><a class="header-anchor" href="#內聚性">¶</a>內聚性</h2>
+<p>內聚性的展現，其實是撰寫程式碼時的大忌</p>
+<p>三步寫糙 code</p>
+<ol>
+<li>複製</li>
+<li>貼上</li>
+<li>改一下</li>
+</ol>
+<p>為什麼又高內聚，又糙 code 呢？<br>
+高內聚不就是「好 code」嗎？<br>
+矛盾哦!!</p>
+<p>常出現問題的情況</p>
+<p>「咦？我改了這個，怎麼這裡沒有改到？不是應該是一起的嗎？」</p>
+<p>糙點在於「該耦合，沒耦合，所以糙」，這樣真的是太主觀了。<br>
+但這就是內聚性，保持單一模組(某一塊程式碼)的獨立性(改了不影響別人)</p>
+<h2 id="耦合性"><a class="header-anchor" href="#耦合性">¶</a>耦合性</h2>
+<p>耦合性的展現，其實是撰寫程式碼時的優點: 「好 code 就是要『重複使用程式碼』」</p>
+<p>「那太好辦啦！盡可能的重複使用的程式碼，不就好了，又是優點集一身，又是寫好 code ，忘了高內聚吧！」</p>
+<p>常出現問題的情況<br>
+「咦？我改了這個，怎麼連這裡也改到？那裡也改到？怎麼到處都改到了呀？！(全爆了！嚇死人了)」</p>
+<p>Sorry!! 小劇場太多了！糙點在於「該內聚，沒內聚，所以糙」，這樣真的是太主觀了。<br>
+但這就是耦合性，相關程式要參數化、連動。</p>
+<h2 id="那要怎麼做呢？"><a class="header-anchor" href="#那要怎麼做呢？">¶</a>那要怎麼做呢？</h2>
+<p>了解問題本身的真實面貌<br>
+問題本身指的是在它尚未以程式碼的形式呈現時，用口說語言如何表達問題的相關與獨立性。<br>
+爬疏人在理解這個問題時，認為相關與不相關的部份。</p>
+<p>這要做得好，<strong>不可以只看見程式碼就思考如何安排內聚與耦合</strong>。</p>
+<blockquote>
+<p>關鍵: <strong>概念整體性</strong> 的實務上要怎麼理解<br>
+「當你可以<code>用一個詞表達一件事</code>，那件事就有一個<code>完整的概念</code>」</p>
+</blockquote>
+<h2 id="舉個例子"><a class="header-anchor" href="#舉個例子">¶</a>舉個例子</h2>
+<p>這是一段，原本不是 JavaScript 的 Code</p>
+<p>給你自己幾秒鐘，看看這一段在做什麼</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">WebService</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">var</span> yaml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> xml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/event.json"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">var</span> yaml_file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span> <span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> <span class="token constant">MESSASGE_LOG</span> <span class="token operator">=</span> <span class="token string">"MessageLog"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>yaml_file<span class="token punctuation">.</span><span class="token function">isExists</span><span class="token punctuation">(</span><span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span>fileName <span class="token operator">=</span> <span class="token string">"Log/MsgLog.log"</span><span class="token punctuation">;</span>
+        <span class="token comment">//...</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">,</span> <span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>fileLog<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">,</span> <span class="token constant">MESSASGE_LOG</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">var</span> event <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Event</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event<span class="token punctuation">.</span><span class="token function">loadConfig</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event<span class="token punctuation">.</span><span class="token function">saveConfig</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"Sent"</span><span class="token punctuation">,</span> Sent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"Received"</span><span class="token punctuation">,</span> Received<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"TransactionError"</span><span class="token punctuation">,</span> transactionError<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"MonitorEventReceived"</span><span class="token punctuation">,</span> monitorEventReceived<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+    <span class="token keyword">var</span> yaml <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span><span class="token punctuation">(</span>yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> system_yaml_pathanme <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> system_yaml <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">yamlFile</span><span class="token punctuation">(</span>system_yaml_pathanme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//...</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>改寫成這樣</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">class</span> <span class="token class-name">WebService</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> yaml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/configfile.yaml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> xml_pathname <span class="token operator">=</span> <span class="token string">"webservice/config/event.json"</span><span class="token punctuation">;</span>
+
+    <span class="token function">initialMsgLogFile</span><span class="token punctuation">(</span>yaml_pathname<span class="token punctuation">,</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Log/MsgLog.log</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">var</span> config <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">filePathConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">initialSystemLogFile</span><span class="token punctuation">(</span>config<span class="token punctuation">.</span>systemIniPathname<span class="token punctuation">,</span> config<span class="token punctuation">.</span>logPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">initialEvent</span><span class="token punctuation">(</span>yaml_pathname<span class="token punctuation">,</span> xml_pathname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="也許會有疑問"><a class="header-anchor" href="#也許會有疑問">¶</a>也許會有疑問</h3>
+<p>「程式碼沒有要重複使用，為什麼要弄成一個 function？」<br>
+但是，反問一下這個問題<br>
+「難道需要變成 function 的都只是因為重複使用而已？」</p>
+<h3 id="回歸到問題本身"><a class="header-anchor" href="#回歸到問題本身">¶</a>回歸到問題本身</h3>
+<p>「如果程式有很多個模組，要吃相同的設定檔，那麼共用設定檔路徑是理所當然的」<br>
+上述的描述，包含了「很多個模組」這件事。<br>
+所以有哪些模組是不是應該就有各個完整的概念性可以使用。</p>
+<p>由上述整理好的程式，可以發現有 <code>MsgLog</code>, <code>SystemLog</code>，<code>Event</code> 幾個模組，共用設定檔。</p>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%A7%E8%81%9A%E6%80%A7_(%E8%A8%88%E7%AE%97%E6%A9%9F%E7%A7%91%E5%AD%B8)">内聚性（電腦科學） - 維基百科，自由的百科全書</a><br>
+[2]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%80%A6%E5%90%88%E6%80%A7_(%E8%A8%88%E7%AE%97%E6%A9%9F%E7%A7%91%E5%AD%B8)">耦合性 (電腦科學) - 維基百科，自由的百科全書</a><br>
+[3]: <a target="_blank" rel="noopener" href="http://teddy-chen-tw.blogspot.com/2011/12/1.html">亂談軟體設計（1）：Cohesion and Coupling</a><br>
+[4]: 《Code Complete 2/e》, CH7 High-Quality Routines, 7.1 Valid Reasons to Create a Routine</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-20T16:00:00.000Z" itemprop="datePublished">
+              2018-10-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E5%85%A7%E8%81%9A/">內聚</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E8%80%A6%E5%90%88/">耦合</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

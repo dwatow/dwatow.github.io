@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/09-18-ironman-2021/2021-09-18-pure-function/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶functional programming (後面簡稱 FP，不是 FB)  這兩個特性，很重要，我們就依這兩個特性，將 pure function 的定義，轉移到 pure component，在此之前，再看一些關於 pure function 的特性，它到底厲害在哪裡？  老實說，這是一個我在寫 C++ 時完全沒有碰過的東西。之前看別的部門的人用 lambda，我那時還真看不太懂。 不過後">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pure function">
+<meta property="og:url" content="https://dwatow.github.io/2021/09-18-ironman-2021/2021-09-18-pure-function/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶functional programming (後面簡稱 FP，不是 FB)  這兩個特性，很重要，我們就依這兩個特性，將 pure function 的定義，轉移到 pure component，在此之前，再看一些關於 pure function 的特性，它到底厲害在哪裡？  老實說，這是一個我在寫 C++ 時完全沒有碰過的東西。之前看別的部門的人用 lambda，我那時還真看不太懂。 不過後">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/cvuFtP5.png">
+<meta property="article:published_time" content="2021-09-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.839Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/cvuFtP5.png">
+  <title>
+    pure function - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>pure function</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#functional-programming-%E5%BE%8C%E9%9D%A2%E7%B0%A1%E7%A8%B1-fp-%E4%B8%8D%E6%98%AF-fb"><span class="toc-text">functional programming (後面簡稱 FP，不是 FB)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pure-function"><span class="toc-text">pure function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E5%82%B3%E5%80%BC-%E5%BC%95%E6%95%B8-return-value-arguments"><span class="toc-text">回傳值&#x2F;引數 return value&#x2F;arguments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%AF%E4%BD%9C%E7%94%A8-side-effective"><span class="toc-text">副作用 side effective</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impure-function-%E4%B8%8D-pure-%E7%9A%84-function"><span class="toc-text">impure function (不 pure 的 function)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3%E5%92%8C%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E6%9C%89%E4%BB%80%E9%BA%BC%E9%97%9C%E4%BF%82%EF%BC%9F"><span class="toc-text">那和前端框架有什麼關係？</span></a></li></ol>
+  </div>
+
+
+    <h2 id="functional-programming-後面簡稱-fp-不是-fb"><a class="header-anchor" href="#functional-programming-後面簡稱-fp-不是-fb">¶</a>functional programming (後面簡稱 FP，不是 FB)</h2>
+<blockquote>
+<p>這兩個特性，很重要，我們就依這兩個特性，將 pure function 的定義，轉移到 pure component，在此之前，再看一些關於 pure function 的特性，它到底厲害在哪裡？</p>
+</blockquote>
+<p>老實說，這是一個我在寫 C++ 時完全沒有碰過的東西。之前看別的部門的人用 lambda，我那時還真看不太懂。</p>
+<p>不過後來學 JavaScript 時，就正好碰到大 React 時代，遇到不少 FP 的狂熱信仰者討論著 FP 很多很神的特性，以及 FP 的程式設計特有的限制。</p>
+<p>還記得 Java 嗎？它是純物件導向程式設計，用它寫程式有它相對應的限制，而這樣的限制伴隨而來的純粹帶來了許多好處。相對的純 FP 也是有一樣的情況，要真正了解這個理論，就必須要了解一下「純」的程式設計究竟有什麼好處，什麼限制，在此就說一下我自己所知道的部份。(可能還有其它的)</p>
+<p><strong>限制</strong></p>
+<ul>
+<li>變數宣告只有 arguments ，函數內部不宣告變數。</li>
+<li>function = pure function</li>
+<li>寫程式的過程，像是在寫數學證明題一樣</li>
+</ul>
+<p><strong>優點</strong></p>
+<ul>
+<li>不會有 side effect</li>
+<li>不會有未預期的變數被修改</li>
+</ul>
+<p><strong>特色</strong></p>
+<ul>
+<li>immutable ，不會有變數被修改，只會取代 (蓋掉)。</li>
+<li>函數行為可預測，只要輸入改變，輸出就可以預測。</li>
+</ul>
+<h2 id="pure-function"><a class="header-anchor" href="#pure-function">¶</a>pure function</h2>
+<p>在 functional programming 的世界裡，有個特別的東西叫 pure function 。</p>
+<p>在在維基百科，有到它們有兩個特性，<br>
+<img src="https://i.imgur.com/cvuFtP5.png" alt=""></p>
+<ol>
+<li>相同的輸入，只會得到相同的輸出。</li>
+<li>沒有 side effect</li>
+</ol>
+<h3 id="回傳值-引數-return-value-arguments"><a class="header-anchor" href="#回傳值-引數-return-value-arguments">¶</a>回傳值/引數 return value/arguments</h3>
+<pre class="line-numbers language-none"><code class="language-none">input -&gt; 邏輯運算 -&gt; output
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>「相同的輸入，只會得到相同的輸出」是什麼意思呢？</p>
+<p>以純 FP 來說，這個 function 內部是沒有變數宣告的，所以裡面只有邏輯運算。有變數的地方，只有 argument，也就是說可以把所有的 pure function 變成這樣的關係</p>
+<pre class="line-numbers language-none"><code class="language-none">arguments -&gt; 邏輯運算 -&gt; return value
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="副作用-side-effective"><a class="header-anchor" href="#副作用-side-effective">¶</a>副作用 side effective</h3>
+<p>簡單的說，就是不用 arguments 和 return value 來進行資料流，或者</p>
+<ol>
+<li>讀寫檔案、資料庫</li>
+<li>全域變數</li>
+</ol>
+<h2 id="impure-function-不-pure-的-function"><a class="header-anchor" href="#impure-function-不-pure-的-function">¶</a>impure function (不 pure 的 function)</h2>
+<p>順便來討論一下「impure function」是什麼。</p>
+<p>先說一個比較經典的特例，取亂數</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>這個函數是 pure 的嗎？不是，因為每一次都<code>沒有輸入，但是每一次的輸出都不一樣</code>。<br>
+只要任何一個輸出，有相同的輸入，就 impure 了。</p>
+<blockquote>
+<p>取得現在的時間也是 impure。</p>
+</blockquote>
+<p>再看另一個例子，計數器</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">++</span>count<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 1</span>
+<span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 2</span>
+<span class="token function">counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 3</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>函數 <code>counter</code> 和取亂數一樣，沒有輸入輸出不同。另外還有一個 impure 的特性，比取亂數更加明顯，就是它有 side effect (事實上 <code>random</code> 是靠 side effect 取亂數的)，變數 <code>count</code> 對 <code>counter</code> 來說，是一種「全域變數」的存在。</p>
+<p>難道純 FP 一個無法宣告變數的環境，還會有<code>全域變數</code>這種 side effect 嗎？有的</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token parameter">count <span class="token operator">=</span> <span class="token number">0</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">++</span>count<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> counter0 <span class="token operator">=</span> <span class="token function">counter</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 1</span>
+<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 2</span>
+<span class="token function">counter0</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 3</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用閉包的手法，就可以為純 FP 的環境，儲存全域變數產生 side effect，counter0 變成了 impure function，有一些語言支援 <code>static 變數</code>，其實就像是閉包做到的效果。</p>
+<h2 id="那和前端框架有什麼關係？"><a class="header-anchor" href="#那和前端框架有什麼關係？">¶</a>那和前端框架有什麼關係？</h2>
+<p>如果你是用 React 就可以直接明白 pure function 和 pure component 之間的關係，因為 React 的 component 有一種就是直接寫個 function 做一次渲染，本身並不記錄 data 的。(雖然後來有 hook 好像就都這樣做)。</p>
+<p>那 Vue.js 呢？明天我們就以 pure function 的特性，來看看 Vue.js 怎麼 pure，能有多 pure。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-09-17T16:00:00.000Z" itemprop="datePublished">
+              2021-09-18
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

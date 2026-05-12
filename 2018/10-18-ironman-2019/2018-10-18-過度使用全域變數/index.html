@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-18-ironman-2019/2018-10-18-過度使用全域變數/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  一開始學習寫程式，有個還不會寫 function 的過程，常常出現一個 main 到底的程式碼。 &#x2F;&#x2F;有一些變數宣告 var words &#x3D; &#39;hello world&#39;;  &#x2F;&#x2F;有一些程式碼執行 console.log(words);  後來，學了 function 就學會這樣的寫法 &#x2F;&#x2F;有一些變數宣告 var words &#x3D; &#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="過度使用全域變數">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-18-ironman-2019/2018-10-18-%E9%81%8E%E5%BA%A6%E4%BD%BF%E7%94%A8%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。  一開始學習寫程式，有個還不會寫 function 的過程，常常出現一個 main 到底的程式碼。 &#x2F;&#x2F;有一些變數宣告 var words &#x3D; &#39;hello world&#39;;  &#x2F;&#x2F;有一些程式碼執行 console.log(words);  後來，學了 function 就學會這樣的寫法 &#x2F;&#x2F;有一些變數宣告 var words &#x3D; &#39;">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-10-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:35.611Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="全域變數">
+<meta property="article:tag" content="static">
+<meta property="article:tag" content="developer experience">
+<meta name="twitter:card" content="summary">
+  <title>
+    過度使用全域變數 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>過度使用全域變數</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%8B%E4%B8%80%E5%80%8B%E7%9C%9F%E5%AF%A6%E6%A1%88%E4%BE%8B%E6%94%B9%E7%B7%A8%E8%80%8C%E6%88%90%E7%9A%84%E7%B3%99-code"><span class="toc-text">看一個真實案例改編而成的糙 code</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%8B%E7%8E%8B%E7%9A%84%E5%BF%83%E6%85%8B"><span class="toc-text">國王的心態</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dx-1-%E5%BE%88%E5%B7%AE"><span class="toc-text">DX[1] 很差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%87%89%E8%A9%B2%E9%80%99%E6%A8%A3%E6%80%9D%E8%80%83"><span class="toc-text">應該這樣思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static-%E8%A6%81%E5%B0%8F%E5%BF%83%E4%BD%BF%E7%94%A8"><span class="toc-text">static 要小心使用</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p>一開始學習寫程式，有個還不會寫 <code>function</code> 的過程，常常出現一個 main 到底的程式碼。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//有一些變數宣告</span>
+<span class="token keyword">var</span> words <span class="token operator">=</span> <span class="token string">'hello world'</span><span class="token punctuation">;</span>
+
+<span class="token comment">//有一些程式碼執行</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>後來，學了 <code>function</code> 就學會這樣的寫法</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//有一些變數宣告</span>
+<span class="token keyword">var</span> words <span class="token operator">=</span> <span class="token string">'hello world'</span><span class="token punctuation">;</span>
+
+<span class="token comment">//有一些程式碼執行</span>
+<span class="token keyword">function</span> <span class="token function">printHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">printHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然後，覺得這很棒!!</p>
+<p>相信很多人看到這個小小的例子，都可以看出一些糙點。<br>
+但是當它變成了大型程式，就看不出糙點了</p>
+<h2 id="看一個真實案例改編而成的糙-code"><a class="header-anchor" href="#看一個真實案例改編而成的糙-code">¶</a>看一個真實案例改編而成的糙 code</h2>
+<p>它原本不是 js 的程式，為了避免侵權的問題，在此改寫成 js 的 code。<br>
+不影響它的糙點！</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> gIniPath <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./config/app.ini</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> gLogFile<span class="token punctuation">;</span>
+<span class="token keyword">var</span> gIniInfo<span class="token punctuation">;</span>
+<span class="token keyword">var</span> gIndicatorSettingDic <span class="token operator">=</span> <span class="token function">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">myClass</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">class</span> <span class="token class-name">IniInfo</span> <span class="token punctuation">&#123;</span><span class="token comment">/* ... */</span><span class="token punctuation">&#125;</span>
+  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>gIniInfo<span class="token punctuation">.</span>CheckRepeatModule<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// 避免重複執行</span>
+    <span class="token punctuation">&#125;</span>
+    
+    gLogFile <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LogFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    gLogFile<span class="token punctuation">.</span><span class="token function">readFile</span><span class="token punctuation">(</span>gIniPath<span class="token punctuation">,</span> <span class="token string">"MsgLog"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    gIniInfo <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IniInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function-variable function">Exit</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      gAppEventBus <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+      gLogFile <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+      gIniInfo <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+  
+  <span class="token function">print</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> <span class="token punctuation">[</span> key<span class="token punctuation">,</span> val <span class="token punctuation">]</span> <span class="token keyword">of</span> gIndicatorSettingDic<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>key <span class="token operator">+</span> <span class="token string">" = "</span> <span class="token operator">+</span> val<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在 <code>myClass</code> 裡，其實並沒有真正做到模組化。這些 「g開頭」的全域變數，其實並沒有需要成為全域與別人「共用」(或「不小心會誤用」)</p>
+<h3 id="國王的心態"><a class="header-anchor" href="#國王的心態">¶</a>國王的心態</h3>
+<p>大多這麼寫的工程師，心裡面會想著「用起來方便呀」、「隨叫隨到的變數」、「不用思考怎麼把它傳進來」…等。</p>
+<p>其實，很不好！</p>
+<h2 id="dx-1-很差"><a class="header-anchor" href="#dx-1-很差">¶</a>DX[1] 很差</h2>
+<p>製造痛點!!<br>
+對寫 code 的人很開心，對用 code 的人不開心呀!!</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myObject1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">// 你知道它載入的是什麼設定檔嗎？</span>
+<span class="token keyword">var</span> myObject2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+myObject1<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+myObject2<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 你知道印出來會不會是同樣的內容嗎？</span>
+gIndicatorSettingDic <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+myObject1<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+myObject2<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 你知道被清空了嗎？</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以語法來說，是封裝不良的問題。</p>
+<h2 id="應該這樣思考"><a class="header-anchor" href="#應該這樣思考">¶</a>應該這樣思考</h2>
+<ul>
+<li><code>myClass</code> 這個要載著什麼樣的概念，它會有什麼行為？</li>
+<li>在使用 method 時，需要先知道什麼嗎？不知的話會出錯嗎？</li>
+</ul>
+<p>以此例，<code>myClass</code> 需要載入 <code>.ini</code> 檔。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myObject1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./config/app.ini</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> myObject2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./config/app.ini</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>這樣就會知道，此物件要吃某個 config 檔。<br>
+又或者建構式提供一組預設值，再另外吃 config 也行</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myObject1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+myObject1<span class="token punctuation">.</span><span class="token function">setConfig</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./config/app.ini</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> myObject2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">myClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+myObject2<span class="token punctuation">.</span><span class="token function">setConfig</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./config/app.ini</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這樣一來，使用這一個 <code>class</code> 的開發者，就不會因為不良耦合的關係，心中浮現一句這樣的話</p>
+<p>「誰知道!? 誰!? 誰呀!?」<br>
+「誰!?」</p>
+<h2 id="static-要小心使用"><a class="header-anchor" href="#static-要小心使用">¶</a><code>static</code> 要小心使用</h2>
+<p>有些程式語言可以將 <code>static</code> 用在變數上，讓它的生命週期跨越生死，永續保存。<br>
+這個要小心，不要濫用!!</p>
+<p>以上述的 js 程式碼為例。<br>
+如果將所有的全域變數，搬到 <code>myClass</code> 裡，然後宣告成 <code>static</code> 而且，在 <code>destructor</code> 或 <code>Exit</code> 時，將這些變數變成 <code>null</code> ，就是原本「糙味加倍」的樣子。</p>
+<p>原因在於，物件本身的生命週期可以利用，將變數變成區域變數，就不用擔心跨 <code>myClass</code> 物件之間存取相同的參考資料， <code>myClass</code> 不用時，也只需要靠垃圾收集即可。</p>
+<p>[1]: <a target="_blank" rel="noopener" href="https://medium.com/@chiunhau/%E5%B7%A5%E7%A8%8B%E5%B8%AB%E5%BF%83%E4%B8%AD%E6%9C%80%E8%BB%9F%E7%9A%84%E4%B8%80%E5%A1%8A-%E8%AB%87%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC%E8%80%85%E9%AB%94%E9%A9%97-developer-experience-96e0cfacb316">工程師心中最軟的一塊：談前端開發者體驗（Developer Experience）</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-17T16:00:00.000Z" itemprop="datePublished">
+              2018-10-18
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/">全域變數</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/static/">static</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/developer-experience/">developer experience</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

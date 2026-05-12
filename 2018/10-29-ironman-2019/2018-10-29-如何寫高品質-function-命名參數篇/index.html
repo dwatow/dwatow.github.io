@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-29-ironman-2019/2018-10-29-如何寫高品質-function-命名參數篇/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。    – 台南原地方法院，最棒的古蹟修復案例之一。基本的從外觀的牆面油漆去除，到馬薩式屋頂的木構造修復。建築最美的雙重圓頂與大廳裝飾，都原汁原味的重現在現在的古蹟內。不只是外觀修復得很美，連內部的構造都依原本的構想，聽說是以零件抽離一件修復一件的方式修復，以確保正確性。也是台南唯一開放貓道，可以參觀馬薩式屋頂木構造的古蹟，長達八年的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何寫高品質 function (命名+參數篇)">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-29-ironman-2019/2018-10-29-%E5%A6%82%E4%BD%95%E5%AF%AB%E9%AB%98%E5%93%81%E8%B3%AA-function-%E5%91%BD%E5%90%8D%E5%8F%83%E6%95%B8%E7%AF%87/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。    – 台南原地方法院，最棒的古蹟修復案例之一。基本的從外觀的牆面油漆去除，到馬薩式屋頂的木構造修復。建築最美的雙重圓頂與大廳裝飾，都原汁原味的重現在現在的古蹟內。不只是外觀修復得很美，連內部的構造都依原本的構想，聽說是以零件抽離一件修復一件的方式修復，以確保正確性。也是台南唯一開放貓道，可以參觀馬薩式屋頂木構造的古蹟，長達八年的">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg/800px-%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg">
+<meta property="article:published_time" content="2018-10-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:52.855Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="高品質">
+<meta property="article:tag" content="function">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg/800px-%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg">
+  <title>
+    如何寫高品質 function (命名+參數篇) - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>如何寫高品質 function (命名+參數篇)</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%93%81%E8%B3%AA-%E5%B0%B1%E6%98%AF%E8%A6%81%E6%BF%83%E9%86%87%E9%A6%99"><span class="toc-text">高品質，就是要濃醇香</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E5%90%8D"><span class="toc-text">命名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%95%B8%E5%AD%97%E5%91%BD%E5%90%8D"><span class="toc-text">使用數字命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8B%95%E8%A9%9E-%E5%B0%A4%E5%85%B6%E6%98%AF-methods"><span class="toc-text">使用動詞，尤其是 methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%B0%8D%E6%87%89%E7%9A%84%E5%90%8D%E7%A8%B1"><span class="toc-text">使用對應的名稱</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E6%95%B8"><span class="toc-text">參數</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E5%B0%8D%E6%87%89-%E5%B0%A4%E5%85%B6%E6%98%AF%E9%A1%9E%E4%BC%BC%E4%BD%9C%E7%94%A8%E7%9A%84%E6%83%85%E6%B3%81"><span class="toc-text">位置對應 (尤其是類似作用的情況)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BC%B8%E5%85%A5-%E8%BC%B8%E5%87%BA"><span class="toc-text">輸入&#x2F;輸出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E5%AE%83"><span class="toc-text">其它</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="toc-text">參考資料</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg/800px-%E5%8E%9F%E5%8F%B0%E5%8D%97%E5%9C%B0%E6%96%B9%E6%B3%95%E9%99%A2.jpg" alt=""></p>
+<blockquote>
+<p>– 台南原地方法院，最棒的古蹟修復案例之一。基本的從外觀的牆面油漆去除，到馬薩式屋頂的木構造修復。建築最美的雙重圓頂與大廳裝飾，都原汁原味的重現在現在的古蹟內。不只是外觀修復得很美，連內部的構造都依原本的構想，聽說是以零件抽離一件修復一件的方式修復，以確保正確性。也是台南唯一開放貓道，可以參觀馬薩式屋頂木構造的古蹟，長達八年的修復已完成，現在是台南司法博物館。</p>
+</blockquote>
+<p>在說了什麼多的「不要這麼做」之後，偶爾也來寫一下「那要怎麼做」比較好。<br>
+這次花一點篇幅來介紹 function 怎麼寫，比較好。(好像語法工匠)<br>
+在《忍者》[1]第一版中，直接就指出 JavaScript 的 function 有 4 種</p>
+<ol>
+<li>一般的 function</li>
+<li>method: 物件中的 function</li>
+<li>constructor: 建構物件的 function</li>
+<li>recursive: 呼叫自己的 function</li>
+</ol>
+<p>(ES6 之後，加上的 arrow function ，請看《忍者2》)</p>
+<h2 id="高品質-就是要濃醇香"><a class="header-anchor" href="#高品質-就是要濃醇香">¶</a>高品質，就是要濃醇香</h2>
+<p>林鳳營？！不！程式也要濃醇香!!!</p>
+<ul>
+<li>濃: 高內聚力</li>
+<li>醇: 好命名與參數設計</li>
+<li>香: 沒有需要重構的壞味道</li>
+</ul>
+<p><strong>好的 function 能做些什麼事</strong></p>
+<ol>
+<li>自我文化化，讓你忘記實作</li>
+<li>不重複你自己 (DRY = Don’t repeat yourself)</li>
+<li>封裝順序耦合性</li>
+<li>封裝指標 (某些有指標的語言)</li>
+<li>改善移殖性 (ex: POSIX[2])</li>
+<li>封裝布林運算</li>
+<li>找出無效之處</li>
+<li>提高可測試性，提升可靠度</li>
+<li>將 function 變短</li>
+</ol>
+<p>好的程式具備非常多的優點。<br>
+相信把 function 寫好，幾乎就是把程式寫好一半了。</p>
+<p>那開始介紹「如何把 function寫好」吧！</p>
+<h2 id="命名"><a class="header-anchor" href="#命名">¶</a>命名</h2>
+<p>怎麼做，才是 function 的好命名呢？<br>
+命名這一件事，除了程式碼品質的書有介紹，最近看了一本《資訊架構學》也有介紹呢！</p>
+<p>其實，沒這麼難！</p>
+<pre class="line-numbers language-none"><code class="language-none">命名的目的，在於「好猜」。
+猜得中你的實作，就不用看了！所以看 code 變快！
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>反之，命名命得不好，就不好猜。<br>
+對吧？所以命名的好壞，回歸到開發者是否可以正確的理解、表達問題。</p>
+<h3 id="使用數字命名"><a class="header-anchor" href="#使用數字命名">¶</a>使用數字命名</h3>
+<p>這真的是，詞窮的表現。</p>
+<h3 id="使用動詞-尤其是-methods"><a class="header-anchor" href="#使用動詞-尤其是-methods">¶</a>使用動詞，尤其是 methods</h3>
+<p>除非是建構式<br>
+function 指的是一個「動作」，所以要用動詞</p>
+<p>尤其是用在 method 上，會更有 <code>S + V</code> 的文化感， <code>S.V()</code><br>
+(S: 主詞，使用名詞，V: 動詞)</p>
+<h3 id="使用對應的名稱"><a class="header-anchor" href="#使用對應的名稱">¶</a>使用對應的名稱</h3>
+<p>引用<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10204370">自 mark9462 的鐵人文章: 易讀程式之美學系列 第 9 篇<br>
+不被誤解的名稱–2</a></p>
+<ol>
+<li>包含邊界的極值優先使用 min 與 max[3]</li>
+<li>閉區間優先使用 first 與 end</li>
+<li>半開放區間優先使用begin與end</li>
+</ol>
+<p>用區間方式建立命名默契是個不錯的方式</p>
+<p>也有一些已經實作的方式</p>
+<p><strong>C++</strong></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">vectorInt<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+vectorInt<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+vectorInt<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+vectorInt<span class="token punctuation">.</span><span class="token function">pull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>JavaScript</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">array<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">pull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">shift</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//這就很不相對</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="參數"><a class="header-anchor" href="#參數">¶</a>參數</h2>
+<p>在這裡，要介紹一下 argument 和 parameter 的定義</p>
+<ul>
+<li>argument 指的是參數值</li>
+<li>parameter 指的是參數變數</li>
+</ul>
+<blockquote>
+<p>js 的 arguments 物件，主要是用來取得「值」。</p>
+</blockquote>
+<h3 id="位置對應-尤其是類似作用的情況"><a class="header-anchor" href="#位置對應-尤其是類似作用的情況">¶</a>位置對應 (尤其是類似作用的情況)</h3>
+<p>《設計的心理學》[4] 有提到一個「對應」的概念，大致上是說: 如果設計有考慮「位置與功能的對應」就會降低心理負擔</p>
+<p>在 JavaScript 中的 Array methods 可以看到這一個默契</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> array</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> array</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token class-name">Array</span><span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index<span class="token punctuation">,</span> array</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>在 jQuery 中的 methods 也可以看見類似的效果</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">jQuery<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">index<span class="token punctuation">,</span> item</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+jQuery<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">index<span class="token punctuation">,</span> item</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="輸入-輸出"><a class="header-anchor" href="#輸入-輸出">¶</a>輸入/輸出</h3>
+<p>可以有依輸出輸出進行排序<br>
+也可以加上前綴，提醒使用者參數是屬於輸入還是輸出。</p>
+<p>看一段硬體描述語言的寫法</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">module</span> mux <span class="token punctuation">(</span>out<span class="token punctuation">,</span> select<span class="token punctuation">,</span> in0<span class="token punctuation">,</span> in1<span class="token punctuation">,</span> in2<span class="token punctuation">,</span> in3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span>
+
+<span class="token keyword">module</span> adder <span class="token punctuation">(</span>oSum<span class="token punctuation">,</span> iEnable<span class="token punctuation">,</span> iAddend0<span class="token punctuation">,</span> iAddend1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">endmodule</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="其它"><a class="header-anchor" href="#其它">¶</a>其它</h3>
+<p>還有很多要注意的參數設計重點，在此就直接列出重點</p>
+<ul>
+<li>全部參數都要使用，不用的參數，就不列出來。</li>
+<li>表示函數執行的狀態或錯誤的參數，要放在相同的位置 (通常是最後)</li>
+<li>可以的話數量掌握在 7±2 的範圍</li>
+</ul>
+<h2 id="參考資料"><a class="header-anchor" href="#參考資料">¶</a>參考資料</h2>
+<p>[1]: <a target="_blank" rel="noopener" href="https://www.books.com.tw/products/0010701459">忍者：JavaScript開發技巧探秘</a><br>
+[2]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3">可移植作業系統埠</a><br>
+[3]: 《程式碼易讀之美學》Ch3 不被誤解的名稱<br>
+[4]: <a target="_blank" rel="noopener" href="https://www.books.com.tw/products/0010643797">設計的心理學：人性化的產品設計如何改變世界(3版)</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-28T16:00:00.000Z" itemprop="datePublished">
+              2018-10-29
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E9%AB%98%E5%93%81%E8%B3%AA/">高品質</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/function/">function</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

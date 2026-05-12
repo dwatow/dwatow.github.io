@@ -68,17 +68,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -92,12 +90,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -135,11 +137,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CP-VC6-%E8%99%9B%E6%93%AC%E5%87%BD%E6%95%B8-%E5%8B%95%E6%85%8B%E9%80%A3%E7%B5%90%E7%9A%84%E5%8F%A6%E9%A1%9E%E5%AF%A6%E4%BD%9C"><span class="toc-text">CP VC6&#x2F;&#x2F;虛擬函數+動態連結的另類實作</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cp-vc6-%E8%99%9B%E6%93%AC%E5%87%BD%E6%95%B8-%E5%8B%95%E6%85%8B%E9%80%A3%E7%B5%90%E7%9A%84%E5%8F%A6%E9%A1%9E%E5%AF%A6%E4%BD%9C"><span class="toc-text">CP VC6&#x2F;&#x2F;虛擬函數+動態連結的另類實作</span></a></li></ol>
   </div>
 
 
-    <h1 id="CP-VC6-虛擬函數-動態連結的另類實作"><a class="header-anchor" href="#CP-VC6-虛擬函數-動態連結的另類實作">¶</a>CP VC6//虛擬函數+動態連結的另類實作</h1>
+    <h1 id="cp-vc6-虛擬函數-動態連結的另類實作"><a class="header-anchor" href="#cp-vc6-虛擬函數-動態連結的另類實作">¶</a>CP VC6//虛擬函數+動態連結的另類實作</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2012/09/cp-vc6_13.html">https://darkblack01.blogspot.com/2012/09/cp-vc6_13.html</a><br>
 移植時的最後更新日期: 2013-12-13T09:23:02.817+08:00</p>
 <p>原本實作了出了問題，後來朋友用g<ins>過了，<a target="_blank" rel="noopener" href="http://darkblack01.blogspot.tw/2012/09/blog-post.html">程式碼</a>也給我了。<br />看一看，這做法，我印象中做過呀！？？<br />貼到VC6，結果ERROR C2555<br /><br />心想：這就是傳說中的「微軟不符合標準C</ins>嗎？」<br />Google了一下，微軟自己還在文件說明中指出，這是產品的問題，更好笑的是，文件的Title寫：「<a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/240862">修正: C2555 共的傳回型別具有虛擬函式</a>」。<br /><br />跟本沒有修正，只說「.Net就修正了」<br />（意思是你愛用VC6是你家的事，不換.Net活該？= =）<br /><br /><a name='more'></a>不過，我後來硬幹了一個做法，似乎可行！（似乎啦^^&quot;）<br /><pre class="prettyprint"><code>#include &lt;iostream&gt;<br /><br />using namespace std;<br /><br />class A<br />&#123;<br />public:<br />    virtual A* fun1() = 0;<br />    virtual A* fun2() = 0;<br />&#125;;<br /><br />class B : public A<br />&#123;<br />public:<br />    A* fun1() &#123; cout &lt;&lt; “B::fun1()” &lt;&lt;endl; return dynamic_cast&lt;A*&gt;(this);&#125;<br />    A* fun2() &#123; cout &lt;&lt; “B::fun2()” &lt;&lt;endl; return dynamic_cast&lt;A*&gt;(this);&#125;<br />&#125;;<br /><br />class C : public A<br />&#123;<br />public:<br />    A* fun1() &#123; cout &lt;&lt; “C::fun1()” &lt;&lt;endl; return dynamic_cast&lt;A*&gt;(this);&#125;<br />    A* fun2() &#123; cout &lt;&lt; “C::fun2()” &lt;&lt;endl; return dynamic_cast&lt;A*&gt;(this);&#125;<br />&#125;;<br /><br />int main()<br />&#123;<br />    B b1;<br />    C c1;<br /><br />    A* a = &amp;b1;<br />    a-&gt;fun1()-&gt;fun2();<br /><br />    a = &amp;c1;<br />    a-&gt;fun1()-&gt;fun2();<br />&#125;</code></pre>程式結果：<br /><br />B::fun1()<br />B::fun2()<br />C::fun1()<br />C::fun2()<br />Press any key to continue<br /><br /><br />但是，和別人討論完，發現…<br />下面這樣做也行。<br /><br /><pre class="prettyprint"><code>#include &lt;iostream&gt;<br /><br />using namespace std;<br /><br />class A<br />&#123;<br />public:<br />    virtual A<em>fun1() = 0;<br />    virtual A</em>fun2() = 0;<br />&#125;;<br /><br />class B : public A<br />&#123;<br />public:<br />    A* fun1() &#123; cout &lt;&lt; “B::fun1()” &lt;&lt;endl; return this; &#125;<br />    A* fun2() &#123; cout &lt;&lt; “B::fun2()” &lt;&lt;endl; return this; &#125;<br />&#125;;<br /><br />class C : public A<br />&#123;<br />public:<br />    A* fun1() &#123; cout &lt;&lt; “C::fun1()” &lt;&lt;endl; return this; &#125;<br />    A* fun2() &#123; cout &lt;&lt; “C::fun2()” &lt;&lt;endl; return this; &#125;<br />&#125;;<br /><br />int main()<br />&#123;<br />    B b1;<br />    C c1;<br /><br />    A* a = &amp;b1;<br />    a-&gt;fun1()-&gt;fun2();<br /><br />    a = &amp;c1;<br />    a-&gt;fun1()-&gt;fun2();<br />&#125;</code></pre><br />程式結果：<br /><br />B::fun1()<br />B::fun2()<br />C::fun1()<br />C::fun2()<br />Press any key to continue<br /><br /><br /></p>
@@ -178,7 +180,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -195,12 +197,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

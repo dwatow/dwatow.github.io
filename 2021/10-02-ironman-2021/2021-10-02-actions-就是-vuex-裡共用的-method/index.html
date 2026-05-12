@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-02-ironman-2021/2021-10-02-actions-就是-vuex-裡共用的-method/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;&#39; &amp;#125;  re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="actions 就是 Vuex 裡「共用的 method」">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-02-ironman-2021/2021-10-02-actions-%E5%B0%B1%E6%98%AF-vuex-%E8%A3%A1%E5%85%B1%E7%94%A8%E7%9A%84-method/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。 有時候在使用 API 時，前端也有一些「一定會一起執行的事」。 那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」  系統可以登入 系統可以登出 系統可以上傳檔案  POST &#x2F;login request body &amp;#123;   user: &#39;&#39;,   password: &#39;&#39; &amp;#125;  re">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-10-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.827Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+  <title>
+    actions 就是 Vuex 裡「共用的 method」 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>actions 就是 Vuex 裡「共用的 method」</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E4%BD%9C-vuex"><span class="toc-text">實作 vuex</span></a></li></ol>
+  </div>
+
+
+    <p>有時候，需要 CRUD 以外的行為，後端有時會開專屬的 API，有時候不會。<br>
+有時候在使用 API 時，前端也有一些「一定會一起執行的事」。</p>
+<p>那麼，這些「雜項」就很適合寫在 action 方便表現「系統的行為」</p>
+<ul>
+<li>系統可以登入</li>
+<li>系統可以登出</li>
+<li>系統可以上傳檔案</li>
+</ul>
+<p><code>POST</code> <code>/login</code></p>
+<p>request body</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  user<span class="token operator">:</span> ''<span class="token punctuation">,</span>
+  password<span class="token operator">:</span> ''
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  token<span class="token operator">:</span> ''
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><code>POST</code> <code>/file</code></p>
+<p>request header</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  'Content-Type'<span class="token operator">:</span> 'multipart/form-data'
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>request body</p>
+<p>form-data</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  file<span class="token operator">:</span> (binary)
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>response 200</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  data<span class="token operator">:</span> '/file/<span class="token operator">:</span>file_path'
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>這些行為有時候可以寫在 acitons。</p>
+<h2 id="實作-vuex"><a class="header-anchor" href="#實作-vuex">¶</a>實作 vuex</h2>
+<p>在 action 可以直接定義 login, logout, uploadFile 的動作。</p>
+<p>應該還有其它的用途，但是我一時之間想不到。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> payload</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token constant">POST</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> payload<span class="token punctuation">)</span>
+  <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'setToken'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>token<span class="token punctuation">)</span>
+  cookies<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">'token'</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>token<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token function">logout</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">commit</span><span class="token punctuation">(</span><span class="token string">'setToken'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>
+  cookies<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token keyword">async</span> <span class="token function">uploadFile</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> commit <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> file</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> backendAPI<span class="token punctuation">.</span><span class="token function">formDataPOST</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/file</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> file <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> res<span class="token punctuation">.</span>data
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這些和 CRUD 不一樣的是，API 發送結束，並不是只有更新資料的 commit 而已。有時還有一些其它的事情要做。</p>
+<p>列舉一些其它可能會有特別在 actions 出現的實作。不過如果這些邏輯和畫面有關，就有可能會在 component 上實作，而不是 actions</p>
+<ul>
+<li>logout 可能在 API 收到 403 時就要執行。</li>
+<li>uploadFile 可能會配合其它的功能使用。</li>
+<li>login 需要儲存 cookie</li>
+</ul>
+<p>明天來實作在一個 actions 裡做多個個非同步行為。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-10-01T16:00:00.000Z" itemprop="datePublished">
+              2021-10-02
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

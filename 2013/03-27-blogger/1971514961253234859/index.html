@@ -71,17 +71,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -95,12 +93,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -138,11 +140,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%B1%E6%80%A8VC6-%E5%8A%A0%E4%BA%86RichEdit%EF%BC%8CDialog%E6%89%93%E4%B8%8D%E9%96%8B"><span class="toc-text">抱怨VC6&#x2F;&#x2F;加了RichEdit，Dialog打不開</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%B1%E6%80%A8vc6-%E5%8A%A0%E4%BA%86richedit-dialog%E6%89%93%E4%B8%8D%E9%96%8B"><span class="toc-text">抱怨VC6&#x2F;&#x2F;加了RichEdit，Dialog打不開</span></a></li></ol>
   </div>
 
 
-    <h1 id="抱怨VC6-加了RichEdit，Dialog打不開"><a class="header-anchor" href="#抱怨VC6-加了RichEdit，Dialog打不開">¶</a>抱怨VC6//加了RichEdit，Dialog打不開</h1>
+    <h1 id="抱怨vc6-加了richedit-dialog打不開"><a class="header-anchor" href="#抱怨vc6-加了richedit-dialog打不開">¶</a>抱怨VC6//加了RichEdit，Dialog打不開</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2013/03/vc6richeditdialog.html">https://darkblack01.blogspot.com/2013/03/vc6richeditdialog.html</a><br>
 移植時的最後更新日期: 2013-03-27T13:50:07.719+08:00</p>
 <div class="separator" style="clear: both; text-align: center;"><a target="_blank" rel="noopener" href="http://1.bp.blogspot.com/-a7UdVl4DAGk/UVKIYngcsTI/AAAAAAAAEpA/oRqeNUGRsy0/s1600/vcbugrichedit.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="316" src="http://1.bp.blogspot.com/-a7UdVl4DAGk/UVKIYngcsTI/AAAAAAAAEpA/oRqeNUGRsy0/s640/vcbugrichedit.png" width="640" /></a></div><br />想說，來練習一下CString的find()。<br /><br />從MS VC6，開一個MFC的Dialog Project。<br />用Static Text似乎不可以多行顯下，所以就新增一個Rich Edit來看看。<br />結果程式改成把字串輸出到Rich Edit就打不了？！<br /><br /><a name='more'></a><br /><br />（心想怎麼會這樣？）<br /><br />再來一次，在MS VC6，開一個MFC的Dialog Project，什麼程式碼都不要打。<br />直接執行→OK！<br />新增一個Rich Edit，再執行→NG！<br /><br />（囧）<br /><br />上網看了一下，要修改一下程式碼（如下） <br /><pre class="prettyprint"><code>BOOL CTempStrFindApp::InitInstance()<br />&#123;<br />    <br />    CTempStrFindDlg dlg;<br />    m_pMainWnd = &amp;dlg;<br /><br />    AfxInitRichEdit();<br /><br />    dlg.DoModal();  //貼在這一行前面就可以了<br /><br />    return FALSE;<br />&#125;</code></pre><br /><div style="color: #2a2a2a; line-height: 18px; padding-bottom: 15px;"><br /></div><div style="color: #2a2a2a; line-height: 18px; padding-bottom: 15px;">MSDN寫的如下 </div><div class="seeAlsoNoToggleSection" id="sectionSection0"><div class="alert" style="font-family: 'Segoe UI', 'Lucida Grande', Verdana, Arial, Helvetica, sans-serif; font-size: 11.818181991577148px; line-height: 14.545454025268555px;"><table style="border-collapse: collapse; border: 1px solid rgb(187, 187, 187); padding: 0px; width: 100%px;"><tbody><tr><th align="left" style="background-color: #ededed; border-collapse: collapse; border-spacing: 0px; border: 1px solid rgb(187, 187, 187); color: #707070; margin: 10px; padding: 10px 11px 5px;"><img alt="Note" class="note cl_IC101471" src="http://i.msdn.microsoft.com/areas/global/content/clear.gif" style="background-attachment: scroll; background-image: url(http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png); background-position: -1152px -3px; background-repeat: no-repeat no-repeat; border: 0px; height: 14px; overflow: hidden; padding-right: 5px; width: 16px;" />Important</th></tr><tr><td style="border: 1px solid rgb(187, 187, 187); color: #2a2a2a; margin: 10px; padding: 10px 8px; vertical-align: top;"><div style="line-height: 18px; padding-bottom: 0px;">If you are using a rich edit control in a dialog box (regardless of whether your application is SDI, MDI, or dialog-based), you must call&nbsp;<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-tw/library/tt1cfb9f(v=vs.80).aspx" style="color: #03697a; text-decoration: none;">AfxInitRichEdit</a>&nbsp;once before the dialog box is displayed. A typical place to call this function is in your program's&nbsp;<b>InitInstance</b>&nbsp;member function. You do not need to call it for each time you display the dialog box, only the first time. You do not have to call&nbsp;<b>AfxInitRichEdit</b>&nbsp;if you are working with&nbsp;<b>CRichEditView</b>.</div><div><br /></div></td></tr></tbody></table></div></div><br />參考資料：<a href="http://msdn.microsoft.com/zh-tw/library/bzhya91s(v=vs.80).aspx" target="_blank">Overview of the Rich Edit Control</a>
@@ -181,7 +183,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -198,12 +200,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }

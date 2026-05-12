@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2018/10-17-ironman-2019/2018-10-17-曝露過多的複雜性/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。   圖片出自於: https:&#x2F;&#x2F;unsplash.com&#x2F;photos&#x2F;dq7kElwnFFg ¶先解釋什麼是「複雜性」 看過人月神話的朋友相信都知道《沒有銀彈》這篇論文裡提到  軟體的複雜是屬於本質上的特性，而非附屬的特性。 –《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239  這篇論文，我個人的解讀如下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="曝露過多的複雜性">
+<meta property="og:url" content="https://dwatow.github.io/2018/10-17-ironman-2019/2018-10-17-%E6%9B%9D%E9%9C%B2%E9%81%8E%E5%A4%9A%E7%9A%84%E8%A4%87%E9%9B%9C%E6%80%A7/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="良好程式碼的優點大同小異。 不好的程式碼的糙點卻各有巧妙之處。   圖片出自於: https:&#x2F;&#x2F;unsplash.com&#x2F;photos&#x2F;dq7kElwnFFg ¶先解釋什麼是「複雜性」 看過人月神話的朋友相信都知道《沒有銀彈》這篇論文裡提到  軟體的複雜是屬於本質上的特性，而非附屬的特性。 –《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239  這篇論文，我個人的解讀如下">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/96dOSYz.jpg">
+<meta property="og:image" content="https://i.imgur.com/m6RZjmt.png">
+<meta property="article:published_time" content="2018-10-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:36:33.965Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="2019鐵人賽">
+<meta property="article:tag" content="糙 code">
+<meta property="article:tag" content="人月神話">
+<meta property="article:tag" content="沒有銀彈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/96dOSYz.jpg">
+  <title>
+    曝露過多的複雜性 - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>曝露過多的複雜性</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%A7%A3%E9%87%8B%E4%BB%80%E9%BA%BC%E6%98%AF-%E8%A4%87%E9%9B%9C%E6%80%A7"><span class="toc-text">先解釋什麼是「複雜性」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%89%AF%E5%A5%BD%E7%9A%84%E7%AE%A1%E7%90%86%E8%A4%87%E9%9B%9C%E6%80%A7-1"><span class="toc-text">良好的管理複雜性[1]</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BE%8B%E5%AD%90%E7%9C%8B%E8%A4%87%E9%9B%9C%E6%80%A7"><span class="toc-text">用例子看複雜性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%99%E6%9C%89%E4%BB%80%E9%BA%BC%E5%8E%B2%E5%AE%B3%E4%B9%8B%E8%99%95%EF%BC%9F"><span class="toc-text">這有什麼厲害之處？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E5%88%B0%E8%BB%9F%E9%AB%94%E8%88%87%E8%A4%87%E9%9B%9C%E5%BA%A6-%E5%8F%88%E6%9C%89%E4%BB%80%E9%BA%BC-%E7%B3%99%E9%BB%9E-%EF%BC%9F"><span class="toc-text">回到軟體與複雜度，又有什麼「糙點」？</span></a></li></ol>
+  </div>
+
+
+    <blockquote>
+<p>良好程式碼的優點大同小異。<br>
+不好的程式碼的糙點卻各有巧妙之處。</p>
+</blockquote>
+<p><img src="https://i.imgur.com/96dOSYz.jpg" alt=""><br>
+圖片出自於: <a target="_blank" rel="noopener" href="https://unsplash.com/photos/dq7kElwnFFg">https://unsplash.com/photos/dq7kElwnFFg</a></p>
+<h2 id="先解釋什麼是-複雜性"><a class="header-anchor" href="#先解釋什麼是-複雜性">¶</a>先解釋什麼是「複雜性」</h2>
+<p>看過人月神話的朋友相信都知道《沒有銀彈》這篇論文裡提到</p>
+<blockquote>
+<p>軟體的複雜是屬於本質上的特性，而非附屬的特性。<br>
+–《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239</p>
+</blockquote>
+<p>這篇論文，我個人的解讀如下</p>
+<p>軟體工程的工作分成本質性問題與附屬性問題</p>
+<ol>
+<li>本質性問題: 本身保有一定的複雜性，無法降低 → 沒救了</li>
+<li>附屬性問題: 管理複雜性的手法，太多種了 → 學不完</li>
+</ol>
+<p>所以軟體工程的工作內容是「管理複雜性」</p>
+<h2 id="良好的管理複雜性-1"><a class="header-anchor" href="#良好的管理複雜性-1">¶</a>良好的管理複雜性[1]</h2>
+<p>如何把軟體工程的工作做好，等同於如何做好管理複雜度</p>
+<blockquote>
+<p>David Parnas 主張，模組應該要被良好的介面封裝 (encapsulate) 起來，模組的內部應該是程式設計師私有的東西，不應該公開讓人知曉，不是他負責的模組，就要對其內部機構加以保護，而非曝露出去，這樣程式計師做起事來會最有效率<br>
+–《人月神話》, 《人月神話》二十年, p.345</p>
+</blockquote>
+<h2 id="用例子看複雜性"><a class="header-anchor" href="#用例子看複雜性">¶</a>用例子看複雜性</h2>
+<p>問題本身: 用瀏覽器的 console 印出 hello world 吧!!</p>
+<p>本質性問題，用程式碼呈現的最低底限</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>附屬性問題，管理複雜性</p>
+<p>呼叫 function 印出 hello world</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token parameter">words</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>用 Object 的 Methods</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> object <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token function-variable function">method</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">words</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+object<span class="token punctuation">.</span><span class="token function">method</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>這一行 hello world 代表著會真正執行目標的程式碼。<br>
+而其它的程式碼是用來輔助管理，讓開發者容易理解、好猜中、好找…這樣的程式可能在訴說著什麼樣的內容。</p>
+<h2 id="這有什麼厲害之處？"><a class="header-anchor" href="#這有什麼厲害之處？">¶</a>這有什麼厲害之處？</h2>
+<p>也許你會說，這是架構問題呀，這不是寫不寫 糙 code 的原因呀。</p>
+<p>來看一些生活上或以前國高中會遇上的例子</p>
+<pre class="line-numbers language-none"><code class="language-none"># 這是曝露過多複雜度的例子
+F &#x3D; (m * x * h) &#x2F; (s * s) ## 單位: kg * m^2 &#x2F; s^2
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>這是什麼？<br>
+這不是一般這個物理定律出現在人們眼中的樣貌。<br>
+無法直覺的理解，而心中不由自主的出現了「這在寫什麼？」的問題<br>
+也許在這問題前，還有個發語詞「糙」</p>
+<p>整理先逆推一下這個公式</p>
+<pre class="line-numbers language-none"><code class="language-none">E &#x3D; m * x * 1&#x2F;s * 1&#x2F;s * h ## v &#x3D; x &#x2F; s
+E &#x3D; m * v * 1&#x2F;s * h       ## g &#x3D; v &#x2F; s
+E &#x3D; m * g * h             ## 原本的樣貌
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.imgur.com/m6RZjmt.png" alt=""></p>
+<p>這是一個位能[2]的公式。</p>
+<p>用了四個符號，代表著一個「能量」概念的表現，以及可以改變能量的變因。隱藏了不必要的複雜度: 將「加速度」的概念呈現成一個符號。</p>
+<h2 id="回到軟體與複雜度-又有什麼-糙點-？"><a class="header-anchor" href="#回到軟體與複雜度-又有什麼-糙點-？">¶</a>回到軟體與複雜度，又有什麼「糙點」？</h2>
+<p>而軟體工程，由在人月神話作者的論文「沒有銀彈」中就已經提到這個使用方式。</p>
+<blockquote>
+<p>數學和物理學之所以能在過去三個世紀突飛猛進，就是藉由為複雜現象建立出簡單的模型 (model) ，然後從模型中推導出現象的特性，並透過實驗來驗證這些特性。<br>
+這種方式之所以行得通，是因為在模型中所排除掉的複雜性 並非現象的本質。<br>
+–《人月神話》, 沒有銀彈: 軟體工程的本質性與附屬性工作, p.239</p>
+</blockquote>
+<p>運用這樣的技巧，就可以實現這種，將問題看似簡化，其實保留本質的做法。</p>
+<p>之後的文章內容，將會大量的運用這樣的技巧並且帶入其它相輔相成的觀念</p>
+<p>[1]: 《Code Complete 2/e》, Ch5 Design in Construction, Importance of Managing Complexity, (中文版 p. 81)<br>
+[2]: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8A%BF%E8%83%BD">位能 - 維基百科，自由的百科全書</a></p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2018-10-16T16:00:00.000Z" itemprop="datePublished">
+              2018-10-17
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/">2019鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E7%B3%99-code/">糙 code</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/">人月神話</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/%E6%B2%92%E6%9C%89%E9%8A%80%E5%BD%88/">沒有銀彈</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

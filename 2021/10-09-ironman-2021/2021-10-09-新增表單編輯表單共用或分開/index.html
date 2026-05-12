@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-09-ironman-2021/2021-10-09-新增表單編輯表單共用或分開/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="目前我們寫好了一個新增的畫面 ¶需求 接下來，常見的需求是，人員的新增之後是人員的編輯。 ¶新增用的畫面  ¶編輯用的畫面  假設編輯時，只能換頭貼，不能改名字的畫面   ¶要合併表單的 component 我們的目的，是要將表單的 code 合成一個 compoennt ，讓 user 的資料都由這個表單來處理 一開始，還無法一步就做到這件事沒關係。只需要把握一個重點「不要加上不必要的 prop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新增表單&#x2F;編輯表單，共用？或分開？">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-09-ironman-2021/2021-10-09-%E6%96%B0%E5%A2%9E%E8%A1%A8%E5%96%AE%E7%B7%A8%E8%BC%AF%E8%A1%A8%E5%96%AE%E5%85%B1%E7%94%A8%E6%88%96%E5%88%86%E9%96%8B/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="目前我們寫好了一個新增的畫面 ¶需求 接下來，常見的需求是，人員的新增之後是人員的編輯。 ¶新增用的畫面  ¶編輯用的畫面  假設編輯時，只能換頭貼，不能改名字的畫面   ¶要合併表單的 component 我們的目的，是要將表單的 code 合成一個 compoennt ，讓 user 的資料都由這個表單來處理 一開始，還無法一步就做到這件事沒關係。只需要把握一個重點「不要加上不必要的 prop">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/8ooxw1D.png">
+<meta property="og:image" content="https://i.imgur.com/vddJqw6.png">
+<meta property="og:image" content="https://i.imgur.com/2pUH3jH.png">
+<meta property="article:published_time" content="2021-10-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.830Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/8ooxw1D.png">
+  <title>
+    新增表單/編輯表單，共用？或分開？ - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>新增表單/編輯表單，共用？或分開？</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-text">需求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E7%94%A8%E7%9A%84%E7%95%AB%E9%9D%A2"><span class="toc-text">新增用的畫面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B7%A8%E8%BC%AF%E7%94%A8%E7%9A%84%E7%95%AB%E9%9D%A2"><span class="toc-text">編輯用的畫面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E5%90%88%E4%BD%B5%E8%A1%A8%E5%96%AE%E7%9A%84-component"><span class="toc-text">要合併表單的 component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%90%84%E5%88%A5%E6%8A%8A-createuserform-%E5%92%8C-updateuserform-%E5%81%9A%E5%A5%BD"><span class="toc-text">先各別把 createUserForm 和 updateUserForm 做好</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%A4%E9%BB%9E%E4%B8%80%E4%B8%8B-vue-%E7%9A%84%E8%AE%80%E8%88%87%E5%AF%AB%E5%8A%9F%E8%83%BD"><span class="toc-text">盤點一下 Vue 的讀與寫功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E4%BD%B5%E8%A1%A8%E5%96%AE%E7%9A%84%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="toc-text">合併表單的程式碼</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B5%82%E6%96%BC%E6%9C%89%E5%83%8F%E6%A8%A3%E4%B8%80%E9%BB%9E%E7%9A%84%E9%80%B2%E9%9A%8E%E5%BF%83%E6%B3%95"><span class="toc-text">終於有像樣一點的進階心法</span></a></li></ol>
+  </div>
+
+
+    <p>目前我們寫好了一個新增的畫面</p>
+<h2 id="需求"><a class="header-anchor" href="#需求">¶</a>需求</h2>
+<p>接下來，常見的需求是，人員的新增之後是人員的編輯。</p>
+<h3 id="新增用的畫面"><a class="header-anchor" href="#新增用的畫面">¶</a>新增用的畫面</h3>
+<p><img src="https://i.imgur.com/8ooxw1D.png" alt=""></p>
+<h3 id="編輯用的畫面"><a class="header-anchor" href="#編輯用的畫面">¶</a>編輯用的畫面</h3>
+<blockquote>
+<p>假設編輯時，只能換頭貼，不能改名字的畫面</p>
+</blockquote>
+<p><img src="https://i.imgur.com/vddJqw6.png" alt=""></p>
+<h2 id="要合併表單的-component"><a class="header-anchor" href="#要合併表單的-component">¶</a>要合併表單的 component</h2>
+<p>我們的目的，是要將表單的 code 合成一個 compoennt ，讓 user 的資料都由這個表單來處理</p>
+<p>一開始，還無法一步就做到這件事沒關係。只需要把握一個重點「不要加上不必要的 props」。</p>
+<ul>
+<li>isEdit</li>
+<li>useType: create, edit, read, manage-read, user-read…</li>
+</ul>
+<p>這些加上的 props 都不好</p>
+<h2 id="先各別把-createuserform-和-updateuserform-做好"><a class="header-anchor" href="#先各別把-createuserform-和-updateuserform-做好">¶</a>先各別把 createUserForm 和 updateUserForm 做好</h2>
+<p><img src="https://i.imgur.com/2pUH3jH.png" alt=""></p>
+<p>兩邊的 code 差別只差在一個 disabled</p>
+<blockquote>
+<p>這簡單！用 isEdit 就可以搞定了 ← 這太「淺想」了。</p>
+</blockquote>
+<p>上次有講過，表單是一種「寫入」資料的方式。<br>
+所以，依照「讀取」與「寫入」我們重新思考一下這個問題</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>新增</th>
+<th>修改</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avatar</td>
+<td>讀/寫</td>
+<td>讀/寫</td>
+</tr>
+<tr>
+<td>name</td>
+<td>讀/寫</td>
+<td>讀</td>
+</tr>
+</tbody>
+</table>
+<p>如果要再追加一個需求，有一個帳號需要查看所有 user 的資料，但是不可以改</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>新增</th>
+<th>修改</th>
+<th>查看</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avatar</td>
+<td>讀/寫</td>
+<td>讀/寫</td>
+<td>讀</td>
+</tr>
+<tr>
+<td>name</td>
+<td>讀/寫</td>
+<td>讀</td>
+<td>讀</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>這是不是 isEdit 就不行了？繼續看下去吧！</p>
+</blockquote>
+<h3 id="盤點一下-vue-的讀與寫功能"><a class="header-anchor" href="#盤點一下-vue-的讀與寫功能">¶</a>盤點一下 Vue 的讀與寫功能</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>讀</th>
+<th>寫</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>component 外部使用(v-model)</td>
+<td>:value, checked</td>
+<td>@input, @change</td>
+</tr>
+<tr>
+<td>component 設計</td>
+<td>props</td>
+<td>event ($emit)</td>
+</tr>
+<tr>
+<td>component 內 API</td>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>s</mi><mi mathvariant="normal">/</mi></mrow><annotation encoding="application/x-tex">props/</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">o</span><span class="mord mathit">p</span><span class="mord mathit">s</span><span class="mord mathrm">/</span></span></span></span>attrs</td>
+<td>$listeners</td>
+</tr>
+</tbody>
+</table>
+<p>所以？看得出怎麼做了嗎？</p>
+<h3 id="合併表單的程式碼"><a class="header-anchor" href="#合併表單的程式碼">¶</a>合併表單的程式碼</h3>
+<p>只需要在「唯讀的地方」，將「寫入的語法」拿掉。並且可以偵測拿掉，就可以了。<br>
+超級重要: ☆☆☆☆☆</p>
+<blockquote>
+<p>使用 Vue3 時，因為 <code>$listeners</code> 沒有繼續存在，所以要用 <code>$attrs</code><br>
+參考: <a target="_blank" rel="noopener" href="https://v3.vuejs.org/guide/migration/listeners-removed.html">$listeners removed</a></p>
+</blockquote>
+<ul>
+<li><code>:disabled=&quot;!$listeners['update:name']&quot;</code></li>
+</ul>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">@submit.prevent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('submit')<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">:src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>avatarSrc<span class="token punctuation">"</span></span> <span class="token attr-name">alt</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
+      <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$listeners['update:file']<span class="token punctuation">"</span></span>
+      <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span>
+      <span class="token attr-name">@change</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:file', $event.taget.files.item(0))<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span><span class="token punctuation">></span></span>name: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
+      <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+      <span class="token attr-name">:disabled</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>!$listeners['update:name']<span class="token punctuation">"</span></span>
+      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data.name<span class="token punctuation">"</span></span>
+      <span class="token attr-name">@input</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$emit('update:name', &#123;
+        ...data,
+        name: $event.target.value
+      &#125;)<span class="token punctuation">"</span></span>
+    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>送出<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'demo'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">data</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Object<span class="token punctuation">,</span>
+      <span class="token literal-property property">required</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">new_avatar</span><span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">computed</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">avatarSrc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>new_avatar <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token punctuation">.</span>avatar<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而外部只要透過 <code>@update:name=&quot;$store.commit('user', $event)&quot;</code> 就可以阻決定「要不要寫入資料」，配合 UserForm 是 pure component 若要改值，要將值傳出來並取代原本的物件。</p>
+<blockquote>
+<p>若不改值就不用傳了，所以就不要掛上這個 event 就好啦！</p>
+</blockquote>
+<p><strong>src/views/UserCreate.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>UserForm</span>
+  <span class="token attr-name">:file</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.file<span class="token punctuation">"</span></span>
+  <span class="token attr-name"><span class="token namespace">@update:</span>file</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>updateFile<span class="token punctuation">"</span></span>
+  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data<span class="token punctuation">"</span></span>
+  <span class="token attr-name"><span class="token namespace">@update:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.commit('user', $event)<span class="token punctuation">"</span></span>
+  <span class="token attr-name">@submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onSubmit<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>UserForm</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>src/views/UserEdit.vue</strong></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>UserForm</span>
+  <span class="token attr-name">:file</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$store.getters.file<span class="token punctuation">"</span></span>
+  <span class="token attr-name"><span class="token namespace">@update:</span>file</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>updateFile<span class="token punctuation">"</span></span>
+  <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data<span class="token punctuation">"</span></span>
+  <span class="token attr-name">@submit</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onSubmit<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>UserForm</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>src/views/UserRead.vue</strong></p>
+<p>這樣一來，只要設定好，只有讀取的權限，只需要這樣使用，component 自己就應該知道如何切換讀寫權限了</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>UserForm</span> <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>UserForm</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="終於有像樣一點的進階心法"><a class="header-anchor" href="#終於有像樣一點的進階心法">¶</a>終於有像樣一點的進階心法</h2>
+<blockquote>
+<p>這一步，才是剛開始進階！哈~~<br>
+前面是因為這樣的做法，是基於前述的小小習慣累積而來的</p>
+</blockquote>
+<p>這個方法，在共用 form 表單時只要變更使用的方式，就可以改變畫面的讀寫形式。</p>
+<p>優點</p>
+<ul>
+<li>可以應付各種讀寫變化的需求。</li>
+<li>表單變化，不用增加不必要的 props</li>
+</ul>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-10-08T16:00:00.000Z" itemprop="datePublished">
+              2021-10-09
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

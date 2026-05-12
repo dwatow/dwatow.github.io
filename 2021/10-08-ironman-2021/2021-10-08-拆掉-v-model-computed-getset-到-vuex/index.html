@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head><link rel=manifest href=/manifest.json>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2021/10-08-ironman-2021/2021-10-08-拆掉-v-model-computed-getset-到-vuex/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="為什麼要特別寫 Form 表單攻略呢？ 因為這是使用者可以輸入資料的常見途徑，一種可以「寫入」資料的方式。 為了使用者可以將資料好好的寫入，單一資料流安排了一系列的旅程讓資料流動。 下面來圖解一下上一次的程式碼與官網推薦的寫法差在哪，各有什麼好壞。 ¶從畫面到 vuex ¶用官網教的方式 官方網站的 Two-way Computed Property 其實也是示範直接用 commit 。過我們還是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拆掉 v-model + computed get&#x2F;set 到 vuex">
+<meta property="og:url" content="https://dwatow.github.io/2021/10-08-ironman-2021/2021-10-08-%E6%8B%86%E6%8E%89-v-model-computed-getset-%E5%88%B0-vuex/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="為什麼要特別寫 Form 表單攻略呢？ 因為這是使用者可以輸入資料的常見途徑，一種可以「寫入」資料的方式。 為了使用者可以將資料好好的寫入，單一資料流安排了一系列的旅程讓資料流動。 下面來圖解一下上一次的程式碼與官網推薦的寫法差在哪，各有什麼好壞。 ¶從畫面到 vuex ¶用官網教的方式 官方網站的 Two-way Computed Property 其實也是示範直接用 commit 。過我們還是">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/qofT5i3.png">
+<meta property="og:image" content="https://i.imgur.com/QJ7KW4I.png">
+<meta property="og:image" content="https://i.imgur.com/KPQP6EE.png">
+<meta property="article:published_time" content="2021-10-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-12T02:43:37.835Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="13th鐵人賽">
+<meta property="article:tag" content="vue.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/qofT5i3.png">
+  <title>
+    拆掉 v-model + computed get/set 到 vuex - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+ 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>拆掉 v-model + computed get/set 到 vuex</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%9E%E7%95%AB%E9%9D%A2%E5%88%B0-vuex"><span class="toc-text">從畫面到 vuex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E5%AE%98%E7%B6%B2%E6%95%99%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-text">用官網教的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E8%A6%81%E7%94%A8-dispatch-%E7%9B%B4%E6%8E%A5%E7%94%A8-commit"><span class="toc-text">不要用 dispatch ，直接用 commit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%87-v-model-computed-get-set-%E7%9A%84%E7%B5%84%E5%90%88%E5%AF%AB%E6%B3%95%E6%8B%BF%E6%8E%89"><span class="toc-text">將 v-model + computed(get&#x2F;set) 的組合寫法拿掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%8A%E5%8C%96"><span class="toc-text">變化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%99%E6%A8%A3%E4%B8%80%E4%BE%86-%E5%B0%B1%E5%AE%8C%E5%85%A8%E4%B8%8D%E6%9C%83%E7%94%A8%E5%88%B0-computed-get-set"><span class="toc-text">這樣一來，就完全不會用到 computed + get&#x2F;set</span></a></li></ol>
+  </div>
+
+
+    <p>為什麼要特別寫 Form 表單攻略呢？<br>
+因為這是使用者可以輸入資料的常見途徑，一種可以「寫入」資料的方式。</p>
+<p>為了使用者可以將資料好好的寫入，<strong>單一資料流</strong>安排了一系列的旅程讓資料流動。<br>
+下面來圖解一下上一次的程式碼與官網推薦的寫法差在哪，各有什麼好壞。</p>
+<h2 id="從畫面到-vuex"><a class="header-anchor" href="#從畫面到-vuex">¶</a>從畫面到 vuex</h2>
+<h3 id="用官網教的方式"><a class="header-anchor" href="#用官網教的方式">¶</a>用官網教的方式</h3>
+<p><a target="_blank" rel="noopener" href="https://vuex.vuejs.org/guide/forms.html#two-way-computed-property">官方網站的 Two-way Computed Property</a> 其實也是示範直接用 commit 。過我們還是在第一版遵守「要用 dispatch 觸發 commit」的規則。</p>
+<blockquote>
+<p>雖然這個規則有可能是要說「從 dispatch 要怎麼更新 state 的建議」</p>
+</blockquote>
+<p><img src="https://i.imgur.com/qofT5i3.png" alt=""></p>
+<p>每一個區塊，都是一段程式碼，都是一個可能出現 bug 的地方。<br>
+所以，我想要將這一切變緊湊一點，並且讓「不要出現簡單邏輯的贅 code 」</p>
+<h3 id="不要用-dispatch-直接用-commit"><a class="header-anchor" href="#不要用-dispatch-直接用-commit">¶</a>不要用 dispatch ，直接用 commit</h3>
+<p>就連官網教學，都不這麼做了，為什麼不照官網示範呢？<br>
+其實，我不建議這種教條式的學習方式。XDDD</p>
+<p>沒有什麼一定要或一定不要，只有優缺點比較。</p>
+<p><img src="https://i.imgur.com/QJ7KW4I.png" alt=""></p>
+<blockquote>
+<p>優點:</p>
+<ul>
+<li>看見程式碼可以直接區分同步動作與非同步動作。</li>
+<li>少了一段 dispatch 直接送給 commit 的贅 code</li>
+</ul>
+</blockquote>
+<h3 id="將-v-model-computed-get-set-的組合寫法拿掉"><a class="header-anchor" href="#將-v-model-computed-get-set-的組合寫法拿掉">¶</a>將 v-model + computed(get/set) 的組合寫法拿掉</h3>
+<p>將 computed 裡 get/set 的內容拆下來，不用寫 <code>this</code> 直接寫在 template。<br>
+整個資料流的 code 就變得更理想。</p>
+<p>我承認這個做法，只是我個人的偏好，與官網建議並不一樣。<br>
+沒錯！來看看優缺點</p>
+<p><img src="https://i.imgur.com/KPQP6EE.png" alt=""></p>
+<p>優點</p>
+<ul>
+<li>多個欄位綁定時，省掉多組的 computed(get/set) 的贅 code</li>
+<li>比起用 v-model 的優雅，沒有粗糙很多 (好好好…這很主觀)</li>
+<li>加強 script 的區段「只存放複雜邏輯」的意義</li>
+</ul>
+<p>缺點</p>
+<ul>
+<li>無法在 template 優雅的使用 v-model</li>
+<li>複雜邏輯無法使用</li>
+</ul>
+<h3 id="變化"><a class="header-anchor" href="#變化">¶</a>變化</h3>
+<ol>
+<li>如果 <code>:value=$store.getters.user.name</code> 變得很複雜怎麼辦？</li>
+</ol>
+<p>例如要過濾呀，要條件，要整理資料才可以用呀！這些怎麼辦？</p>
+<ul>
+<li>如果屬於資料邏輯，寫在 getters</li>
+<li>如果屬於畫面邏輯，寫成 computed (不用 get/set) ，在 template 綁成一個變數<br>
+ex: <code>:value=&quot;userName&quot;</code></li>
+</ul>
+<ol start="2">
+<li>如果 <code>@input=&quot;$store.commit('user', &#123; ...data, name: $event &#125;)&quot;</code></li>
+</ol>
+<p>如果，name 出來之後，還要欄位驗證，還檢查是不是 C 開頭？之類的，或者要轉成另一種文字再儲存，如果是數字有可能遇到轉成另一個單位再儲存，這些怎辦？</p>
+<ul>
+<li>如果屬於資料邏輯，寫在 mutation</li>
+<li>如果屬於畫面邏輯，寫成 method ，在 template 綁成一個 method name<br>
+ex: <code>@input=&quot;=&quot;updateUserName&quot;</code></li>
+</ul>
+<blockquote>
+<p>雖然 v-model + computed(get/set) 的做法一樣可以面對這種複雜的程式碼<br>
+但是，它卻無法將「簡單邏輯」與「複雜邏輯」區分開來。</p>
+</blockquote>
+<h2 id="這樣一來-就完全不會用到-computed-get-set"><a class="header-anchor" href="#這樣一來-就完全不會用到-computed-get-set">¶</a>這樣一來，就完全不會用到 computed + get/set</h2>
+<p>將寫法緊湊，是讓我對 vue 的一種革命性的體驗。</p>
+<p>最重要的一個關鍵就是不怕將欄位儲存到 vuex 並且也不怕一個欄位一個欄位的綁起來</p>
+<p>而且，其實仔細看 mutation 並不會依照欄位一個一個開，而 getters 也不會一個一個開。<br>
+多個欄位的綁定對於初學 vue + vuex 的人來說，是一場惡夢，因為官網並沒有任何指引告訴你該怎麼避免增長不必要的複雜度。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2021-10-07T16:00:00.000Z" itemprop="datePublished">
+              2021-10-08
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/">13th鐵人賽</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/vue-js/">vue.js</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+<script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script><script>if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
+    .then(function () {console.log('ServiceWorker Register Successfully.')})
+    .catch(function (e) {console.error(e)});
+}
+</script></body>
+</html>

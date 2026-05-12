@@ -69,17 +69,15 @@
     <canvas id="ixbg" width="100%" height="100%"></canvas>
     <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
     </section>
-    <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
     <section class='menu'>
-        <div>《Chris 技術筆記》</div>
+        <div><a href="/">《Chris 技術筆記》</a></div>
         
             <div>設計 × 研究 × 程式</div>
         
         <ul>
-          
-            <a href="/" class="Btn">
-              <li>Lastest</li>
-            </a>
           
             <a href="/archives/" class="Btn">
               <li>Posts</li>
@@ -93,12 +91,16 @@
               <li>Categories</li>
             </a>
           
-            <a href="/tags/" class="Btn">
-              <li>Tags</li>
-            </a>
-          
             <a href="/categories/前端新手村/" class="Btn">
               <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
             </a>
           
         </ul>
@@ -136,11 +138,11 @@
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Jenkins%E7%9A%84git-log%E7%9A%84%E4%B8%AD%E6%96%87%E5%87%BA%E7%8F%BE%E4%BA%82%E7%A2%BC"><span class="toc-text">Jenkins的git log的中文出現亂碼</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用big5顯示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">讓Git log輸出log的編碼為big5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用UTF8顯示[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">改Jenkins用的Java字集為UTF8</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#jenkins%E7%9A%84git-log%E7%9A%84%E4%B8%AD%E6%96%87%E5%87%BA%E7%8F%BE%E4%BA%82%E7%A2%BC"><span class="toc-text">Jenkins的git log的中文出現亂碼</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用big5顯示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">讓Git log輸出log的編碼為big5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">用UTF8顯示[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">改Jenkins用的Java字集為UTF8</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="Jenkins的git-log的中文出現亂碼"><a class="header-anchor" href="#Jenkins的git-log的中文出現亂碼">¶</a>Jenkins的git log的中文出現亂碼</h1>
+    <h1 id="jenkins的git-log的中文出現亂碼"><a class="header-anchor" href="#jenkins的git-log的中文出現亂碼">¶</a>Jenkins的git log的中文出現亂碼</h1>
 <p>原文連結: <a target="_blank" rel="noopener" href="https://darkblack01.blogspot.com/2015/07/jenkinsgit-log.html">https://darkblack01.blogspot.com/2015/07/jenkinsgit-log.html</a><br>
 移植時的最後更新日期: 2016-03-04T10:46:26.294+08:00</p>
 <p>首先我要強調的是，git log盡量不要打中文！XD<br /><br />好！接下來，來介紹一下怎麼解決中文的問題。<br />先說說有一個指令。<br /><br /><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding &lt;編碼方式&gt;</span><br /><br />這個指令，可以設定log輸出的編碼方式是要utf-8？還是要big5？還是別的。<br /><br /><br />一開始，我想說Jenkins的網頁，都嘛utf8，所以輸出成utf8吧！<br />結果一直都亂碼，無法解決，也覺得我是不是漏設定了什麼。<br /><br />有一天，我想到了一個測試的方式。<br />看看是怎麼回事。<br /><br /><span style="background-color: black;"><span style="color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git log &gt;&gt; gitlog.txt</span></span><br /><br />將git的log輸出成檔案。再用文字編輯器去開。就可以知道它是不是我想要的編碼方式啦！<br />我使用的文字編輯器是windows提供的WordPad，它…開啟utf8，是亂碼！= =<br /><br />Oh~<br /><br />怎麼和Jenkins一樣呢？<br /><br /><h2><span style="font-size: x-large;">用big5顯示</span></h2><h3><span style="font-size: large;">讓Git log輸出log的編碼為big5</span></h3>就把輸出log的編碼改成big5<br />結果WordPad開，是正常的！= =<br /><br />所以要在Jenkins的繁體中文介面顯示正常的git log內容。請用這個設定<br /><br /><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding big5</span><br /><br /><br /><h2><span style="font-size: x-large;">用UTF8顯示[1]</span></h2><h3><span style="font-size: large;">改Jenkins用的Java字集為UTF8</span></h3>以系統管理員身分<br /><ol><li>開啟命令提示字元視窗</li><li><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">X:\SETX /M JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8</span></li><li>開啟Git Bash</li><li><span style="background-color: black; color: white; font-family: &quot;courier new&quot; , &quot;courier&quot; , monospace;">git config --global i18n.logOutputEncoding utf8</span></li><li>重新啟動Jenkins</li></ol><br /><br />參考資料<br />[1] <a href="http://blog.miniasp.com/post/2015/12/24/Jenkins-on-Windows-03-Avoid-messy-words-in-log-messages.aspx" target="_blank">Jenkins on Windows 心得分享 (03)：有效避免記錄檔或訊息出現亂碼的方法</a></p>
@@ -183,7 +185,7 @@
 </div>
 
                 <footer>
-    <div>© 2017 - 2025 Chris </div>
+    <div>© 2017 - 2026 Chris </div>
     <div>
     Powered by Hexo
     </div>
@@ -200,12 +202,12 @@
 <script src="/js/scrollTop.js"></script>
 
 <script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331006')
+  navigator.serviceWorker.register('/sw.js?t=1778553946185')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
 </script><script>if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?t=1748049331034')
+  navigator.serviceWorker.register('/sw.js?t=1778553946203')
     .then(function () {console.log('ServiceWorker Register Successfully.')})
     .catch(function (e) {console.error(e)});
 }
