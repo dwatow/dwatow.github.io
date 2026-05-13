@@ -16,7 +16,7 @@ permalink: /404.html
 
 ## 一開始，學了 C++。
 
-```c++
+```cpp
 #include <iostream>
 
 using namespace std;
@@ -28,7 +28,7 @@ int main() {
 
 ## 學了物件導向....
 
-```c++
+```cpp
 #include <iostream>
 #include <string>
 
@@ -53,7 +53,7 @@ int main() {
 
 ## 學了 Design Pattern...
 
-```c++
+```cpp
 #include <iostream>
 #include <map>
 #include <string>
