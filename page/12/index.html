@@ -142,255 +142,409 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2020/04-21-jest/jest-doc-4/">https://dwatow.github.io/2020/04-21-jest/jest-doc-4/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2020/04-24-jest/jest-doc-5/">https://dwatow.github.io/2020/04-24-jest/jest-doc-5/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋</h1>
+        <h1>讀 Jest Doc - 測試替身</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%80-jest-doc-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%9A%84%E7%B5%90%E6%A7%8B-%E5%9F%B7%E8%A1%8C%E9%A0%86%E5%BA%8F%E8%88%87%E5%90%8D%E8%A9%9E%E8%A7%A3%E9%87%8B"><span class="toc-text">讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%9A%84%E8%A1%80%E8%84%88"><span class="toc-text">單元測試的血脈</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#setup-and-teardown"><span class="toc-text">Setup and Teardown</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#repeating-setup-for-many-tests"><span class="toc-text">Repeating Setup For Many Tests</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#one-time-setup"><span class="toc-text">One-Time Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scoping"><span class="toc-text">Scoping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-of-execution-of-describe-and-test-blocks"><span class="toc-text">Order of execution of describe and test blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#general-advice"><span class="toc-text">General Advice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%9B%9E%E8%A6%8B"><span class="toc-text">下回見</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6%E6%9B%BF%E8%BA%AB"><span class="toc-text">測試替身</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3-mock-%E8%A6%81%E6%80%8E%E9%BA%BC%E7%94%A8%EF%BC%9F"><span class="toc-text">那 Mock 要怎麼用？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mock-functions"><span class="toc-text">Mock Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#using-a-mock-function"><span class="toc-text">Using a mock function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mock-property"><span class="toc-text">.mock property</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mock-return-values"><span class="toc-text">Mock Return Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mocking-modules"><span class="toc-text">Mocking Modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mock-implementations"><span class="toc-text">Mock Implementations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mock-names"><span class="toc-text">Mock Names</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#custom-matchers"><span class="toc-text">Custom Matchers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%91%8A%E4%B8%80%E6%AE%B5%E8%90%BD"><span class="toc-text">先告一段落</span></a></li></ol></li></ol>
   </div>
 
 
-    <h1 id="讀-jest-doc-單元測試的結構-執行順序與名詞解釋"><a class="header-anchor" href="#讀-jest-doc-單元測試的結構-執行順序與名詞解釋">¶</a>讀 Jest Doc - 單元測試的結構、執行順序與名詞解釋</h1>
-<p>上一篇，聊了關於非同步問題。<br>
-這一篇，我們要更了解 Jest 的生命週期 (其實就是執行順序)。</p>
-<p>廣義的來說，也可以說是測試 3A<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> 的 Arrange</p>
-<blockquote>
-<p>如果以煮菜來解釋</p>
-<ol>
-<li>Arrange: 準備材料</li>
-<li>Act: 煮東西</li>
-<li>Assert: 試吃，看看結果如何？</li>
-</ol>
-</blockquote>
-<h2 id="單元測試的血脈"><a class="header-anchor" href="#單元測試的血脈">¶</a>單元測試的血脈</h2>
-<p>單元測試框架，最早是由 Smalltalk 的 SUnit<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 的單元測試框架結構，而成名之作是由 Kent Beck 用 Java 寫的 JUnit，在<a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9789861547534">《重構─改善既有程式的設計, 2/e》</a>一書中有介紹其架構與設計。並且於 2018 再重新出版，<a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9789865021832?list_name=c-refactoring">《重構｜改善既有程式的設計, 2/e》</a>一書中的例子，全面改寫成 JavaScript 而介紹單元測試的章節。</p>
-<p>之後許許多多的單元測試框架，也由不同的語言重新實作，並且命名也有一個慣例<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>，而這種重新實作 JUnit 的框架，統稱為 xUnit<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>，不過<strong>不代表這麼命名的框架為該語言的主流測試框架</strong>。</p>
-<p>ex:</p>
+    <h1 id="測試替身"><a class="header-anchor" href="#測試替身">¶</a>測試替身</h1>
+<p>戲劇演員的替身, 在英文裡叫 body double 或 stunt double<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p><strong>待測物與相依元件</strong><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <ul>
-<li>Bash: ShUnit, shUnit2</li>
-<li>C語言: CUnit</li>
-<li>C++: CppUnit</li>
-<li>Objective-C: OCUnit, XCTest</li>
-<li>Swift: XCTest</li>
-<li>SystemVerilog: VUnit</li>
-<li>Java: JUnit</li>
-<li>JavaScript: JSUnit(Jasmine)</li>
-<li>jQuery: QUnit</li>
-<li>PHP: PHPUnit, Codeception</li>
+<li><strong>SUT</strong>：System Under Test 或 Software Under Test 的簡寫，代表<strong>待測程式</strong>。</li>
+<li><strong>DOC</strong>：Depended-on Component (相依元件)，又稱為 Collaborator (合作者)。DOC 是 SUT 執行的時候會使用到的元件。</li>
 </ul>
-<p>由於 JUnit 是由物件導向語言而撰寫而成，所以一些非純物件導向語言或可以透過自身語言特性簡化其 xUnit 的類別結構。</p>
-<p><strong>Jest 並不是 xUnit 系列的測試框架</strong></p>
-<p>在此就一邊引用 <a target="_blank" rel="noopener" href="https://jasmine.github.io/tutorials/your_first_suite.html">Jasmine</a> 一邊對照 CppUnit 來看看，在 JavaScript 中的術語如何對到 JUnit 上術語。</p>
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/jOBeduguvKcWzU?startSlide=38" width="100%" height="590px" frameborder="0" loading="lazy" allowfullscreen></iframe>
-<p><a target="_blank" rel="noopener" href="https://www.slideshare.net/dwatow/cppunit-56845277#38">Cppunit下載、編譯、使用與困難排除, p38</a></p>
-<table>
-<thead>
-<tr>
-<th>xUnit</th>
-<th>Jasmine</th>
-<th>備註</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TestCase</td>
-<td>it</td>
-<td></td>
-</tr>
-<tr>
-<td>Fixture</td>
-<td>describe</td>
-<td>有 beforeEach，裡面可以加入 TestCase</td>
-</tr>
-<tr>
-<td>Assertion</td>
-<td>expect + matcher(BDD)</td>
-<td></td>
-</tr>
-<tr>
-<td>Suite</td>
-<td>檔案的頂層 describe</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>測試不多，可以只用 Fixture (Object) + TestCase (method)<br>
-測試變多 xUnit 會使用 Suite (會用 Caller) 將 <code>Fixture::suite()</code> 集結起來，再整包執行。</p>
-<p>主要就先了解到這。<br>
-CppUnit 的<strong>測試主程式</strong>，一般來說是固定寫法，有需要修改的地方，是輸出的 report 是要印在 terminal 還是寫成 xml 檔案。<br>
-也許 Jasmine 也都寫死了，不用改寫，呼叫時用參數再決定就可以了。</p>
-<p>接下來就來看看 <s><code>Fixture</code> 的</s> <code>beforeEach</code>/<code>afterEach</code> 要怎麼在 Jest 寫囉。</p>
-<h1 id="setup-and-teardown"><a class="header-anchor" href="#setup-and-teardown">¶</a>Setup and Teardown</h1>
-<p>哪些是先執行，哪些是後執行的？</p>
-<p>在成套的的測試中，往往只差一點點。<br>
-這些測試會有「一致的準備過程」，有時還需要有「一致的收尾」。</p>
-<h2 id="repeating-setup-for-many-tests"><a class="header-anchor" href="#repeating-setup-for-many-tests">¶</a>Repeating Setup For Many Tests</h2>
-<p>例如: 資料庫的初始與釋放</p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
-  initializeCityDatabase();
+<p>在實案例中，模組之間是會相依在一起的，執行單元測試時，要視情況將「與外部溝通」的相依元件進行替換，這是一種不修改產品 code 的替換手法，例如有些情況，是不確定相依元件的穩定性，而進行 test double 的替換。<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<ol>
+<li>一來保持測試速度都是在記憶體內完成，不會到讀寫檔案、Web API…等，與外部資源互動而拖長測試時間。</li>
+<li>針對問題的範圍進行測試，可以視情況的縮小 specical case，也就是說，可以讓 SUT 不依賴原本的 DOC 也可以測試。</li>
+</ol>
+<p>在 <a target="_blank" rel="noopener" href="http://xunitpatterns.com/Test%20Double.html">xunitpatterns</a> 裡特別分成五種 Test Double<br>
+分別是 Dummy Object、Test Stub、Test Spy、Fake Object 與 Mock Object。</p>
+<p>其實，就是假的，到超級假的等級區分。</p>
+<pre class="language-none"><code class="language-none">No Implement &gt; Dummies &gt; Stubs &gt; Spies &gt; Facke &gt; Real Implement</code></pre>
+<p>常見的術語，只要知道 Stub、Spy、Mock</p>
+<ul>
+<li>Stub: 回傳 hack-code 內容。</li>
+<li>Spy: 跟著真實本體，告訴你他發生了什麼。</li>
+<li>Mock: 假的本體替身，看他身上的痕跡，了解他發生了什麼。</li>
+</ul>
+<blockquote>
+<p>如果說 jest.fn 能夠作為一個 Function 的替身，那麼 jest.mock 就是能模擬整個模組的 Mock！<br>
+– 神Ｑ超人</p>
+</blockquote>
+<p><strong>jest.spyOn()</strong></p>
+<blockquote>
+<p>SUT 一直享受著假資料帶來的美好，當過程中動用到 DOC 邏輯等或修改回傳值時。上線時卻會有「什麼！這傢伙怎麼會回傳這種東西？測試明明就沒有錯！」之類的慘劇發生。</p>
+<p>但是 jest.spyOn() 不同，它會去重現 DOC 的邏輯，即使在任何時候修改了它的任何內容都一樣，SUT 在測試時便會發現 DOC 已經和之前測試時有所不同，不論是邏輯、回傳值等等，這時候捕獲了真實資料的測試結果才會有效。</p>
+<p>那 jest.mock() 整個那麼假，可以用在哪裡？用在模擬無法重現邏輯、或者根本不會去變動的第三方套件時。<br>
+– 神Q超人</p>
+</blockquote>
+<h2 id="那-mock-要怎麼用？"><a class="header-anchor" href="#那-mock-要怎麼用？">¶</a>那 Mock 要怎麼用？</h2>
+<p><strong>Q: 是不是一次只測一個 function 其它都 mock 掉呢？</strong><br>
+<strong>Q: 模組相依一起測算是整合測試嗎？</strong></p>
+<p>這些問題，也許可以用<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10229734">探討單元測試和整合測試的涵蓋範圍</a>來解答</p>
+<p>重點:</p>
+<ol>
+<li>單元測試有兩派: 孤立型（Solitary）or 社交型（Sociable）</li>
+<li>如果你是 BDD 或 TDD 的實踐者，那麼你的單元測試就可能是跨多個類別的 社交型單元測試，因為測試的對象是 一個行為，而非一個類別。</li>
+<li>2017 年，<a target="_blank" rel="noopener" href="https://twitter.com/unclebobmartin/status/943552605950750721">Uncle Bob 在 Twitter 有對網友說明</a> TDD 單元測試的對象是一個&quot;行為&quot;，而非一個&quot;方法&quot;</li>
+</ol>
+<h1 id="mock-functions"><a class="header-anchor" href="#mock-functions">¶</a>Mock Functions</h1>
+<p>Mock 函數有這些作用</p>
+<ul>
+<li>取代真正的函式程式碼 (建立替身函數)</li>
+<li>替代函式被呼叫與接收參數 (呼叫替身函數)</li>
+<li>當 new 一個物件實例時，替代物件實例的建構式，指定函式回傳值 (指定替身函數回傳值)</li>
+</ul>
+<p>有兩種方式可以擁有 mock functions</p>
+<ol>
+<li>建立在測試用的 mock 函數</li>
+<li>手動 mock 覆蓋相依模組</li>
+</ol>
+<h2 id="using-a-mock-function"><a class="header-anchor" href="#using-a-mock-function">¶</a>Using a mock function</h2>
+<p>Let’s imagine we’re testing an implementation of a function forEach, which invokes a callback for each item in a supplied array.</p>
+<p>假設我們寫了一個 <code>forEach</code> 想要測試它，而執行它，需要 Array 和 callback 當作參數。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">function forEach(items, callback) &#123;
+  for (let index &#x3D; 0; index &lt; items.length; index++) &#123;
+    callback(items[index]);
+  &#125;
+&#125;</code></pre>
+<p>為了要測試 forEach，可以使用一個 mock function ，並且檢查它被呼叫的情況。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const mockCallback &#x3D; jest.fn(x &#x3D;&gt; 42 + x);
+forEach([0, 1], mockCallback);
+
+&#x2F;&#x2F; The mock function is called twice
+expect(mockCallback.mock.calls.length).toBe(2);
+
+&#x2F;&#x2F; The first argument of the first call to the function was 0
+expect(mockCallback.mock.calls[0][0]).toBe(0);
+
+&#x2F;&#x2F; The first argument of the second call to the function was 1
+expect(mockCallback.mock.calls[1][0]).toBe(1);
+
+&#x2F;&#x2F; The return value of the first call to the function was 42
+expect(mockCallback.mock.results[0].value).toBe(42);</code></pre>
+<h2 id="mock-property"><a class="header-anchor" href="#mock-property">¶</a><code>.mock</code> property</h2>
+<p>每個 mock function，都有一個叫 <code>.mock</code> 的屬性，裡面會記載著 function 如何被呼叫、丟了什麼參數，回傳什麼回傳值。隨著 JavaScript 的持性， mock function 也會記得每次被呼叫時的 <code>this</code> 是誰。</p>
+<pre class="line-numbers language-javascriptconst" data-language="javascriptconst" data-start="1"><div class="caption"><span>myMock</span></div><code class="language-javascriptconst">
+const a &#x3D; new myMock(); &#x2F;&#x2F; 第一次呼叫
+ const b &#x3D; &#123;
+    name: &quot;b&quot;
+  &#125;;
+const bound &#x3D; myMock.bind(b);
+bound(); &#x2F;&#x2F; 第二次呼叫
+
+console.log(myMock.mock.instances);
+&#x2F;&#x2F; &gt; [ &lt;a&gt;, &lt;b&gt; ]
+
+&#x2F;&#x2F; 實際測出來，這樣印較清楚
+console.log(myMock.mock.instances.constructor.name, &quot;\n&quot;, JSON.stringify(myMock.mock.instances));</code></pre>
+<p>實測印出</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">console.log 2020-04-16&#x2F;mock.test.js:11
+  Array
+   [&#123;&#125;,&#123;&quot;name&quot;:&quot;b&quot;&#125;]</code></pre>
+<p>mock 物件的內容，用在斷言下面幾種情況</p>
+<ol>
+<li>mock function 吃什麼參數</li>
+<li>mock function 在測試中的回傳值</li>
+<li>mock function new 了幾個實例</li>
+</ol>
+<p>下面的實際執行程式碼，也可以直接翻譯。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock object of mock function as call mockFunction&#39;, () &#x3D;&gt; &#123;
+  const someMockFunction &#x3D; jest.fn(() &#x3D;&gt; &#39;return value&#39;);
+  someMockFunction(&#39;first arg&#39;, &#39;second arg&#39;);
+
+  &#x2F;&#x2F; someMockFunction.假物件屬性.呼叫.次數
+  expect(someMockFunction.mock.calls.length).toBe(1);
+
+  &#x2F;&#x2F; someMockFunction.假物件屬性.呼叫[第幾次][第幾個參數]
+  expect(someMockFunction.mock.calls[0][0]).toBe(&#39;first arg&#39;);
+  expect(someMockFunction.mock.calls[0][1]).toBe(&#39;second arg&#39;);
+
+  &#x2F;&#x2F; someMockFunction.假物件屬性.回傳值[第幾次]
+  expect(someMockFunction.mock.results[0].value).toBe(&#39;return value&#39;);
 &#125;);
 
-afterEach(() &#x3D;&gt; &#123;
-  clearCityDatabase();
-&#125;);
+test(&#39;mock object of mock function as new mockFunction&#39;, () &#x3D;&gt; &#123;
+  const someMockFunction &#x3D; jest.fn();
+  const a &#x3D; new someMockFunction();
+  a.name &#x3D; &#39;test&#39;;
+  const b &#x3D; new someMockFunction();
 
-test(&#39;city database has Vienna&#39;, () &#x3D;&gt; &#123;
-  expect(isCity(&#39;Vienna&#39;)).toBeTruthy();
-&#125;);
+  &#x2F;&#x2F; someMockFunction.假物件屬性.用 new 呼叫.次數
+  expect(someMockFunction.mock.instances.length).toBe(2);
 
-test(&#39;city database has San Juan&#39;, () &#x3D;&gt; &#123;
-  expect(isCity(&#39;San Juan&#39;)).toBeTruthy();
+  &#x2F;&#x2F; someMockFunction.假物件屬性.用 new 呼叫[第幾次]的物件.name
+  expect(someMockFunction.mock.instances[0].name).toEqual(&#39;test&#39;);
 &#125;);</code></pre>
-<p>如果遇到非同步的準備/釋放過程，可以在 <code>beforeEah</code>/<code>afterEach</code> 中使用 <code>return</code></p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
-  return initializeCityDatabase(&quot;beforeEach&quot;);
+<h2 id="mock-return-values"><a class="header-anchor" href="#mock-return-values">¶</a>Mock Return Values</h2>
+<p><strong>執行假物件的回傳值</strong>，可以在呼叫前 <code>mockReturnValueOnce</code> 快速設定。<br>
+不用寫任何邏輯的方式，直接設定回傳值。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;return Value of mock function&#39;, () &#x3D;&gt; &#123;
+  const myMock &#x3D; jest.fn();
+
+  &#x2F;&#x2F; console.log(myMock());
+  &#x2F;&#x2F; &gt; undefined
+  expect(myMock()).toBeUndefined();
+
+  myMock.mockReturnValueOnce(10)
+        .mockReturnValueOnce(&#39;x&#39;)
+        .mockReturnValue(true);
+
+  &#x2F;&#x2F; console.log(myMock(), myMock(), myMock(), myMock());
+  &#x2F;&#x2F; &gt; 10, &#39;x&#39;, true, true
+  expect(myMock()).toBe(10);
+  expect(myMock()).toBe(&#39;x&#39;);
+  expect(myMock()).toBe(true);
+  expect(myMock()).toBe(true);
+
+  console.log(JSON.stringify(myMock.mock.results));
 &#125;);</code></pre>
-<h2 id="one-time-setup"><a class="header-anchor" href="#one-time-setup">¶</a>One-Time Setup</h2>
-<p>只想要用一次的初始/釋放。<br>
-也可以說只想在第一次的 <code>beforeEach</code> 才有的初始，可以放在 <code>beforeAll</code><br>
-只想在最後一次的 <code>afterEach</code> 才有的釋放，可以放在 <code>afterAll</code></p>
-<h2 id="scoping"><a class="header-anchor" href="#scoping">¶</a>Scoping</h2>
-<p>一般而言，<code>before</code>/<code>after</code> 會為每一個測試(<code>test</code> 區塊)進行前置與後置作業。<br>
-但是，如果你想要將測試分類，並且每一類會執行各別的 before/after 區塊的話，可以用 <code>describe</code></p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeEach(() &#x3D;&gt; &#123;
-  return asyncInitializeCityDatabase(&quot;beforeEach VVVVVVV asyncInitializeCityDatabase&quot;);
-&#125;);
+<pre class="language-shell" data-language="shell"><code class="language-shell">console.log 2020-04-16&#x2F;returnValue.test.js:19
+  [&#123;
+    &quot;type&quot;:&quot;return&quot;
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:10
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:&quot;x&quot;
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:true
+  &#125;, &#123;
+    &quot;type&quot;:&quot;return&quot;,&quot;value&quot;:true
+  &#125;]</code></pre>
+<p>在呼叫之前，直接塞回傳值。取代真實行為時，避免需要複雜的 stub</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">
+test(&#39;mock to stub&#39;, () &#x3D;&gt; &#123;
+  const filterTestFn &#x3D; jest.fn();
 
-test(&#39;city database has Vienna&#39;, () &#x3D;&gt; &#123;
-  expect(isCity(&#39;Vienna&#39;)).toBeTruthy();
-&#125;);
+  filterTestFn
+    .mockReturnValueOnce(true)
+    .mockReturnValueOnce(false);
 
-test(&#39;city database has San Juan&#39;, () &#x3D;&gt; &#123;
-  expect(isCity(&#39;San Juan&#39;)).toBeTruthy();
-&#125;);
+  const result &#x3D; [11, 12].filter(num &#x3D;&gt; filterTestFn(num));
 
-describe(&#39;matching cities to foods&#39;, () &#x3D;&gt; &#123;
-  &#x2F;&#x2F; Applies only to tests in this describe block
-  beforeEach(() &#x3D;&gt; &#123;
-    return asyncInitializeFoodDatabase(&quot;describe beforeEach VVVVVVV asyncInitializeFoodDatabase&quot;);
-  &#125;);
-
-  test(&#39;Vienna &lt;3 sausage&#39;, () &#x3D;&gt; &#123;
-    expect(isValidCityFoodPair(&#39;Vienna&#39;, &#39;Wiener Schnitzel&#39;)).toBe(true);
-  &#125;);
-
-  test(&#39;San Juan &lt;3 plantains&#39;, () &#x3D;&gt; &#123;
-    expect(isValidCityFoodPair(&#39;San Juan&#39;, &#39;Mofongo&#39;)).toBe(true);
-  &#125;);
+  console.log(result);
+  &#x2F;&#x2F; &gt; [11]
+  console.log(filterTestFn.mock.calls);
+  &#x2F;&#x2F; &gt; [ [11], [12] ]
 &#125;);</code></pre>
-<p>執行順序 (拿掉不必要的資訊)</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell"># 全域
-beforeEach VVVVVVV asyncInitializeCityDatabase
-&gt; run test Vienna
-beforeEach VVVVVVV asyncInitializeCityDatabase
-&gt; run test San Juan
-beforeEach VVVVVVV asyncInitializeCityDatabase
-# describe 區塊
-describe beforeEach VVVVVVV asyncInitializeFoodDatabase
-&gt; run test Vienna
-beforeEach VVVVVVV asyncInitializeCityDatabase
-describe beforeEach VVVVVVV asyncInitializeFoodDatabase
-&gt; run test San Juan</code></pre>
-<p>如果有多層的 <code>describe</code> 。<br>
-每一層 <code>describe</code> 外面如果有 <code>beforeEach</code> 的話也會先執行 <code>beforeEach</code>，再執行 <code>describe</code></p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">beforeAll(() &#x3D;&gt; console.log(&#39;1 - beforeAll&#39;));
-afterAll(() &#x3D;&gt; console.log(&#39;1 - afterAll&#39;));
-beforeEach(() &#x3D;&gt; console.log(&#39;1 - beforeEach&#39;));
-afterEach(() &#x3D;&gt; console.log(&#39;1 - afterEach&#39;));
-test(&#39;&#39;, () &#x3D;&gt; console.log(&#39;1 - test&#39;));
-describe(&#39;Scoped &#x2F; Nested block&#39;, () &#x3D;&gt; &#123;
-  beforeAll(() &#x3D;&gt; console.log(&#39;2 - beforeAll&#39;));
-  afterAll(() &#x3D;&gt; console.log(&#39;2 - afterAll&#39;));
-  beforeEach(() &#x3D;&gt; console.log(&#39;2 - beforeEach&#39;));
-  afterEach(() &#x3D;&gt; console.log(&#39;2 - afterEach&#39;));
-  test(&#39;&#39;, () &#x3D;&gt; console.log(&#39;2 - test&#39;));
-&#125;);
+<p>實際上，該 mock 掉的都是一些相依套件的情況。<br>
+但是技術上是相同的，避免在假物件內實作測不到的邏輯</p>
+<h2 id="mocking-modules"><a class="header-anchor" href="#mocking-modules">¶</a>Mocking Modules</h2>
+<p>來看看更接近真實案例的 code，對 axios 進行 mock！</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; users.js
+import axios from &#39;axios&#39;;
 
-&#x2F;&#x2F; 1 - beforeAll
-&#x2F;&#x2F; 1 - beforeEach
-&#x2F;&#x2F; 1 - test
-&#x2F;&#x2F; 1 - afterEach
-&#x2F;&#x2F; 2 - beforeAll
-&#x2F;&#x2F; 1 - beforeEach
-&#x2F;&#x2F; 2 - beforeEach
-&#x2F;&#x2F; 2 - test
-&#x2F;&#x2F; 2 - afterEach
-&#x2F;&#x2F; 1 - afterEach
-&#x2F;&#x2F; 2 - afterAll
-&#x2F;&#x2F; 1 - afterAll</code></pre>
-<h2 id="order-of-execution-of-describe-and-test-blocks"><a class="header-anchor" href="#order-of-execution-of-describe-and-test-blocks">¶</a>Order of execution of describe and test blocks</h2>
-<p>執行順序！這一段就厲害了，完全超乎你想像的執行順序。<br>
-Jest 在執行 <code>test</code> 區段之前，會先把 <code>describe</code> 執行完。</p>
-<p>一個 <code>describe</code> 執行完，就先把目前搜集的所有 <code>test</code> 跑完。<br>
-這些 <code>test</code> 執行完，再執行接下來會遇到的 <code>describe</code></p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">describe(&#39;outer&#39;, () &#x3D;&gt; &#123;
-  console.log(&#39;describe outer-a&#39;);
+class Users &#123;
+  static all() &#123;
+    return axios.get(&#39;&#x2F;users.json&#39;).then(resp &#x3D;&gt; resp.data);
+  &#125;
+&#125;
 
-  describe(&#39;describe inner 1&#39;, () &#x3D;&gt; &#123;
-    console.log(&#39;describe inner 1&#39;);
-    test(&#39;test 1&#39;, () &#x3D;&gt; &#123;
-      console.log(&#39;test for describe inner 1&#39;);
-      expect(true).toEqual(true);
-    &#125;);
+export default Users;</code></pre>
+<p>為了不要真的發送 API 又不修改 axios，又要執行測試，就是要把 axios 模組給 mock 起來。</p>
+<p>mock 好了之後，<code>axios.get()</code> 就變成 mock function ，可以用 <code>.mockResolvedValue</code> 設定它回傳 prmise 時，裡面要帶什麼值。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; users.test.js
+import axios from &#39;axios&#39;;
+import Users from &#39;.&#x2F;users&#39;;
+
+jest.mock(&#39;axios&#39;);
+
+test(&#39;should fetch users&#39;, () &#x3D;&gt; &#123;
+  const users &#x3D; [&#123;name: &#39;Bob&#39;&#125;];
+  axios.get.mockResolvedValue(&#123;
+    data: users
   &#125;);
 
-  console.log(&#39;describe outer-b&#39;);
+  return Users.all().then(data &#x3D;&gt; expect(data).toEqual(users));
 
-  test(&#39;test 1&#39;, () &#x3D;&gt; &#123;
-    console.log(&#39;test for describe outer&#39;);
-    expect(true).toEqual(true);
-  &#125;);
-
-  describe(&#39;describe inner 2&#39;, () &#x3D;&gt; &#123;
-    console.log(&#39;describe inner 2&#39;);
-    test(&#39;test for describe inner 2&#39;, () &#x3D;&gt; &#123;
-      console.log(&#39;test for describe inner 2&#39;);
-      expect(false).toEqual(false);
-    &#125;);
-  &#125;);
-
-  console.log(&#39;describe outer-c&#39;);
-&#125;);
-
-&#x2F;&#x2F; describe outer-a
-&#x2F;&#x2F; describe inner 1
-&#x2F;&#x2F; describe outer-b
-&#x2F;&#x2F; describe inner 2
-&#x2F;&#x2F; describe outer-c
-&#x2F;&#x2F; test for describe inner 1
-&#x2F;&#x2F; test for describe outer
-&#x2F;&#x2F; test for describe inner 2</code></pre>
-<h2 id="general-advice"><a class="header-anchor" href="#general-advice">¶</a>General Advice</h2>
-<p>建議你，如果遇到測試失敗時，就先使用 <code>test.only()</code> 讓其它的測試先不跑，只跑出錯的，看看是不是還是失敗。</p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test.only(&#39;this will be the only test that runs&#39;, () &#x3D;&gt; &#123;
-  expect(true).toBe(false);
-&#125;);
-
-test(&#39;this test will not run&#39;, () &#x3D;&gt; &#123;
-  expect(&#39;A&#39;).toBe(&#39;A&#39;);
 &#125;);</code></pre>
-<p>通常在測試大型專案的一小部份時出錯，而單獨執行不會失敗，最好檢查一下是不是被其它的測試干擾到了。</p>
-<p>通常檢查需不需要在 beforeEach 加上清除共享資料就可以解決。如果不確定，就先在 beforeEach 記錄這些共享資料。</p>
-<h2 id="下回見"><a class="header-anchor" href="#下回見">¶</a>下回見</h2>
-<p>喜歡的話歡迎訂閱、按讚、分享。<br>
-有任何問題也歡迎在下方留言討論。</p>
-<p>如果想參加聚會的話，可以私訊給我哦~<br>
-我們下一篇見</p>
+<p>或者用 <code>axios.get.mockImplementation(() =&gt; Promise.resolve(resp))</code> 也可以</p>
+<blockquote>
+<p>這幾個差在哪？<br>
+mockResolvedValue: 直接定回傳 promise<br>
+mockImplementation: 實作 function 內容<br>
+jest.fn(): 實作 function 內容</p>
+<p>注意: <code>jest.fn(implementation)</code> 是 <code>jest.fn().mockImplementation(implementation)</code> 的縮寫.<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+</blockquote>
+<h2 id="mock-implementations"><a class="header-anchor" href="#mock-implementations">¶</a>Mock Implementations</h2>
+<p>假實作 fake 比起假回傳的 Stub 來得更強大。強大到幾乎可以取代假回傳 (stub)，但是就是自己要寫很多 code。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock function&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest.fn(callback &#x3D;&gt; callback(null, true));
+
+  myMockFn((err, val) &#x3D;&gt; console.log(val));
+  &#x2F;&#x2F; 印出 true
+
+  expect(myMockFn.mock.calls[0][0]).toBeInstanceOf(Function);
+&#125;);</code></pre>
+<p><code>mockImplementation</code> 可以定義一個 mock function 的<strong>預設的假行為</strong>。<br>
+瘋狂的完全取代原本的模組，就算它還沒有實作。(危險)</p>
+<p><strong>emptyImplement.js</strong></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module.exports &#x3D; function () &#123;
+  &#x2F;&#x2F; some implementation;
+&#125;;</code></pre>
+<p><strong>emptyImplement.test.js</strong></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">jest.mock(&#39;.&#x2F;emptyImplement&#39;); &#x2F;&#x2F; this happens automatically with automocking
+const emptyImplement &#x3D; require(&#39;.&#x2F;emptyImplement&#39;);
+
+test(&#39;mock empty module&#39;, () &#x3D;&gt; &#123;
+  &#x2F;&#x2F; emptyImplement is a mock function
+  emptyImplement.mockImplementation(() &#x3D;&gt; 42);
+
+  expect(emptyImplement()).toBe(42);
+&#125;);</code></pre>
+<p>覆蓋率是 0</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |      0 |     100 |
+ emptyImplement.js |     100 |      100 |       0 |     100 |
+ ------------------|---------|----------|---------|---------|-------------------</code></pre>
+<p>當你需要「假物件實作免洗筷」時，可以使用 <code>mockImplementationOnce</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const myMockFn &#x3D; jest
+  .fn()
+  .mockImplementationOnce(cb &#x3D;&gt; cb(null, true))
+  .mockImplementationOnce(cb &#x3D;&gt; cb(null, false));
+
+myMockFn((err, val) &#x3D;&gt; console.log(val));
+&#x2F;&#x2F; &gt; true
+
+myMockFn((err, val) &#x3D;&gt; console.log(val));
+&#x2F;&#x2F; &gt; false</code></pre>
+<p>免洗筷用完時，再呼叫會跑<strong>預設假行為</strong></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock mockImplementationOnce call lots of times&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest
+  .fn(() &#x3D;&gt; &#39;default&#39;)
+  .mockImplementationOnce(() &#x3D;&gt; &#39;first call&#39;)
+  .mockImplementationOnce(() &#x3D;&gt; &#39;second call&#39;);
+
+  expect(myMockFn()).toMatch(&#39;first call&#39;);
+  expect(myMockFn()).toMatch(&#39;second call&#39;);
+  expect(myMockFn()).toMatch(&#39;default&#39;);
+  expect(myMockFn()).toMatch(&#39;default&#39;);
+
+  expect(myMockFn.mock.calls[0][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[1][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[2][0]).toBeUndefined();
+  expect(myMockFn.mock.calls[3][0]).toBeUndefined();
+  expect(myMockFn.mock.calls.length).toBe(4);
+&#125;);</code></pre>
+<p>通常這種 <strong>免洗筷</strong> 都是用來應付鍊狀呼叫<br>
+而鍊狀呼叫的假物件，就是回傳 this ，可以使用 <code>mockReturnThis()</code> 來實作。</p>
+<blockquote>
+<p>疑問: <code>axios.create()</code> 就可以這樣做？</p>
+</blockquote>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const otherObj &#x3D; &#123;
+  myMethod: jest.fn(function () &#123;
+    return this;
+  &#125;),
+&#125;;</code></pre>
+<p>可以寫成</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const myObj &#x3D; &#123;
+  myMethod: jest.fn().mockReturnThis(),
+&#125;;</code></pre>
+<h2 id="mock-names"><a class="header-anchor" href="#mock-names">¶</a>Mock Names</h2>
+<p>一個 function 都會有一個 name，就算是 <code>jest.fn()</code> 也是。</p>
+<ul>
+<li>可以用 <code>.mockName()</code> 給一個 mockName。</li>
+<li>可以用 <code>.getMockName()</code> 要取得 function name。</li>
+</ul>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;mock name&#39;, () &#x3D;&gt; &#123;
+  const myMockFn &#x3D; jest
+    .fn()
+    .mockReturnValue(&#39;default&#39;)
+    .mockImplementation(scalar &#x3D;&gt; 42 + scalar);
+
+  expect(myMockFn.getMockName()).toMatch(&quot;jest.fn()&quot;);
+
+  myMockFn.mockName(&#39;add42&#39;);
+  expect(myMockFn.getMockName()).toMatch(&quot;add42&quot;);
+&#125;);</code></pre>
+<h2 id="custom-matchers"><a class="header-anchor" href="#custom-matchers">¶</a>Custom Matchers</h2>
+<p>為了 mock function 而生的 Matcher</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">test(&#39;test mock function matcher&#39;, () &#x3D;&gt; &#123;
+  const mockFunc &#x3D; jest.fn();
+
+  const arg1 &#x3D; &#39;chris&#39;
+  const arg2 &#x3D; &#39;mary&#39;
+  mockFunc(arg1, arg2);
+  expect(mockFunc).toHaveBeenCalled();
+
+  &#x2F;&#x2F; The mock function was called at least once with the specified args
+  expect(mockFunc).toHaveBeenCalledWith(arg1, arg2);
+
+  &#x2F;&#x2F; The last call to the mock function was called with the specified args
+  expect(mockFunc).toHaveBeenLastCalledWith(arg1, arg2);
+
+  &#x2F;&#x2F; All calls and the name of the mock is written as a snapshot
+  expect(mockFunc).toMatchSnapshot();
+&#125;);</code></pre>
+<p>其中的 Snapshot 第一次執行，會儲存執行結果。<br>
+第二次執行，會拿上次執行的結果與這次比對。</p>
+<pre class="language-none"><code class="language-none">&#x2F;&#x2F; Jest Snapshot v1, https:&#x2F;&#x2F;goo.gl&#x2F;fbAQLP
+
+exports[&#96;test mock function matcher 1&#96;] &#x3D; &#96;
+[MockFunction] &#123;
+  &quot;calls&quot;: Array [
+    Array [
+      42,
+      43,
+    ],
+  ],
+  &quot;results&quot;: Array [
+    Object &#123;
+      &quot;type&quot;: &quot;return&quot;,
+      &quot;value&quot;: undefined,
+    &#125;,
+  ],
+&#125;
+&#96;;</code></pre>
+<p>以上這些都是語法糖。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#x2F;&#x2F; The mock function was called at least once
+expect(mockFunc.mock.calls.length).toBeGreaterThan(0);
+
+&#x2F;&#x2F; The mock function was called at least once with the specified args
+expect(mockFunc.mock.calls).toContainEqual([arg1, arg2]);
+
+&#x2F;&#x2F; The last call to the mock function was called with the specified args
+expect(mockFunc.mock.calls[mockFunc.mock.calls.length - 1]).toEqual([
+  arg1,
+  arg2,
+]);
+
+&#x2F;&#x2F; The first arg of the last call to the mock function was &#96;42&#96;
+&#x2F;&#x2F; (note that there is no sugar helper for this specific of an assertion)
+expect(mockFunc.mock.calls[mockFunc.mock.calls.length - 1][0]).toBe(42);
+
+&#x2F;&#x2F; A snapshot will check that a mock was invoked the same number of times,
+&#x2F;&#x2F; in the same order, with the same arguments. It will also assert on the name.
+expect(mockFunc.mock.calls).toEqual([[arg1, arg2]]);
+expect(mockFunc.getMockName()).toBe(&#39;a mock name&#39;);</code></pre>
+<h2 id="先告一段落"><a class="header-anchor" href="#先告一段落">¶</a>先告一段落</h2>
+<p>對於 Jest 系列，其實讀書會還在進行中，預計再過一個月左右。<br>
+會針對幾個議題做深入的討論。</p>
+<p>不過那個與測試入門就比較不相關，就再看是不是需要寫文章跟大家介紹了。<br>
+感謝支持，如果有想看的文章類型也歡迎在底下留言哦~</p>
+<p>我們下次見</p>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10102643">[Day 3]動手寫Unit Test</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://blogs.teachersammy.com/Blogs/entry/how-to-describe-doubles-clones-twins-in-English">“替身”, “分身” 的英文怎麼說?</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/SUnit">SUnit - Wikipedia</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://teddy-chen-tw.blogspot.com/2014/09/test-double1.html">Test Double（1）：什麼是測試替身？ - 搞笑談軟工</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks">List of unit testing frameworks - Wikipedia</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://xunitpatterns.com/Test%20Double.html">When To Use It - Test Double at XUnitPatterns.com</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/XUnit">xUnit - Wikipedia</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/mock-function-api#mockfnmockimplementationfn">mockFn.mockImplementation(fn)</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
@@ -410,15 +564,19 @@ test(&#39;this test will not run&#39;, () &#x3D;&gt; &#123;
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/async/">async</a> }
+  { <a href="/tags/mock/">mock</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/promise/">promise</a> }
+  { <a href="/tags/stub/">stub</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/callback/">callback</a> }
+  { <a href="/tags/spy/">spy</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/test-double/">test double</a> }
   </li>
 
 
@@ -448,7 +606,7 @@ test(&#39;this test will not run&#39;, () &#x3D;&gt; &#123;
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.4px;">.new framework</a> <a href="/tags/12th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 41.2px;">12th鐵人賽</a> <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 41.2px;">13th鐵人賽</a> <a href="/tags/1597463007/" style="font-size: 14px;">1597463007</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 43.47px;">2018鐵人賽</a> <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 41.2px;">2019鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.27px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.27px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.27px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.13px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 37.8px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.47px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.13px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.67px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.27px;">Flex</a> <a href="/tags/Git/" style="font-size: 35.53px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.4px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.27px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 32.13px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.67px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 20.8px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.13px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.27px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.4px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.13px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.53px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.27px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 28.73px;">TDD</a> <a href="/tags/TED/" style="font-size: 15.13px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 36.67px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.13px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 23.07px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 42.33px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.53px;">Xilinx</a> <a href="/tags/amos/" style="font-size: 14px;">amos</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 23.07px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.27px;">animation</a> <a href="/tags/api/" style="font-size: 15.13px;">api</a> <a href="/tags/array-methods/" style="font-size: 14px;">array methods</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.13px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.13px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/bem/" style="font-size: 14px;">bem</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/bootstrapvue/" style="font-size: 14px;">bootstrapvue</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/botton-up/" style="font-size: 14px;">botton up</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.13px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.4px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/code-complete/" style="font-size: 14px;">code complete</a> <a href="/tags/code-golf/" style="font-size: 14px;">code golf</a> <a href="/tags/component/" style="font-size: 17.4px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.27px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.4px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/developer-experience/" style="font-size: 14px;">developer experience</a> <a href="/tags/display/" style="font-size: 15.13px;">display</a> <a href="/tags/docker/" style="font-size: 16.27px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/excel-class/" style="font-size: 14px;">excel class</a> <a href="/tags/exception/" style="font-size: 14px;">exception</a> <a href="/tags/exporess/" style="font-size: 14px;">exporess</a> <a href="/tags/express/" style="font-size: 15.13px;">express</a> <a href="/tags/facebook/" style="font-size: 17.4px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.13px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/float/" style="font-size: 14px;">float</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/for-loop/" style="font-size: 14px;">for-loop</a> <a href="/tags/foreign-key/" style="font-size: 16.27px;">foreign key</a> <a href="/tags/function/" style="font-size: 16.27px;">function</a> <a href="/tags/git/" style="font-size: 18.53px;">git</a> <a href="/tags/git-log/" style="font-size: 14px;">git log</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/god-object/" style="font-size: 14px;">god object</a> <a href="/tags/google/" style="font-size: 15.13px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.13px;">hackmd</a> <a href="/tags/hash/" style="font-size: 14px;">hash</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 31px;">hexo</a> <a href="/tags/hpx-%E5%8F%B0%E5%8D%97%E8%AE%80%E6%9B%B8%E6%9C%83/" style="font-size: 14px;">hpx 台南讀書會</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.13px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/ieee754/" style="font-size: 14px;">ieee754</a> <a href="/tags/if/" style="font-size: 15.13px;">if</a> <a href="/tags/if-else/" style="font-size: 14px;">if-else</a> <a href="/tags/if-else-if/" style="font-size: 14px;">if-else-if</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 45.73px;">javascript</a> <a href="/tags/jest/" style="font-size: 25.33px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/kata/" style="font-size: 14px;">kata</a> <a href="/tags/keyframes/" style="font-size: 15.13px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/magic-number/" style="font-size: 14px;">magic number</a> <a href="/tags/mariadb/" style="font-size: 18.53px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.53px;">markdown</a> <a href="/tags/mentor/" style="font-size: 15.13px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.27px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.13px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/mopcon/" style="font-size: 14px;">mopcon</a> <a href="/tags/nginx/" style="font-size: 15.13px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 25.33px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.27px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.4px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.13px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.13px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 23.07px;">python</a> <a href="/tags/sass/" style="font-size: 14px;">sass</a> <a href="/tags/sequelize/" style="font-size: 26.47px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.27px;">shell</a> <a href="/tags/short-coding/" style="font-size: 14px;">short coding</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/spaghetti-code/" style="font-size: 14px;">spaghetti code</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/static/" style="font-size: 14px;">static</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 24.2px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/tc39/" style="font-size: 14px;">tc39</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/top-down/" style="font-size: 14px;">top down</a> <a href="/tags/training-camp/" style="font-size: 37.8px;">training camp</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.13px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.47px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.13px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.27px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vue-js/" style="font-size: 41.2px;">vue.js</a> <a href="/tags/vue-js%E9%80%B2%E9%9A%8E%E5%BF%83%E6%B3%95/" style="font-size: 14px;">vue.js進階心法</a> <a href="/tags/vuex/" style="font-size: 16.27px;">vuex</a> <a href="/tags/w3c/" style="font-size: 14px;">w3c</a> <a href="/tags/web/" style="font-size: 14px;">web</a> <a href="/tags/web-camp/" style="font-size: 23.07px;">web camp</a> <a href="/tags/webpack/" style="font-size: 29.87px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/whatwg/" style="font-size: 14px;">whatwg</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 25.33px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.67px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E6%95%B4%E6%B5%81/" style="font-size: 14px;">三相整流</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 15.13px;">三相發電</a> <a href="/tags/%E4%B8%8D%E9%81%A9%E4%BB%BB/" style="font-size: 14px;">不適任</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E5%8A%9B%E8%B3%87%E6%BA%90/" style="font-size: 15.13px;">人力資源</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.67px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/" style="font-size: 15.13px;">你所不知道的JS</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E4%BD%BF%E7%94%A8%E5%B1%80%E9%99%90/" style="font-size: 14px;">使用局限</a> <a href="/tags/%E5%81%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%9F%E5%91%BD%E8%A8%AD%E8%A8%88%E5%B8%AB/" style="font-size: 14px;">做自己的生命設計師</a> <a href="/tags/%E5%85%A7%E8%81%9A/" style="font-size: 14px;">內聚</a> <a href="/tags/%E5%85%A7%E8%81%9A%E6%80%A7/" style="font-size: 14px;">內聚性</a> <a href="/tags/%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/" style="font-size: 14px;">全域變數</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.13px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 16.27px;">分享</a> <a href="/tags/%E5%89%8D%E7%BD%AE%E8%99%95%E7%90%86%E5%99%A8/" style="font-size: 14px;">前置處理器</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E5%91%BD%E5%90%8D%E6%B3%95/" style="font-size: 14px;">匈牙利命名法</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%A3%E8%80%B3%E7%9B%B8%E5%82%B3/" style="font-size: 14px;">口耳相傳</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%91%BD%E5%90%8D/" style="font-size: 14px;">命名</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 32.13px;">和道服說話</a> <a href="/tags/%E5%9B%9E%E9%A5%8B/" style="font-size: 14px;">回饋</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 29.87px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.53px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 40.07px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 29.87px;">好想工作室</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E5%AE%A4/" style="font-size: 14px;">好想工室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 20.8px;">字型設定</a> <a href="/tags/%E5%AD%B8%E5%93%A1/" style="font-size: 15.13px;">學員</a> <a href="/tags/%E5%AD%B8%E5%BE%92/" style="font-size: 14px;">學徒</a> <a href="/tags/%E5%AD%B8%E7%BF%92/" style="font-size: 14px;">學習</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 15.13px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%9A%E7%BE%A9/" style="font-size: 14px;">定義</a> <a href="/tags/%E5%AE%A3%E5%91%8A/" style="font-size: 14px;">宣告</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.4px;">家家有本難唸的經</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 14px;">容器</a> <a href="/tags/%E5%B0%8D%E6%87%89%E6%80%A7/" style="font-size: 14px;">對應性</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 38.93px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BB%BA%E7%BD%AE/" style="font-size: 14px;">建置</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.27px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%83%B3%E7%9F%A5%E9%81%93%E5%97%8E%EF%BC%9F/" style="font-size: 14px;">想知道嗎？</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%89%93%E9%80%A0%E8%BB%9F%E9%AB%94%E5%9C%98%E9%9A%8A/" style="font-size: 14px;">打造軟體團隊</a> <a href="/tags/%E6%8A%80%E8%A1%93%E5%82%B5/" style="font-size: 15.13px;">技術債</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 32.13px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%8B%9B%E7%94%9F/" style="font-size: 19.67px;">招生</a> <a href="/tags/%E6%8C%87%E6%84%8F/" style="font-size: 14px;">指意</a> <a href="/tags/%E6%96%87%E4%BB%B6/" style="font-size: 14px;">文件</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 21.93px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 32.13px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 34.4px;">柔道社與我</a> <a href="/tags/%E6%A2%9D%E4%BB%B6%E7%B7%A8%E8%AD%AF/" style="font-size: 14px;">條件編譯</a> <a href="/tags/%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 14px;">概念模型</a> <a href="/tags/%E6%A8%A1%E6%93%AC%E6%A1%88%E4%B8%BB/" style="font-size: 14px;">模擬案主</a> <a href="/tags/%E6%B2%92%E6%9C%89%E9%8A%80%E5%BD%88/" style="font-size: 14px;">沒有銀彈</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.87px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E6%B9%AF%E7%91%AA%E6%A3%AE/" style="font-size: 14px;">湯瑪森</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 27.6px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.67px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 43.47px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 23.07px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.13px;">看書</a> <a href="/tags/%E7%9F%AD%E7%A2%BC/" style="font-size: 15.13px;">短碼</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 31px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 28.73px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 44.6px;">社服社與我</a> <a href="/tags/%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%93%81%E8%B3%AA/" style="font-size: 14px;">程式碼品質</a> <a href="/tags/%E7%B3%99-code/" style="font-size: 41.2px;">糙 code</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/" style="font-size: 14px;">系統架構</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%88%87%E7%89%88/" style="font-size: 16.27px;">網頁切版</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 18.53px;">網頁前端技術</a> <a href="/tags/%E8%80%A6%E5%90%88/" style="font-size: 14px;">耦合</a> <a href="/tags/%E8%81%96%E7%B6%93/" style="font-size: 14px;">聖經</a> <a href="/tags/%E8%85%A6%E5%8A%9B%E5%AF%86%E9%9B%86%E7%94%A2%E6%A5%AD%E7%9A%84%E4%BA%BA%E6%89%8D%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93/" style="font-size: 14px;">腦力密集產業的人才管理之道</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.4px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 32.13px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.13px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 33.27px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E4%B9%8B%E8%B7%AF/" style="font-size: 14px;">設計師之路</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 35.53px;">設計師的路</a> <a href="/tags/%E8%A8%BB%E8%A7%A3/" style="font-size: 14px;">註解</a> <a href="/tags/%E8%A9%9E%E6%9B%B2%E5%92%AC%E5%90%88/" style="font-size: 14px;">詞曲咬合</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.53px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.53px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.27px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 15.13px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.4px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 14px;">鐵人賽</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.13px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 14px;">電路</a> <a href="/tags/%E9%9D%A2%E8%A9%A6/" style="font-size: 14px;">面試</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 27.6px;">音響拆裝過程</a> <a href="/tags/%E9%A0%90%E8%A8%AD%E7%94%A8%E9%80%94/" style="font-size: 14px;">預設用途</a> <a href="/tags/%E9%AB%98%E5%93%81%E8%B3%AA/" style="font-size: 15.13px;">高品質</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
+    <a href="/tags/new-framework/" style="font-size: 17.29px;">.new framework</a> <a href="/tags/12th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">12th鐵人賽</a> <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">13th鐵人賽</a> <a href="/tags/1597463007/" style="font-size: 14px;">1597463007</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 42.52px;">2018鐵人賽</a> <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">2019鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.19px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.19px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.19px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.1px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 37.03px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.06px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.1px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.48px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.19px;">Flex</a> <a href="/tags/Git/" style="font-size: 34.84px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.29px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.19px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31.55px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.48px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 20.58px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.1px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.19px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.29px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.1px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.39px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.19px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 28.26px;">TDD</a> <a href="/tags/TED/" style="font-size: 15.1px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 35.94px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.1px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 22.77px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 41.42px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.39px;">Xilinx</a> <a href="/tags/amos/" style="font-size: 14px;">amos</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 22.77px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.19px;">animation</a> <a href="/tags/api/" style="font-size: 15.1px;">api</a> <a href="/tags/array-methods/" style="font-size: 14px;">array methods</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.1px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.1px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/bem/" style="font-size: 14px;">bem</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/bootstrapvue/" style="font-size: 14px;">bootstrapvue</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/botton-up/" style="font-size: 14px;">botton up</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.1px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.29px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/code-complete/" style="font-size: 14px;">code complete</a> <a href="/tags/code-golf/" style="font-size: 14px;">code golf</a> <a href="/tags/component/" style="font-size: 17.29px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.19px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.29px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/developer-experience/" style="font-size: 14px;">developer experience</a> <a href="/tags/display/" style="font-size: 15.1px;">display</a> <a href="/tags/docker/" style="font-size: 16.19px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/excel-class/" style="font-size: 14px;">excel class</a> <a href="/tags/exception/" style="font-size: 14px;">exception</a> <a href="/tags/exporess/" style="font-size: 14px;">exporess</a> <a href="/tags/express/" style="font-size: 15.1px;">express</a> <a href="/tags/facebook/" style="font-size: 17.29px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.1px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/float/" style="font-size: 14px;">float</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/for-loop/" style="font-size: 14px;">for-loop</a> <a href="/tags/foreign-key/" style="font-size: 16.19px;">foreign key</a> <a href="/tags/function/" style="font-size: 16.19px;">function</a> <a href="/tags/git/" style="font-size: 18.39px;">git</a> <a href="/tags/git-log/" style="font-size: 14px;">git log</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/god-object/" style="font-size: 14px;">god object</a> <a href="/tags/google/" style="font-size: 15.1px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.1px;">hackmd</a> <a href="/tags/hash/" style="font-size: 14px;">hash</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 30.45px;">hexo</a> <a href="/tags/hpx-%E5%8F%B0%E5%8D%97%E8%AE%80%E6%9B%B8%E6%9C%83/" style="font-size: 14px;">hpx 台南讀書會</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.1px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/ieee754/" style="font-size: 14px;">ieee754</a> <a href="/tags/if/" style="font-size: 15.1px;">if</a> <a href="/tags/if-else/" style="font-size: 14px;">if-else</a> <a href="/tags/if-else-if/" style="font-size: 14px;">if-else-if</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 45.81px;">javascript</a> <a href="/tags/jest/" style="font-size: 24.97px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/kata/" style="font-size: 14px;">kata</a> <a href="/tags/keyframes/" style="font-size: 15.1px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/magic-number/" style="font-size: 14px;">magic number</a> <a href="/tags/mariadb/" style="font-size: 18.39px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.39px;">markdown</a> <a href="/tags/mentor/" style="font-size: 15.1px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.19px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.1px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/mopcon/" style="font-size: 14px;">mopcon</a> <a href="/tags/nginx/" style="font-size: 15.1px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 24.97px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.19px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.29px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.1px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.1px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 22.77px;">python</a> <a href="/tags/sass/" style="font-size: 14px;">sass</a> <a href="/tags/sequelize/" style="font-size: 26.06px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.19px;">shell</a> <a href="/tags/short-coding/" style="font-size: 14px;">short coding</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/slot/" style="font-size: 14px;">slot</a> <a href="/tags/spaghetti-code/" style="font-size: 14px;">spaghetti code</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/static/" style="font-size: 14px;">static</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 23.87px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/tc39/" style="font-size: 14px;">tc39</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/top-down/" style="font-size: 14px;">top down</a> <a href="/tags/training-camp/" style="font-size: 37.03px;">training camp</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.1px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.61px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.1px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.19px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vue-js/" style="font-size: 40.32px;">vue.js</a> <a href="/tags/vue-js%E9%80%B2%E9%9A%8E%E5%BF%83%E6%B3%95/" style="font-size: 14px;">vue.js進階心法</a> <a href="/tags/vuex/" style="font-size: 16.19px;">vuex</a> <a href="/tags/w3c/" style="font-size: 14px;">w3c</a> <a href="/tags/web/" style="font-size: 14px;">web</a> <a href="/tags/web-camp/" style="font-size: 22.77px;">web camp</a> <a href="/tags/webpack/" style="font-size: 29.35px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/whatwg/" style="font-size: 14px;">whatwg</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 24.97px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.48px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E6%95%B4%E6%B5%81/" style="font-size: 14px;">三相整流</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 15.1px;">三相發電</a> <a href="/tags/%E4%B8%8D%E9%81%A9%E4%BB%BB/" style="font-size: 14px;">不適任</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E5%8A%9B%E8%B3%87%E6%BA%90/" style="font-size: 15.1px;">人力資源</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.48px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/" style="font-size: 15.1px;">你所不知道的JS</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E4%BD%BF%E7%94%A8%E5%B1%80%E9%99%90/" style="font-size: 14px;">使用局限</a> <a href="/tags/%E5%81%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%9F%E5%91%BD%E8%A8%AD%E8%A8%88%E5%B8%AB/" style="font-size: 14px;">做自己的生命設計師</a> <a href="/tags/%E5%85%A7%E8%81%9A/" style="font-size: 14px;">內聚</a> <a href="/tags/%E5%85%A7%E8%81%9A%E6%80%A7/" style="font-size: 14px;">內聚性</a> <a href="/tags/%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/" style="font-size: 14px;">全域變數</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.1px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 16.19px;">分享</a> <a href="/tags/%E5%89%8D%E7%BD%AE%E8%99%95%E7%90%86%E5%99%A8/" style="font-size: 14px;">前置處理器</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E5%91%BD%E5%90%8D%E6%B3%95/" style="font-size: 14px;">匈牙利命名法</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%A3%E8%80%B3%E7%9B%B8%E5%82%B3/" style="font-size: 14px;">口耳相傳</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%91%BD%E5%90%8D/" style="font-size: 14px;">命名</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 31.55px;">和道服說話</a> <a href="/tags/%E5%9B%9E%E9%A5%8B/" style="font-size: 14px;">回饋</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 29.35px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.39px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 39.23px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 29.35px;">好想工作室</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E5%AE%A4/" style="font-size: 14px;">好想工室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 20.58px;">字型設定</a> <a href="/tags/%E5%AD%B8%E5%93%A1/" style="font-size: 15.1px;">學員</a> <a href="/tags/%E5%AD%B8%E5%BE%92/" style="font-size: 14px;">學徒</a> <a href="/tags/%E5%AD%B8%E7%BF%92/" style="font-size: 14px;">學習</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 15.1px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%9A%E7%BE%A9/" style="font-size: 14px;">定義</a> <a href="/tags/%E5%AE%A3%E5%91%8A/" style="font-size: 14px;">宣告</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.29px;">家家有本難唸的經</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 14px;">容器</a> <a href="/tags/%E5%B0%8D%E6%87%89%E6%80%A7/" style="font-size: 14px;">對應性</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 38.13px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BB%BA%E7%BD%AE/" style="font-size: 14px;">建置</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.19px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%83%B3%E7%9F%A5%E9%81%93%E5%97%8E%EF%BC%9F/" style="font-size: 14px;">想知道嗎？</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%89%93%E9%80%A0%E8%BB%9F%E9%AB%94%E5%9C%98%E9%9A%8A/" style="font-size: 14px;">打造軟體團隊</a> <a href="/tags/%E6%8A%80%E8%A1%93%E5%82%B5/" style="font-size: 15.1px;">技術債</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 31.55px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%8B%9B%E7%94%9F/" style="font-size: 19.48px;">招生</a> <a href="/tags/%E6%8C%87%E6%84%8F/" style="font-size: 14px;">指意</a> <a href="/tags/%E6%96%87%E4%BB%B6/" style="font-size: 14px;">文件</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 21.68px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 31.55px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 33.74px;">柔道社與我</a> <a href="/tags/%E6%A2%9D%E4%BB%B6%E7%B7%A8%E8%AD%AF/" style="font-size: 14px;">條件編譯</a> <a href="/tags/%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 14px;">概念模型</a> <a href="/tags/%E6%A8%A1%E6%93%AC%E6%A1%88%E4%B8%BB/" style="font-size: 14px;">模擬案主</a> <a href="/tags/%E6%B2%92%E6%9C%89%E9%8A%80%E5%BD%88/" style="font-size: 14px;">沒有銀彈</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.9px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E6%B9%AF%E7%91%AA%E6%A3%AE/" style="font-size: 14px;">湯瑪森</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 27.16px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.48px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.52px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 22.77px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.1px;">看書</a> <a href="/tags/%E7%9F%AD%E7%A2%BC/" style="font-size: 15.1px;">短碼</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 30.45px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 28.26px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 44.71px;">社服社與我</a> <a href="/tags/%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%93%81%E8%B3%AA/" style="font-size: 14px;">程式碼品質</a> <a href="/tags/%E7%B3%99-code/" style="font-size: 40.32px;">糙 code</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/" style="font-size: 14px;">系統架構</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%88%87%E7%89%88/" style="font-size: 16.19px;">網頁切版</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 18.39px;">網頁前端技術</a> <a href="/tags/%E8%80%A6%E5%90%88/" style="font-size: 14px;">耦合</a> <a href="/tags/%E8%81%96%E7%B6%93/" style="font-size: 14px;">聖經</a> <a href="/tags/%E8%85%A6%E5%8A%9B%E5%AF%86%E9%9B%86%E7%94%A2%E6%A5%AD%E7%9A%84%E4%BA%BA%E6%89%8D%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93/" style="font-size: 14px;">腦力密集產業的人才管理之道</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.29px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 31.55px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.1px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 32.65px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E4%B9%8B%E8%B7%AF/" style="font-size: 14px;">設計師之路</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 34.84px;">設計師的路</a> <a href="/tags/%E8%A8%BB%E8%A7%A3/" style="font-size: 14px;">註解</a> <a href="/tags/%E8%A9%9E%E6%9B%B2%E5%92%AC%E5%90%88/" style="font-size: 14px;">詞曲咬合</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.39px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.39px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.19px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 15.1px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.29px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 14px;">鐵人賽</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.1px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 14px;">電路</a> <a href="/tags/%E9%9D%A2%E8%A9%A6/" style="font-size: 14px;">面試</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 27.16px;">音響拆裝過程</a> <a href="/tags/%E9%A0%90%E8%A8%AD%E7%94%A8%E9%80%94/" style="font-size: 14px;">預設用途</a> <a href="/tags/%E9%AB%98%E5%93%81%E8%B3%AA/" style="font-size: 15.1px;">高品質</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
 
 
                 <footer>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-106752702-1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-106752702-1");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Chris's Blog" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    itemprop="image"
+    content="https://avatars1.githubusercontent.com/u/1825852?v=3&s=460"
+  />
+  <link rel="canonical" href="https://dwatow.github.io/2026/05-21-avoid-hub-coupling-with-slot/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet"
+  />
+  <meta name="description" content="¶用 Slot 分離資料流，避免 Hub 式耦合 ¶問題的起點 假設你在開發一個通知設定頁面，使用者可以選擇接收通知的方式：電子郵件 或 簡訊。不同的通知方式會顯示不同的表單欄位。 第一版實作很自然地長這樣： NotificationSettings（頁面）   └── NotificationForm（表單殼）         ├── NotifyByEmail（當選電子郵件時顯示）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="avoid-hub-coupling-with-slot">
+<meta property="og:url" content="https://dwatow.github.io/2026/05-21-avoid-hub-coupling-with-slot/index.html">
+<meta property="og:site_name" content="《Chris 技術筆記》">
+<meta property="og:description" content="¶用 Slot 分離資料流，避免 Hub 式耦合 ¶問題的起點 假設你在開發一個通知設定頁面，使用者可以選擇接收通知的方式：電子郵件 或 簡訊。不同的通知方式會顯示不同的表單欄位。 第一版實作很自然地長這樣： NotificationSettings（頁面）   └── NotificationForm（表單殼）         ├── NotifyByEmail（當選電子郵件時顯示）">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2026-05-21T02:34:20.000Z">
+<meta property="article:modified_time" content="2026-05-21T02:35:03.823Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="slot">
+<meta name="twitter:card" content="summary">
+  <title>
+    avoid-hub-coupling-with-slot - 《Chris 技術筆記》
+  </title>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <script
+    defer
+    src="https://cdn.bootcdn.net/ajax/libs/raphael/2.3.0/raphael.min.js"
+  ></script>
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css">
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
+
+  
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+    <div class="Shell">
+        <aside class='SideBar'>
+    <canvas id="ixbg" width="100%" height="100%"></canvas>
+    <section class='avatar' style="background-image: linear-gradient(to bottom, #1e5799 0%, #f8f8f8 100%)">
+    </section>
+    <a href="/" style="display: block;">
+        <div class='av-pic' style="background-image: url(/assets/head.svg)"></div>
+    </a>
+    <section class='menu'>
+        <div><a href="/">《Chris 技術筆記》</a></div>
+        
+            <div>設計 × 研究 × 程式</div>
+        
+        <ul>
+          
+            <a href="/archives/" class="Btn">
+              <li>Posts</li>
+            </a>
+          
+            <a href="/categories/" class="Btn">
+              <li>Categories</li>
+            </a>
+          
+            <a href="/categories/前端新手村/" class="Btn">
+              <li>Novice F2E</li>
+            </a>
+          
+            <a href="/categories/可不可以不要寫糙-code/" class="Btn">
+              <li>No Spag</li>
+            </a>
+          
+            <a href="/categories/完美-Camp-進化論/" class="Btn">
+              <li>WebCamp Evo</li>
+            </a>
+          
+            <a href="/categories/Vue-js-進階心法/" class="Btn">
+              <li>Vue Mind</li>
+            </a>
+          
+            <a href="/about/" class="Btn">
+              <li>Works</li>
+            </a>
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-github-alt"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/dwatow" target="_blank">
+                    <i class="fab fa-sm fa-facebook-f"></i>
+                </a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/chris-wang-604469107" target="_blank">
+                    <i class="fab fa-sm fa-linkedin-in"></i>
+                </a>
+            
+        
+    </section>
+</aside>
+
+        <div class="container">
+            <div data-pager-shell>
+                <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>avoid-hub-coupling-with-slot</h1>
+    </header>
+    <section>
+    
+  <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%A8-slot-%E5%88%86%E9%9B%A2%E8%B3%87%E6%96%99%E6%B5%81-%E9%81%BF%E5%85%8D-hub-%E5%BC%8F%E8%80%A6%E5%90%88"><span class="toc-text">用 Slot 分離資料流，避免 Hub 式耦合</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%8F%E9%A1%8C%E7%9A%84%E8%B5%B7%E9%BB%9E"><span class="toc-text">問題的起點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%AA%E8%A3%A1%E4%B8%8D%E5%B0%8D%E5%8B%81%EF%BC%9F"><span class="toc-text">哪裡不對勁？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F-%E5%9C%A8%E8%B3%87%E6%96%99%E6%B5%81%E6%BA%90%E9%A0%AD%E7%94%A8-slot-%E5%88%86%E9%9B%A2"><span class="toc-text">解決方式: 在資料流源頭用 Slot 分離</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A9%E7%A8%AE%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%B0%8D%E6%AF%94"><span class="toc-text">兩種模式的對比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%99%82%E5%80%99%E7%94%A8-slot%EF%BC%9F"><span class="toc-text">什麼時候用 Slot？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B5%90%E8%AA%9E"><span class="toc-text">結語</span></a></li></ol></li></ol>
+  </div>
+
+
+    <h1 id="用-slot-分離資料流-避免-hub-式耦合"><a class="header-anchor" href="#用-slot-分離資料流-避免-hub-式耦合">¶</a>用 Slot 分離資料流，避免 Hub 式耦合</h1>
+<h2 id="問題的起點"><a class="header-anchor" href="#問題的起點">¶</a>問題的起點</h2>
+<p>假設你在開發一個通知設定頁面，使用者可以選擇接收通知的方式：<strong>電子郵件</strong> 或 <strong>簡訊</strong>。不同的通知方式會顯示不同的表單欄位。</p>
+<p>第一版實作很自然地長這樣：</p>
+<pre class="language-none"><code class="language-none">NotificationSettings（頁面）
+  └── NotificationForm（表單殼）
+        ├── NotifyByEmail（當選電子郵件時顯示）
+        └── NotifyBySms（當選簡訊時顯示）</code></pre>
+<p>頁面負責取得資料，然後把所有東西往下傳：</p>
+<pre class="language-vue" data-language="vue"><code class="language-vue">&lt;!-- NotificationSettings.vue --&gt;
+&lt;NotificationForm
+  :countryOptions&#x3D;&quot;optionsStore.countries&quot;
+  @countryChange&#x3D;&quot;optionsStore.fetchDialCodes($event)&quot;
+  :dialCodeOptions&#x3D;&quot;optionsStore.dialCodes&quot;
+  @submit&#x3D;&quot;onFormSubmit&quot;
+&#x2F;&gt;</code></pre>
+<p><code>NotificationForm</code> 收到這些 props，再轉手傳給動態元件：</p>
+<pre class="language-vue" data-language="vue"><code class="language-vue">&lt;!-- NotificationForm.vue --&gt;
+&lt;Component
+  :is&#x3D;&quot;channelForms[selectedChannel]&quot;
+  :countryOptions&#x3D;&quot;props.countryOptions&quot;
+  :dialCodeOptions&#x3D;&quot;props.dialCodeOptions&quot;
+  @countryChange&#x3D;&quot;emits(&#39;countryChange&#39;, $event)&quot;
+&#x2F;&gt;</code></pre>
+<p>乍看之下很合理。但問題藏在細節裡。</p>
+<hr>
+<h2 id="哪裡不對勁？"><a class="header-anchor" href="#哪裡不對勁？">¶</a>哪裡不對勁？</h2>
+<p><code>countryOptions</code> 和 <code>dialCodeOptions</code> 只有 <code>NotifyBySms</code> 需要（選國碼用）。</p>
+<p><code>NotifyByEmail</code> 完全不需要這些資料，但 <code>NotificationForm</code> 還是得宣告這些 props、接收它們、再傳下去——就算目前選的是 Email 模式，這些 props 根本沒有意義。</p>
+<p>這種設計之下，就不小心產生了 NotificationForm 擔任 hub 的功能，只擔任轉手資料，並不參與處理。<br>
+這樣的設計一多，就變成機房內的網路線，日子久了沒有人敢去碰它。</p>
+<p>可怕之處在於，閱讀這樣耦合的程式碼，大腦裡假設會發散出不存在的使用情境。讓追查程式碼的工作量變大。</p>
+<pre class="language-none"><code class="language-none">頁面知道的
+  ↓ 傳給
+中介元件（NotificationForm）知道的
+  ↓ 轉手傳給
+真正需要的子元件</code></pre>
+<p>中介層變成了一個超級元件，無所不知。</p>
+<p><strong>未來的代價很清楚：</strong></p>
+<ul>
+<li>新增第三種通知方式（例如：LINE 推播），你需要在 <code>NotificationForm</code> 加入新的 props</li>
+<li><code>NotificationForm</code> 的介面會隨著支援的通知方式增加而無限膨脹</li>
+<li>閱讀 <code>NotificationForm</code> 的人無法直覺判斷：「這個 prop 到底是誰在用？」</li>
+</ul>
+<hr>
+<h2 id="解決方式-在資料流源頭用-slot-分離"><a class="header-anchor" href="#解決方式-在資料流源頭用-slot-分離">¶</a>解決方式: 在資料流源頭用 Slot 分離</h2>
+<p>解法是讓 <code>NotificationForm</code> 不要知道子元件的存在。把「要顯示哪個表單」的決策權交回給頁面，透過 <strong>slot</strong> 注入。</p>
+<pre class="language-none"><code class="language-none">NotificationSettings（頁面）—— 持有所有資料，決定渲染哪個子元件
+  └── NotificationForm（表單殼）—— 只管 layout 和提交邏輯
+        └── &lt;slot &#x2F;&gt;（由頁面注入具體表單）</code></pre>
+<p>改寫後，<code>NotificationForm</code> 變成純粹的殼：</p>
+<pre class="language-vue" data-language="vue"><code class="language-vue">&lt;!-- NotificationForm.vue（改寫後） --&gt;
+&lt;template&gt;
+  &lt;Form @submit&#x3D;&quot;onSubmit&quot;&gt;
+    &lt;RadioGroup v-model&#x3D;&quot;selectedChannel&quot; :options&#x3D;&quot;channelOptions&quot; &#x2F;&gt;
+
+    &lt;!-- 不再動態渲染子元件，改由外部注入 --&gt;
+    &lt;slot :selectedChannel&#x3D;&quot;selectedChannel&quot; &#x2F;&gt;
+
+    &lt;Button type&#x3D;&quot;submit&quot; &#x2F;&gt;
+  &lt;&#x2F;Form&gt;
+&lt;&#x2F;template&gt;</code></pre>
+<p>資料流的分叉點被推回到頁面層：</p>
+<pre class="language-vue" data-language="vue"><code class="language-vue">&lt;!-- NotificationSettings.vue（改寫後） --&gt;
+&lt;NotificationForm @submit&#x3D;&quot;onFormSubmit&quot;&gt;
+  &lt;template #default&#x3D;&quot;&#123; selectedChannel &#125;&quot;&gt;
+    &lt;!-- Email 分支：不需要電話相關資料 --&gt;
+    &lt;NotifyByEmail v-if&#x3D;&quot;selectedChannel &#x3D;&#x3D;&#x3D; &#39;email&#39;&quot; &#x2F;&gt;
+
+    &lt;!-- 簡訊分支：自己取用需要的資料 --&gt;
+    &lt;NotifyBySms
+      v-else-if&#x3D;&quot;selectedChannel &#x3D;&#x3D;&#x3D; &#39;sms&#39;&quot;
+      :countryOptions&#x3D;&quot;optionsStore.countries&quot;
+      :dialCodeOptions&#x3D;&quot;optionsStore.dialCodes&quot;
+      @countryChange&#x3D;&quot;optionsStore.fetchDialCodes($event)&quot;
+    &#x2F;&gt;
+  &lt;&#x2F;template&gt;
+&lt;&#x2F;NotificationForm&gt;</code></pre>
+<p>現在，<code>countryOptions</code> 只出現在真正需要它的地方。<code>NotificationForm</code> 的介面完全不需要知道有「國碼」這回事。</p>
+<hr>
+<h2 id="兩種模式的對比"><a class="header-anchor" href="#兩種模式的對比">¶</a>兩種模式的對比</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Hub 式（Props 中繼）</th>
+<th>Slot 分離資料流</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>資料流方向</strong></td>
+<td>頁面 → 中介層 → 子元件</td>
+<td>頁面 → 子元件（直接）</td>
+</tr>
+<tr>
+<td><strong>中介層的職責</strong></td>
+<td>知道每個子元件需要什麼</td>
+<td>只管自己的 layout 邏輯</td>
+</tr>
+<tr>
+<td><strong>新增通知方式</strong></td>
+<td>改中介層的 props</td>
+<td>只改頁面</td>
+</tr>
+<tr>
+<td><strong>閱讀難度</strong></td>
+<td>需要追蹤 prop 的流向</td>
+<td>在頁面就能看出全貌</td>
+</tr>
+<tr>
+<td><strong>子元件間的耦合</strong></td>
+<td>透過中介層互相感知</td>
+<td>完全獨立</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="什麼時候用-slot？"><a class="header-anchor" href="#什麼時候用-slot？">¶</a>什麼時候用 Slot？</h2>
+<p>一個簡單的判斷標準：</p>
+<blockquote>
+<p>如果一個元件需要接收 props 只是為了「轉手傳給子元件」，那這個 props 就不應該存在於這個元件——改用 slot。</p>
+</blockquote>
+<p>更廣義地說，當你的元件結構出現下面這個訊號時，就應該考慮 slot：</p>
+<ul>
+<li>同一個 props 在這一層根本不被使用</li>
+<li>子元件切換時，這一層的 props 需要跟著變動</li>
+<li>未來可能有第 N 種子元件，而你不想每次都改中介層</li>
+</ul>
+<hr>
+<h2 id="結語"><a class="header-anchor" href="#結語">¶</a>結語</h2>
+<p>Slot 不只是「讓父元件插入 HTML」的工具，它的本質是<strong>控制反轉（Inversion of Control）</strong>。</p>
+<p>把「要渲染什麼、用什麼資料」的決策權交還給最靠近資料源頭的那一層，讓中介層只專注於自己的職責——這樣不管加多少種通知方式，<code>NotificationForm</code> 都不需要動。</p>
+<p>這正是元件設計中「開放/封閉原則」（Open/Closed Principle）在 Vue 的體現：對擴充開放，對修改封閉。</p>
+
+    
+    </section>
+    
+        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
+        <section class='ArticleMeta'>
+            <div>
+                發表於&nbsp;
+                <time datetime="2026-05-21T02:34:20.000Z" itemprop="datePublished">
+              2026-05-21
+            </time>
+            </div>
+            
+                <div>
+                    tags:
+                    
+  <li class="meta-text">
+  { <a href="/tags/vue/">vue</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/slot/">slot</a> }
+  </li>
+
+
+                </div>
+            
+        </section>
+    
+</article>
+
+  <section id="comment">
+  <script src="https://utteranc.es/client.js" repo="dwatow/dwatow.github.io" issue-term="title" label="utteranc"
+    theme="github-light" crossorigin="anonymous" async>
+  </script>
+</section>
+</div>
+
+                <footer>
+    <div>© 2017 - 2026 Chris </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+            </div>
+        </div>
+    </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    
+<script src="/js/ixbg/ixbg.js"></script>
+
+    
+<script src="/js/scrollTop.js"></script>
+
+</body>
+</html>
