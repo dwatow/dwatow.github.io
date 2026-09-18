@@ -1,5 +1,5 @@
 ---
-title: avoid-hub-coupling-with-slot
+title: 用 Slot 分離資料流，避免 Hub 式耦合
 date: 2026-05-21 10:34:20
 tags:
   - vue
