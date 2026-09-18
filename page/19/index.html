@@ -142,129 +142,251 @@
         </header>
         
             
-                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-24-sequelize/sequelize-first-hand/">https://dwatow.github.io/2018/09-24-sequelize/sequelize-first-hand/</a></li>
+                <li>本文永久連結: <a href="https://dwatow.github.io/2018/09-24-sequelize/sequelize-define-model/">https://dwatow.github.io/2018/09-24-sequelize/sequelize-define-model/</a></li>
                 <li>
                     <article class='ContentView'>
     <header class='PageTitle'>
-        <h1>初探 Sequelize</h1>
+        <h1>Sequelize 的 define model</h1>
     </header>
     <section>
     
   <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sequelize-%E5%88%9D%E6%8E%A2"><span class="toc-text">Sequelize 初探</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D"><span class="toc-text">安裝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%9A%84%E6%AA%94%E6%A1%88"><span class="toc-text">生成的檔案</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sequelize-%E7%9A%84-define-model"><span class="toc-text">Sequelize 的 define model</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sequelize-define-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">Sequelize Define 使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attributes"><span class="toc-text">attributes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#datatypes"><span class="toc-text">DataTypes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getter-setter"><span class="toc-text">Getter&#x2F;Setter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%9C%E8%81%AF-foreign-key"><span class="toc-text">關聯 (foreign key)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#config"><span class="toc-text">config</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%B4%E5%85%85-model-%E7%9A%84-methods"><span class="toc-text">擴充 model 的 methods</span></a></li></ol></li></ol></li></ol>
   </div>
 
 
-    <h1 id="sequelize-初探"><a class="header-anchor" href="#sequelize-初探">¶</a>Sequelize 初探</h1>
-<p>Sequelize 是一個使用 JavaScript 的 ORM。<br>
-我自己的使用方式是與 Express 搭配，當作 MVC 的 <code>M</code></p>
-<p>另外，因為官網文件很鳥，所以寫了一個教學流程</p>
-<h2 id="安裝"><a class="header-anchor" href="#安裝">¶</a>安裝</h2>
-<p>使用 Node.js 盡量不要安裝 <code>-g</code> 因為每個 project 需要的工具，不管是初始化專案還是要維護時使用的套件，都是應該安裝的套件。</p>
-<pre class="language-shell" data-language="shell"><code class="language-shell">$ npm install --save sequelize@&quot;&lt;4.0.0&quot;  &#x2F;&#x2F;我需要 v3 版
-$ npm install --save mysql2
-$ npm install --save sequelize-cli</code></pre>
-<h2 id="初始化"><a class="header-anchor" href="#初始化">¶</a>初始化</h2>
-<pre class="language-shell" data-language="shell"><code class="language-shell">$ npx sequelize init</code></pre>
-<h3 id="生成的檔案"><a class="header-anchor" href="#生成的檔案">¶</a>生成的檔案</h3>
-<p><strong>config/config.json</strong></p>
-<p>這是用來儲存連線資訊的設定檔，看預設給的，有分成 <code>development</code>, <code>test</code>, <code>production</code> 三種環境變數設定。<br>
-可依自己的需要與設定進行修改</p>
-<pre class="language-none"><code class="language-none">&#123;
-  &quot;development&quot;: &#123;
-    &quot;username&quot;: &quot;root&quot;,
-    &quot;password&quot;: null,
-    &quot;database&quot;: &quot;database_development&quot;,
-    &quot;host&quot;: &quot;127.0.0.1&quot;,
-    &quot;dialect&quot;: &quot;mysql&quot;
-  &#125;,
-  &quot;test&quot;: &#123;
-    &quot;username&quot;: &quot;root&quot;,
-    &quot;password&quot;: null,
-    &quot;database&quot;: &quot;database_test&quot;,
-    &quot;host&quot;: &quot;127.0.0.1&quot;,
-    &quot;dialect&quot;: &quot;mysql&quot;
-  &#125;,
-  &quot;production&quot;: &#123;
-    &quot;username&quot;: &quot;root&quot;,
-    &quot;password&quot;: null,
-    &quot;database&quot;: &quot;database_production&quot;,
-    &quot;host&quot;: &quot;127.0.0.1&quot;,
-    &quot;dialect&quot;: &quot;mysql&quot;
-  &#125;
-&#125;</code></pre>
-<p><strong>models/index.js</strong></p>
-<p>這個檔案很長，是 sequelize-cli 的重點。<br>
-透過這段程式碼，幫你管理的幾個部份，成為 MVC 的 <code>M</code></p>
-<ul>
-<li>資料庫連線設定 <code>config.json</code></li>
-<li>還有 Models 的內容 <code>models/index.js</code></li>
-</ul>
-<p>來導讀一下這一段程式碼</p>
-<p>第一段，將需要的功能載進來，包含 Sequelize 的套件程式。<br>
-並且環境變數設定預設 development<br>
-引入 <code>config.json</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#39;use strict&#39;;
-
-var fs        &#x3D; require(&#39;fs&#39;);
-var path      &#x3D; require(&#39;path&#39;);
-var Sequelize &#x3D; require(&#39;sequelize&#39;);
-var basename  &#x3D; path.basename(__filename);
-var env       &#x3D; process.env.NODE_ENV || &#39;development&#39;;
-var config    &#x3D; require(__dirname + &#39;&#x2F;..&#x2F;config&#x2F;config.json&#39;)[env];
-var db        &#x3D; &#123;&#125;;</code></pre>
-<p>第二段，就是官網文件會介紹到的連線設定。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><br>
-引入的 <code>config.json</code> 存成變數 <code>config</code> 並在這此使用它。</p>
-<pre class="line-numbers language-javascript" data-language="javascript" data-start="10"><code class="language-javascript">if (config.use_env_variable) &#123;
-  var sequelize &#x3D; new Sequelize(process.env[config.use_env_variable], config);
-&#125; else &#123;
-  var sequelize &#x3D; new Sequelize(config.database, config.username, config.password, config);
-&#125;</code></pre>
-<div class="info">
-<p>如果要使用 env file 的設定，就是使用連線字串的方式連線</p>
-<p><strong>env file</strong></p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript">&#123;
-    &quot;production&quot;: &#123;
-        &quot;use_env_variable&quot;: &#39;mysql:&#x2F;&#x2F;root:password@mysql_host.com&#x2F;database_name&#39;
-    &#125;
-&#125;</code></pre>
-</div>
-<p>第三段，<code>require</code> 將相同目錄底下的 <code>.js</code> 以 <code>model.name</code> 當索引值放到 <code>db</code> 物件中。<br>
-執行每一個 model 的 「<code>define</code>」將 資料表與 js 對應上</p>
-<pre class="line-numbers language-javascript" data-language="javascript" data-start="15"><code class="language-javascript">fs
-  .readdirSync(__dirname)
-  .filter(file &#x3D;&gt; &#123;
-    return (file.indexOf(&#39;.&#39;) !&#x3D;&#x3D; 0) &amp;&amp; (file !&#x3D;&#x3D; basename) &amp;&amp; (file.slice(-3) &#x3D;&#x3D;&#x3D; &#39;.js&#39;);
+    <h1 id="sequelize-的-define-model"><a class="header-anchor" href="#sequelize-的-define-model">¶</a>Sequelize 的 define model</h1>
+<p>定義 table 與 model 的映射，使用 <code>sequelize.define()</code><br>
+使用了 sequelize-cli 後， model 的寫法如下</p>
+<p><strong>models/project.js</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">module.exports &#x3D; function(sequelize, DataTypes) &#123;
+  return sequelize.define(&quot;project&quot;, &#123;
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT
   &#125;)
-  .forEach(file &#x3D;&gt; &#123;
-    var model &#x3D; sequelize[&#39;import&#39;](path.join(__dirname, file));
-    db[model.name] &#x3D; model;
-  &#125;);</code></pre>
-<p>第四段，用來執行 <code>db</code> 物件裡的每一個 <code>.associate</code> method<br>
-執行每一個 「model 關聯」 的設定，也就是關聯式資料庫的 foreign key 的設定與 js 對應上。</p>
-<pre class="line-numbers language-javascript" data-language="javascript" data-start="24"><code class="language-javascript">Object.keys(db).forEach(modelName &#x3D;&gt; &#123;
-  if (db[modelName].associate) &#123;
-    db[modelName].associate(db);
+&#125;</code></pre>
+<h2 id="sequelize-define-使用方式"><a class="header-anchor" href="#sequelize-define-使用方式">¶</a>Sequelize Define 使用方式</h2>
+<p>Sequelize 將自動添加 <code>createdAt</code> 和 <code>updatedAt</code> 屬性</p>
+<p><strong>語法</strong></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">const attributes &#x3D; &#123;&#125;
+const config &#x3D; &#123;&#125;
+var myModel &#x3D; sequelize.define(&#39;name&#39;, attributes, config)</code></pre>
+<p>回傳的是可以操作資料表的 <code>class</code> , 要取得資料表的實例化物件，可以用 <code>myModel.build()</code> 不過不是一般的用法</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">myModel &#x2F;&#x2F;class
+myModel.build() &#x2F;&#x2F;instance</code></pre>
+<h2 id="attributes"><a class="header-anchor" href="#attributes">¶</a>attributes</h2>
+<p>直接看示範</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var Foo &#x3D; sequelize.define(&#39;foo&#39;, &#123;
+  columnName: &#123;
+    type: Sequelize. &lt; 欄位的資料型別 &gt; ,
+    &#x2F;&#x2F;primary keys
+    primaryKey: true,
+    &#x2F;&#x2F; 自動遞增 (incrementing) 整數 (type: Sequelize.INTEGER)
+    autoIncrement: true,
+    &#x2F;&#x2F; 自訂義欄位名稱
+    field: &quot;field_with_underscores&quot;,
+    &#x2F;&#x2F; 欄位的預設值:
+    defaultValue: Sequelize.NOW, &#x2F;&#x2F;預設 目前時間 (type: Sequelize.DATE)
+    defaultValue: true &#x2F;&#x2F; 預設 true (type: Sequelize.BOOLEAN)
+    &#x2F;&#x2F; 允許 NULL: false
+    allowNull: false,
+    &#x2F;&#x2F; 在 MySQL and PG 可以指定各別欄位的 comment
+    comment: &quot;I&#39;m a comment!&quot;,
+    &#x2F;&#x2F; 獨一無二欄位 (unique)
+    unique: true,&#x2F;&#x2F; 此欄位是 unique, 複合式 unique, 要看下面的例子
+  &#125;,
+  &#x2F;&#x2F; 複合式 unique
+  uniqueOne: &#123;
+    type: Sequelize.STRING,
+    unique: &#39;compositeIndex&#39; &#x2F;&#x2F; 同名
+  &#125;,
+  uniqueTwo: &#123;
+    type: Sequelize.INTEGER,
+    unique: &#39;compositeIndex&#39; &#x2F;&#x2F; 同名
+  &#125;,
+  &#x2F;&#x2F; 這是一種 unique 的縮寫方式
+  someUnique: &#123;
+    type: Sequelize.STRING,
+    unique: true
+  &#125;
+  &#x2F;&#x2F; unique 詳細的寫法，要另外寫一個 models 的 indexes 選項，並且將欄位填上
+  &#123;
+    someUnique: &#123;
+      type: Sequelize.STRING
+    &#125;
+  &#125;,
+  &#123;
+    indexes: [&#123;
+      unique: true,
+      fields: [&#39;someUnique&#39;]
+    &#125;]
+  &#125;,
+&#125;)</code></pre>
+<h3 id="datatypes"><a class="header-anchor" href="#datatypes">¶</a>DataTypes</h3>
+<p>參考 <a target="_blank" rel="noopener" href="http://sequelize.readthedocs.io/en/v3/api/datatypes/">Data types</a></p>
+<p><strong>example: 列舉</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">sequelize.define(&#39;model&#39;, &#123;
+  states: &#123;
+    type:   Sequelize.ENUM,
+    values: [&#39;active&#39;, &#39;pending&#39;, &#39;deleted&#39;]
+  &#125;
+&#125;)</code></pre>
+<h3 id="getter-setter"><a class="header-anchor" href="#getter-setter">¶</a>Getter/Setter</h3>
+<p>在 <code>sequelize.define()</code> 裡，<code>attributes</code>, <code>config</code> 都可以定義 getter/setter</p>
+<p>getter/setter 有兩種。</p>
+<ol>
+<li>可以映射成資料表欄位: protecting properties</li>
+<li>可以只當作 model 的屬性: pseudo properties<br>
+pseudo properties (不真實存在 database schema 的 attribute)。</li>
+</ol>
+<blockquote>
+<p>注意: 同名屬性，後定義優先覆蓋前定義<br>
+要使用 ES6 的寫法實現。</p>
+</blockquote>
+<p>在 name 裡定義 getter, 在 title 裡定義 setter</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var Employee &#x3D; sequelize.define(&#39;employee&#39;, &#123;
+  name: &#123;
+    type: Sequelize.STRING,
+    allowNull: false,
+    get: function()  &#123;
+      var title &#x3D; ;
+      &#x2F;&#x2F; &#39;this&#39; instance of 資料庫資料
+      return &#96;$&#123;this.getDataValue(&#39;name&#39;)&#125; ($&#123;this.getDataValue(&#39;title&#39;)&#125;)&#96;;
+    &#125;,
+  &#125;,
+  title: &#123;
+    type: Sequelize.STRING,
+    allowNull: false,
+    set: function(value) &#123;
+      this.setDataValue(&#39;title&#39;, value.toUpperCase());
+    &#125;
   &#125;
 &#125;);</code></pre>
-<p>將全域的物件與類別，也放進 <code>db</code> 物件中。<br>
-將所有關於 MVC 的 <code>M</code> 都收斂在 <code>db</code> 裡</p>
-<pre class="language-none"><code class="language-none">db.sequelize &#x3D; sequelize;
-db.Sequelize &#x3D; Sequelize;
-
-module.exports &#x3D; db;</code></pre>
-<p>這兩個資料夾目前都還是空的。</p>
-<p><strong>migrations</strong><br>
-<strong>seeders</strong></p>
-<p>就先不要管它。<br>
-先看懂程式碼比較重要，對於之後，要如何維護 Model 心裡要有一個底。</p>
-<hr class="footnotes-sep">
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://sequelize.readthedocs.io/en/v3/docs/getting-started/">Getting Started - Setting up a connection</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+<div class="info">
+<p>使用時這樣使用</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">Employee
+  .create(&#123; name: &#39;John Doe&#39;, title: &#39;senior engineer&#39; &#125;)
+  .then(function(employee) &#123;
+    console.log(employee.get(&#39;name&#39;)); &#x2F;&#x2F; John Doe (SENIOR ENGINEER)
+    console.log(employee.get(&#39;title&#39;)); &#x2F;&#x2F; SENIOR ENGINEER
+&#125;)</code></pre>
+</div>
+<h3 id="關聯-foreign-key"><a class="header-anchor" href="#關聯-foreign-key">¶</a>關聯 (foreign key)</h3>
+<p>在 sequelize 的 define 階段只要宣告 <code>hasOne</code> 這一類的 method 即可</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">Foo.member.hasOne(Bar, &#123;foreignKey: &#39;foo_id&#39;&#125;)</code></pre>
+<h2 id="config"><a class="header-anchor" href="#config">¶</a>config</h2>
+<p>時間戳記可以單獨使用 (要先開，再指定是否要使用)</p>
+<ul>
+<li>資料表
+<ul>
+<li>tableName: 自訂 table name</li>
+</ul>
 </li>
-</ol>
-</section>
+<li>資料欄位
+<ul>
+<li>underscored (false): 是否全小寫欄位名稱</li>
+<li>freezeTableName (true): 不改成複數型的 table name</li>
+<li>comment (’’): 欄位註解 (MYSQL, PG only)</li>
+</ul>
+</li>
+<li>自動生成欄位
+<ul>
+<li>timestamps (true): 是否加上 updatedAt, createdAt 欄位
+<ul>
+<li>createdAt: false or ‘自訂欄位名稱’</li>
+<li>updatedAt: false or ‘自訂欄位名稱’</li>
+</ul>
+</li>
+<li>paranoid (false): 當 timestamps: true 時，是否加上 deletedAt
+<ul>
+<li>deletedAt: false or ‘自訂欄位名稱’</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>example:</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var Bar &#x3D; sequelize.define(&#39;bar&#39;, &#123; &#x2F;* attributes *&#x2F; &#125;, &#123;
+&#x2F;&#x2F; 新增&#x2F;修改 時間戳記
+  timestamps: false,  &#x2F;&#x2F; 自動加上 updatedAt, createdAt
+  createdAt: false, &#x2F;&#x2F;加上 createdAt
+  updatedAt: &#39;updateTimestamp&#39;, &#x2F;&#x2F; 加上 updatedAt as updateTimestamp
+&#x2F;&#x2F; 刪除 時間戳記 刪除不刪資料，而是記錄刪除時間
+  paranoid: true,  &#x2F;&#x2F; 加上 deletedAt 先 timestamps: true
+  deletedAt: &#39;destoryTime&#39;, &#x2F;&#x2F; 加上 deletedAt as destoryTime
+&#x2F;&#x2F; 欄位名稱
+  underscored: true,  &#x2F;&#x2F; 全小寫欄位名稱
+  &#x2F;&#x2F; so updatedAt will be updated_at
+&#x2F;&#x2F; 資料表名稱
+  freezeTableName: true,  &#x2F;&#x2F; 禁止改成複數型的 table name: 預設 true
+  tableName: &#39;custom_table_name&#39;,  &#x2F;&#x2F; table name
+&#x2F;&#x2F; Comment (MYSQL, PG only)
+  comment: &quot;I&#39;m a table comment!&quot;,
+  indexes: [
+    &#x2F;&#x2F; 建立不重複 index on email
+    &#123;
+      unique: true,
+      fields: [&#39;email&#39;]
+    &#125;,
+    &#x2F;&#x2F; Creates a gin index on data with the jsonb_path_ops operator
+    &#123;
+      fields: [&#39;data&#39;],
+      using: &#39;gin&#39;,
+      operator: &#39;jsonb_path_ops&#39;
+    &#125;,
+    &#x2F;&#x2F; By default index name will be [table]_[fields]
+    &#x2F;&#x2F; Creates a multi column partial index
+    &#123;
+      name: &#39;public_by_author&#39;,
+      fields: [&#39;author&#39;, &#39;status&#39;],
+      where: &#123;
+        status: &#39;public&#39;
+      &#125;
+    &#125;,
+    &#x2F;&#x2F; A BTREE index with a ordered field
+    &#123;
+      name: &#39;title_index&#39;,
+      method: &#39;BTREE&#39;,
+      fields: [&#39;author&#39;, &#123;attribute: &#39;title&#39;, collate: &#39;en_US&#39;, order: &#39;DESC&#39;, length: 5&#125;]
+    &#125;
+  ]
+&#125;)</code></pre>
+<h3 id="擴充-model-的-methods"><a class="header-anchor" href="#擴充-model-的-methods">¶</a>擴充 model 的 methods</h3>
+<p>超重要，這一個部份是大部份的重要邏輯放置的做法。</p>
+<p>Model 之所以重要，並不是因為它可以把 table 的欄位，當作 object 的 property 而已。而是因為它可以將屬於 table 的邏輯放在 model 上，就是這個功能。</p>
+<p>v3 文件的寫法</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var Bar &#x3D; sequelize.define(&#39;bar&#39;, &#123; &#x2F;* attributes *&#x2F; &#125;, &#123;
+  &#x2F;&#x2F;無效寫法 建議使用 v4 的寫法
+  classMethods: &#123;
+    method1: function()&#123; return &#39;smth&#39; &#125;
+  &#125;,
+  &#x2F;&#x2F;有效寫法
+  instanceMethods: &#123;
+    method2: function() &#123; return &#39;foo&#39; &#125;
+  &#125;
+&#125;)</code></pre>
+<p>v4 文件的寫法 (ES6)</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">&#x2F;&#x2F; Adding a class level method
+Bar.classLevelMethod &#x3D; function() &#123;
+  return &#39;foo&#39;;
+&#125;;
+
+&#x2F;&#x2F; Adding an instance level method
+Bar.prototype.instanceLevelMethod &#x3D; function() &#123;
+  return &#39;bar&#39;;
+&#125;;</code></pre>
+<p>初始化會執行 <code>sequelize-cli</code> 生成的 <code>associate</code> method 就是要在這裡處理。<br>
+它算是一種 class method (static function) 執行</p>
+<pre class="line-numbers language-javascript" data-language="javascript" data-start="1"><code class="language-javascript">var Bar &#x3D; sequelize.define(&#39;bar&#39;, &#123; &#x2F;* attributes *&#x2F; &#125;, &#123;
+  &#x2F;&#x2F;有效寫法
+  instanceMethods: &#123;
+    method2: function() &#123; return &#39;foo&#39; &#125;
+  &#125;
+&#125;)
+
+Bar.associate &#x3D; function () &#123;
+  Foo.member.hasOne(Bar, &#123;foreignKey: &#39;foo_id&#39;&#125;)
+&#125;</code></pre>
 
     
     </section>
@@ -307,7 +429,7 @@ module.exports &#x3D; db;</code></pre>
 
 
     <h2>標籤雲</h2>
-    <a href="/tags/new-framework/" style="font-size: 17.29px;">.new framework</a> <a href="/tags/12th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">12th鐵人賽</a> <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">13th鐵人賽</a> <a href="/tags/1597463007/" style="font-size: 14px;">1597463007</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 42.52px;">2018鐵人賽</a> <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">2019鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.19px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.19px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.19px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.1px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 37.03px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.06px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.1px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.48px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.19px;">Flex</a> <a href="/tags/Git/" style="font-size: 34.84px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.29px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.19px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31.55px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.48px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 20.58px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.1px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.19px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.29px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.1px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.39px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.19px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 28.26px;">TDD</a> <a href="/tags/TED/" style="font-size: 15.1px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 35.94px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.1px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 22.77px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 41.42px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.39px;">Xilinx</a> <a href="/tags/amos/" style="font-size: 14px;">amos</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 22.77px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.19px;">animation</a> <a href="/tags/api/" style="font-size: 15.1px;">api</a> <a href="/tags/array-methods/" style="font-size: 14px;">array methods</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.1px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.1px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/bem/" style="font-size: 14px;">bem</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/bootstrapvue/" style="font-size: 14px;">bootstrapvue</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/botton-up/" style="font-size: 14px;">botton up</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.1px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.29px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/code-complete/" style="font-size: 14px;">code complete</a> <a href="/tags/code-golf/" style="font-size: 14px;">code golf</a> <a href="/tags/component/" style="font-size: 17.29px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.19px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.29px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/developer-experience/" style="font-size: 14px;">developer experience</a> <a href="/tags/display/" style="font-size: 15.1px;">display</a> <a href="/tags/docker/" style="font-size: 16.19px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/excel-class/" style="font-size: 14px;">excel class</a> <a href="/tags/exception/" style="font-size: 14px;">exception</a> <a href="/tags/exporess/" style="font-size: 14px;">exporess</a> <a href="/tags/express/" style="font-size: 15.1px;">express</a> <a href="/tags/facebook/" style="font-size: 17.29px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.1px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/float/" style="font-size: 14px;">float</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/for-loop/" style="font-size: 14px;">for-loop</a> <a href="/tags/foreign-key/" style="font-size: 16.19px;">foreign key</a> <a href="/tags/function/" style="font-size: 16.19px;">function</a> <a href="/tags/git/" style="font-size: 18.39px;">git</a> <a href="/tags/git-log/" style="font-size: 14px;">git log</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/god-object/" style="font-size: 14px;">god object</a> <a href="/tags/google/" style="font-size: 15.1px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.1px;">hackmd</a> <a href="/tags/hash/" style="font-size: 14px;">hash</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 30.45px;">hexo</a> <a href="/tags/hpx-%E5%8F%B0%E5%8D%97%E8%AE%80%E6%9B%B8%E6%9C%83/" style="font-size: 14px;">hpx 台南讀書會</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.1px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/ieee754/" style="font-size: 14px;">ieee754</a> <a href="/tags/if/" style="font-size: 15.1px;">if</a> <a href="/tags/if-else/" style="font-size: 14px;">if-else</a> <a href="/tags/if-else-if/" style="font-size: 14px;">if-else-if</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 45.81px;">javascript</a> <a href="/tags/jest/" style="font-size: 24.97px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/kata/" style="font-size: 14px;">kata</a> <a href="/tags/keyframes/" style="font-size: 15.1px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/magic-number/" style="font-size: 14px;">magic number</a> <a href="/tags/mariadb/" style="font-size: 18.39px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.39px;">markdown</a> <a href="/tags/mentor/" style="font-size: 15.1px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.19px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.1px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/mopcon/" style="font-size: 14px;">mopcon</a> <a href="/tags/nginx/" style="font-size: 15.1px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 24.97px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.19px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.29px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.1px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.1px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 22.77px;">python</a> <a href="/tags/sass/" style="font-size: 14px;">sass</a> <a href="/tags/sequelize/" style="font-size: 26.06px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.19px;">shell</a> <a href="/tags/short-coding/" style="font-size: 14px;">short coding</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/slot/" style="font-size: 14px;">slot</a> <a href="/tags/spaghetti-code/" style="font-size: 14px;">spaghetti code</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/static/" style="font-size: 14px;">static</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 23.87px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/tc39/" style="font-size: 14px;">tc39</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/top-down/" style="font-size: 14px;">top down</a> <a href="/tags/training-camp/" style="font-size: 37.03px;">training camp</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.1px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.61px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.1px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.19px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vue-js/" style="font-size: 40.32px;">vue.js</a> <a href="/tags/vue-js%E9%80%B2%E9%9A%8E%E5%BF%83%E6%B3%95/" style="font-size: 14px;">vue.js進階心法</a> <a href="/tags/vuex/" style="font-size: 16.19px;">vuex</a> <a href="/tags/w3c/" style="font-size: 14px;">w3c</a> <a href="/tags/web/" style="font-size: 14px;">web</a> <a href="/tags/web-camp/" style="font-size: 22.77px;">web camp</a> <a href="/tags/webpack/" style="font-size: 29.35px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/whatwg/" style="font-size: 14px;">whatwg</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 24.97px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.48px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E6%95%B4%E6%B5%81/" style="font-size: 14px;">三相整流</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 15.1px;">三相發電</a> <a href="/tags/%E4%B8%8D%E9%81%A9%E4%BB%BB/" style="font-size: 14px;">不適任</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E5%8A%9B%E8%B3%87%E6%BA%90/" style="font-size: 15.1px;">人力資源</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.48px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/" style="font-size: 15.1px;">你所不知道的JS</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E4%BD%BF%E7%94%A8%E5%B1%80%E9%99%90/" style="font-size: 14px;">使用局限</a> <a href="/tags/%E5%81%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%9F%E5%91%BD%E8%A8%AD%E8%A8%88%E5%B8%AB/" style="font-size: 14px;">做自己的生命設計師</a> <a href="/tags/%E5%85%A7%E8%81%9A/" style="font-size: 14px;">內聚</a> <a href="/tags/%E5%85%A7%E8%81%9A%E6%80%A7/" style="font-size: 14px;">內聚性</a> <a href="/tags/%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/" style="font-size: 14px;">全域變數</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.1px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 16.19px;">分享</a> <a href="/tags/%E5%89%8D%E7%BD%AE%E8%99%95%E7%90%86%E5%99%A8/" style="font-size: 14px;">前置處理器</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E5%91%BD%E5%90%8D%E6%B3%95/" style="font-size: 14px;">匈牙利命名法</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%A3%E8%80%B3%E7%9B%B8%E5%82%B3/" style="font-size: 14px;">口耳相傳</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%91%BD%E5%90%8D/" style="font-size: 14px;">命名</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 31.55px;">和道服說話</a> <a href="/tags/%E5%9B%9E%E9%A5%8B/" style="font-size: 14px;">回饋</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 29.35px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.39px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 39.23px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 29.35px;">好想工作室</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E5%AE%A4/" style="font-size: 14px;">好想工室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 20.58px;">字型設定</a> <a href="/tags/%E5%AD%B8%E5%93%A1/" style="font-size: 15.1px;">學員</a> <a href="/tags/%E5%AD%B8%E5%BE%92/" style="font-size: 14px;">學徒</a> <a href="/tags/%E5%AD%B8%E7%BF%92/" style="font-size: 14px;">學習</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 15.1px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%9A%E7%BE%A9/" style="font-size: 14px;">定義</a> <a href="/tags/%E5%AE%A3%E5%91%8A/" style="font-size: 14px;">宣告</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.29px;">家家有本難唸的經</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 14px;">容器</a> <a href="/tags/%E5%B0%8D%E6%87%89%E6%80%A7/" style="font-size: 14px;">對應性</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 38.13px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BB%BA%E7%BD%AE/" style="font-size: 14px;">建置</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.19px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%83%B3%E7%9F%A5%E9%81%93%E5%97%8E%EF%BC%9F/" style="font-size: 14px;">想知道嗎？</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%89%93%E9%80%A0%E8%BB%9F%E9%AB%94%E5%9C%98%E9%9A%8A/" style="font-size: 14px;">打造軟體團隊</a> <a href="/tags/%E6%8A%80%E8%A1%93%E5%82%B5/" style="font-size: 15.1px;">技術債</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 31.55px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%8B%9B%E7%94%9F/" style="font-size: 19.48px;">招生</a> <a href="/tags/%E6%8C%87%E6%84%8F/" style="font-size: 14px;">指意</a> <a href="/tags/%E6%96%87%E4%BB%B6/" style="font-size: 14px;">文件</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 21.68px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 31.55px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 33.74px;">柔道社與我</a> <a href="/tags/%E6%A2%9D%E4%BB%B6%E7%B7%A8%E8%AD%AF/" style="font-size: 14px;">條件編譯</a> <a href="/tags/%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 14px;">概念模型</a> <a href="/tags/%E6%A8%A1%E6%93%AC%E6%A1%88%E4%B8%BB/" style="font-size: 14px;">模擬案主</a> <a href="/tags/%E6%B2%92%E6%9C%89%E9%8A%80%E5%BD%88/" style="font-size: 14px;">沒有銀彈</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.9px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E6%B9%AF%E7%91%AA%E6%A3%AE/" style="font-size: 14px;">湯瑪森</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 27.16px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.48px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.52px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 22.77px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.1px;">看書</a> <a href="/tags/%E7%9F%AD%E7%A2%BC/" style="font-size: 15.1px;">短碼</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 30.45px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 28.26px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 44.71px;">社服社與我</a> <a href="/tags/%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%93%81%E8%B3%AA/" style="font-size: 14px;">程式碼品質</a> <a href="/tags/%E7%B3%99-code/" style="font-size: 40.32px;">糙 code</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/" style="font-size: 14px;">系統架構</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%88%87%E7%89%88/" style="font-size: 16.19px;">網頁切版</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 18.39px;">網頁前端技術</a> <a href="/tags/%E8%80%A6%E5%90%88/" style="font-size: 14px;">耦合</a> <a href="/tags/%E8%81%96%E7%B6%93/" style="font-size: 14px;">聖經</a> <a href="/tags/%E8%85%A6%E5%8A%9B%E5%AF%86%E9%9B%86%E7%94%A2%E6%A5%AD%E7%9A%84%E4%BA%BA%E6%89%8D%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93/" style="font-size: 14px;">腦力密集產業的人才管理之道</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.29px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 31.55px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.1px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 32.65px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E4%B9%8B%E8%B7%AF/" style="font-size: 14px;">設計師之路</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 34.84px;">設計師的路</a> <a href="/tags/%E8%A8%BB%E8%A7%A3/" style="font-size: 14px;">註解</a> <a href="/tags/%E8%A9%9E%E6%9B%B2%E5%92%AC%E5%90%88/" style="font-size: 14px;">詞曲咬合</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.39px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.39px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.19px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 15.1px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.29px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 14px;">鐵人賽</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.1px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 14px;">電路</a> <a href="/tags/%E9%9D%A2%E8%A9%A6/" style="font-size: 14px;">面試</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 27.16px;">音響拆裝過程</a> <a href="/tags/%E9%A0%90%E8%A8%AD%E7%94%A8%E9%80%94/" style="font-size: 14px;">預設用途</a> <a href="/tags/%E9%AB%98%E5%93%81%E8%B3%AA/" style="font-size: 15.1px;">高品質</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
+    <a href="/tags/new-framework/" style="font-size: 17.29px;">.new framework</a> <a href="/tags/12th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">12th鐵人賽</a> <a href="/tags/13th%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">13th鐵人賽</a> <a href="/tags/1597463007/" style="font-size: 14px;">1597463007</a> <a href="/tags/2018%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 42.52px;">2018鐵人賽</a> <a href="/tags/2019%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 40.32px;">2019鐵人賽</a> <a href="/tags/API-Doc/" style="font-size: 14px;">API Doc</a> <a href="/tags/Aglio/" style="font-size: 14px;">Aglio</a> <a href="/tags/Arduino/" style="font-size: 14px;">Arduino</a> <a href="/tags/Atom/" style="font-size: 16.19px;">Atom</a> <a href="/tags/Block/" style="font-size: 14px;">Block</a> <a href="/tags/Boost/" style="font-size: 16.19px;">Boost</a> <a href="/tags/Box-Model/" style="font-size: 14px;">Box Model</a> <a href="/tags/C-sharp/" style="font-size: 16.19px;">C sharp</a> <a href="/tags/CRUD/" style="font-size: 15.1px;">CRUD</a> <a href="/tags/CSS/" style="font-size: 37.03px;">CSS</a> <a href="/tags/CSS-Unit/" style="font-size: 14px;">CSS Unit</a> <a href="/tags/CSS3/" style="font-size: 14px;">CSS3</a> <a href="/tags/C-and-Cpp/" style="font-size: 48px;">C_and_Cpp</a> <a href="/tags/Code-Complete-2/" style="font-size: 26.06px;">Code Complete 2</a> <a href="/tags/Cpp%E6%B2%89%E6%80%9D%E9%8C%84/" style="font-size: 14px;">Cpp沉思錄</a> <a href="/tags/Design-Pattern/" style="font-size: 15.1px;">Design Pattern</a> <a href="/tags/Django/" style="font-size: 19.48px;">Django</a> <a href="/tags/ECMA-262/" style="font-size: 14px;">ECMA-262</a> <a href="/tags/ECMAScript/" style="font-size: 14px;">ECMAScript</a> <a href="/tags/Flex/" style="font-size: 16.19px;">Flex</a> <a href="/tags/Git/" style="font-size: 34.84px;">Git</a> <a href="/tags/HPX/" style="font-size: 14px;">HPX</a> <a href="/tags/HTML/" style="font-size: 17.29px;">HTML</a> <a href="/tags/Inline/" style="font-size: 16.19px;">Inline</a> <a href="/tags/JavaScript/" style="font-size: 31.55px;">JavaScript</a> <a href="/tags/Jenkins/" style="font-size: 19.48px;">Jenkins</a> <a href="/tags/KnR2/" style="font-size: 20.58px;">KnR2</a> <a href="/tags/LIFF/" style="font-size: 14px;">LIFF</a> <a href="/tags/LINE/" style="font-size: 14px;">LINE</a> <a href="/tags/MFC-controls/" style="font-size: 15.1px;">MFC controls</a> <a href="/tags/MOPCON/" style="font-size: 14px;">MOPCON</a> <a href="/tags/Media-Query/" style="font-size: 14px;">Media Query</a> <a href="/tags/OAuth/" style="font-size: 14px;">OAuth</a> <a href="/tags/Position/" style="font-size: 14px;">Position</a> <a href="/tags/Pseudo-elements/" style="font-size: 14px;">Pseudo-elements</a> <a href="/tags/RWD/" style="font-size: 16.19px;">RWD</a> <a href="/tags/Raspberry-Pi-4/" style="font-size: 17.29px;">Raspberry Pi 4</a> <a href="/tags/Render-tree/" style="font-size: 15.1px;">Render tree</a> <a href="/tags/Rulest-Order/" style="font-size: 14px;">Rulest Order</a> <a href="/tags/SVN/" style="font-size: 14px;">SVN</a> <a href="/tags/Selector/" style="font-size: 18.39px;">Selector</a> <a href="/tags/Sliverlight/" style="font-size: 16.19px;">Sliverlight</a> <a href="/tags/Specificity/" style="font-size: 14px;">Specificity</a> <a href="/tags/TC39/" style="font-size: 14px;">TC39</a> <a href="/tags/TDD/" style="font-size: 28.26px;">TDD</a> <a href="/tags/TED/" style="font-size: 15.1px;">TED</a> <a href="/tags/TED%E7%89%B9%E5%8D%80/" style="font-size: 35.94px;">TED特區</a> <a href="/tags/Transition/" style="font-size: 15.1px;">Transition</a> <a href="/tags/Ubuntu/" style="font-size: 22.77px;">Ubuntu</a> <a href="/tags/Vendor-Prefix/" style="font-size: 14px;">Vendor Prefix</a> <a href="/tags/WIN32-API-MFC/" style="font-size: 41.42px;">WIN32 API/MFC</a> <a href="/tags/XML/" style="font-size: 14px;">XML</a> <a href="/tags/XPath/" style="font-size: 14px;">XPath</a> <a href="/tags/XSLT/" style="font-size: 14px;">XSLT</a> <a href="/tags/Xilinx/" style="font-size: 18.39px;">Xilinx</a> <a href="/tags/amos/" style="font-size: 14px;">amos</a> <a href="/tags/angular1/" style="font-size: 14px;">angular1</a> <a href="/tags/angularjs/" style="font-size: 22.77px;">angularjs</a> <a href="/tags/animation/" style="font-size: 16.19px;">animation</a> <a href="/tags/api/" style="font-size: 15.1px;">api</a> <a href="/tags/array-methods/" style="font-size: 14px;">array methods</a> <a href="/tags/assertion/" style="font-size: 14px;">assertion</a> <a href="/tags/async/" style="font-size: 15.1px;">async</a> <a href="/tags/awk/" style="font-size: 14px;">awk</a> <a href="/tags/axios/" style="font-size: 15.1px;">axios</a> <a href="/tags/babel/" style="font-size: 14px;">babel</a> <a href="/tags/background/" style="font-size: 14px;">background</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/bem/" style="font-size: 14px;">bem</a> <a href="/tags/blogger/" style="font-size: 14px;">blogger</a> <a href="/tags/body/" style="font-size: 14px;">body</a> <a href="/tags/bootstrap/" style="font-size: 14px;">bootstrap</a> <a href="/tags/bootstrapvue/" style="font-size: 14px;">bootstrapvue</a> <a href="/tags/border/" style="font-size: 14px;">border</a> <a href="/tags/botton-up/" style="font-size: 14px;">botton up</a> <a href="/tags/bugTracker/" style="font-size: 14px;">bugTracker</a> <a href="/tags/callback/" style="font-size: 15.1px;">callback</a> <a href="/tags/canvas/" style="font-size: 14px;">canvas</a> <a href="/tags/chatbot/" style="font-size: 17.29px;">chatbot</a> <a href="/tags/cloud-fonts/" style="font-size: 14px;">cloud fonts</a> <a href="/tags/code-complete/" style="font-size: 14px;">code complete</a> <a href="/tags/code-golf/" style="font-size: 14px;">code golf</a> <a href="/tags/component/" style="font-size: 17.29px;">component</a> <a href="/tags/controller/" style="font-size: 14px;">controller</a> <a href="/tags/cpp/" style="font-size: 14px;">cpp</a> <a href="/tags/css/" style="font-size: 16.19px;">css</a> <a href="/tags/css-loader/" style="font-size: 14px;">css-loader</a> <a href="/tags/database/" style="font-size: 17.29px;">database</a> <a href="/tags/design-pattern/" style="font-size: 14px;">design pattern</a> <a href="/tags/developer-experience/" style="font-size: 14px;">developer experience</a> <a href="/tags/display/" style="font-size: 15.1px;">display</a> <a href="/tags/docker/" style="font-size: 16.19px;">docker</a> <a href="/tags/docsify/" style="font-size: 14px;">docsify</a> <a href="/tags/e2e/" style="font-size: 14px;">e2e</a> <a href="/tags/env/" style="font-size: 14px;">env</a> <a href="/tags/eslint/" style="font-size: 14px;">eslint</a> <a href="/tags/excel-class/" style="font-size: 14px;">excel class</a> <a href="/tags/exception/" style="font-size: 14px;">exception</a> <a href="/tags/exporess/" style="font-size: 14px;">exporess</a> <a href="/tags/express/" style="font-size: 15.1px;">express</a> <a href="/tags/facebook/" style="font-size: 17.29px;">facebook</a> <a href="/tags/file-api/" style="font-size: 15.1px;">file api</a> <a href="/tags/file-loader/" style="font-size: 14px;">file-loader</a> <a href="/tags/filter/" style="font-size: 14px;">filter</a> <a href="/tags/flex-grow/" style="font-size: 14px;">flex-grow</a> <a href="/tags/flex-shrink/" style="font-size: 14px;">flex-shrink</a> <a href="/tags/float/" style="font-size: 14px;">float</a> <a href="/tags/fontawesome/" style="font-size: 14px;">fontawesome</a> <a href="/tags/for-loop/" style="font-size: 14px;">for-loop</a> <a href="/tags/foreign-key/" style="font-size: 16.19px;">foreign key</a> <a href="/tags/function/" style="font-size: 16.19px;">function</a> <a href="/tags/git/" style="font-size: 18.39px;">git</a> <a href="/tags/git-log/" style="font-size: 14px;">git log</a> <a href="/tags/git-reset/" style="font-size: 14px;">git reset</a> <a href="/tags/git-ftp/" style="font-size: 14px;">git-ftp</a> <a href="/tags/gitalk/" style="font-size: 14px;">gitalk</a> <a href="/tags/god-object/" style="font-size: 14px;">god object</a> <a href="/tags/google/" style="font-size: 15.1px;">google</a> <a href="/tags/gulp/" style="font-size: 14px;">gulp</a> <a href="/tags/hackmd/" style="font-size: 15.1px;">hackmd</a> <a href="/tags/hash/" style="font-size: 14px;">hash</a> <a href="/tags/heroku/" style="font-size: 14px;">heroku</a> <a href="/tags/hexo/" style="font-size: 30.45px;">hexo</a> <a href="/tags/hpx-%E5%8F%B0%E5%8D%97%E8%AE%80%E6%9B%B8%E6%9C%83/" style="font-size: 14px;">hpx 台南讀書會</a> <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/https/" style="font-size: 15.1px;">https</a> <a href="/tags/husky/" style="font-size: 14px;">husky</a> <a href="/tags/ieee754/" style="font-size: 14px;">ieee754</a> <a href="/tags/if/" style="font-size: 15.1px;">if</a> <a href="/tags/if-else/" style="font-size: 14px;">if-else</a> <a href="/tags/if-else-if/" style="font-size: 14px;">if-else-if</a> <a href="/tags/import/" style="font-size: 14px;">import</a> <a href="/tags/iview/" style="font-size: 14px;">iview</a> <a href="/tags/ivuew/" style="font-size: 14px;">ivuew</a> <a href="/tags/javascript/" style="font-size: 45.81px;">javascript</a> <a href="/tags/jest/" style="font-size: 24.97px;">jest</a> <a href="/tags/jquery/" style="font-size: 14px;">jquery</a> <a href="/tags/json/" style="font-size: 14px;">json</a> <a href="/tags/kata/" style="font-size: 14px;">kata</a> <a href="/tags/keyframes/" style="font-size: 15.1px;">keyframes</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/login/" style="font-size: 14px;">login</a> <a href="/tags/magic-number/" style="font-size: 14px;">magic number</a> <a href="/tags/mariadb/" style="font-size: 18.39px;">mariadb</a> <a href="/tags/markdown/" style="font-size: 18.39px;">markdown</a> <a href="/tags/mentor/" style="font-size: 15.1px;">mentor</a> <a href="/tags/migration/" style="font-size: 16.19px;">migration</a> <a href="/tags/mixin/" style="font-size: 14px;">mixin</a> <a href="/tags/mock/" style="font-size: 14px;">mock</a> <a href="/tags/model/" style="font-size: 15.1px;">model</a> <a href="/tags/monent/" style="font-size: 14px;">monent</a> <a href="/tags/mopcon/" style="font-size: 14px;">mopcon</a> <a href="/tags/nginx/" style="font-size: 15.1px;">nginx</a> <a href="/tags/ngork/" style="font-size: 14px;">ngork</a> <a href="/tags/node-sass/" style="font-size: 14px;">node-sass</a> <a href="/tags/nodejs/" style="font-size: 24.97px;">nodejs</a> <a href="/tags/npm/" style="font-size: 16.19px;">npm</a> <a href="/tags/oo/" style="font-size: 14px;">oo</a> <a href="/tags/opacity/" style="font-size: 14px;">opacity</a> <a href="/tags/orm/" style="font-size: 17.29px;">orm</a> <a href="/tags/outline/" style="font-size: 14px;">outline</a> <a href="/tags/pm2/" style="font-size: 14px;">pm2</a> <a href="/tags/postman/" style="font-size: 14px;">postman</a> <a href="/tags/prettier/" style="font-size: 15.1px;">prettier</a> <a href="/tags/promise/" style="font-size: 15.1px;">promise</a> <a href="/tags/protractor/" style="font-size: 14px;">protractor</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/pure-component/" style="font-size: 14px;">pure component</a> <a href="/tags/python/" style="font-size: 22.77px;">python</a> <a href="/tags/sass/" style="font-size: 14px;">sass</a> <a href="/tags/sequelize/" style="font-size: 26.06px;">sequelize</a> <a href="/tags/shell/" style="font-size: 16.19px;">shell</a> <a href="/tags/short-coding/" style="font-size: 14px;">short coding</a> <a href="/tags/sign-in/" style="font-size: 14px;">sign-in</a> <a href="/tags/slot/" style="font-size: 14px;">slot</a> <a href="/tags/spaghetti-code/" style="font-size: 14px;">spaghetti code</a> <a href="/tags/spy/" style="font-size: 14px;">spy</a> <a href="/tags/ssl/" style="font-size: 14px;">ssl</a> <a href="/tags/static/" style="font-size: 14px;">static</a> <a href="/tags/stub/" style="font-size: 14px;">stub</a> <a href="/tags/sublime-text2/" style="font-size: 23.87px;">sublime text2</a> <a href="/tags/swap/" style="font-size: 14px;">swap</a> <a href="/tags/swing-dance/" style="font-size: 14px;">swing dance</a> <a href="/tags/tc39/" style="font-size: 14px;">tc39</a> <a href="/tags/test-double/" style="font-size: 14px;">test double</a> <a href="/tags/top-down/" style="font-size: 14px;">top down</a> <a href="/tags/training-camp/" style="font-size: 37.03px;">training camp</a> <a href="/tags/transition/" style="font-size: 14px;">transition</a> <a href="/tags/unit-test/" style="font-size: 14px;">unit test</a> <a href="/tags/unit-testing/" style="font-size: 15.1px;">unit testing</a> <a href="/tags/v-model/" style="font-size: 14px;">v-model</a> <a href="/tags/vee-validate/" style="font-size: 14px;">vee-validate</a> <a href="/tags/viewport/" style="font-size: 14px;">viewport</a> <a href="/tags/visibility/" style="font-size: 14px;">visibility</a> <a href="/tags/vue/" style="font-size: 43.61px;">vue</a> <a href="/tags/vue-cli/" style="font-size: 15.1px;">vue-cli</a> <a href="/tags/vue-loader/" style="font-size: 14px;">vue-loader</a> <a href="/tags/vue-masonry/" style="font-size: 14px;">vue-masonry</a> <a href="/tags/vue-router/" style="font-size: 16.19px;">vue-router</a> <a href="/tags/vue-slot/" style="font-size: 14px;">vue-slot</a> <a href="/tags/vue-js/" style="font-size: 40.32px;">vue.js</a> <a href="/tags/vue-js%E9%80%B2%E9%9A%8E%E5%BF%83%E6%B3%95/" style="font-size: 14px;">vue.js進階心法</a> <a href="/tags/vuex/" style="font-size: 16.19px;">vuex</a> <a href="/tags/w3c/" style="font-size: 14px;">w3c</a> <a href="/tags/web/" style="font-size: 14px;">web</a> <a href="/tags/web-camp/" style="font-size: 23.87px;">web camp</a> <a href="/tags/webpack/" style="font-size: 29.35px;">webpack</a> <a href="/tags/webpack-loader/" style="font-size: 14px;">webpack loader</a> <a href="/tags/whatwg/" style="font-size: 14px;">whatwg</a> <a href="/tags/which/" style="font-size: 14px;">which</a> <a href="/tags/wiki/" style="font-size: 24.97px;">wiki</a> <a href="/tags/zip/" style="font-size: 14px;">zip</a> <a href="/tags/zsh/" style="font-size: 14px;">zsh</a> <a href="/tags/%E4%B8%83%E8%82%A1%E5%AE%9B%E8%93%81%E5%AE%B6%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C/" style="font-size: 19.48px;">七股宛蓁家兩天一夜</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E6%95%B4%E6%B5%81/" style="font-size: 14px;">三相整流</a> <a href="/tags/%E4%B8%89%E7%9B%B8%E7%99%BC%E9%9B%BB/" style="font-size: 15.1px;">三相發電</a> <a href="/tags/%E4%B8%8D%E9%81%A9%E4%BB%BB/" style="font-size: 14px;">不適任</a> <a href="/tags/%E4%B8%AD%E6%9F%B1/" style="font-size: 14px;">中柱</a> <a href="/tags/%E4%BA%BA%E5%8A%9B%E8%B3%87%E6%BA%90/" style="font-size: 15.1px;">人力資源</a> <a href="/tags/%E4%BA%BA%E6%9C%88%E7%A5%9E%E8%A9%B1/" style="font-size: 19.48px;">人月神話</a> <a href="/tags/%E4%BA%BA%E6%A9%9F%E4%BA%92%E5%8B%95/" style="font-size: 14px;">人機互動</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JS/" style="font-size: 15.1px;">你所不知道的JS</a> <a href="/tags/%E4%BD%A0%E6%89%80%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" style="font-size: 14px;">你所不知道的js</a> <a href="/tags/%E4%BD%BF%E7%94%A8%E5%B1%80%E9%99%90/" style="font-size: 14px;">使用局限</a> <a href="/tags/%E5%81%9A%E8%87%AA%E5%B7%B1%E7%9A%84%E7%94%9F%E5%91%BD%E8%A8%AD%E8%A8%88%E5%B8%AB/" style="font-size: 14px;">做自己的生命設計師</a> <a href="/tags/%E5%85%A7%E8%81%9A/" style="font-size: 14px;">內聚</a> <a href="/tags/%E5%85%A7%E8%81%9A%E6%80%A7/" style="font-size: 14px;">內聚性</a> <a href="/tags/%E5%85%A8%E5%9F%9F%E8%AE%8A%E6%95%B8/" style="font-size: 14px;">全域變數</a> <a href="/tags/%E5%86%8D%E8%AE%80%E4%B8%80%E6%9C%AC%E6%9B%B8/" style="font-size: 15.1px;">再讀一本書</a> <a href="/tags/%E5%87%B1%E5%AE%87%E7%9A%93%E6%9C%88/" style="font-size: 14px;">凱宇皓月</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 16.19px;">分享</a> <a href="/tags/%E5%89%8D%E7%BD%AE%E8%99%95%E7%90%86%E5%99%A8/" style="font-size: 14px;">前置處理器</a> <a href="/tags/%E5%8B%95%E7%95%AB%E7%89%B9%E6%95%88/" style="font-size: 14px;">動畫特效</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E5%91%BD%E5%90%8D%E6%B3%95/" style="font-size: 14px;">匈牙利命名法</a> <a href="/tags/%E5%8D%81%E5%B9%B4%E4%B9%8B%E5%BE%8C%E6%88%90%E7%82%BA%E5%A4%A7%E5%B8%AB/" style="font-size: 14px;">十年之後成為大師</a> <a href="/tags/%E5%8F%A3%E8%80%B3%E7%9B%B8%E5%82%B3/" style="font-size: 14px;">口耳相傳</a> <a href="/tags/%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">台南</a> <a href="/tags/%E5%91%BD%E5%90%8D/" style="font-size: 14px;">命名</a> <a href="/tags/%E5%92%8C%E9%81%93%E6%9C%8D%E8%AA%AA%E8%A9%B1/" style="font-size: 31.55px;">和道服說話</a> <a href="/tags/%E5%9B%9E%E9%A5%8B/" style="font-size: 14px;">回饋</a> <a href="/tags/%E5%9C%96%E8%A7%A3%E6%9F%94%E9%81%93%E4%B9%8B%E8%A1%93/" style="font-size: 29.35px;">圖解柔道之術</a> <a href="/tags/%E5%9C%98%E9%9A%8A%E6%BA%9D%E9%80%9A%E6%8A%80%E5%B7%A7/" style="font-size: 18.39px;">團隊溝通技巧</a> <a href="/tags/%E5%9C%A8%E9%81%93%E9%A4%A8%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 39.23px;">在道館的日子</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4/" style="font-size: 29.35px;">好想工作室</a> <a href="/tags/%E5%A5%BD%E6%83%B3%E5%B7%A5%E5%AE%A4/" style="font-size: 14px;">好想工室</a> <a href="/tags/%E5%AD%97%E5%9E%8B%E8%A8%AD%E5%AE%9A/" style="font-size: 20.58px;">字型設定</a> <a href="/tags/%E5%AD%B8%E5%93%A1/" style="font-size: 15.1px;">學員</a> <a href="/tags/%E5%AD%B8%E5%BE%92/" style="font-size: 14px;">學徒</a> <a href="/tags/%E5%AD%B8%E7%BF%92/" style="font-size: 14px;">學習</a> <a href="/tags/%E5%AE%8C%E7%BE%8E-camp-%E9%80%B2%E5%8C%96%E8%AB%96/" style="font-size: 15.1px;">完美 camp 進化論</a> <a href="/tags/%E5%AE%9A%E7%BE%A9/" style="font-size: 14px;">定義</a> <a href="/tags/%E5%AE%A3%E5%91%8A/" style="font-size: 14px;">宣告</a> <a href="/tags/%E5%AE%B6%E5%AE%B6%E6%9C%89%E6%9C%AC%E9%9B%A3%E5%94%B8%E7%9A%84%E7%B6%93/" style="font-size: 17.29px;">家家有本難唸的經</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 14px;">容器</a> <a href="/tags/%E5%B0%8D%E6%87%89%E6%80%A7/" style="font-size: 14px;">對應性</a> <a href="/tags/%E5%B0%8F%E6%97%85%E8%A1%8C/" style="font-size: 38.13px;">小旅行</a> <a href="/tags/%E5%B7%A5%E6%A5%AD%E9%A2%A8/" style="font-size: 14px;">工業風</a> <a href="/tags/%E5%BB%BA%E7%BD%AE/" style="font-size: 14px;">建置</a> <a href="/tags/%E5%BD%B1%E5%83%8F%E8%99%95%E7%90%86/" style="font-size: 14px;">影像處理</a> <a href="/tags/%E5%BE%8C%E6%90%96%E8%87%82/" style="font-size: 14px;">後搖臂</a> <a href="/tags/%E6%80%A6%E7%84%B6%E5%BF%83%E5%8B%95%E7%9A%84%E4%BA%BA%E7%94%9F%E6%95%B4%E7%90%86%E9%AD%94%E6%B3%95/" style="font-size: 16.19px;">怦然心動的人生整理魔法</a> <a href="/tags/%E6%83%B3%E7%9F%A5%E9%81%93%E5%97%8E%EF%BC%9F/" style="font-size: 14px;">想知道嗎？</a> <a href="/tags/%E6%89%8B%E6%8A%8A%E9%96%8B%E9%97%9C/" style="font-size: 14px;">手把開關</a> <a href="/tags/%E6%89%93%E9%80%A0%E8%BB%9F%E9%AB%94%E5%9C%98%E9%9A%8A/" style="font-size: 14px;">打造軟體團隊</a> <a href="/tags/%E6%8A%80%E8%A1%93%E5%82%B5/" style="font-size: 15.1px;">技術債</a> <a href="/tags/%E6%8A%B1%E6%80%A8VC6/" style="font-size: 31.55px;">抱怨VC6</a> <a href="/tags/%E6%8B%9B%E5%8B%9F/" style="font-size: 14px;">招募</a> <a href="/tags/%E6%8B%9B%E7%94%9F/" style="font-size: 19.48px;">招生</a> <a href="/tags/%E6%8C%87%E6%84%8F/" style="font-size: 14px;">指意</a> <a href="/tags/%E6%96%87%E4%BB%B6/" style="font-size: 14px;">文件</a> <a href="/tags/%E6%97%A5%E8%88%9E%E5%8F%B0%E5%8D%97/" style="font-size: 14px;">日舞台南</a> <a href="/tags/%E6%9C%8D%E4%B8%89%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 21.68px;">服三的日子</a> <a href="/tags/%E6%9D%B1%E5%B2%B8%E8%BB%8D%E6%97%85/" style="font-size: 31.55px;">東岸軍旅</a> <a href="/tags/%E6%9F%94%E9%81%93%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 33.74px;">柔道社與我</a> <a href="/tags/%E6%A2%9D%E4%BB%B6%E7%B7%A8%E8%AD%AF/" style="font-size: 14px;">條件編譯</a> <a href="/tags/%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B/" style="font-size: 14px;">概念模型</a> <a href="/tags/%E6%A8%A1%E6%93%AC%E6%A1%88%E4%B8%BB/" style="font-size: 14px;">模擬案主</a> <a href="/tags/%E6%B2%92%E6%9C%89%E9%8A%80%E5%BD%88/" style="font-size: 14px;">沒有銀彈</a> <a href="/tags/%E6%B5%81%E6%B5%AA%E6%96%87%E7%AB%A0/" style="font-size: 46.9px;">流浪文章</a> <a href="/tags/%E6%B8%AC%E8%A9%A6%E5%B7%A5%E5%85%B7/" style="font-size: 14px;">測試工具</a> <a href="/tags/%E6%B9%AF%E7%91%AA%E6%A3%AE/" style="font-size: 14px;">湯瑪森</a> <a href="/tags/%E7%88%9B-code-%E6%94%B6%E9%9B%86%E5%99%A8/" style="font-size: 27.16px;">爛 code 收集器</a> <a href="/tags/%E7%88%AC%E8%9F%B2/" style="font-size: 14px;">爬蟲</a> <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" style="font-size: 19.48px;">版本控制</a> <a href="/tags/%E7%8B%BC%E8%A8%98%E4%BA%8B/" style="font-size: 42.52px;">狼記事</a> <a href="/tags/%E7%94%9F%E5%B9%B3%E8%99%95%E5%A5%B3%E7%A7%80%E4%B9%8B%E9%9B%BB%E8%85%A6%E8%A3%9D%E6%A9%9F/" style="font-size: 22.77px;">生平處女秀之電腦裝機</a> <a href="/tags/%E7%94%9F%E6%B4%BB%E5%B0%8F%E4%BA%8B/" style="font-size: 14px;">生活小事</a> <a href="/tags/%E7%9B%B4%E6%B5%81-CDI/" style="font-size: 14px;">直流 CDI</a> <a href="/tags/%E7%9C%8B%E6%9B%B8/" style="font-size: 15.1px;">看書</a> <a href="/tags/%E7%9F%AD%E7%A2%BC/" style="font-size: 15.1px;">短碼</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E6%89%80%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 30.45px;">研究所的日子</a> <a href="/tags/%E7%A4%BE%E5%A4%A7%E7%9A%84%E6%97%A5%E5%AD%90/" style="font-size: 28.26px;">社大的日子</a> <a href="/tags/%E7%A4%BE%E6%9C%8D%E7%A4%BE%E8%88%87%E6%88%91/" style="font-size: 44.71px;">社服社與我</a> <a href="/tags/%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%93%81%E8%B3%AA/" style="font-size: 14px;">程式碼品質</a> <a href="/tags/%E7%B3%99-code/" style="font-size: 40.32px;">糙 code</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/" style="font-size: 14px;">系統架構</a> <a href="/tags/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88/" style="font-size: 14px;">系統設計</a> <a href="/tags/%E7%B6%B2%E8%AA%8C%E8%A8%98%E4%BA%8B/" style="font-size: 14px;">網誌記事</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%88%87%E7%89%88/" style="font-size: 16.19px;">網頁切版</a> <a href="/tags/%E7%B6%B2%E9%A0%81%E5%89%8D%E7%AB%AF%E6%8A%80%E8%A1%93/" style="font-size: 18.39px;">網頁前端技術</a> <a href="/tags/%E8%80%A6%E5%90%88/" style="font-size: 14px;">耦合</a> <a href="/tags/%E8%81%96%E7%B6%93/" style="font-size: 14px;">聖經</a> <a href="/tags/%E8%85%A6%E5%8A%9B%E5%AF%86%E9%9B%86%E7%94%A2%E6%A5%AD%E7%9A%84%E4%BA%BA%E6%89%8D%E7%AE%A1%E7%90%86%E4%B9%8B%E9%81%93/" style="font-size: 14px;">腦力密集產業的人才管理之道</a> <a href="/tags/%E8%88%8A%E7%A7%8B%E8%AA%BF/" style="font-size: 17.29px;">舊秋調</a> <a href="/tags/%E8%97%9D%E8%A1%93/" style="font-size: 31.55px;">藝術</a> <a href="/tags/%E8%A1%8C%E5%88%97%E8%BC%B8%E5%85%A5%E6%B3%95/" style="font-size: 15.1px;">行列輸入法</a> <a href="/tags/%E8%A8%AD%E8%A8%88/" style="font-size: 32.65px;">設計</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E4%B9%8B%E8%B7%AF/" style="font-size: 14px;">設計師之路</a> <a href="/tags/%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E8%B7%AF/" style="font-size: 34.84px;">設計師的路</a> <a href="/tags/%E8%A8%BB%E8%A7%A3/" style="font-size: 14px;">註解</a> <a href="/tags/%E8%A9%9E%E6%9B%B2%E5%92%AC%E5%90%88/" style="font-size: 14px;">詞曲咬合</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB/" style="font-size: 18.39px;">資料庫</a> <a href="/tags/%E8%B3%87%E6%96%99%E5%BA%AB%E6%AD%A3%E8%A6%8F%E5%89%87/" style="font-size: 14px;">資料庫正規則</a> <a href="/tags/%E8%B8%A9%E7%99%BC%E6%A1%BF/" style="font-size: 14px;">踩發桿</a> <a href="/tags/%E8%BF%BD%E9%80%90%E6%88%91%E5%9C%A8%E5%A2%BE%E4%B8%81-%E5%A4%A9%E6%B0%A3%E6%99%B4/" style="font-size: 18.39px;">追逐我在墾丁*天氣晴</a> <a href="/tags/%E9%81%BF%E9%9C%87%E5%99%A8/" style="font-size: 14px;">避震器</a> <a href="/tags/%E9%87%8D%E6%A7%8B/" style="font-size: 16.19px;">重構</a> <a href="/tags/%E9%87%8E%E7%8B%BC/" style="font-size: 15.1px;">野狼</a> <a href="/tags/%E9%88%9E%E7%A5%90%E7%9A%84%E7%8D%A8%E7%AB%8B%E5%B1%B1%E5%85%A9%E5%A4%A9%E4%B8%80%E5%A4%9C%E9%9C%B2%E7%87%9F/" style="font-size: 17.29px;">鈞祐的獨立山兩天一夜露營</a> <a href="/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD/" style="font-size: 14px;">鐵人賽</a> <a href="/tags/%E9%9B%BB%E5%AD%90DIY/" style="font-size: 15.1px;">電子DIY</a> <a href="/tags/%E9%9B%BB%E8%B7%AF/" style="font-size: 14px;">電路</a> <a href="/tags/%E9%9D%A2%E8%A9%A6/" style="font-size: 14px;">面試</a> <a href="/tags/%E9%9F%B3%E9%9F%BF%E6%8B%86%E8%A3%9D%E9%81%8E%E7%A8%8B/" style="font-size: 27.16px;">音響拆裝過程</a> <a href="/tags/%E9%A0%90%E8%A8%AD%E7%94%A8%E9%80%94/" style="font-size: 14px;">預設用途</a> <a href="/tags/%E9%AB%98%E5%93%81%E8%B3%AA/" style="font-size: 15.1px;">高品質</a> <a href="/tags/%E9%AB%98%E5%A3%93%E7%B7%9A%E5%9C%88-coil/" style="font-size: 14px;">高壓線圈 coil</a>
 
 
                 <footer>
